@@ -1,0 +1,235 @@
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, "Pingfang SC", "Microsoft Yahei", "WenQuanYi Micro Hei", 'PingFangSC-Medium', sans-serif;
+    font-size: 16px;
+    user-select: none;
+    overflow-x: hidden;
+    background: transparent !important;
+}
+
+* {
+    -webkit-text-size-adjust: none;
+}
+
+html {
+    overflow-y: scroll;
+    overflow-x: hidden;
+    -webkit-overflow-scrolling: touch;
+    background-color: #f9f9f9;
+}
+
+body,
+div,
+span,
+header,
+footer,
+nav,
+section,
+aside,
+article,
+ul,
+dl,
+dt,
+dd,
+li,
+a,
+p,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+i,
+b,
+select,
+figure,
+figcaption {
+    padding: 0;
+    margin: 0;
+    list-style: none;
+    font-style: normal;
+    text-decoration: none;
+    border: none;
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
+    -webkit-font-smoothing: antialiased;
+    outline: none;
+    word-break: break-all;
+}
+
+input[type="button"],
+input[type="submit"],
+input[type="search"],
+input[type="reset"] {
+    -webkit-appearance: none;
+    appearance: none;
+}
+
+textarea {
+    -webkit-appearance: none;
+    appearance: none;
+}
+
+//动画
+.u_fadeOut-show {
+    animation-name: u_fadeOut-show;
+    animation-duration: .3s;
+    animation-timing-function: linear;
+    animation-iteration-count: 1;
+    animation-fill-mode: both;
+}
+
+@keyframes u_fadeOut-show {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
+//defined  public float and clear css
+.left {
+    float: left;
+}
+
+.right {
+    float: right;
+}
+
+.clearFix {
+    display: block;
+    zoom: 1;
+}
+
+.clearFix:before,
+.clearFix:after {
+    content: '.';
+    display: block;
+    height: 0;
+    clear: both;
+    visibility: hidden;
+}
+
+* html .clearFix {
+    height: 1%;
+}
+
+// 鼠标放上，高亮
+.highlight {
+    transition: opacity .8s;
+}
+
+.highlight:hover {
+    //opacity: 0.9;
+    cursor: pointer;
+}
+
+.break_word {
+    word-break: break-all;
+}
+
+.flexGrid-col {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.flexGrid-row {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.c_image {
+    cursor: pointer;
+}
+
+.html_file img,
+.html_file video {
+    max-width: 100%;
+}
+
+.html_file p {
+    font: 18px/32px "Microsoft Yahei";
+    color: #404040;
+    text-indent: 2em;
+    margin: 32px 0 0;
+}
+
+.dividing_line,
+.line_1px {
+    width: 100%;
+    height: 10px;
+    position: relative;
+    border: none;
+}
+
+.dividing_line:after {
+    content: "";
+    position: absolute;
+    left: 0;
+    background: #E9E9E9;
+    width: 100%;
+    height: 2px;
+    -webkit-transform: scaleY(0.5);
+    transform: scaleY(0.5);
+    -webkit-transform-origin: 0 0;
+    transform-origin: 0 0;
+}
+
+.line_1px:after {
+    content: "";
+    position: absolute;
+    left: 0;
+    background: #E9E9E9;
+    width: 100%;
+    height: 1px;
+    -webkit-transform: scaleY(0.5);
+    transform: scaleY(0.5);
+    -webkit-transform-origin: 0 0;
+    transform-origin: 0 0;
+}
+
+.line_bottom_1px:after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    margin: auto;
+    background: #E9E9E9;
+    width: 100%;
+    height: 1px;
+    -webkit-transform: scaleY(0.5);
+    transform: scaleY(0.5);
+    -webkit-transform-origin: 0 0;
+    transform-origin: 0 0;
+}
+
+input[type=search]::-webkit-search-cancel-button {
+    -webkit-appearance: none;
+    /*此处只是去掉默认的小×*/
+}
+
+.btn_style {
+    background-image: linear-gradient(-180deg, #FF8072 0%, #CF1431 100%) !important;
+    color: #fff !important;
+    border: solid 1px #FF8072 !important;
+}
+
+.error_content {
+    width: 750px !important;
+    margin: 45px auto 15px auto;
+}
+
+//最外层包裹的div
+.container_wrapper {
+    padding: 15px 30px;
+    width: 100%;
+    height: 100%;
+    max-width: 1200px;
+    margin: auto;
+    background-color: #f9f9f9;
+    overflow-y: auto;
+}
