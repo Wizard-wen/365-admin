@@ -20,33 +20,37 @@ const homeModule = [
 
 import classify from '@/pages/classify.vue'
 import serviceList from '@/pages/classify/serviceList.vue'
+import search from '@/pages/search.vue'
 
 const classifyModule = [
     {
         path: '/classify',
         name: classify,
         component: classify,
-        children:[
-            {
-                path: '/classify/serviceList',
-                name: serviceList,
-                component: serviceList,
-            }
-        ]
-    }
+    },
+    {
+        path: '/classify/serviceList',
+        name: serviceList,
+        component: serviceList,
+    },
+    {
+        path: '/search',
+        name: search,
+        component: search,
+    },
 ]
 
 /**
- * 购物车
+ * 我的订单
  */
 
-import cart from '@/pages/cart.vue'
+import order from '@/pages/order.vue'
 
 const cartModule = [
     {
-        path: '/cart',
-        name: cart,
-        component:cart
+        path: '/order',
+        name: order,
+        component:order
     }
 ]
 

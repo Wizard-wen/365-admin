@@ -37,8 +37,8 @@ export default {
                     icon: classify,
                 },
                 {
-                    name: '购物车',
-                    router: '/cart',
+                    name: '订单',
+                    router: '/order',
                     highIcon: cartActive,
                     icon: cart,
                 },

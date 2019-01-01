@@ -1,7 +1,7 @@
 <template>
     <div class="classify">
         <div class="classify-search">
-            <div class="search-item" @click="search">搜索</div>
+            <div class="search-item" @click="goSearch">搜索</div>
             <img :src="searchPic" alt="">
         </div>
         <div class="px-line"></div>
@@ -17,9 +17,7 @@
             </div>
             <div class="px-line"></div>
             <div class="classify-second">
-                <!-- <div  v-if="secondLevel.hasOwnProperty('sliderPic')"> -->
-                    <img class="classify-pic" :src="secondLevel.sliderPic" alt="">
-                <!-- </div> -->
+                <img class="classify-pic" :src="secondLevel.sliderPic" alt="">
                 <div class="second-level-name">
                     <div 
                         class="level-name" 
@@ -65,8 +63,8 @@ export default {
         /**
          * 跳转搜索页
          */
-        search(){
-
+        goSearch(){
+            this.$router.push('/search')
         },
         /**
          * 切换分类
@@ -82,15 +80,13 @@ export default {
          * 二级目录列表
          */
         secondLevel(){
-            if(this.classifyList[this.highIndex]){
-                let obj = {
-                    // name: '',
-                    // sliderPic: '',
-                    // typeList: [],
-                    ...this.classifyList[this.highIndex]
-                }
-                return  obj
+            let obj = {
+                name: '',
+                sliderPic: '',
+                typeList: [],
+                ...this.classifyList[this.highIndex]
             }
+            return  obj
         }
     },
     async mounted(){

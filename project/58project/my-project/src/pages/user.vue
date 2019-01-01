@@ -43,7 +43,7 @@
                 class="about-item"
                 v-for="(item, index) in serviceList"
                 :key="index"
-                @click="goPage(item.router)">
+                @click="goPage(item)">
                 {{item.name}}
                 <img class="right-arrow" :src="rightArrow" alt="">
                 <div class="px-line"></div>
@@ -53,6 +53,10 @@
     </div>
 </template>
 <script>
+/**
+ * <a href="tel:15001279362">15001279361</a>
+ * 这样ios会识别为手机号码
+ */
 import setPic from './home/img/set.svg'
 import preaffording from './home/img/preaffording.svg'
 import prewaiting from './home/img/prewaiting.svg'
@@ -123,6 +127,16 @@ export default {
                     router: ''
                 },
             ]
+        }
+    },
+    methods: {
+        /**
+         * 跳转页面
+         */
+        goPage(item){
+            if(item.name=="联系客服"){
+                alert('15001279361')
+            }
         }
     }
 }

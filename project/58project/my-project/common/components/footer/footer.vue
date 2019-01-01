@@ -45,6 +45,13 @@ export default {
                 return []
             }
         }
+    },
+    mounted(){
+        this.footerList.forEach((item, index) =>{
+            if(item.router == this.$route.path){
+                this.activeIndex = index
+            }
+        })
     }
 }
 </script>
