@@ -1,0 +1,30 @@
+.a{
+    /* 红色系 */
+    background: #ccc;
+
+    /* 灰色系 */
+
+    
+    /* 蓝色系 */
+    background: #4b77be;
+}
+
+// 字体通用模板
+@mixin textStyle($height, $width, $size, $color){
+    height: $height;
+    line-height: $height;
+    width: $width;
+    font-size: $size;
+    color: $color;
+}
+//清除浮动
+@mixin clearFloat{
+    content: '';
+    clear: both;
+    display: block;
+}
+
+
+
+
+

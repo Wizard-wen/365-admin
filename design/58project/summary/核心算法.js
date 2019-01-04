@@ -1,4 +1,4 @@
-export default{
+export default {
     /**
      * 
      * 预接单服务人员筛选算法
@@ -12,14 +12,62 @@ export default{
      *      1star -> -2
      *      若一个人的服务评价加权低于一定的数，则会被暂停服务。
      *      这个可以和绩效考核平台联网，共享数据。
-     * 
      */
     preOrder(){
+        //员工信息
+        let staffItem = {
+            name: '',//只有姓氏
+            staffIcon: '',//头像
+            age: '',//年龄
+            level: '五星', //等级
+            serviceType: '月嫂',//服务类型
+            price: '128000',//服务价格
+            measurePrice: '月',//价格度量方式
+            nativePlace: '辽宁',//籍贯 到省
+            workYear: '',//年限
+            credential: ['身份证','健康证'],//证书
+            workTime: {
+                "Jan": 12,
+                "Feb": 2,
+                ...{},
+            },//工作档期
+        }
+        //预约单信息
+        let reservationOrder = {
+            /**
+             * orderId 订单唯一编号 
+             * 1 开头是预约单 
+             * 0 开头是服务单
+             * 
+             * 识别号 + 区号 + 周期类型 + 服务类型 + 预约员工id + 时间戳
+             * 0 0024 01 02 0001 时间戳    
+             */
+            orderId: '',
+            orderType: '', //预约单 0 服务单1
+            /**
+             * cycleType是一级分类   所有的服务首先都要分成长期还是短期
+             * serviceType是二级分类 是长期服务里的什么 保姆 育儿嫂 月嫂
+             */
+            cycleType: '', //服务周期   1 长期  2短期
 
+            serviceType: '', //服务类型 
+            serviceTime: '', //预约的面试时间
+            staffId: '', //员工id
+            place: '',//客户地址
+            message: '', //客户留言
+        }
+
+        //订单信息
+        let orderMessage = {
+            orderId: '',//系统自动生成
+            orderType: '',//订单类型
+            orderTime: '2018-',//时间戳
+            orderPlace: '', //订单在哪里履行
+            orderCycle: '',//订单是长期订单还是短期订单  1 长期订单 2 短期订单
+        }
     },
     /**
      * 订单排队算法
-     * 
      * 
      * 假设我们提供A B C 三个工种，在某个城市有1，2，3。。7个区域。
      * 那么，现在有一个单进到系统里，需要根据“服务人员筛选算法”先筛选出备选的三个服务人员。
@@ -38,5 +86,14 @@ export default{
 
     }
 }
+
+
+
+
+
+
+
+
+
 
 
