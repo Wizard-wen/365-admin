@@ -1,6 +1,6 @@
 <template>
     <div class="login">
-        <v-header :title="'快速登录'"></v-header>
+        <Hog-header :title="'快速登录'"></Hog-header>
         <div class="login-phone" v-if="loginType == 1">
             <div class="phone px-line">
                 <input class="phone-number-input" type="text" placeholder="请输入手机号">
