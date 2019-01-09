@@ -1,17 +1,31 @@
+/**
+ * 路由配置
+ */
+
+//框架配置
 import Vue from 'vue'
 import Router from 'vue-router'
-import routerConfig from './routerConfig.js'
-import loginPage from '@/pages/login.vue'
+Vue.use(Router)
 
+
+//路由列表
+import routerConfig from './routerConfig.js'
+
+
+//登录页
+import loginPage from '@/pages/Login.vue'
+
+//404页
 import notFound from '@/pages/notFound.vue'
 
-import mainPage from '@/pages/main.vue'
+//模板页
+import mainPage from '@/pages/Main.vue'
 
+//vuex数据
 import store from '../store/index.js'
 
-let isLogin = store.state.loginModule.isLogin
-
-Vue.use(Router)
+//登录信息
+import {Login} from '../store/login/logGlobal.js'
 
 window.router = new Router({
     routes: [
@@ -22,7 +36,7 @@ window.router = new Router({
         {
             path: '/',
             component: mainPage,
-            children: [...routerConfig],
+            children:[...routerConfig],
         },
         {
             path: '/login',
@@ -30,18 +44,25 @@ window.router = new Router({
             meta: {
                 requiresAuth:false,//该页面不需要登录
             }
-        }
+        },
     ]
 })
 
-//登录验证，要求用户必须先登录系统在访问网页
+
+/**
+ * 路由拦截
+ * 要求用户必须登录才能进入系统
+ * 只有登录页被设置 requiresAuth等于false，可以不登录
+ */
 router.beforeEach((to, from, next) => {
-    //如果用户配置了requiresAuth等于false，则可以不校验，否则会校验用户是否登录。要求登录页一定要配置requiresAuth为false
+    
     if (to.meta.requiresAuth !== false) {
-        if (!store.state.loginModule.isLogin) {
+        if (!Login.isLogin) {
             next({
                 path: '/login',
-                query: {redirect: to.fullPath}
+                query: {
+                    redirect: to.fullPath
+                }
             })
         } else {
             next()
@@ -50,4 +71,6 @@ router.beforeEach((to, from, next) => {
         next()
     }
 })
+
+
 export default router

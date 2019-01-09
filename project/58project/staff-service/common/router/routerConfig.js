@@ -9,93 +9,72 @@ import homePage from '@/pages/home.vue'
 const homeModule = [
     {
         path: '/homePage',
-        name: homePage,
+        name: 'homePage',
         component: homePage,
-        meta: {
-            requiresAuth:false,//该页面不需要登录
-        }
     }
 ]
 
 /**
- * 分类
+ * 超级管理员
  */
 
-import classify from '@/pages/classify.vue'
-import serviceList from '@/pages/classify/serviceList.vue'
-import search from '@/pages/search.vue'
+ import accountList from '@/pages/superAdmin/accountList.vue'
+ import editAccount from '@/pages/superAdmin/editAccount.vue'
+ import dashboard from '@/pages/superAdmin/dashboard.vue'
 
-const classifyModule = [
+ const superAdminModule = [
     {
-        path: '/classify',
-        name: classify,
-        component: classify,
-        meta: {
-            requiresAuth:false,//该页面不需要登录
-        }
+        path: '/superAdmin/accountList',
+        name: 'accountList',
+        component: accountList,
     },
     {
-        path: '/classify/serviceList',
-        name: serviceList,
+        path: '/superAdmin/dashboard',
+        name: 'dashboard',
+        component: dashboard,
+    },
+    {
+        path: '/superAdmin/editAccount',
+        name: 'editAccount',
+        component: editAccount,
+        beforeEnter: (to, from, next) => {
+            if(!(from.path == '/superAdmin/accountList' || from.path == '/superAdmin/editAccount')){
+                next(false)
+            } else {
+                next()
+            }
+        }
+    },
+ ]
+
+/**
+ * 人力资源管理
+ */
+ import serviceList from '@/pages/serviceType/serviceList.vue'
+ import staffList from '@/pages/staff/staffList.vue'
+
+ const hrAdminModule = [
+    {
+        path: '/hrAdmin/serviceList',
+        name: 'serviceList',
         component: serviceList,
-        meta: {
-            requiresAuth:false,//该页面不需要登录
-        }
     },
     {
-        path: '/search',
-        name: search,
-        component: search,
-        meta: {
-            requiresAuth:false,//该页面不需要登录
-        }
+        path: '/hrAdmin/staffList',
+        name: 'staffList',
+        component: staffList,
     },
-]
-
-/**
- * 我的订单
- */
-
-import order from '@/pages/order.vue'
-
-const cartModule = [
-    {
-        path: '/order',
-        name: order,
-        component:order
-    }
-]
+ ]
 
 
-/**
- * 我的模块
- */
-import userpage from '@/pages/user.vue'
-import address from '@/pages/user/address.vue'
-
-const usersModule = [
-    {
-        path: '/userpage',
-        name: userpage,
-        component: userpage
-    },
-    {
-        path: '/address',
-        name: address,
-        component: address,
-        
-    },
-
-]
 
 
 /**
  * 重定向
  */
 export default [
-    {path: '/', redirect: '/homepage'},
+    {path: '/', redirect: '/homePage'},
     ...homeModule,
-    ...classifyModule,
-    ...cartModule,
-    ...usersModule,
+    ...superAdminModule,
+    ...hrAdminModule,
 ]

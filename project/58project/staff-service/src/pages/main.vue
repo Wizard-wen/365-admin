@@ -1,80 +1,46 @@
 <template>
     <div class="main">
-        <router-view></router-view>
-        <div class="main-footer"></div>
-        <v-footer :footerList="items"></v-footer>
+        <Hog-layout
+        :closeAble="closeAble"
+        :menuNav="menuList"
+        :menuState="1">
+            <div slot="header" class="header"></div>
+        </Hog-layout>
     </div>
 </template>
-<script>
-import footer from '../../common/components/footer/footer.vue'
 
-//footer图片
-import homeActive from './home/img/home-active.svg'
-import home from './home/img/home.svg'
-import classifyActive from './home/img/classify-active.svg'
-import classify from './home/img/classify.svg'
-import cartActive from './home/img/cart-active.svg'
-import cart from './home/img/cart.svg'
-import mineActive from './home/img/mine-active.svg'
-import mine from './home/img/mine.svg'
+<script>
+import HogLayout from '../../common/components/Layout/SystemLayout.vue'
+
 
 export default {
     data(){
         return {
-            items: [
-                {
-                    name: '首页',
-                    router: '/',
-                    highIcon: homeActive,
-                    icon: home,
-                },
-                {
-                    name: '分类',
-                    router: '/classify',
-                    highIcon: classifyActive,
-                    icon: classify,
-                },
-                {
-                    name: '订单',
-                    router: '/order',
-                    highIcon: cartActive,
-                    icon: cart,
-                },
-                {
-                    name: '我的',
-                    router: '/userpage',
-                    highIcon: mineActive,
-                    icon: mine, 
-                },
-            ]
+            closeAble: true,
         }
     },
-    components:{
-        'v-footer': footer,
+    methods:{
+
     },
-    mounted(){
-        console.log(this.$store.state.loginModule.isLogin)
+    computed:{
+        menuList(){
+            return store.state.loginModule.user.menu
+        }
+    },
+    components: {
+        HogLayout,
+    },
+    async mounted(){
+        // this.menuList = await menuService.getMenuList()
     }
 }
 </script>
 
 <style scoped lang="scss">
-    .main{
-        background: #f5f5f5;
-        height: 100vh;
-        padding-bottom: .5rem;
-        width: 100%;
-        .main-footer{
-            height: .5rem;
-            width: 100%;
-        }
+    .header{
+        height: 50px;
+        width:100%;
+        background: #394043;
     }
 </style>
-
-
-
-
-
-
-
 

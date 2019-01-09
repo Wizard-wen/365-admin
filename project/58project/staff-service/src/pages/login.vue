@@ -1,122 +1,91 @@
 <template>
     <div class="login">
-        <v-header :title="'快速登录'"></v-header>
-        <div class="login-phone" v-if="loginType == 1">
-            <div class="phone px-line">
-                <input class="phone-number-input" type="text" placeholder="请输入手机号">
-                <p class="code">获取验证码</p>
-            </div>
-            
-            <div class="check-code">
-                <input class="check-code-input" type="text" placeholder="请输入验证码">
-                <p class="no-code">没有收到？</p>
-            </div>
-            <div class="line-px"></div>
-            <div class="login-btn" @click="login">立即登录</div>
+        <div class="login-box">
+            <el-form ref="form" :rules="rules" :model="form" label-width="80px">
+                <el-form-item label="用户名" prop="username">
+                    <el-input v-model="form.username" size="medium" type="text" placeholder="请输入用户名"></el-input>
+                </el-form-item>
+                <el-form-item label="密码" prop="password">
+                    <el-input v-model="form.password" size="medium" type="password" placeholder="请输入密码"></el-input>
+                </el-form-item>
+                <el-form-item>
+                    <el-button type="primary" size="medium" @click="submitForm('form')">登录</el-button>
+                    <el-button size="medium" @click="resetForm('form')">重置</el-button>
+                </el-form-item>
+            </el-form>
         </div>
     </div>
 </template>
 
 <script>
-import header from '../../common/components/header/header.vue'
+import loginService from '../../common/service/loginService.js'
 export default {
-    data(){
+    data() {
         return {
-            loginType: 1,//登录方式 1 手机号 2 账号密码
-            codeButtonActive: 0, //手机登录，验证码按钮高亮
+            form: {
+                username: 'superAdmin',
+                password: 'superAdmin',
+            },
+            rules: {
+                username: [
+                    {required: true, message: '请填写用户名', trigger: 'blur'}
+                ],
+                password: [
+                    {required: true, message: '请输入密码', trigger: 'blur' }
+                ],
+            }
         }
     },
-    methods:{
-        /**
-         * 
-         */
-        login(){
-            this.$store.state.loginModule.isLogin = true
-            this.$router.go(-1)
+    methods: {
+        submitForm(formName) {
+            this.$refs[formName].validate(async (valid) => {
+                if (valid) {
+                    try{
+                        await loginService.getToken(this.form.username, this.form.password)
+                        this.$message({
+                            type: 'success',
+                            message: '登陆成功！'
+                        });
+                        this.$router.push('/');
+                    }catch(e){
+                        this.$message({
+                            type: 'error',
+                            message: '登录失败'
+                        })
+                    }
+                } else {
+                    return false;
+                }
+            });
+        },
+        resetForm(formName) {
+            this.$refs[formName].resetFields();
         }
     },
-    components:{
-        'v-header':header
+    mounted(){
+        console.log(this.$options)
     }
 }
 </script>
 
-<style scoped lang="scss">
+<style lang="scss" scoped>
     .login{
-        .login-phone{
-            padding-top: .7rem; 
-            .phone{
-                width: 100%;
-                height: .5rem;
-                padding: .125rem .15rem;
-                display: flex;
-                background: #fff;
-                position:relative;
-                .phone-number-input{
-                    flex: 1;
-                    display: inline-block;
-                    height: .25rem;
-                    outline: none;
-                    border: 0;
-                    background: #fff;
-                    font-size:.14rem;
-                }
-                .code{
-                    height: .25rem;
-                    line-height: .25rem;
-                    width: .8rem;
-                    color: #999;
-                    font-size: .12rem;
-                    text-align:center;
-                    border-radius: .04rem;
-                    border:.01rem solid #ccc;
-                }
-            }
-            .px-line{
-                &:after{
-                    content: '';
-                    position: absolute;
-                    height: .01rem;
-                    width: 100%;
-                    background: #f5f5f5;
-                    bottom: 0;
-                }
-            }
-            .check-code{
-                width: 100%;
-                height: .5rem;
-                display: flex;
-                padding: .125rem .15rem;
-                background: #fff;
-                margin-bottom:.2rem;
-                .check-code-input{
-                    flex: 1;
-                    display: inline-block;
-                    height: .25rem;
-                    outline: none;
-                    border: 0;
-                    background: #fff;
-                    font-size:.14rem;
-                }
-                .no-code{
-                    height: .25rem;
-                    width: .8rem;
-                    line-height: .25rem;
-                    text-align: center;
-                    color: green;
-                }
-            }
-            .login-btn{
-                height: .35rem;
-                width: 90%;
-                margin: 0 auto;
-                background: #ccc;
-                line-height: .35rem;
-                text-align: center;
-                border-radius: .04rem;
-                color:#fff;
-            }
+        height :100vh;
+        width :100%;
+        background: #f2f2f2;
+        .login-box{
+            height : 280px;
+            width : 400px;
+            background :#fff;
+            position: fixed;
+            left : calc(50% - 200px);
+            top : calc(50% - 140px);
+            border-radius : 6px;
+            padding :50px 30px;
+            box-shadow: 0 2px 3px 0 rgba(0,0,0,.2);
         }
     }
+    
 </style>
+
 

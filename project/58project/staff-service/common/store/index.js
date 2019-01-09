@@ -6,7 +6,8 @@ import vuex from 'vuex'
  */
 import createPersistedState from 'vuex-persistedstate'
 
-import {loginModule} from './loginModule.js'
+import {loginModule} from './login/loginModule.js'
+import {authorityModule} from './authorityModule.js'
 
 Vue.use(vuex);
 
@@ -14,10 +15,15 @@ window.store = new vuex.Store({
     //保存
     modules: {
         loginModule,
+        authorityModule,
     },
-    // plugins: [createPersistedState({
-    //     paths: ['login'],
-    //     key: config.namespace,
-    // })]
+    plugins: [createPersistedState({
+        // paths: ['login'],
+        key: 'staff',
+        storage: window.sessionStorage,
+
+    })]
 })
+
+
 export default store
