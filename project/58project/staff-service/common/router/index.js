@@ -5,12 +5,12 @@
 //框架配置
 import Vue from 'vue'
 import Router from 'vue-router'
+
 Vue.use(Router)
 
 
 //路由列表
 import routerConfig from './routerConfig.js'
-
 
 //登录页
 import loginPage from '@/pages/Login.vue'
@@ -55,7 +55,7 @@ window.router = new Router({
  * 只有登录页被设置 requiresAuth等于false，可以不登录
  */
 router.beforeEach((to, from, next) => {
-    
+
     if (to.meta.requiresAuth !== false) {
         if (!Login.isLogin) {
             next({

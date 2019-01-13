@@ -6,124 +6,146 @@ import axios from 'axios'
 import store from '../store'
 
 import {Login} from '../store/login/logGlobal.js'
+import loginRequest from './request/loginRequest.js'
+import authRequest from './request/authRequest.js'
 
 export default {
     //登录，获取、设置token 
-    getToken(account, password){
+    async getToken(username, password){
+        let arr = [
+            {
+                title : '我的',
+                router: '/homePage'
+            },
+            {
+                router: '/',
+                title : '权限管理',
+                children :[
+                    {
+                        title : '账户列表',
+                        router: '/auth/accountList'
+                    },
+                    {
+                        title : '角色列表',
+                        router: '/auth/roleList'
+                    },
+                    {
+                        title : '权限配置',
+                        router: '/auth/authList'
+                    },
+                ]
+            },
+            {
+                router: '/',
+                title : '人力资源管理',
+                children :[
+                    {
+                        title : '服务人员列表',
+                        router: '/staff/staffList'
+                    },
+                    {
+                        title : '服务类型列表',
+                        router: '/serviceType/typeList'
+                    },
+                ]
+            },
+            {
+                router: '/',
+                title : '销售管理',
+                children :[
+                    {
+                        title : '订单列表',
+                        router: '/sale/orderList'
+                    },
+                    {
+                        title : '服务人员列表',
+                        router: '/staff/staffList'
+                    },
+                ]
+            },
+        ];
 
-        // return axios.post({
-        //     url: '',
-        //     data: {
-        //         username : account,
-        //         password : password
-        //     },
-        // }).then((data) =>{
-        //     // 将登录信息存入 vuex sessionStorage
-        //     store.commit('login',true,'123')
-            
-        // }).catch(err =>{
-        //     throw err
-        // })
-        
-        return Promise.resolve().then(() =>{
-            let arr = [
-                {
-                    title : '首页',
-                    router: '/homePage'
-                },
-                {
-                    router: '/',
-                    title : '超级管理员',
-                    children :[
-                        {
-                            title : '仪表盘',
-                            router: '/superAdmin/dashboard'
-                        },
-                        {
-                            title : '权限管理',
-                            router: '/superAdmin/accountList'
-                        },
-                    ]
-                },
-                {
-                    router: '/',
-                    title : '人力资源管理',
-                    children :[
-                        {
-                            title : '服务类型管理',
-                            router: '/hrAdmin/serviceList'
-                        },
-                        {
-                            title : '服务人员管理',
-                            router: '/hrAdmin/staffList'
-                        },
-                    ]
-                },
-            ]
-            store.commit('login',{
-                accessToken: 'accessToken',
-                refreshToken: 'refreshToken'
-            })
-            
-            let routerobject = {}
-            this.visitTree(arr,'')
-            Object.keys(this.routerobject).forEach(key =>{
-                this.routerobject[key] = this.routerobject[key].split("-")
-            })
-            console.log(this.routerobject)
-            store.commit('setUser', {
-                menu: arr,
-                routerNavigator: this.routerobject
-            })
-        })
-    },
-    routerobject: {
+        let routerObj = this.getRouterLeaf(arr,'');
 
+        await loginRequest.login(username, password)
+            .then(data =>{
+                let manager = data.data.manager,
+                    tree = data.data.tree
+                // 登录信息存入 vuex sessionStorage
+                store.commit('login',{
+                    access_token: manager.access_token,
+                    refresh_token: manager.refresh_token
+                })
+                //用户信息存入 vuex sessionStorage
+                store.commit('setUser', {
+                    menu: arr,
+                    routerNavigator: routerObj,
+                    username: manager.name,
+                    id: manager.id,
+                    account: manager.account,
+                    expire: manager.expire,
+                    tree: tree,
+                })
+            }).catch(err =>{
+                throw err
+            })     
     },
     /**
-     * 遍历目录树
-     * @param Treelist 树形结构
-     * @param valuenode 叶子结点信息
+     * des 提取树形路由数组的叶节点
+     *     将叶节点路由作为对象键名
+     *     将从根路由开始的逐级菜单名称，组成一个数组作为键值
+     * @param {路由数组} Treelist 
+     * @param {初始值} valuenode 
      */
-    visitTree(Treelist, valuenode, routerobject){
-        if(Array.isArray(Treelist)){
-            Treelist.forEach((item, index) =>{
-                if(item.children){
-                    this.visitTree(item.children, (valuenode == ''? '' : (valuenode+'-'))+item.title)
-                }else{
-
-                    this.routerobject[item.router] =  (valuenode == ''? '' : (valuenode+'-'))+item.title
-                }
-            })
-        }else{
-            throw new Error("expect array structure")
+    getRouterLeaf(Treelist, valuenode){
+        var routerobject = {}
+        
+        function visitTree(Treelist, valuenode){
+            if(Array.isArray(Treelist)){
+                Treelist.forEach((item, index) =>{
+                    if(item.children){
+                        visitTree(item.children, (valuenode == ''? '' : (valuenode+'-'))+item.title)
+                    }else{
+    
+                        routerobject[item.router] =  (valuenode == ''? '' : (valuenode+'-'))+item.title
+                    }
+                })
+            }else{
+                throw new Error("expect array structure")
+            }
         }
+
+        visitTree(Treelist, valuenode)
+
+        Object.keys(routerobject).forEach(key =>{
+            routerobject[key] = routerobject[key].split("-")
+        })
+
+        return routerobject
     },
     /**
      * 刷新token 
+     * @param refresh_token 刷新token
      */
-    refreshToken(){
-        let refreshToken = Login.token.refreshToken;
+    async refreshToken(refresh_token){
+        await loginRequest.refreshToken(refresh_token)
+            .then(data =>{
+                let manager = data.data
+                // 登录信息存入 vuex sessionStorage
+                store.commit('login',{
+                    access_token: manager.access_token,
+                    refresh_token: manager.refresh_token
+                })
 
-        return axios.post({
+            }).catch(error =>{
 
-        }).then(data => {
-            //将信息存入 vuex sessionStorage
-        }).catch(err =>{
-            throw err
-        })
+            })
     },
     /**
      * 退出登录
      */
     logout(){
-        return axios.post({
-            
-        }).then(() => {
-          
-            store.commit('logout');
-        
-        })
+        store.commit('logout')
     }
 }
 

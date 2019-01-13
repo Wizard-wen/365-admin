@@ -18,13 +18,13 @@
 </template>
 
 <script>
-import loginService from '../../common/service/loginService.js'
+import {loginService} from '../../common'
 export default {
     data() {
         return {
             form: {
-                username: 'superAdmin',
-                password: 'superAdmin',
+                username: 'admin',
+                password: 'admin',
             },
             rules: {
                 username: [
@@ -38,6 +38,7 @@ export default {
     },
     methods: {
         submitForm(formName) {
+            let _this = this;
             this.$refs[formName].validate(async (valid) => {
                 if (valid) {
                     try{
@@ -46,7 +47,8 @@ export default {
                             type: 'success',
                             message: '登陆成功！'
                         });
-                        this.$router.push('/');
+                        
+                        _this.$router.push('/');
                     }catch(e){
                         this.$message({
                             type: 'error',
@@ -62,8 +64,13 @@ export default {
             this.$refs[formName].resetFields();
         }
     },
-    mounted(){
-        console.log(this.$options)
+    async mounted(){
+        // await this.$axios.post(`./api/admin/login`,{
+        //     account: 'admin',
+        //     password: 'admin'
+        // }).then(data =>{
+        //     console.log(data.data)
+        // })
     }
 }
 </script>

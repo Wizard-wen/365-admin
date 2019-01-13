@@ -21,7 +21,6 @@ window.store = new vuex.Store({
         // paths: ['login'],
         key: 'staff',
         storage: window.sessionStorage,
-
     })]
 })
 

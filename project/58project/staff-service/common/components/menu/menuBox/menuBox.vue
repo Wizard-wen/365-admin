@@ -4,7 +4,7 @@
         @mouseleave="clearmenu">
         <!-- 菜单盒子 -->
         <!-- <transition-group name="list"> -->
-            <menu-slider
+            <slider-box
                 ref="menubox"
                 v-for="(item,index) in menuArr"
                 :key="index"
@@ -16,12 +16,12 @@
                 :siderWidth="siderWidth"
                 :selectedHighLight="selectedIndexArray"
                 @changelist="changelistfn"
-                @onchosenmenu="chosemenufn"></menu-slider>
+                @onchosenmenu="chosemenufn"></slider-box>
         <!-- </transition-group> -->
     </div>
 </template>
 <script>
-import menuSlider from './menuslider.vue'
+import sliderBox from './sliderBox.vue'
 
 export default {
     data(){
@@ -119,7 +119,7 @@ export default {
 
     },
     components : {
-        menuSlider : menuSlider
+        sliderBox : sliderBox
     },
     methods : {
         /*

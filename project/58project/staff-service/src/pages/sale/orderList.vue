@@ -1,15 +1,16 @@
 <template>
-    <div class="authority">
+    <div class="order">
         
         <div class="container-box">
-            <el-form :inline="true" :model="authSearch" class="authority-form">
-                <el-form-item label="搜索">
-                    <el-input v-model="authSearch.user" placeholder="请输入用户名"></el-input>
+            <el-form :inline="true" :model="authSearch" class="order-form">
+                <el-form-item label="订单号">
+                    <el-input v-model="authSearch.user" placeholder="请输入订单号"></el-input>
                 </el-form-item>
-                <el-form-item label="账号类型">
-                    <el-select v-model="authSearch.region" placeholder="账号类型">
-                        <el-option label="销售管理员" value="shanghai"></el-option>
-                        <el-option label="人力管理员" value="beijing"></el-option>
+                <el-form-item label="订单类型">
+                    <el-select v-model="authSearch.region" placeholder="订单类型">
+                        <el-option label="待处理" value="shanghai"></el-option>
+                        <el-option label="处理中" value="beijing"></el-option>
+                        <el-option label="已完成" value="beijing"></el-option>
                     </el-select>
                 </el-form-item>
                 <el-form-item>
@@ -18,24 +19,29 @@
             </el-form>
             <el-table
                 :data="userTable" 
-                class="authority-table">
+                class="order-table">
                 <el-table-column
-                    label="id"
+                    label="订单号"
                     prop="id"
                     align="center">
                 </el-table-column>
                 <el-table-column
-                    label="姓名"
-                    prop="name"
+                    label="订单状态"
+                    prop="state"
                     align="center">
                 </el-table-column>
                 <el-table-column
-                    label="账号类型"
+                    label="创建时间"
+                    prop="time"
+                    align="center">
+                </el-table-column>
+                <el-table-column
+                    label="服务类型"
                     prop="type"
                     align="center">
                 </el-table-column>
                 <el-table-column
-                    label="地址"
+                    label="服务区域"
                     prop="address"
                     align="center">
                 </el-table-column>
@@ -45,14 +51,10 @@
                     <template slot-scope="scope">
                         <el-button
                             size="mini"
-                            @click="editUser(scope.$index, scope.row)">编辑</el-button>
-                        <el-button
-                            size="mini"
                             @click="viewUser(scope.$index, scope.row)">查看</el-button>
                         <el-button
                             size="mini"
-                            type="danger"
-                            @click="deleteUser(scope.$index, scope.row)">删除</el-button>
+                            @click="viewUser(scope.$index, scope.row)">处理订单</el-button>
                     </template>
                 </el-table-column>
             </el-table>
@@ -61,12 +63,15 @@
     </div>
 </template>
 <script>
-    import authorityService from '../../../common/service/authorityService.js'
     export default {
         data() {
             return {
-                //用户列表
-                userTable: [],
+                //丁丹列表
+                orderTable: [
+                    {
+                        
+                    }
+                ],
                 //用户列表搜索条件
                 authSearch: {
                     user:'',
@@ -105,30 +110,24 @@
                     }
                 })
             },
-            /**
-             * 删除用户
-             */
-            deleteUser(index, row) {
-                console.log(index, row);
-            },
         },
         async mounted(){
-            this.userTable = await authorityService.getAccountList()
+            this.orderTable = await orderService.getOrderList()
         }
     }
 </script>
 <style lang="scss" scoped>
-    .authority{
+    .order{
         
         
         .container-box{
             padding: 30px;
-            .authority-form{
+            .order-form{
                 width:80%;
                 min-width:1100px;
                 margin: 0 auto;
             }
-            .authority-table{
+            .order-table{
                 width: 80%;
                 min-width: 1100px;
                 margin: 0 auto;

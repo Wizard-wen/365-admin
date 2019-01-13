@@ -24,9 +24,9 @@
 </template>
 <script>
 
-import MenuBox from './menu/sliderMenu/menubox.vue'
-import menuVertical from './menu/menuVertical/menuVertical.vue'
-import menuSpread from './menu/menuspread/menuSpread.vue'
+import menuBox from './menuBox/menuBox.vue'
+import menuVertical from './menuVertical/menuVertical.vue'
+import menuSpread from './menuspread/menuSpread.vue'
 
 export default {
     data(){
@@ -69,7 +69,7 @@ export default {
         }
     },
     components : {
-        MenuBox : MenuBox,
+        menuBox,
         menuVertical,
         menuSpread
     }

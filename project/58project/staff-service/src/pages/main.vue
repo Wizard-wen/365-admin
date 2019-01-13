@@ -3,8 +3,7 @@
         <Hog-layout
         :closeAble="closeAble"
         :menuNav="menuList"
-        :menuState="1">
-            <div slot="header" class="header"></div>
+        :menuState="2">
         </Hog-layout>
     </div>
 </template>
@@ -37,10 +36,6 @@ export default {
 </script>
 
 <style scoped lang="scss">
-    .header{
-        height: 50px;
-        width:100%;
-        background: #394043;
-    }
+
 </style>
 

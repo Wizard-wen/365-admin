@@ -1,10 +1,34 @@
 <template>
     <div class="layoutbox">
         <div class="">
-            <!-- 用户header，可供用户扩展 -->
-            <header  ref="header" >
-                <slot name="header" ></slot>
-            </header>
+            <div class="header" ref="header">
+                <div class="logo">
+                    365后台管理系统
+                </div>
+                <div class="header-right">
+                    <div class="breadcrumb-box">
+                        <el-breadcrumb class="breadcrumb">
+                            <el-breadcrumb-item 
+                                v-for="(item,index) in breadcrumb" 
+                                :key="index">{{item}}</el-breadcrumb-item>
+                        </el-breadcrumb>
+                    </div>
+                    <div class="user">
+                        <img :src="mine" alt="">
+                        <el-dropdown @command="handleCommand">
+                            <span class="el-dropdown-link">
+                                {{`您好！超级管理员`}}<i class="el-icon-arrow-down el-icon--right"></i>
+                            </span>
+                            <el-dropdown-menu slot="dropdown">
+                                <el-dropdown-item command="1">注销</el-dropdown-item>
+                                <el-dropdown-item>我的</el-dropdown-item>
+                            </el-dropdown-menu>
+                        </el-dropdown>
+                    </div>
+                </div>
+                
+            </div>
+
             <!-- 用户content，包括导航栏和router-view -->
             <div class="content">
                 <!-- 菜单栏 -->
@@ -23,6 +47,7 @@
                     <menu-spread
                         v-else
                         :datalist="menuNav"></menu-spread>
+
                     <!-- 菜单缩进 -->
                     <div class="menucontrol" :style="{width : `${siderWidth}px`}" v-if="menuState == 1">
                         <div class="icon-place" v-if="closeAble">
@@ -34,12 +59,7 @@
                     class="contentshow"
                     :style="{height: `calc(100vh - ${headerHeight}px)`,width : `calc(100% - ${siderWidth}px`}"
                     ref="content">
-                    <div class="banner">
-                        <i @click="goback" class="el-icon-back banner-back" ></i>
-                        <!-- <el-breadcrumb separator-class="el-icon-arrow-right">
-                            <el-breadcrumb-item v-for="item in breadcrumb">item</el-breadcrumb-item>
-                        </el-breadcrumb> -->
-                    </div>
+                    
                     <div class="router-contains">
                         <router-view></router-view>
                     </div>
@@ -49,11 +69,13 @@
     </div>
 </template>
 <script>
-import MenuBox from '../menu/sliderMenu/menubox.vue'
+import menuBox from '../menu/menuBox/menuBox.vue'
 import menuVertical from '../menu/menuVertical/menuVertical.vue'
-import menuSpread from '../menu/menuspread/menuSpread.vue'
+import menuSpread from '../menu/menuSpread/menuSpread.vue'
 
+import mine from '../img/mine.svg'
 
+import loginService from '../../service/loginService.js'
 
 export default {
     props :{
@@ -77,21 +99,24 @@ export default {
         return {
             headerHeight : 50, //头部高
             siderWidth : 180,
-            isClose : false
+            isClose : false,
+            breadcrumb: [],//面包屑导航
+            mine,
         }
     },
-    computed:{
-        /**
-         * 面包屑导航数据
-         */
-        breadcrumb(){   
-            // return store.state.loginModule.user.routerNavigator[this.$route.path]
+    watch: {
+        $route: {
+            handler: function(val, oldVal){
+                if(store.state.loginModule.user.routerNavigator[val.path])
+                    this.breadcrumb = store.state.loginModule.user.routerNavigator[val.path]
+                else 
+                    console.log(-1);
+            },
+            // 深度观察监听
+            deep: true
         }
     },
     methods : {
-        headerSizeChange(){
-            this.headerHeight = this.$refs.header ? this.$refs.header.clientHeight : 0
-        },
         //收起sider
         changesider(){
             if(this.isClose){
@@ -107,12 +132,27 @@ export default {
          */
         goback(){
             this.$router.go(-1)
+            // if(this.$router.from){
+                console.log(this.$route)
+            // }
+        },
+        /**
+         * 下拉菜单
+         */
+        handleCommand(type){
+            if(type == '1'){
+                loginService.logout()
+                this.$router.push('/login')
+            }
         }
     },
     components : {
-        MenuBox : MenuBox,
+        menuBox,
         menuVertical,
         menuSpread
+    },
+    async mounted(){
+        this.breadcrumb = store.state.loginModule.user.routerNavigator[this.$route.path]
     }
 }
 </script>
@@ -121,75 +161,108 @@ export default {
         height : 100vh;
         position : relative;
         overflow: hidden;
-    }
-    .sider{
-        float: left;
-        position : relative;
-        background: #333;
-    }
-    .contentshow{
-        float :right;
-        // overflow-y: auto;
-        background-color: #f2f2f2 !important;
-        padding: 0px 30px 0px 30px;
-        .banner{
+        .header{
             height:50px;
             width:100%;
-            background: #f2f2f2;
-            position: relative;
-            .banner-back{
-                position:absolute;
-                top: 5px;
-                height: 40px;
-                width:40px;
-                font-size: 25px;
-                line-height: 40px;
+            display: flex;
+            background: #fafafa;
+            border-bottom:1px solid #e8e8e8 ;
+            .logo{
+                position: relative;
+                height:50px;
+                line-height: 50px;
+                color:#fff;
                 text-align: center;
-                cursor: pointer;
+                width:180px;
+                background: #333;
+                
+                &:after{
+                    content : '';
+                    position: absolute;
+                    height : 1px;
+                    width : 100%;
+                    bottom: 0;
+                    left: 0;
+                    background: hsla(0,0%,100%,.1);
+                }
+            }
+            .header-right{
+                height: 50px;
+                width: calc(100% - 180px);
+                padding: 0 30px;
+                .breadcrumb-box{
+                    height: 50px;
+                    width: 300px;
+                    float: left;
+                    .breadcrumb{
+                        & /deep/ .el-breadcrumb__item{
+                            display: inline-block;
+                            height: 50px;
+                            line-height: 50px;
+                            color:#fff;
+                        }
+                        & /deep/ .el-breadcrumb__inner{
+                            // color: #fff;
+                        }
+                    }
+                }
+                .user{
+                    float:right;
+                    font-size: 14px;
+                    line-height: 20px;
+                    padding: 10px 0;
+                    img{
+                        height: 20px;
+                        width: 20px;
+                    }
+                }
+            }
+            
+        }
+        .content{
+            .sider{
+                float: left;
+                position : relative;
+                background: #333;
+                .menucontrol{
+                    position : absolute;
+                    z-index : 10;
+                    height : 40px;
+                    background-color: #333;
+                    border-top: 1px solid #262626;
+                    bottom : 0px;
+                    left : 0px;
+                    right : 0px;
+                    .icon-place{
+                        height : 40px;
+                        width : 100%;
+                        position : relative;
+                        .icon-position{
+                            position : absolute;
+                            cursor: pointer;
+                            right : 12.5px;
+                            bottom : 10px;
+                            color : #fff;
+                        }
+                        .icon-position:hover{
+                            color : #42AAFA
+                        }
+                    }
+                }
+            }
+            .contentshow{
+                float :right;
+                background-color: #f2f2f2 !important;
+                // padding: 0px 30px 0px 30px;
+                
+                .router-contains{
+                    overflow-y: auto;
+                    height:100%;
+                    width:100%;
+                    background: #fff;
+                }
             }
         }
-        .router-contains{
-            overflow-y: auto;
-            height:100%;
-            width:100%;
-            border-radius: 6px;
-            background: #fff;
-            padding:20px;
-        }
-    }
-    .routercontent{
-        height : 100%;
-        width :100%;    
-        padding: 10px;
-            overflow-y: auto;
-            border-radius :4px;
-            border: 1px solid #ddd;
-            box-shadow: 0 2px 3px 0 rgba(0,0,0,.2);
-    }
-    .menucontrol{
-        position : absolute;
-        z-index : 10;
-        height : 40px;
-        background-color: #333;
-        border-top: 1px solid #262626;
-        bottom : 0px;
-        left : 0px;
-        right : 0px;
-    }
-    .icon-place{
-        height : 40px;
-        width : 100%;
-        position : relative;
-    }
-    .icon-position{
-        position : absolute;
-        cursor: pointer;
-        right : 12.5px;
-        bottom : 10px;
-        color : #fff;
-    }
-    .icon-position:hover{
-        color : #42AAFA
     }
 </style>
 

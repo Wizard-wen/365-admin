@@ -5,68 +5,155 @@
  */
 
 import homePage from '@/pages/home.vue'
+import dashboard from '@/pages/home/dashboard.vue'
 
 const homeModule = [
     {
         path: '/homePage',
         name: 'homePage',
         component: homePage,
-    }
+    },
+    {
+        path: '/home/dashboard',
+        name: 'dashboard',
+        component: dashboard,
+    },
 ]
 
 /**
- * 超级管理员
+ * 权限管理
  */
 
- import accountList from '@/pages/superAdmin/accountList.vue'
- import editAccount from '@/pages/superAdmin/editAccount.vue'
- import dashboard from '@/pages/superAdmin/dashboard.vue'
+ //账户管理
+ import accountList from '@/pages/auth/account/accountList.vue'
+ import accountEdit from '@/pages/auth/account/accountEdit.vue'
+ import roleConfig from '@/pages/auth/account/roleConfig.vue'
 
- const superAdminModule = [
+ //角色管理
+ import roleList from '@/pages/auth/role/roleList.vue'
+ import roleEdit from '@/pages/auth/role/roleEdit.vue'
+ import authConfig from '@/pages/auth/role/authConfig.vue'
+ 
+ //权限配置
+ import authList from '@/pages/auth/auth/authList.vue'
+ import authEdit from '@/pages/auth/auth/authEdit.vue'
+ 
+
+ const authModule = [
     {
-        path: '/superAdmin/accountList',
+        path: '/auth/accountList',
         name: 'accountList',
         component: accountList,
     },
     {
-        path: '/superAdmin/dashboard',
-        name: 'dashboard',
-        component: dashboard,
-    },
-    {
-        path: '/superAdmin/editAccount',
-        name: 'editAccount',
-        component: editAccount,
+        path: '/auth/accountEdit',
+        name: 'accountEdit',
+        component: accountEdit,
         beforeEnter: (to, from, next) => {
-            if(!(from.path == '/superAdmin/accountList' || from.path == '/superAdmin/editAccount')){
+            if(!(from.path == '/auth/accountList' || from.path == '/auth/accountEdit')){
                 next(false)
             } else {
                 next()
             }
         }
     },
+    {
+        path: '/auth/roleConfig',
+        name: 'roleConfig',
+        component: roleConfig,
+    },
+    //角色
+    {
+        path: '/auth/roleList',
+        name: 'roleList',
+        component: roleList,
+    },
+    {
+        path: '/auth/roleEdit',
+        name: 'roleEdit',
+        component: roleEdit,
+    },
+    {
+        path: '/auth/authConfig',
+        name: 'authConfig',
+        component: authConfig,
+    },
+
+    //
+    {
+        path: '/auth/authList',
+        name: 'authList',
+        component: authList,
+    },
+    {
+        path: '/auth/authEdit',
+        name: 'authEdit',
+        component: authEdit,
+    },
  ]
 
 /**
- * 人力资源管理
+ * 服务人员管理
  */
- import serviceList from '@/pages/serviceType/serviceList.vue'
- import staffList from '@/pages/staff/staffList.vue'
 
- const hrAdminModule = [
+
+ import staffList from '@/pages/staff/staffList.vue'
+ import staffItem from '@/pages/staff/staffItem.vue'
+
+ const staffModule = [
+
     {
-        path: '/hrAdmin/serviceList',
-        name: 'serviceList',
-        component: serviceList,
-    },
-    {
-        path: '/hrAdmin/staffList',
+        path: '/staff/staffList',
         name: 'staffList',
         component: staffList,
     },
+    {
+        path: '/staff/staffItem',
+        name: 'staffItem',
+        component: staffItem,
+    },
  ]
 
+/**
+ * 服务类型管理
+ */
 
+
+import typeList from '@/pages/serviceType/typeList.vue'
+import typeConfig from '@/pages/serviceType/typeConfig.vue'
+
+const serviceTypeModule = [
+    {
+        path: '/serviceType/typeList',
+        name: 'typeList',
+        component: typeList,
+    },
+    {
+        path: '/serviceType/typeConfig',
+        name: 'typeConfig',
+        component: typeConfig,
+    },
+]
+
+/**
+ * 销售管理模块
+ */
+import orderList from '@/pages/sale/orderList.vue'
+import orderEdit from '@/pages/sale/orderEdit.vue'
+
+
+const saleModule = [
+    {
+        path: '/sale/orderList',
+        name: 'orderList',
+        component: orderList,
+    },
+    {
+        path: '/sale/orderEdit',
+        name: 'orderEdit',
+        component: orderEdit,
+    },
+]
 
 
 /**
@@ -74,7 +161,9 @@ const homeModule = [
  */
 export default [
     {path: '/', redirect: '/homePage'},
-    ...homeModule,
-    ...superAdminModule,
-    ...hrAdminModule,
+    ...homeModule, //我的模块
+    ...authModule,//权限管理模块
+    ...staffModule, //服务人员管理模块
+    ...serviceTypeModule,//服务类型管理模块
+    ...saleModule,//销售人员模块
 ]

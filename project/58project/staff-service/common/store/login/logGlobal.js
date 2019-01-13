@@ -3,6 +3,7 @@ import store from '../'
 
 export const Login = {
     get isLogin(){
+        
         return store.state.loginModule.isLogin
     },
     get token(){

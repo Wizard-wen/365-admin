@@ -10,22 +10,30 @@
         <div 
             class="vertical-item-line" 
             @click="changeSpreadState(item, index)">
-            <i 
+            <!-- <i 
                 :type="item.icon? item.icon : 'md-radio-button-off'"
                 :size="18-level"
                 :ref="'vertical-item-icon'+level+index"
                 class="vertical-item-icon"
-                :style="{color: hightLightIndex == index?'#42AAFA' : ''}"/>
+                :style="{color: hightLightIndex == index?'#42AAFA' : ''}"/> -->
+            <img 
+                alt=""
+                :src="hightLightIndex == index ? circleActive : circle"
+                class="icon-position">
             <div 
                 class="vertical-item-title" 
                 :style="{fontSize: `${12-level *2}px`,textIndent: `${5 * level}px`,color: hightLightIndex == index?'#42AAFA' : ''}">
                 {{item.title}}
-                <i 
+                <!-- <i 
                     v-if="item.children"
                     size="12"
                     class="vertical-arrow"
                     :style="{transform: (item.children && showState.isShow && (showState.shownIndex == index))? 'rotate(180deg)': ''}"
-                    type="ios-arrow-up" />
+                    type="ios-arrow-up" /> -->
+                    <i 
+                    v-if="item.children"
+                    class="vertical-arrow"
+                    :class="(item.children && showState.isShow && (showState.shownIndex == index))? 'el-icon-arrow-down' : 'el-icon-arrow-right'"></i>
             </div>
         </div>
         <slider-vertical
@@ -40,6 +48,8 @@
     
 </template>
 <script>
+import circle from '../../img/circle.svg'
+import circleActive from '../../img/circle-active.svg'
 export default {
     data(){
         return{
@@ -50,7 +60,9 @@ export default {
                 isShow: false, //当前是否有菜单打开
                 shownIndex: null,  //当前显示的节点索引
             },
-            hightlight: 0
+            hightlight: 0,
+            circle,//小图标
+            circleActive,
         }
     },
     props: {
@@ -173,6 +185,7 @@ export default {
         cursor: pointer;
     }
     .vertical-item-line{
+        position: relative;
         height: 40px;
         width: 100%;
     }
@@ -182,6 +195,14 @@ export default {
         width : 40px;
         text-align: center;
         line-height: 40px;
+    }
+    .icon-position{
+        display: inline-block;
+        height:18px;
+        width:18px;
+        position :absolute;
+        left : 11px;
+        top : 11px;
     }
     .vertical-item-title{
         float :right;
