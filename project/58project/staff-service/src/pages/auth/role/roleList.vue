@@ -81,7 +81,7 @@
                 this.$router.push({
                     path: "/auth/authConfig",
                     query: {
-
+                        id: row.id,
                     }
                 })
             },
@@ -115,16 +115,23 @@
             },
         },
         async mounted(){
-            await authService.getRoleList()
-                .then(data =>{
-                    console.log(data)
-                    this.authTable = data.data.data
-                }).catch(error =>{
-                    this.$message({
-                        type:'error',
-                        message: error.message
+            store.commit('setLoading',true)
+            try{
+                await authService.getRoleList()
+                    .then(data =>{
+                        console.log(data)
+                        this.authTable = data.data.data
+                    }).catch(error =>{
+                        this.$message({
+                            type:'error',
+                            message: error.message
+                        })
                     })
-                })
+            }catch(e){
+
+            }
+            
+            store.commit('setLoading',false)
         }
     }
 </script>

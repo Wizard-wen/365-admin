@@ -70,7 +70,6 @@
             async search(){
                 await authService.getManagerList(this.authSearch.page,this.authSearch.username)
                     .then(data =>{
-                        console.log(data)
                         this.userTable = data.data
                     }).catch(error =>{
                         this.$message({
@@ -123,16 +122,24 @@
             },
         },
         async mounted(){
-            await authService.getManagerList(this.authSearch.page,this.authSearch.username)
-                .then(data =>{
-                    // console.log(data)
-                    this.userTable = data.data.data
-                }).catch(error =>{
-                    this.$message({
-                        type:'error',
-                        message: error.message
+            store.commit('setLoading',true)
+            try{
+                await authService.getManagerList(this.authSearch.page,this.authSearch.username)
+                    .then(data =>{
+                        this.userTable = data.data.data
+                    }).catch(error =>{
+                        this.$message({
+                            type:'error',
+                            message: error.message
+                        })
                     })
+            }catch(e){
+                this.$message({
+                    type:'error',
+                    message: e.message
                 })
+            }
+            store.commit('setLoading',false)
         }
     }
 </script>

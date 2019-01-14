@@ -1,5 +1,5 @@
 <template>
-    <div class="login">
+    <div class="login" v-loading="isLoaded">
         <div class="login-box">
             <el-form ref="form" :rules="rules" :model="form" label-width="80px">
                 <el-form-item label="用户名" prop="username">
@@ -22,6 +22,7 @@ import {loginService} from '../../common'
 export default {
     data() {
         return {
+            isLoaded: false,
             form: {
                 username: 'admin',
                 password: 'admin',
@@ -42,7 +43,10 @@ export default {
             this.$refs[formName].validate(async (valid) => {
                 if (valid) {
                     try{
+                        this.isLoaded = true
                         await loginService.getToken(this.form.username, this.form.password)
+                        this.isLoaded  = false
+                        
                         this.$message({
                             type: 'success',
                             message: '登陆成功！'

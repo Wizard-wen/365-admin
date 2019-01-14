@@ -68,6 +68,7 @@ axios.interceptors.request.use(config => {
 
 // 添加响应拦截器
 axios.interceptors.response.use(async response => {
+    console.log(response)
 
     //若不是刷新token逻辑，将请求栈清空
     if(response.data.code != "10001"){
@@ -92,12 +93,13 @@ axios.interceptors.response.use(async response => {
         let stackTop = stack.pop()
         
         //重新发起请求，清空headers
-        return axios({
-            ...stackTop,
-            headers:{
+        // return axios({
+        //     ...stackTop,
+        //     headers:{
 
-            }
-        })
+        //     }
+        // })
+        return axios(response.config)
     }
     //access_token错误 10002
     else if(response.data.code == "10002"){

@@ -41,13 +41,19 @@ export default {
         }
     },
     async mounted(){
-        //若是编辑，请求编辑数据
-        if(this.$route.query.type == 1){
-            await authService.getManager(this.$route.query.id)
-                .then(data =>{
-                    this.accountForm.username = data.data.name
-                })
+        store.commit('setLoading',true)
+        try{
+            //若是编辑，请求编辑数据
+            if(this.$route.query.type == 1){
+                await authService.getManager(this.$route.query.id)
+                    .then(data =>{
+                        this.accountForm.username = data.data.name
+                    })
+            }
+        }catch(e){
+
         }
+        store.commit('setLoading',false)
     }
 }
 </script>

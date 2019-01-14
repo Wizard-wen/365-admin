@@ -14,7 +14,7 @@
                         </el-breadcrumb>
                     </div>
                     <div class="user">
-                        <img :src="mine" alt="">
+                        <img :src="minePic" alt="">
                         <el-dropdown @command="handleCommand">
                             <span class="el-dropdown-link">
                                 {{`您好！超级管理员`}}<i class="el-icon-arrow-down el-icon--right"></i>
@@ -59,8 +59,7 @@
                     class="contentshow"
                     :style="{height: `calc(100vh - ${headerHeight}px)`,width : `calc(100% - ${siderWidth}px`}"
                     ref="content">
-                    
-                    <div class="router-contains">
+                    <div class="router-contains" v-loading="isLoaded">
                         <router-view></router-view>
                     </div>
                 </div>
@@ -69,15 +68,28 @@
     </div>
 </template>
 <script>
+
+//侧拉菜单
 import menuBox from '../menu/menuBox/menuBox.vue'
 import menuVertical from '../menu/menuVertical/menuVertical.vue'
 import menuSpread from '../menu/menuSpread/menuSpread.vue'
 
-import mine from '../img/mine.svg'
+//图片
+import minePic from '../img/mine.svg'
 
+//service方法
 import loginService from '../../service/loginService.js'
 
 export default {
+    data(){
+        return {
+            headerHeight : 50, //头部高
+            siderWidth : 180,
+            isClose : false,
+            breadcrumb: [],//面包屑导航
+            minePic,//我的图标
+        }
+    },
     props :{
         //导航列表
         menuNav: {
@@ -93,15 +105,11 @@ export default {
         menuState:{
             type: Number,
             default:1
-        }
+        },
     },
-    data(){
-        return {
-            headerHeight : 50, //头部高
-            siderWidth : 180,
-            isClose : false,
-            breadcrumb: [],//面包屑导航
-            mine,
+    computed:{
+        isLoaded(){
+            return store.state.loadingModule.isLoading
         }
     },
     watch: {
@@ -128,15 +136,6 @@ export default {
             }
         },
         /**
-         * 返回上一级
-         */
-        goback(){
-            this.$router.go(-1)
-            // if(this.$router.from){
-                console.log(this.$route)
-            // }
-        },
-        /**
          * 下拉菜单
          */
         handleCommand(type){
@@ -152,6 +151,7 @@ export default {
         menuSpread
     },
     async mounted(){
+        //面包屑导航
         this.breadcrumb = store.state.loginModule.user.routerNavigator[this.$route.path]
     }
 }
@@ -200,9 +200,6 @@ export default {
                             height: 50px;
                             line-height: 50px;
                             color:#fff;
-                        }
-                        & /deep/ .el-breadcrumb__inner{
-                            // color: #fff;
                         }
                     }
                 }
@@ -253,10 +250,9 @@ export default {
             .contentshow{
                 float :right;
                 background-color: #f2f2f2 !important;
-                // padding: 0px 30px 0px 30px;
-                
                 .router-contains{
                     overflow-y: auto;
+                    min-height: calc(100vh - 50px);
                     height:100%;
                     width:100%;
                     background: #fff;

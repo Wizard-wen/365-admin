@@ -43,4 +43,11 @@ export default {
     getRoleList(){
         return authRequest.getRoleList()
     },
+     /**
+     * 获取角色权限信息
+     * @param id 角色id
+     */
+    getRolePermission(id){
+        return authRequest.getRolePermission(id)
+    },
 }
