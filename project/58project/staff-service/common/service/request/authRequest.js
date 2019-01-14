@@ -148,8 +148,8 @@ export default {
      * 物理删除权限
      * @param id 权限id
      */
-    deleteRole(id){
-        return axios.post(`./api/admin/permission/deleteRole`,{
+    deletePermission(id){
+        return axios.post(`./api/admin/permission/deletePermission`,{
             id: id
         })
     }

@@ -50,4 +50,18 @@ export default {
     getRolePermission(id){
         return authRequest.getRolePermission(id)
     },
+    /**************************************权限模块****************************************/
+    /**
+     * 获取权限列表
+     */
+    getPermissionList(){
+        return authRequest.getPermissionList()
+    },
+    /**
+     * 获取权限信息
+     * @param id 权限id
+     */
+    getPermission(id){
+        return authRequest.getPermission(id)
+    },
 }

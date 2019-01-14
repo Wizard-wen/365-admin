@@ -27,16 +27,17 @@ const homeModule = [
  //账户管理
  import accountList from '@/pages/auth/account/accountList.vue'
  import accountEdit from '@/pages/auth/account/accountEdit.vue'
- import roleConfig from '@/pages/auth/account/roleConfig.vue'
+ import accountConfig from '@/pages/auth/account/accountConfig.vue'
 
  //角色管理
  import roleList from '@/pages/auth/role/roleList.vue'
  import roleEdit from '@/pages/auth/role/roleEdit.vue'
- import authConfig from '@/pages/auth/role/authConfig.vue'
+ import roleConfig from '@/pages/auth/role/roleConfig.vue'
  
  //权限配置
  import authList from '@/pages/auth/auth/authList.vue'
  import authEdit from '@/pages/auth/auth/authEdit.vue'
+import authConfig from '@/pages/auth/auth/authConfig.vue'
  
 
  const authModule = [
@@ -58,9 +59,9 @@ const homeModule = [
         }
     },
     {
-        path: '/auth/roleConfig',
-        name: 'roleConfig',
-        component: roleConfig,
+        path: '/auth/accountConfig',
+        name: 'accountConfig',
+        component: accountConfig,
     },
     //角色
     {
@@ -74,9 +75,9 @@ const homeModule = [
         component: roleEdit,
     },
     {
-        path: '/auth/authConfig',
-        name: 'authConfig',
-        component: authConfig,
+        path: '/auth/roleConfig',
+        name: 'roleConfig',
+        component: roleConfig,
     },
 
     //
@@ -89,6 +90,11 @@ const homeModule = [
         path: '/auth/authEdit',
         name: 'authEdit',
         component: authEdit,
+    },
+    {
+        path: '/auth/authConfig',
+        name: 'authConfig',
+        component: authConfig,
     },
  ]
 

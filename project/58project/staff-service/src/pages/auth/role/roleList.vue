@@ -79,7 +79,7 @@
              */
             editAuth(index, row){
                 this.$router.push({
-                    path: "/auth/authConfig",
+                    path: "/auth/roleConfig",
                     query: {
                         id: row.id,
                     }
