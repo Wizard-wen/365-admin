@@ -63,16 +63,7 @@
              * 查找角色
              */
             async search(){
-                await authService.getManagerList(this.authSearch.page,this.authSearch.username)
-                    .then(data =>{
-                        console.log(data)
-                        this.authTable = data.data
-                    }).catch(error =>{
-                        this.$message({
-                            type:'error',
-                            message: error.message
-                        })
-                    })
+
             },
             /**
              * 权限配置
@@ -104,6 +95,7 @@
                     path: "/auth/roleEdit",
                     query: {
                         type: 1, //编辑为1
+                        id: row.id,
                     }
                 })
             },
@@ -112,6 +104,23 @@
              */
             deleteRole(index, row) {
                 console.log(index, row);
+                this.$confirm('此操作将永久删除该角色, 是否继续?', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                }).then(async () =>{
+                    await authService.deleteRole(row.id)
+                }).then(() => {
+                    this.$message({
+                        type: 'success',
+                        message: '删除成功!'
+                    });
+                }).catch(() => {
+                    this.$message({
+                        type: 'info',
+                        message: '已取消删除'
+                    });          
+                });
             },
         },
         async mounted(){

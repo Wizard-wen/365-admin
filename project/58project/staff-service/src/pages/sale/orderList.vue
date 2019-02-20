@@ -3,9 +3,10 @@
         
         <div class="container-box">
             <el-form :inline="true" :model="authSearch" class="order-form">
-                <el-form-item label="订单号">
-                    <el-input v-model="authSearch.user" placeholder="请输入订单号"></el-input>
-                </el-form-item>
+            
+                
+                
+                
                 <el-form-item label="订单类型">
                     <el-select v-model="authSearch.region" placeholder="订单类型">
                         <el-option label="待处理" value="shanghai"></el-option>
@@ -13,12 +14,39 @@
                         <el-option label="已完成" value="beijing"></el-option>
                     </el-select>
                 </el-form-item>
+                <el-form-item label="订单来源">
+                    <el-select v-model="authSearch.origin" placeholder="订单来源">
+                        <el-option label="线上" value="shanghai"></el-option>
+                        <el-option label="线下" value="beijing"></el-option>
+                        <el-option label="渠道" value="beijing"></el-option>
+                    </el-select>
+                </el-form-item>
+                <el-form-item label="搜索途径">
+                    <el-select v-model="authSearch.type" placeholder="搜索途径">
+                        <el-option label="按订单号搜索" value="shanghai"></el-option>
+                        <el-option label="按手机号搜索" value="beijing"></el-option>
+                    </el-select>
+                </el-form-item>
+                <el-form-item>
+                    <el-input v-model="authSearch.phone" placeholder="请输入订单号或客户手机号"></el-input>
+                </el-form-item>
+
                 <el-form-item>
                     <el-button type="primary" @click="search">查询</el-button>
                 </el-form-item>
+
+                <el-form-item>
+                    <el-button type="primary" @click="create">创建订单</el-button>
+                </el-form-item>
+
             </el-form>
+
+
+
+
+
             <el-table
-                :data="userTable" 
+                :data="orderTable" 
                 class="order-table">
                 <el-table-column
                     label="订单号"
@@ -26,8 +54,18 @@
                     align="center">
                 </el-table-column>
                 <el-table-column
+                    label="手机号"
+                    prop="phone"
+                    align="center">
+                </el-table-column>
+                <el-table-column
                     label="订单状态"
                     prop="state"
+                    align="center">
+                </el-table-column>
+                <el-table-column
+                    label="订单来源"
+                    prop="origin"
                     align="center">
                 </el-table-column>
                 <el-table-column
@@ -41,17 +79,9 @@
                     align="center">
                 </el-table-column>
                 <el-table-column
-                    label="服务区域"
-                    prop="address"
-                    align="center">
-                </el-table-column>
-                <el-table-column
                     label="操作"
                     align="center">
                     <template slot-scope="scope">
-                        <el-button
-                            size="mini"
-                            @click="viewUser(scope.$index, scope.row)">查看</el-button>
                         <el-button
                             size="mini"
                             @click="viewUser(scope.$index, scope.row)">处理订单</el-button>
@@ -69,13 +99,20 @@
                 //丁丹列表
                 orderTable: [
                     {
-                        
+                        id: '1',
+                        phone: '15001279361',//手机号
+                        state: '已匹配',
+                        origin: '线上',
+                        time: '2019-2-17',
+                        type: '月嫂',
                     }
                 ],
                 //用户列表搜索条件
                 authSearch: {
-                    user:'',
-                    region: ''
+                    phone: '',
+                    region: '',
+                    type: '',
+                    origin: ''
                 }
             }
         },
@@ -85,6 +122,15 @@
              */
             search(){
 
+            },
+            /**
+             * 创建订单
+             * 
+             */
+            create(){
+                this.$router.push({
+                    path: "/sale/orderCreate",
+                })
             },
             /**
              * 编辑用户权限
@@ -103,11 +149,7 @@
              */
             viewUser(index, row) {
                 this.$router.push({
-                    path: "/superAdmin/editAccount",
-                    query: {
-                        type: 0, //查看为0
-                        id: row.id
-                    }
+                    path: "/sale/orderEdit",
                 })
             },
         },

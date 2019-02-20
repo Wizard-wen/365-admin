@@ -9,6 +9,8 @@ export default {
     /****************************管理员模块**********************************/
     /**
      * 获取管理员列表
+     * @param page 页码
+     * @param name 用户名
      */
     getManagerList(page=1, name=''){
         return axios.get(`./api/admin/permission/getManagerList?page=${page}&name=${name}`)
@@ -80,11 +82,18 @@ export default {
      * @param id 角色id
      * @param name 角色名
      */
-    editRole(id, name){
-        return axios.post(`./api/admin/permission/editRole`,{
-            id: id,
-            name: name
-        })
+    editRole(name, id=''){
+        if(id == ''){
+            return axios.post(`./api/admin/permission/editRole`,{
+                name: name
+            })
+        } else {
+            return axios.post(`./api/admin/permission/editRole`,{
+                id: id,
+                name: name
+            })
+        }
+        
     },
     /**
      * 物理删除角色

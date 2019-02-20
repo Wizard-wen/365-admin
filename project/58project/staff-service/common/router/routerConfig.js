@@ -24,23 +24,23 @@ const homeModule = [
  * 权限管理
  */
 
- //账户管理
- import accountList from '@/pages/auth/account/accountList.vue'
- import accountEdit from '@/pages/auth/account/accountEdit.vue'
- import accountConfig from '@/pages/auth/account/accountConfig.vue'
+//账户管理
+import accountList from '@/pages/auth/account/accountList.vue'
+import accountEdit from '@/pages/auth/account/accountEdit.vue'
+import accountConfig from '@/pages/auth/account/accountConfig.vue'
 
- //角色管理
- import roleList from '@/pages/auth/role/roleList.vue'
- import roleEdit from '@/pages/auth/role/roleEdit.vue'
- import roleConfig from '@/pages/auth/role/roleConfig.vue'
+//角色管理
+import roleList from '@/pages/auth/role/roleList.vue'
+import roleEdit from '@/pages/auth/role/roleEdit.vue'
+import roleConfig from '@/pages/auth/role/roleConfig.vue'
  
- //权限配置
- import authList from '@/pages/auth/auth/authList.vue'
- import authEdit from '@/pages/auth/auth/authEdit.vue'
+//权限配置
+import authList from '@/pages/auth/auth/authList.vue'
 import authConfig from '@/pages/auth/auth/authConfig.vue'
  
 
  const authModule = [
+    //账户管理
     {
         path: '/auth/accountList',
         name: 'accountList',
@@ -63,7 +63,7 @@ import authConfig from '@/pages/auth/auth/authConfig.vue'
         name: 'accountConfig',
         component: accountConfig,
     },
-    //角色
+    //角色配置
     {
         path: '/auth/roleList',
         name: 'roleList',
@@ -80,16 +80,11 @@ import authConfig from '@/pages/auth/auth/authConfig.vue'
         component: roleConfig,
     },
 
-    //
+    //权限配置
     {
         path: '/auth/authList',
         name: 'authList',
         component: authList,
-    },
-    {
-        path: '/auth/authEdit',
-        name: 'authEdit',
-        component: authEdit,
     },
     {
         path: '/auth/authConfig',
@@ -103,8 +98,8 @@ import authConfig from '@/pages/auth/auth/authConfig.vue'
  */
 
 
- import staffList from '@/pages/staff/staffList.vue'
- import staffItem from '@/pages/staff/staffItem.vue'
+ import staffList from '@/pages/servicehr/staff/staffList.vue'
+ import staffItem from '@/pages/servicehr/staff/staffItem.vue'
 
  const staffModule = [
 
@@ -125,8 +120,8 @@ import authConfig from '@/pages/auth/auth/authConfig.vue'
  */
 
 
-import typeList from '@/pages/serviceType/typeList.vue'
-import typeConfig from '@/pages/serviceType/typeConfig.vue'
+import typeList from '@/pages/servicehr/serviceType/typeList.vue'
+import typeConfig from '@/pages/servicehr/serviceType/typeConfig.vue'
 
 const serviceTypeModule = [
     {
@@ -146,6 +141,7 @@ const serviceTypeModule = [
  */
 import orderList from '@/pages/sale/orderList.vue'
 import orderEdit from '@/pages/sale/orderEdit.vue'
+import orderCreate from '@/pages/sale/orderCreate.vue'
 
 
 const saleModule = [
@@ -158,6 +154,11 @@ const saleModule = [
         path: '/sale/orderEdit',
         name: 'orderEdit',
         component: orderEdit,
+    },
+    {
+        path: '/sale/orderCreate',
+        name: 'orderCreate',
+        component: orderCreate,
     },
 ]
 

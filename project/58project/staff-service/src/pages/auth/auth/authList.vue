@@ -4,9 +4,9 @@
             <div class="authList-option">
                 <div class="search">
                     <el-input class="input" v-model="authSearch.username" placeholder="请输入权限"></el-input>
-                    <el-button type="primary" @click="search">查询</el-button>
+                    <el-button type="primary" @click="searchAuth">查询</el-button>
                 </div>
-                <el-button type="primary" @click="createRole">添加权限</el-button>
+                <el-button type="primary" @click="createAuth">添加权限</el-button>
             </div>
             
             <el-table
@@ -42,10 +42,17 @@
                         <el-button
                             size="mini"
                             type="danger"
-                            @click="deleteRole(scope.$index, scope.row)">删除</el-button>
+                            @click="deleteAuth(scope.$index, scope.row)">删除</el-button>
                     </template>
                 </el-table-column>
             </el-table>
+            <!-- <el-pagination
+                @size-change="handleSizeChange"
+                @current-change="handleCurrentChange"
+                :current-page.sync="currentPage3"
+                :page-size="100"
+                layout="prev, pager, next, jumper"
+                :total="1000"></el-pagination> -->
         </div>
     </div>
 </template>
@@ -58,24 +65,75 @@ export default {
             authSearch: {
                 username: ''
             },
+            currentPage3: 5,
         }
     },
     methods: {
-        createRole(){
-
+        handleSizeChange(val) {
+            console.log(`每页 ${val} 条`);
         },
-        search(){
+        handleCurrentChange(val) {
+            console.log(`当前页: ${val}`);
+        },
+        /**
+         * 查找权限信息
+         */
+        searchAuth(){
 
         },
         /**
-         * 权限配置
+         * 新建权限
+         */
+        createAuth(){
+            this.$router.push({
+                path: "/auth/authConfig",
+                query: {
+                    type: 0,
+                }
+            })
+        },
+        /**
+         * 配置权限
          */
         editAuth(index, row){
             this.$router.push({
                 path: "/auth/authConfig",
                 query: {
                     id: row.id,
+                    type: 1
                 }
+            })
+        },
+        /**
+         * 删除用户
+         */
+        deleteAuth(index, row) {
+            console.log(index, row);
+            this.$confirm('此操作将永久删除该权限, 是否继续?', '提示', {
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                type: 'warning',
+            }).then(async () => {
+                let a = await authService.deletePermission(row.id)
+                // Promise.resolve()
+                    // .then(data =>{
+                    //     debugger
+                    //     this.$message({
+                    //         type: 'success',
+                    //         message: data.message
+                    //     });
+                    // }).catch(error =>{
+                    //     debugger
+                    //     this.$message({
+                    //         type: 'info',
+                    //         message: error.message
+                    //     }); 
+                    // })
+            }).catch(error =>{
+                    this.$message({
+                            type: 'info',
+                            message: error.message
+                        }); 
             })
         },
     },
@@ -84,7 +142,6 @@ export default {
         try {
              await authService.getPermissionList()
                 .then(data =>{
-                    console.log(data)
                     this.authList = data.data.data
                 }).catch(err =>{
 

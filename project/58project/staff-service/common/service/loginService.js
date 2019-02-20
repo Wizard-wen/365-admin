@@ -23,16 +23,43 @@ export default {
                 children :[
                     {
                         title : '账户列表',
-                        router: '/auth/accountList'
+                        router: '/auth/accountList',
+                        contains: [
+                            {
+                                title : '账户编辑',
+                                router: '/auth/accountEdit'
+                            },
+                            {
+                                title : '角色配置',
+                                router: '/auth/accountConfig'
+                            },
+                        ]
                     },
                     {
                         title : '角色列表',
-                        router: '/auth/roleList'
+                        router: '/auth/roleList',
+                        contains: [
+                            {
+                                title : '角色权限配置',
+                                router: '/auth/roleConfig'
+                            },
+                            {
+                                title : '角色编辑',
+                                router: '/auth/roleEdit'
+                            },
+                        ]
                     },
                     {
                         title : '权限配置',
-                        router: '/auth/authList'
+                        router: '/auth/authList',
+                        contains: [
+                            {
+                                title : '权限信息配置',
+                                router: '/auth/authConfig'
+                            },
+                        ]
                     },
+                    
                 ]
             },
             {
@@ -56,10 +83,6 @@ export default {
                     {
                         title : '订单列表',
                         router: '/sale/orderList'
-                    },
-                    {
-                        title : '服务人员列表',
-                        router: '/staff/staffList'
                     },
                 ]
             },
@@ -106,7 +129,16 @@ export default {
                     if(item.children){
                         visitTree(item.children, (valuenode == ''? '' : (valuenode+'-'))+item.title)
                     }else{
-    
+                        if(item.contains){
+                            
+                            let contains_arr = item.contains
+                            
+                            let father_router = item.router
+
+                            contains_arr.forEach((it, index) => {
+                                routerobject[it.router] = (valuenode == ''? '' : (valuenode+'-'))+it.title
+                            })
+                        }
                         routerobject[item.router] =  (valuenode == ''? '' : (valuenode+'-'))+item.title
                     }
                 })

@@ -1,7 +1,7 @@
 <template>
-    <div>
-        <div>
-            <el-form ref="form" :model="authForm" label-width="120px">
+    <div class="auth-config">
+        <el-form class="auth-form" ref="form" :model="authForm" label-width="120px">
+            <div>
                 <el-form-item label="权限路由">
                     <el-input v-model="authForm.route"></el-input>
                 </el-form-item>
@@ -32,12 +32,13 @@
                 <el-form-item label="是否展示">
                     <el-switch v-model="authForm.is_display"></el-switch>
                 </el-form-item>
-                <el-form-item>
-                    <el-button type="primary" @click="onSubmit">立即创建</el-button>
-                    <el-button>取消</el-button>
-                </el-form-item>
-            </el-form>
-        </div>
+            </div>
+            
+            <el-form-item>
+                <el-button type="primary" @click="onSubmit">{{$route.query.id? '确认编辑' : '立即创建'}}</el-button>
+                <el-button @click="goback">取消</el-button>
+            </el-form-item>
+        </el-form>
     </div>
 </template>
 
@@ -45,11 +46,18 @@
 
 
 <script>
+
+/**
+ * type 0 新建  1 编辑 
+ */
 import {authService} from '../../../../common'
+
 export default {
     data() {
         return {
+            //权限表单
             authForm: {
+                id: '',//id
                 route: '',//权限路由
                 name: '',//权限名字
                 description: '',//权限描述
@@ -59,23 +67,59 @@ export default {
                 is_api: '',//是否为api路由
                 is_display: '',//是否展示
             },
+            //权限父级id下拉列表
             selectionList: []
         }
     },
     methods: {
-        onSubmit() {
-            console.log('submit!');
+        /**
+         * 提交表单
+         * 区分新建和编辑
+         */
+        async onSubmit() {
+            let obj = {}
+            if(this.$route.query.type == 0){
+                Object.keys(this.authForm).forEach((item) =>{
+                    if(item != 'id'){
+                        obj.item = this.authForm.item
+                    }
+                })
+            } else {
+                obj = {
+                    ...this.authForm
+                }
+            }
+            try{
+                await authService.editPermission(obj)
+                    .then(data =>{
+                        console.log(data)
+                    }).catch(error =>{
+                        this.$message({
+                            type:'error',
+                            message: error.message
+                        })
+                    })
+            } catch(e){
+
+            }
+            
+        },
+        goback(){
+            this.$router.push("/auth/authList")
         }
     },
     async mounted(){
         store.commit('setLoading',true)
         try{
-            debugger
             await authService.getPermission(this.$route.query.id)
                 .then(data =>{
-                    console.log(data)
+
+                    //权限表单字段
                     this.authForm = data.data.permission
+
+                    //下拉菜单列表
                     this.selectionList = data.data.selection
+
                 }).catch(error =>{
                     this.$message({
                         type:'error',
@@ -90,4 +134,12 @@ export default {
     }
 }
 </script>
+<style lang="scss" scoped>
+    .auth-config{
+        padding: 30px;
+        .auth-form{
+            width: 760px;
+        }
+    }
+</style>
 

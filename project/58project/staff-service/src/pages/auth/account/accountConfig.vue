@@ -1,14 +1,21 @@
 <template>
     <div class="roleConfig">
-        <div 
-            v-for="(item, index) in roleList"
-            :key="index">
-            <p>{{item.name}}</p>
-            <el-switch
-            v-model="item.ischosen"
-            active-color="#13ce66"
-            inactive-color="#ff4949"></el-switch>
+        <div class="config-box">
+            <div 
+                class="roleLine"
+                v-for="(item, index) in roleList"
+                :key="index">
+                
+                <p class="name">{{item.name}}</p>
+                
+                <el-switch
+                    class="switch"
+                    v-model="item.ischosen"
+                    active-color="#13ce66"
+                    inactive-color="#ff4949"></el-switch>
+            </div>
         </div>
+        
         <div>
             <el-button type="primary" @click="editRole">修改</el-button>
             <el-button @click="goback">返回</el-button>
@@ -100,3 +107,33 @@ export default {
     }
 }
 </script>
+<style lang="scss" scoped>
+    .roleConfig{
+        // height: 500px;
+        // width: 100%;
+        padding: 30px;
+        .config-box{
+            padding: 10px;
+            margin-bottom: 20px;
+            min-height: 560px;
+            overflow: auto;
+            width: 100%;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+
+        }
+        .roleLine{
+            height: 40px;
+            // width: 300px;
+            display: flex;
+            justify-content: flex-start;
+            .name{
+                height: 40px;
+                width: 120px;
+                font-size: 16px;
+
+            }
+        }
+    }
+</style>
+

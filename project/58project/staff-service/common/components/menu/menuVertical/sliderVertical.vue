@@ -10,12 +10,6 @@
         <div 
             class="vertical-item-line" 
             @click="changeSpreadState(item, index)">
-            <!-- <i 
-                :type="item.icon? item.icon : 'md-radio-button-off'"
-                :size="18-level"
-                :ref="'vertical-item-icon'+level+index"
-                class="vertical-item-icon"
-                :style="{color: hightLightIndex == index?'#42AAFA' : ''}"/> -->
             <img 
                 alt=""
                 :src="hightLightIndex == index ? circleActive : circle"
@@ -24,12 +18,6 @@
                 class="vertical-item-title" 
                 :style="{fontSize: `${12-level *2}px`,textIndent: `${5 * level}px`,color: hightLightIndex == index?'#42AAFA' : ''}">
                 {{item.title}}
-                <!-- <i 
-                    v-if="item.children"
-                    size="12"
-                    class="vertical-arrow"
-                    :style="{transform: (item.children && showState.isShow && (showState.shownIndex == index))? 'rotate(180deg)': ''}"
-                    type="ios-arrow-up" /> -->
                     <i 
                     v-if="item.children"
                     class="vertical-arrow"
