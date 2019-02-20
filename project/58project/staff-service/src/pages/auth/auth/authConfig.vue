@@ -3,10 +3,10 @@
         <el-form class="auth-form" ref="form" :model="authForm" label-width="120px">
             <!-- <div> -->
                 <el-form-item label="权限路由">
-                    <el-input v-model="authForm.route"></el-input>
+                    <el-input v-model="authForm.router"></el-input>
                 </el-form-item>
                 <el-form-item label="权限名字">
-                    <el-input v-model="authForm.name"></el-input>
+                    <el-input v-model="authForm.title"></el-input>
                 </el-form-item>
                 <el-form-item label="权限描述">
                     <el-input v-model="authForm.description"></el-input>
@@ -19,7 +19,7 @@
                         <el-option 
                             v-for="(item, index) in selectionList" 
                             :key="index" 
-                            :label="item.names" 
+                            :label="item.titles" 
                             :value="item.id"></el-option>
                     </el-select>
                 </el-form-item>
@@ -52,8 +52,8 @@ export default {
             //权限表单
             authForm: {
                 id: '',//id
-                route: '',//权限路由
-                name: '',//权限名字
+                router: '',//权限路由
+                title: '',//权限名字
                 description: '',//权限描述
                 sort_order: '',//权限排序顺序
                 parent_id: '',//权限父级id

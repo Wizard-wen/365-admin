@@ -88,28 +88,38 @@ export default {
             },
         ];
 
-        let routerObj = this.getRouterLeaf(arr,'');
+        // let routerObj = this.getRouterLeaf(arr,'');
 
         await loginRequest.login(username, password)
             .then(data =>{
                 console.log(data)
+
                 let manager = data.data.manager,
                     tree = data.data.tree
+                
+                let routerObj = this.getRouterLeaf(tree,'');
+
+                console.log(tree)
+                console.log(routerObj)
+
                 // 登录信息存入 vuex sessionStorage
                 store.commit('login',{
                     access_token: manager.access_token,
                     refresh_token: manager.refresh_token
                 })
+                
                 //用户信息存入 vuex sessionStorage
                 store.commit('setUser', {
-                    menu: arr,
+                    menu: arr, //树形菜单就是据此渲染
                     routerNavigator: routerObj,
+
                     username: manager.name,
                     id: manager.id,
                     account: manager.account,
                     expire: manager.expire,
                     tree: tree,
                 })
+
             }).catch(err =>{
                 throw err
             })     

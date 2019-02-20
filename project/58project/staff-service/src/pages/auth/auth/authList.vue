@@ -24,12 +24,12 @@
                 </el-table-column>
                 <el-table-column
                     label="名称"
-                    prop="name"
+                    prop="title"
                     align="center">
                 </el-table-column>
                 <el-table-column
                     label="路由"
-                    prop="route"
+                    prop="router"
                     align="center">
                 </el-table-column>
                 <el-table-column

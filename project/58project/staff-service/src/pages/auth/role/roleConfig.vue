@@ -26,7 +26,7 @@ export default {
             roleConfigList: [],//包装好的树形结构渲染的数据
             defaultProps: {
                 children: 'children',
-                label: 'name'
+                label: 'title'
             }
         }
     },
