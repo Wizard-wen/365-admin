@@ -119,7 +119,7 @@ export default {
     editRolePermission(id, permission){
         return axios.post(`./api/admin/permission/editRolePermission`,{
             id: id,
-            permission: permission
+            permissionIds: permission
         })
     },
 

@@ -92,6 +92,7 @@ export default {
 
         await loginRequest.login(username, password)
             .then(data =>{
+                console.log(data)
                 let manager = data.data.manager,
                     tree = data.data.tree
                 // 登录信息存入 vuex sessionStorage

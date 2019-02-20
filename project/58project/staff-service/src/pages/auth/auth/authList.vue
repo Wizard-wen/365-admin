@@ -18,13 +18,13 @@
                     align="center">
                 </el-table-column>
                 <el-table-column
-                    label="名称"
-                    prop="name"
+                    label="是否展示"
+                    prop="is_display"
                     align="center">
                 </el-table-column>
                 <el-table-column
-                    label="描述"
-                    prop="description"
+                    label="名称"
+                    prop="name"
                     align="center">
                 </el-table-column>
                 <el-table-column
@@ -61,7 +61,9 @@ import {authService} from '../../../../common'
 export default {
     data(){
         return {
-            authList: [], //权限列表
+            authList: [
+
+            ], //权限列表
             authSearch: {
                 username: ''
             },
