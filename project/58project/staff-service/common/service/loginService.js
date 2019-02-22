@@ -68,7 +68,8 @@ export default {
                 children :[
                     {
                         title : '服务人员列表',
-                        router: '/staff/staffList'
+                        router: '/staff/staffList',
+
                     },
                     {
                         title : '服务类型列表',
@@ -92,15 +93,11 @@ export default {
 
         await loginRequest.login(username, password)
             .then(data =>{
-                console.log(data)
 
                 let manager = data.data.manager,
                     tree = data.data.tree
-                
-                let routerObj = this.getRouterLeaf(tree,'');
-
                 console.log(tree)
-                console.log(routerObj)
+                let routerObj = this.getRouterLeaf(tree,'');
 
                 // 登录信息存入 vuex sessionStorage
                 store.commit('login',{
@@ -113,9 +110,9 @@ export default {
                     menu: arr, //树形菜单就是据此渲染
                     routerNavigator: routerObj,
 
-                    username: manager.name,
-                    id: manager.id,
-                    account: manager.account,
+                    username: manager.name,//用户名
+                    id: manager.id, //用户id
+                    account: manager.account,//账号
                     expire: manager.expire,
                     tree: tree,
                 })

@@ -55,5 +55,11 @@ export default {
             id: id,
             version: version
         })
+    },
+    /**
+     * 省市区数据
+     */
+    getAreaTree(){
+        return axios.get(`./api/admin/getAreaTree`)
     }
 }

@@ -29,4 +29,11 @@ export default {
     getStaffSkillList(){
         return hrRequest.getStaffSkillList()
     },
+
+    /**
+     * 省市区数据获取
+     */
+    getAreaTree(){
+        return hrRequest.getAreaTree()
+    }
 }
