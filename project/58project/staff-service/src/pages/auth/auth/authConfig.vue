@@ -57,7 +57,7 @@ export default {
                 description: '',//权限描述
                 sort_order: '',//权限排序顺序
                 parent_id: '',//权限父级id
-                is_display: '',//是否展示，是否在列表中展示 1 显示 2 不显示
+                is_display: false,//是否展示，是否在列表中展示 1 显示 2 不显示
             },
             //权限父级id下拉列表
             selectionList: []
@@ -69,11 +69,13 @@ export default {
          * 区分新建和编辑
          */
         async onSubmit() {
-            if(this.authForm.is_display){
+            let is_show = this.authForm.is_display;
+            if(is_show){
                 this.authForm.is_display = 1
             } else {
                 this.authForm.is_display = 2
             }
+            
             try{
                 await authService.editPermission(this.authForm)
                     .then(data =>{

@@ -35,5 +35,24 @@ export default {
      */
     getAreaTree(){
         return hrRequest.getAreaTree()
-    }
+    },
+    /**
+     * 技能分类接口
+     */
+    getCategoryList(){
+        return hrRequest.getCategoryList()
+    },
+    /**
+     * 请求某一具体技能接口
+     * @param id 技能的id
+     */
+    getCategory(id){
+        return hrRequest.getCategory(id)
+    },
+    /**
+     * 编辑技能接口
+     */
+    editCategory(obj){
+        return hrRequest.editCategory(obj)
+    },
 }

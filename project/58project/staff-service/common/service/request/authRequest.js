@@ -127,8 +127,8 @@ export default {
     /**
      * 获取权限列表
      */
-    getPermissionList(){
-        return axios.get(`./api/admin/permission/getPermissionList`)
+    getPermissionList(page= 1, pageNumber= 10){
+        return axios.get(`./api/admin/permission/getPermissionList?page=${page}&pageNumber=${10}`)
     },
     /**
      * 获取权限信息

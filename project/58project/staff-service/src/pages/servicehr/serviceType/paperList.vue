@@ -1,56 +1,47 @@
 <template>
     <div class="staff">
         <div class="container-box">
-            <el-form :inline="true" :model="staffSearch" class="staff-form">
+            <el-form :inline="true" :model="paperSearch" class="staff-form">
                 <div >
                     <el-form-item>
-                        <el-input v-model="staffSearch.phone" placeholder="请输入员工id或姓名"></el-input>
+                        <el-input v-model="paperSearch.phone" placeholder="请输入员工id或姓名"></el-input>
                     </el-form-item>
 
                     <el-form-item>
-                        <el-button type="primary" @click="searchStaff">查询</el-button>
+                        <el-button type="primary" @click="searchPaper">查询</el-button>
                     </el-form-item>
 
                     <el-form-item>
-                        <el-button type="primary" @click="createStaff">添加</el-button>
+                        <el-button type="primary" @click="createPaper">添加</el-button>
                     </el-form-item>
                 </div>
                 
                 <div>
-                    <el-form-item label="服务地区">
-                        <el-select v-model="staffSearch.region" placeholder="服务地区">
+                    <el-form-item label="订单类型">
+                        <el-select v-model="paperSearch.region" placeholder="订单类型">
                             <el-option label="待处理" value="shanghai"></el-option>
                             <el-option label="处理中" value="beijing"></el-option>
                             <el-option label="已完成" value="beijing"></el-option>
                         </el-select>
                     </el-form-item>
-                    <el-form-item label="技能分类">
-                        <el-select v-model="staffSearch.skill" placeholder="选择技能分类">
+                    <el-form-item label="订单来源">
+                        <el-select v-model="paperSearch.origin" placeholder="订单来源">
                             <el-option label="线上" value="shanghai"></el-option>
                             <el-option label="线下" value="beijing"></el-option>
                             <el-option label="渠道" value="beijing"></el-option>
                         </el-select>
                     </el-form-item>
-                    <el-form-item label="能力标签">
-                        <el-select v-model="staffSearch.lable" placeholder="能力标签">
-                            <el-option label="按订单号搜索" value="shanghai"></el-option>
-                            <el-option label="按手机号搜索" value="beijing"></el-option>
-                        </el-select>
-                    </el-form-item>
-                     <el-form-item label="证书">
-                        <el-select v-model="staffSearch.paper" placeholder="证书">
+                    <el-form-item label="搜索途径">
+                        <el-select v-model="paperSearch.type" placeholder="搜索途径">
                             <el-option label="按订单号搜索" value="shanghai"></el-option>
                             <el-option label="按手机号搜索" value="beijing"></el-option>
                         </el-select>
                     </el-form-item>
                 </div>
-                
-                
-
             </el-form>
             
             <el-table
-                :data="staffTable" 
+                :data="paperTable" 
                 class="staff-table">
                 <el-table-column
                     label="员工id"
@@ -63,18 +54,8 @@
                     align="center">
                 </el-table-column>
                 <el-table-column
-                    label="年龄"
-                    prop="age"
-                    align="center">
-                </el-table-column>
-                <el-table-column
-                    label="手机号"
-                    prop="phone"
-                    align="center">
-                </el-table-column>
-                <el-table-column
-                    label="是否添加技能信息"
-                    prop="state"
+                    label="是否启用"
+                    prop="type"
                     align="center">
                 </el-table-column>
 
@@ -82,8 +63,8 @@
                     label="操作"
                     align="center">
                     <template slot-scope="scope">
-                        <el-button size="mini" @click="editStaff(scope.$index, scope.row)">编辑</el-button>
-                        <el-button size="mini" @click="deleteStaff(scope.$index, scope.row)">删除</el-button>
+                        <el-button size="mini" @click="editPaper(scope.$index, scope.row)">编辑</el-button>
+                        <el-button size="mini" @click="deletePaper(scope.$index, scope.row)">删除</el-button>
                     </template>
                 </el-table-column>
             </el-table>
@@ -96,22 +77,20 @@
     export default {
         data() {
             return {
-                //丁丹列表
-                staffTable: [
+                //技能列表
+                paperTable: [
                     {
-                        id: '1',
-                        name: '宋希文',//姓名
-                        age: '',
-                        phone: '15001279361',//手机号
-                        // state: '是',//是否已经添加技能信息
+                        id: '1',//技能id
+                        name: '宋希文',//技能名
+                        type: '',//是否展示
                     }
                 ],
-                //用户列表搜索条件
-                staffSearch: {
-                    region: '',//服务地区
-                    skill: '',//技能
-                    label: '',//标签
-                    paper: '',//证书
+                //技能搜索条件
+                paperSearch: {
+                    phone: '',
+                    region: '',
+                    type: '',
+                    origin: ''
                 }
             }
         },
@@ -119,14 +98,14 @@
             /**
              * 查找用户
              */
-            searchStaff(){
+            searchPaper(){
 
             },
             /**
              * 创建服务人员
              * des 先创建服务人员，然后才能添加服务人员技能。
              */
-            createStaff(){
+            createPaper(){
                 this.$router.push({
                     path: "/staff/staffItem",
                     query: {
@@ -138,13 +117,21 @@
              * 编辑服务人员信息
              * 编辑时可以添加服务人员技能
              */
-            editStaff(index, row){
+            editPaper(index, row){
                 this.$router.push({
-                    path: "/staff/staffItem",
+                    path: "/serviceType/skillConfig",
                     query: {
                         type: 1, //编辑为1
                         id: row.id
                     }
+                })
+            },
+            /**
+             * 查看用户权限
+             */
+            viewService(index, row) {
+                this.$router.push({
+                    path: "/sale/orderEdit",
                 })
             },
         },
@@ -156,9 +143,11 @@
                 /**
                  * 获取员工数据信息
                  */
-                await hrService.getStaffList()
+                await hrService.getCategoryList()
                     .then(data =>{
-                        this.staffTable = data.data.data
+                        // console.log(data)
+                        // debugger
+                        this.paperTable = data.data.data
                     }).catch(error =>{
                         this.$message({
                             type:'error',
@@ -174,5 +163,21 @@
     }
 </script>
 <style lang="scss" scoped>
-
+    .staff{
+        
+        
+        .container-box{
+            padding: 30px;
+            .staff-form{
+                width:80%;
+                min-width:1100px;
+                margin: 0 auto;
+            }
+            .staff-table{
+                width: 80%;
+                min-width: 1100px;
+                margin: 0 auto;
+            }
+        }
+    }
 </style>

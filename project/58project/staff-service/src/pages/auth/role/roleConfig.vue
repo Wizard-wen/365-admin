@@ -3,7 +3,7 @@
         <div class="tree-container">
             <el-tree
                 ref="tree"
-                :data="roleConfigList"
+                :data="permissionList"
                 show-checkbox
                 node-key="id"
                 :default-checked-keys="rolePermissionIds"
@@ -32,10 +32,15 @@ export default {
     },
     methods: {
         async onSubmit(){
-            console.log(this.$refs.tree.getCheckedKeys())
-            console.log(this.$refs.tree.getHalfCheckedKeys())
-            debugger
-            await authService.editRolePermission(this.$route.query.id, this.$refs.tree.getCheckedKeys())
+            /**
+             * 提交时，应当将半选和全选全部都提出来
+             */
+            let selectedList = [
+                ...this.$refs.tree.getCheckedKeys(),
+                ...this.$refs.tree.getHalfCheckedKeys()
+            ]
+
+            await authService.editRolePermission(this.$route.query.id, selectedList)
                 .then(data =>{
                     if(data.code == '0'){
                         this.$message({
@@ -58,83 +63,99 @@ export default {
             this.$router.push('/auth/roleList')
         },
         /**
-         * 若存在子节点，统一改变状态
+         * 拿到所有处于选中状态的叶节点
+         * @param arrList 原始树形结构数组
          */
-        changeState(item){
-            if(item.son){
-                item.son.forEach((i, index) =>{
-                    i.isChosen = item.isChosen
-                })
-            }
-        },
-        /**
-         * 拿到所有选中的id
-         */
-        getSelectedIds(arr1){
-            let ids = []
-            function findIds(arr){
-                arr.forEach((item, index) =>{
-                    if(item.son){
-                        debugger
-                        findIds(item.son)
-                    }
-                    if(item.isChosen){
-                        ids.push(item.id)
-                    }
-                })
-            }
-            findIds(arr1)
-            return ids
-        },
-        getCheckedNodes(){
+        getSelectedIds(arrList){
 
+            let ids = []; //定义一个用来保存所有 处于选中状态 的 叶节点 的 数组
+            
+            /**
+             * 递归地，将所有的叶节点is_on属性为true的节点存入数组
+             */
+            function findIds(arr){
+
+                arr.forEach((item, index) =>{
+                    if(item.children){
+                        findIds(item.children)
+                    } else {
+                        if(item.is_on){
+                            ids.push(item.id)
+                        }
+                    } 
+                })
+            }
+
+            findIds(arrList)
+            
+            return ids
         }
-        
     },
     async mounted(){
         let _this = this
         store.commit('setLoading',true)
         try {
              await authService.getRolePermission(this.$route.query.id)
+                
                 .then(data =>{
+                    //数组形式的树状结构
                     this.permissionList = data.data.permissionList
-                    this.rolePermissionIds = data.data.rolePermissionIds
 
-                    this.roleConfigList = data.data.permissionList.reduce((arr, item, index) => {
+                    //当前所有处于选中状态的叶节点（回显用）
+                    this.rolePermissionIds = this.getSelectedIds(data.data.permissionList)
 
-                        function hasSonFn(id, arr){
-                            return {
-                                isChosen: arr.includes(id)? true: false
-                            }
-                        }
-                        function createObj(obj){
-                            let sonArr = [],
-                                hasSon = {};
+                    // this.rolePermissionIds = [15]
 
-                            hasSon = hasSonFn(obj.id, _this.rolePermissionIds)
 
-                            if(obj.son){
-                                sonArr = obj.son.reduce((arr, item, index)=>{
-                                    return [...arr, createObj(item)]
-                                },[])
-                            } 
+                    // this.roleConfigList = data.data.permissionList.reduce((arr, item, index) => {
+                        
+                    //     //判断 当前分支节点 是否在 被选中数组 中
+                    //     function hasSonFn(id, arr){
+                    //         return {
+                    //             isChosen: arr.includes(id)? true : false
+                    //         }
+                    //     }
 
-                            if(sonArr.length){
-                                return {
-                                    ...obj,
-                                    ...hasSon,
-                                    children: sonArr
-                                }
-                            } else {
-                                return {
-                                    ...obj,
-                                    ...hasSon,
-                                }
-                            }
-                        }
-                        return [...arr,createObj(item)]
-                    },[])
-                    console.log(this.roleConfigList[12])
+                    //     function createObj(obj){
+                    //         let sonArr = [],
+                    //             hasSon = {};
+
+
+                    //         hasSon = hasSonFn(obj.id, _this.rolePermissionIds)
+
+                    //         if(obj.children){
+
+                    //             sonArr = obj.children.reduce((arr, item, index)=>{
+                    //                 return [
+                    //                     ...arr, 
+                    //                     createObj(item)
+                    //                 ]
+                    //             },[])
+                    //         } 
+
+                    //         if(sonArr.length){
+                    //             return {
+                    //                 ...obj,
+                    //                 ...hasSon,
+                    //                 children: sonArr
+                    //             }
+                    //         } else {
+                    //             return {
+                    //                 ...obj,
+                    //                 ...hasSon,
+                    //             }
+                    //         }
+                    //     }
+
+                    //     return [
+                    //         ...arr,
+                    //         createObj(item)
+                    //     ]
+
+                    // },[])
+
+                    console.log(this.roleConfigList)
+
                 }).catch(err =>{
 
                 })

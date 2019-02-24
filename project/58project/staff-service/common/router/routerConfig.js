@@ -122,6 +122,8 @@ import authConfig from '@/pages/auth/auth/authConfig.vue'
 
 import typeList from '@/pages/servicehr/serviceType/typeList.vue'
 import typeConfig from '@/pages/servicehr/serviceType/typeConfig.vue'
+import skillList from '@/pages/servicehr/serviceType/skillList.vue'
+import skillConfig from '@/pages/servicehr/serviceType/skillConfig.vue'
 
 const serviceTypeModule = [
     {
@@ -133,6 +135,16 @@ const serviceTypeModule = [
         path: '/serviceType/typeConfig',
         name: 'typeConfig',
         component: typeConfig,
+    },
+    {
+        path: '/serviceType/skillList',
+        name: 'skillList',
+        component: skillList,
+    },
+    {
+        path: '/serviceType/skillConfig',
+        name: 'skillConfig',
+        component: skillConfig,
     },
 ]
 

@@ -7,16 +7,14 @@ export default {
      * 获取员工列表
      */
     getStaffList(){
-        return axios.get(`./api/admin/staff/getStaffList?page=1`)
+        return axios.get(`./api/admin/staff/getStaffList?page=1&pageNumber=3`)
     },
     /**
      * 获取人员信息
      * @param id 员工id
      */
     getStaff(id){
-        return axios.post(`./api/admin/staff/getStaff`, {
-            id: id
-        })
+        return axios.get(`./api/admin/staff/getStaff?id=${id}`)
     },
     /**
      * 编辑员工
@@ -60,6 +58,29 @@ export default {
      * 省市区数据
      */
     getAreaTree(){
-        return axios.get(`./api/admin/getAreaTree`)
-    }
+        return axios.get(`./api/admin/common/getAreaTree`)
+    },
+    /**
+     * 技能分类接口
+     */
+    getCategoryList(){
+        return axios.get(`./api/admin/service/getCategoryList`)
+    },
+    /**
+     * 请求某一具体技能接口
+     * @param id 技能的id
+     */
+    getCategory(id){
+        return axios.get(`./api/admin/service/getCategory?id=${id}`)
+    },
+    /**
+     * 编辑技能接口
+     */
+    editCategory(obj){
+        
+        obj = Object.assign({},obj)
+
+        return axios.post(`./api/admin/service/editCategory`,obj)
+    
+    },
 }
