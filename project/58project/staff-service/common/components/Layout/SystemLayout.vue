@@ -17,7 +17,7 @@
                         <img :src="minePic" alt="">
                         <el-dropdown @command="handleCommand">
                             <span class="el-dropdown-link">
-                                {{`您好！超级管理员`}}<i class="el-icon-arrow-down el-icon--right"></i>
+                                {{`您好！${$store.state.loginModule.user.username}`}}<i class="el-icon-arrow-down el-icon--right"></i>
                             </span>
                             <el-dropdown-menu slot="dropdown">
                                 <el-dropdown-item command="1">注销</el-dropdown-item>

@@ -23,7 +23,7 @@ export default {
     },
     computed:{
         menuList(){
-            return store.state.loginModule.user.menu
+            return store.state.loginModule.user.tree
         }
     },
     components: {

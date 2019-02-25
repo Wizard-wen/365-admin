@@ -47,6 +47,8 @@ Vue.config.productionTip = false
 // axios.defaults.baseURL = config.apiPath
 
 axios.interceptors.request.use(config => {
+    
+    // console.log('请求栈长度',stack.length)
 
     //token加入请求头
     config.headers = {
@@ -61,6 +63,15 @@ axios.interceptors.request.use(config => {
 
 // 添加响应拦截器
 axios.interceptors.response.use(async response => {
+    // console.log(response)
+
+    //若不是刷新token逻辑，将请求栈清空
+    if(response.data.code != "10001"){
+
+        stack.pop()
+        
+        // console.log(stack.length,stack)
+    }
     
     //请求出错
     if(response.data.code == "1"){
@@ -68,6 +79,7 @@ axios.interceptors.response.use(async response => {
     }
     //token失效 
     else if(response.data.code == "10001"){
+        // console.log('token失效，10001')
         
         //刷新token 
         await loginService.refreshToken(Login.token.refresh_token)

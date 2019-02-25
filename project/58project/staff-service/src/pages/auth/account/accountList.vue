@@ -4,14 +4,14 @@
         <div class="container-box">
             <div class="authority-option">
                 <div class="search">
-                    <el-input class="input" v-model="authSearch.username" placeholder="请输入用户名"></el-input>
-                    <el-button type="primary" @click="search">查询</el-button>
+                    <el-input class="input" v-model="accountSearch.username" placeholder="请输入用户名"></el-input>
+                    <el-button type="primary" @click="searchAccount">查询</el-button>
                 </div>
                 <el-button type="primary" @click="createAccount">添加账户</el-button>
             </div>
             
             <el-table
-                :data="userTable" 
+                :data="accountTable" 
                 class="authority-table">
                 <el-table-column
                     label="id"
@@ -19,12 +19,12 @@
                     align="center">
                 </el-table-column>
                 <el-table-column
-                    label="用户名"
+                    label="账号"
                     prop="account"
                     align="center">
                 </el-table-column>
                 <el-table-column
-                    label="昵称"
+                    label="用户名"
                     prop="name"
                     align="center">
                 </el-table-column>
@@ -53,11 +53,12 @@
     import {authService} from '../../../../common'
     export default {
         data() {
+            
             return {
                 //用户列表
-                userTable: [],
+                accountTable: [],
                 //用户列表搜索条件
-                authSearch: {
+                accountSearch: {
                     username: '',//账户名
                     page: 1,//页码
                 }
@@ -67,10 +68,12 @@
             /**
              * 查找用户
              */
-            async search(){
-                await authService.getManagerList(this.authSearch.page,this.authSearch.username)
+            async searchAccount(){
+
+                await authService.getManagerList(this.accountSearch.page, this.accountSearch.username)
                     .then(data =>{
-                        this.userTable = data.data
+                        console.log(data)
+                        this.accountTable = data.data.data
                     }).catch(error =>{
                         this.$message({
                             type:'error',
@@ -83,7 +86,7 @@
              */
             editRole(index, row){
                 this.$router.push({
-                    path: "/auth/roleConfig",
+                    path: "/auth/accountConfig",
                     query: {
                         id: row.id
                     }
@@ -97,7 +100,6 @@
                     path: "/auth/accountEdit",
                     query: {
                         type: 0, //创建为0
-                        id: ''
                     }
                 })
             },
@@ -110,23 +112,43 @@
                     query: {
                         type: 1, //编辑为1
                         id: row.id,
-                        account: row.account
                     }
                 })
+            },
+            async realDelete(id){
+                await authService.deleteManager(id)
+                    .then(data =>{
+                        console.log(data)
+                        // done();
+                    }).catch(error =>{
+                        this.$message({
+                            type:'error',
+                            message: error.message
+                        })
+                    })
             },
             /**
              * 删除用户
              */
-            deleteUser(index, row) {
-                console.log(index, row);
+            deleteAccount(index, row) {
+
+                this.$confirm('此操作将永久删除该账户, 是否继续?', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning',
+                })
+                .then(async () => {
+                    // debugger
+                    await this.realDelete(row.id)
+                })
             },
         },
         async mounted(){
             store.commit('setLoading',true)
             try{
-                await authService.getManagerList(this.authSearch.page,this.authSearch.username)
+                await authService.getManagerList(this.accountSearch.page,this.accountSearch.username)
                     .then(data =>{
-                        this.userTable = data.data.data
+                        this.accountTable = data.data.data
                     }).catch(error =>{
                         this.$message({
                             type:'error',
