@@ -26,6 +26,11 @@ export default {
                         router: '/auth/accountList'
                     },
                     {
+                        title : '账户配置',
+                        router: '/auth/accountConfig',
+                        isShow: false
+                    },
+                    {
                         title : '角色列表',
                         router: '/auth/roleList'
                     },
