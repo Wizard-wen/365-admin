@@ -4,14 +4,14 @@
         <div class="container-box">
             <div class="authority-option">
                 <div class="search">
-                    <el-input class="input" v-model="authSearch.username" placeholder="请输入角色名"></el-input>
-                    <el-button type="primary" @click="search">查询</el-button>
+                    <el-input class="input" v-model="roleSearch[0].name" placeholder="请输入角色名"></el-input>
+                    <el-button type="primary" @click="searchRole">查询</el-button>
                 </div>
                 <el-button type="primary" @click="createRole">添加角色</el-button>
             </div>
             
             <el-table
-                :data="authTable" 
+                :data="roleTable" 
                 class="authority-table">
                 <el-table-column
                     label="id"
@@ -40,6 +40,16 @@
                     </template>
                 </el-table-column>
             </el-table>
+            <!-- 分页 -->
+            <el-pagination
+                style="margin-top:30px;"
+                @current-change="handleCurrentPage"
+                @prev-click="handleCurrentPage"
+                @next-click="handleCurrentPage"
+                :current-page.sync="pagination.currentPage"
+                :page-size="10"
+                layout="prev, pager, next, jumper"
+                :total="pagination.total"></el-pagination>
         </div>
         
     </div>
@@ -50,20 +60,80 @@
         data() {
             return {
                 //角色列表
-                authTable: [],
+                roleTable: [],
                 //角色列表搜索条件
-                authSearch: {
-                    username: '',//角色名
-                    page: 1,//页码
+                roleSearch: [
+                    {
+                        key: 'name',
+                        name: ''
+                    },
+                ],
+                /**
+                 * 分页信息
+                 */
+                pagination: {
+                    total: 0,
+                    currentPage: 1,
+                    pageNumber: 10,
                 }
+            }
+        },
+        computed:{
+            /**
+             * 全部已添加搜索字段
+             */
+            searchArray(){
+                let arr = this.roleSearch.filter((item, index) =>{
+                    if(item[item.key] != ''){
+                        return item
+                    }
+                })
+                return arr
             }
         },
         methods: {
             /**
+             * 请求表格数据
+             * @param tableOption 表格配置项
+             * @param tableOption.currentPage 当前页
+             * @param tableOption.searchSelect Array 页面筛选项
+             * [{searchkey: '', searchValue: ''}]
+             */
+            async getTableList(){
+
+                let tableOption = {
+                    currentPage: this.pagination.currentPage,
+                    pageNumber: this.pagination.pageNumber,
+                    searchSelect: this.searchArray
+                }
+
+                await authService.getRoleList(tableOption)
+                    .then(data =>{
+                        
+                        this.roleTable = data.data.data
+                        
+                        //分页信息
+                        this.pagination.currentPage = data.data.current_page //当前页码
+                        this.pagination.total = data.data.total //列表总条数
+                    }).catch(error =>{
+                        this.$message({
+                            type:'error',
+                            message: error.message
+                        })
+                    })
+            },
+            /**
+             * 切换页码
+             */
+            async handleCurrentPage(val){
+                this.pagination.currentPage = val
+                await this.getTableList()
+            },
+            /**
              * 查找角色
              */
-            async search(){
-
+            async searchRole(){
+                await this.getTableList()
             },
             /**
              * 权限配置
@@ -126,18 +196,12 @@
         async mounted(){
             store.commit('setLoading',true)
             try{
-                await authService.getRoleList()
-                    .then(data =>{
-                        console.log(data)
-                        this.authTable = data.data.data
-                    }).catch(error =>{
-                        this.$message({
-                            type:'error',
-                            message: error.message
-                        })
-                    })
+                await this.getTableList()
             }catch(e){
-
+                this.$message({
+                    type:'error',
+                    message: e.message
+                })
             }
             
             store.commit('setLoading',false)

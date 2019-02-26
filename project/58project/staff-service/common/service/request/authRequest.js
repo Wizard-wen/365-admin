@@ -3,6 +3,7 @@
  */
 
  import axios from 'axios'
+import { BreadcrumbItem } from '../../../node_modules/element-ui';
 
 export default {
 
@@ -11,9 +12,19 @@ export default {
      * 获取管理员列表
      * @param page 页码
      * @param name 用户名
+     * @param tableOption 表格配置项
+     * @param tableOption.currentPage 当前页
+     * @param tableOption.searchSelect Array 页面筛选项
+     * [{key: 'searchkey', searchkey: ''}]
      */
-    getManagerList(page=1, name=''){
-        return axios.get(`./api/admin/permission/getManagerList?page=${page}&name=${name}`)
+    getManagerList(tableOption){
+        let baseUrl = `./api/admin/permission/getManagerList?pageNumber=${tableOption.pageNumber}&page=${tableOption.currentPage}`
+        if(tableOption.searchSelect.length){
+            tableOption.searchSelect.forEach((item, index) => {
+                baseUrl += `&${item.key}=${item[item.key]}`
+            });
+        }
+        return axios.get(baseUrl)
     },
     /**
      * 获取管理员角色绑定信息
@@ -67,8 +78,14 @@ export default {
     /**
      * 获取角色列表
      */
-    getRoleList(){
-        return axios.get(`./api/admin/permission/getRoleList`)
+    getRoleList(tableOption){
+        let baseUrl = `./api/admin/permission/getRoleList?pageNumber=${tableOption.pageNumber}&page=${tableOption.currentPage}`
+        if(tableOption.searchSelect.length){
+            tableOption.searchSelect.forEach((item, index) => {
+                baseUrl += `&${item.key}=${item[item.key]}`
+            });
+        }
+        return axios.get(baseUrl)
     },
     /**
      * 获取角色信息
@@ -127,8 +144,14 @@ export default {
     /**
      * 获取权限列表
      */
-    getPermissionList(page= 1, pageNumber= 10){
-        return axios.get(`./api/admin/permission/getPermissionList?page=${page}&pageNumber=${10}`)
+    getPermissionList(tableOption){
+        let baseUrl = `./api/admin/permission/getPermissionList?pageNumber=${tableOption.pageNumber}&page=${tableOption.currentPage}`
+        if(tableOption.searchSelect.length){
+            tableOption.searchSelect.forEach((item, index) => {
+                baseUrl += `&${item.key}=${item[item.key]}`
+            });
+        }
+        return axios.get(baseUrl)
     },
     /**
      * 获取权限信息

@@ -6,8 +6,8 @@ export default {
     /**
      * 获取员工列表
      */
-    getStaffList(){
-        return hrRequest.getStaffList()
+    getStaffList(tableOption){
+        return hrRequest.getStaffList(tableOption)
     },
     /**
      * 获取人员信息
@@ -23,6 +23,9 @@ export default {
     editStaff(obj){
         return hrRequest.editStaff(obj)
     },
+
+
+
     /**
      * 获取技能列表
      */
@@ -36,11 +39,16 @@ export default {
     getAreaTree(){
         return hrRequest.getAreaTree()
     },
+
+
+
+
+    /****************************技能列表****************************************/
     /**
      * 技能分类接口
      */
-    getCategoryList(){
-        return hrRequest.getCategoryList()
+    getCategoryList(tableOption){
+        return hrRequest.getCategoryList(tableOption)
     },
     /**
      * 请求某一具体技能接口

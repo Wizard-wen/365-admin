@@ -80,6 +80,8 @@
  * type 0 新建  1 编辑 
  */
 import {hrService} from '../../../../common'
+import {hrRequest} from '../../../../common'
+
 
 export default {
     data() {
@@ -115,11 +117,6 @@ export default {
             }
         }
         return {
-            textObject: {
-                name: '/^[\u4e00-\u9fa5]+$/',
-
-            },
-            region: [],//地区信息
             //员工信息表单
             staffForm: {
                 id: '',//员工id
@@ -143,6 +140,7 @@ export default {
                 papers: [],//证书
                 skills: [],//技能
             },
+            region: [],//地区信息
             areaList: [],//地区数组
             //地区级联选择字段
             areaProps: {
@@ -228,7 +226,7 @@ export default {
             try{
                 await authService.editPermission(obj)
                     .then(data =>{
-                        console.log(data)
+                        // console.log(data)
                     }).catch(error =>{
                         this.$message({
                             type:'error',
@@ -241,12 +239,30 @@ export default {
         },
         /**
          * 添加地区
+         * @param region Array 级联选择器选出的三级地区数组
          */
         addRegion(region){
             let _this = this
-            
+            //判断是否已经存在这个地区
+            let isHave = this.staffForm.region.some((item, index) =>{
+                return item.code == region[2]
+            })
+            if(isHave){
+                this.$message({
+                    type:'error',
+                    message: '当前地区已存在，请重新选择'
+                })
+                return
+            }
             findAreaObj(this.areaList, region)
 
+            /**
+             * Tag数组添加地区
+             * des 地区控件拿到的格式是一个包含三级选项id的数组， [1000, 10001, 10002]
+             *  该函数通过最后一级的code值，递归树，找到这个匹配的 区县信息 叶节点选项，并插入tag数组中
+             * @param areaList Array  树形地区列表
+             * @param region Array 级联选择器选出的三级地区数组
+             */
             function findAreaObj(areaList, region){
 
                 areaList.forEach((item, index) =>{
@@ -264,12 +280,9 @@ export default {
                     }
                 })
             }
-            
-            
-            // 
         },
         /**
-         * tag删除一条
+         * tag数组删除一条
          */
         handleClose(tag){
             this.staffForm.region.forEach((item, index) =>{
@@ -285,37 +298,18 @@ export default {
     async mounted(){
         store.commit('setLoading',true)
         try{
-            // console.log(await hrService.getPermission(this.$route.query.id))
-            await hrService.getStaff(this.$route.query.id)
-                    .then(data =>{
-                        //权限表单字段
-                        this.staffForm = data.data
-                    
-
-                    }).catch(error =>{
-                        this.$message({
-                            type:'error',
-                            message: error.message
-                        })
-                    })
-
-            // debugger
-            await hrService.getAreaTree()
-                    .then(data =>{
-                        console.log(data)
-                        this.areaList = data.data
-                    })
-
-
-            await Promise.all([
-                 hrService.getPermission(this.$route.query.id),
+            let data = await Promise.all([
+                 hrService.getStaff(this.$route.query.id),
                  hrService.getAreaTree()
-            ]).then(data =>{
-                console.log(data)
-            })
+            ])
+            this.staffForm = data[0].data
+            this.areaList = data[1].data
             
         }catch(e){
-
+            this.$message({
+                type:'error',
+                message: e.message
+            })
         }
         
         store.commit('setLoading',false)

@@ -68,6 +68,16 @@
                     </template>
                 </el-table-column>
             </el-table>
+            <!-- 分页 -->
+            <el-pagination
+                style="margin-top:30px;"
+                @current-change="handleCurrentPage"
+                @prev-click="handleCurrentPage"
+                @next-click="handleCurrentPage"
+                :current-page.sync="pagination.currentPage"
+                :page-size="10"
+                layout="prev, pager, next, jumper"
+                :total="pagination.total"></el-pagination>
         </div>
         
     </div>
@@ -78,13 +88,7 @@
         data() {
             return {
                 //技能列表
-                skillTable: [
-                    {
-                        id: '1',//技能id
-                        name: '宋希文',//技能名
-                        type: '',//是否展示
-                    }
-                ],
+                skillTable: [],
                 //技能搜索条件
                 skillSearch: {
                     phone: '',
@@ -92,15 +96,82 @@
                     type: '',
                     type1: '',
                     origin: ''
-                }
+                },
+                /**
+                 * 分页信息
+                 */
+                pagination: {
+                    total: 0,
+                    currentPage: 1,
+                    pageNumber: 10,
+                },
+            }
+        },
+        computed:{
+            /**
+             * 全部已添加搜索字段
+             */
+            searchArray(){
+                let arr = [],
+                _this = this;
+
+                Object.keys(this.skillSearch).forEach((item, index) =>{
+                    if(_this.skillSearch[item] != ''){
+                        let obj = {}
+                        obj[item] = _this.skillSearch[item]
+                        obj = {
+                            ...obj,
+                            key: item
+                        }
+                        arr.push(obj)
+                    }
+                })
+                return arr
             }
         },
         methods: {
+             /**
+             * 请求表格数据
+             * @param tableOption 表格配置项
+             * @param tableOption.currentPage 当前页
+             * @param tableOption.searchSelect Array 页面筛选项
+             * [{searchkey: '', searchValue: ''}]
+             */
+            async getTableList(){
+
+                let tableOption = {
+                    currentPage: this.pagination.currentPage,
+                    pageNumber: this.pagination.pageNumber,
+                    searchSelect: this.searchArray
+                }
+
+                await hrService.getCategoryList(tableOption)
+                    .then(data =>{
+                        
+                        this.skillTable = data.data.data
+                        
+                        //分页信息
+                        this.pagination.currentPage = data.data.current_page //当前页码
+                        this.pagination.total = data.data.total //列表总条数
+                    }).catch(error =>{
+                        this.$message({
+                            type:'error',
+                            message: error.message
+                        })
+                    })
+            },
+            /**
+             * 切换页码
+             */
+            async handleCurrentPage(val){
+                this.pagination.currentPage = val
+                await this.getTableList()
+            },
             /**
              * 查找用户
              */
-            searchSkill(){
-
+            async searchSkill(){
+                await this.getTableList()
             },
             /**
              * 创建服务人员
@@ -137,28 +208,15 @@
             },
         },
         async mounted(){
-
-            
             store.commit('setLoading',true)
             try{
-                /**
-                 * 获取员工数据信息
-                 */
-                await hrService.getCategoryList()
-                    .then(data =>{
-                        // console.log(data)
-                        // debugger
-                        this.skillTable = data.data.data
-                    }).catch(error =>{
-                        this.$message({
-                            type:'error',
-                            message: error.message
-                        })
-                    })
+                this.getTableList()
             }catch(e){
-
+                this.$message({
+                    type:'error',
+                    message: e.message
+                })
             }
-            
             store.commit('setLoading',false)
         }
     }

@@ -46,7 +46,7 @@ export default {
                         this.isLoaded = true
                         await loginService.getToken(this.form.username, this.form.password)
                         this.isLoaded  = false
-                        
+                        // debugger
                         this.$message({
                             type: 'success',
                             message: '登陆成功！'

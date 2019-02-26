@@ -8,11 +8,10 @@ import authRequest from './request/authRequest.js'
 export default {
     /**
      * 获取管理员列表
-     * @param page 页码
-     * @param name 用户名
+     * @param tableOption
      */
-    getManagerList(page, name){
-        return authRequest.getManagerList(page, name)
+    getManagerList(tableOption){
+        return authRequest.getManagerList(tableOption)
     },
     /**
      * 获取管理员角色绑定信息
@@ -64,8 +63,8 @@ export default {
     /**
      * 获取角色列表
      */
-    getRoleList(){
-        return authRequest.getRoleList()
+    getRoleList(tableOption){
+        return authRequest.getRoleList(tableOption)
     },
     /**
      * 获取角色信息
@@ -108,8 +107,8 @@ export default {
     /**
      * 获取权限列表
      */
-    getPermissionList(){
-        return authRequest.getPermissionList()
+    getPermissionList(tableOption){
+        return authRequest.getPermissionList(tableOption)
     },
     /**
      * 获取权限信息

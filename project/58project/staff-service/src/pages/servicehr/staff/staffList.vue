@@ -4,7 +4,7 @@
             <el-form :inline="true" :model="staffSearch" class="staff-form">
                 <div >
                     <el-form-item>
-                        <el-input v-model="staffSearch.phone" placeholder="请输入员工id或姓名"></el-input>
+                        <el-input v-model="staffSearch.name" placeholder="请输入员工姓名"></el-input>
                     </el-form-item>
 
                     <el-form-item>
@@ -18,11 +18,13 @@
                 
                 <div>
                     <el-form-item label="服务地区">
-                        <el-select v-model="staffSearch.region" placeholder="服务地区">
-                            <el-option label="待处理" value="shanghai"></el-option>
-                            <el-option label="处理中" value="beijing"></el-option>
-                            <el-option label="已完成" value="beijing"></el-option>
-                        </el-select>
+                        <el-cascader
+                            :options="areaList"
+                            v-model="region"
+                            :props="areaProps"
+                            @change="changeRegion"
+                            placeholder="请选择服务地区">
+                        </el-cascader>
                     </el-form-item>
                     <el-form-item label="技能分类">
                         <el-select v-model="staffSearch.skill" placeholder="选择技能分类">
@@ -72,11 +74,6 @@
                     prop="phone"
                     align="center">
                 </el-table-column>
-                <el-table-column
-                    label="是否添加技能信息"
-                    prop="state"
-                    align="center">
-                </el-table-column>
 
                 <el-table-column
                     label="操作"
@@ -87,6 +84,16 @@
                     </template>
                 </el-table-column>
             </el-table>
+            <!-- 分页 -->
+            <el-pagination
+                style="margin-top:30px;"
+                @current-change="handleCurrentPage"
+                @prev-click="handleCurrentPage"
+                @next-click="handleCurrentPage"
+                :current-page.sync="pagination.currentPage"
+                :page-size="10"
+                layout="prev, pager, next, jumper"
+                :total="pagination.total"></el-pagination>
         </div>
         
     </div>
@@ -96,31 +103,104 @@
     export default {
         data() {
             return {
-                //丁丹列表
-                staffTable: [
-                    {
-                        id: '1',
-                        name: '宋希文',//姓名
-                        age: '',
-                        phone: '15001279361',//手机号
-                        // state: '是',//是否已经添加技能信息
-                    }
-                ],
-                //用户列表搜索条件
+                //员工信息列表
+                staffTable: [],
+                //表单搜索项
                 staffSearch: {
+                    name: '', //姓名
                     region: '',//服务地区
-                    skill: '',//技能
-                    label: '',//标签
+                    skill: '',//技能分类
+                    label: '',//能力标签
                     paper: '',//证书
-                }
+                },
+                region: [],//地区级联选择器筛选信息
+                areaList: [],//地区级联选择器渲染数组
+                //地区级联选择字段
+                areaProps: {
+                    label: 'name',
+                    value: 'code'
+                },
+                /**
+                 * 分页信息
+                 */
+                pagination: {
+                    total: 0,
+                    currentPage: 1,
+                    pageNumber: 10,
+                },
+            }
+        },
+        computed:{
+            /**
+             * 全部已添加搜索字段
+             */
+            searchArray(){
+                let arr = [],
+                _this = this;
+
+                Object.keys(this.staffSearch).forEach((item, index) =>{
+                    if(_this.staffSearch[item] != ''){
+                        let obj = {}
+                        obj[item] = _this.staffSearch[item]
+                        obj = {
+                            ...obj,
+                            key: item
+                        }
+                        arr.push(obj)
+                    }
+                })
+                return arr
             }
         },
         methods: {
+             /**
+             * 请求表格数据
+             * @param tableOption 表格配置项
+             * @param tableOption.currentPage 当前页
+             * @param tableOption.searchSelect Array 页面筛选项
+             * [{searchkey: '', searchValue: ''}]
+             */
+            async getTableList(){
+
+                let tableOption = {
+                    currentPage: this.pagination.currentPage,
+                    pageNumber: this.pagination.pageNumber,
+                    searchSelect: this.searchArray
+                }
+
+                await hrService.getStaffList(tableOption)
+                    .then(data =>{
+                        
+                        this.staffTable = data.data.data
+                        
+                        //分页信息
+                        this.pagination.currentPage = data.data.current_page //当前页码
+                        this.pagination.total = data.data.total //列表总条数
+                    }).catch(error =>{
+                        this.$message({
+                            type:'error',
+                            message: error.message
+                        })
+                    })
+            },
+            /**
+             * 切换页码
+             */
+            async handleCurrentPage(val){
+                this.pagination.currentPage = val
+                await this.getTableList()
+            },
+            /**
+             * 级联选择器更改时
+             */
+            changeRegion(val){
+                this.staffSearch.region = val[2]
+            },
             /**
              * 查找用户
              */
-            searchStaff(){
-
+            async searchStaff(){
+                await this.getTableList()
             },
             /**
              * 创建服务人员
@@ -153,20 +233,16 @@
             
             store.commit('setLoading',true)
             try{
-                /**
-                 * 获取员工数据信息
-                 */
-                await hrService.getStaffList()
+                 await hrService.getAreaTree()
                     .then(data =>{
-                        this.staffTable = data.data.data
-                    }).catch(error =>{
-                        this.$message({
-                            type:'error',
-                            message: error.message
-                        })
+                        this.areaList = data.data
                     })
+                await this.getTableList()
             }catch(e){
-
+                this.$message({
+                    type:'error',
+                    message: e.message
+                })
             }
             
             store.commit('setLoading',false)

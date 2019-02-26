@@ -2,15 +2,18 @@
     <div class="authority">
         
         <div class="container-box">
+
+            <!-- 搜索项 -->
             <div class="authority-option">
                 <div class="search">
-                    <el-input class="input" v-model="accountSearch.username" placeholder="请输入用户名"></el-input>
+                    <el-input class="input" v-model="accountSearch[0].name" placeholder="请输入用户名"></el-input>
                     <el-button type="primary" @click="searchAccount">查询</el-button>
                 </div>
                 <el-button type="primary" @click="createAccount">添加账户</el-button>
             </div>
             
-            <el-table
+            <!-- 表格 -->
+            <el-table   
                 :data="accountTable" 
                 class="authority-table">
                 <el-table-column
@@ -45,8 +48,17 @@
                     </template>
                 </el-table-column>
             </el-table>
+            <!-- 分页 -->
+            <el-pagination
+                style="margin-top:30px;"
+                @current-change="handleCurrentPage"
+                @prev-click="handleCurrentPage"
+                @next-click="handleCurrentPage"
+                :current-page.sync="pagination.currentPage"
+                :page-size="10"
+                layout="prev, pager, next, jumper"
+                :total="pagination.total"></el-pagination>
         </div>
-        
     </div>
 </template>
 <script>
@@ -58,28 +70,80 @@
                 //用户列表
                 accountTable: [],
                 //用户列表搜索条件
-                accountSearch: {
-                    username: '',//账户名
-                    page: 1,//页码
+                accountSearch: [
+                    {
+                        key: 'name',
+                        name: ''
+                    },
+                ],
+                /**
+                 * 分页信息
+                 */
+                pagination: {
+                    total: 0,
+                    currentPage: 1,
+                    pageNumber: 10,
                 }
+                
+
+            }
+        },
+        computed:{
+            /**
+             * 全部已添加搜索字段
+             */
+            searchArray(){
+                let arr = this.accountSearch.filter((item, index) =>{
+                    if(item[item.key] != ''){
+                        return item
+                    }
+                })
+                return arr
             }
         },
         methods: {
             /**
-             * 查找用户
+             * 请求表格数据
+             * @param tableOption 表格配置项
+             * @param tableOption.currentPage 当前页
+             * @param tableOption.searchSelect Array 页面筛选项
+             * [{searchkey: '', searchValue: ''}]
              */
-            async searchAccount(){
+            async getTableList(){
 
-                await authService.getManagerList(this.accountSearch.page, this.accountSearch.username)
+                let tableOption = {
+                    currentPage: this.pagination.currentPage,
+                    pageNumber: this.pagination.pageNumber, 
+                    searchSelect: this.searchArray
+                }
+
+                await authService.getManagerList(tableOption)
                     .then(data =>{
-                        console.log(data)
+                        
                         this.accountTable = data.data.data
+                        
+                        //分页信息
+                        this.pagination.currentPage = data.data.current_page //当前页码
+                        this.pagination.total = data.data.total //列表总条数
                     }).catch(error =>{
                         this.$message({
                             type:'error',
                             message: error.message
                         })
                     })
+            },
+            /**
+             * 切换页码
+             */
+            async handleCurrentPage(val){
+                this.pagination.currentPage = val
+                await this.getTableList()
+            },
+            /**
+             * 查找用户
+             */
+            async searchAccount(){
+                await this.getTableList()
             },
             /**
              * 角色配置
@@ -146,15 +210,16 @@
         async mounted(){
             store.commit('setLoading',true)
             try{
-                await authService.getManagerList(this.accountSearch.page,this.accountSearch.username)
-                    .then(data =>{
-                        this.accountTable = data.data.data
-                    }).catch(error =>{
-                        this.$message({
-                            type:'error',
-                            message: error.message
-                        })
-                    })
+                // await authService.getManagerList(this.accountSearch.page,this.accountSearch.username)
+                //     .then(data =>{
+                //         this.accountTable = data.data.data
+                //     }).catch(error =>{
+                //         this.$message({
+                //             type:'error',
+                //             message: error.message
+                //         })
+                //     })
+                await this.getTableList()
             }catch(e){
                 this.$message({
                     type:'error',

@@ -1,17 +1,17 @@
-<template>
-    <div class="authList">
+0<template>
+    <div class="authTable">
         <div class="container-box">
-            <div class="authList-option">
+            <div class="authTable-option">
                 <div class="search">
-                    <el-input class="input" v-model="authSearch.username" placeholder="请输入权限"></el-input>
+                    <el-input class="input" v-model="authSearch[0].title" placeholder="请输入权限"></el-input>
                     <el-button type="primary" @click="searchAuth">查询</el-button>
                 </div>
                 <el-button type="primary" @click="createAuth">添加权限</el-button>
             </div>
             
             <el-table
-                :data="authList" 
-                class="authList-table">
+                :data="authTable" 
+                class="authTable-table">
                 <el-table-column
                     label="id"
                     prop="id"
@@ -46,13 +46,16 @@
                     </template>
                 </el-table-column>
             </el-table>
-            <!-- <el-pagination
-                @size-change="handleSizeChange"
-                @current-change="handleCurrentChange"
-                :current-page.sync="currentPage3"
-                :page-size="100"
+            <!-- 分页 -->
+            <el-pagination
+                style="margin-top:30px;"
+                @current-change="handleCurrentPage"
+                @prev-click="handleCurrentPage"
+                @next-click="handleCurrentPage"
+                :current-page.sync="pagination.currentPage"
+                :page-size="10"
                 layout="prev, pager, next, jumper"
-                :total="1000"></el-pagination> -->
+                :total="pagination.total"></el-pagination>
         </div>
     </div>
 </template>
@@ -61,27 +64,81 @@ import {authService} from '../../../../common'
 export default {
     data(){
         return {
-            authList: [
-
-            ], //权限列表
-            authSearch: {
-                username: ''
-            },
-            currentPage3: 5,
+            //权限列表
+            authTable: [], 
+            //权限列表搜索
+            authSearch: [
+                {
+                    key: 'title',
+                    title: ''
+                },
+            ],
+            /**
+             * 分页信息
+             */
+            pagination: {
+                total: 0,
+                currentPage: 1,
+                pageNumber: 10,
+            }
+        }
+    },
+    computed:{
+        /**
+         * 全部已添加搜索字段
+         */
+        searchArray(){
+            let arr = this.authSearch.filter((item, index) =>{
+                if(item[item.key] != ''){
+                    return item
+                }
+            })
+            return arr
         }
     },
     methods: {
-        handleSizeChange(val) {
-            console.log(`每页 ${val} 条`);
+        /**
+         * 请求表格数据
+         * @param tableOption 表格配置项
+         * @param tableOption.currentPage 当前页
+         * @param tableOption.searchSelect Array 页面筛选项
+         * [{searchkey: '', searchValue: ''}]
+         */
+        async getTableList(){
+
+            let tableOption = {
+                currentPage: this.pagination.currentPage,
+                pageNumber: this.pagination.pageNumber,
+                searchSelect: this.searchArray
+            }
+
+            await authService.getPermissionList(tableOption)
+                .then(data =>{
+                    
+                    this.authTable = data.data.data
+                    
+                    //分页信息
+                    this.pagination.currentPage = data.data.current_page //当前页码
+                    this.pagination.total = data.data.total //列表总条数
+                }).catch(error =>{
+                    this.$message({
+                        type:'error',
+                        message: error.message
+                    })
+                })
         },
-        handleCurrentChange(val) {
-            console.log(`当前页: ${val}`);
+        /**
+         * 切换页码
+         */
+        async handleCurrentPage(val){
+            this.pagination.currentPage = val
+            await this.getTableList()
         },
         /**
          * 查找权限信息
          */
-        searchAuth(){
-
+        async searchAuth(){
+            await this.getTableList()
         },
         /**
          * 新建权限
@@ -142,28 +199,26 @@ export default {
     async mounted(){
         store.commit('setLoading',true)
         try {
-             await authService.getPermissionList()
-                .then(data =>{
-                    this.authList = data.data.data
-                }).catch(err =>{
-
-                })
+            await this.getTableList()
         } catch (error) {
-            
+            this.$message({
+                type:'error',
+                message: e.message
+            })
         }
         store.commit('setLoading',false)
     }
 }
 </script>
 <style lang="scss" scoped>
-    .authList{
+    .authTable{
         
         padding-top: 30px;
         .container-box{
             width:80%;
             min-width:1100px;
             margin: 0 auto;
-            .authList-option{
+            .authTable-option{
                 padding-right: 30px;
                 margin-bottom:30px;
                 width:100%;
@@ -177,7 +232,7 @@ export default {
                     }
                 }
             }
-            .authList-table{
+            .authTable-table{
                 width: 100%;
             }
         }

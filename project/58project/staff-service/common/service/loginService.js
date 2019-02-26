@@ -1,107 +1,23 @@
 /**
  * 登陆模块
  */
-import axios from 'axios'
 
 import store from '../store'
 
 import {Login} from '../store/login/logGlobal.js'
+
 import loginRequest from './request/loginRequest.js'
-import authRequest from './request/authRequest.js'
+import {menuArr} from './menuArr.js'
 
 export default {
     //登录，获取、设置token 
     async getToken(username, password){
-        let arr = [
-            {
-                title : '我的',
-                router: '/homePage'
-            },
-            {
-                router: '/',
-                title : '权限管理',
-                children :[
-                    {
-                        title : '账户列表',
-                        router: '/auth/accountList',
-                        contains: [
-                            {
-                                title : '账户编辑',
-                                router: '/auth/accountEdit'
-                            },
-                            {
-                                title : '角色配置',
-                                router: '/auth/accountConfig'
-                            },
-                        ]
-                    },
-                    {
-                        title : '账户配置',
-                        router: '/auth/accountConfig',
-                        isShow: false
-                    },
-                    {
-                        title : '角色列表',
-                        router: '/auth/roleList',
-                        contains: [
-                            {
-                                title : '角色权限配置',
-                                router: '/auth/roleConfig'
-                            },
-                            {
-                                title : '角色编辑',
-                                router: '/auth/roleEdit'
-                            },
-                        ]
-                    },
-                    {
-                        title : '权限配置',
-                        router: '/auth/authList',
-                        contains: [
-                            {
-                                title : '权限信息配置',
-                                router: '/auth/authConfig'
-                            },
-                        ]
-                    },
-                    
-                ]
-            },
-            {
-                router: '/',
-                title : '人力资源管理',
-                children :[
-                    {
-                        title : '服务人员列表',
-                        router: '/staff/staffList',
-
-                    },
-                    {
-                        title : '服务类型列表',
-                        router: '/serviceType/typeList'
-                    },
-                ]
-            },
-            {
-                router: '/',
-                title : '销售管理',
-                children :[
-                    {
-                        title : '订单列表',
-                        router: '/sale/orderList'
-                    },
-                ]
-            },
-        ];
-
-        // let routerObj = this.getRouterLeaf(arr,'');
 
         await loginRequest.login(username, password)
             .then(data =>{
-
                 let manager = data.data.manager,
                     tree = data.data.tree
-                console.log(tree)
+
                 let routerObj = this.getRouterLeaf(tree,'');
 
                 // 登录信息存入 vuex sessionStorage
@@ -109,10 +25,9 @@ export default {
                     access_token: manager.access_token,
                     refresh_token: manager.refresh_token
                 })
-                
                 //用户信息存入 vuex sessionStorage
                 store.commit('setUser', {
-                    menu: arr, //树形菜单就是据此渲染
+                    menu: menuArr, //树形菜单就是据此渲染
                     routerNavigator: routerObj,
 
                     username: manager.name,//用户名

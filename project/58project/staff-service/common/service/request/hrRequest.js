@@ -6,15 +6,25 @@ export default {
     /**
      * 获取员工列表
      */
-    getStaffList(){
-        return axios.get(`./api/admin/staff/getStaffList?page=1&pageNumber=3`)
+    getStaffList(tableOption){
+        let baseUrl = `./api/admin/staff/getStaffList?pageNumber=${tableOption.pageNumber}&page=${tableOption.currentPage}`
+        if(tableOption.searchSelect.length){
+            tableOption.searchSelect.forEach((item, index) => {
+                baseUrl += `&${item.key}=${item[item.key]}`
+            });
+        }
+        return axios.get(baseUrl)
     },
     /**
      * 获取人员信息
      * @param id 员工id
      */
     getStaff(id){
-        return axios.get(`./api/admin/staff/getStaff?id=${id}`)
+        let baseUrl = `./api/admin/staff/getStaff` 
+        if(id){
+            baseUrl += `?id=${id}`
+        }
+        return axios.get(baseUrl)
     },
     /**
      * 编辑员工
@@ -60,11 +70,19 @@ export default {
     getAreaTree(){
         return axios.get(`./api/admin/common/getAreaTree`)
     },
+
+    /****************************************************************/
     /**
      * 技能分类接口
      */
-    getCategoryList(){
-        return axios.get(`./api/admin/service/getCategoryList`)
+    getCategoryList(tableOption){
+        let baseUrl = `./api/admin/service/getCategoryList?pageNumber=${tableOption.pageNumber}&page=${tableOption.currentPage}`
+        if(tableOption.searchSelect.length){
+            tableOption.searchSelect.forEach((item, index) => {
+                baseUrl += `&${item.key}=${item[item.key]}`
+            });
+        }
+        return axios.get(baseUrl)
     },
     /**
      * 请求某一具体技能接口
