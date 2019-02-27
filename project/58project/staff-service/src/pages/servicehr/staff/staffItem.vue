@@ -30,11 +30,10 @@
 
             <el-form-item label="地区" prop="region">
                 <el-tag
-                v-for="tag in staffForm.region"
-                :key="tag.name"
+                v-for="(tag, index) in staffForm.region"
+                :key="index"
                 @close="handleClose(tag,'area')"
-                closable
-                :type="tag.type">{{tag.name}}</el-tag>
+                closable>{{tag.name}}</el-tag>
                 
                 <el-cascader
                     :options="areaList"
@@ -49,11 +48,10 @@
 
             <el-form-item label="能力标签" prop="label">
                 <el-tag
-                v-for="tag in staffForm.label"
-                :key="tag.name"
+                v-for="(tag, index) in staffForm.label"
+                :key="index"
                 @close="handleClose(tag, 'label')"
-                closable
-                :type="tag.type">{{tag.name}}</el-tag>
+                closable>{{tag.name}}</el-tag>
                 
                 <el-cascader
                     :options="labelList"
@@ -67,11 +65,10 @@
             
             <el-form-item label="技能" prop="skill">
                 <el-tag
-                v-for="tag in staffForm.skill"
-                :key="tag.name"
+                v-for="(tag, index) in staffForm.skill"
+                :key="index"
                 @close="handleClose(tag, 'skill')"
-                closable
-                :type="tag.type">{{tag.name}}</el-tag>
+                closable>{{tag.name}}</el-tag>
                 
                 <el-cascader
                     clearable
@@ -85,11 +82,10 @@
 
             <el-form-item label="证书" prop="paper">
                 <el-tag
-                v-for="tag in staffForm.paper"
-                :key="tag.name"
+                v-for="(tag, index) in staffForm.paper"
+                :key="index"
                 @close="handleClose(tag, 'paper')"
-                closable
-                :type="tag.type">{{tag.name}}</el-tag>
+                closable>{{tag.name}}</el-tag>
                 
                 <el-cascader
                     clearable
@@ -277,6 +273,8 @@ export default {
         async onSubmit() {
 
             try{
+                console.log(this.staffForm)
+                // debugger
                 await hrService.editStaff(this.staffForm)
                     .then(data =>{
                         if(data.code == '0'){
@@ -297,8 +295,9 @@ export default {
             }
         },
         /**
-         * 添加地区
+         * 给级联选择器添加标签
          * @param cascaderData Array 级联选择器选出的三级地区数组
+         * @param type String 当前级联选择器所属表单字段
          */
         addRegion(cascaderData, type){
 
@@ -306,33 +305,39 @@ export default {
 
             var levelArr = [], //级联选择数组
                 selectedArr = [],//当前被选中数组
-                dangerWord = "";//警告词
-            
+                dangerWord = "",//警告词
+                idkey= "";//该标签id的属性值----分类id和分类所属标签的id不一致
+
             //判断类型
             if(type == "area"){
                 levelArr = this.areaList
                 selectedArr = [..._this.staffForm.region]
                 dangerWord = "地区"
+                idkey = "region_id"
             } else if(type == "skill"){
                 levelArr = this.skillList
                 selectedArr = [..._this.staffForm.skill]
                 dangerWord = "技能"
+                idkey = "service_category_id"
             } else if (type == "label"){
                 levelArr = this.labelList
                 selectedArr = [..._this.staffForm.label]
                 dangerWord = "技能标签"
+                idkey = "ability_id"
             }else if (type == "paper"){
                 levelArr = this.paperList
                 selectedArr = [..._this.staffForm.paper]
                 dangerWord = "证书"
+                idkey = "paper_id"
             }
 
             //判断是否已经存在这个字段
             let isHave = selectedArr.some((item, index) =>{
                 let length = cascaderData.length
-                return item.id == cascaderData[length-1]
+                return item[idkey] == cascaderData[length-1]
             })
 
+            //如果标签已经存在
             if(isHave){
                 this.$message({
                     type:'error',
@@ -340,15 +345,27 @@ export default {
                 })
                 return
             }
-
+            
+            //向tag数组添加一条数据
             findAreaObj(levelArr, cascaderData)
+            
+            //重新给表单字段赋值
+            if(type == "area"){
+                _this.staffForm.region = selectedArr
+            } else if(type == "skill"){
+                _this.staffForm.skill = selectedArr
+            } else if (type == "label"){
+                _this.staffForm.label = selectedArr
+            } else if (type == "paper"){
+                _this.staffForm.paper = selectedArr
+            }
 
             /**
-             * Tag数组添加地区
-             * des 地区控件拿到的格式是一个包含三级选项id的数组， [1000, 10001, 10002]
-             *  该函数通过最后一级的code值，递归树，找到这个匹配的 区县信息 叶节点选项，并插入tag数组中
-             * @param areaList Array  树形地区列表
-             * @param region Array 级联选择器选出的三级地区数组
+             * Tag数组添加方法
+             * des 级联选择器控件拿到的格式是一个包含三级选项id的数组， [1000, 10001, 10002]
+             *  该函数通过最后一级的id值，递归树，找到这个匹配的叶节点选项，并插入tag数组中
+             * @param areaList Array  树形列表
+             * @param region Array 级联选择器选出的三级数组
              */
             function findAreaObj(areaList, region){
 
@@ -359,9 +376,24 @@ export default {
                         findAreaObj(item.children, region)
                     
                     } else {
-
+                        
+                        //未添加时属性名还是id!!!!!
                         if(item.id == region[region.length-1]){
+                            /**
+                             * {id: '', name: '', parant_id: ''}
+                             * 将id属性转换成以下四种之一
+                             * 删除parant_id属性
+                             */
+                            let idvalue = region[region.length-1]; //取出id值
+                            
+                            //删除原有的两个字段
+                            delete item['id']
+                            delete item['parent_id']
+                            
+                            //赋给id新的属性名
+                            item[idkey] = idvalue
 
+                            //混入数组
                             selectedArr = [
                                 item,
                                 ...selectedArr
@@ -370,50 +402,42 @@ export default {
                     }
                 })
             }
-            
-            //重新赋值
-            if(type == "area"){
-                _this.staffForm.region = selectedArr
-            } else if(type == "skill"){
-                _this.staffForm.skill = selectedArr
-            } else if (type == "label"){
-                _this.staffForm.label = selectedArr
-            } else if (type == "paper"){
-                _this.staffForm.paper = selectedArr
-            }
         },
         /**
          * tag数组删除一条
          */
         handleClose(tag, type){
-            if(type == "area"){
+
+            if(tag.hasOwnProperty("region_id")){
                 //删除地区tag
                 this.staffForm.region.forEach((item, index) =>{
-                    if(item.id == tag.id){
+                    if(item.region_id == tag.region_id){
                         this.staffForm.region.splice(index, 1)
                     }
                 })
-            } else if(type == "skill"){
+            } else if(tag.hasOwnProperty("service_category_id")){
                 //删除技能tag
                 this.staffForm.skill.forEach((item, index) =>{
-                    if(item.id == tag.id){
+                    if(item.service_category_id == tag.service_category_id){
                         this.staffForm.skill.splice(index, 1)
                     }
                 })
-            } else if (type == "label"){
+            } else if (tag.hasOwnProperty("ability_id")){
                 //删除能力标签tag
                 this.staffForm.label.forEach((item, index) =>{
-                    if(item.id == tag.id){
+                    if(item.ability_id == tag.ability_id){
                         this.staffForm.label.splice(index, 1)
                     }
                 })
-            } else if (type == "paper"){
+            } else if (tag.hasOwnProperty("paper_id")){
                 //删除证书tag
                 this.staffForm.paper.forEach((item, index) =>{
-                    if(item.id == tag.id){
+                    if(item.paper_id == tag.paper_id){
                         this.staffForm.paper.splice(index, 1)
                     }
                 })
+            } else {
+                return 
             }
         },
         goback(){
