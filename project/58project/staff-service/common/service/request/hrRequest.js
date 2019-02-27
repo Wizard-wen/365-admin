@@ -7,13 +7,23 @@ export default {
      * 获取员工列表
      */
     getStaffList(tableOption){
-        let baseUrl = `./api/admin/staff/getStaffList?pageNumber=${tableOption.pageNumber}&page=${tableOption.currentPage}`
+        let baseUrl = `./api/admin/staff/getStaffList`,
+            searchObj = {}, //搜索字段对象
+            obj = {
+                pageNumber: tableOption.pageNumber,
+                page: tableOption.currentPage,
+            }
+
         if(tableOption.searchSelect.length){
             tableOption.searchSelect.forEach((item, index) => {
-                baseUrl += `&${item.key}=${item[item.key]}`
+                searchObj[item.key] = item[item.key]
             });
         }
-        return axios.get(baseUrl)
+
+        return axios.post(
+            baseUrl, 
+            Object.assign({}, searchObj, obj)
+        )
     },
     /**
      * 获取人员信息
@@ -145,7 +155,38 @@ export default {
         
         obj = Object.assign({},obj)
 
-        return axios.post(`./api/admin/sability/editAbility`,obj)
+        return axios.post(`./api/admin/ability/editAbility`,obj)
+    
+    },
+
+    /*********************************证书模块*************************************************/
+    /**
+     * 证书列表接口
+     */
+    getPaperList(tableOption){
+        let baseUrl = `./api/admin/paper/getPaperList?pageNumber=${tableOption.pageNumber}&page=${tableOption.currentPage}`
+        if(tableOption.searchSelect.length){
+            tableOption.searchSelect.forEach((item, index) => {
+                baseUrl += `&${item.key}=${item[item.key]}`
+            });
+        }
+        return axios.get(baseUrl)
+    },
+    /**
+     * 请求某一具体证书接口
+     * @param id 证书的id
+     */
+    getPaper(id){
+        return axios.get(`./api/admin/paper/getPaper?id=${id}`)
+    },
+    /**
+     * 编辑证书接口
+     */
+    editPaper(obj){
+        
+        obj = Object.assign({},obj)
+
+        return axios.post(`./api/admin/paper/editPaper`,obj)
     
     },
 }

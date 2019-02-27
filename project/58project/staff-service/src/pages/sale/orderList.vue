@@ -3,10 +3,24 @@
         
         <div class="container-box">
             <el-form :inline="true" :model="authSearch" class="order-form">
-            
-                
-                
-                
+                <div>
+                    <el-form-item>
+                        <el-input v-model="authSearch.phone" placeholder="请输入订单号">
+                            <el-select v-model="type" placeholder="搜索途径" slot="prepend">
+                                <el-option label="按订单号搜索" value="1"></el-option>
+                                <el-option label="按手机号搜索" value="2"></el-option>
+                            </el-select>
+                        </el-input>
+                    </el-form-item>
+
+                    <el-form-item>
+                        <el-button type="primary" @click="searchOrder">查询</el-button>
+                    </el-form-item>
+
+                    <el-form-item>
+                        <el-button type="primary" @click="createOrder">创建订单</el-button>
+                    </el-form-item>
+                </div>
                 <el-form-item label="订单类型">
                     <el-select v-model="authSearch.region" placeholder="订单类型">
                         <el-option label="待处理" value="shanghai"></el-option>
@@ -14,6 +28,7 @@
                         <el-option label="已完成" value="beijing"></el-option>
                     </el-select>
                 </el-form-item>
+
                 <el-form-item label="订单来源">
                     <el-select v-model="authSearch.origin" placeholder="订单来源">
                         <el-option label="线上" value="shanghai"></el-option>
@@ -21,23 +36,11 @@
                         <el-option label="渠道" value="beijing"></el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item label="搜索途径">
-                    <el-select v-model="authSearch.type" placeholder="搜索途径">
-                        <el-option label="按订单号搜索" value="shanghai"></el-option>
-                        <el-option label="按手机号搜索" value="beijing"></el-option>
-                    </el-select>
-                </el-form-item>
-                <el-form-item>
-                    <el-input v-model="authSearch.phone" placeholder="请输入订单号或客户手机号"></el-input>
-                </el-form-item>
 
-                <el-form-item>
-                    <el-button type="primary" @click="search">查询</el-button>
-                </el-form-item>
+                
 
-                <el-form-item>
-                    <el-button type="primary" @click="create">创建订单</el-button>
-                </el-form-item>
+
+                
 
             </el-form>
 
@@ -111,23 +114,24 @@
                 authSearch: {
                     phone: '',
                     region: '',
-                    type: '',
+                    type: '1',
                     origin: ''
-                }
+                },
+                type: "1"
             }
         },
         methods: {
             /**
              * 查找用户
              */
-            search(){
+            searchOrder(){
 
             },
             /**
              * 创建订单
              * 
              */
-            create(){
+            createOrder(){
                 this.$router.push({
                     path: "/sale/orderCreate",
                 })

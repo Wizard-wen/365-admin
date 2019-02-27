@@ -60,11 +60,9 @@ export default {
                 } else {
                     this.skillForm.type = "disable"
                 }
-                console.log(this.skillForm)
-                // debugger
+                
                 await hrService.editCategory(this.skillForm)
                     .then(data =>{
-                        debugger
                         if(data.code == '0'){
                             this.$message({
                                 type:"success",

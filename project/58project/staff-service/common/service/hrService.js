@@ -102,4 +102,27 @@ export default {
         return hrRequest.editAbility(obj)
     
     },
+    /*****************************证书模块******************************************************* */
+    /**
+     * 证书列表接口
+     */
+    getPaperList(tableOption){
+
+        return hrRequest.getPaperList(tableOption)
+    },
+    /**
+     * 请求某一证书接口
+     * @param id 证书的id
+     */
+    getPaper(id){
+        return hrRequest.getPaper(id)
+    },
+    /**
+     * 编辑证书接口
+     */
+    editPaper(obj){
+
+        return hrRequest.editPaper(obj)
+    
+    },
 }

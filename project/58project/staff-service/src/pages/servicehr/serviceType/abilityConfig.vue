@@ -60,7 +60,6 @@ export default {
                 } else {
                     this.abilityForm.type = "disable"
                 }
-
                 await hrService.editAbility(this.abilityForm)
                     .then(data =>{
 

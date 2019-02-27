@@ -83,6 +83,24 @@
                 <el-button icon="el-icon-plus" circle @click="addRegion(skill, 'skill')"></el-button>
             </el-form-item>
 
+            <el-form-item label="证书" prop="paper">
+                <el-tag
+                v-for="tag in staffForm.paper"
+                :key="tag.name"
+                @close="handleClose(tag, 'paper')"
+                closable
+                :type="tag.type">{{tag.name}}</el-tag>
+                
+                <el-cascader
+                    clearable
+                    :options="paperList"
+                    v-model="paper"
+                    :props="areaProps"
+                    placeholder="请选择证书">
+                </el-cascader>
+                <el-button icon="el-icon-plus" circle @click="addRegion(paper, 'paper')"></el-button>
+            </el-form-item>
+
             <el-form-item label="年龄" prop="age">
                 <el-input v-model="staffForm.age" placeholder="请输入年龄"></el-input>
             </el-form-item>
@@ -261,7 +279,13 @@ export default {
             try{
                 await hrService.editStaff(this.staffForm)
                     .then(data =>{
-                        console.log(data)
+                        if(data.code == '0'){
+                            this.$message({
+                                type:"success",
+                                message: "修改成功"
+                            })
+                            this.$router.push('/staff/staffList')
+                        }
                     }).catch(error =>{
                         this.$message({
                             type:'error',
@@ -297,6 +321,10 @@ export default {
                 levelArr = this.labelList
                 selectedArr = [..._this.staffForm.label]
                 dangerWord = "技能标签"
+            }else if (type == "paper"){
+                levelArr = this.paperList
+                selectedArr = [..._this.staffForm.paper]
+                dangerWord = "证书"
             }
 
             //判断是否已经存在这个字段
@@ -339,7 +367,6 @@ export default {
                                 ...selectedArr
                             ]
                         }
-                    
                     }
                 })
             }
@@ -351,6 +378,8 @@ export default {
                 _this.staffForm.skill = selectedArr
             } else if (type == "label"){
                 _this.staffForm.label = selectedArr
+            } else if (type == "paper"){
+                _this.staffForm.paper = selectedArr
             }
         },
         /**
@@ -358,25 +387,34 @@ export default {
          */
         handleClose(tag, type){
             if(type == "area"){
+                //删除地区tag
                 this.staffForm.region.forEach((item, index) =>{
-                    if(item.code == tag.code){
+                    if(item.id == tag.id){
                         this.staffForm.region.splice(index, 1)
                     }
                 })
             } else if(type == "skill"){
+                //删除技能tag
                 this.staffForm.skill.forEach((item, index) =>{
-                    if(item.code == tag.code){
-                        this.staffForm.region.splice(index, 1)
+                    if(item.id == tag.id){
+                        this.staffForm.skill.splice(index, 1)
                     }
                 })
             } else if (type == "label"){
+                //删除能力标签tag
                 this.staffForm.label.forEach((item, index) =>{
-                    if(item.code == tag.code){
-                        this.staffForm.region.splice(index, 1)
+                    if(item.id == tag.id){
+                        this.staffForm.label.splice(index, 1)
+                    }
+                })
+            } else if (type == "paper"){
+                //删除证书tag
+                this.staffForm.paper.forEach((item, index) =>{
+                    if(item.id == tag.id){
+                        this.staffForm.paper.splice(index, 1)
                     }
                 })
             }
-            
         },
         goback(){
             this.$router.push("/staff/staffList")
@@ -386,25 +424,32 @@ export default {
         store.commit('setLoading',true)
         try{
             let data = await Promise.all([
-                hrService.getStaff(this.$route.query.id),
                 hrService.getAreaTree(),
                 hrService.getSkillTree(), //获取技能树
-                // hrService.getPaperSelection(), //获取证书列表
+                hrService.getPaperSelection(), //获取证书列表
                 hrService.getAbilityTree(), //获取能力标签树
             ])
-            this.staffForm = data[0].data
-            this.areaList = data[1].data
-            this.skillList = data[2].data
-            // this.paperList = data[2].data
+            //promise.all 赋值
+            this.areaList = data[0].data
+            this.skillList = data[1].data
+            this.paperList = data[2].data
             this.labelList = data[3].data
-            
+
+            //如果是编辑则请求接口
+            if(this.$route.query.type == 1){
+                await hrService.getStaff(this.$route.query.id)
+                    .then(data =>{
+                        if(data.code == "0"){
+                            this.staffForm = data.data
+                        }
+                    })
+            }
         }catch(e){
             this.$message({
                 type:'error',
                 message: e.message
             })
-        }
-        
+        }    
         store.commit('setLoading',false)
     }
 }

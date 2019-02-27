@@ -4,6 +4,7 @@
             <el-form :inline="true" :model="paperSearch" class="staff-form">
                 <el-form-item label="是否启用">
                     <el-select v-model="paperSearch.type" placeholder="请选择是否启用">
+                        <el-option label="全部" value=""></el-option>
                         <el-option label="已启用" value="enable"></el-option>
                         <el-option label="未启用" value="disable"></el-option>
                     </el-select>
@@ -121,7 +122,7 @@
                     searchSelect: this.searchArray
                 }
 
-                await hrService.getCategoryList(tableOption)
+                await hrService.getPaperList(tableOption)
                     .then(data =>{
                         
                         this.paperTable = data.data.data

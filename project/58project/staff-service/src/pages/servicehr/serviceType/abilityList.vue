@@ -4,6 +4,7 @@
             <el-form :inline="true" :model="abilitySearch" class="staff-form">
                 <el-form-item label="是否启用">
                     <el-select v-model="abilitySearch.type" placeholder="请选择是否启用">
+                        <el-option label="全部" value=""></el-option>
                         <el-option label="已启用" value="enable"></el-option>
                         <el-option label="未启用" value="disable"></el-option>
                     </el-select>
@@ -32,6 +33,11 @@
                 <el-table-column
                     label="技能名称"
                     prop="name"
+                    align="center">
+                </el-table-column>
+                <el-table-column
+                    label="状态"
+                    prop="type"
                     align="center">
                 </el-table-column>
 

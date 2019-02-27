@@ -4,15 +4,6 @@
             <el-form-item label="证书名称">
                 <el-input v-model="paperForm.name"></el-input>
             </el-form-item>
-            <!-- <el-form-item label="技能所属层级">
-                <el-select v-model="paperForm.parent_id" placeholder="权限父级id">
-                    <el-option 
-                        v-for="(item, index) in selectionList" 
-                        :key="index" 
-                        :label="item.names" 
-                        :value="item.id"></el-option>
-                </el-select>
-            </el-form-item> -->
             <el-form-item label="是否启用">
                 <el-switch v-model="paperForm.type"></el-switch>
             </el-form-item>
@@ -41,8 +32,6 @@ export default {
                 version: 0,//所属版本号
                 type : true,//
             },
-            //权限层级下拉列表
-            selectionList: []
         }
     },
     methods: {
@@ -61,7 +50,7 @@ export default {
                     this.paperForm.type = "disable"
                 }
 
-                await hrService.editCategory(this.paperForm)
+                await hrService.editPaper(this.paperForm)
                     .then(data =>{
 
                         if(data.code == '0'){
@@ -91,7 +80,7 @@ export default {
             //id
             let categoryId = this.$route.query.id? this.$route.query.id : '';
 
-            await hrService.getCategory(categoryId)
+            await hrService.getPaper(categoryId)
                 .then(data =>{
                     //若是编辑的话回显数据
                     if(this.$route.query.type == 1){
@@ -103,13 +92,13 @@ export default {
                          *  enable 启用 
                          *  disable 不启用
                          */ 
-                        if(data.data.category.type == "disable"){
+                        if(data.data.type == "disable"){
                             obj.type = false
                         } 
 
                         //混入obj数据
                         this.paperForm = {
-                            ...data.data.category,
+                            ...data.data,
                             ...obj,
                         }
                     }

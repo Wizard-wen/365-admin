@@ -1,63 +1,69 @@
 <template>
     <div class="staff">
         <div class="container-box">
-            <el-form :inline="true" :model="skillSearch" class="staff-form">
-                <el-form-item label="是否启用">
-                    <el-select v-model="skillSearch.type" placeholder="请选择是否启用">
-                        <el-option label="已启用" value="enable"></el-option>
-                        <el-option label="未启用" value="disable"></el-option>
-                    </el-select>
-                </el-form-item>
-                <el-form-item>
-                    <el-input v-model="skillSearch.name" placeholder="请输入技能名称"></el-input>
-                </el-form-item>
+            <div style="width: 60%">
+                <el-form :inline="true" :model="skillSearch" class="staff-form">
+                    <el-form-item label="是否启用">
+                        <el-select v-model="skillSearch.type" placeholder="请选择是否启用">
+                            <el-option label="全部" value=""></el-option>
+                            <el-option label="已启用" value="enable"></el-option>
+                            <el-option label="未启用" value="disable"></el-option>
+                        </el-select>
+                    </el-form-item>
+                    <el-form-item>
+                        <el-input v-model="skillSearch.name" placeholder="请输入技能名称"></el-input>
+                    </el-form-item>
 
-                <el-form-item>
-                    <el-button type="primary" @click="searchSkill">查询</el-button>
-                </el-form-item>
+                    <el-form-item>
+                        <el-button type="primary" @click="searchSkill">查询</el-button>
+                    </el-form-item>
 
-                <el-form-item>
-                    <el-button type="primary" @click="createSkill">添加</el-button>
-                </el-form-item>    
-            </el-form>
+                    <el-form-item>
+                        <el-button type="primary" @click="createSkill">添加</el-button>
+                    </el-form-item>    
+                </el-form>
+                
+                <el-table
+                    :data="skillTable" 
+                    class="staff-table">
+                    <el-table-column
+                        label="技能id"
+                        prop="id"
+                        align="center">
+                    </el-table-column>
+                    <el-table-column
+                        label="技能名称"
+                        prop="name"
+                        align="center">
+                    </el-table-column>
+                    <el-table-column
+                        label="状态"
+                        prop="type"
+                        :filter-method="showWords"
+                        align="center">
+                    </el-table-column>
+
+                    <el-table-column
+                        label="操作"
+                        align="center">
+                        <template slot-scope="scope">
+                            <el-button size="mini" @click="editSkill(scope.$index, scope.row)">配置</el-button>
+                        </template>
+                    </el-table-column>
+                </el-table>
+                <!-- 分页 -->
+                <el-pagination
+                    style="margin-top:30px;"
+                    @current-change="handleCurrentPage"
+                    @prev-click="handleCurrentPage"
+                    @next-click="handleCurrentPage"
+                    :current-page.sync="pagination.currentPage"
+                    :page-size="10"
+                    layout="prev, pager, next, jumper"
+                    :total="pagination.total">
+                </el-pagination>
+            </div>
             
-            <el-table
-                :data="skillTable" 
-                class="staff-table">
-                <el-table-column
-                    label="技能id"
-                    prop="id"
-                    align="center">
-                </el-table-column>
-                <el-table-column
-                    label="技能名称"
-                    prop="name"
-                    align="center">
-                </el-table-column>
-                <el-table-column
-                    label="状态"
-                    prop="type"
-                    align="center">
-                </el-table-column>
-
-                <el-table-column
-                    label="操作"
-                    align="center">
-                    <template slot-scope="scope">
-                        <el-button size="mini" @click="editSkill(scope.$index, scope.row)">配置</el-button>
-                    </template>
-                </el-table-column>
-            </el-table>
-            <!-- 分页 -->
-            <el-pagination
-                style="margin-top:30px;"
-                @current-change="handleCurrentPage"
-                @prev-click="handleCurrentPage"
-                @next-click="handleCurrentPage"
-                :current-page.sync="pagination.currentPage"
-                :page-size="10"
-                layout="prev, pager, next, jumper"
-                :total="pagination.total"></el-pagination>
         </div>
         
     </div>
@@ -174,6 +180,9 @@
                         id: row.id
                     }
                 })
+            },
+            showWords(value, row, column){
+                console.log(value)
             },
         },
         async mounted(){
