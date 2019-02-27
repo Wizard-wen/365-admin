@@ -274,7 +274,7 @@ export default {
 
             try{
                 console.log(this.staffForm)
-                // debugger
+
                 await hrService.editStaff(this.staffForm)
                     .then(data =>{
                         if(data.code == '0'){
