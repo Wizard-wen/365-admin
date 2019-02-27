@@ -43,26 +43,29 @@ export default {
         obj = Object.assign({},obj)
         return axios.post(`./api/admin/staff/editStaff`,obj)
     },
+
+
+
+
+
+    /********************************通用模块**************************************88 */
     /**
-     * 获取技能列表
+     * 获取能力标签树
      */
-    getStaffSkillList(){
-        return axios.get(`./api/admin/staff/getStaffSkillList`)
+    getAbilityTree(){
+        return axios.get(`./api/admin/common/getLabelTree`)
     },
     /**
-     * 审核技能
+     * 获取证书列表
      */
-    reviewStaffSkill(){
-        return axios.get(`./api/admin/staff/reviewStaffSkill`)
+    getPaperSelection(){
+        return axios.get(`./api/admin/common/getPaperSelection`)
     },
     /**
-     * 删除技能
+     * 获取技能树
      */
-    deleteStaffSkill(id, version){
-        return axios.post(`./api/admin/staff/deleteStaffSkill`,{
-            id: id,
-            version: version
-        })
+    getSkillTree(){
+        return axios.get(`./api/admin/common/getServiceTree`)
     },
     /**
      * 省市区数据
@@ -71,7 +74,14 @@ export default {
         return axios.get(`./api/admin/common/getAreaTree`)
     },
 
-    /****************************************************************/
+
+
+
+
+
+
+
+    /***************************技能分类模块*************************************/
     /**
      * 技能分类接口
      */
@@ -99,6 +109,43 @@ export default {
         obj = Object.assign({},obj)
 
         return axios.post(`./api/admin/service/editCategory`,obj)
+    
+    },
+
+
+
+
+
+
+
+    /*********************************能力标签模块*************************************************/
+    /**
+     * 能力标签列表接口
+     */
+    getAbilityList(tableOption){
+        let baseUrl = `./api/admin/ability/getAbilityList?pageNumber=${tableOption.pageNumber}&page=${tableOption.currentPage}`
+        if(tableOption.searchSelect.length){
+            tableOption.searchSelect.forEach((item, index) => {
+                baseUrl += `&${item.key}=${item[item.key]}`
+            });
+        }
+        return axios.get(baseUrl)
+    },
+    /**
+     * 请求某一具体能力标签接口
+     * @param id 能力标签的id
+     */
+    getAbility(id){
+        return axios.get(`./api/admin/ability/getAbility?id=${id}`)
+    },
+    /**
+     * 编辑能力标签接口
+     */
+    editAbility(obj){
+        
+        obj = Object.assign({},obj)
+
+        return axios.post(`./api/admin/sability/editAbility`,obj)
     
     },
 }

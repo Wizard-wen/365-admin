@@ -154,7 +154,7 @@
             },
         },
         async mounted(){
-            this.orderTable = await orderService.getOrderList()
+            // this.orderTable = await orderService.getOrderList()
         }
     }
 </script>

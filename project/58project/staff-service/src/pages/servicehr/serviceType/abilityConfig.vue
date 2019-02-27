@@ -1,20 +1,20 @@
 <template>
     <div class="skill-config">
-        <el-form class="skill-form" ref="form" :model="paperForm" label-width="120px">
-            <el-form-item label="证书名称">
-                <el-input v-model="paperForm.name"></el-input>
+        <el-form class="skill-form" ref="form" :model="abilityForm" label-width="120px">
+            <el-form-item label="标签名称">
+                <el-input v-model="abilityForm.name"></el-input>
             </el-form-item>
-            <!-- <el-form-item label="技能所属层级">
-                <el-select v-model="paperForm.parent_id" placeholder="权限父级id">
+            <el-form-item label="标签所属层级">
+                <el-select v-model="abilityForm.parent_id" placeholder="标签父级id">
                     <el-option 
                         v-for="(item, index) in selectionList" 
                         :key="index" 
                         :label="item.names" 
                         :value="item.id"></el-option>
                 </el-select>
-            </el-form-item> -->
+            </el-form-item>
             <el-form-item label="是否启用">
-                <el-switch v-model="paperForm.type"></el-switch>
+                <el-switch v-model="abilityForm.type"></el-switch>
             </el-form-item>
             <el-form-item>
                 <el-button type="primary" @click="onSubmit">{{$route.query.id? '确认编辑' : '立即创建'}}</el-button>
@@ -34,7 +34,7 @@ export default {
     data() {
         return {
             //权限表单
-            paperForm: {
+            abilityForm: {
                 id: '',//id
                 name: '',//技能名称
                 parent_id: 0,//所属层级
@@ -52,16 +52,16 @@ export default {
          */
         async onSubmit() {
             try{
-                let type = this.paperForm.type
+                let type = this.abilityForm.type
                 
                 //判断type的类型，转换为enable字段
                 if(type){
-                    this.paperForm.type = "enable"
+                    this.abilityForm.type = "enable"
                 } else {
-                    this.paperForm.type = "disable"
+                    this.abilityForm.type = "disable"
                 }
 
-                await hrService.editCategory(this.paperForm)
+                await hrService.editAbility(this.abilityForm)
                     .then(data =>{
 
                         if(data.code == '0'){
@@ -69,7 +69,7 @@ export default {
                                 type:"success",
                                 message: "修改成功"
                             })
-                            this.$router.push('/serviceType/paperList')
+                            this.$router.push('/serviceType/abilityList')
                         }
                     }).catch(error =>{
                         this.$message({
@@ -82,7 +82,7 @@ export default {
             }
         },
         goback(){
-            this.$router.push("/serviceType/paperList")
+            this.$router.push("/serviceType/abilityList")
         }
     },
     async mounted(){
@@ -91,7 +91,7 @@ export default {
             //id
             let categoryId = this.$route.query.id? this.$route.query.id : '';
 
-            await hrService.getCategory(categoryId)
+            await hrService.getAbility(categoryId)
                 .then(data =>{
                     //若是编辑的话回显数据
                     if(this.$route.query.type == 1){
@@ -103,13 +103,13 @@ export default {
                          *  enable 启用 
                          *  disable 不启用
                          */ 
-                        if(data.data.category.type == "disable"){
+                        if(data.data.ability.type == "disable"){
                             obj.type = false
                         } 
 
                         //混入obj数据
-                        this.paperForm = {
-                            ...data.data.category,
+                        this.abilityForm = {
+                            ...data.data.ability,
                             ...obj,
                         }
                     }

@@ -120,21 +120,23 @@ import authConfig from '@/pages/auth/auth/authConfig.vue'
  */
 
 
-import typeList from '@/pages/servicehr/serviceType/typeList.vue'
-import typeConfig from '@/pages/servicehr/serviceType/typeConfig.vue'
+import abilityList from '@/pages/servicehr/serviceType/abilityList.vue'
+import abilityConfig from '@/pages/servicehr/serviceType/abilityConfig.vue'
 import skillList from '@/pages/servicehr/serviceType/skillList.vue'
 import skillConfig from '@/pages/servicehr/serviceType/skillConfig.vue'
+import paperList from '@/pages/servicehr/serviceType/paperList.vue'
+import paperConfig from '@/pages/servicehr/serviceType/paperConfig.vue'
 
 const serviceTypeModule = [
     {
-        path: '/serviceType/typeList',
-        name: 'typeList',
-        component: typeList,
+        path: '/serviceType/abilityList',
+        name: 'abilityList',
+        component: abilityList,
     },
     {
-        path: '/serviceType/typeConfig',
-        name: 'typeConfig',
-        component: typeConfig,
+        path: '/serviceType/abilityConfig',
+        name: 'abilityConfig',
+        component: abilityConfig,
     },
     {
         path: '/serviceType/skillList',
@@ -145,6 +147,16 @@ const serviceTypeModule = [
         path: '/serviceType/skillConfig',
         name: 'skillConfig',
         component: skillConfig,
+    },
+    {
+        path: '/serviceType/paperList',
+        name: 'paperList',
+        component: paperList,
+    },
+    {
+        path: '/serviceType/paperConfig',
+        name: 'paperConfig',
+        component: paperConfig,
     },
 ]
 

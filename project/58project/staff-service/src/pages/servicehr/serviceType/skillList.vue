@@ -2,42 +2,23 @@
     <div class="staff">
         <div class="container-box">
             <el-form :inline="true" :model="skillSearch" class="staff-form">
-                <div >
-                    <el-form-item>
-                        <el-input v-model="skillSearch.phone" placeholder="请输入员工id或姓名"></el-input>
-                    </el-form-item>
+                <el-form-item label="是否启用">
+                    <el-select v-model="skillSearch.type" placeholder="请选择是否启用">
+                        <el-option label="已启用" value="enable"></el-option>
+                        <el-option label="未启用" value="disable"></el-option>
+                    </el-select>
+                </el-form-item>
+                <el-form-item>
+                    <el-input v-model="skillSearch.name" placeholder="请输入技能名称"></el-input>
+                </el-form-item>
 
-                    <el-form-item>
-                        <el-button type="primary" @click="searchSkill">查询</el-button>
-                    </el-form-item>
+                <el-form-item>
+                    <el-button type="primary" @click="searchSkill">查询</el-button>
+                </el-form-item>
 
-                    <el-form-item>
-                        <el-button type="primary" @click="createSkill">添加</el-button>
-                    </el-form-item>
-                </div>
-                
-                <div>
-                    <el-form-item label="订单类型">
-                        <el-select v-model="skillSearch.region" placeholder="订单类型">
-                            <el-option label="待处理" value="shanghai"></el-option>
-                            <el-option label="处理中" value="beijing"></el-option>
-                            <el-option label="已完成" value="beijing"></el-option>
-                        </el-select>
-                    </el-form-item>
-                    <el-form-item label="订单来源">
-                        <el-select v-model="skillSearch.origin" placeholder="订单来源">
-                            <el-option label="线上" value="shanghai"></el-option>
-                            <el-option label="线下" value="beijing"></el-option>
-                            <el-option label="渠道" value="beijing"></el-option>
-                        </el-select>
-                    </el-form-item>
-                    <el-form-item label="搜索途径">
-                        <el-select v-model="skillSearch.type" placeholder="搜索途径">
-                            <el-option label="按订单号搜索" value="shanghai"></el-option>
-                            <el-option label="按手机号搜索" value="beijing"></el-option>
-                        </el-select>
-                    </el-form-item>
-                </div>
+                <el-form-item>
+                    <el-button type="primary" @click="createSkill">添加</el-button>
+                </el-form-item>    
             </el-form>
             
             <el-table
@@ -54,7 +35,7 @@
                     align="center">
                 </el-table-column>
                 <el-table-column
-                    label="是否启用"
+                    label="状态"
                     prop="type"
                     align="center">
                 </el-table-column>
@@ -63,8 +44,7 @@
                     label="操作"
                     align="center">
                     <template slot-scope="scope">
-                        <el-button size="mini" @click="editSkill(scope.$index, scope.row)">编辑</el-button>
-                        <el-button size="mini" @click="deleteSkill(scope.$index, scope.row)">删除</el-button>
+                        <el-button size="mini" @click="editSkill(scope.$index, scope.row)">配置</el-button>
                     </template>
                 </el-table-column>
             </el-table>
@@ -91,11 +71,8 @@
                 skillTable: [],
                 //技能搜索条件
                 skillSearch: {
-                    phone: '',
-                    region: '',
-                    type: '',
-                    type1: '',
-                    origin: ''
+                    name: '',//技能名称
+                    type: '',//是否启用
                 },
                 /**
                  * 分页信息
@@ -198,19 +175,11 @@
                     }
                 })
             },
-            /**
-             * 查看用户权限
-             */
-            viewService(index, row) {
-                this.$router.push({
-                    path: "/sale/orderEdit",
-                })
-            },
         },
         async mounted(){
             store.commit('setLoading',true)
             try{
-                this.getTableList()
+                await this.getTableList()
             }catch(e){
                 this.$message({
                     type:'error',

@@ -26,13 +26,28 @@ export default {
 
 
 
-    /**
-     * 获取技能列表
-     */
-    getStaffSkillList(){
-        return hrRequest.getStaffSkillList()
-    },
 
+
+
+    /************************************通用模块****************************************** */
+      /**
+     * 获取能力标签树
+     */
+    getAbilityTree(){
+        return hrRequest.getAbilityTree()
+    },
+    /**
+     * 获取证书列表
+     */
+    getPaperSelection(){
+        return hrRequest.getPaperSelection()
+    },
+    /**
+     * 获取技能树
+     */
+    getSkillTree(){
+        return hrRequest.getSkillTree()
+    },
     /**
      * 省市区数据获取
      */
@@ -43,7 +58,7 @@ export default {
 
 
 
-    /****************************技能列表****************************************/
+    /****************************技能列表模块****************************************/
     /**
      * 技能分类接口
      */
@@ -62,5 +77,29 @@ export default {
      */
     editCategory(obj){
         return hrRequest.editCategory(obj)
+    },
+
+    /*****************************能力标签模块******************************************************* */
+    /**
+     * 能力标签列表接口
+     */
+    getAbilityList(tableOption){
+
+        return hrRequest.getAbilityList(tableOption)
+    },
+    /**
+     * 请求某一具体能力标签接口
+     * @param id 能力标签的id
+     */
+    getAbility(id){
+        return hrRequest.getAbility(id)
+    },
+    /**
+     * 编辑能力标签接口
+     */
+    editAbility(obj){
+
+        return hrRequest.editAbility(obj)
+    
     },
 }

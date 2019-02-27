@@ -27,28 +27,33 @@
                         </el-cascader>
                     </el-form-item>
                     <el-form-item label="技能分类">
-                        <el-select v-model="staffSearch.skill" placeholder="选择技能分类">
-                            <el-option label="线上" value="shanghai"></el-option>
-                            <el-option label="线下" value="beijing"></el-option>
-                            <el-option label="渠道" value="beijing"></el-option>
-                        </el-select>
+                        <el-cascader
+                            :options="skillList"
+                            v-model="skill"
+                            :props="skillProps"
+                            @change="changeSkill"
+                            placeholder="请选择技能分类">
+                        </el-cascader>
                     </el-form-item>
                     <el-form-item label="能力标签">
-                        <el-select v-model="staffSearch.lable" placeholder="能力标签">
-                            <el-option label="按订单号搜索" value="shanghai"></el-option>
-                            <el-option label="按手机号搜索" value="beijing"></el-option>
-                        </el-select>
+                        <el-cascader
+                            :options="labelList"
+                            v-model="label"
+                            :props="labelProps"
+                            @change="changeLabel"
+                            placeholder="请选择能力标签">
+                        </el-cascader>
                     </el-form-item>
-                     <el-form-item label="证书">
-                        <el-select v-model="staffSearch.paper" placeholder="证书">
-                            <el-option label="按订单号搜索" value="shanghai"></el-option>
-                            <el-option label="按手机号搜索" value="beijing"></el-option>
-                        </el-select>
+                    <el-form-item label="证书">
+                        <el-cascader
+                            :options="paperList"
+                            v-model="paper"
+                            :props="paperProps"
+                            @change="changePaper"
+                            placeholder="请选择证书">
+                        </el-cascader>
                     </el-form-item>
                 </div>
-                
-                
-
             </el-form>
             
             <el-table
@@ -115,10 +120,31 @@
                 },
                 region: [],//地区级联选择器筛选信息
                 areaList: [],//地区级联选择器渲染数组
+                skill: [],//技能级联选择器筛选信息
+                skillList: [],//技能级联选择器渲染数组
+                paper: [],//证书级联选择器筛选信息
+                paperList: [],//证书级联选择器渲染数组
+                label: [],//能力标签级联选择器筛选信息
+                labelList: [],//能力标签级联选择器渲染数组
                 //地区级联选择字段
                 areaProps: {
                     label: 'name',
-                    value: 'code'
+                    value: 'id'
+                },
+                //技能级联选择字段
+                skillProps: {
+                    label: 'name',
+                    value: 'id'
+                },
+                //能力标签级联选择字段
+                labelProps: {
+                    label: 'name',
+                    value: 'id'
+                },
+                //证书级联选择字段
+                paperProps: {
+                    label: 'name',
+                    value: 'id'
                 },
                 /**
                  * 分页信息
@@ -191,10 +217,32 @@
                 await this.getTableList()
             },
             /**
-             * 级联选择器更改时
+             * 地区级联选择器更改时
              */
             changeRegion(val){
-                this.staffSearch.region = val[2]
+                let length = val.length
+                this.staffSearch.region = val[length - 1]
+            },
+            /**
+             * 技能级联选择器更改时
+             */
+            changeSkill(val){
+                let length = val.length
+                this.staffSearch.skill = val[length - 1]
+            },
+            /**
+             * 能力标签级联选择器更改时
+             */
+            changeLabel(val){
+                let length = val.length
+                this.staffSearch.label = val[length - 1]
+            },
+            /**
+             * 证书级联选择器更改时
+             */
+            changePaper(val){
+                let length = val.length
+                this.staffSearch.paper = val[length - 1]
             },
             /**
              * 查找用户
@@ -233,11 +281,17 @@
             
             store.commit('setLoading',true)
             try{
-                 await hrService.getAreaTree()
-                    .then(data =>{
-                        this.areaList = data.data
-                    })
-                await this.getTableList()
+                let data = await Promise.all([
+                    hrService.getAreaTree(), //省市区数据获取
+                    hrService.getSkillTree(), //获取技能树
+                    // hrService.getPaperSelection(), //获取证书列表
+                    hrService.getAbilityTree(), //获取能力标签树
+                    this.getTableList()
+                ])
+                this.areaList = data[0].data
+                this.skillList = data[1].data
+                // this.paperList = data[2].data
+                this.labelList = data[2].data
             }catch(e){
                 this.$message({
                     type:'error',

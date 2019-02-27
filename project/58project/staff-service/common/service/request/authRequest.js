@@ -3,7 +3,6 @@
  */
 
  import axios from 'axios'
-import { BreadcrumbItem } from '../../../node_modules/element-ui';
 
 export default {
 
@@ -18,12 +17,16 @@ export default {
      * [{key: 'searchkey', searchkey: ''}]
      */
     getManagerList(tableOption){
-        let baseUrl = `./api/admin/permission/getManagerList?pageNumber=${tableOption.pageNumber}&page=${tableOption.currentPage}`
+        let baseUrl = `./api/admin/permission/getManagerList?pageNumber=${tableOption.pageNumber}`
         if(tableOption.searchSelect.length){
             tableOption.searchSelect.forEach((item, index) => {
                 baseUrl += `&${item.key}=${item[item.key]}`
             });
+            baseUrl += `&page=1`
+        } else {
+            baseUrl += `&page=${tableOption.currentPage}`
         }
+        
         return axios.get(baseUrl)
     },
     /**
@@ -79,11 +82,19 @@ export default {
      * 获取角色列表
      */
     getRoleList(tableOption){
-        let baseUrl = `./api/admin/permission/getRoleList?pageNumber=${tableOption.pageNumber}&page=${tableOption.currentPage}`
+        let baseUrl = `./api/admin/permission/getRoleList?pageNumber=${tableOption.pageNumber}`
+        // if(tableOption.searchSelect.length){
+        //     tableOption.searchSelect.forEach((item, index) => {
+        //         baseUrl += `&${item.key}=${item[item.key]}`
+        //     });
+        // }
         if(tableOption.searchSelect.length){
             tableOption.searchSelect.forEach((item, index) => {
                 baseUrl += `&${item.key}=${item[item.key]}`
             });
+            baseUrl += `&page=1`
+        } else {
+            baseUrl += `&page=${tableOption.currentPage}`
         }
         return axios.get(baseUrl)
     },
@@ -145,11 +156,19 @@ export default {
      * 获取权限列表
      */
     getPermissionList(tableOption){
-        let baseUrl = `./api/admin/permission/getPermissionList?pageNumber=${tableOption.pageNumber}&page=${tableOption.currentPage}`
+        let baseUrl = `./api/admin/permission/getPermissionList?pageNumber=${tableOption.pageNumber}`
+        // if(tableOption.searchSelect.length){
+        //     tableOption.searchSelect.forEach((item, index) => {
+        //         baseUrl += `&${item.key}=${item[item.key]}`
+        //     });
+        // }
         if(tableOption.searchSelect.length){
             tableOption.searchSelect.forEach((item, index) => {
                 baseUrl += `&${item.key}=${item[item.key]}`
             });
+            baseUrl += `&page=1`
+        } else {
+            baseUrl += `&page=${tableOption.currentPage}`
         }
         return axios.get(baseUrl)
     },

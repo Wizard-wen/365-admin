@@ -30,18 +30,57 @@
 
             <el-form-item label="地区" prop="region">
                 <el-tag
-                    v-for="tag in staffForm.region"
-                    :key="tag.name"
-                    @close="handleClose(tag)"
-                    closable
-                    :type="tag.type">{{tag.region_name}}</el-tag>
+                v-for="tag in staffForm.region"
+                :key="tag.name"
+                @close="handleClose(tag,'area')"
+                closable
+                :type="tag.type">{{tag.name}}</el-tag>
+                
                 <el-cascader
                     :options="areaList"
                     v-model="region"
                     :props="areaProps"
+                    clearable
                     placeholder="请选择服务地区">
                 </el-cascader>
-                <el-button icon="el-icon-plus" circle @click="addRegion(region)"></el-button>
+                <el-button icon="el-icon-plus" circle @click="addRegion(region, 'area')"></el-button>
+            </el-form-item>
+
+
+            <el-form-item label="能力标签" prop="label">
+                <el-tag
+                v-for="tag in staffForm.label"
+                :key="tag.name"
+                @close="handleClose(tag, 'label')"
+                closable
+                :type="tag.type">{{tag.name}}</el-tag>
+                
+                <el-cascader
+                    :options="labelList"
+                    v-model="label"
+                    :props="areaProps"
+                    clearable
+                    placeholder="请选择能力标签">
+                </el-cascader>
+                <el-button icon="el-icon-plus" circle @click="addRegion(label,'label')"></el-button>
+            </el-form-item>
+            
+            <el-form-item label="技能" prop="skill">
+                <el-tag
+                v-for="tag in staffForm.skill"
+                :key="tag.name"
+                @close="handleClose(tag, 'skill')"
+                closable
+                :type="tag.type">{{tag.name}}</el-tag>
+                
+                <el-cascader
+                    clearable
+                    :options="skillList"
+                    v-model="skill"
+                    :props="areaProps"
+                    placeholder="请选择技能">
+                </el-cascader>
+                <el-button icon="el-icon-plus" circle @click="addRegion(skill, 'skill')"></el-button>
             </el-form-item>
 
             <el-form-item label="年龄" prop="age">
@@ -136,16 +175,26 @@ export default {
                 version: '',//操作版本号,两个人同时操作
 
 
-                labels: [],//能力标签
-                papers: [],//证书
-                skills: [],//技能
+                label: [],//能力标签
+                paper: [],//证书
+                skill: [],//技能
             },
             region: [],//地区信息
             areaList: [],//地区数组
+
+            skill: [],//技能级联选择器筛选信息
+            skillList: [],//技能级联选择器渲染数组
+            
+            paper: [],//证书级联选择器筛选信息
+            paperList: [],//证书级联选择器渲染数组
+            
+            label: [],//能力标签级联选择器筛选信息
+            labelList: [],//能力标签级联选择器渲染数组
+            
             //地区级联选择字段
             areaProps: {
                 label: 'name',
-                value: 'code'
+                value: 'id'
             },
             //表单验证规则
             staffRules: {
@@ -208,25 +257,11 @@ export default {
          * 区分新建和编辑
          */
         async onSubmit() {
-            
-            let obj = {}
-
-            if(this.$route.query.type == 0){
-                Object.keys(this.staffForm).forEach((item) =>{
-                    if(item != 'id'){
-                        obj.item = this.staffForm.item
-                    }
-                })
-            } else {
-                obj = {
-                    ...this.staffForm
-                }
-            }
 
             try{
-                await authService.editPermission(obj)
+                await hrService.editStaff(this.staffForm)
                     .then(data =>{
-                        // console.log(data)
+                        console.log(data)
                     }).catch(error =>{
                         this.$message({
                             type:'error',
@@ -239,22 +274,46 @@ export default {
         },
         /**
          * 添加地区
-         * @param region Array 级联选择器选出的三级地区数组
+         * @param cascaderData Array 级联选择器选出的三级地区数组
          */
-        addRegion(region){
+        addRegion(cascaderData, type){
+
             let _this = this
-            //判断是否已经存在这个地区
-            let isHave = this.staffForm.region.some((item, index) =>{
-                return item.code == region[2]
+
+            var levelArr = [], //级联选择数组
+                selectedArr = [],//当前被选中数组
+                dangerWord = "";//警告词
+            
+            //判断类型
+            if(type == "area"){
+                levelArr = this.areaList
+                selectedArr = [..._this.staffForm.region]
+                dangerWord = "地区"
+            } else if(type == "skill"){
+                levelArr = this.skillList
+                selectedArr = [..._this.staffForm.skill]
+                dangerWord = "技能"
+            } else if (type == "label"){
+                levelArr = this.labelList
+                selectedArr = [..._this.staffForm.label]
+                dangerWord = "技能标签"
+            }
+
+            //判断是否已经存在这个字段
+            let isHave = selectedArr.some((item, index) =>{
+                let length = cascaderData.length
+                return item.id == cascaderData[length-1]
             })
+
             if(isHave){
                 this.$message({
                     type:'error',
-                    message: '当前地区已存在，请重新选择'
+                    message: `当前${dangerWord}已存在，请重新选择`
                 })
                 return
             }
-            findAreaObj(this.areaList, region)
+
+            findAreaObj(levelArr, cascaderData)
 
             /**
              * Tag数组添加地区
@@ -273,23 +332,51 @@ export default {
                     
                     } else {
 
-                        if(item.code == region[2]){
-                            _this.staffForm.region.push(item)
+                        if(item.id == region[region.length-1]){
+
+                            selectedArr = [
+                                item,
+                                ...selectedArr
+                            ]
                         }
                     
                     }
                 })
             }
+            
+            //重新赋值
+            if(type == "area"){
+                _this.staffForm.region = selectedArr
+            } else if(type == "skill"){
+                _this.staffForm.skill = selectedArr
+            } else if (type == "label"){
+                _this.staffForm.label = selectedArr
+            }
         },
         /**
          * tag数组删除一条
          */
-        handleClose(tag){
-            this.staffForm.region.forEach((item, index) =>{
-                if(item.code == tag.code){
-                    this.staffForm.region.splice(index, 1)
-                }
-            })
+        handleClose(tag, type){
+            if(type == "area"){
+                this.staffForm.region.forEach((item, index) =>{
+                    if(item.code == tag.code){
+                        this.staffForm.region.splice(index, 1)
+                    }
+                })
+            } else if(type == "skill"){
+                this.staffForm.skill.forEach((item, index) =>{
+                    if(item.code == tag.code){
+                        this.staffForm.region.splice(index, 1)
+                    }
+                })
+            } else if (type == "label"){
+                this.staffForm.label.forEach((item, index) =>{
+                    if(item.code == tag.code){
+                        this.staffForm.region.splice(index, 1)
+                    }
+                })
+            }
+            
         },
         goback(){
             this.$router.push("/staff/staffList")
@@ -299,11 +386,17 @@ export default {
         store.commit('setLoading',true)
         try{
             let data = await Promise.all([
-                 hrService.getStaff(this.$route.query.id),
-                 hrService.getAreaTree()
+                hrService.getStaff(this.$route.query.id),
+                hrService.getAreaTree(),
+                hrService.getSkillTree(), //获取技能树
+                // hrService.getPaperSelection(), //获取证书列表
+                hrService.getAbilityTree(), //获取能力标签树
             ])
             this.staffForm = data[0].data
             this.areaList = data[1].data
+            this.skillList = data[2].data
+            // this.paperList = data[2].data
+            this.labelList = data[3].data
             
         }catch(e){
             this.$message({

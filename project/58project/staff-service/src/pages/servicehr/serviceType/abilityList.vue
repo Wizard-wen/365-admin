@@ -1,42 +1,37 @@
 <template>
     <div class="staff">
         <div class="container-box">
-            <el-form :inline="true" :model="paperSearch" class="staff-form">
+            <el-form :inline="true" :model="abilitySearch" class="staff-form">
                 <el-form-item label="是否启用">
-                    <el-select v-model="paperSearch.type" placeholder="请选择是否启用">
+                    <el-select v-model="abilitySearch.type" placeholder="请选择是否启用">
                         <el-option label="已启用" value="enable"></el-option>
                         <el-option label="未启用" value="disable"></el-option>
                     </el-select>
                 </el-form-item>
                 <el-form-item>
-                    <el-input v-model="paperSearch.name" placeholder="请输入证书名称"></el-input>
+                    <el-input v-model="abilitySearch.name" placeholder="请输入能力标签名称"></el-input>
                 </el-form-item>
 
                 <el-form-item>
-                    <el-button type="primary" @click="searchPaper">查询</el-button>
+                    <el-button type="primary" @click="searchAbility">查询</el-button>
                 </el-form-item>
 
                 <el-form-item>
-                    <el-button type="primary" @click="createPaper">添加</el-button>
+                    <el-button type="primary" @click="createAbility">添加</el-button>
                 </el-form-item>    
             </el-form>
             
             <el-table
-                :data="paperTable" 
+                :data="abilityTable" 
                 class="staff-table">
                 <el-table-column
-                    label="证书id"
+                    label="技能id"
                     prop="id"
                     align="center">
                 </el-table-column>
                 <el-table-column
-                    label="证书名称"
+                    label="技能名称"
                     prop="name"
-                    align="center">
-                </el-table-column>
-                <el-table-column
-                    label="状态"
-                    prop="type"
                     align="center">
                 </el-table-column>
 
@@ -44,10 +39,11 @@
                     label="操作"
                     align="center">
                     <template slot-scope="scope">
-                        <el-button size="mini" @click="editPaper(scope.$index, scope.row)">配置</el-button>
+                        <el-button size="mini" @click="editAbility(scope.$index, scope.row)">配置</el-button>
                     </template>
                 </el-table-column>
             </el-table>
+            <!-- 分页 -->
             <el-pagination
                 style="margin-top:30px;"
                 @current-change="handleCurrentPage"
@@ -67,11 +63,11 @@
         data() {
             return {
                 //技能列表
-                paperTable: [],
+                abilityTable: [],
                 //技能搜索条件
-                paperSearch: {
-                    name: '',//证书名称
-                    type: '',//是否启用
+                abilitySearch: {
+                    name: '', //能力标签名称
+                    type: '', //是否启用
                 },
                 /**
                  * 分页信息
@@ -91,10 +87,10 @@
                 let arr = [],
                 _this = this;
 
-                Object.keys(this.paperSearch).forEach((item, index) =>{
-                    if(_this.paperSearch[item] != ''){
+                Object.keys(this.abilitySearch).forEach((item, index) =>{
+                    if(_this.abilitySearch[item] != ''){
                         let obj = {}
-                        obj[item] = _this.paperSearch[item]
+                        obj[item] = _this.abilitySearch[item]
                         obj = {
                             ...obj,
                             key: item
@@ -121,10 +117,10 @@
                     searchSelect: this.searchArray
                 }
 
-                await hrService.getCategoryList(tableOption)
+                await hrService.getAbilityList(tableOption)
                     .then(data =>{
                         
-                        this.paperTable = data.data.data
+                        this.abilityTable = data.data.data
                         
                         //分页信息
                         this.pagination.currentPage = data.data.current_page //当前页码
@@ -146,16 +142,16 @@
             /**
              * 查找用户
              */
-            async searchPaper(){
+            async searchAbility(){
                 await this.getTableList()
             },
             /**
              * 创建服务人员
              * des 先创建服务人员，然后才能添加服务人员技能。
              */
-            createPaper(){
+            createAbility(){
                 this.$router.push({
-                    path: "/serviceType/paperConfig",
+                    path: "/serviceType/abilityConfig",
                     query: {
                         type: 0
                     }
@@ -165,9 +161,9 @@
              * 编辑服务人员信息
              * 编辑时可以添加服务人员技能
              */
-            editPaper(index, row){
+            editAbility(index, row){
                 this.$router.push({
-                    path: "/serviceType/paperConfig",
+                    path: "/serviceType/abilityConfig",
                     query: {
                         type: 1, //编辑为1
                         id: row.id
