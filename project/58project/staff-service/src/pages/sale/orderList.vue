@@ -1,12 +1,11 @@
 <template>
     <div class="order">
-        
         <div class="container-box">
             <el-form :inline="true" :model="authSearch" class="order-form">
                 <div>
-                    <el-form-item>
+                    <el-form-item class="order-select">
                         <el-input v-model="authSearch.phone" placeholder="请输入订单号">
-                            <el-select v-model="type" placeholder="搜索途径" slot="prepend">
+                            <el-select v-model="type" slot="prepend" placeholder="搜索途径">
                                 <el-option label="按订单号搜索" value="1"></el-option>
                                 <el-option label="按手机号搜索" value="2"></el-option>
                             </el-select>
@@ -99,6 +98,8 @@
     export default {
         data() {
             return {
+                input5: '',
+                select:'',
                 //丁丹列表
                 orderTable: [
                     {
@@ -172,6 +173,11 @@
                 width:80%;
                 min-width:1100px;
                 margin: 0 auto;
+               .order-select{
+                    & /deep/ .el-select .el-input {
+                        width: 130px;
+                    }
+                }
             }
             .order-table{
                 width: 80%;
