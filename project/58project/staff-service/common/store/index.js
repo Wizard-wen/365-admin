@@ -9,6 +9,7 @@ import createPersistedState from 'vuex-persistedstate'
 import {loginModule} from './login/loginModule.js'
 import {authorityModule} from './authorityModule.js'
 import {loadingModule} from './loadingModule.js'
+import {orderModule} from './orderModule.js'
 
 Vue.use(vuex);
 
@@ -18,6 +19,7 @@ window.store = new vuex.Store({
         loginModule,
         authorityModule,
         loadingModule,
+        orderModule
     },
     plugins: [createPersistedState({
         // paths: ['login'],
