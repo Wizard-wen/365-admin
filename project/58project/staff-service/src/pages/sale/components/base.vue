@@ -11,47 +11,23 @@
                     @click="changeFormState">{{isShow?`收起`:`展开`}}</el-button>
             </div>
         </div>
-        <div class="base-form-box" v-if="isShow">
-            <el-form size="small" class="baseForm" ref="baseForm" :model="baseForm" label-width="120px">
 
-                <el-form-item label="创建人">
-                    <el-input v-model="baseForm.createMan"></el-input>
-                </el-form-item>
-                <el-form-item label="服务类型" placeholder="月嫂">
-                    <el-input v-model="baseForm.serviceType"></el-input>
-                </el-form-item>
-                <el-form-item label="客户名称" >
-                    <el-input v-model="baseForm.name"></el-input>
-                </el-form-item>
-                <el-form-item label="客户联系方式">
-                    <el-input v-model="baseForm.number"></el-input>
-                </el-form-item>
-                <el-form-item label="服务地址">
-                    <el-input v-model="baseForm.address"></el-input>
-                </el-form-item>
-
-                <el-form-item label="服务周期">
-                    <el-date-picker
-                        v-model="baseForm.cycle"
-                        type="datetimerange"
-                        range-separator="至"
-                        start-placeholder="开始日期"
-                        end-placeholder="结束日期"></el-date-picker>
-                </el-form-item>
-
-
-                <el-form-item label="订单来源">
-                    <el-select v-model="baseForm.origin" placeholder="请选择订单来源">
-                        <el-option label="线上" value="shanghai"></el-option>
-                        <el-option label="线下" value="beijing"></el-option>
-                        <el-option label="渠道" value="beijing"></el-option>
-                    </el-select>
-                </el-form-item>
-
-                <el-form-item label="订单备注信息">
-                    <el-input type="textarea" v-model="baseForm.desc"></el-input>
-                </el-form-item>
-            </el-form>
+        <div class="base-form-box" >
+            <div class="base-message-box" v-if="isShow">
+                <div 
+                    class="base-line"
+                    :style="{
+                        width: item.size == 1? '100%' : '50%',
+                        marginBottom: index == baseList.length - 1? '20px': '0'}"
+                    v-for="(item, index) in baseList"
+                    :key="index">
+                    <div class="base-word">   
+                        <div class="base-key">{{`${item.key}：`}}</div>
+                        <div class="base-value">{{item.value}}</div>
+                    </div>
+                    
+                </div>
+            </div>
         </div>
         
     </el-card>
@@ -60,19 +36,70 @@
 export default {
     data(){
         return {
-            baseForm: {
-                createMan: '',//创建人
-                serviceType: '',//服务类型
-                name: '',//客户称呼
-                number: '',//客户联系方式
-                address: '',//服务地址
-                cycle: '',//订单周期
-                origin: '',//订单来源
-                desc: '', //订单备注信息
-                value6: ''
+            baseForm: this.$store.state.orderModule.order,
+            orderKeyName: {
+                manager_name: "创建人", //创建人
+                user_name: '客户名',//客户名
+                phone: '客户手机号',//客户手机号
+                name: '服务名称',//服务名称
+                service_address: '服务地址',//服务地址
+                service_start_time: '服务开始时间',//服务开始时间
+                service_end_time: '服务终止时间',//服务终止时间
+                source: '订单来源',//订单来源
+                remark: '备注信息',//备注信息
             },
             //是否展示表单
             isShow:true
+        }
+    },
+    computed: {
+        baseList(){
+            let obj = this.orderKeyName,
+            newArr = [];
+            
+            /**
+             * key 为渲染字段的属性名
+             * value 为某个属性名的值
+             */
+            Object.keys(this.baseForm).forEach((item, index) =>{
+                if(obj.hasOwnProperty(item)){
+                    let itemObj = {
+                        key: obj[item],
+                        value: this.baseForm[item]
+                    }
+                    newArr.push(itemObj)
+                }
+
+            })
+            //获取字符串长度（汉字算两个字符，字母数字算一个）
+            function getByteLen(val) {
+                var len = 0;
+                for (var i = 0; i < val.length; i++) {
+                    var a = val.charAt(i);
+                    if (a.match(/[^\x00-\xff]/ig) != null) {//\x00-\xff→GBK双字节编码范围
+                        len += 2;
+                    }
+                    else {
+                        len += 1;
+                    }
+                }
+                return len;
+            }
+            newArr = newArr.map((item, index) =>{
+
+                if(getByteLen(item.value) > 20){
+                    return {
+                        ...item,
+                        size: 1, //长字段，独占一行
+                    }
+                } else {
+                    return {
+                        ...item,
+                        size: 2,//短字段，占半行
+                    }
+                }
+            })
+            return newArr
         }
     },
     methods: {
@@ -80,7 +107,7 @@ export default {
         changeFormState(){
             this.isShow = !this.isShow
         }
-    }
+    },
 }
 </script>
 <style lang="scss" scoped>
@@ -106,7 +133,28 @@ export default {
             }
         }
         .base-form-box{
-
+            height: 100%;
+            width: 100%;
+            .base-message-box{
+                width: 100%;
+                .base-line{
+                    float: left;
+                    display: flex;
+                    line-height: 40px;
+                    .base-word{
+                        display: flex;
+                        .base-key{
+                            width: 120px;
+                            padding-right: 10px;
+                            text-align: right;
+                        }
+                        .base-value{
+                            flex: 1;
+                        }
+                    }
+                }
+            }
+            
             .baseForm{
                 width: 80%;
                 min-width: 500px;

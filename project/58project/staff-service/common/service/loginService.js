@@ -9,6 +9,12 @@ import {Login} from '../store/login/logGlobal.js'
 import loginRequest from './request/loginRequest.js'
 import {menuArr} from './menuArr.js'
 
+import {authorityModule} from '../store/authorityModule.js'
+import {loadingModule} from '../store/loadingModule.js'
+import {orderModule} from '../store/orderModule.js'
+
+
+console.log(orderModule)
 export default {
     //登录，获取、设置token 
     async getToken(username, password){
@@ -36,6 +42,7 @@ export default {
                     expire: manager.expire,
                     tree: tree,
                 })
+
 
             }).catch(err =>{
                 throw err

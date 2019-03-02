@@ -7,6 +7,9 @@
 
 import Vue from 'vue'
 import Vuex from 'vuex'
+import {authorityModule} from '../authorityModule.js'
+import {loadingModule} from '../loadingModule.js'
+import {orderModule} from '../orderModule.js'
 
 Vue.use(Vuex)
 
@@ -29,6 +32,8 @@ export const loginModule = {
             state.isLogin = false
             state.token = null
             state.user = {}
+            orderModule.state = {}
+            
         },
     }
 }

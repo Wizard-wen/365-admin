@@ -164,8 +164,8 @@ const serviceTypeModule = [
  * 销售管理模块
  */
 import orderList from '@/pages/sale/orderList.vue'
+import orderConfig from '@/pages/sale/orderConfig.vue'
 import orderEdit from '@/pages/sale/orderEdit.vue'
-import orderCreate from '@/pages/sale/orderCreate.vue'
 
 
 const saleModule = [
@@ -175,14 +175,14 @@ const saleModule = [
         component: orderList,
     },
     {
+        path: '/sale/orderConfig',
+        name: 'orderConfig',
+        component: orderConfig,
+    },
+    {
         path: '/sale/orderEdit',
         name: 'orderEdit',
         component: orderEdit,
-    },
-    {
-        path: '/sale/orderCreate',
-        name: 'orderCreate',
-        component: orderCreate,
     },
 ]
 

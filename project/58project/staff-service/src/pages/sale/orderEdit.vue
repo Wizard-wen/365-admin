@@ -1,139 +1,282 @@
 <template>
-    <div class="order-box">
-        <div class="order-edit">
-            <div class="order-message-box" :style="{width: isSearch? 'calc(50% - 8px)' : '100%'}">
-                <div class="order-in-box">
-                    <base-component></base-component>
-                    <service-list-component></service-list-component>
-                    <match-log-component></match-log-component>
-                </div>
-                
-                <div class="order-pull" @click="pullSearch" :style="{right: isSearch? '-16px':'0px'}">
-                    <i class="el-icon-arrow-left pull-icon"></i>
-                </div>
-            </div>
+    <div class="order-edit">
+        <el-form ref="orderForm" :model="orderForm" label-width="120px" class="order-edit-form">
+            
+            <el-form-item label="服务类型" prop="skill">
+                <el-tag
+                @close="handleClose"
+                v-if="orderForm.service_category_id"
+                closable>{{orderForm.name}}</el-tag>
 
-            <match-box-component v-if="isSearch" :style="{width: isSearch? 'calc(50% - 8px)' : 0}"></match-box-component>
+                <el-cascader
+                    v-if="orderForm.service_category_id == ''"
+                    clearable
+                    :options="skillList"
+                    v-model="skill"
+                    :props="areaProps"
+                    placeholder="请选择技能">
+                </el-cascader>
+                <el-button 
+                    icon="el-icon-plus" 
+                    circle 
+                    v-if="orderForm.service_category_id == ''"
+                    @click="addSkill(skill, 'skill')">
+                </el-button>
+            </el-form-item>
 
-        </div>
+            <el-form-item label="客户名称" >
+                <el-input v-model="orderForm.user_name"></el-input>
+            </el-form-item>
+            
+            <el-form-item label="客户联系方式">
+                <el-input v-model="orderForm.phone"></el-input>
+            </el-form-item>
+            
+            <el-form-item label="服务地址" class="area-form">
+                <el-cascader
+                    :options="areaList"
+                    v-model="region_id"
+                    :props="areaProps"
+                    @change="getAreaName"
+                    clearable
+                    placeholder="省市区">
+                </el-cascader>
+                <el-input placeholder="详细地址" v-model="region_string"></el-input>
+            </el-form-item>
+            <p class="address-details">
+                <span 
+                    v-for="(item,index) in regionArea_string"
+                    :key="index">{{item}}</span>
+                <span>{{region_string}}</span>
+            </p>
+
+            <el-form-item label="服务周期">
+                <el-date-picker
+                    v-model="cycleTime"
+                    type="datetimerange"
+                    @change="changeCycleTime"
+                    range-separator="至"
+                    start-placeholder="开始日期"
+                    end-placeholder="结束日期"></el-date-picker>
+            </el-form-item>
+
+
+            <el-form-item label="订单来源">
+                <el-select v-model="orderForm.source" placeholder="订单来源">
+                    <el-option label="全部" value="0"></el-option>
+                    <el-option label="线上" value="2"></el-option>
+                    <el-option label="线下" value="1"></el-option>
+                    <el-option label="渠道" value="3"></el-option>
+                </el-select>
+            </el-form-item>
+
+            <el-form-item label="备注信息">
+                <el-input type="textarea" v-model="orderForm.remark"></el-input>
+            </el-form-item>
+
+
+            <el-form-item>
+                <el-button type="primary" @click="onSubmit">立即创建</el-button>
+                <el-button>取消</el-button>
+            </el-form-item>
+        </el-form>
     </div>
-
 </template>
 <script>
-import base from './components/base.vue'
-import matchLog from './components/matchLog.vue'
-import serviceList from './components/serviceList.vue'
-import matchBox from './components/matchBox.vue'
+import {hrService} from '../../../common'
+import {orderService} from '../../../common'
 export default {
     data(){
         return {
-            input:'',
-            options2: [{
-                value: '选项1',
-                label: '黄金糕'
-            }, {
-                value: '选项2',
-                label: '双皮奶',
-            }],
-            /**
-             * 订单查找字段
-             */
-            searchForm:{
-                region:''
+            orderForm: {
+                // id: '',
+                manager_id: this.$store.state.loginModule.user.id, //创建人
+                manager_name: this.$store.state.loginModule.user.username, //创建人
+                user_name: '',//客户名
+                phone: '',//客户手机号
+                service_category_id: "",//服务分类id
+                name: '',//服务名称
+                service_address: '',//服务地址
+                service_start_time: '',//服务开始时间
+                service_end_time: '',//服务终止时间
+                source: '',//订单来源
+                remark: '',//备注信息
             },
-            typeList: [
-                {
-                    name:'区域'
-                },
-                {
-                    name:'标签'
-                },
-                {
-                    name:'服务类型'
-                },
-                {
-                    name:'区域'
-                },
-            ],
-            showSearchBox:false,
-            isSearch: true,
-
-            
+            cycleTime: [],//时间周期
+            region_id: [], //省市区联动
+            areaList: [],//地区数组
+            skill: [],//技能级联选择器筛选信息
+            skillList: [],//技能级联选择器渲染数组
+            regionArea_string: [],//省市区 汉字数组
+            region_string: '',//具体的街道信息
+            //地区级联选择字段
+            areaProps: {
+                label: 'name',
+                value: 'id'
+            },
         }
     },
-    methods:{   
-        onSubmit(){
+    methods: {
+        async onSubmit() {
+            try{
+                let str = "",
+                    arr = this.regionArea_string;
 
+                for(let i = 0; i<arr.length; i++){
+                    str += arr[i] 
+                }
+                this.orderForm.service_address = str + this.region_string
+
+                await orderService.createOrder(this.orderForm)
+                    .then(data =>{
+
+                        if(data.code == '0'){
+                            this.$message({
+                                type:"success",
+                                message: "修改成功"
+                            })
+                            this.$router.push('/sale/orderList')
+                        }
+                    }).catch(error =>{
+                        this.$message({
+                            type:'error',
+                            message: error.message
+                        })
+                    })
+            } catch(e){
+                this.$message({
+                    type:'error',
+                    message: e.message
+                })
+            }
         },
-        spread(){
-            this.showSearchBox = !this.showSearchBox
+        /**
+         * 改变周期时间
+         */
+        changeCycleTime(param){
+            this.orderForm.service_start_time = param[0].getTime()
+            this.orderForm.service_end_time = param[1].getTime()
         },
-        pullSearch(){
-            let state = this.isSearch
-            this.isSearch = Boolean(!state);
-        }
+        /**
+         * 得到级联选择器的名字
+         */
+        getAreaName(){
+            let num = 0,
+                arr = [],
+                regionArr = this.region_id;
+
+            function findAreaName(areaList){
+                areaList.forEach((item, index) =>{
+                    if(item.id == regionArr[num]){
+                        arr.push(item.name)
+                    }
+                })
+
+                areaList.forEach((item, index) =>{
+                    if(num < 2 && item.id == regionArr[num]){
+                        num++
+                        findAreaName(item.children)
+                    }
+                })
+            }
+
+            findAreaName(this.areaList)
+            this.regionArea_string = arr;
+        },
+        /**
+         * 给级联选择器添加标签
+         * @param cascaderData Array 级联选择器选出的三级地区数组
+         * @param type String 当前级联选择器所属表单字段
+         */
+        addSkill(cascaderData, type){
+            if(cascaderData.length == 0){
+                this.$message({
+                    type:'error',
+                    message: `请选择服务类型`
+                })
+                return 
+            }
+
+            let _this = this,
+                levelArr = this.skillList //级联选择数组
+
+            //向tag数组添加一条数据
+            findAreaObj(levelArr, cascaderData)
+
+            /**
+             * Tag数组添加方法
+             * des 级联选择器控件拿到的格式是一个包含三级选项id的数组， [1000, 10001, 10002]
+             *  该函数通过最后一级的id值，递归树，找到这个匹配的叶节点选项，并插入tag数组中
+             * @param areaList Array  树形列表
+             * @param region Array 级联选择器选出的三级数组
+             */
+            function findAreaObj(areaList, region){
+
+                areaList.forEach((item, index) =>{
+                    
+                    if(item.children){
+
+                        findAreaObj(item.children, region)
+                    
+                    } else {
+                        if(item.id == region[region.length-1]){
+                            _this.orderForm.service_category_id = item.id
+                            _this.orderForm.name = item.name
+                            _this.skill = []
+                        }
+                    }
+                })
+            }
+        },
+        /**
+         * tag数组删除一条
+         */
+        handleClose(){
+
+            this.orderForm.service_category_id = ""
+        },
     },
-    components:{
-        baseComponent: base,
-        serviceListComponent: serviceList,
-        matchLogComponent: matchLog,
-        matchBoxComponent: matchBox,
+    async mounted(){
+        store.commit('setLoading',true)
+        try{
+            let data = await Promise.all([
+                hrService.getAreaTree(), //省市区数据获取
+                hrService.getSkillTree(), //获取技能树
+            ])
+            this.areaList = data[0].data
+            this.skillList = data[1].data
+        }catch(e){
+            this.$message({
+                type:'error',
+                message: e.message
+            })
+        }
+        
+        store.commit('setLoading',false)
     }
 }
 </script>
 <style lang="scss" scoped>
-    .line-bottom-1px{
-        &:after{
-            content: '';
-            display: block;
-            height: 1px;
-            width: 100%;
-            background: #ccc; 
-        }
-    }
-    .order-box{
-        height: calc(100vh - 50px);
-        width: calc(100vw - 180px);
-        width: 100%;
-        overflow-y: hidden;
-        .order-edit{
-            background: #eaedf1;
-            height:100%;
-            width:100%;
-            display: flex;
-            justify-content: space-between;
-            .order-message-box{
-                height:calc(100vh - 50px);
-                position: relative;
-                // background: #fff;
-                .order-in-box{
-                    height: 100%;
-                    width: 100%;
-                    overflow-y: auto;
-                }
-                .order-pull{
-                    position: absolute;
-                    right: 0px;
-                    top:calc(50% - 60px);
-                    height: 100px;
-                    line-height: 100px;
-                    width: 16px;
-                    text-align: center;
-                    background: #409EFF;
-                    border-top-left-radius: 6px;
-                    border-bottom-left-radius: 6px;
-                    cursor: pointer;
-                    .pull-icon{
-                        color: #fff;
-                        font-size: 14px;
+    .order-edit{
+        padding: 30px 0 0 30px;
+        .order-edit-form{
+            max-width: 750px;
+            width: 80%;
+            .area-form{
+                & /deep/ .el-form-item__content{
+                    display: flex;
+                    & /deep/ .el-cascader{
+                        margin-right: 20px;
+                        width: 200px;
                     }
                 }
-                
             }
-
-            
+            .address-details{
+                line-height: 40px;
+                padding-left: 120px;
+            }
         }
     }
-
-
 </style>
+
+

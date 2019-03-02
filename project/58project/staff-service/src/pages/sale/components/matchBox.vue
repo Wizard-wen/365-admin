@@ -3,77 +3,52 @@
 
         <el-card class="match-message">
             <div class="match-box" slot="header">
-                <!-- <div class="head-title line-bottom-1px">
-                    <h3>服务人员查询</h3>
-                </div> -->
                 <div class="head-input">
-                    <el-input placeholder="请输入员工姓名或id" v-model="searchForm.name" class="input-with-select">
-                        <el-select v-model="select" slot="prepend" placeholder="请选择搜索方式">
-                            <el-option label="按姓名搜索" value="1"></el-option>
-                            <el-option label="按id搜索" value="2"></el-option>
-                        </el-select>
-                        <el-button slot="append" style="width:120px;">搜索</el-button>
-                    </el-input>
+                    <el-input  placeholder="请输入员工姓名" v-model="matchForm.name" class="input-with-select"></el-input>
+                    <el-input  placeholder="请输入员工号" v-model="matchForm.staff_id" class="input-with-select"></el-input>
+                    <el-button  @click="searchStaff">搜索</el-button>
                 </div>
                 <div class="head-cascader">
-                    <el-form :inline="true" :model="staffSearch" class="cascader-form">
-                        <el-form-item  class="form-item-style">
-                            <el-cascader
-                                class="cascader"
-                                size="medium"
-                                :options="areaList"
-                                v-model="region"
-                                :props="areaProps"
-                                @change="changeRegion"
-                                clearable
-                                placeholder="服务地区">
-                            </el-cascader>
-                        </el-form-item>
-                        
-                        <el-form-item  class="form-item-style">
-                            <el-cascader
-                                class="cascader"
-                                size="medium"
-                                :options="skillList"
-                                v-model="skill"
-                                :props="skillProps"
-                                @change="changeSkill"
-                                clearable
-                                placeholder="技能分类">
-                            </el-cascader>
-                        </el-form-item>
-                        
-                        <el-form-item  class="form-item-style">
-                            <el-cascader
-                                class="cascader"
-                                size="medium"
-                                :options="labelList"
-                                v-model="label"
-                                :props="labelProps"
-                                @change="changeLabel"
-                                clearable
-                                placeholder="能力标签">
-                            </el-cascader>
-                        </el-form-item>
-                        <el-form-item  class="form-item-style">
-                            <el-cascader
-                                class="cascader"
-                                size="medium"
-                                :options="labelList"
-                                v-model="label"
-                                :props="labelProps"
-                                @change="changeLabel"
-                                clearable
-                                placeholder="能力标签">
-                            </el-cascader>
-                        </el-form-item>
-                    </el-form>
-                    <div class="icon" @click="spread" :title="'下拉展开更多搜索项'">
+                    <el-cascader
+                        class="cascader"
+                        size="medium"
+                        :options="areaList"
+                        v-model="area"
+                        :props="cascaderProps"
+                        @change="changeRegion"
+                        :show-all-levels="false"
+                        clearable
+                        placeholder="服务地区">
+                    </el-cascader>
+
+                    <el-cascader
+                        class="cascader"
+                        size="medium"
+                        :options="skillList"
+                        v-model="skill"
+                        :props="cascaderProps"
+                        @change="changeSkill"
+                        :show-all-levels="false"
+                        clearable
+                        placeholder="技能分类">
+                    </el-cascader>
+                    <el-cascader
+                        class="cascader"
+                        size="medium"
+                        :options="labelList"
+                        v-model="label"
+                        :props="cascaderProps"
+                        @change="changeLabel"
+                        :show-all-levels="false"
+                        clearable
+                        placeholder="能力标签">
+                    </el-cascader>
+                    <!-- <div class="icon" @click="spread" :title="'下拉展开更多搜索项'">
                         <i class="el-icon-arrow-down" v-if="!showSearchBox"></i>
                         <i class="el-icon-arrow-up" v-else></i>
-                    </div>
+                    </div> -->
                 </div>
-                <transition name="el-zoom-in-top">
+                <!-- <transition name="el-zoom-in-top">
                     <div v-if="showSearchBox" class="head-more-cascader" :style="{top: 120+`px`}">
                         <el-form :inline="true" :model="staffSearch" class="more-cascader-form">
                             <el-form-item v-for="(n, index) in 8" :key="index" class="form-item-style">
@@ -81,8 +56,8 @@
                                     class="cascader"
                                     size="medium"
                                     :options="areaList"
-                                    v-model="region"
-                                    :props="areaProps"
+                                    v-model="area"
+                                    :props="cascaderProps"
                                     @change="changeRegion"
                                     clearable
                                     placeholder="服务地区">
@@ -90,7 +65,7 @@
                             </el-form-item>
                         </el-form>
                     </div>
-                </transition>
+                </transition> -->
             </div>
 
             <div class="match-content">
@@ -98,39 +73,27 @@
                     class="match-service-item"
                     v-for="(item, index) in 20"
                     :key="index">
+                    <div class="service-pic">
 
+                    </div>
                 </el-card>
             </div>
         </el-card>
     </div>
 </template>
 <script>
+import {hrService} from '../../../../common'
 export default {
     data(){
         return{
             /**
-             * 订单查找字段
+             * 订单查找表单字段
              */
-            searchForm:{
-                region:''
+            matchForm:{
+                name: '',
+                staff_id: ''
             },
-            typeList: [
-                {
-                    name:'区域'
-                },
-                {
-                    name:'标签'
-                },
-                {
-                    name:'服务类型'
-                },
-                {
-                    name:'区域'
-                },
-            ],
-            select: '',
-            showSearchBox:false,
-            //表单搜索项
+            //下拉框搜索字段
             staffSearch: {
                 name: '', //姓名
                 region_ids: [],//服务地区
@@ -138,7 +101,15 @@ export default {
                 ability_ids: [],//能力标签
                 paper_ids: [],//证书
             },
-            region: [],//地区级联选择器筛选信息
+
+            //下拉展开字段
+            showSearchBox:false,
+
+
+
+
+
+            area: [],//地区级联选择器筛选信息
             areaList: [],//地区级联选择器渲染数组
             skill: [],//技能级联选择器筛选信息
             skillList: [],//技能级联选择器渲染数组
@@ -146,53 +117,131 @@ export default {
             paperList: [],//证书级联选择器渲染数组
             label: [],//能力标签级联选择器筛选信息
             labelList: [],//能力标签级联选择器渲染数组
-            //地区级联选择字段
-            areaProps: {
-                label: 'name',
-                value: 'id'
-            },
-            //技能级联选择字段
-            skillProps: {
-                label: 'name',
-                value: 'id'
-            },
-            //能力标签级联选择字段
-            labelProps: {
-                label: 'name',
-                value: 'id'
-            },
-            //证书级联选择字段
-            paperProps: {
+
+            
+            //级联选择器prop字段
+            cascaderProps: {
                 label: 'name',
                 value: 'id'
             },
         }
     },
+    computed:{
+        /**
+         * 全部已添加搜索字段
+         */
+        searchArray(){
+            let arr = [],
+            _this = this;
+
+            Object.keys(this.staffSearch).forEach((item, index) =>{
+                //如果搜索字段是数组的话
+                if(Array.isArray(_this.staffSearch[item])){
+                    if(_this.staffSearch[item].length){
+                        let obj = {}
+                        obj[item] = [..._this.staffSearch[item]]
+                        obj = {
+                            ...obj,
+                            key: item
+                        }
+                        arr.push(obj)
+                    }
+                } 
+                //如果搜索字段是字符串的话
+                else if(_this.staffSearch[item] != ''){
+                    let obj = {}
+                    obj[item] = _this.staffSearch[item]
+                    obj = {
+                        ...obj,
+                        key: item
+                    }
+                    arr.push(obj)
+                }
+            })
+            return arr
+        }
+    },
     methods: {
+        /**
+         * 请求表格数据
+         * @param tableOption 表格配置项
+         * @param tableOption.currentPage 当前页
+         * @param tableOption.searchSelect Array 页面筛选项
+         * [{searchkey: '', searchValue: ''}]
+         */
+        async getTableList(){
+
+            let tableOption = {
+                searchSelect: this.searchArray
+            }
+
+            await hrService.getStaffList(tableOption)
+                .then(data =>{
+                    this.staffTable = data.data.data
+                    
+                    //分页信息
+                    this.pagination.currentPage = data.data.current_page //当前页码
+                    this.pagination.total = data.data.total //列表总条数
+                }).catch(error =>{
+                    this.$message({
+                        type:'error',
+                        message: error.message
+                    })
+                })
+        },
         spread(){
             this.showSearchBox = !this.showSearchBox
         },
-                    /**
-             * 地区级联选择器更改时
-             */
-            changeRegion(val){
-                let length = val.length
-                this.staffSearch.region_ids.push(val[length - 1])
-            },
-            /**
-             * 技能级联选择器更改时
-             */
-            changeSkill(val){
-                let length = val.length
-                this.staffSearch.service_category_id = val[length - 1]
-            },
-            /**
-             * 能力标签级联选择器更改时
-             */
-            changeLabel(val){
-                let length = val.length
-                this.staffSearch.ability_ids.push(val[length - 1])
-            },
+        /**
+         * 地区级联选择器更改时
+         */
+        changeRegion(val){
+            let length = val.length
+            this.staffSearch.region_ids.push(val[length - 1])
+        },
+        /**
+         * 技能级联选择器更改时
+         */
+        changeSkill(val){
+            let length = val.length
+            this.staffSearch.service_category_id = val[length - 1]
+        },
+        /**
+         * 能力标签级联选择器更改时
+         */
+        changeLabel(val){
+            let length = val.length
+            this.staffSearch.ability_ids.push(val[length - 1])
+        },
+        /**
+         * 
+         */
+        async searchStaff(){
+            await this.getTableList()
+        }
+    },
+    async mounted(){
+        store.commit('setLoading',true)
+        try{
+            let data = await Promise.all([
+                hrService.getAreaTree(),
+                hrService.getSkillTree(), //获取技能树
+                hrService.getPaperSelection(), //获取证书列表
+                hrService.getAbilityTree(), //获取能力标签树
+            ])
+            //promise.all 赋值
+            this.areaList = data[0].data
+            this.skillList = data[1].data
+            this.paperList = data[2].data
+            this.labelList = data[3].data
+
+        }catch(e){
+            this.$message({
+                type:'error',
+                message: e.message
+            })
+        }    
+        store.commit('setLoading',false)
     }
 }
 </script>
@@ -317,11 +366,18 @@ export default {
             //匹配员工信息列表
             .match-content{
                 .match-service-item{
-                    // height: 80px;
-                    width: 100%;
-                    // border: 1px solid #ccc;
-                    // border-radius: 6px;
                     margin: 20px 0;
+                    display: flex;
+                    & /deep/ .el-card__body{
+                        padding: 0;
+                        height:160px;
+                        width: 100%;  
+                    }
+                    .service-pic{
+                        height: 140px;
+                        width: 200px;
+                        background: green;
+                    }
                 }
             }
             

@@ -14,8 +14,8 @@
             <div class="service-line line-bottom-1px"
                 v-for="(item, index) in matchList"
                 :key="index">
-                <div class="service-id">{{`${item.id}`}}</div>
-                <div class="service-name">{{item.name}}</div>
+                <div class="service-name">{{item.staff_name}}</div>
+                <div class="service-message">{{item.message}}</div>
                 <div class="control">
                     <el-button type="text" size="small">面试</el-button>
                     <el-button type="text" size="small" @click="deleteService(item.id)">删除</el-button>
@@ -35,7 +35,7 @@ export default {
     },
     computed:{
         matchList(){
-            return store.state.orderModule.matchList
+            return store.state.orderModule.order_sign_logs
         }
     },
     methods: {
@@ -96,10 +96,6 @@ export default {
                 &:hover{
                     background: #f5f7fa;
                     cursor: pointer;
-                }
-                .service-id{
-                    float:left;
-                    width: 150px;
                 }
                 .service-name{
                     float:left;
