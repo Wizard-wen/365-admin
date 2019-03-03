@@ -213,7 +213,7 @@
                     pageNumber: this.pagination.pageNumber,
                     searchSelect: this.searchArray
                 }
-
+                store.commit('setLoading',true)
                 await hrService.getStaffList(tableOption)
                     .then(data =>{
                         this.staffTable = data.data.data
@@ -227,6 +227,7 @@
                             message: error.message
                         })
                     })
+                store.commit('setLoading',false)
             },
             /**
              * 切换页码
@@ -240,28 +241,48 @@
              */
             changeRegion(val){
                 let length = val.length
-                this.staffSearch.region_ids.push(val[length - 1])
+                if(length){
+                    this.staffSearch.region_ids.push(val[length - 1])
+                } else {
+                    this.staffSearch.region_ids = []
+                }
+                
             },
             /**
              * 技能级联选择器更改时
              */
             changeSkill(val){
                 let length = val.length
-                this.staffSearch.service_category_id = val[length - 1]
+                if(length){
+                    this.staffSearch.service_category_id = val[length - 1]
+                } else {
+                    this.staffSearch.service_category_id = []
+                }
+                
             },
             /**
              * 能力标签级联选择器更改时
              */
             changeLabel(val){
                 let length = val.length
-                this.staffSearch.ability_ids.push(val[length - 1])
+                if(length){
+                    this.staffSearch.ability_ids.push(val[length - 1])
+                } else {
+                    this.staffSearch.ability_ids = []
+                }
+                
             },
             /**
              * 证书级联选择器更改时
              */
             changePaper(val){
                 let length = val.length
-                this.staffSearch.paper_ids.push(val[length - 1])
+                if(length){
+                    this.staffSearch.paper_ids.push(val[length - 1])
+                } else {
+                    this.staffSearch.paper_ids = []
+                }
+                
             },
             /**
              * 查找用户

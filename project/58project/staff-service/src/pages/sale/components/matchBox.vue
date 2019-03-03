@@ -4,9 +4,9 @@
         <el-card class="match-message">
             <div class="match-box" slot="header">
                 <div class="head-input">
-                    <el-input  placeholder="请输入员工姓名" v-model="matchForm.name" class="input-with-select"></el-input>
-                    <el-input  placeholder="请输入员工号" v-model="matchForm.staff_id" class="input-with-select"></el-input>
-                    <el-button  @click="searchStaff">搜索</el-button>
+                    <el-input  placeholder="请输入员工姓名" v-model="staffSearch.name" class="input-with-select"></el-input>
+                    <el-input  placeholder="请输入员工号" v-model="staffSearch.staff_id" class="input-with-select"></el-input>
+                    <el-button type="primary"  @click="searchStaff">搜索</el-button>
                 </div>
                 <div class="head-cascader">
                     <el-cascader
@@ -43,13 +43,13 @@
                         clearable
                         placeholder="能力标签">
                     </el-cascader>
-                    <!-- <div class="icon" @click="spread" :title="'下拉展开更多搜索项'">
-                        <i class="el-icon-arrow-down" v-if="!showSearchBox"></i>
-                        <i class="el-icon-arrow-up" v-else></i>
-                    </div> -->
+                    <div class="icon" @click="spread" :title="'下拉展开更多搜索项'">
+                        <el-button icon="el-icon-arrow-down"  type="text" size="medium"  v-if="!showSearchBox">更多</el-button>
+                        <el-button icon="el-icon-arrow-up"  type="text" size="medium"  v-else>收起</el-button>
+                    </div>
                 </div>
-                <!-- <transition name="el-zoom-in-top">
-                    <div v-if="showSearchBox" class="head-more-cascader" :style="{top: 120+`px`}">
+                <transition name="el-zoom-in-top">
+                    <div v-if="showSearchBox" class="head-more-cascader" :style="{top: 100+`px`}">
                         <el-form :inline="true" :model="staffSearch" class="more-cascader-form">
                             <el-form-item v-for="(n, index) in 8" :key="index" class="form-item-style">
                                 <el-cascader
@@ -65,20 +65,81 @@
                             </el-form-item>
                         </el-form>
                     </div>
-                </transition> -->
+                </transition>
             </div>
 
             <div class="match-content">
-                <el-card
-                    class="match-service-item"
-                    v-for="(item, index) in 20"
-                    :key="index">
-                    <div class="service-pic">
-
+                <div class="match-list" v-if="matchTable.length">
+                    <div
+                        class="match-service-item"
+                        v-for="(item, index) in matchTable"
+                        :key="index">
+                        <div class="service-pic">
+                            
+                        </div>
+                        <div class="service-message">
+                            <div class="service-message-line">
+                                <p class="label">姓名：</p>
+                                <p class="value">{{item.name}}</p>
+                            </div>
+                            <div class="service-message-line">
+                                <p class="label">年龄：</p>
+                                <p class="value">{{item.age}}</p>
+                            </div>
+                            <div class="service-message-line">
+                                <p class="label">地址：</p>
+                                <p class="value">{{item.address}}</p>
+                            </div>
+                            <div class="service-message-line">
+                                <p class="label">联系方式：</p>
+                                <p class="value">{{item.phone}}</p>
+                            </div>
+                            <div class="control">
+                                <el-button type="text" size="small" >备选</el-button>
+                                <el-button type="text" size="small" @click="showDetail(item.id)">详情</el-button>
+                            </div>
+                            
+                        </div>
                     </div>
-                </el-card>
+                    <!-- 分页 -->
+                    <el-pagination
+                        style="margin-top:30px;"
+                        @current-change="handleCurrentPage"
+                        @prev-click="handleCurrentPage"
+                        @next-click="handleCurrentPage"
+                        :current-page.sync="pagination.currentPage"
+                        :page-size="10"
+                        layout="prev, pager, next, jumper"
+                        :total="pagination.total"></el-pagination>
+                </div>
+                <div v-else>暂无数据</div>
             </div>
         </el-card>
+        <el-dialog title="收货地址" :visible.sync="dialogFormVisible">
+
+
+
+            <div 
+                class="base-line"
+                :style="{
+                    width: item.size == 1? '100%' : '50%',
+                    marginBottom: index == baseList.length - 1? '20px': '0'}"
+                v-for="(item, index) in baseList"
+                :key="index">
+                <div class="base-word">   
+                    <div class="base-key">{{`${item.key}：`}}</div>
+                    <div class="base-value">{{item.value}}</div>
+                </div>
+            </div>
+
+
+
+
+            <div slot="footer" class="dialog-footer">
+                <el-button @click="dialogFormVisible = false">取 消</el-button>
+                <el-button type="primary"  @click="send">确 定</el-button>
+            </div>
+        </el-dialog>
     </div>
 </template>
 <script>
@@ -86,28 +147,29 @@ import {hrService} from '../../../../common'
 export default {
     data(){
         return{
+            orderKeyName: {
+                address: "地址",
+                age: "年龄",
+                name: "",
+                identify: "身份证号",
+            },
             /**
              * 订单查找表单字段
              */
             matchForm:{
-                name: '',
-                staff_id: ''
+                
             },
             //下拉框搜索字段
             staffSearch: {
-                name: '', //姓名
+                name: '',
+                staff_id: '',
                 region_ids: [],//服务地区
                 service_category_id: '',//技能分类
                 ability_ids: [],//能力标签
-                paper_ids: [],//证书
             },
 
             //下拉展开字段
             showSearchBox:false,
-
-
-
-
 
             area: [],//地区级联选择器筛选信息
             areaList: [],//地区级联选择器渲染数组
@@ -124,6 +186,18 @@ export default {
                 label: 'name',
                 value: 'id'
             },
+            matchTable: [],
+            /**
+             * 分页信息
+             */
+            pagination: {
+                total: 0,
+                currentPage: 1,
+                pageNumber: 10,
+            },
+            dialogTableVisible: false,
+            dialogFormVisible: false,
+            baseList: [],
         }
     },
     computed:{
@@ -159,7 +233,7 @@ export default {
                 }
             })
             return arr
-        }
+        },
     },
     methods: {
         /**
@@ -174,10 +248,10 @@ export default {
             let tableOption = {
                 searchSelect: this.searchArray
             }
-
+            store.commit('setLoading',true)
             await hrService.getStaffList(tableOption)
                 .then(data =>{
-                    this.staffTable = data.data.data
+                    this.matchTable = data.data.data
                     
                     //分页信息
                     this.pagination.currentPage = data.data.current_page //当前页码
@@ -188,6 +262,14 @@ export default {
                         message: error.message
                     })
                 })
+            store.commit('setLoading',false)
+        },
+        /**
+         * 切换页码
+         */
+        async handleCurrentPage(val){
+            this.pagination.currentPage = val
+            await this.getTableList()
         },
         spread(){
             this.showSearchBox = !this.showSearchBox
@@ -197,27 +279,119 @@ export default {
          */
         changeRegion(val){
             let length = val.length
-            this.staffSearch.region_ids.push(val[length - 1])
+            if(length){
+                this.staffSearch.region_ids.push(val[length - 1])
+            } else {
+                this.staffSearch.region_ids = []
+            }
+            
         },
         /**
          * 技能级联选择器更改时
          */
         changeSkill(val){
             let length = val.length
-            this.staffSearch.service_category_id = val[length - 1]
+            if(length){
+                this.staffSearch.service_category_id = val[length - 1]
+            } else {
+                this.staffSearch.service_category_id = []
+            }
+            
         },
         /**
          * 能力标签级联选择器更改时
          */
         changeLabel(val){
             let length = val.length
-            this.staffSearch.ability_ids.push(val[length - 1])
+            if(length){
+                this.staffSearch.ability_ids.push(val[length - 1])
+            } else {
+                this.staffSearch.ability_ids = []
+            }
+            
         },
         /**
-         * 
+         * 查找服务人员
          */
         async searchStaff(){
             await this.getTableList()
+        },
+        /**
+         * 显示服务人员详情
+         */
+        async showDetail(id){
+            let _this = this;
+            store.commit('setLoading',true)
+            await hrService.getStaff(id)
+                .then(data =>{
+                    if(data.code == "0"){
+                        _this.baseList = _this.changeBaseList(data.data)
+                        _this.dialogFormVisible = true
+                    }
+                })
+                .catch(e =>{
+                    this.$message({
+                        type:'error',
+                        message: e.message
+                    })
+                })
+            store.commit('setLoading',false)
+        },
+        /**
+         * 表单数据样式包装
+         */
+        changeBaseList(baseForm){
+            let obj = this.orderKeyName,
+            newArr = [];
+            
+            /**
+             * key 为渲染字段的属性名
+             * value 为某个属性名的值
+             */
+            Object.keys(baseForm).forEach((item, index) =>{
+                if(obj.hasOwnProperty(item)){
+                    let itemObj = {
+                        key: obj[item],
+                        value: baseForm[item]
+                    }
+                    newArr.push(itemObj)
+                }
+
+            })
+            //获取字符串长度（汉字算两个字符，字母数字算一个）
+            function getByteLen(val) {
+                var len = 0;
+                for (var i = 0; i < val.length; i++) {
+                    var a = val.charAt(i);
+                    if (a.match(/[^\x00-\xff]/ig) != null) {//\x00-\xff→GBK双字节编码范围
+                        len += 2;
+                    }
+                    else {
+                        len += 1;
+                    }
+                }
+                return len;
+            }
+            newArr = newArr.map((item, index) =>{
+
+                if(getByteLen(item.value) > 20){
+                    return {
+                        ...item,
+                        size: 1, //长字段，独占一行
+                    }
+                } else {
+                    return {
+                        ...item,
+                        size: 2,//短字段，占半行
+                    }
+                }
+            })
+            return newArr
+        },
+        async send(){
+            await console.log(1)
+            // await done()
+            this.dialogFormVisible = false
         }
     },
     async mounted(){
@@ -228,6 +402,7 @@ export default {
                 hrService.getSkillTree(), //获取技能树
                 hrService.getPaperSelection(), //获取证书列表
                 hrService.getAbilityTree(), //获取能力标签树
+                this.getTableList()
             ])
             //promise.all 赋值
             this.areaList = data[0].data
@@ -257,6 +432,23 @@ export default {
             background: #ccc; 
         }
     }
+
+    .base-line{
+        float: left;
+        display: flex;
+        line-height: 40px;
+        .base-word{
+            display: flex;
+            .base-key{
+                width: 120px;
+                padding-right: 10px;
+                text-align: right;
+            }
+            .base-value{
+                flex: 1;
+            }
+        }
+    }
     .match-box{
         height: 100%;
         position: relative;
@@ -283,6 +475,8 @@ export default {
             height: 100%;
             width: 100%;
             background: #fff;
+
+
             //搜索项
             .match-box{
                 height: 100px;
@@ -290,27 +484,16 @@ export default {
                 background: #fff;
                 border-bottom: 1px solid #e8e8e8;
                 position: relative;
-                //标题
-                .head-title{
-                    position: relative;
-                    height: 50px;
-                    width: 100%;
-                    line-height: 50px;
-                    h3{
-                        padding: 0 30px;
-                    }
-                }
                 //表单搜索框
                 .head-input{
                     width: 100%;
                     height: 60px;
                     display: flex;
                     padding:12px 30px;
-                    & /deep/ .el-select{
-                        width: 150px;
-                    }
-                    & /deep/ .input-with-select{
-                        height:36px;
+                    // 
+                    & /deep/ .el-input__inner{
+                        width: 200px;
+                        height: 36px;
                     }
                 }
                 //级联选择器
@@ -318,31 +501,25 @@ export default {
                     height: 40px;
                     width:100%;
                     padding: 0 30px;
-                    display: flex;
-                    justify-content: space-between;
+                    float: left;
                     //级联选择器表单
-                    .cascader-form{
-                        // padding: 10px 0;
-                        width:calc(100% - 30px);
-                        & /deep/ .el-form-item{
-                            margin-bottom:0;
-                            width:120px;
+                    .cascader{
+                        & /deep/ .el-input{
+                            width: 120px;
                         }
                         & /deep/ .el-input__inner{
                             border: none;
-                        }
-                        .form-item-style{
-
+                            width: 100px;
+                            padding-right: 20px;
                         }
                     }
-                    //展开图标
-                    .icon{
-                        width:30px;
-                        line-height: 60px;
-                        text-align: center;
-                        cursor: pointer;
-                        font-size: 20px;
-                    }
+                }
+                //展开图标
+                .icon{
+                    float: right;
+                    width:50px;
+                    height: 40px;
+                    padding: 2px 0;
                 }
                 //更多级联选择器
                 .head-more-cascader{
@@ -365,20 +542,44 @@ export default {
             }
             //匹配员工信息列表
             .match-content{
-                .match-service-item{
-                    margin: 20px 0;
-                    display: flex;
-                    & /deep/ .el-card__body{
-                        padding: 0;
-                        height:160px;
-                        width: 100%;  
-                    }
-                    .service-pic{
-                        height: 140px;
-                        width: 200px;
-                        background: green;
+                //匹配的员工列表框
+                .match-list{
+                    //每条员工信息
+                    .match-service-item{
+                        margin: 20px 0;
+                        display: flex;
+                        height: 160px;
+                        width: 100%;
+                        //员工头像
+                        .service-pic{
+                            height: 160px;
+                            width: 160px;
+                            background: green;
+                        }
+                        .service-message{
+                            height: 160px;
+                            padding: 5px 15px;
+                            width: calc(100% - 160px);
+                            background: #f5f5f5;
+                            .service-message-line{
+                                height: 30px;
+                                line-height: 30px;
+                                width: 100%;
+                                display: flex;
+                                .label{
+                                    width: 80px;
+                                    text-align: right;
+                                    padding-right: 10px;
+                                }
+                            }
+                            .control{
+                                display: flex;
+                                justify-content: flex-end;
+                            }
+                        }
                     }
                 }
+
             }
             
 

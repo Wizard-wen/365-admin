@@ -3,6 +3,7 @@
         <div slot="header" class="card-header">
             <h3>备选日志</h3>
             <div class="control">
+                <el-button type="text" size="small" @click="dialogFormVisible = true">添加日志</el-button>
                 <el-button 
                     type="text" 
                     :icon="isShow? 'el-icon-arrow-up' : 'el-icon-arrow-down'" 
@@ -11,18 +12,39 @@
             </div>
         </div>
         <div class="service-box" v-if="isShow">
-            <div class="service-line line-bottom-1px"
-                v-for="(item, index) in matchList"
-                :key="index">
-                <div class="service-name">{{item.staff_name}}</div>
-                <div class="service-message">{{item.message}}</div>
-                <div class="control">
-                    <el-button type="text" size="small">面试</el-button>
-                    <el-button type="text" size="small" @click="deleteService(item.id)">删除</el-button>
+            <div v-if="matchList.length">
+                <div class="service-line line-bottom-1px"
+                    v-for="(item, index) in matchList"
+                    :key="index">
+                    <div class="service-name">{{item.staff_name}}</div>
+                    <div class="service-message">{{item.message}}</div>
+                    <div class="control">
+                        <el-button type="text" size="small">面试</el-button>
+                        <el-button type="text" size="small" @click="deleteService(item.id)">删除</el-button>
+                    </div>
                 </div>
             </div>
+            <div v-else>暂无内容</div>
         </div>
         
+
+        <el-dialog title="收货地址" :visible.sync="dialogFormVisible">
+            <el-form :model="form">
+                <el-form-item label="活动名称" :label-width="formLabelWidth">
+                    <el-input v-model="form.name" autocomplete="off"></el-input>
+                </el-form-item>
+                <el-form-item label="活动区域" :label-width="formLabelWidth">
+                    <el-select v-model="form.region" placeholder="请选择活动区域">
+                        <el-option label="区域一" value="shanghai"></el-option>
+                        <el-option label="区域二" value="beijing"></el-option>
+                    </el-select>
+                </el-form-item>
+            </el-form>
+            <div slot="footer" class="dialog-footer">
+                <el-button @click="dialogFormVisible = false">取 消</el-button>
+                <el-button type="primary" @click="dialogFormVisible = false">确 定</el-button>
+            </div>
+        </el-dialog>
     </el-card>  
 </template>
 <script>
@@ -30,7 +52,20 @@ export default {
     data(){
         return {
             //是否展示表单
-            isShow:true
+            isShow:true,
+            dialogTableVisible: false,
+            dialogFormVisible: false,
+            form: {
+                name: '',
+                region: '',
+                date1: '',
+                date2: '',
+                delivery: false,
+                type: [],
+                resource: '',
+                desc: ''
+            },
+            formLabelWidth: '120px'
         }
     },
     computed:{

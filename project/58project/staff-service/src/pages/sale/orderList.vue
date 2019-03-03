@@ -242,7 +242,7 @@
                     path: "/sale/orderConfig",
                     query: {
                         type: 1, //编辑为1
-                        id: row.id
+                        id: row.id?row.id: '2' 
                     }
                 })
             }

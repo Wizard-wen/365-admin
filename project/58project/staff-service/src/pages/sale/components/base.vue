@@ -3,7 +3,6 @@
         <div slot="header" class="card-header">
             <h3>订单基本信息</h3>
             <div class="control">
-                <el-button type="text" icon="el-icon-edit" circle size="small" >编辑</el-button>
                 <el-button 
                     type="text" 
                     :icon="isShow? 'el-icon-arrow-up' : 'el-icon-arrow-down'" 
@@ -14,19 +13,21 @@
 
         <div class="base-form-box" >
             <div class="base-message-box" v-if="isShow">
-                <div 
-                    class="base-line"
-                    :style="{
-                        width: item.size == 1? '100%' : '50%',
-                        marginBottom: index == baseList.length - 1? '20px': '0'}"
-                    v-for="(item, index) in baseList"
-                    :key="index">
-                    <div class="base-word">   
-                        <div class="base-key">{{`${item.key}：`}}</div>
-                        <div class="base-value">{{item.value}}</div>
+                <div v-if="baseList.length">
+                    <div 
+                        class="base-line"
+                        :style="{
+                            width: item.size == 1? '100%' : '50%',
+                            marginBottom: index == baseList.length - 1? '20px': '0'}"
+                        v-for="(item, index) in baseList"
+                        :key="index">
+                        <div class="base-word">   
+                            <div class="base-key">{{`${item.key}：`}}</div>
+                            <div class="base-value">{{item.value}}</div>
+                        </div>
                     </div>
-                    
                 </div>
+                <div v-else> 暂无内容</div>
             </div>
         </div>
         

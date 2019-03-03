@@ -3,7 +3,6 @@
         <div slot="header" class="card-header">
             <h3>备选服务人员</h3>
             <div class="control">
-                <el-button type="text" size="small" @click="addService">添加</el-button>
                 <el-button 
                     type="text" 
                     :icon="isShow? 'el-icon-arrow-up' : 'el-icon-arrow-down'" 
@@ -12,23 +11,26 @@
             </div>
         </div>
         <div class="service-box" v-if="isShow">
-            <el-row>
-                <el-col :span="6" v-for="(item, index) in matchList" :key="index" :offset="index%3 == 0 ? 0 : 2">
-                    <el-card 
-                        :style="{marginBottom: index < 3? '10px' : '0' }" 
-                        :body-style="{padding: 0 }">
-                        <div style="padding: 7px;">
-                            <p>{{`姓名：${item.staff_name}`}}</p>
-                            <p>{{`id：${item.staff_id}`}}</p>
-                            <div class="bottom clearfix">
-                                <el-button type="text" size="mini">签约</el-button>
-                                <el-button type="text" size="mini">拒绝</el-button>
-                                <el-button type="text" size="mini" @click="deleteService(item.id)">删除</el-button>
+            <div v-if="matchList.length">
+                <el-row>
+                    <el-col :span="6" v-for="(item, index) in matchList" :key="index" :offset="index%3 == 0 ? 0 : 2">
+                        <el-card 
+                            :style="{marginBottom: index < 3? '10px' : '0' }" 
+                            :body-style="{padding: 0 }">
+                            <div style="padding: 7px;">
+                                <p>{{`姓名：${item.staff_name}`}}</p>
+                                <p>{{`id：${item.staff_id}`}}</p>
+                                <div class="bottom clearfix">
+                                    <el-button type="text" size="mini">签约</el-button>
+                                    <el-button type="text" size="mini">拒绝</el-button>
+                                    <el-button type="text" size="mini" @click="deleteService(item.id)">删除</el-button>
+                                </div>
                             </div>
-                        </div>
-                    </el-card>
-                </el-col>
-            </el-row>
+                        </el-card>
+                    </el-col>
+                </el-row>
+            </div>
+            <div v-else>暂无内容</div>
         </div>
     </el-card>  
 </template>
@@ -37,7 +39,7 @@ export default {
     data(){
         return {
             //是否展示表单
-            isShow:true
+            isShow:true,
         }
     },
     computed:{
@@ -48,13 +50,6 @@ export default {
     methods: {
         deleteService(id){
             store.commit('deleteMatchService', id)
-        },
-        addService(){
-            if(store.state.orderModule.matchList.length == 6){
-                alert("最多加6个")
-                return
-            }
-            store.commit('addMatchService')
         },
         //改变表单的显示隐藏状态
         changeFormState(){
