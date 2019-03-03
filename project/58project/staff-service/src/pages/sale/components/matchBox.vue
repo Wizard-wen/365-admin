@@ -32,6 +32,7 @@
                         clearable
                         placeholder="技能分类">
                     </el-cascader>
+
                     <el-cascader
                         class="cascader"
                         size="medium"
@@ -116,9 +117,6 @@
             </div>
         </el-card>
         <el-dialog title="收货地址" :visible.sync="dialogFormVisible">
-
-
-
             <div 
                 class="base-line"
                 :style="{
@@ -136,8 +134,8 @@
 
 
             <div slot="footer" class="dialog-footer">
-                <el-button @click="dialogFormVisible = false">取 消</el-button>
-                <el-button type="primary"  @click="send">确 定</el-button>
+                <el-button @click="dialogFormVisible = false">取消</el-button>
+                <el-button type="primary"  @click="saveOrderStaff">备选</el-button>
             </div>
         </el-dialog>
     </div>
@@ -150,7 +148,7 @@ export default {
             orderKeyName: {
                 address: "地址",
                 age: "年龄",
-                name: "",
+                name: "姓名",
                 identify: "身份证号",
             },
             /**
@@ -248,7 +246,9 @@ export default {
             let tableOption = {
                 searchSelect: this.searchArray
             }
+
             store.commit('setLoading',true)
+            
             await hrService.getStaffList(tableOption)
                 .then(data =>{
                     this.matchTable = data.data.data
@@ -262,6 +262,7 @@ export default {
                         message: error.message
                     })
                 })
+
             store.commit('setLoading',false)
         },
         /**
@@ -271,6 +272,9 @@ export default {
             this.pagination.currentPage = val
             await this.getTableList()
         },
+        /**
+         * 展开更多选项
+         */
         spread(){
             this.showSearchBox = !this.showSearchBox
         },
@@ -388,10 +392,15 @@ export default {
             })
             return newArr
         },
-        async send(){
+        /**
+         * 添加候选人
+         */
+        async saveOrderStaff(){
             await console.log(1)
+
             // await done()
             this.dialogFormVisible = false
+            console.log(2)
         }
     },
     async mounted(){
