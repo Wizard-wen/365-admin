@@ -1,9 +1,9 @@
 <template>
     <el-card class="box-card">
         <div slot="header" class="card-header">
-            <h3>备选日志</h3>
+            <h3>售后日志</h3>
             <div class="control">
-                <el-button type="text" size="small" @click="showRefusePage">添加日志</el-button>
+                <el-button type="text" size="small" @click="showMaintainPage" v-if="isSigned ==3">添加日志</el-button>
                 <el-button 
                     type="text" 
                     :icon="isShow? 'el-icon-arrow-up' : 'el-icon-arrow-down'" 
@@ -12,9 +12,9 @@
             </div>
         </div>
         <div class="service-box" v-if="isShow">
-            <div v-if="matchList.length">
+            <div v-if="maintainLogList.length">
                 <div class="service-line line-bottom-1px"
-                    v-for="(item, index) in matchList"
+                    v-for="(item, index) in maintainLogList"
                     :key="index">
                     <div class="service-name">{{item.staff_name}}</div>
                     <div class="service-message">{{item.message}}</div>
@@ -24,15 +24,15 @@
         </div>
         
 
-        <el-dialog title="日志" :visible.sync="refuseDialogVisible">
-            <el-form :model="refuseForm">
+        <el-dialog title="售后日志" :visible.sync="maintainDialogVisible">
+            <el-form :model="maintainForm">
                 <el-form-item label="日志" :label-width="formLabelWidth">
-                    <el-input v-model="refuseForm.message" type="textarea"></el-input>
+                    <el-input v-model="maintainForm.message" type="textarea"></el-input>
                 </el-form-item>
             </el-form>
             <div slot="footer" class="dialog-footer">
-                <el-button @click="refuseDialogVisible = false">取 消</el-button>
-                <el-button type="primary" @click="refuseStaff">提交</el-button>
+                <el-button @click="maintainDialogVisible = false">取 消</el-button>
+                <el-button type="primary" @click="maintainStaff">提交</el-button>
             </div>
         </el-dialog>
 
@@ -46,22 +46,30 @@ export default {
         return {
             //是否展示表单
             isShow:true,
-            //拒绝对话框
-            refuseDialogVisible: false,
-            //拒绝表单
-            refuseForm : {
+            //售后对话框
+            maintainDialogVisible: false,
+            //售后表单
+            maintainForm : {
                 order_id: this.$route.query.id,// 订单id
                 staff_id: 0,// 服务人员id
                 staff_name: "",//服务人员姓名
-                message: '',//拒签日志
+                message: '',//售后日志
             },
             
             formLabelWidth: '120px'
         }
     },
     computed:{
-        matchList(){
-            return store.state.orderModule.order_sign_logs
+        maintainLogList(){
+            return store.state.orderModule.order_maintain_logs
+        },
+        /**
+         * 该订单是否已经签约
+         * des 根据vuex 中orderModule.order.type判断
+         *  1 待匹配 2 已匹配 3 已签约 4 已取消 5 订单完成
+         */
+        isSigned(){
+            return store.state.orderModule.order.type
         }
     },
     methods: {
@@ -70,22 +78,22 @@ export default {
             this.isShow = !this.isShow
         },
         /**
-         * 打开拒绝对话框
+         * 打开售后日志对话框
          */
-        showRefusePage(){
-            this.refuseForm = {
-                ...this.refuseForm,
+        showMaintainPage(){
+            this.maintainForm = {
+                ...this.maintainForm,
                 message: "",
             }
-            this.refuseDialogVisible = true
+            this.maintainDialogVisible = true
         },
         /**
-         * 提交拒绝日志
+         * 售后日志
          */
-        async refuseStaff(){  
+        async maintainStaff(){  
             store.commit('setLoading',true)
 
-            await orderService.writeSignLog(this.refuseForm) 
+            await orderService.writeMaintainLog(this.maintainForm) 
                 .then(data =>{
                     if(data.code == "0"){
                         this.$message({
@@ -104,7 +112,8 @@ export default {
             await orderService.getOrder(this.$route.query.id)
             
             store.commit('setLoading',false)
-            this.refuseDialogVisible = false
+
+            this.maintainDialogVisible = false
         }, 
     }
 }

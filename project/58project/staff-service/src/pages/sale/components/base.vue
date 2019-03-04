@@ -19,6 +19,7 @@
                         :style="{
                             width: item.size == 1? '100%' : '50%',
                             marginBottom: index == baseList.length - 1? '20px': '0'}"
+                        
                         v-for="(item, index) in baseList"
                         :key="index">
                         <div class="base-word">   

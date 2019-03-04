@@ -80,5 +80,29 @@ export default {
         return axios.post(`./api/admin/order/writeSignLog`,
             Object.assign({}, obj)
         )
+    },
+    /**
+     * 售后日志
+     */
+    writeMaintainLog(obj){
+        return axios.post(`./api/admin/order/writeMaintainLog`,
+            Object.assign({}, obj)
+        )
+    },
+    /**
+     * 取消订单
+     */ 
+    cancelOrder(obj){
+        return axios.post(`./api/admin/order/cancelOrder`,
+            Object.assign({}, obj)
+        )
+    },
+    /**
+     * 完成订单
+     */ 
+    completeOrder(obj){
+        return axios.post(`./api/admin/order/completeOrder`,
+            Object.assign({}, obj)
+        )
     }
 }

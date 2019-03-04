@@ -75,5 +75,23 @@ export default {
      */
     writeSignLog(obj){
         return orderRequest.writeSignLog(obj)
+    },
+    /**
+     * 售后日志
+     */
+    writeMaintainLog(obj){
+        return orderRequest.writeMaintainLog(obj)
+    },
+    /**
+     * 取消订单
+     */ 
+    cancelOrder(obj){
+        return orderRequest.cancelOrder(obj)
+    },
+    /**
+     * 完成订单
+     */ 
+    completeOrder(obj){
+        return orderRequest.completeOrder(obj)
     }
 }
