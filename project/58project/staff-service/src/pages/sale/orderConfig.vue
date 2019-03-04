@@ -165,7 +165,7 @@ export default {
             
             this.completeDialogVisible = false         
             store.commit('setLoading',false)
-        }
+        },
     },
     computed:{
         /**

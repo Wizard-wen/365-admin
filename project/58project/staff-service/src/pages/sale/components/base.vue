@@ -69,6 +69,40 @@ export default {
                         key: obj[item],
                         value: this.baseForm[item]
                     }
+
+                    //转换value格式
+                    let realValue = itemObj.value,
+                        realItemObj = {
+                            value: ''
+                        }
+                    
+                    if(item == "source"){
+                        if(realValue == 1){
+                            realItemObj.value =  "待匹配"
+                        } else if(realValue == 2){
+                            realItemObj.value = "已匹配"
+                        } else if(realValue == 3){
+                            realItemObj.value ="已签约"
+                        }else if(realValue == 4){
+                            realItemObj.value = "已取消"
+                        }else if(realValue == 5){
+                            realItemObj.value = "订单完成"
+                        }
+
+                        itemObj = {
+                            ...itemObj,
+                            ...realItemObj,
+                        }
+                    } else if(item == "service_start_time" || item == "service_end_time"){
+                        realItemObj.value = new Date(realValue * 1000).getFullYear()
+                        itemObj = {
+                            ...itemObj,
+                            ...realItemObj,
+                        }
+                    }
+                    
+
+
                     newArr.push(itemObj)
                 }
 
