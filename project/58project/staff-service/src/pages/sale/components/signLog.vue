@@ -16,7 +16,6 @@
                 <div class="service-line line-bottom-1px"
                     v-for="(item, index) in maintainLogList"
                     :key="index">
-                    <div class="service-name">{{item.staff_name}}</div>
                     <div class="service-message">{{item.message}}</div>
                 </div>
             </div>
@@ -172,7 +171,7 @@ export default {
                 }
                 .service-message{
                     float:left;
-                    width: 150px;
+                    width: 100%;
                 }
                 .control{
                     float:right;
