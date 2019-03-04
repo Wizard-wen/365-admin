@@ -3,7 +3,7 @@
  */
 
 import orderRequest from './request/orderRequest.js'
-
+import { Message } from 'element-ui';
 export default {
     /**
      * 获取订单列表
@@ -22,14 +22,16 @@ export default {
      * 获取订单信息
      */
     async getOrder(id){
-        try{
-            await orderRequest.getOrder(id) 
-                .then(data =>{
-                    store.commit('configData', data)
+        await orderRequest.getOrder(id) 
+            .then(data =>{
+                store.dispatch('setData', {data})
+            })
+            .catch(e =>{
+                Message({
+                    type:'error',
+                    message: e.message
                 })
-        }catch(err){
-            throw err
-        }   
+            })
     },
     /**
      * 编辑订单
@@ -41,16 +43,20 @@ export default {
     /**
      * 添加候选人
      * @param obj 候选人字段信息
+     * @param obj.order_id 订单id
+     * @param obj.staff_id 服务人员id
+     * @param obj.staff_name 服务人员姓名
      */
-    saveOrderStaff(obj){
-        return orderRequest.saveOrderStaff(obj)
+    createOrderStaff(obj){
+
+        return orderRequest.createOrderStaff(obj)
     },
     /**
      * 删除候选人
-     * @param obj 候选人字段信息
+     * @param id 候选人id
      */
-    deleteOrderStaff(obj){
-        return orderRequest.deleteOrderStaff(obj)
+    deleteOrderStaff(id){
+        return orderRequest.deleteOrderStaff(id)
     },
     /**
      * 签约

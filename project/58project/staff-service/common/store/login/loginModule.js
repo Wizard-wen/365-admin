@@ -32,8 +32,6 @@ export const loginModule = {
             state.isLogin = false
             state.token = null
             state.user = {}
-            orderModule.state = {}
-            
         },
     }
 }

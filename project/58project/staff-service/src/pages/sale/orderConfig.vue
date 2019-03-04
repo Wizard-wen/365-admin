@@ -1,7 +1,8 @@
 <template>
     <div class="order-box">
-        <div class="order-edit">
-            <div class="order-message-box" :style="{width: isSearch? 'calc(50% - 8px)' : '100%'}">
+        <!-- 未签约 -->
+        <div class="order-edit" v-if="isSigned < 3">
+            <div class="order-message-box" :style="{width: isSearch? 'calc(50% - 8px)' : '100%'}" >
                 <div class="order-in-box">
                     <base-component></base-component>
                     <service-list-component></service-list-component>
@@ -14,7 +15,15 @@
             </div>
 
             <match-box-component v-if="isSearch" :style="{width: isSearch? 'calc(50% - 8px)' : 0}"></match-box-component>
+        </div>
 
+        <!-- 已签约 -->
+        <div class="order-edit" v-if="isSigned >= 3">
+            <div class="order-message-box">
+                <div class="order-in-box">
+                    <base-component></base-component>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -29,50 +38,23 @@ import {orderService} from '../../../common'
 export default {
     data(){
         return {
-            input:'',
-            options2: [{
-                value: '选项1',
-                label: '黄金糕'
-            }, {
-                value: '选项2',
-                label: '双皮奶',
-            }],
-            /**
-             * 订单查找字段
-             */
-            searchForm:{
-                region:''
-            },
-            typeList: [
-                {
-                    name:'区域'
-                },
-                {
-                    name:'标签'
-                },
-                {
-                    name:'服务类型'
-                },
-                {
-                    name:'区域'
-                },
-            ],
-            showSearchBox:false,
-            isSearch: true,
-
-            
+            isSearch: true, 
         }
     },
     methods:{   
-        onSubmit(){
-
-        },
-        spread(){
-            this.showSearchBox = !this.showSearchBox
-        },
         pullSearch(){
             let state = this.isSearch
             this.isSearch = Boolean(!state);
+        }
+    },
+    computed:{
+        /**
+         * 该订单是否已经签约
+         * des 根据vuex 中orderModule.order.type判断
+         *  1 待匹配 2 已匹配 3 已签约 4 已取消 5 订单完成
+         */
+        isSigned(){
+            return store.state.orderModule.order.type
         }
     },
     components:{

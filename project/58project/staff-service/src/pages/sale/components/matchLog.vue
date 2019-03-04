@@ -3,7 +3,7 @@
         <div slot="header" class="card-header">
             <h3>备选日志</h3>
             <div class="control">
-                <el-button type="text" size="small" @click="dialogFormVisible = true">添加日志</el-button>
+                <el-button type="text" size="small" @click="showRefusePage">添加日志</el-button>
                 <el-button 
                     type="text" 
                     :icon="isShow? 'el-icon-arrow-up' : 'el-icon-arrow-down'" 
@@ -18,53 +18,44 @@
                     :key="index">
                     <div class="service-name">{{item.staff_name}}</div>
                     <div class="service-message">{{item.message}}</div>
-                    <div class="control">
-                        <el-button type="text" size="small">面试</el-button>
-                        <el-button type="text" size="small" @click="deleteService(item.id)">删除</el-button>
-                    </div>
                 </div>
             </div>
             <div v-else>暂无内容</div>
         </div>
         
 
-        <el-dialog title="收货地址" :visible.sync="dialogFormVisible">
-            <el-form :model="form">
-                <el-form-item label="活动名称" :label-width="formLabelWidth">
-                    <el-input v-model="form.name" autocomplete="off"></el-input>
-                </el-form-item>
-                <el-form-item label="活动区域" :label-width="formLabelWidth">
-                    <el-select v-model="form.region" placeholder="请选择活动区域">
-                        <el-option label="区域一" value="shanghai"></el-option>
-                        <el-option label="区域二" value="beijing"></el-option>
-                    </el-select>
+        <el-dialog title="日志" :visible.sync="refuseDialogVisible">
+            <el-form :model="refuseForm">
+                <el-form-item label="日志" :label-width="formLabelWidth">
+                    <el-input v-model="refuseForm.message" type="textarea"></el-input>
                 </el-form-item>
             </el-form>
             <div slot="footer" class="dialog-footer">
-                <el-button @click="dialogFormVisible = false">取 消</el-button>
-                <el-button type="primary" @click="dialogFormVisible = false">确 定</el-button>
+                <el-button @click="refuseDialogVisible = false">取 消</el-button>
+                <el-button type="primary" @click="refuseStaff">提交</el-button>
             </div>
         </el-dialog>
+
+
     </el-card>  
 </template>
 <script>
+import {orderService} from '../../../../common'
 export default {
     data(){
         return {
             //是否展示表单
             isShow:true,
-            dialogTableVisible: false,
-            dialogFormVisible: false,
-            form: {
-                name: '',
-                region: '',
-                date1: '',
-                date2: '',
-                delivery: false,
-                type: [],
-                resource: '',
-                desc: ''
+            //拒绝对话框
+            refuseDialogVisible: false,
+            //拒绝表单
+            refuseForm : {
+                order_id: this.$route.query.id,// 订单id
+                staff_id: 0,// 服务人员id
+                staff_name: "",//服务人员姓名
+                message: '',//拒签日志
             },
+            
             formLabelWidth: '120px'
         }
     },
@@ -74,13 +65,47 @@ export default {
         }
     },
     methods: {
-        deleteService(id){
-            store.commit('deleteMatchService', id)
-        },
         //改变表单的显示隐藏状态
         changeFormState(){
             this.isShow = !this.isShow
-        }
+        },
+        /**
+         * 打开拒绝对话框
+         */
+        showRefusePage(){
+            this.refuseForm = {
+                ...this.refuseForm,
+                message: "",
+            }
+            this.refuseDialogVisible = true
+        },
+        /**
+         * 提交拒绝日志
+         */
+        async refuseStaff(){  
+            store.commit('setLoading',true)
+
+            await orderService.refuse(this.refuseForm) 
+                .then(data =>{
+                    if(data.code == "0"){
+                        this.$message({
+                            type:'success',
+                            message: data.message
+                        })
+                    }
+                })
+                .catch(e =>{
+                    this.$message({
+                        type:'error',
+                        message: e.message
+                    })
+                })
+            
+            await orderService.getOrder(this.$route.query.id)
+            
+            store.commit('setLoading',false)
+            this.refuseDialogVisible = false
+        }, 
     }
 }
 </script>
@@ -133,6 +158,10 @@ export default {
                     cursor: pointer;
                 }
                 .service-name{
+                    float:left;
+                    width: 150px;
+                }
+                .service-message{
                     float:left;
                     width: 150px;
                 }

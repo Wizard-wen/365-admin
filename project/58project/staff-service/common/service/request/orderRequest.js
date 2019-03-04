@@ -43,18 +43,18 @@ export default {
      * 添加候选人
      * @param obj 候选人字段信息
      */
-    saveOrderStaff(obj){
-        return axios.post(`./api/admin/order/saveOrderStaff`,
+    createOrderStaff(obj){
+        return axios.post(`./api/admin/order/createOrderStaff`,
             Object.assign({}, obj)
         )
     },
     /**
      * 删除候选人
-     * @param obj 候选人字段信息
+     * @param id 候选人id
      */
-    deleteOrderStaff(obj){
+    deleteOrderStaff(id){
         return axios.post(`./api/admin/order/deleteOrderStaff`,
-            Object.assign({}, obj)
+            {id: id}
         )
     },
     /**

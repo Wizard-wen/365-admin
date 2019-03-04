@@ -12,9 +12,9 @@
                     <el-cascader
                         class="cascader"
                         size="medium"
-                        :options="areaList"
-                        v-model="area"
-                        :props="cascaderProps"
+                        :options="cascaderOption.areaList"
+                        v-model="cascaderOption.area"
+                        :props="cascaderOption.cascaderProps"
                         @change="changeRegion"
                         :show-all-levels="false"
                         clearable
@@ -24,9 +24,9 @@
                     <el-cascader
                         class="cascader"
                         size="medium"
-                        :options="skillList"
-                        v-model="skill"
-                        :props="cascaderProps"
+                        :options="cascaderOption.skillList"
+                        v-model="cascaderOption.skill"
+                        :props="cascaderOption.cascaderProps"
                         @change="changeSkill"
                         :show-all-levels="false"
                         clearable
@@ -36,9 +36,9 @@
                     <el-cascader
                         class="cascader"
                         size="medium"
-                        :options="labelList"
-                        v-model="label"
-                        :props="cascaderProps"
+                        :options="cascaderOption.labelList"
+                        v-model="cascaderOption.label"
+                        :props="cascaderOption.cascaderProps"
                         @change="changeLabel"
                         :show-all-levels="false"
                         clearable
@@ -56,9 +56,9 @@
                                 <el-cascader
                                     class="cascader"
                                     size="medium"
-                                    :options="areaList"
-                                    v-model="area"
-                                    :props="cascaderProps"
+                                    :options="cascaderOption.areaList"
+                                    v-model="cascaderOption.area"
+                                    :props="cascaderOption.cascaderProps"
                                     @change="changeRegion"
                                     clearable
                                     placeholder="服务地区">
@@ -70,10 +70,10 @@
             </div>
 
             <div class="match-content">
-                <div class="match-list" v-if="matchTable.length">
+                <div class="match-list" v-if="staffMatchTable.length">
                     <div
                         class="match-service-item"
-                        v-for="(item, index) in matchTable"
+                        v-for="(item, index) in staffMatchTable"
                         :key="index">
                         <div class="service-pic">
                             
@@ -96,7 +96,7 @@
                                 <p class="value">{{item.phone}}</p>
                             </div>
                             <div class="control">
-                                <el-button type="text" size="small" >备选</el-button>
+                                <el-button type="text" size="small" @click="createOrderStaff('2',item)">备选</el-button>
                                 <el-button type="text" size="small" @click="showDetail(item.id)">详情</el-button>
                             </div>
                             
@@ -121,8 +121,8 @@
                 class="base-line"
                 :style="{
                     width: item.size == 1? '100%' : '50%',
-                    marginBottom: index == baseList.length - 1? '20px': '0'}"
-                v-for="(item, index) in baseList"
+                    marginBottom: index == staffDetailList.length - 1? '20px': '0'}"
+                v-for="(item, index) in staffDetailList"
                 :key="index">
                 <div class="base-word">   
                     <div class="base-key">{{`${item.key}：`}}</div>
@@ -135,16 +135,20 @@
 
             <div slot="footer" class="dialog-footer">
                 <el-button @click="dialogFormVisible = false">取消</el-button>
-                <el-button type="primary"  @click="saveOrderStaff">备选</el-button>
+                <el-button type="primary"  @click="createOrderStaff('1')">备选</el-button>
             </div>
         </el-dialog>
     </div>
 </template>
 <script>
 import {hrService} from '../../../../common'
+import {orderService} from '../../../../common'
 export default {
     data(){
         return{
+            /**
+             * 字段对应
+             */
             orderKeyName: {
                 address: "地址",
                 age: "年龄",
@@ -152,12 +156,8 @@ export default {
                 identify: "身份证号",
             },
             /**
-             * 订单查找表单字段
+             * 服务人员列表查找字段
              */
-            matchForm:{
-                
-            },
-            //下拉框搜索字段
             staffSearch: {
                 name: '',
                 staff_id: '',
@@ -168,23 +168,28 @@ export default {
 
             //下拉展开字段
             showSearchBox:false,
-
-            area: [],//地区级联选择器筛选信息
-            areaList: [],//地区级联选择器渲染数组
-            skill: [],//技能级联选择器筛选信息
-            skillList: [],//技能级联选择器渲染数组
-            paper: [],//证书级联选择器筛选信息
-            paperList: [],//证书级联选择器渲染数组
-            label: [],//能力标签级联选择器筛选信息
-            labelList: [],//能力标签级联选择器渲染数组
-
             
-            //级联选择器prop字段
-            cascaderProps: {
-                label: 'name',
-                value: 'id'
+            //级联选择器配置数据
+            cascaderOption: {
+
+                area: [],//地区级联选择器筛选信息
+                areaList: [],//地区级联选择器渲染数组
+                skill: [],//技能级联选择器筛选信息
+                skillList: [],//技能级联选择器渲染数组
+                paper: [],//证书级联选择器筛选信息
+                paperList: [],//证书级联选择器渲染数组
+                label: [],//能力标签级联选择器筛选信息
+                labelList: [],//能力标签级联选择器渲染数组
+                //级联选择器prop字段
+                cascaderProps: {
+                    label: 'name',
+                    value: 'id'
+                },
+            
             },
-            matchTable: [],
+
+            //员工列表
+            staffMatchTable: [],
             /**
              * 分页信息
              */
@@ -193,9 +198,21 @@ export default {
                 currentPage: 1,
                 pageNumber: 10,
             },
+
+            //弹出框显示隐藏字段
             dialogTableVisible: false,
             dialogFormVisible: false,
-            baseList: [],
+
+            /**
+             * 服务人员详情数组
+             * des 经过包装后的数据
+             */
+            staffDetailList: [],
+            /**
+             * 服务人员详情对象
+             * des 接口请求后得到的数据
+             */
+            staffDetailForm: {}
         }
     },
     computed:{
@@ -251,7 +268,7 @@ export default {
             
             await hrService.getStaffList(tableOption)
                 .then(data =>{
-                    this.matchTable = data.data.data
+                    this.staffMatchTable = data.data.data
                     
                     //分页信息
                     this.pagination.currentPage = data.data.current_page //当前页码
@@ -281,7 +298,8 @@ export default {
         /**
          * 地区级联选择器更改时
          */
-        changeRegion(val){
+        changeRegion(val, type){
+            console.log(val, type)
             let length = val.length
             if(length){
                 this.staffSearch.region_ids.push(val[length - 1])
@@ -300,7 +318,6 @@ export default {
             } else {
                 this.staffSearch.service_category_id = []
             }
-            
         },
         /**
          * 能力标签级联选择器更改时
@@ -312,7 +329,6 @@ export default {
             } else {
                 this.staffSearch.ability_ids = []
             }
-            
         },
         /**
          * 查找服务人员
@@ -329,7 +345,8 @@ export default {
             await hrService.getStaff(id)
                 .then(data =>{
                     if(data.code == "0"){
-                        _this.baseList = _this.changeBaseList(data.data)
+                        _this.staffDetailForm = data.data
+                        _this.staffDetailList = _this.changeBaseList(data.data)
                         _this.dialogFormVisible = true
                     }
                 })
@@ -394,30 +411,86 @@ export default {
         },
         /**
          * 添加候选人
+         * @param type 类型 1 在列表中备选 2 在弹出框中备选
          */
-        async saveOrderStaff(){
-            await console.log(1)
+        async createOrderStaff(type, item){
+            
+            let matchedList = store.state.orderModule.order_staff
 
-            // await done()
-            this.dialogFormVisible = false
-            console.log(2)
+            //该服务人员是否已经备选
+            let isHave = matchedList.some((it, index) =>{
+                return it.staff_id == item.id
+            })
+            
+            if(isHave){
+                this.$message({
+                    type:'error',
+                    message: `该人员已经匹配`
+                })
+                return false;
+            } 
+
+            let obj = null
+
+            if(type == "2"){
+                obj = {
+                    order_id: this.$route.query.id,
+                    staff_id: item.id ,
+                    staff_name: item.name,
+                }
+            } else {
+                obj = {
+                    order_id: this.$route.query.id,
+                    staff_id: this.staffDetailForm.id ,
+                    staff_name: this.staffDetailForm.name,
+                }
+            }
+            
+            store.commit('setLoading',true)
+
+            //添加服务人员接口
+            await orderService.createOrderStaff(obj) 
+                .then(data =>{
+                    if(data.code == "0"){
+                        this.$message({
+                            type:'success',
+                            message: `添加成功`
+                        })
+                    }
+                })
+                .catch(e =>{
+                    this.$message({
+                        type:'error',
+                        message: e.message
+                    })
+                })
+            
+            //刷新订单配置页
+            await orderService.getOrder(this.$route.query.id)
+            // await store.dispatch('setData', {id: this.$route.query.id})
+            store.commit('setLoading',false)
+
+            //关闭弹出框
+            if(type == "1"){
+                this.dialogFormVisible = false
+            } 
         }
     },
     async mounted(){
         store.commit('setLoading',true)
         try{
+            
             let data = await Promise.all([
                 hrService.getAreaTree(),
                 hrService.getSkillTree(), //获取技能树
-                hrService.getPaperSelection(), //获取证书列表
                 hrService.getAbilityTree(), //获取能力标签树
                 this.getTableList()
             ])
+            
             //promise.all 赋值
-            this.areaList = data[0].data
-            this.skillList = data[1].data
-            this.paperList = data[2].data
-            this.labelList = data[3].data
+            this.cascaderOption.areaList = data[0].data
+            this.cascaderOption.skillList = data[1].data
+            this.cascaderOption.labelList = data[2].data
 
         }catch(e){
             this.$message({

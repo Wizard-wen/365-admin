@@ -21,9 +21,9 @@
                                 <p>{{`姓名：${item.staff_name}`}}</p>
                                 <p>{{`id：${item.staff_id}`}}</p>
                                 <div class="bottom clearfix">
-                                    <el-button type="text" size="mini" @click="dialogFormVisible = true">签约</el-button>
-                                    <el-button type="text" size="mini">拒绝</el-button>
-                                    <el-button type="text" size="mini" @click="deleteService(item.id)">删除</el-button>
+                                    <el-button type="text" size="mini" @click="showSignPage(item)">签约</el-button>
+                                    <el-button type="text" size="mini" @click="showRefusePage(item)">拒绝</el-button>
+                                    <el-button type="text" size="mini" @click="deleteOrderStaff(item.id)">删除</el-button>
                                 </div>
                             </div>
                         </el-card>
@@ -35,71 +35,251 @@
 
 
 
-        <el-dialog title="签约" :visible.sync="dialogFormVisible">
-            <el-form :model="form">
-                <el-form-item label="活动名称" :label-width="formLabelWidth">
-                    <el-input v-model="form.name" autocomplete="off"></el-input>
-                </el-form-item>
-
-                <el-form-item label="活动名称" :label-width="formLabelWidth">
-                    <el-input v-model="form.name" autocomplete="off"></el-input>
-                </el-form-item>
-
-                <el-form-item label="活动名称" :label-width="formLabelWidth">
-                    <el-input v-model="form.name" autocomplete="off"></el-input>
-                </el-form-item>
-
-                <el-form-item label="活动名称" :label-width="formLabelWidth">
-                    <el-input v-model="form.name" autocomplete="off"></el-input>
-                </el-form-item>
-
-                <el-form-item label="活动区域" :label-width="formLabelWidth">
-                    <el-select v-model="form.region" placeholder="请选择活动区域">
-                        <el-option label="区域一" value="shanghai"></el-option>
-                        <el-option label="区域二" value="beijing"></el-option>
+        <el-dialog title="签约" :visible.sync="signDialogVisible">
+            <el-form :model="signForm">
+                <el-form-item label="服务周期单位" :label-width="formLabelWidth">
+                    <el-select v-model="signForm.unit" placeholder="请选择活动区域">
+                        <el-option label="全部" :value="0"></el-option>
+                        <el-option label="按月" value="month"></el-option>
+                        <el-option label="按日" value="day"></el-option>
+                        <el-option label="按时" value="hour"></el-option>
+                        <el-option label="按次" value="time"></el-option>
                     </el-select>
+                </el-form-item>
+
+                <el-form-item label="服务次数" :label-width="formLabelWidth">
+                     <el-input-number v-model="signForm.service_count"></el-input-number>
+                </el-form-item>
+
+                <el-form-item label="服务期间" :label-width="formLabelWidth">
+                     <el-date-picker
+                        v-model="service_period"
+                        type="datetimerange"
+                        @change="changeServicePeriod"
+                        range-separator="至"
+                        start-placeholder="开始日期"
+                        end-placeholder="结束日期">
+                    </el-date-picker>
+                </el-form-item>
+               
+                <el-form-item label="单价" :label-width="formLabelWidth">
+                    <el-input v-model="signForm.unit_price" autocomplete="off"></el-input>
+                </el-form-item>
+
+                <el-form-item label="总价" :label-width="formLabelWidth">
+                    <el-input v-model="signForm.total_price" autocomplete="off" disabled=""></el-input>
+                </el-form-item>
+
+                <el-form-item label="是否代发工资" :label-width="formLabelWidth">
+                   <el-select v-model="signForm.pay_wage" placeholder="请选择活动区域">
+                        <el-option label="是" :value="2"></el-option>
+                        <el-option label="否" :value="1"></el-option>
+                    </el-select>
+                </el-form-item>
+                <div v-if="signForm.pay_wage == 2">
+                    <el-form-item label="代发工资周期" :label-width="formLabelWidth">
+                        <el-input v-model="signForm.wage_count" autocomplete="off"></el-input>
+                    </el-form-item>
+
+                    <el-form-item label="代发金额" :label-width="formLabelWidth">
+                        <el-input v-model="signForm.wage_price" autocomplete="off"></el-input>
+                    </el-form-item>
+                </div>
+            </el-form>
+            <div slot="footer" class="dialog-footer">
+                <el-button @click="signDialogVisible = false">取 消</el-button>
+                <el-button type="primary" @click="signOrder">签 约</el-button>
+            </div>
+        </el-dialog>
+
+        <el-dialog title="拒签" :visible.sync="refuseDialogVisible">
+            <el-form :model="refuseForm">
+                <el-form-item label="服务人员姓名" :label-width="formLabelWidth">
+                    <el-input v-model="refuseForm.staff_name" disabled></el-input>
+                </el-form-item>
+                <el-form-item label="拒签事由" :label-width="formLabelWidth">
+                    <el-input v-model="refuseForm.message" type="textarea"></el-input>
                 </el-form-item>
             </el-form>
             <div slot="footer" class="dialog-footer">
-                <el-button @click="dialogFormVisible = false">取 消</el-button>
-                <el-button type="primary" @click="dialogFormVisible = false">确 定</el-button>
+                <el-button @click="refuseDialogVisible = false">取 消</el-button>
+                <el-button type="primary" @click="refuseStaff">提交</el-button>
             </div>
         </el-dialog>
     </el-card>  
 </template>
 <script>
+import {orderService} from '../../../../common'
 export default {
     data(){
         return {
             //是否展示表单
             isShow:true,
-            dialogTableVisible: false,
-            dialogFormVisible: false,
-            form: {
-                name: '',
-                region: '',
-                date1: '',
-                date2: '',
-                delivery: false,
-                type: [],
-                resource: '',
-                desc: ''
+            //签约对话框
+            signDialogVisible: false,
+            //拒绝对话框
+            refuseDialogVisible: false,
+            //签约表单
+            signForm: {
+                id: this.$route.query.id,// 订单id
+                staff_id:'',// 服务人员id
+                unit: 0,// 服务周期单位
+                service_count: 0,// 服务次数
+                unit_price: 0,// 单价
+                total_price: 0,// 总价
+                pay_wage: 1,// 是否代发工资
+                wage_count: 0,// 代发工资次数
+                wage_price: 0,// 代发工资金额
+                version: store.state.orderModule.order.version,
             },
+            //拒绝表单
+            refuseForm : {
+                order_id: this.$route.query.id,// 订单id
+                staff_id:'',// 服务人员id
+                staff_name: "",//服务人员姓名
+                message: '',//拒签日志
+            },
+            service_period:[],//服务起止时间段
             formLabelWidth: '120px'
         }
     },
     computed:{
         matchList(){
             return store.state.orderModule.order_staff
+        },
+        total_price(){
+            return Number(this.signForm.service_count) * Number(this.signForm.unit_price)
+        }
+    },
+    watch: {
+        total_price:function(val){
+            this.signForm.total_price = val
         }
     },
     methods: {
-        deleteService(id){
-            store.commit('deleteMatchService', id)
+        /**
+         * 删除备选服务人员
+         */
+        async deleteOrderStaff(id){
+            store.commit('setLoading',1)
+
+            await orderService.deleteOrderStaff(id) 
+                .then(data =>{
+                    if(data.code == "0"){
+                        this.$message({
+                            type:'success',
+                            message: `删除成功`
+                        })
+                    }
+                })
+                .catch(e =>{
+                    this.$message({
+                        type:'error',
+                        message: e.message
+                    })
+                })
+            
+            await orderService.getOrder(this.$route.query.id)
+
+            // await store.dispatch('setData', {id: this.$route.query.id})
+            store.commit('setLoading',false)
         },
         //改变表单的显示隐藏状态
         changeFormState(){
             this.isShow = !this.isShow
+        },
+        changeServicePeriod(){
+
+        },
+        /**
+         * 打开拒绝对话框
+         */
+        showRefusePage(item){
+            this.refuseForm = {
+                order_id: this.$route.query.id,// 订单id
+                staff_id:item.staff_id,// 服务人员id
+                staff_name: item.staff_name,//服务人员姓名
+                message: "",
+            }
+            this.refuseDialogVisible = true
+        },
+        /**
+         * 提交拒绝日志
+         */
+        async refuseStaff(){  
+            store.commit('setLoading',true)
+
+            await orderService.refuse(this.refuseForm) 
+                .then(data =>{
+                    if(data.code == "0"){
+                        this.$message({
+                            type:'success',
+                            message: data.message
+                        })
+                    }
+                })
+                .catch(e =>{
+                    this.$message({
+                        type:'error',
+                        message: e.message
+                    })
+                })
+            
+            await orderService.getOrder(this.$route.query.id)
+
+            store.commit('setLoading',false)
+            
+            //关闭拒绝弹窗
+            this.refuseDialogVisible = false
+        },  
+        /**
+         * 打开签约对话框
+         */
+        showSignPage(item){
+            this.signForm = {
+                id: this.$route.query.id,// 订单id
+                staff_id:item.staff_id,// 服务人员id
+                unit: 0,// 服务周期单位
+                service_count: 0,// 服务次数
+                unit_price: 0,// 单价
+                total_price: 0,// 总价
+                pay_wage: 1,// 是否代发工资
+                wage_count: 0,// 代发工资次数
+                wage_price: 0,// 代发工资金额
+                version: store.state.orderModule.order.version,
+            }
+            //打开签约弹窗
+            this.signDialogVisible = true
+        },
+        /**
+         * 提交签约表单
+         */
+        async signOrder(){
+
+            store.commit('setLoading',true)
+
+            await orderService.sign(this.signForm) 
+                .then(data =>{
+                    if(data.code == "0"){
+                        this.$message({
+                            type:'success',
+                            message: `签约成功`
+                        })
+                    }
+                })
+                .catch(e =>{
+                    this.$message({
+                        type:'error',
+                        message: e.message
+                    })
+                })
+            
+            await orderService.getOrder(this.$route.query.id)
+            
+            store.commit('setLoading',false)
+
+            //关闭签约弹出框
+            this.signDialogVisible = false
         }
     }
 }

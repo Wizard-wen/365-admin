@@ -90,7 +90,7 @@ export default {
         return {
             orderForm: {
                 // id: '',
-                manager_id: this.$store.state.loginModule.user.id, //创建人
+                manager_id: this.$.user.id, //创建人
                 manager_name: this.$store.state.loginModule.user.username, //创建人
                 user_name: '',//客户名
                 phone: '',//客户手机号

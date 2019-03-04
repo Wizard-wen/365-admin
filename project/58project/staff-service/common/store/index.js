@@ -25,6 +25,13 @@ window.store = new vuex.Store({
         // paths: ['login'],
         key: 'staff',
         storage: window.sessionStorage,
+        reducer(val) {
+            console.log(val)
+            return {
+            // 只储存state中的user
+            loginModule: val.loginModule
+          }
+       }
     })]
 })
 

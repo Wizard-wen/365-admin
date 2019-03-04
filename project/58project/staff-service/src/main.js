@@ -42,14 +42,13 @@ Vue.config.productionTip = false
  * 以下是路由拦截
  */
 
-
  //设置ajax根路径
 // axios.defaults.baseURL = config.apiPath
 
 axios.interceptors.request.use(config => {
     //token加入请求头
     config.headers = {
-        accessToken: Login.token != null? Login.token.access_token: ''
+        accessToken: store.state.loginModule.token != null? store.state.loginModule.token.access_token: ''
     }
     return config;
   
@@ -68,7 +67,7 @@ axios.interceptors.response.use(async response => {
     else if(response.data.code == "10001"){
         
         //刷新token 
-        await loginService.refreshToken(Login.token.refresh_token)
+        await loginService.refreshToken(store.state.loginModule.token.refresh_token)
 
         //重发请求
         return axios(response.config)
