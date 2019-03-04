@@ -284,7 +284,22 @@
              * 服务类型匹配字段
              */
             formatterCategory(row, column){
+                function findName(arrList, type){
+                    let len = arrList.length;
+                    
+                    for(let i = 0; i<len; i++){
+                    
+                        if(arrList[i].children){
+                            return findName(arrList[i].children, type)
+                        } else {
+                            if(type == arrList[i].id){
+                                return arrList[i].name
+                            }
+                        }
+                    }
+                }
 
+               return findName(this.skillList, row.service_category_id)
             }
         },
         async mounted(){

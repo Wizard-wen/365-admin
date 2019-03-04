@@ -39,6 +39,7 @@
                     <el-table-column
                         label="状态"
                         prop="type"
+                        :formatter="formatterType"
                         :filter-method="showWords"
                         align="center">
                     </el-table-column>
@@ -184,6 +185,16 @@
             showWords(value, row, column){
                 console.log(value)
             },
+            /**
+             * 是否启用的状态
+             */
+            formatterType(row, column){
+                if(row.type == "enable"){
+                    return "启用"
+                } else if(row.type == "disable"){
+                    return "未启用"
+                }
+            }
         },
         async mounted(){
             store.commit('setLoading',true)
