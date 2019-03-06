@@ -55,9 +55,9 @@
 
                 </el-form>
             </div>
-            
+
             <el-table
-                :data="orderTable" 
+                :data="orderTable"
                 class="order-table">
                 <el-table-column
                     label="订单号"
@@ -88,8 +88,7 @@
                 </el-table-column>
                 <el-table-column
                     label="服务类型"
-                    prop="service_category_id"
-                    :formatter="formatterCategory"
+                    prop="name"
                     align="center">
                 </el-table-column>
                 <el-table-column
@@ -113,7 +112,7 @@
                 layout="prev, pager, next, jumper"
                 :total="pagination.total"></el-pagination>
 
-        
+
     </div>
 </template>
 <script>
@@ -130,7 +129,7 @@
                     phone: '',
                     service_category_id: '',//服务分类id
                     name: '',//服务名称
-                    source: '',//线上线下渠道  
+                    source: '',//线上线下渠道
                     type: '',//订单类型
                 }],
                 //用户列表搜索条件
@@ -138,7 +137,7 @@
                     code: '', //订单号
                     phone: '',
                     service_category_id: '',//服务分类id
-                    source: 0,//线上线下渠道  
+                    source: 0,//线上线下渠道
                     type: 0,//订单类型
                 },
                 /**
@@ -200,7 +199,7 @@
                 await orderService.getOrderList(tableOption)
                     .then(data =>{
                         this.orderTable = data.data.data
-                        
+
                         //分页信息
                         this.pagination.currentPage = data.data.current_page //当前页码
                         this.pagination.total = data.data.total //列表总条数
@@ -226,7 +225,7 @@
             },
             /**
              * 创建订单
-             * 
+             *
              */
             createOrder(){
                 this.$router.push({
@@ -241,14 +240,14 @@
                 this.orderSearch.service_category_id = val[length - 1]
             },
             /**
-             * 
+             *
              */
             configOrder(index, row){
                 this.$router.push({
                     path: "/sale/orderConfig",
                     query: {
                         type: 1, //编辑为1
-                        id: row.id?row.id: '2' 
+                        id: row.id?row.id: '2'
                     }
                 })
             },
@@ -283,24 +282,24 @@
             /**
              * 服务类型匹配字段
              */
-            formatterCategory(row, column){
-                function findName(arrList, type){
-                    let len = arrList.length;
-                    
-                    for(let i = 0; i<len; i++){
-                    
-                        if(arrList[i].children){
-                            return findName(arrList[i].children, type)
-                        } else {
-                            if(type == arrList[i].id){
-                                return arrList[i].name
-                            }
-                        }
-                    }
-                }
+            // formatterCategory(row, column){
+            //     function findName(arrList, type){
+            //         let len = arrList.length;
 
-               return findName(this.skillList, row.service_category_id)
-            }
+            //         for(let i = 0; i<len; i++){
+
+            //             if(arrList[i].children){
+            //                 return findName(arrList[i].children, type)
+            //             } else {
+            //                 if(type == arrList[i].id){
+            //                     return arrList[i].name
+            //                 }
+            //             }
+            //         }
+            //     }
+
+            //    return findName(this.skillList, row.service_category_id)
+            // }
         },
         async mounted(){
 
@@ -317,7 +316,7 @@
                     message: e.message
                 })
             }
-            
+
             store.commit('setLoading',false)
         }
     }
@@ -328,7 +327,7 @@
             width:80%;
             min-width:1100px;
             margin: 20px auto;
-            .order-form{            
+            .order-form{
                 .search-input-box{
                     display: flex;
                 }

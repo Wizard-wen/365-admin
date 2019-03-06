@@ -34,7 +34,7 @@
                 :key="index"
                 @close="handleClose(tag,'area')"
                 closable>{{tag.name}}</el-tag>
-                
+
                 <el-cascader
                     :options="areaList"
                     v-model="region"
@@ -52,7 +52,7 @@
                 :key="index"
                 @close="handleClose(tag, 'label')"
                 closable>{{tag.name}}</el-tag>
-                
+
                 <el-cascader
                     :options="labelList"
                     v-model="label"
@@ -62,14 +62,14 @@
                 </el-cascader>
                 <el-button icon="el-icon-plus" circle @click="addRegion(label,'label')"></el-button>
             </el-form-item>
-            
+
             <el-form-item label="技能" prop="skill">
                 <el-tag
                 v-for="(tag, index) in staffForm.skill"
                 :key="index"
                 @close="handleClose(tag, 'skill')"
                 closable>{{tag.name}}</el-tag>
-                
+
                 <el-cascader
                     clearable
                     :options="skillList"
@@ -86,7 +86,7 @@
                 :key="index"
                 @close="handleClose(tag, 'paper')"
                 closable>{{tag.name}}</el-tag>
-                
+
                 <el-cascader
                     clearable
                     :options="paperList"
@@ -107,10 +107,10 @@
 
             <el-form-item label="教育程度" prop="education">
                 <el-select v-model="staffForm.education" placeholder="请选择教育程度">
-                    <el-option  
-                        v-for="(item, index) in educationList" 
+                    <el-option
+                        v-for="(item, index) in educationList"
                         :key="index"
-                        :label="item.name" 
+                        :label="item.name"
                         :value="item.id"></el-option>
                 </el-select>
             </el-form-item>
@@ -118,7 +118,7 @@
             <el-form-item label="银行卡号" prop="bank_card">
                 <el-input v-model="staffForm.bank_card" placeholder="数字"></el-input>
             </el-form-item>
-        
+
             <el-form-item>
                 <el-button type="primary" @click="onSubmit">{{$route.query.id? '确认编辑' : '立即创建'}}</el-button>
                 <el-button @click="goback">取消</el-button>
@@ -130,7 +130,7 @@
 <script>
 
 /**
- * type 0 新建  1 编辑 
+ * type 0 新建  1 编辑
  */
 import {hrService} from '../../../../common'
 import {hrRequest} from '../../../../common'
@@ -158,7 +158,7 @@ export default {
                 callback();
             }
         }
-        
+
         const phoneValidate = (rule, value, callback) => {
             if (value === '') {
                 callback(new Error('请输入手机号'));
@@ -198,13 +198,13 @@ export default {
 
             skill: [],//技能级联选择器筛选信息
             skillList: [],//技能级联选择器渲染数组
-            
+
             paper: [],//证书级联选择器筛选信息
             paperList: [],//证书级联选择器渲染数组
-            
+
             label: [],//能力标签级联选择器筛选信息
             labelList: [],//能力标签级联选择器渲染数组
-            
+
             //地区级联选择字段
             areaProps: {
                 label: 'name',
@@ -273,8 +273,6 @@ export default {
         async onSubmit() {
 
             try{
-                console.log(this.staffForm)
-
                 await hrService.editStaff(this.staffForm)
                     .then(data =>{
                         if(data.code == '0'){
@@ -345,10 +343,10 @@ export default {
                 })
                 return
             }
-            
+
             //向tag数组添加一条数据
             findAreaObj(levelArr, cascaderData)
-            
+
             //重新给表单字段赋值
             if(type == "area"){
                 _this.staffForm.region = selectedArr
@@ -370,13 +368,13 @@ export default {
             function findAreaObj(areaList, region){
 
                 areaList.forEach((item, index) =>{
-                    
+
                     if(item.children){
 
                         findAreaObj(item.children, region)
-                    
+
                     } else {
-                        
+
                         //未添加时属性名还是id!!!!!
                         if(item.id == region[region.length-1]){
                             /**
@@ -385,11 +383,11 @@ export default {
                              * 删除parant_id属性
                              */
                             let idvalue = region[region.length-1]; //取出id值
-                            
+
                             //删除原有的两个字段
                             delete item['id']
                             delete item['parent_id']
-                            
+
                             //赋给id新的属性名
                             item[idkey] = idvalue
 
@@ -437,7 +435,7 @@ export default {
                     }
                 })
             } else {
-                return 
+                return
             }
         },
         goback(){
@@ -449,9 +447,9 @@ export default {
         try{
             let data = await Promise.all([
                 hrService.getAreaTree(),
-                hrService.getSkillTree(), //获取技能树
-                hrService.getPaperSelection(), //获取证书列表
-                hrService.getAbilityTree(), //获取能力标签树
+                hrService.getSkillTree('enable'), //获取技能树
+                hrService.getPaperSelection('enable'), //获取证书列表
+                hrService.getAbilityTree('enable'), //获取能力标签树
             ])
             //promise.all 赋值
             this.areaList = data[0].data
@@ -473,7 +471,7 @@ export default {
                 type:'error',
                 message: e.message
             })
-        }    
+        }
         store.commit('setLoading',false)
     }
 }

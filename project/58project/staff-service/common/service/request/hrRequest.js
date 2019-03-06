@@ -21,7 +21,7 @@ export default {
         }
 
         return axios.post(
-            baseUrl, 
+            baseUrl,
             Object.assign({}, searchObj, obj)
         )
     },
@@ -30,7 +30,7 @@ export default {
      * @param id 员工id
      */
     getStaff(id){
-        let baseUrl = `./api/admin/staff/getStaff` 
+        let baseUrl = `./api/admin/staff/getStaff`
         if(id){
             baseUrl += `?id=${id}`
         }
@@ -62,20 +62,32 @@ export default {
     /**
      * 获取能力标签树
      */
-    getAbilityTree(){
-        return axios.get(`./api/admin/common/getLabelTree`)
+    getAbilityTree(type){
+        if (type) {
+            return axios.get(`./api/admin/common/getLabelTree?type=${type}`)
+        } else {
+            return axios.get(`./api/admin/common/getLabelTree`)
+        }
     },
     /**
      * 获取证书列表
      */
-    getPaperSelection(){
-        return axios.get(`./api/admin/common/getPaperSelection`)
+    getPaperSelection(type){
+        if (type) {
+            return axios.get(`./api/admin/common/getPaperSelection?type=${type}`)
+        } else {
+            return axios.get(`./api/admin/common/getPaperSelection`)
+        }
     },
     /**
      * 获取技能树
      */
-    getSkillTree(){
-        return axios.get(`./api/admin/common/getServiceTree`)
+    getSkillTree(type){
+        if (type) {
+            return axios.get(`./api/admin/common/getServiceTree?type=${type}`)
+        } else {
+            return axios.get(`./api/admin/common/getServiceTree`)
+        }
     },
     /**
      * 省市区数据
@@ -115,11 +127,11 @@ export default {
      * 编辑技能接口
      */
     editCategory(obj){
-        
+
         obj = Object.assign({},obj)
 
         return axios.post(`./api/admin/service/editCategory`,obj)
-    
+
     },
 
 
@@ -152,11 +164,11 @@ export default {
      * 编辑能力标签接口
      */
     editAbility(obj){
-        
+
         obj = Object.assign({},obj)
 
         return axios.post(`./api/admin/ability/editAbility`,obj)
-    
+
     },
 
     /*********************************证书模块*************************************************/
@@ -183,10 +195,10 @@ export default {
      * 编辑证书接口
      */
     editPaper(obj){
-        
+
         obj = Object.assign({},obj)
 
         return axios.post(`./api/admin/paper/editPaper`,obj)
-    
+
     },
 }

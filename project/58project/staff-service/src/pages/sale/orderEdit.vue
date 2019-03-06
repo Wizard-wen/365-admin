@@ -1,7 +1,7 @@
 <template>
     <div class="order-edit">
         <el-form ref="orderForm" :model="orderForm" label-width="120px" class="order-edit-form">
-            
+
             <el-form-item label="服务类型" prop="skill">
                 <el-tag
                 @close="handleClose"
@@ -16,9 +16,9 @@
                     :props="areaProps"
                     placeholder="请选择技能">
                 </el-cascader>
-                <el-button 
-                    icon="el-icon-plus" 
-                    circle 
+                <el-button
+                    icon="el-icon-plus"
+                    circle
                     v-if="orderForm.service_category_id == ''"
                     @click="addSkill(skill, 'skill')">
                 </el-button>
@@ -27,11 +27,11 @@
             <el-form-item label="客户名称" >
                 <el-input v-model="orderForm.user_name"></el-input>
             </el-form-item>
-            
+
             <el-form-item label="客户联系方式">
                 <el-input v-model="orderForm.phone"></el-input>
             </el-form-item>
-            
+
             <el-form-item label="服务地址" class="area-form">
                 <el-cascader
                     :options="areaList"
@@ -44,7 +44,7 @@
                 <el-input placeholder="详细地址" v-model="region_string"></el-input>
             </el-form-item>
             <p class="address-details">
-                <span 
+                <span
                     v-for="(item,index) in regionArea_string"
                     :key="index">{{item}}</span>
                 <span>{{region_string}}</span>
@@ -123,7 +123,7 @@ export default {
                     arr = this.regionArea_string;
 
                 for(let i = 0; i<arr.length; i++){
-                    str += arr[i] 
+                    str += arr[i]
                 }
                 this.orderForm.service_address = str + this.region_string
 
@@ -194,7 +194,7 @@ export default {
                     type:'error',
                     message: `请选择服务类型`
                 })
-                return 
+                return
             }
 
             let _this = this,
@@ -213,11 +213,11 @@ export default {
             function findAreaObj(areaList, region){
 
                 areaList.forEach((item, index) =>{
-                    
+
                     if(item.children){
 
                         findAreaObj(item.children, region)
-                    
+
                     } else {
                         if(item.id == region[region.length-1]){
                             _this.orderForm.service_category_id = item.id
@@ -247,7 +247,7 @@ export default {
         try{
             let data = await Promise.all([
                 hrService.getAreaTree(), //省市区数据获取
-                hrService.getSkillTree(), //获取技能树
+                hrService.getSkillTree('enable'), //获取技能树
             ])
             this.areaList = data[0].data
             this.skillList = data[1].data
@@ -257,7 +257,7 @@ export default {
                 message: e.message
             })
         }
-        
+
         store.commit('setLoading',false)
     }
 }

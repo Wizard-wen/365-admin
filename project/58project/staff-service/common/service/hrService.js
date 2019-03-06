@@ -18,7 +18,7 @@ export default {
     },
     /**
      * 创建、编辑员工信息
-     * @param obj 
+     * @param obj
      */
     editStaff(obj){
         return hrRequest.editStaff(obj)
@@ -33,20 +33,20 @@ export default {
       /**
      * 获取能力标签树
      */
-    getAbilityTree(){
-        return hrRequest.getAbilityTree()
+    getAbilityTree(type = ''){
+        return hrRequest.getAbilityTree(type)
     },
     /**
      * 获取证书列表
      */
-    getPaperSelection(){
-        return hrRequest.getPaperSelection()
+    getPaperSelection(type = ''){
+        return hrRequest.getPaperSelection(type)
     },
     /**
      * 获取技能树
      */
-    getSkillTree(){
-        return hrRequest.getSkillTree()
+    getSkillTree(type = ''){
+        return hrRequest.getSkillTree(type)
     },
     /**
      * 省市区数据获取
@@ -100,7 +100,7 @@ export default {
     editAbility(obj){
 
         return hrRequest.editAbility(obj)
-    
+
     },
     /*****************************证书模块******************************************************* */
     /**
@@ -123,6 +123,6 @@ export default {
     editPaper(obj){
 
         return hrRequest.editPaper(obj)
-    
+
     },
 }
