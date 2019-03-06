@@ -1,28 +1,28 @@
 <template>
     <div class="account-edit">
-        <el-form 
+        <el-form
             class="form-style"
-            ref="form" 
+            ref="form"
             :rules="accountRules"
-            :model="accountForm" 
+            :model="accountForm"
             label-width="120px">
             <el-form-item label="账号"  prop="account">
                 <el-input v-model="accountForm.account" :disabled="$route.query.type == 1" ></el-input>
-            </el-form-item> 
+            </el-form-item>
             <el-form-item label="用户名" prop="username">
                 <el-input v-model="accountForm.username"></el-input>
-            </el-form-item> 
+            </el-form-item>
             <el-form-item label="密码" prop="password">
                 <el-input v-model="accountForm.password" type="password"></el-input>
-            </el-form-item> 
+            </el-form-item>
             <el-form-item label="确认密码" prop="repassword">
                 <el-input v-model="accountForm.repassword" type="password"></el-input>
-            </el-form-item> 
+            </el-form-item>
             <el-form-item>
-                <el-button type="primary" @click="onSubmit">提交</el-button>
+                <el-button type="primary" @click="onSubmit('form')">提交</el-button>
                 <el-button @click="$router.go(-1)">取消</el-button>
             </el-form-item>
-        </el-form>   
+        </el-form>
     </div>
 </template>
 <script>
@@ -48,6 +48,20 @@ export default {
                 callback();
             }
         };
+        const validateAccount = (rule, value, callback) => {
+            if (value === '') {
+                callback(new Error('请输入账号名'));
+            } else {
+                callback();
+            }
+        }
+        const validateUsername = (rule, value, callback) => {
+            if (value === '') {
+                callback(new Error('请输入用户名'));
+            } else {
+                callback();
+            }
+        }
         return {
             //账户信息
             accountForm: {
@@ -58,20 +72,23 @@ export default {
                 repassword: '',//确认密码
             },
             accountRules: {
+                account: [
+                    { validator: validateAccount, trigger: 'blur' }
+                ],
+                username: [
+                    { validator: validateUsername, trigger: 'blur' }
+                ],
                 password: [
-                     { validator: validatePassword, trigger: 'blur' }
+                    { validator: validatePassword, trigger: 'blur' }
                 ],
                 repassword: [
-                     { validator: validateRePassword, trigger: 'blur' }
+                    { validator: validateRePassword, trigger: 'blur' }
                 ]
             }
         }
     },
-    computed: {
-        
-    },
     methods:{
-        async onSubmit(){
+        async onSubmit(formName){
             let accountObj = {}
             if(this.$route.query.type == 1){
                 accountObj = {
@@ -88,21 +105,27 @@ export default {
                     repassword: this.accountForm.repassword,
                 }
             }
-            await authService.editManager(accountObj)
-                .then(data =>{
-                    if(data.code == '0'){
+            await this.$refs[formName].validate((valid) => {
+                if (valid) {
+                    authService.editManager(accountObj)
+                    .then(data =>{
+                        if(data.code == '0'){
+                            this.$message({
+                                type: "success",
+                                message: data.message
+                            })
+                            this.$router.push("/auth/accountList")
+                        }
+                    }).catch(error =>{
                         this.$message({
-                            type: "success",
-                            message: data.message
+                            type: "error",
+                            message: error.message
                         })
-                        this.$router.push("/auth/accountList")
-                    }
-                }).catch(error =>{
-                    this.$message({
-                        type: "error",
-                        message: data.message
                     })
-                })
+                } else {
+                    return false;
+                }
+            });
         }
     },
     async mounted(){
