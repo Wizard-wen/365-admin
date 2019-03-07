@@ -1,6 +1,6 @@
 <template>
     <div>
-        <el-form ref="staffForm" :model="staffForm" :rules="staffRules" label-width="120px">
+        <el-form ref="form" :model="staffForm" :rules="staffRules" label-width="120px">
             <el-form-item label="员工姓名" prop="name">
                 <el-input v-model="staffForm.name" placeholder="只能是汉字"></el-input>
             </el-form-item>
@@ -28,7 +28,7 @@
                 <el-input v-model="staffForm.wechat" placeholder="请输入微信号"></el-input>
             </el-form-item>
 
-            <el-form-item label="地区" prop="region">
+            <el-form-item label="服务地区" prop="region">
                 <el-tag
                 v-for="(tag, index) in staffForm.region"
                 :key="index"
@@ -98,7 +98,7 @@
             </el-form-item>
 
             <el-form-item label="年龄" prop="age">
-                <el-input v-model="staffForm.age" placeholder="请输入年龄"></el-input>
+                <el-input-number v-model="staffForm.age"></el-input-number>
             </el-form-item>
 
             <el-form-item label="住址" prop="address">
@@ -120,7 +120,7 @@
             </el-form-item>
 
             <el-form-item>
-                <el-button type="primary" @click="onSubmit">{{$route.query.id? '确认编辑' : '立即创建'}}</el-button>
+                <el-button type="primary" @click="onSubmit('form')">{{$route.query.id? '确认编辑' : '立即创建'}}</el-button>
                 <el-button @click="goback">取消</el-button>
             </el-form-item>
         </el-form>
@@ -169,6 +169,31 @@ export default {
                 callback();
             }
         }
+
+        const addressValidate = (rule, value, callback) => {
+            if (value === '') {
+                callback(new Error('请输入住址'));
+            } else {
+                callback();
+            }
+        }
+
+        const bankCardValidate = (rule, value, callback) => {
+            if (value === '') {
+                callback(new Error('请输入银行卡号'));
+            } else {
+                callback();
+            }
+        }
+
+        const ageValidate = (rule, value, callback) => {
+            if (!value) {
+                callback(new Error('请输入年龄'));
+            } else {
+                callback();
+            }
+        }
+
         return {
             //员工信息表单
             staffForm: {
@@ -176,7 +201,7 @@ export default {
 
                 name: '',//员工姓名
                 identify: '',//身份证号
-                sex: '',//员工性别
+                sex: 1,//员工性别
                 nation: '',//民族
                 phone: '',//员工联系方式
                 wechat: '',//微信号
@@ -220,6 +245,15 @@ export default {
                 ],
                 phone: [
                     {validator: phoneValidate, trigger: 'blur'}
+                ],
+                address: [
+                    {validator: addressValidate, trigger: 'blur'}
+                ],
+                bank_card: [
+                    {validator: bankCardValidate, trigger: 'blur'}
+                ],
+                age: [
+                    {validator: ageValidate, trigger: 'blur'}
                 ],
             },
             /**
@@ -270,10 +304,10 @@ export default {
          * 提交表单
          * 区分新建和编辑
          */
-        async onSubmit() {
-
-            try{
-                await hrService.editStaff(this.staffForm)
+        async onSubmit(formName) {
+            await this.$refs[formName].validate((valid) => {
+                if (valid) {
+                    hrService.editStaff(this.staffForm)
                     .then(data =>{
                         if(data.code == '0'){
                             this.$message({
@@ -288,9 +322,10 @@ export default {
                             message: error.message
                         })
                     })
-            } catch(e){
-
-            }
+                } else {
+                    return false;
+                }
+            });
         },
         /**
          * 给级联选择器添加标签

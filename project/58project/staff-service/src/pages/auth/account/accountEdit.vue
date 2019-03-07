@@ -130,18 +130,14 @@ export default {
     },
     async mounted(){
         store.commit('setLoading',true)
-        try{
-            //若是编辑，请求编辑数据
-            if(this.$route.query.type == 1){
-                await authService.getManager(this.$route.query.id)
-                    .then(data =>{
-                        console.log(data)
-                        this.accountForm.username = data.data.name
-                        this.accountForm.account = data.data.account
-                    })
-            }
-        }catch(e){
-
+        //若是编辑，请求编辑数据
+        if(this.$route.query.type == 1){
+            await authService.getManager(this.$route.query.id)
+                .then(data =>{
+                    console.log(data)
+                    this.accountForm.username = data.data.name
+                    this.accountForm.account = data.data.account
+                })
         }
         store.commit('setLoading',false)
     }

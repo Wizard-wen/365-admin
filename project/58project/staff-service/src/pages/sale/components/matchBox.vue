@@ -76,7 +76,7 @@
                         v-for="(item, index) in staffMatchTable"
                         :key="index">
                         <div class="service-pic">
-                            
+
                         </div>
                         <div class="service-message">
                             <div class="service-message-line">
@@ -99,7 +99,7 @@
                                 <el-button type="text" size="small" @click="createOrderStaff('2',item)">备选</el-button>
                                 <el-button type="text" size="small" @click="showDetail(item.id)">详情</el-button>
                             </div>
-                            
+
                         </div>
                     </div>
                     <!-- 分页 -->
@@ -117,14 +117,14 @@
             </div>
         </el-card>
         <el-dialog title="收货地址" :visible.sync="dialogFormVisible">
-            <div 
+            <div
                 class="base-line"
                 :style="{
                     width: item.size == 1? '100%' : '50%',
                     marginBottom: index == staffDetailList.length - 1? '20px': '0'}"
                 v-for="(item, index) in staffDetailList"
                 :key="index">
-                <div class="base-word">   
+                <div class="base-word">
                     <div class="base-key">{{`${item.key}：`}}</div>
                     <div class="base-value">{{item.value}}</div>
                 </div>
@@ -168,7 +168,7 @@ export default {
 
             //下拉展开字段
             showSearchBox:false,
-            
+
             //级联选择器配置数据
             cascaderOption: {
 
@@ -185,7 +185,7 @@ export default {
                     label: 'name',
                     value: 'id'
                 },
-            
+
             },
 
             //员工列表
@@ -235,7 +235,7 @@ export default {
                         }
                         arr.push(obj)
                     }
-                } 
+                }
                 //如果搜索字段是字符串的话
                 else if(_this.staffSearch[item] != ''){
                     let obj = {}
@@ -265,11 +265,11 @@ export default {
             }
 
             store.commit('setLoading',true)
-            
+
             await hrService.getStaffList(tableOption)
                 .then(data =>{
                     this.staffMatchTable = data.data.data
-                    
+
                     //分页信息
                     this.pagination.currentPage = data.data.current_page //当前页码
                     this.pagination.total = data.data.total //列表总条数
@@ -306,7 +306,7 @@ export default {
             } else {
                 this.staffSearch.region_ids = []
             }
-            
+
         },
         /**
          * 技能级联选择器更改时
@@ -364,7 +364,7 @@ export default {
         changeBaseList(baseForm){
             let obj = this.orderKeyName,
             newArr = [];
-            
+
             /**
              * key 为渲染字段的属性名
              * value 为某个属性名的值
@@ -414,21 +414,21 @@ export default {
          * @param type 类型 1 在列表中备选 2 在弹出框中备选
          */
         async createOrderStaff(type, item){
-            
+
             let matchedList = store.state.orderModule.order_staff
 
             //该服务人员是否已经备选
             let isHave = matchedList.some((it, index) =>{
                 return it.staff_id == item.id
             })
-            
+
             if(isHave){
                 this.$message({
                     type:'error',
                     message: `该人员已经匹配`
                 })
                 return false;
-            } 
+            }
 
             let obj = null
 
@@ -445,11 +445,11 @@ export default {
                     staff_name: this.staffDetailForm.name,
                 }
             }
-            
+
             store.commit('setLoading',true)
 
             //添加服务人员接口
-            await orderService.createOrderStaff(obj) 
+            await orderService.createOrderStaff(obj)
                 .then(data =>{
                     if(data.code == "0"){
                         this.$message({
@@ -464,7 +464,7 @@ export default {
                         message: e.message
                     })
                 })
-            
+
             //刷新订单配置页
             await orderService.getOrder(this.$route.query.id)
             // await store.dispatch('setData', {id: this.$route.query.id})
@@ -473,20 +473,20 @@ export default {
             //关闭弹出框
             if(type == "1"){
                 this.dialogFormVisible = false
-            } 
+            }
         }
     },
     async mounted(){
         store.commit('setLoading',true)
         try{
-            
+
             let data = await Promise.all([
                 hrService.getAreaTree(),
                 hrService.getSkillTree(), //获取技能树
                 hrService.getAbilityTree(), //获取能力标签树
                 this.getTableList()
             ])
-            
+
             //promise.all 赋值
             this.cascaderOption.areaList = data[0].data
             this.cascaderOption.skillList = data[1].data
@@ -497,7 +497,7 @@ export default {
                 type:'error',
                 message: e.message
             })
-        }    
+        }
         store.commit('setLoading',false)
     }
 }
@@ -511,7 +511,7 @@ export default {
             display: block;
             height: 1px;
             width: 100%;
-            background: #ccc; 
+            background: #ccc;
         }
     }
 
@@ -550,7 +550,7 @@ export default {
             & /deep/ .el-card__body{
                 padding: 0 20px;
                 height:calc(100% - 120px);
-                width: 100%;  
+                width: 100%;
                 overflow: scroll;
                 padding-bottom: 80px;
             }
@@ -572,7 +572,7 @@ export default {
                     height: 60px;
                     display: flex;
                     padding:12px 30px;
-                    // 
+                    //
                     & /deep/ .el-input__inner{
                         width: 200px;
                         height: 36px;
@@ -615,7 +615,7 @@ export default {
                     .more-cascader-form{
                         padding-top: 12px;
                         & /deep/ .el-form-item{
-                            
+
                             margin-bottom: 12px;
                             width:calc(25% - 13px);
                         }
@@ -663,11 +663,11 @@ export default {
                 }
 
             }
-            
+
 
         }
     }
-    
+
 </style>
 
 
