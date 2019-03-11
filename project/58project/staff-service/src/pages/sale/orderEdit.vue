@@ -1,6 +1,6 @@
 <template>
     <div class="order-edit">
-        <el-form ref="orderForm" :model="orderForm" label-width="120px" class="order-edit-form">
+        <el-form ref="orderForm" :model="orderForm" :rules="orderRules" label-width="120px" class="order-edit-form">
 
             <el-form-item label="服务类型" prop="skill">
                 <el-tag
@@ -60,7 +60,6 @@
                     end-placeholder="结束日期"></el-date-picker>
             </el-form-item>
 
-
             <el-form-item label="订单来源">
                 <el-select v-model="orderForm.source" placeholder="订单来源">
                     <el-option label="全部" value="0"></el-option>
@@ -74,9 +73,8 @@
                 <el-input type="textarea" v-model="orderForm.remark"></el-input>
             </el-form-item>
 
-
             <el-form-item>
-                <el-button type="primary" @click="onSubmit">立即创建</el-button>
+                <el-button type="primary" @click="onSubmit('orderForm')">立即创建</el-button>
                 <el-button @click="goback">取消</el-button>
             </el-form-item>
         </el-form>
@@ -114,20 +112,23 @@ export default {
                 label: 'name',
                 value: 'id'
             },
+            orderRules: {
+
+            },
         }
     },
     methods: {
-        async onSubmit() {
-            try{
-                let str = "",
-                    arr = this.regionArea_string;
+        async onSubmit(formName) {
+            let str = "",
+                arr = this.regionArea_string;
 
-                for(let i = 0; i<arr.length; i++){
-                    str += arr[i]
-                }
-                this.orderForm.service_address = str + this.region_string
-
-                await orderService.createOrder(this.orderForm)
+            for(let i = 0; i<arr.length; i++){
+                str += arr[i]
+            }
+            this.orderForm.service_address = str + this.region_string
+            await this.$refs[formName].validate((valid) => {
+                if (valid) {
+                    orderService.createOrder(this.orderForm)
                     .then(data =>{
 
                         if(data.code == '0'){
@@ -143,12 +144,10 @@ export default {
                             message: error.message
                         })
                     })
-            } catch(e){
-                this.$message({
-                    type:'error',
-                    message: e.message
-                })
-            }
+                } else {
+                    return false;
+                }
+            });
         },
         /**
          * 改变周期时间
