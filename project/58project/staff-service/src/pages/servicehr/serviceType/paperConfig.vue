@@ -92,7 +92,7 @@ export default {
         store.commit('setLoading',true)
         //id
         let categoryId = this.$route.query.id ? this.$route.query.id : 0;
-        if (!categoryId) {
+        if (categoryId) {
             await hrService.getPaper(categoryId)
               .then(data =>{
                   //若是编辑的话回显数据
