@@ -7,6 +7,18 @@
             <el-form-item label="是否启用">
                 <el-switch v-model="paperForm.type"></el-switch>
             </el-form-item>
+            <el-upload
+                class="upload-demo"
+                action="/api/admin/common/uploadImage"
+                :on-success="handleSuccess"
+                :on-preview="handlePreview"
+                :on-remove="handleRemove"
+                :file-list="fileList"
+                :headers="uploadHeaders"
+                list-type="picture">
+                <el-button size="small" type="primary">点击上传</el-button>
+                <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
+            </el-upload>
             <el-form-item>
                 <el-button type="primary" @click="onSubmit('form')">{{$route.query.id? '确认编辑' : '立即创建'}}</el-button>
                 <el-button @click="goback">取消</el-button>
@@ -42,14 +54,31 @@ export default {
                 version: 0,//所属版本号
                 type : true,//
             },
+            uploadHeaders: {
+                'Access-Control-Allow-Origin': '*',
+                // 'Content-Type': 'multipart/form-data',
+                'accessToken': 'sdfafefaefaefaf'
+            },
             paperRules: {
                 name: [
                     { validator: nameValidate, trigger: 'blur' }
                 ]
-            }
+            },
+            fileList: [{name: 'food.jpeg', url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100'}, {name: 'food2.jpeg', url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100'}]
         }
     },
     methods: {
+        handleRemove(file, fileList) {
+            console.log(file, fileList);
+        },
+        handlePreview(file) {
+            console.log(file);
+        },
+        handlePreview(response, file, fileList) {
+            console.log(response);
+            console.log(file);
+            console.log(fileList);
+        },
         /**
          * 提交表单
          * 区分新建和编辑
