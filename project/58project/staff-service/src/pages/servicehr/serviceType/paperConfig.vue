@@ -64,7 +64,7 @@ export default {
                     { validator: nameValidate, trigger: 'blur' }
                 ]
             },
-            fileList: [{name: 'food.jpeg', url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100'}, {name: 'food2.jpeg', url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100'}]
+            fileList: []
         }
     },
     methods: {
@@ -74,7 +74,8 @@ export default {
         handlePreview(file) {
             console.log(file);
         },
-        handlePreview(response, file, fileList) {
+        handleSuccess(response, file, fileList) {
+            this.fileList.push(response.data)
             console.log(response);
             console.log(file);
             console.log(fileList);
