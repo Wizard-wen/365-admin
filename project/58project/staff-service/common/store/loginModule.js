@@ -7,9 +7,6 @@
 
 import Vue from 'vue'
 import Vuex from 'vuex'
-import {authorityModule} from '../authorityModule.js'
-import {loadingModule} from '../loadingModule.js'
-import {orderModule} from '../orderModule.js'
 
 Vue.use(Vuex)
 

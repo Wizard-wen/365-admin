@@ -24,8 +24,6 @@ import mainPage from '@/pages/Main.vue'
 //vuex数据
 import store from '../store/index.js'
 
-//登录信息
-import {Login} from '../store/login/logGlobal.js'
 
 window.router = new Router({
     routes: [
@@ -57,7 +55,7 @@ window.router = new Router({
 router.beforeEach((to, from, next) => {
 
     if (to.meta.requiresAuth !== false) {
-        if (!Login.isLogin) {
+        if (!store.state.loginModule.isLogin) {
             next({
                 path: '/login',
                 query: {

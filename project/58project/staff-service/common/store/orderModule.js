@@ -1,8 +1,11 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 
+
 Vue.use(Vuex)
-import {orderService} from '../../common'
+
+
+
 export const orderModule = {
     state: {
         order: [],//订单基本信息
