@@ -54,6 +54,7 @@ export default {
                         
                         _this.$router.push('/');
                     }catch(e){
+                        console.log(e)
                         this.$message({
                             type: 'error',
                             message: '登录失败'
@@ -68,14 +69,6 @@ export default {
             this.$refs[formName].resetFields();
         }
     },
-    async mounted(){
-        // await this.$axios.post(`./api/admin/login`,{
-        //     account: 'admin',
-        //     password: 'admin'
-        // }).then(data =>{
-        //     console.log(data.data)
-        // })
-    }
 }
 </script>
 

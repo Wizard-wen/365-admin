@@ -24,7 +24,6 @@ import '../common/config'
 import {
 
     store, //引入vuex数据
-    Login, //注入全局的登录信息
     
     router,
     authService,//引入路由

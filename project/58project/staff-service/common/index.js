@@ -38,14 +38,13 @@ export {
 /**
  * service 
  */
-import loginService from './service/loginService.js'
-import authService from './service/authService.js'
-import hrService from './service/hrService.js'
-import orderService from './service/orderService.js'
-import saleService from './service/saleService.js'
+import loginService from './service/loginService'
+import authService from './service/authService'
+import hrService from './service/hrService'
+import orderService from './service/orderService'
 
 
-import hrRequest from './service/request/hrRequest.js'
+import hrRequest from './service/request/hrRequest'
 
 export {
     hrRequest,
@@ -53,7 +52,6 @@ export {
     authService,
     hrService,
     orderService,
-    saleService,
 }
 
 /**
@@ -61,10 +59,8 @@ export {
  */
 
 import store from './store'
-import {Login} from './store/login/logGlobal.js'
 export {
     store,
-    Login
 }
 
 /**

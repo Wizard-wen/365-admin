@@ -6,8 +6,7 @@ import vuex from 'vuex'
  */
 import createPersistedState from 'vuex-persistedstate'
 
-import {loginModule} from './login/loginModule.js'
-import {authorityModule} from './authorityModule.js'
+import {loginModule} from './loginModule.js'
 import {loadingModule} from './loadingModule.js'
 import {orderModule} from './orderModule.js'
 
@@ -17,12 +16,10 @@ window.store = new vuex.Store({
     //保存
     modules: {
         loginModule,
-        authorityModule,
         loadingModule,
         orderModule
     },
     plugins: [createPersistedState({
-        // paths: ['login'],
         key: 'staff',
         storage: window.sessionStorage,
         reducer(val) {

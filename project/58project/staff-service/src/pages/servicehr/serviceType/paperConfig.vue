@@ -13,6 +13,7 @@
                 :on-success="handleSuccess"
                 :on-preview="handlePreview"
                 :on-remove="handleRemove"
+                :before-upload="beforeUpload"
                 :file-list="fileList"
                 :headers="uploadHeaders"
                 list-type="picture">
@@ -75,10 +76,17 @@ export default {
             console.log(file);
         },
         handleSuccess(response, file, fileList) {
-            this.fileList.push(response.data)
+            let arr = [{
+                url: response.data[0].path,
+                name: response.data[0].name
+                }]
+            this.fileList.push(arr)
             console.log(response);
             console.log(file);
             console.log(fileList);
+        },
+        beforeUpload(file){ 
+            console.log(file)
         },
         /**
          * 提交表单
