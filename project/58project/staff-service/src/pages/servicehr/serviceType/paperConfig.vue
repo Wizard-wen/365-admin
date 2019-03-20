@@ -34,7 +34,7 @@
 import {hrService} from '../../../../common'
 
 export default {
-    data() {
+    data(){
         const nameValidate = (rule, value, callback) => {
             if (value === '') {
                 callback(new Error('请输入证书类型名'));
