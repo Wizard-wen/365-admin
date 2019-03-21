@@ -145,8 +145,11 @@ export default {
                     }
                 }
             })
-            if(remderArr%2 == 1){
-                renderrArr.push({})
+            if(renderArr.length%2 == 1){
+                renderArr.push({
+                    key:  "",
+                    value: ""
+                })
             }
             return renderArr
         },
@@ -219,11 +222,6 @@ export default {
             this.$emit('closeDetailDialog')
         }
     },
-
-
-
-
-
     async mounted(){
         store.commit('setLoading',true)
         let _this = this
@@ -233,7 +231,7 @@ export default {
 
                     _this.staffDetailForm = data.data
                     _this.staffDetailList = _this.changeBaseList(data.data)
-                    store.commit('setLoading',false)
+                    // store.commit('setLoading',false)
                 }
             })
             .catch(e =>{
@@ -241,8 +239,9 @@ export default {
                     type:'error',
                     message: e.message
                 })
+                
             })
-        
+        store.commit('setLoading',false)
     }
 }
 </script>
