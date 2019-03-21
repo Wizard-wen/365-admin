@@ -116,45 +116,23 @@
                 <div v-else>暂无数据</div>
             </div>
         </el-card>
-        <el-dialog title="收货地址" :visible.sync="dialogFormVisible">
-            <div
-                class="base-line"
-                :style="{
-                    width: item.size == 1? '100%' : '50%',
-                    marginBottom: index == staffDetailList.length - 1? '20px': '0'}"
-                v-for="(item, index) in staffDetailList"
-                :key="index">
-                <div class="base-word">
-                    <div class="base-key">{{`${item.key}：`}}</div>
-                    <div class="base-value">{{item.value}}</div>
-                </div>
-            </div>
-
-
-
-
-            <div slot="footer" class="dialog-footer">
-                <el-button @click="dialogFormVisible = false">取消</el-button>
-                <el-button type="primary"  @click="createOrderStaff('1')">备选</el-button>
-            </div>
-        </el-dialog>
+        <staff-detail
+            :staffId="detailStaffId"
+            v-if="dialogFormVisible"
+            :openDetailDialog="dialogFormVisible"
+            @closeDetailDialog="dialogFormVisible = false"></staff-detail>
     </div>
 </template>
 <script>
 import {hrService} from '../../../../common'
 import {orderService} from '../../../../common'
+import staffDetail from './staffDetail'
 export default {
+    components: {
+            staffDetail,
+    },
     data(){
         return{
-            /**
-             * 字段对应
-             */
-            orderKeyName: {
-                address: "地址",
-                age: "年龄",
-                name: "姓名",
-                identify: "身份证号",
-            },
             /**
              * 服务人员列表查找字段
              */
@@ -201,7 +179,9 @@ export default {
 
             //弹出框显示隐藏字段
             dialogTableVisible: false,
+
             dialogFormVisible: false,
+            detailStaffId: 0,
 
             /**
              * 服务人员详情数组
@@ -340,75 +320,10 @@ export default {
          * 显示服务人员详情
          */
         async showDetail(id){
-            let _this = this;
-            store.commit('setLoading',true)
-            await hrService.getStaff(id)
-                .then(data =>{
-                    if(data.code == "0"){
-                        _this.staffDetailForm = data.data
-                        _this.staffDetailList = _this.changeBaseList(data.data)
-                        _this.dialogFormVisible = true
-                    }
-                })
-                .catch(e =>{
-                    this.$message({
-                        type:'error',
-                        message: e.message
-                    })
-                })
-            store.commit('setLoading',false)
+            this.dialogFormVisible = true
+            this.detailStaffId = id;
         },
-        /**
-         * 表单数据样式包装
-         */
-        changeBaseList(baseForm){
-            let obj = this.orderKeyName,
-            newArr = [];
 
-            /**
-             * key 为渲染字段的属性名
-             * value 为某个属性名的值
-             */
-            Object.keys(baseForm).forEach((item, index) =>{
-                if(obj.hasOwnProperty(item)){
-                    let itemObj = {
-                        key: obj[item],
-                        value: baseForm[item]
-                    }
-                    newArr.push(itemObj)
-                }
-
-            })
-            //获取字符串长度（汉字算两个字符，字母数字算一个）
-            function getByteLen(val) {
-                var len = 0;
-                for (var i = 0; i < val.length; i++) {
-                    var a = val.charAt(i);
-                    if (a.match(/[^\x00-\xff]/ig) != null) {//\x00-\xff→GBK双字节编码范围
-                        len += 2;
-                    }
-                    else {
-                        len += 1;
-                    }
-                }
-                return len;
-            }
-            newArr = newArr.map((item, index) =>{
-
-                if(getByteLen(item.value) > 20){
-                    return {
-                        ...item,
-                        size: 1, //长字段，独占一行
-                    }
-                } else {
-                    return {
-                        ...item,
-                        size: 2,//短字段，占半行
-                    }
-                }
-            })
-            return newArr
-        },
         /**
          * 添加候选人
          * @param type 类型 1 在列表中备选 2 在弹出框中备选

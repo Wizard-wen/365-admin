@@ -9,6 +9,7 @@ import createPersistedState from 'vuex-persistedstate'
 import {loginModule} from './loginModule.js'
 import {loadingModule} from './loadingModule.js'
 import {orderModule} from './orderModule.js'
+import {hrModule} from './hrModule.js'
 
 Vue.use(vuex);
 
@@ -17,7 +18,8 @@ window.store = new vuex.Store({
     modules: {
         loginModule,
         loadingModule,
-        orderModule
+        orderModule,
+        hrModule,
     },
     plugins: [createPersistedState({
         key: 'staff',

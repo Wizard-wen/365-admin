@@ -1,6 +1,6 @@
 <template>
-    <div class="skill-config">
-        <el-form class="skill-form" ref="form" :rules="abilityRules" :model="abilityForm" label-width="120px">
+    <div class="ability-config">
+        <el-form class="ability-form" ref="form" :rules="abilityRules" :model="abilityForm" label-width="120px">
             <el-form-item label="标签名称" prop="name">
                 <el-input v-model="abilityForm.name"></el-input>
             </el-form-item>
@@ -139,10 +139,10 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-    .auth-config{
+    .ability-config{
         padding: 30px;
-        .auth-form{
-            width: 760px;
+        .ability-form{
+            max-width: 760px;
         }
     }
 </style>

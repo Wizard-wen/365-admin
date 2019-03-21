@@ -24,11 +24,11 @@
                 </el-button>
             </el-form-item>
 
-            <el-form-item label="客户名称" >
+            <el-form-item label="客户名称" prop="user_name">
                 <el-input v-model="orderForm.user_name"></el-input>
             </el-form-item>
 
-            <el-form-item label="客户联系方式">
+            <el-form-item label="客户联系方式" prop="phone">
                 <el-input v-model="orderForm.phone"></el-input>
             </el-form-item>
 
@@ -60,7 +60,7 @@
                     end-placeholder="结束日期"></el-date-picker>
             </el-form-item>
 
-            <el-form-item label="订单来源">
+            <el-form-item label="订单来源" prop="source">
                 <el-select v-model="orderForm.source" placeholder="订单来源">
                     <el-option label="全部" value="0"></el-option>
                     <el-option label="线上" value="2"></el-option>
@@ -85,9 +85,53 @@ import {hrService} from '../../../common'
 import {orderService} from '../../../common'
 export default {
     data(){
+        const validator = {
+            user_name(rule, value, callback){
+                if (!value) {
+                    callback(new Error('客户名不能为空'));
+                } else if (!/^[a-zA-Z\u4e00-\u9fa5]+$/.test(value)){
+                    callback(new Error('只能是中、英文及其组合'));
+                } else {
+                    callback()
+                }
+            },
+            phone(rule, value, callback){
+                if (!value) {
+                    callback(new Error('手机号不能为空'));
+                } else if (!(/^1[34578]\d{9}$/.test(value ))){
+                    callback(new Error('请输入正确的手机号'));
+                } else {
+                    callback()
+                }
+            },
+            service_address(rule, value, callback){
+                if (!value) {
+                    callback(new Error('服务地址不能为空'));
+                } else {
+                    callback()
+                }
+            },
+            source(rule, value, callback){
+                if (value == '0') {
+                    callback(new Error('请选择订单来源'));
+                } else {
+                    callback()
+                }
+            },
+        }
         return {
+            orderRules: {
+                user_name: [
+                    { validator: validator.user_name, trigger: 'blur' }
+                ],
+                phone: [
+                    { validator: validator.phone, trigger: 'blur' }
+                ],
+                source: [
+                    { validator: validator.source, trigger: 'change' }
+                ],
+            },
             orderForm: {
-                // id: '',
                 manager_id: this.$store.state.loginModule.user.id, //创建人
                 manager_name: this.$store.state.loginModule.user.username, //创建人
                 user_name: '',//客户名
@@ -97,7 +141,7 @@ export default {
                 service_address: '',//服务地址
                 service_start_time: '',//服务开始时间
                 service_end_time: '',//服务终止时间
-                source: '',//订单来源
+                source: '0',//订单来源
                 remark: '',//备注信息
             },
             cycleTime: [],//时间周期
@@ -112,9 +156,6 @@ export default {
                 label: 'name',
                 value: 'id'
             },
-            orderRules: {
-
-            },
         }
     },
     methods: {
@@ -126,6 +167,34 @@ export default {
                 str += arr[i]
             }
             this.orderForm.service_address = str + this.region_string
+
+            //校验服务类型
+            if(this.orderForm.service_category_id == '' || this.orderForm.name ==''){
+                this.$message({
+                    type:'error',
+                    message: '请选择服务类型'
+                })
+                return false;
+            }
+
+            //校验服务地址
+            if(this.orderForm.service_address == '' || this.region_string =='' || arr.length == 0){
+                this.$message({
+                    type:'error',
+                    message: '请填写服务地址'
+                })
+                return false;
+            }
+
+            //校验服务起止时间
+            if(this.orderForm.service_start_time == '' || this.orderForm.service_start_time == ''){
+                this.$message({
+                    type:'error',
+                    message: '请选择服务起止时间'
+                })
+                return false ;
+            }
+            //校验并提交
             await this.$refs[formName].validate((valid) => {
                 if (valid) {
                     orderService.createOrder(this.orderForm)

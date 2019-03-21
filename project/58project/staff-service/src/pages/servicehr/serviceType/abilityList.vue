@@ -1,7 +1,7 @@
 <template>
-    <div class="staff">
-        <div class="container-box">
-            <el-form :inline="true" :model="abilitySearch" class="staff-form">
+    <div class="ability">
+        <el-form :inline="true" :model="abilitySearch" class="ability-form">
+            <div class="search">
                 <el-form-item label="是否启用">
                     <el-select v-model="abilitySearch.type" placeholder="请选择是否启用">
                         <el-option label="全部" value=""></el-option>
@@ -15,52 +15,52 @@
 
                 <el-form-item>
                     <el-button type="primary" @click="searchAbility">查询</el-button>
+                    <el-button type="primary" @click="resetAbility">重置</el-button>
                 </el-form-item>
+            </div>
+            <el-form-item>
+                <el-button type="primary" @click="createAbility">添加能力标签</el-button>
+            </el-form-item>
+        </el-form>
+        
+        <el-table
+            :data="abilityTable" 
+            class="ability-table">
+            <el-table-column
+                label="技能id"
+                prop="id"
+                align="center">
+            </el-table-column>
+            <el-table-column
+                label="技能名称"
+                prop="name"
+                align="center">
+            </el-table-column>
+            <el-table-column
+                label="状态"
+                prop="type"
+                :formatter="formatterType"
+                align="center">
+            </el-table-column>
 
-                <el-form-item>
-                    <el-button type="primary" @click="createAbility">添加</el-button>
-                </el-form-item>    
-            </el-form>
-            
-            <el-table
-                :data="abilityTable" 
-                class="staff-table">
-                <el-table-column
-                    label="技能id"
-                    prop="id"
-                    align="center">
-                </el-table-column>
-                <el-table-column
-                    label="技能名称"
-                    prop="name"
-                    align="center">
-                </el-table-column>
-                <el-table-column
-                    label="状态"
-                    prop="type"
-                    :formatter="formatterType"
-                    align="center">
-                </el-table-column>
-
-                <el-table-column
-                    label="操作"
-                    align="center">
-                    <template slot-scope="scope">
-                        <el-button size="mini" @click="editAbility(scope.$index, scope.row)">配置</el-button>
-                    </template>
-                </el-table-column>
-            </el-table>
-            <!-- 分页 -->
-            <el-pagination
-                style="margin-top:30px;"
-                @current-change="handleCurrentPage"
-                @prev-click="handleCurrentPage"
-                @next-click="handleCurrentPage"
-                :current-page.sync="pagination.currentPage"
-                :page-size="10"
-                layout="prev, pager, next, jumper"
-                :total="pagination.total"></el-pagination>
-        </div>
+            <el-table-column
+                label="操作"
+                align="center">
+                <template slot-scope="scope">
+                    <el-button size="mini" @click="editAbility(scope.$index, scope.row)">配置</el-button>
+                </template>
+            </el-table-column>
+        </el-table>
+        <!-- 分页 -->
+        <el-pagination
+            class="pagination"
+            @current-change="handleCurrentPage"
+            @prev-click="handleCurrentPage"
+            @next-click="handleCurrentPage"
+            :current-page.sync="pagination.currentPage"
+            :page-size="10"
+            layout="prev, pager, next, jumper"
+            :total="pagination.total"></el-pagination>
         
     </div>
 </template>
@@ -153,6 +153,15 @@
                 await this.getTableList()
             },
             /**
+             * 重置
+             */
+            async resetAbility(){
+                Object.keys(this.abilitySearch).forEach((item =>{
+                    this.abilitySearch[item] = ''
+                }))
+                await this.getTableList()
+            }, 
+            /**
              * 创建服务人员
              * des 先创建服务人员，然后才能添加服务人员技能。
              */
@@ -203,21 +212,25 @@
     }
 </script>
 <style lang="scss" scoped>
-    .staff{
-        
-        
-        .container-box{
-            padding: 30px;
-            .staff-form{
-                width:80%;
-                min-width:1100px;
-                margin: 0 auto;
-            }
-            .staff-table{
-                width: 80%;
-                min-width: 1100px;
-                margin: 0 auto;
-            }
+    .ability{
+        padding-top: 30px;
+        margin: 0 auto;
+        .ability-form{
+            width:80%;
+            min-width:1100px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+        }
+        .ability-table{
+            width: 80%;
+            min-width: 1100px;
+            margin: 0 auto;
+        }
+        .pagination{
+            width:80%;
+            min-width:1100px;
+            margin: 30px auto 0 auto;;
         }
     }
 </style>

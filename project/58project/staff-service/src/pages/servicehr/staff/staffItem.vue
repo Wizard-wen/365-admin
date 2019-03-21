@@ -1,6 +1,18 @@
 <template>
     <div class="staff-box">
-        <el-form ref="form" :model="staffForm" :rules="staffRules" label-width="120px">
+        
+        <el-form class="staff-form" ref="form" :model="staffForm" :rules="staffRules" label-width="120px">
+            <el-form-item label="员工头像">
+                <el-upload
+                    class="avatar-uploader"
+                    action="/api/admin/common/uploadImage"
+                    :show-file-list="false"
+                    :on-success="handleAvatarSuccess"
+                    :before-upload="beforeAvatarUpload">
+                    <img v-if="staffForm.imageUrl" :src="staffForm.imageUrl" class="avatar">
+                    <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+                </el-upload>
+            </el-form-item>
             <el-form-item label="员工姓名" prop="name">
                 <el-input v-model="staffForm.name" placeholder="只能是汉字"></el-input>
             </el-form-item>
@@ -80,22 +92,26 @@
                 <el-button icon="el-icon-plus" circle @click="addRegion(skill, 'skill')"></el-button>
             </el-form-item>
 
-            <!-- <el-form-item label="证书" prop="paper">
-                <el-tag
-                v-for="(tag, index) in staffForm.paper"
-                :key="index"
-                @close="handleClose(tag, 'paper_id')"
-                closable>{{tag.paper_category_name}}</el-tag>
-
-                <el-cascader
-                    clearable
-                    :options="paperList"
-                    v-model="paper"
-                    :props="areaProps"
-                    placeholder="请选择证书">
-                </el-cascader>
-                <el-button icon="el-icon-plus" circle @click="addRegion(paper, 'paper')"></el-button>
-            </el-form-item> -->
+            <el-form-item label="证书" prop="paper">
+                <el-button icon="el-icon-plus"  @click="openPaperDialog('new', {})">添加证书</el-button>
+                <div class="paper-list">
+                    <div 
+                        class="paper-item"
+                        v-for="(item, index) in staffForm.paper" 
+                        :key="index">
+                        <div class="paper-name">
+                            <p>{{item.paper_category_name}}</p>
+                            <div>
+                                <el-button @click="deleteFormPaper(item)" class="el-icon-delete" circle size="small"></el-button>
+                                <el-button @click="openPaperDialog('edit', item)" class="el-icon-edit" circle size="small"></el-button>
+                            </div>
+                        </div>
+                        <div class="paper-imgs">
+                            <img class="paper-item-img" v-for="(it, inds) in item.images" :key="inds" :src="it.url" alt="">
+                        </div>
+                    </div>
+                </div>
+            </el-form-item>
 
             <el-form-item label="年龄" prop="age">
                 <el-input-number v-model="staffForm.age"></el-input-number>
@@ -124,32 +140,14 @@
                 <el-button @click="goback">取消</el-button>
             </el-form-item>
         </el-form>
-
-        <!-- 添加证书 -->
-        <!-- <el-dialog title="添加证书" :visible.sync="paperDialogVisible">
-            <el-form :model="paperForm">
-                <el-form-item label="证书" prop="paper">
-                    <el-tag
-                    v-for="(tag, index) in paperForm.paper"
-                    :key="index"
-                    @close="handleClose(tag, 'paper_id')"
-                    closable>{{tag.paper_category_name}}</el-tag>
-
-                    <el-cascader
-                        clearable
-                        :options="paperList"
-                        v-model="paper"
-                        :props="areaProps"
-                        placeholder="请选择证书">
-                    </el-cascader>
-                    <el-button icon="el-icon-plus" circle @click="addPaper"></el-button>
-                </el-form-item>
-            </el-form>
-            <div slot="footer" class="dialog-footer">
-                <el-button @click="paperDialogVisible = false">取 消</el-button>
-                <el-button type="primary" @click="cancelOrder">确定</el-button>
-            </div>
-        </el-dialog> -->
+        <paper-dialog 
+            :isEditPaper="paperDialog.isEditPaper"
+            :paperDialogVisible="paperDialog.paperDialogVisible"
+            v-if="paperDialog.paperDialogVisible"
+            :paperProps="paperDialog.paperAddModel"
+            :selectedPapers="staffForm.paper"
+            @changePaper="changePaper"
+            @closePaper="cancelPaperFn"></paper-dialog>
     </div>
 </template>
 
@@ -161,70 +159,75 @@
 import {hrService} from '../../../../common'
 import {hrRequest} from '../../../../common'
 
-
+import paperDialog from './paperDialog.vue'
 export default {
+    components: {
+        paperDialog
+    },
     data() {
-        const nameValidate = (rule, value, callback) => {
-            if (value === '') {
-                callback(new Error('请输入服务人员姓名'));
-            } else {
-                if (!/^[\u4e00-\u9fa5]+$/.test(value)) {
-                    callback(new Error('只能输入汉字'));
+        //表单验证
+        const validator = {
+            nameValidate(rule, value, callback){
+                if (value === '') {
+                    callback(new Error('请输入服务人员姓名'));
+                } else {
+                    if (!/^[\u4e00-\u9fa5]+$/.test(value)) {
+                        callback(new Error('只能输入汉字'));
+                    }
+                    callback();
                 }
-                callback();
-            }
-        }
-        const identifyValidate = (rule, value, callback) => {
-            if (value === '') {
-                callback(new Error('请输入身份证号'));
-            } else {
-                if (!(value.length == 18)) {
-                    callback(new Error('请输入18位有效身份证号'));
+            },
+            identifyValidate(rule, value, callback){
+                if (value === '') {
+                    callback(new Error('请输入身份证号'));
+                } else {
+                    if (!(value.length == 18)) {
+                        callback(new Error('请输入18位有效身份证号'));
+                    }
+                    callback();
                 }
-                callback();
-            }
-        }
+            },
 
-        const phoneValidate = (rule, value, callback) => {
-            if (value === '') {
-                callback(new Error('请输入手机号'));
-            } else {
-                if (!(/^1[34578]\d{9}$/.test(value))) {
-                    callback(new Error('请输入正确格式的手机号'));
+            phoneValidate(rule, value, callback){
+                if (value === '') {
+                    callback(new Error('请输入手机号'));
+                } else {
+                    if (!(/^1[34578]\d{9}$/.test(value))) {
+                        callback(new Error('请输入正确格式的手机号'));
+                    }
+                    callback();
                 }
-                callback();
-            }
-        }
+            },
 
-        const addressValidate = (rule, value, callback) => {
-            if (value === '') {
-                callback(new Error('请输入住址'));
-            } else {
-                callback();
-            }
-        }
+            addressValidate(rule, value, callback){
+                if (value === '') {
+                    callback(new Error('请输入住址'));
+                } else {
+                    callback();
+                }
+            },
 
-        const bankCardValidate = (rule, value, callback) => {
-            if (value === '') {
-                callback(new Error('请输入银行卡号'));
-            } else {
-                callback();
-            }
+            bankCardValidate(rule, value, callback){
+                if (value === '') {
+                    callback(new Error('请输入银行卡号'));
+                } else {
+                    callback();
+                }
+            },
+            ageValidate(rule, value, callback){
+                if (!value) {
+                    callback(new Error('请输入年龄'));
+                } else {
+                    callback();
+                }
+            },
         }
-
-        const ageValidate = (rule, value, callback) => {
-            if (!value) {
-                callback(new Error('请输入年龄'));
-            } else {
-                callback();
-            }
-        }
-
         return {
             //员工信息表单
             staffForm: {
                 id: '',//员工id
 
+                imageUrl: '',
                 name: '',//员工姓名
                 identify: '',//身份证号
                 sex: 1,//员工性别
@@ -239,17 +242,40 @@ export default {
 
                 version: '',//操作版本号,两个人同时操作
 
-
                 label: [],//能力标签
                 paper: [],//证书
                 skill: [],//技能
             },
-            
-            //证书配置弹框
-            paperDialogVisible: true, 
-
-            paperForm: {
-                paper: '',
+            //表单验证规则
+            staffRules: {
+                name: [
+                    { validator: validator.nameValidate, trigger: 'blur' }
+                ],
+                identify: [
+                    {validator: validator.identifyValidate, trigger: 'blur'}
+                ],
+                phone: [
+                    {validator: validator.phoneValidate, trigger: 'blur'}
+                ],
+                address: [
+                    {validator: validator.addressValidate, trigger: 'blur'}
+                ],
+                bank_card: [
+                    {validator: validator.bankCardValidate, trigger: 'blur'}
+                ],
+                age: [
+                    {validator: validator.ageValidate, trigger: 'blur'}
+                ],
+            },
+            //证书弹出框
+            paperDialog: {
+                isEditPaper: false,
+                paperDialogVisible: false,
+                paperAddModel:{
+                    paper_category_name: null,
+                    paper_category_id: null,
+                    images: [],
+                }
             },
 
 
@@ -259,9 +285,6 @@ export default {
             skill: [],//技能级联选择器筛选信息
             skillList: [],//技能级联选择器渲染数组
 
-            paper: [],//证书级联选择器筛选信息
-            paperList: [],//证书级联选择器渲染数组
-
             label: [],//能力标签级联选择器筛选信息
             labelList: [],//能力标签级联选择器渲染数组
 
@@ -270,68 +293,12 @@ export default {
                 label: 'name',
                 value: 'id'
             },
-            //表单验证规则
-            staffRules: {
-                name: [
-                    { validator: nameValidate, trigger: 'blur' }
-                ],
-                identify: [
-                    {validator: identifyValidate, trigger: 'blur'}
-                ],
-                phone: [
-                    {validator: phoneValidate, trigger: 'blur'}
-                ],
-                address: [
-                    {validator: addressValidate, trigger: 'blur'}
-                ],
-                bank_card: [
-                    {validator: bankCardValidate, trigger: 'blur'}
-                ],
-                age: [
-                    {validator: ageValidate, trigger: 'blur'}
-                ],
-            },
-            /**
-             * 受教育程度数组
-             */
-            educationList: [
-                {
-                    id : 0,
-                    name: "全部"
-                },
-                {
-                    id : 1,
-                    name: "博士"
-                },
-                {
-                    id : 2,
-                    name: "硕士"
-                },
-                {
-                    id : 3,
-                    name: "本科"
-                },
-                {
-                    id : 4,
-                    name: "大专"
-                },
-                {
-                    id : 5,
-                    name: "中专"
-                },
-                {
-                    id : 6,
-                    name: "高中"
-                },
-                {
-                    id : 7,
-                    name: "初中"
-                },
-                {
-                    id : 8,
-                    name: "小学"
-                },
-            ]
+        }
+    },
+    computed: {
+        //受教育程度数组
+        educationList(){
+            return this.$store.state.hrModule.educationList
         }
     },
     methods: {
@@ -361,6 +328,21 @@ export default {
                     return false;
                 }
             });
+        },
+        handleAvatarSuccess(res, file) {
+            this.staffForm.imageUrl = URL.createObjectURL(file.raw);
+        },
+        beforeAvatarUpload(file) {
+            const isJPG = file.type === 'image/jpeg';
+            const isLt2M = file.size / 1024 / 1024 < 2;
+
+            if (!isJPG) {
+            this.$message.error('上传头像图片只能是 JPG 格式!');
+            }
+            if (!isLt2M) {
+            this.$message.error('上传头像图片大小不能超过 2MB!');
+            }
+            return isJPG && isLt2M;
         },
         /**
          * 给级联选择器添加标签
@@ -392,11 +374,6 @@ export default {
                 selectedArr = [..._this.staffForm.label]
                 dangerWord = "技能标签"
                 idkey = "ability_id"
-            }else if (type == "paper"){
-                levelArr = this.paperList
-                selectedArr = [..._this.staffForm.paper]
-                dangerWord = "证书"
-                idkey = "paper_category_id"
             }
 
             //判断是否已经存在这个字段
@@ -424,8 +401,6 @@ export default {
                 _this.staffForm.skill = selectedArr
             } else if (type == "label"){
                 _this.staffForm.label = selectedArr
-            } else if (type == "paper"){
-                _this.staffForm.paper = selectedArr
             }
 
             /**
@@ -472,13 +447,6 @@ export default {
             }
         },
         /**
-         * 
-         */
-        addPaper(){
-
-
-        },
-        /**
          * tag数组删除一条
          */
         handleClose(tag, type){
@@ -504,16 +472,81 @@ export default {
                         this.staffForm.label.splice(index, 1)
                     }
                 })
-            } else if (tag.hasOwnProperty("paper_category_id")){
-                //删除证书tag
-                this.staffForm.paper.forEach((item, index) =>{
-                    if(item.paper_id == tag.paper_id){
-                        this.staffForm.paper.splice(index, 1)
-                    }
-                })
             } else {
                 return
             }
+        },
+        /**
+         * 删除一条证书数据
+         */
+        deleteFormPaper(paperItem){
+            this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                type: 'warning'
+            }).then(() => {
+                this.staffForm.paper.forEach((item, index) =>{
+                    if(item.paper_category_id == paperItem.paper_category_id){
+                        this.staffForm.paper.splice(index, 1)
+                    }
+                })
+                this.$message({
+                    type: 'success',
+                    message: '删除成功!'
+                });
+            }).catch(() => {
+                this.$message({
+                    type: 'info',
+                    message: '已取消删除'
+                });          
+            });
+
+        },
+
+        /**
+         * 新建 或 编辑 证书信息----打开弹窗
+         */
+        openPaperDialog(state, paperItem){
+            if(state == 'edit'){
+                this.paperDialog.isEditPaper = true
+                this.paperDialog.paperAddModel = {
+                    paper_category_name: paperItem.paper_category_name,
+                    paper_category_id: paperItem.paper_category_id,
+                    images: [...paperItem.images],
+                }
+            } else {
+                this.paperDialog.isEditPaper = false
+                this.paperDialog.paperAddModel = {
+                    paper_category_name: '',
+                    paper_category_id: '',
+                    images: [],
+                }
+            }
+            this.paperDialog.paperDialogVisible = true
+        },
+        /**
+         * 添加证书，改变证书信息
+         */
+        changePaper(paperItem, isEdit){
+            //若是编辑，替换证书
+            if(isEdit){
+                 this.staffForm.paper.forEach((item, index) =>{
+                     if(paperItem.paper_category_id == item.paper_category_id){
+                         this.staffForm.paper.splice(index, 1, paperItem)
+                     }
+                 })
+            } else {
+                //新建证书，直接插入
+                this.staffForm.paper.push(paperItem)
+            }
+            //关闭弹窗
+            this.paperDialog.paperDialogVisible = false
+        },
+        /**
+         * 关闭证书编辑弹窗
+         */
+        cancelPaperFn(item){
+            this.paperDialog.paperDialogVisible = false
         },
         goback(){
             this.$router.push("/staff/staffList")
@@ -525,26 +558,24 @@ export default {
             let data = await Promise.all([
                 hrService.getAreaTree(),
                 hrService.getSkillTree('enable'), //获取技能树
-                hrService.getPaperSelection('enable'), //获取证书列表
                 hrService.getAbilityTree('enable'), //获取能力标签树
             ])
             //promise.all 赋值
             this.areaList = data[0].data
             this.skillList = data[1].data
-            this.paperList = data[2].data
-            this.labelList = data[3].data
+            this.labelList = data[2].data
 
             //如果是编辑则请求接口
-            // if(this.$route.query.type == 1){
-            //     await hrService.getStaff(this.$route.query.id)
-            //         .then(data =>{
-            //             if(data.code == "0"){
-            //                 this.staffForm = data.data
-            //             }
-            //         }).catch(err =>{
-            //             throw err
-            //         })
-            // }
+            if(this.$route.query.type == 1){
+                await hrService.getStaff(this.$route.query.id)
+                    .then(data =>{
+                        if(data.code == "0"){
+                            this.staffForm = data.data
+                        }
+                    }).catch(err =>{
+                        throw err
+                    })
+            }
         }catch(e){
             this.$message({
                 type:'error',
@@ -558,6 +589,67 @@ export default {
 <style lang="scss" scoped>
     .staff-box{
         width: 80%;
+        padding-top: 30px; 
+        .staff-form{
+            max-width: 650px; 
+        }
+        .paper-list{
+            width:100%;
+            .paper-item{
+                position: relative;
+                display: flex;
+                justify-content: flex-start;
+                height:100px;
+                &:after{
+                    position: absolute;
+                    bottom: 0;
+                    width: 100%;
+                    height: 1px;
+                    background: #ccc;
+                    content: '';
+                }
+                .paper-name{
+                    height:100px;
+                    width: 100px;
+                    text-align: center;
+                    font-size: 14px;
+                    line-height: 40px;
+                }
+                .paper-imgs{
+                    .paper-item-img{
+                        display: inline-block;
+                        height:100px;
+                        width: 100px;
+                        margin : 0 10px;
+                    }
+                }
+            }
+            
+        }
+    }
+    //图片上传
+    .avatar-uploader /deep/ .el-upload {
+        border: 1px dashed #d9d9d9;
+        border-radius: 6px;
+        cursor: pointer;
+        position: relative;
+        overflow: hidden;
+    }
+    .avatar-uploader /deep/ .el-upload:hover {
+        border-color: #409EFF;
+    }
+    .avatar-uploader-icon {
+        font-size: 28px;
+        color: #8c939d;
+        width: 178px;
+        height: 178px;
+        line-height: 178px;
+        text-align: center;
+    }
+    .avatar {
+        width: 178px;
+        height: 178px;
+        display: block;
     }
 </style>
 

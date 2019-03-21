@@ -1,72 +1,70 @@
 <template>
-    <div class="staff">
-        <div class="container-box">
-            <div style="width: 60%">
-                <el-form :inline="true" :model="skillSearch" class="staff-form">
-                    <el-form-item label="是否启用">
-                        <el-select v-model="skillSearch.type" placeholder="请选择是否启用">
-                            <el-option label="全部" value=""></el-option>
-                            <el-option label="已启用" value="enable"></el-option>
-                            <el-option label="未启用" value="disable"></el-option>
-                        </el-select>
-                    </el-form-item>
-                    <el-form-item>
-                        <el-input v-model="skillSearch.name" placeholder="请输入技能名称"></el-input>
-                    </el-form-item>
+    <div class="skill">
+        <el-form :inline="true" :model="skillSearch" class="skill-form">
+            <div>
+                <el-form-item label="是否启用">
+                    <el-select v-model="skillSearch.type" placeholder="请选择是否启用">
+                        <el-option label="全部" value=""></el-option>
+                        <el-option label="已启用" value="enable"></el-option>
+                        <el-option label="未启用" value="disable"></el-option>
+                    </el-select>
+                </el-form-item>
+                <el-form-item>
+                    <el-input v-model="skillSearch.name" placeholder="请输入技能名称"></el-input>
+                </el-form-item>
 
-                    <el-form-item>
-                        <el-button type="primary" @click="searchSkill">查询</el-button>
-                    </el-form-item>
-
-                    <el-form-item>
-                        <el-button type="primary" @click="createSkill">添加</el-button>
-                    </el-form-item>    
-                </el-form>
-                
-                <el-table
-                    :data="skillTable" 
-                    class="staff-table">
-                    <el-table-column
-                        label="技能id"
-                        prop="id"
-                        align="center">
-                    </el-table-column>
-                    <el-table-column
-                        label="技能名称"
-                        prop="name"
-                        align="center">
-                    </el-table-column>
-                    <el-table-column
-                        label="状态"
-                        prop="type"
-                        :formatter="formatterType"
-                        :filter-method="showWords"
-                        align="center">
-                    </el-table-column>
-
-                    <el-table-column
-                        label="操作"
-                        align="center">
-                        <template slot-scope="scope">
-                            <el-button size="mini" @click="editSkill(scope.$index, scope.row)">配置</el-button>
-                        </template>
-                    </el-table-column>
-                </el-table>
-                <!-- 分页 -->
-                <el-pagination
-                    style="margin-top:30px;"
-                    @current-change="handleCurrentPage"
-                    @prev-click="handleCurrentPage"
-                    @next-click="handleCurrentPage"
-                    :current-page.sync="pagination.currentPage"
-                    :page-size="10"
-                    layout="prev, pager, next, jumper"
-                    :total="pagination.total">
-                </el-pagination>
+                <el-form-item>
+                    <el-button type="primary" @click="searchSkill">查询</el-button>
+                    <el-button type="primary" @click="resetSkill">重置</el-button>
+                </el-form-item>
             </div>
-            
-        </div>
+
+
+            <el-form-item>
+                <el-button type="primary" @click="createSkill">添加技能</el-button>
+            </el-form-item>    
+        </el-form>
         
+        <el-table
+            :data="skillTable" 
+            class="skill-table">
+            <el-table-column
+                label="技能id"
+                prop="id"
+                align="center">
+            </el-table-column>
+            <el-table-column
+                label="技能名称"
+                prop="name"
+                align="center">
+            </el-table-column>
+            <el-table-column
+                label="状态"
+                prop="type"
+                :formatter="formatterType"
+                :filter-method="showWords"
+                align="center">
+            </el-table-column>
+
+            <el-table-column
+                label="操作"
+                align="center">
+                <template slot-scope="scope">
+                    <el-button size="mini" @click="editSkill(scope.$index, scope.row)">配置</el-button>
+                </template>
+            </el-table-column>
+        </el-table>
+        <!-- 分页 -->
+        <el-pagination
+            class="pagination"
+            @current-change="handleCurrentPage"
+            @prev-click="handleCurrentPage"
+            @next-click="handleCurrentPage"
+            :current-page.sync="pagination.currentPage"
+            :page-size="10"
+            layout="prev, pager, next, jumper"
+            :total="pagination.total">
+        </el-pagination>
     </div>
 </template>
 <script>
@@ -158,6 +156,15 @@
                 await this.getTableList()
             },
             /**
+             * 重置
+             */
+            async resetSkill(){
+                Object.keys(this.skillSearch).forEach((item =>{
+                    this.skillSearch[item] = ''
+                }))
+                await this.getTableList()
+            }, 
+            /**
              * 创建服务人员
              * des 先创建服务人员，然后才能添加服务人员技能。
              */
@@ -211,21 +218,25 @@
     }
 </script>
 <style lang="scss" scoped>
-    .staff{
-        
-        
-        .container-box{
-            padding: 30px;
-            .staff-form{
-                width:80%;
-                min-width:1100px;
-                margin: 0 auto;
-            }
-            .staff-table{
-                width: 80%;
-                min-width: 1100px;
-                margin: 0 auto;
-            }
+    .skill{
+        padding-top: 30px;
+        margin: 0 auto;
+        .skill-form{
+            width:80%;
+            min-width:1100px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+        }
+        .skill-table{
+            width: 80%;
+            min-width: 1100px;
+            margin: 0 auto;
+        }
+        .pagination{
+            width:80%;
+            min-width:1100px;
+            margin: 30px auto 0 auto;;
         }
     }
 </style>

@@ -1,7 +1,7 @@
 <template>
-    <div class="staff">
-        <div class="container-box">
-            <el-form :inline="true" :model="paperSearch" class="staff-form">
+    <div class="paper">
+        <el-form :inline="true" :model="paperSearch" class="paper-form">
+            <div>
                 <el-form-item label="是否启用">
                     <el-select v-model="paperSearch.type" placeholder="请选择是否启用">
                         <el-option label="全部" value=""></el-option>
@@ -15,51 +15,53 @@
 
                 <el-form-item>
                     <el-button type="primary" @click="searchPaper">查询</el-button>
+                    <el-button type="primary" @click="resetPaper">重置</el-button>
                 </el-form-item>
-
-                <el-form-item>
-                    <el-button type="primary" @click="createPaper">添加</el-button>
-                </el-form-item>    
-            </el-form>
+            </div>
             
-            <el-table
-                :data="paperTable" 
-                class="staff-table">
-                <el-table-column
-                    label="证书id"
-                    prop="id"
-                    align="center">
-                </el-table-column>
-                <el-table-column
-                    label="证书名称"
-                    prop="name"
-                    align="center">
-                </el-table-column>
-                <el-table-column
-                    label="状态"
-                    prop="type"
-                    :formatter="formatterType"
-                    align="center">
-                </el-table-column>
 
-                <el-table-column
-                    label="操作"
-                    align="center">
-                    <template slot-scope="scope">
-                        <el-button size="mini" @click="editPaper(scope.$index, scope.row)">配置</el-button>
-                    </template>
-                </el-table-column>
-            </el-table>
-            <el-pagination
-                style="margin-top:30px;"
-                @current-change="handleCurrentPage"
-                @prev-click="handleCurrentPage"
-                @next-click="handleCurrentPage"
-                :current-page.sync="pagination.currentPage"
-                :page-size="10"
-                layout="prev, pager, next, jumper"
-                :total="pagination.total"></el-pagination>
-        </div>
+            <el-form-item>
+                <el-button type="primary" @click="createPaper">添加证书</el-button>
+            </el-form-item>    
+        </el-form>
+        
+        <el-table
+            :data="paperTable" 
+            class="paper-table">
+            <el-table-column
+                label="证书id"
+                prop="id"
+                align="center">
+            </el-table-column>
+            <el-table-column
+                label="证书名称"
+                prop="name"
+                align="center">
+            </el-table-column>
+            <el-table-column
+                label="状态"
+                prop="type"
+                :formatter="formatterType"
+                align="center">
+            </el-table-column>
+
+            <el-table-column
+                label="操作"
+                align="center">
+                <template slot-scope="scope">
+                    <el-button size="mini" @click="editPaper(scope.$index, scope.row)">配置</el-button>
+                </template>
+            </el-table-column>
+        </el-table>
+        <el-pagination
+            class="pagination"
+            @current-change="handleCurrentPage"
+            @prev-click="handleCurrentPage"
+            @next-click="handleCurrentPage"
+            :current-page.sync="pagination.currentPage"
+            :page-size="10"
+            layout="prev, pager, next, jumper"
+            :total="pagination.total"></el-pagination>
         
     </div>
 </template>
@@ -152,6 +154,15 @@
                 await this.getTableList()
             },
             /**
+             * 重置
+             */
+            async resetPaper(){
+                Object.keys(this.paperSearch).forEach((item =>{
+                    this.paperSearch[item] = ''
+                }))
+                await this.getTableList()
+            }, 
+            /**
              * 创建服务人员
              * des 先创建服务人员，然后才能添加服务人员技能。
              */
@@ -202,21 +213,25 @@
     }
 </script>
 <style lang="scss" scoped>
-    .staff{
-        
-        
-        .container-box{
-            padding: 30px;
-            .staff-form{
-                width:80%;
-                min-width:1100px;
-                margin: 0 auto;
-            }
-            .staff-table{
-                width: 80%;
-                min-width: 1100px;
-                margin: 0 auto;
-            }
+    .paper{
+        padding-top: 30px;
+        margin: 0 auto;
+        .paper-form{
+            width:80%;
+            min-width:1100px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+        }
+        .paper-table{
+            width: 80%;
+            min-width: 1100px;
+            margin: 0 auto;
+        }
+        .pagination{
+            width:80%;
+            min-width:1100px;
+            margin: 30px auto 0 auto;;
         }
     }
 </style>

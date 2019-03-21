@@ -138,10 +138,11 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-    .auth-config{
+    .skill-config{
         padding: 30px;
-        .auth-form{
-            width: 760px;
+        .skill-form{
+            width: 80%;
+            max-width: 760px;
         }
     }
 </style>

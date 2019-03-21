@@ -1,8 +1,9 @@
 <template>
     <div class="order">
-            <div class="order-match-box">
-                <el-form :inline="true" :model="orderSearch" class="order-form">
-                    <div class="search-input-box">
+        <div class="order-match-box">
+            <el-form :inline="true" :model="orderSearch" class="order-form">
+                <div class="search-input-box">
+                    <div>
                         <el-form-item class="order-select" label="订单号">
                             <el-input v-model="orderSearch.code" placeholder="请输入订单号"></el-input>
                         </el-form-item>
@@ -13,104 +14,107 @@
 
                         <el-form-item>
                             <el-button type="primary" @click="searchOrder">查询</el-button>
-                        </el-form-item>
-
-                        <el-form-item>
-                            <el-button type="primary" @click="createOrder">创建订单</el-button>
+                            <el-button type="primary" @click="resetOrder">重置</el-button>
                         </el-form-item>
                     </div>
-                    <div class="search-select-box">
-                        <el-form-item label="技能分类">
-                            <el-cascader
-                                :options="skillList"
-                                v-model="skill"
-                                :props="skillProps"
-                                @change="changeSkill"
-                                clearable
-                                placeholder="技能分类">
-                            </el-cascader>
-                        </el-form-item>
+                    
 
-                        <el-form-item label="订单类型">
-                            <el-select v-model="orderSearch.type" placeholder="订单类型">
-                                <el-option label="全部" :value="0"></el-option>
-                                <el-option label="待匹配" :value="1"></el-option>
-                                <el-option label="已匹配" :value="2"></el-option>
-                                <el-option label="已签约" :value="3"></el-option>
-                                <el-option label="已取消" :value="4"></el-option>
-                                <el-option label="订单完成" :value="5"></el-option>
+                    <el-form-item>
+                        <el-button type="primary" @click="createOrder">创建订单</el-button>
+                    </el-form-item>
+                </div>
+                <div class="search-select-box">
+                    <el-form-item label="技能分类">
+                        <el-cascader
+                            :options="skillList"
+                            v-model="skill"
+                            :props="skillProps"
+                            @change="changeSkill"
+                            clearable
+                            placeholder="技能分类">
+                        </el-cascader>
+                    </el-form-item>
 
-                            </el-select>
-                        </el-form-item>
+                    <el-form-item label="订单类型">
+                        <el-select v-model="orderSearch.type" placeholder="订单类型">
+                            <el-option label="全部" :value="0"></el-option>
+                            <el-option label="待匹配" :value="1"></el-option>
+                            <el-option label="已匹配" :value="2"></el-option>
+                            <el-option label="已签约" :value="3"></el-option>
+                            <el-option label="已取消" :value="4"></el-option>
+                            <el-option label="订单完成" :value="5"></el-option>
 
-                        <el-form-item label="订单来源">
-                            <el-select v-model="orderSearch.source" placeholder="订单来源">
-                                <el-option label="全部" :value="0"></el-option>
-                                <el-option label="线下" :value="1"></el-option>
-                                <el-option label="线上" :value="2"></el-option>
-                                <el-option label="渠道" :value="3"></el-option>
-                            </el-select>
-                        </el-form-item>
-                    </div>
+                        </el-select>
+                    </el-form-item>
 
-                </el-form>
-            </div>
+                    <el-form-item label="订单来源">
+                        <el-select v-model="orderSearch.source" placeholder="订单来源">
+                            <el-option label="全部" :value="0"></el-option>
+                            <el-option label="线下" :value="1"></el-option>
+                            <el-option label="线上" :value="2"></el-option>
+                            <el-option label="渠道" :value="3"></el-option>
+                        </el-select>
+                    </el-form-item>
+                </div>
 
-            <el-table
-                :data="orderTable"
-                class="order-table">
-                <el-table-column
-                    label="订单号"
-                    prop="code"
-                    align="center">
-                </el-table-column>
-                <el-table-column
-                    label="手机号"
-                    prop="phone"
-                    align="center">
-                </el-table-column>
-                <el-table-column
-                    label="订单状态"
-                    prop="type"
-                    :formatter="formatterType"
-                    align="center">
-                </el-table-column>
-                <el-table-column
-                    label="订单来源"
-                    prop="source"
-                    :formatter="formatterSource"
-                    align="center">
-                </el-table-column>
-                <el-table-column
-                    label="创建时间"
-                    prop="created_at"
-                    align="center">
-                </el-table-column>
-                <el-table-column
-                    label="服务类型"
-                    prop="name"
-                    align="center">
-                </el-table-column>
-                <el-table-column
-                    label="操作"
-                    align="center">
-                    <template slot-scope="scope">
-                        <el-button
-                            size="mini"
-                            @click="configOrder(scope.$index, scope.row)">处理订单</el-button>
-                    </template>
-                </el-table-column>
-            </el-table>
-            <!-- 分页 -->
-            <el-pagination
-                style="margin-top:30px;"
-                @current-change="handleCurrentPage"
-                @prev-click="handleCurrentPage"
-                @next-click="handleCurrentPage"
-                :current-page.sync="pagination.currentPage"
-                :page-size="10"
-                layout="prev, pager, next, jumper"
-                :total="pagination.total"></el-pagination>
+            </el-form>
+        </div>
+
+        <el-table
+            :data="orderTable"
+            class="order-table">
+            <el-table-column
+                label="订单号"
+                prop="code"
+                align="center">
+            </el-table-column>
+            <el-table-column
+                label="手机号"
+                prop="phone"
+                align="center">
+            </el-table-column>
+            <el-table-column
+                label="订单状态"
+                prop="type"
+                :formatter="formatterType"
+                align="center">
+            </el-table-column>
+            <el-table-column
+                label="订单来源"
+                prop="source"
+                :formatter="formatterSource"
+                align="center">
+            </el-table-column>
+            <el-table-column
+                label="创建时间"
+                prop="created_at"
+                align="center">
+            </el-table-column>
+            <el-table-column
+                label="服务类型"
+                prop="name"
+                align="center">
+            </el-table-column>
+            <el-table-column
+                label="操作"
+                align="center">
+                <template slot-scope="scope">
+                    <el-button
+                        size="mini"
+                        @click="configOrder(scope.$index, scope.row)">处理订单</el-button>
+                </template>
+            </el-table-column>
+        </el-table>
+        <!-- 分页 -->
+        <el-pagination
+            class="pagination"
+            @current-change="handleCurrentPage"
+            @prev-click="handleCurrentPage"
+            @next-click="handleCurrentPage"
+            :current-page.sync="pagination.currentPage"
+            :page-size="10"
+            layout="prev, pager, next, jumper"
+            :total="pagination.total"></el-pagination>
 
 
     </div>
@@ -224,6 +228,20 @@
                 await this.getTableList()
             },
             /**
+             * 重置
+             */
+            async resetOrder(){
+                Object.keys(this.orderSearch).forEach((item =>{
+                    if(Array.isArray(this.orderSearch[item])){
+                        this.orderSearch[item] = []
+                    } else {
+                        this.orderSearch[item] = ''
+                    }
+                    this.skill = []
+                }))
+                await this.getTableList()
+            }, 
+            /**
              * 创建订单
              *
              */
@@ -330,6 +348,7 @@
             .order-form{
                 .search-input-box{
                     display: flex;
+                    justify-content: space-between;
                 }
                 .search-select-box{
                     display: flex;
@@ -344,8 +363,13 @@
 
         .order-table{
             width: 80%;
-            min-width: 1200px;
+            min-width: 1100px;
             margin: 0 auto;
+        }
+        .pagination{
+            width:80%;
+            min-width:1100px;
+            margin: 30px auto 0 auto;;
         }
     }
 </style>

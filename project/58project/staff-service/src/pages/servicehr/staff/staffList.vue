@@ -1,113 +1,112 @@
 <template>
     <div class="staff">
-        <div class="container-box">
-            <el-form :inline="true" :model="staffSearch" class="staff-form">
-                <div >
+        <el-form :inline="true" :model="staffSearch" class="staff-form">
+            <div class="search-up">
+                <div>
                     <el-form-item>
                         <el-input v-model="staffSearch.name" placeholder="请输入员工姓名"></el-input>
                     </el-form-item>
 
                     <el-form-item>
                         <el-button type="primary" @click="searchStaff">查询</el-button>
-                    </el-form-item>
-
-                    <el-form-item>
-                        <el-button type="primary" @click="createStaff">添加</el-button>
+                        <el-button type="primary" @click="resetStaff">重置</el-button>
                     </el-form-item>
                 </div>
-                
-                <div>
-                    <el-form-item label="服务地区">
-                        <el-cascader
-                            :options="areaList"
-                            v-model="region"
-                            :props="areaProps"
-                            @change="changeRegion"
-                            clearable
-                            placeholder="请选择服务地区">
-                        </el-cascader>
-                    </el-form-item>
-                    
-                    <el-form-item label="技能分类">
-                        <el-cascader
-                            :options="skillList"
-                            v-model="skill"
-                            :props="skillProps"
-                            @change="changeSkill"
-                            clearable
-                            placeholder="请选择技能分类">
-                        </el-cascader>
-                    </el-form-item>
-                    
-                    <el-form-item label="能力标签">
-                        <el-cascader
-                            :options="labelList"
-                            v-model="label"
-                            :props="labelProps"
-                            @change="changeLabel"
-                            clearable
-                            placeholder="请选择能力标签">
-                        </el-cascader>
-                    </el-form-item>
-
-                    <el-form-item label="证书">
-                        <el-cascader
-                            :options="paperList"
-                            v-model="paper"
-                            :props="paperProps"
-                            @change="changePaper"
-                            clearable
-                            placeholder="请选择证书">
-                        </el-cascader>
-                    </el-form-item>
-                </div>
-            </el-form>
+                <el-form-item>
+                    <el-button type="primary" @click="createStaff">添加服务人员</el-button>
+                </el-form-item>
+            </div>
             
-            <el-table
-                :data="staffTable" 
-                class="staff-table">
-                <el-table-column
-                    label="员工id"
-                    prop="id"
-                    align="center">
-                </el-table-column>
-                <el-table-column
-                    label="姓名"
-                    prop="name"
-                    align="center">
-                </el-table-column>
-                <el-table-column
-                    label="年龄"
-                    prop="age"
-                    align="center">
-                </el-table-column>
-                <el-table-column
-                    label="手机号"
-                    prop="phone"
-                    align="center">
-                </el-table-column>
+            <div>
+                <el-form-item label="服务地区">
+                    <el-cascader
+                        :options="areaList"
+                        v-model="region"
+                        :props="areaProps"
+                        @change="changeRegion"
+                        clearable
+                        placeholder="请选择服务地区">
+                    </el-cascader>
+                </el-form-item>
+                
+                <el-form-item label="技能分类">
+                    <el-cascader
+                        :options="skillList"
+                        v-model="skill"
+                        :props="skillProps"
+                        @change="changeSkill"
+                        clearable
+                        placeholder="请选择技能分类">
+                    </el-cascader>
+                </el-form-item>
+                
+                <el-form-item label="能力标签">
+                    <el-cascader
+                        :options="labelList"
+                        v-model="label"
+                        :props="labelProps"
+                        @change="changeLabel"
+                        clearable
+                        placeholder="请选择能力标签">
+                    </el-cascader>
+                </el-form-item>
 
-                <el-table-column
-                    label="操作"
-                    align="center">
-                    <template slot-scope="scope">
-                        <el-button size="mini" @click="editStaff(scope.$index, scope.row)">编辑</el-button>
-                        <el-button size="mini" @click="deleteStaff(scope.$index, scope.row)">删除</el-button>
-                    </template>
-                </el-table-column>
-            </el-table>
-            <!-- 分页 -->
-            <el-pagination
-                style="margin-top:30px;"
-                @current-change="handleCurrentPage"
-                @prev-click="handleCurrentPage"
-                @next-click="handleCurrentPage"
-                :current-page.sync="pagination.currentPage"
-                :page-size="10"
-                layout="prev, pager, next, jumper"
-                :total="pagination.total"></el-pagination>
-        </div>
+                <el-form-item label="证书">
+                    <el-cascader
+                        :options="paperList"
+                        v-model="paper"
+                        :props="paperProps"
+                        @change="changePaper"
+                        clearable
+                        placeholder="请选择证书">
+                    </el-cascader>
+                </el-form-item>
+            </div>
+        </el-form>
         
+        <el-table
+            :data="staffTable" 
+            class="staff-table">
+            <el-table-column
+                label="员工id"
+                prop="id"
+                align="center">
+            </el-table-column>
+            <el-table-column
+                label="姓名"
+                prop="name"
+                align="center">
+            </el-table-column>
+            <el-table-column
+                label="年龄"
+                prop="age"
+                align="center">
+            </el-table-column>
+            <el-table-column
+                label="手机号"
+                prop="phone"
+                align="center">
+            </el-table-column>
+
+            <el-table-column
+                label="操作"
+                align="center">
+                <template slot-scope="scope">
+                    <el-button size="mini" @click="editStaff(scope.$index, scope.row)">编辑</el-button>
+                    <el-button size="mini" @click="deleteStaff(scope.$index, scope.row)">删除</el-button>
+                </template>
+            </el-table-column>
+        </el-table>
+        <!-- 分页 -->
+        <el-pagination
+            class="pagination"
+            @current-change="handleCurrentPage"
+            @prev-click="handleCurrentPage"
+            @next-click="handleCurrentPage"
+            :current-page.sync="pagination.currentPage"
+            :page-size="10"
+            layout="prev, pager, next, jumper"
+            :total="pagination.total"></el-pagination>
     </div>
 </template>
 <script>
@@ -290,6 +289,23 @@
                 await this.getTableList()
             },
             /**
+             * 重置
+             */
+            async resetStaff(){
+                Object.keys(this.staffSearch).forEach((item =>{
+                    if(Array.isArray(this.staffSearch[item])){
+                        this.staffSearch[item] = []
+                    } else {
+                        this.staffSearch[item] = ''
+                    }
+                }))
+                this.region = []
+                this.skill = []
+                this.label = []
+                this.paper = []
+                await this.getTableList()
+            }, 
+            /**
              * 创建服务人员
              * des 先创建服务人员，然后才能添加服务人员技能。
              */
@@ -343,5 +359,27 @@
     }
 </script>
 <style lang="scss" scoped>
-
+        .staff{
+        padding-top: 30px;
+        margin: 0 auto;
+        .staff-form{
+            width:80%;
+            min-width:1100px;
+            margin: 0 auto;
+            .search-up{
+                display: flex;
+                justify-content: space-between;
+            }
+        }
+        .staff-table{
+            width: 80%;
+            min-width: 1100px;
+            margin: 0 auto;
+        }
+        .pagination{
+            width:80%;
+            min-width:1100px;
+            margin: 30px auto 0 auto;;
+        }
+    }
 </style>

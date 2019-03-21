@@ -1,25 +1,11 @@
 <template>
-    <div class="skill-config">
-        <el-form class="skill-form" ref="form" :rules="paperRules" :model="paperForm" label-width="120px">
+    <div class="paper-config">
+        <el-form class="paper-form" ref="form" :rules="paperRules" :model="paperForm" label-width="120px">
             <el-form-item label="证书名称" prop="name">
                 <el-input v-model="paperForm.name"></el-input>
             </el-form-item>
             <el-form-item label="是否启用">
                 <el-switch v-model="paperForm.type"></el-switch>
-            </el-form-item>
-            <el-form-item label="">
-                <el-upload
-                    class="upload-demo"
-                    action="/api/admin/common/uploadImage"
-                    :on-success="handleSuccess"
-                    :on-preview="handlePreview"
-                    :on-remove="handleRemove"
-                    :before-upload="beforeUpload"
-                    :file-list="paperForm.fileList"
-                    list-type="picture">
-                    <el-button size="small" type="primary">点击上传</el-button>
-                    <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
-                </el-upload>
             </el-form-item>
             
             <el-form-item>
@@ -56,42 +42,15 @@ export default {
                 parent_id: 0,//所属层级
                 version: 0,//所属版本号
                 type : true,//
-                fileList: [],
-            },
-            uploadHeaders: {
             },
             paperRules: {
                 name: [
                     { validator: nameValidate, trigger: 'blur' }
                 ]
             },
-            fileList: []
         }
     },
     methods: {
-        handleRemove(file, fileList) {
-            console.log(file, fileList);
-        },
-        handlePreview(file) {
-            console.log(file);
-        },
-        handleSuccess(response, file, fileList) {
-            let arr = [{
-                url: response.data[0].path,
-                name: response.data[0].name
-                }]
-            this.fileList.push(arr)
-        },
-        beforeUpload(file){
-            // var formData = new FormData()
-            // console.log(file)
-            // formData.append('file', file) 
-            // axios.post('./api/admin/common/uploadImage',formData).then(data =>{
-            //     console.log(data)
-            // }).catch(err =>{
-            //     console.log(err)
-            // })
-        },
         /**
          * 提交表单
          * 区分新建和编辑
@@ -172,9 +131,10 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-    .auth-config{
+    .paper-config{
         padding: 30px;
-        .auth-form{
+        .paper-form{
+            width: 80%;
             width: 760px;
         }
     }
