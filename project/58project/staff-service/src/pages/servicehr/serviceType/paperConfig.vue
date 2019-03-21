@@ -7,19 +7,21 @@
             <el-form-item label="是否启用">
                 <el-switch v-model="paperForm.type"></el-switch>
             </el-form-item>
-            <el-upload
-                class="upload-demo"
-                action="/api/admin/common/uploadImage"
-                :on-success="handleSuccess"
-                :on-preview="handlePreview"
-                :on-remove="handleRemove"
-                :before-upload="beforeUpload"
-                :file-list="fileList"
-                :headers="uploadHeaders"
-                list-type="picture">
-                <el-button size="small" type="primary">点击上传</el-button>
-                <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
-            </el-upload>
+            <el-form-item label="">
+                <el-upload
+                    class="upload-demo"
+                    action="/api/admin/common/uploadImage"
+                    :on-success="handleSuccess"
+                    :on-preview="handlePreview"
+                    :on-remove="handleRemove"
+                    :before-upload="beforeUpload"
+                    :file-list="paperForm.fileList"
+                    list-type="picture">
+                    <el-button size="small" type="primary">点击上传</el-button>
+                    <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
+                </el-upload>
+            </el-form-item>
+            
             <el-form-item>
                 <el-button type="primary" @click="onSubmit('form')">{{$route.query.id? '确认编辑' : '立即创建'}}</el-button>
                 <el-button @click="goback">取消</el-button>
@@ -33,7 +35,7 @@
  * type 0 新建  1 编辑
  */
 import {hrService} from '../../../../common'
-
+import axios from 'axios'
 export default {
     data(){
         const nameValidate = (rule, value, callback) => {
@@ -54,11 +56,9 @@ export default {
                 parent_id: 0,//所属层级
                 version: 0,//所属版本号
                 type : true,//
+                fileList: [],
             },
             uploadHeaders: {
-                'Access-Control-Allow-Origin': '*',
-                // 'Content-Type': 'multipart/form-data',
-                'accessToken': 'sdfafefaefaefaf'
             },
             paperRules: {
                 name: [
@@ -81,12 +81,16 @@ export default {
                 name: response.data[0].name
                 }]
             this.fileList.push(arr)
-            console.log(response);
-            console.log(file);
-            console.log(fileList);
         },
-        beforeUpload(file){ 
-            console.log(file)
+        beforeUpload(file){
+            // var formData = new FormData()
+            // console.log(file)
+            // formData.append('file', file) 
+            // axios.post('./api/admin/common/uploadImage',formData).then(data =>{
+            //     console.log(data)
+            // }).catch(err =>{
+            //     console.log(err)
+            // })
         },
         /**
          * 提交表单

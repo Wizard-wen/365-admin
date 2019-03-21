@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="staff-box">
         <el-form ref="form" :model="staffForm" :rules="staffRules" label-width="120px">
             <el-form-item label="员工姓名" prop="name">
                 <el-input v-model="staffForm.name" placeholder="只能是汉字"></el-input>
@@ -80,12 +80,12 @@
                 <el-button icon="el-icon-plus" circle @click="addRegion(skill, 'skill')"></el-button>
             </el-form-item>
 
-            <el-form-item label="证书" prop="paper">
+            <!-- <el-form-item label="证书" prop="paper">
                 <el-tag
                 v-for="(tag, index) in staffForm.paper"
                 :key="index"
-                @close="handleClose(tag, 'paper')"
-                closable>{{tag.name}}</el-tag>
+                @close="handleClose(tag, 'paper_id')"
+                closable>{{tag.paper_category_name}}</el-tag>
 
                 <el-cascader
                     clearable
@@ -95,7 +95,7 @@
                     placeholder="请选择证书">
                 </el-cascader>
                 <el-button icon="el-icon-plus" circle @click="addRegion(paper, 'paper')"></el-button>
-            </el-form-item>
+            </el-form-item> -->
 
             <el-form-item label="年龄" prop="age">
                 <el-input-number v-model="staffForm.age"></el-input-number>
@@ -124,6 +124,32 @@
                 <el-button @click="goback">取消</el-button>
             </el-form-item>
         </el-form>
+
+        <!-- 添加证书 -->
+        <!-- <el-dialog title="添加证书" :visible.sync="paperDialogVisible">
+            <el-form :model="paperForm">
+                <el-form-item label="证书" prop="paper">
+                    <el-tag
+                    v-for="(tag, index) in paperForm.paper"
+                    :key="index"
+                    @close="handleClose(tag, 'paper_id')"
+                    closable>{{tag.paper_category_name}}</el-tag>
+
+                    <el-cascader
+                        clearable
+                        :options="paperList"
+                        v-model="paper"
+                        :props="areaProps"
+                        placeholder="请选择证书">
+                    </el-cascader>
+                    <el-button icon="el-icon-plus" circle @click="addPaper"></el-button>
+                </el-form-item>
+            </el-form>
+            <div slot="footer" class="dialog-footer">
+                <el-button @click="paperDialogVisible = false">取 消</el-button>
+                <el-button type="primary" @click="cancelOrder">确定</el-button>
+            </div>
+        </el-dialog> -->
     </div>
 </template>
 
@@ -218,6 +244,15 @@ export default {
                 paper: [],//证书
                 skill: [],//技能
             },
+            
+            //证书配置弹框
+            paperDialogVisible: true, 
+
+            paperForm: {
+                paper: '',
+            },
+
+
             region: [],//地区信息
             areaList: [],//地区数组
 
@@ -361,7 +396,7 @@ export default {
                 levelArr = this.paperList
                 selectedArr = [..._this.staffForm.paper]
                 dangerWord = "证书"
-                idkey = "paper_id"
+                idkey = "paper_category_id"
             }
 
             //判断是否已经存在这个字段
@@ -437,6 +472,13 @@ export default {
             }
         },
         /**
+         * 
+         */
+        addPaper(){
+
+
+        },
+        /**
          * tag数组删除一条
          */
         handleClose(tag, type){
@@ -462,7 +504,7 @@ export default {
                         this.staffForm.label.splice(index, 1)
                     }
                 })
-            } else if (tag.hasOwnProperty("paper_id")){
+            } else if (tag.hasOwnProperty("paper_category_id")){
                 //删除证书tag
                 this.staffForm.paper.forEach((item, index) =>{
                     if(item.paper_id == tag.paper_id){
@@ -493,14 +535,16 @@ export default {
             this.labelList = data[3].data
 
             //如果是编辑则请求接口
-            if(this.$route.query.type == 1){
-                await hrService.getStaff(this.$route.query.id)
-                    .then(data =>{
-                        if(data.code == "0"){
-                            this.staffForm = data.data
-                        }
-                    })
-            }
+            // if(this.$route.query.type == 1){
+            //     await hrService.getStaff(this.$route.query.id)
+            //         .then(data =>{
+            //             if(data.code == "0"){
+            //                 this.staffForm = data.data
+            //             }
+            //         }).catch(err =>{
+            //             throw err
+            //         })
+            // }
         }catch(e){
             this.$message({
                 type:'error',
@@ -511,4 +555,10 @@ export default {
     }
 }
 </script>
+<style lang="scss" scoped>
+    .staff-box{
+        width: 80%;
+    }
+</style>
+
 

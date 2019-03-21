@@ -282,7 +282,6 @@
                 } else {
                     this.staffSearch.paper_ids = []
                 }
-                
             },
             /**
              * 查找用户
