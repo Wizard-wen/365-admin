@@ -239,7 +239,6 @@ export default {
                     type:'error',
                     message: e.message
                 })
-                
             })
         store.commit('setLoading',false)
     }
