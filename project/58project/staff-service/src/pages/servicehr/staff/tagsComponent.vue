@@ -18,15 +18,13 @@
                 @close="deleteTag(tag)"
                 closable>{{tag.name}}</el-tag>
         </div>
-
-
-
     </div>
 </template>
 <script>
 export default {
-    modal:{
-        prop: 'tagList'
+    model:{
+        prop: 'tagList',
+        event: 'input',
     },
     props: {
         /**
@@ -74,6 +72,13 @@ export default {
             type: String,
         }
 
+    },
+    watch: {
+        tagList: function(val){
+            if(Array.isArray(val)){
+                this.showList = val
+            }
+        }
     },
     data(){
         return {

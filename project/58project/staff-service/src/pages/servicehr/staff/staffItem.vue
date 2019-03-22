@@ -150,6 +150,8 @@ import {hrRequest} from '../../../../common'
 
 import paperDialog from './paperDialog.vue'
 import tagsComponent from './tagsComponent.vue'
+
+
 export default {
     components: {
         paperDialog,
@@ -244,7 +246,7 @@ export default {
                 address: '',//员工住址
                 education: 0,//教育程度
                 bank_card: '',//银行卡号
-
+                icon: '',//头像
                 version: '',//操作版本号,两个人同时操作
 
                 label: [],//能力标签

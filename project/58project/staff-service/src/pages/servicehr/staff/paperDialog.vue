@@ -130,7 +130,8 @@ export default {
          */
         uploadSuccess(response, file, fileList) {
             let picItem = {
-                url: 'http://'+response.data.path,
+                path: response.data.path,
+                url: './api/resource/'+response.data.path,
                 name: response.data.name
             }
             this.paperForm.images.push(picItem)
@@ -153,10 +154,13 @@ export default {
             let paperItem = {
                 ...this.paperForm
             }
-                let name = this.paperList.find((item, index) =>{
-                    return item.id == paperItem.paper_category_id
-                })
-                paperItem.paper_category_name = name.name
+            
+            let name = this.paperList.find((item, index) =>{
+                return item.id == paperItem.paper_category_id
+            })
+            
+            paperItem.paper_category_name = name.name
+
             this.$refs[formName].validate((valid) => {
                 if (valid) {
                     this.$emit('changePaper',paperItem, this.isEditPaper)
