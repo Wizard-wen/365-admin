@@ -478,6 +478,12 @@ export default {
                     .then(data =>{
                         if(data.code == "0"){
                             this.staffForm = data.data
+                            
+                            this.staffForm.paper.forEach((item, index) =>{
+                                item.images.forEach((it, index) =>{
+                                    it.url = './api/resource/'+it.path
+                                })
+                            })
                         }
                     }).catch(err =>{
                         throw err
