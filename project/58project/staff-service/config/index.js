@@ -11,13 +11,13 @@ module.exports = {
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
     proxyTable: {
-        // '/api': {
-        //     target: 'http://www.magicheart.win/', // 接口的域名
-        //     changeOrigin: true, // 如果接口跨域，需要进行这个参数配置
-        //     pathRewrite: {
-        //         '^/api': ''   //需要rewrite的,
-        //     }
-        // },
+        '/api': {
+            target: 'http://www.magicheart.win/', // 接口的域名
+            changeOrigin: true, // 如果接口跨域，需要进行这个参数配置
+            pathRewrite: {
+                '^/api': ''   //需要rewrite的,
+            }
+        },
         // '/api': {
         //   target: 'http://10.0.0.33:1017/', // 接口的域名
         //   changeOrigin: true, // 如果接口跨域，需要进行这个参数配置
@@ -25,13 +25,13 @@ module.exports = {
         //       '^/api': ''   //需要rewrite的,
         //   }
         // },
-        '/api': {
-          target: 'http://192.168.0.128:1001/', // 接口的域名
-          changeOrigin: true, // 如果接口跨域，需要进行这个参数配置
-          pathRewrite: {
-              '^/api': ''   //需要rewrite的,
-          }
-        },
+        // '/api': {
+        //   target: 'http://192.168.1.109:1001/', // 接口的域名
+        //   changeOrigin: true, // 如果接口跨域，需要进行这个参数配置
+        //   pathRewrite: {
+        //       '^/api': ''   //需要rewrite的,
+        //   }
+        // },
     },
 
     // Various Dev Server settings

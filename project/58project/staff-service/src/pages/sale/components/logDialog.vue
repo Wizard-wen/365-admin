@@ -1,21 +1,21 @@
 <template>
     <el-dialog 
-        title="拒签" 
-        :visible.sync="openRefuseDialog"
+        :title="logDialogTitle" 
+        :visible.sync="openLogDialog"
         :show-close="false"
         :close-on-press-escape="false"
         :close-on-click-modal="false">
-        <el-form :model="refuseForm" :label-width="'120px'" ref="refuseForm" :rules="refuseRules">
-            <el-form-item label="服务人员姓名" >
-                <el-input v-model="refuseForm.staff_name" disabled></el-input>
+        <el-form :model="logForm" :label-width="'120px'" ref="logForm" :rules="logRules">
+            <el-form-item label="服务人员姓名" v-if="logType == 'refuse'">
+                <el-input v-model="logForm.staff_name" disabled></el-input>
             </el-form-item>
-            <el-form-item label="拒签事由" prop="message">
-                <el-input v-model="refuseForm.message" type="textarea"></el-input>
+            <el-form-item label="日志信息" prop="message">
+                <el-input v-model="logForm.message" type="textarea"></el-input>
             </el-form-item>
         </el-form>
         <div slot="footer" class="dialog-footer">
-            <el-button @click="closeRefuseDialog">取 消</el-button>
-            <el-button type="primary" @click="refuseStaff('refuseForm')">提交</el-button>
+            <el-button @click="closeLogDialog">取 消</el-button>
+            <el-button type="primary" @click="commitLog('logForm')">提交</el-button>
         </div>
     </el-dialog>
 </template>
@@ -25,7 +25,7 @@ import {orderService} from '../../../../common'
 export default {
     props: {
         //是否打弹出框
-        openRefuseDialog: {
+        openLogDialog: {
             type: Boolean,
             default: false,
         },
@@ -44,43 +44,57 @@ export default {
             type: String,
             default: ""
         },
+        //弹窗title
+        logDialogTitle: {
+            type: String,
+            default: "添加日志"
+        },
+        /**
+         * 日志类型
+         * normal 签约前日志、售后日志
+         * refuse 拒绝日志
+         */
+        logType: {
+            type: String,
+            default: 'normal'
+        }
     },
     data(){
         const messageValidator = (rule, value, callback) => {
             if (value === '') {
-                callback(new Error('请填写拒绝事由'));
+                callback(new Error('请填写日志信息'));
             } else {
                 callback();
             }
         };
         return {
-            //拒绝表单
-            refuseForm : {
+            //日志信息
+            logForm : {
                 order_id: this.$route.query.order_id,// 订单id
                 order_staff_id: this.order_staff_id,//候选人员信息id
                 staff_name: this.staffName,//服务人员姓名
                 staff_id: this.staffId,// 服务人员id
-                message: '',//拒签日志
+                message: '',//日志信息
             },
-            //拒绝表单验证
-            refuseRules: {
+            //日志表单验证
+            logRules: {
                 message: [
-                     { validator: messageValidator, trigger: 'blur' }
+                    { validator: messageValidator, trigger: 'blur' }
                 ]
             }
         }
     },
     methods: {
         /**
-         * 提交拒绝日志
+         * 提交日志信息
          */
-        async refuseStaff(formName){  
+        async commitLog(formName){  
             this.$refs[formName].validate(async (valid) => {
                 if (valid) {
                     
                     store.commit('setLoading',true)
             
-                    await orderService.refuse(this.refuseForm) 
+                    await orderService.logCommit(this.logForm, this.logType) 
                         .then(data =>{
                             if(data.code == "0"){
                                 this.$message({
@@ -100,18 +114,18 @@ export default {
 
                     store.commit('setLoading',false)
 
-                    //关闭拒绝弹出框
-                    this.$emit('closeRefuseDialog')
+                    //关闭日志弹出框
+                    this.$emit('closeLogDialog')
                 } else {
                     return false;
                 }
             });
             
         },  
-        //关闭拒绝日志
-        closeRefuseDialog(){
-            //关闭拒绝弹出框
-            this.$emit('closeRefuseDialog')
+        //关闭日志弹框
+        closeLogDialog(){
+            //关闭日志弹出框
+            this.$emit('closeLogDialog')
         }
     }
 }

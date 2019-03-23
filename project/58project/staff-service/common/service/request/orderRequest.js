@@ -16,6 +16,14 @@ export default {
         return axios.get(baseUrl)
     },
     /**
+     * 获取所有销售人员名单
+     */
+    getManagerSelection(){
+        let baseUrl = `./api/admin/order/getManagerSelection`
+
+        return axios.get(baseUrl)
+    },
+    /**
      * 创建订单
      * @param obj 新订单表单字段
      */
@@ -79,18 +87,10 @@ export default {
         )
     },
     /**
-     * 签约日志
+     * 签约前、售后日志
      */
-    writeSignLog(obj){
-        return axios.post(`./api/admin/order/writeSignLog`,
-            Object.assign({}, obj)
-        )
-    },
-    /**
-     * 售后日志
-     */
-    writeMaintainLog(obj){
-        return axios.post(`./api/admin/order/writeMaintainLog`,
+    writeOrderLog(obj){
+        return axios.post(`./api/admin/order/writeOrderLog`,
             Object.assign({}, obj)
         )
     },

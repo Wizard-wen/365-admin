@@ -13,16 +13,26 @@
         </div>
         <div class="service-box" v-if="isShow">
             <div v-if="maintainLogList.length">
-                <div class="service-line line-bottom-1px"
-                    v-for="(item, index) in maintainLogList"
-                    :key="index">
-                    <div class="service-message">{{item.message}}</div>
-                </div>
+                <el-table
+                    :data="maintainLogList"
+                    style="width: 100%">
+                    <el-table-column
+                        prop="created_at"
+                        label="创建日期">
+                    </el-table-column>
+                    <el-table-column
+                        prop="manager_name"
+                        label="操作人">
+                    </el-table-column>
+                    <el-table-column
+                        prop="message"
+                        label="售后日志">
+                    </el-table-column>
+                    </el-table>
             </div>
             <div v-else>暂无内容</div>
         </div>
         
-
         <el-dialog title="售后日志" :visible.sync="maintainDialogVisible">
             <el-form :model="maintainForm">
                 <el-form-item label="日志" :label-width="formLabelWidth">
@@ -34,8 +44,6 @@
                 <el-button type="primary" @click="maintainStaff">提交</el-button>
             </div>
         </el-dialog>
-
-
     </el-card>  
 </template>
 <script>

@@ -42,7 +42,7 @@
         </div>
         <div slot="footer" class="dialog-footer">
             <el-button @click="cancelDetail">取消</el-button>
-            <el-button type="primary"  @click="createOrderStaff('1', item)">备选</el-button>
+            <el-button type="primary"  @click="selectService">备选</el-button>
         </div>
     </el-dialog>
 </template>
@@ -169,69 +169,10 @@ export default {
             return renderArr
         },
         /**
-         * 添加候选人
-         * @param type 类型 1 在列表中备选 2 在弹出框中备选
+         * 备选人员
          */
-        async createOrderStaff(type, item){
-
-            let matchedList = store.state.orderModule.order_staff
-
-            //该服务人员是否已经备选
-            let isHave = matchedList.some((it, index) =>{
-                return it.staff_id == item.id
-            })
-
-            if(isHave){
-                this.$message({
-                    type:'error',
-                    message: `该人员已经匹配`
-                })
-                return false;
-            }
-
-            let obj = null
-
-            if(type == "2"){
-                obj = {
-                    order_id: this.$route.query.id,
-                    staff_id: item.id ,
-                    staff_name: item.name,
-                }
-            } else {
-                obj = {
-                    order_id: this.$route.query.id,
-                    staff_id: this.staffDetailForm.id ,
-                    staff_name: this.staffDetailForm.name,
-                }
-            }
-
-            store.commit('setLoading',true)
-
-            //添加服务人员接口
-            await orderService.createOrderStaff(obj)
-                .then(data =>{
-                    if(data.code == "0"){
-                        this.$message({
-                            type:'success',
-                            message: `添加成功`
-                        })
-                    }
-                })
-                .catch(e =>{
-                    this.$message({
-                        type:'error',
-                        message: e.message
-                    })
-                })
-
-            //刷新订单配置页
-            await orderService.getOrder(this.$route.query.id)
-            store.commit('setLoading',false)
-
-            //关闭弹出框
-            if(type == "1"){
-                this.$emit('closeDetailDialog')
-            }
+        selectService(){
+            this.$emit('sign',this.staffDetailForm)
         },
         cancelDetail(){
             this.$emit('closeDetailDialog')

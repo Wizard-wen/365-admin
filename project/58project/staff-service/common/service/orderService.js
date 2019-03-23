@@ -12,6 +12,12 @@ export default {
         return orderRequest.getOrderList(tableOption)
     },
     /**
+     * 获取所有销售人员名单
+     */
+    getManagerSelection(){
+        return orderRequest.getManagerSelection()
+    },
+    /**
      * 创建订单
      * @param obj 新订单表单字段
      */
@@ -58,22 +64,21 @@ export default {
         return orderRequest.sign(obj)
     },
     /**
-     * 拒签
+     * 日志信息提交
+     * @param obj 
+     * @param type 
      */
-    refuse(obj){
-        return orderRequest.refuse(obj)
-    },
-    /**
-     * 签约日志
-     */
-    writeSignLog(obj){
-        return orderRequest.writeSignLog(obj)
-    },
-    /**
-     * 售后日志
-     */
-    writeMaintainLog(obj){
-        return orderRequest.writeMaintainLog(obj)
+    logCommit(obj, type){
+        //签约前、售后日志
+        if(type == 'normal'){
+            return orderRequest.writeOrderLog(obj)
+        } 
+        //拒绝日志
+        else if(type == 'refuse'){
+            return orderRequest.refuse(obj)
+        } else {
+            return 
+        }
     },
     /**
      * 取消订单

@@ -20,7 +20,7 @@
                     <el-input-number v-model="signForm.service_count"></el-input-number>
             </el-form-item>
 
-            <!-- <el-form-item label="服务期间" :label-width="'120px'">
+            <el-form-item label="服务期间" >
                     <el-date-picker
                     v-model="service_period"
                     type="datetimerange"
@@ -29,7 +29,7 @@
                     start-placeholder="开始日期"
                     end-placeholder="结束日期">
                 </el-date-picker>
-            </el-form-item> -->
+            </el-form-item>
             
             <el-form-item label="单价" prop="unit_price">
                 <el-input v-model="signForm.unit_price" autocomplete="off"></el-input>
@@ -73,6 +73,11 @@ export default {
         staffId: {
             type: Number,
             default: 0,
+        },
+        //服务人员姓名
+        staffName: {
+            type: String,
+            default: ""
         },
         //候选人员信息id
         order_staff_id: {
@@ -162,8 +167,13 @@ export default {
                 order_id: this.$route.query.order_id,// 订单id
                 order_staff_id: this.order_staff_id,//候选人员信息id
                 staff_id: this.staffId,// 服务人员id
+                staff_name: this.staffName,//服务人员姓名
                 unit: 0,// 服务周期单位
                 service_count: 0,// 服务次数
+                
+                service_start_time: 0,//服务开始时间
+                service_end_time: 0,//服务结束时间
+
                 unit_price: 0,// 单价
                 total_price: 0,// 总价
                 pay_wage: 1,// 是否代发工资
@@ -171,7 +181,7 @@ export default {
                 wage_price: 0,// 代发工资金额
                 version: store.state.orderModule.order.version,
             },
-            // service_period:[],//服务起止时间段
+            service_period:[],//服务起止时间段
         }
     },
     computed:{
@@ -185,8 +195,12 @@ export default {
         }
     },
     methods: {
-        changeServicePeriod(){
-
+        /**
+         * 改变服务时间段
+         */
+        changeServicePeriod(param){
+            this.signForm.service_start_time = param[0].getTime()
+            this.signForm.service_end_time = param[1].getTime()
         },
         /**
          * 提交签约表单
@@ -197,35 +211,29 @@ export default {
 
                     store.commit('setLoading',true)
 
-                    await orderService.sign(this.signForm) 
-                        .then(data =>{
+                    await orderService.sign(this.signForm).then(data =>{
                             if(data.code == "0"){
                                 this.$message({
                                     type:'success',
                                     message: `签约成功`
                                 })
+                            //关闭签约弹出框
+                            this.$emit('closeSignDialog')
                             }
-                        })
-                        .catch(e =>{
+                        }).catch(e =>{
                             this.$message({
                                 type:'error',
                                 message: e.message
                             })
+                        }).finally(async () =>{
+                            await orderService.getOrder(this.$route.query.order_id)
+                    
+                            store.commit('setLoading',false)
                         })
-                    
-                    await orderService.getOrder(this.$route.query.order_id)
-                    
-                    store.commit('setLoading',false)
-
-                    //关闭签约弹出框
-                    this.$emit('closeSignDialog')
-                
                 } else {
                     return false;
                 }
             });
-
-
         },
         /**
          * 关闭弹窗
