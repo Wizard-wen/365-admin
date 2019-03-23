@@ -129,7 +129,7 @@
                 orderTable: [{
                     code: '', //订单号
                     create_at: '', //创建时间
-                    id: '',
+                    order_id: '',//订单id
                     phone: '',
                     service_category_id: '',//服务分类id
                     name: '',//服务名称
@@ -265,7 +265,7 @@
                     path: "/sale/orderConfig",
                     query: {
                         type: 1, //编辑为1
-                        id: row.id?row.id: '2'
+                        order_id: row.order_id?row.order_id: '2'
                     }
                 })
             },

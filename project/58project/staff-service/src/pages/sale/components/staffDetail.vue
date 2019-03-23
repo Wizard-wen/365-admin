@@ -123,10 +123,25 @@ export default {
              */
             Object.keys(baseForm).forEach((item, index) =>{
                 if(obj.hasOwnProperty(item) && (typeof baseForm[item] == "number" || typeof baseForm[item] == "string" )  ){
+                    
+                    
                     let itemObj = {
                         key: obj[item],
-                        value: baseForm[item]
                     }
+                    
+                    //转换为文字
+                    if(item == "sex"){
+                        itemObj.value = baseForm[item] == 1? "男" : "女"
+                    } else if(item == "education"){
+                        let educationList = _this.$store.state.hrModule.educationList
+                        let education = educationList.find((it, index) =>{
+                            return it.id == baseForm[item]
+                        })
+                        itemObj.value = education.name
+                    } else {
+                        itemObj.value= baseForm[item]
+                    }
+
                     renderArr.push(itemObj)
                 }
 

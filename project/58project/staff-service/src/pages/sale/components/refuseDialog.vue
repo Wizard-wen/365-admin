@@ -34,11 +34,16 @@ export default {
             type: Number,
             default: 0,
         },
+        //候选人员信息id
+        order_staff_id: {
+            type: Number,
+            default: 0,
+        },
         //服务人员姓名
         staffName: {
             type: String,
             default: ""
-        }
+        },
     },
     data(){
         const messageValidator = (rule, value, callback) => {
@@ -51,11 +56,13 @@ export default {
         return {
             //拒绝表单
             refuseForm : {
-                order_id: this.$route.query.id,// 订单id
-                staff_id: this.staffId,// 服务人员id
+                order_id: this.$route.query.order_id,// 订单id
+                order_staff_id: this.order_staff_id,//候选人员信息id
                 staff_name: this.staffName,//服务人员姓名
+                staff_id: this.staffId,// 服务人员id
                 message: '',//拒签日志
             },
+            //拒绝表单验证
             refuseRules: {
                 message: [
                      { validator: messageValidator, trigger: 'blur' }
@@ -89,7 +96,7 @@ export default {
                             })
                         })
                     
-                    await orderService.getOrder(this.$route.query.id)
+                    await orderService.getOrder(this.$route.query.order_id)
 
                     store.commit('setLoading',false)
 

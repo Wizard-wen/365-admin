@@ -75,12 +75,12 @@ export default {
             completeDialogVisible: false,
             //取消订单表单
             cancelForm : {
-                order_id: this.$route.query.id,// 订单id
+                order_id: this.$route.query.order_id,// 订单id
                 message: '',//售后日志
             },
             //完成订单表单
             completeForm : {
-                order_id: this.$route.query.id,// 订单id
+                order_id: this.$route.query.order_id,// 订单id
                 message: '',//售后日志
             },
             formLabelWidth: '120px'
@@ -187,7 +187,7 @@ export default {
     async mounted(){
         store.commit('setLoading',true)
         try{
-            await orderService.getOrder(this.$route.query.id)
+            await orderService.getOrder(this.$route.query.order_id)
         }catch(e){
             this.$message({
                 type:'error',

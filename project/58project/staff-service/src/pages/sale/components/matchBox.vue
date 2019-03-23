@@ -13,6 +13,7 @@
                         class="cascader"
                         size="medium"
                         :options="cascaderOption.areaList"
+                        @visible-change="show"
                         v-model="cascaderOption.area"
                         :props="cascaderOption.cascaderProps"
                         @change="changeRegion"
@@ -44,12 +45,12 @@
                         clearable
                         placeholder="能力标签">
                     </el-cascader>
-                    <div class="icon" @click="spread" :title="'下拉展开更多搜索项'">
+                    <!-- <div class="icon" @click="spread" :title="'下拉展开更多搜索项'">
                         <el-button icon="el-icon-arrow-down"  type="text" size="medium"  v-if="!showSearchBox">更多</el-button>
                         <el-button icon="el-icon-arrow-up"  type="text" size="medium"  v-else>收起</el-button>
-                    </div>
+                    </div> -->
                 </div>
-                <transition name="el-zoom-in-top">
+                <!-- <transition name="el-zoom-in-top">
                     <div v-if="showSearchBox" class="head-more-cascader" :style="{top: 100+`px`}">
                         <el-form :inline="true" :model="staffSearch" class="more-cascader-form">
                             <el-form-item v-for="(n, index) in 8" :key="index" class="form-item-style">
@@ -66,7 +67,7 @@
                             </el-form-item>
                         </el-form>
                     </div>
-                </transition>
+                </transition> -->
             </div>
 
             <div class="match-content">
@@ -248,11 +249,13 @@ export default {
 
             await hrService.getStaffList(tableOption)
                 .then(data =>{
+                    //匹配的服务人员列表
                     this.staffMatchTable = data.data.data
 
                     //分页信息
                     this.pagination.currentPage = data.data.current_page //当前页码
                     this.pagination.total = data.data.total //列表总条数
+
                 }).catch(error =>{
                     this.$message({
                         type:'error',
@@ -323,21 +326,25 @@ export default {
             this.dialogFormVisible = true
             this.detailStaffId = id;
         },
-
+        show(state){
+            alert(state)
+        },
         /**
          * 添加候选人
          * @param type 类型 1 在列表中备选 2 在弹出框中备选
          */
         async createOrderStaff(type, item){
 
-            let matchedList = store.state.orderModule.order_staff
+            //取出所有备选人员
+            let order_staff_list = store.state.orderModule.order_staff
 
             //该服务人员是否已经备选
-            let isHave = matchedList.some((it, index) =>{
+            let isHave = order_staff_list.some((it, index) =>{
                 return it.staff_id == item.id
             })
 
-            if(isHave){
+            //如果已经匹配
+            if(isHave){ 
                 this.$message({
                     type:'error',
                     message: `该人员已经匹配`
@@ -347,15 +354,16 @@ export default {
 
             let obj = null
 
+            //在弹出框中备选
             if(type == "2"){
                 obj = {
-                    order_id: this.$route.query.id,
+                    order_id: this.$route.query.order_id,
                     staff_id: item.id ,
                     staff_name: item.name,
                 }
             } else {
                 obj = {
-                    order_id: this.$route.query.id,
+                    order_id: this.$route.query.order_id,
                     staff_id: this.staffDetailForm.id ,
                     staff_name: this.staffDetailForm.name,
                 }
@@ -381,8 +389,8 @@ export default {
                 })
 
             //刷新订单配置页
-            await orderService.getOrder(this.$route.query.id)
-            // await store.dispatch('setData', {id: this.$route.query.id})
+            await orderService.getOrder(this.$route.query.order_id)
+            
             store.commit('setLoading',false)
 
             //关闭弹出框

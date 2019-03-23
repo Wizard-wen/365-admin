@@ -49,9 +49,7 @@ export default {
             maintainDialogVisible: false,
             //售后表单
             maintainForm : {
-                order_id: this.$route.query.id,// 订单id
-                staff_id: 0,// 服务人员id
-                staff_name: "",//服务人员姓名
+                order_id: this.$route.query.order_id,// 订单id
                 message: '',//售后日志
             },
             
@@ -108,7 +106,7 @@ export default {
                     })
                 })
             
-            await orderService.getOrder(this.$route.query.id)
+            await orderService.getOrder(this.$route.query.order_id)
             
             store.commit('setLoading',false)
 

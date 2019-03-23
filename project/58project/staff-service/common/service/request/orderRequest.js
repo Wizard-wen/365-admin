@@ -26,9 +26,10 @@ export default {
     },
     /**
      * 获取订单信息
+     * @param order_id 订单id
      */
-    getOrder(id){
-        return axios.get(`./api/admin/order/getOrder?id=${id}`)
+    getOrder(order_id){
+        return axios.get(`./api/admin/order/getOrder?order_id=${order_id}`)
     },
     /**
      * 编辑订单
@@ -50,11 +51,15 @@ export default {
     },
     /**
      * 删除候选人
-     * @param id 候选人id
+     * @param order_staff_id 候选人员信息id
+     * @param order_id 订单id
      */
-    deleteOrderStaff(id){
+    deleteOrderStaff(order_staff_id, order_id){
         return axios.post(`./api/admin/order/deleteOrderStaff`,
-            {id: id}
+            {
+                order_staff_id: order_staff_id,
+                order_id: order_id
+            }
         )
     },
     /**

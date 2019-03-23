@@ -4,8 +4,8 @@ import Vuex from 'vuex'
 
 Vue.use(Vuex)
 
-
-
+import orderRequest from '../service/request/orderRequest.js'
+import { Message } from 'element-ui';
 export const orderModule = {
     state: {
         order: [],//订单基本信息
@@ -27,8 +27,18 @@ export const orderModule = {
         }
     },
     actions: {
-        setData(context, data){
-            context.commit('configData',data.data)
+        async setData(context, order_id){
+            await orderRequest.getOrder(order_id) 
+                .then(data =>{
+                    context.commit('configData',data)
+                })
+                .catch(e =>{
+                    Message({
+                        type:'error',
+                        message: e.message
+                    })
+                })
+            
         }
     }
 }

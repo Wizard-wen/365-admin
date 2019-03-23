@@ -13,12 +13,26 @@
         </div>
         <div class="service-box" v-if="isShow">
             <div v-if="matchList.length">
-                <div class="service-line line-bottom-1px"
-                    v-for="(item, index) in matchList"
-                    :key="index">
-                    <div class="service-name">{{item.staff_name}}</div>
-                    <div class="service-message">{{item.message}}</div>
-                </div>
+                    <el-table
+                        :data="matchList"
+                        style="width: 100%">
+                        <el-table-column
+                            prop="created_at"
+                            label="创建日期">
+                        </el-table-column>
+                        <el-table-column
+                            prop="staff_name"
+                            label="服务人员">
+                        </el-table-column>
+                        <el-table-column
+                            prop="manager_name"
+                            label="操作人">
+                        </el-table-column>
+                        <el-table-column
+                            prop="message"
+                            label="拒绝事由">
+                        </el-table-column>
+                        </el-table>
             </div>
             <div v-else>暂无内容</div>
         </div>
@@ -48,11 +62,10 @@ export default {
             isShow:true,
             //拒绝对话框
             refuseDialogVisible: false,
+            
             //拒绝表单
             refuseForm : {
-                order_id: this.$route.query.id,// 订单id
-                staff_id: 0,// 服务人员id
-                staff_name: "",//服务人员姓名
+                order_id: this.$route.query.order_id,// 订单id
                 message: '',//拒签日志
             },
             
@@ -101,7 +114,7 @@ export default {
                     })
                 })
             
-            await orderService.getOrder(this.$route.query.id)
+            await orderService.getOrder(this.$route.query.order_id)
             
             store.commit('setLoading',false)
             this.refuseDialogVisible = false
@@ -144,34 +157,6 @@ export default {
         }
         .service-box{
 
-            .service-line{
-                position: relative;
-                height: 40px;
-                line-height: 40px;
-                width: 80%;
-                min-width: 500px;
-                margin: 10px 0;
-                text-indent: 10px;
-                margin: 0;
-                &:hover{
-                    background: #f5f7fa;
-                    cursor: pointer;
-                }
-                .service-name{
-                    float:left;
-                    width: 150px;
-                }
-                .service-message{
-                    float:left;
-                    width: 150px;
-                }
-                .control{
-                    float:right;
-                    width: 200px;
-                    padding-left: 100px;
-                    
-                }
-            }
         }
     }
 
