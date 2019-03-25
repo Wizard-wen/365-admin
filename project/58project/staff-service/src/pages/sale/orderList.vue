@@ -65,7 +65,8 @@
             <el-table-column
                 label="订单号"
                 prop="code"
-                align="center">
+                align="center"
+                width="170px">
             </el-table-column>
             <el-table-column
                 label="手机号"

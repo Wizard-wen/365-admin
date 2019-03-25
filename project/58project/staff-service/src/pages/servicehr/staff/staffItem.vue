@@ -329,21 +329,20 @@ export default {
         async onSubmit(formName) {
             await this.$refs[formName].validate((valid, fileds) => {
                 if (valid) {
-                    hrService.editStaff(this.staffForm)
-                    .then(data =>{
-                        if(data.code == '0'){
+                    hrService.editStaff(this.staffForm).then(data =>{
+                            if(data.code == '0'){
+                                this.$message({
+                                    type:"success",
+                                    message: "修改成功"
+                                })
+                                this.$router.push('/staff/staffList')
+                            }
+                        }).catch(error =>{
                             this.$message({
-                                type:"success",
-                                message: "修改成功"
+                                type:'error',
+                                message: error.message
                             })
-                            this.$router.push('/staff/staffList')
-                        }
-                    }).catch(error =>{
-                        this.$message({
-                            type:'error',
-                            message: error.message
                         })
-                    })
                 } else {
                     let require = ["name", "sex", "phone", "identify", "address", "bank_card"],
                         base = ["nation", "wechat", "education"];
