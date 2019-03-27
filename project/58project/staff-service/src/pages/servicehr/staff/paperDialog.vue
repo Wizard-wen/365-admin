@@ -42,7 +42,7 @@
  */
 import {hrService} from '../../../../common'
 import {hrRequest} from '../../../../common'
-
+import ceshi from './ceshi.js'
 
 export default {
     props:{

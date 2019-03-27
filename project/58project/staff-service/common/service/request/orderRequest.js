@@ -21,7 +21,10 @@ export default {
      */
     createOrder(obj){
         return axios.post(`./api/admin/order/createOrder`,
-            Object.assign({}, obj)
+            // Object.assign({}, obj)
+            {
+                ...obj
+            }
         )
     },
     /**
