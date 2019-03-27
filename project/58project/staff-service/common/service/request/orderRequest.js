@@ -16,6 +16,14 @@ export default {
         return axios.get(baseUrl)
     },
     /**
+     * 获取所有销售人员名单
+     */
+    getManagerSelection(){
+        let baseUrl = `./api/admin/order/getManagerSelection`
+
+        return axios.get(baseUrl)
+    },
+    /**
      * 创建订单
      * @param obj 新订单表单字段
      */
@@ -29,9 +37,10 @@ export default {
     },
     /**
      * 获取订单信息
+     * @param order_id 订单id
      */
-    getOrder(id){
-        return axios.get(`./api/admin/order/getOrder?id=${id}`)
+    getOrder(order_id){
+        return axios.get(`./api/admin/order/getOrder?order_id=${order_id}`)
     },
     /**
      * 编辑订单
@@ -53,11 +62,15 @@ export default {
     },
     /**
      * 删除候选人
-     * @param id 候选人id
+     * @param order_staff_id 候选人员信息id
+     * @param order_id 订单id
      */
-    deleteOrderStaff(id){
+    deleteOrderStaff(order_staff_id, order_id){
         return axios.post(`./api/admin/order/deleteOrderStaff`,
-            {id: id}
+            {
+                order_staff_id: order_staff_id,
+                order_id: order_id
+            }
         )
     },
     /**
@@ -77,18 +90,10 @@ export default {
         )
     },
     /**
-     * 签约日志
+     * 签约前、售后日志
      */
-    writeSignLog(obj){
-        return axios.post(`./api/admin/order/writeSignLog`,
-            Object.assign({}, obj)
-        )
-    },
-    /**
-     * 售后日志
-     */
-    writeMaintainLog(obj){
-        return axios.post(`./api/admin/order/writeMaintainLog`,
+    writeOrderLog(obj){
+        return axios.post(`./api/admin/order/writeOrderLog`,
             Object.assign({}, obj)
         )
     },

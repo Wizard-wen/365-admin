@@ -34,7 +34,7 @@ export default {
     data() {
         const nameValidate = (rule, value, callback) => {
             if (value === '') {
-                callback(new Error('请输入证书类型名'));
+                callback(new Error('请输入技能名称'));
             } else {
                 if (!/^[\u4e00-\u9fa5]+$/.test(value)) {
                     callback(new Error('只能输入汉字'));
@@ -100,40 +100,53 @@ export default {
         }
     },
     async mounted(){
-        store.commit('setLoading',true)
+        
         //id
         let categoryId = this.$route.query.id? this.$route.query.id : 0;
-        await hrService.getCategory(categoryId)
-        .then(data =>{
-            //若是编辑的话回显数据
-            if(this.$route.query.type == 1){
-                let obj = {
-                    type: true
-                }
-                /**
-                 *  转换是否启用字段，若字段名为
-                 *  enable 启用
-                 *  disable 不启用
-                 */
-                if(data.data.category.type == "disable"){
-                    obj.type = false
+        
+        store.commit('setLoading',true)
+        try{
+            await hrService.getCategory(categoryId).then(data =>{
+                
+                //若是编辑的话回显数据
+                if(this.$route.query.type == 1){
+                    let obj = {
+                        type: true
+                    }
+                    /**
+                     *  转换是否启用字段，若字段名为
+                     *  enable 启用
+                     *  disable 不启用
+                     */
+                    if(data.data.category.type == "disable"){
+                        obj.type = false
+                    }
+
+                    //混入obj数据
+                    this.skillForm = {
+                        ...data.data.category,
+                        ...obj,
+                    }
                 }
 
-                //混入obj数据
-                this.skillForm = {
-                    ...data.data.category,
-                    ...obj,
-                }
-            }
+                this.selectionList = data.data.selection
 
-            this.selectionList = data.data.selection
-        }).catch(error =>{
+            }).catch(error =>{
+                this.$message({
+                    type:'error',
+                    message: error.message
+                })
+            }).finally(() =>{
+                store.commit('setLoading',false)
+            })
+        } catch(error){
             this.$message({
                 type:'error',
                 message: error.message
             })
-        })
-        store.commit('setLoading',false)
+        }
+
+
     }
 }
 </script>

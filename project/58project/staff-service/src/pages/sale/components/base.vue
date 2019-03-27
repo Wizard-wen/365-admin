@@ -38,7 +38,6 @@
 export default {
     data(){
         return {
-            baseForm: this.$store.state.orderModule.order,
             orderKeyName: {
                 manager_name: "创建人", //创建人
                 user_name: '客户名',//客户名
@@ -55,19 +54,23 @@ export default {
         }
     },
     computed: {
+        // baseForm(){
+        //     return this.$store.state.orderModule.order
+        // },
         baseList(){
             let obj = this.orderKeyName,
-            newArr = [];
+                baseForm = this.$store.state.orderModule.order,
+                newArr = [];
             
             /**
              * key 为渲染字段的属性名
              * value 为某个属性名的值
              */
-            Object.keys(this.baseForm).forEach((item, index) =>{
+            Object.keys(baseForm).forEach((item, index) =>{
                 if(obj.hasOwnProperty(item)){
                     let itemObj = {
                         key: obj[item],
-                        value: this.baseForm[item]
+                        value: baseForm[item]
                     }
 
                     //转换value格式
@@ -78,15 +81,11 @@ export default {
                     
                     if(item == "source"){
                         if(realValue == 1){
-                            realItemObj.value =  "待匹配"
+                            realItemObj.value = "线下"
                         } else if(realValue == 2){
-                            realItemObj.value = "已匹配"
+                            realItemObj.value = "线上"
                         } else if(realValue == 3){
-                            realItemObj.value ="已签约"
-                        }else if(realValue == 4){
-                            realItemObj.value = "已取消"
-                        }else if(realValue == 5){
-                            realItemObj.value = "订单完成"
+                            realItemObj.value = "渠道"
                         }
 
                         itemObj = {

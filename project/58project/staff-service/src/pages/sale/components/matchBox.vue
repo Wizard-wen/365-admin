@@ -1,55 +1,38 @@
 <template>
     <div class="match-box">
-
         <el-card class="match-message">
             <div class="match-box" slot="header">
                 <div class="head-input">
                     <el-input  placeholder="请输入员工姓名" v-model="staffSearch.name" class="input-with-select"></el-input>
                     <el-input  placeholder="请输入员工号" v-model="staffSearch.staff_id" class="input-with-select"></el-input>
+                    <el-button type="primary"  @click="searchReset">重置</el-button>
                     <el-button type="primary"  @click="searchStaff">搜索</el-button>
                 </div>
                 <div class="head-cascader">
-                    <el-cascader
-                        class="cascader"
-                        size="medium"
-                        :options="cascaderOption.areaList"
-                        v-model="cascaderOption.area"
-                        :props="cascaderOption.cascaderProps"
-                        @change="changeRegion"
-                        :show-all-levels="false"
-                        clearable
-                        placeholder="服务地区">
-                    </el-cascader>
 
-                    <el-cascader
-                        class="cascader"
-                        size="medium"
-                        :options="cascaderOption.skillList"
-                        v-model="cascaderOption.skill"
-                        :props="cascaderOption.cascaderProps"
-                        @change="changeSkill"
-                        :show-all-levels="false"
-                        clearable
-                        placeholder="技能分类">
-                    </el-cascader>
+                    <cascader-component
+                        v-model="staffSearch.region_ids"
+                        :cascaderName="'服务地区'"
+                        :setProps="cascaderOption.cascaderProps"
+                        :requestUrl="'./api/admin/common/getAreaTree'"></cascader-component>
+                    <cascader-component
+                        v-model="staffSearch.service_category_id"
+                        :cascaderName="'技能分类'"
+                        :modelType="'int'"
+                        :setProps="cascaderOption.cascaderProps"
+                        :requestUrl="'./api/admin/common/getServiceTree'"></cascader-component>
+                    <cascader-component
+                        v-model="staffSearch.ability_ids"
+                        :cascaderName="'能力标签'"
+                        :setProps="cascaderOption.cascaderProps"
+                        :requestUrl="'./api/admin/common/getLabelTree'"></cascader-component>
 
-                    <el-cascader
-                        class="cascader"
-                        size="medium"
-                        :options="cascaderOption.labelList"
-                        v-model="cascaderOption.label"
-                        :props="cascaderOption.cascaderProps"
-                        @change="changeLabel"
-                        :show-all-levels="false"
-                        clearable
-                        placeholder="能力标签">
-                    </el-cascader>
-                    <div class="icon" @click="spread" :title="'下拉展开更多搜索项'">
+                    <!-- <div class="icon" @click="spread" :title="'下拉展开更多搜索项'">
                         <el-button icon="el-icon-arrow-down"  type="text" size="medium"  v-if="!showSearchBox">更多</el-button>
                         <el-button icon="el-icon-arrow-up"  type="text" size="medium"  v-else>收起</el-button>
-                    </div>
+                    </div> -->
                 </div>
-                <transition name="el-zoom-in-top">
+                <!-- <transition name="el-zoom-in-top">
                     <div v-if="showSearchBox" class="head-more-cascader" :style="{top: 100+`px`}">
                         <el-form :inline="true" :model="staffSearch" class="more-cascader-form">
                             <el-form-item v-for="(n, index) in 8" :key="index" class="form-item-style">
@@ -66,7 +49,7 @@
                             </el-form-item>
                         </el-form>
                     </div>
-                </transition>
+                </transition> -->
             </div>
 
             <div class="match-content">
@@ -96,7 +79,7 @@
                                 <p class="value">{{item.phone}}</p>
                             </div>
                             <div class="control">
-                                <el-button type="text" size="small" @click="createOrderStaff('2',item)">备选</el-button>
+                                <el-button type="text" size="small" @click="sureSelect(item)">备选</el-button>
                                 <el-button type="text" size="small" @click="showDetail(item.id)">详情</el-button>
                             </div>
 
@@ -116,20 +99,26 @@
                 <div v-else>暂无数据</div>
             </div>
         </el-card>
+
         <staff-detail
             :staffId="detailStaffId"
             v-if="dialogFormVisible"
             :openDetailDialog="dialogFormVisible"
+            @sign="createOrderStaff"
             @closeDetailDialog="dialogFormVisible = false"></staff-detail>
     </div>
 </template>
 <script>
 import {hrService} from '../../../../common'
 import {orderService} from '../../../../common'
-import staffDetail from './staffDetail'
+
+import staffDetail from './staffDetail.vue'
+import cascaderComponent from './cascaderComponent.vue'
+
 export default {
     components: {
-            staffDetail,
+        staffDetail,
+        cascaderComponent
     },
     data(){
         return{
@@ -140,7 +129,7 @@ export default {
                 name: '',
                 staff_id: '',
                 region_ids: [],//服务地区
-                service_category_id: '',//技能分类
+                service_category_id: 0,//技能分类
                 ability_ids: [],//能力标签
             },
 
@@ -149,21 +138,11 @@ export default {
 
             //级联选择器配置数据
             cascaderOption: {
-
-                area: [],//地区级联选择器筛选信息
-                areaList: [],//地区级联选择器渲染数组
-                skill: [],//技能级联选择器筛选信息
-                skillList: [],//技能级联选择器渲染数组
-                paper: [],//证书级联选择器筛选信息
-                paperList: [],//证书级联选择器渲染数组
-                label: [],//能力标签级联选择器筛选信息
-                labelList: [],//能力标签级联选择器渲染数组
                 //级联选择器prop字段
                 cascaderProps: {
                     label: 'name',
                     value: 'id'
                 },
-
             },
 
             //员工列表
@@ -178,21 +157,9 @@ export default {
             },
 
             //弹出框显示隐藏字段
-            dialogTableVisible: false,
 
             dialogFormVisible: false,
             detailStaffId: 0,
-
-            /**
-             * 服务人员详情数组
-             * des 经过包装后的数据
-             */
-            staffDetailList: [],
-            /**
-             * 服务人员详情对象
-             * des 接口请求后得到的数据
-             */
-            staffDetailForm: {}
         }
     },
     computed:{
@@ -246,21 +213,30 @@ export default {
 
             store.commit('setLoading',true)
 
-            await hrService.getStaffList(tableOption)
-                .then(data =>{
-                    this.staffMatchTable = data.data.data
+            try{
+                await hrService.getStaffList(tableOption)
+                    .then(data =>{
+                        //匹配的服务人员列表
+                        this.staffMatchTable = data.data.data
 
-                    //分页信息
-                    this.pagination.currentPage = data.data.current_page //当前页码
-                    this.pagination.total = data.data.total //列表总条数
-                }).catch(error =>{
-                    this.$message({
-                        type:'error',
-                        message: error.message
+                        //分页信息
+                        this.pagination.currentPage = data.data.current_page //当前页码
+                        this.pagination.total = data.data.total //列表总条数
+
+                    }).catch(error =>{
+                        this.$message({
+                            type:'error',
+                            message: error.message
+                        })
+                    }).finally(() =>{
+                        store.commit('setLoading',false)
                     })
+            }catch(error){
+                this.$message({
+                    type:'error',
+                    message: error.message
                 })
-
-            store.commit('setLoading',false)
+            }   
         },
         /**
          * 切换页码
@@ -270,51 +246,26 @@ export default {
             await this.getTableList()
         },
         /**
-         * 展开更多选项
+         * 展开更多搜索选项 ---- 一期不上
          */
-        spread(){
-            this.showSearchBox = !this.showSearchBox
-        },
-        /**
-         * 地区级联选择器更改时
-         */
-        changeRegion(val, type){
-            console.log(val, type)
-            let length = val.length
-            if(length){
-                this.staffSearch.region_ids.push(val[length - 1])
-            } else {
-                this.staffSearch.region_ids = []
-            }
-
-        },
-        /**
-         * 技能级联选择器更改时
-         */
-        changeSkill(val){
-            let length = val.length
-            if(length){
-                this.staffSearch.service_category_id = val[length - 1]
-            } else {
-                this.staffSearch.service_category_id = []
-            }
-        },
-        /**
-         * 能力标签级联选择器更改时
-         */
-        changeLabel(val){
-            let length = val.length
-            if(length){
-                this.staffSearch.ability_ids.push(val[length - 1])
-            } else {
-                this.staffSearch.ability_ids = []
-            }
-        },
+        // spread(){
+        //     this.showSearchBox = !this.showSearchBox
+        // },
         /**
          * 查找服务人员
          */
         async searchStaff(){
             await this.getTableList()
+        },
+        /**
+         * 重置搜索信息
+         */
+        searchReset(){
+            this.staffSearch.name= ''
+            this.staffSearch.staff_id= ''
+            this.staffSearch.region_ids= []//服务地区
+            this.staffSearch.service_category_id= 0//技能分类
+            this.staffSearch.ability_ids= []//能力标签
         },
         /**
          * 显示服务人员详情
@@ -323,21 +274,41 @@ export default {
             this.dialogFormVisible = true
             this.detailStaffId = id;
         },
+        /**
+         * 询问是否确定备选
+         */
+        async sureSelect(item){
+            let _this = this
+            this.$confirm('确定匹配该服务人员吗?', '提示', {
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                type: 'warning'
+            }).then(async () => {
+                
+                await _this.createOrderStaff(item)
 
+            }).catch(() => {
+                this.$message({
+                    type: 'info',
+                    message: '已取消匹配'
+                });          
+            })
+        },
         /**
          * 添加候选人
-         * @param type 类型 1 在列表中备选 2 在弹出框中备选
          */
-        async createOrderStaff(type, item){
+        async createOrderStaff(item){
 
-            let matchedList = store.state.orderModule.order_staff
+            //取出所有备选人员
+            let order_staff_list = store.state.orderModule.order_staff
 
             //该服务人员是否已经备选
-            let isHave = matchedList.some((it, index) =>{
+            let isHave = order_staff_list.some((it, index) =>{
                 return it.staff_id == item.id
             })
 
-            if(isHave){
+            //如果已经匹配
+            if(isHave){ 
                 this.$message({
                     type:'error',
                     message: `该人员已经匹配`
@@ -345,75 +316,42 @@ export default {
                 return false;
             }
 
-            let obj = null
-
-            if(type == "2"){
-                obj = {
-                    order_id: this.$route.query.id,
-                    staff_id: item.id ,
-                    staff_name: item.name,
-                }
-            } else {
-                obj = {
-                    order_id: this.$route.query.id,
-                    staff_id: this.staffDetailForm.id ,
-                    staff_name: this.staffDetailForm.name,
-                }
+            //在弹出框中备选
+            let order_staff_item = {
+                order_id: this.$route.query.order_id,
+                staff_id: item.id ,
+                staff_name: item.name,
             }
 
             store.commit('setLoading',true)
 
             //添加服务人员接口
-            await orderService.createOrderStaff(obj)
-                .then(data =>{
-                    if(data.code == "0"){
-                        this.$message({
-                            type:'success',
-                            message: `添加成功`
-                        })
-                    }
-                })
-                .catch(e =>{
+            await orderService.createOrderStaff(order_staff_item).then(data =>{
+                if(data.code == "0"){
                     this.$message({
-                        type:'error',
-                        message: e.message
+                        type:'success',
+                        message: `匹配成功`
                     })
+                    //关闭详情弹出框
+                    this.dialogFormVisible = false
+                }
+            }).catch(e =>{
+                this.$message({
+                    type:'error',
+                    message: e.message
                 })
+            }).finally(async () =>{
+                //刷新订单配置页
+                await orderService.getOrder(this.$route.query.order_id)
+                
+                store.commit('setLoading',false)
+            })
 
-            //刷新订单配置页
-            await orderService.getOrder(this.$route.query.id)
-            // await store.dispatch('setData', {id: this.$route.query.id})
-            store.commit('setLoading',false)
 
-            //关闭弹出框
-            if(type == "1"){
-                this.dialogFormVisible = false
-            }
         }
     },
     async mounted(){
-        store.commit('setLoading',true)
-        try{
-
-            let data = await Promise.all([
-                hrService.getAreaTree(),
-                hrService.getSkillTree(), //获取技能树
-                hrService.getAbilityTree(), //获取能力标签树
-                this.getTableList()
-            ])
-
-            //promise.all 赋值
-            this.cascaderOption.areaList = data[0].data
-            this.cascaderOption.skillList = data[1].data
-            this.cascaderOption.labelList = data[2].data
-
-        }catch(e){
-            this.$message({
-                type:'error',
-                message: e.message
-            })
-        }
-        store.commit('setLoading',false)
+        await this.getTableList()
     }
 }
 </script>

@@ -125,20 +125,30 @@
                     searchSelect: this.searchArray
                 }
 
-                await hrService.getPaperList(tableOption)
-                    .then(data =>{
-                        
-                        this.paperTable = data.data.data
-                        
-                        //分页信息
-                        this.pagination.currentPage = data.data.current_page //当前页码
-                        this.pagination.total = data.data.total //列表总条数
-                    }).catch(error =>{
-                        this.$message({
-                            type:'error',
-                            message: error.message
+                store.commit('setLoading',true)
+                try{
+                    await hrService.getPaperList(tableOption).then(data =>{
+                            if(data.code == "0"){
+                                this.paperTable = data.data.data
+                                
+                                //分页信息
+                                this.pagination.currentPage = data.data.current_page //当前页码
+                                this.pagination.total = data.data.total //列表总条数
+                            }
+                        }).catch(error =>{
+                            this.$message({
+                                type:'error',
+                                message: error.message
+                            })
+                        }).finally(() =>{
+                            store.commit('setLoading',false)
                         })
+                } catch(error){
+                    this.$message({
+                        type:'error',
+                        message: error.message
                     })
+                }
             },
             /**
              * 切换页码
@@ -199,16 +209,7 @@
             }
         },
         async mounted(){
-            store.commit('setLoading',true)
-            try{
-                await this.getTableList()
-            }catch(e){
-                this.$message({
-                    type:'error',
-                    message: e.message
-                })
-            }
-            store.commit('setLoading',false)
+            await this.getTableList()
         }
     }
 </script>

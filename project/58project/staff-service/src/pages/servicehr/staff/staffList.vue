@@ -18,8 +18,8 @@
             </div>
             
             <div>
-                <el-form-item label="服务地区">
-                    <el-cascader
+                <!-- <el-form-item label="服务地区"> -->
+                    <!-- <el-cascader
                         :options="areaList"
                         v-model="region"
                         :props="areaProps"
@@ -60,7 +60,29 @@
                         clearable
                         placeholder="请选择证书">
                     </el-cascader>
-                </el-form-item>
+                </el-form-item> -->
+
+                <cascader-component
+                    v-model="staffSearch.region_ids"
+                    :cascaderName="'服务地区'"
+                    :setProps="setProps"
+                    :requestUrl="'./api/admin/common/getAreaTree'"></cascader-component>
+                <cascader-component
+                    v-model="staffSearch.service_category_id"
+                    :cascaderName="'技能分类'"
+                    :modelType="'int'"
+                    :setProps="setProps"
+                    :requestUrl="'./api/admin/common/getServiceTree'"></cascader-component>
+                <cascader-component
+                    v-model="staffSearch.ability_ids"
+                    :cascaderName="'能力标签'"
+                    :setProps="setProps"
+                    :requestUrl="'./api/admin/common/getLabelTree'"></cascader-component>
+                <cascader-component
+                    v-model="staffSearch.paper_ids"
+                    :cascaderName="'证书'"
+                    :setProps="setProps"
+                    :requestUrl="'./api/admin/common/getLabelTree'"></cascader-component>
             </div>
         </el-form>
         
@@ -111,7 +133,11 @@
 </template>
 <script>
     import hrService from '../../../../common/service/hrService.js'
+    import cascaderComponent from '../../sale/components/cascaderComponent.vue'
     export default {
+        components: {
+            cascaderComponent
+        },
         data() {
             return {
                 //员工信息列表
@@ -120,38 +146,43 @@
                 staffSearch: {
                     name: '', //姓名
                     region_ids: [],//服务地区
-                    service_category_id: '',//技能分类
+                    service_category_id: 0,//技能分类
                     ability_ids: [],//能力标签
                     paper_ids: [],//证书
                 },
-                region: [],//地区级联选择器筛选信息
-                areaList: [],//地区级联选择器渲染数组
-                skill: [],//技能级联选择器筛选信息
-                skillList: [],//技能级联选择器渲染数组
-                paper: [],//证书级联选择器筛选信息
-                paperList: [],//证书级联选择器渲染数组
-                label: [],//能力标签级联选择器筛选信息
-                labelList: [],//能力标签级联选择器渲染数组
-                //地区级联选择字段
-                areaProps: {
+                // region: [],//地区级联选择器筛选信息
+                // areaList: [],//地区级联选择器渲染数组
+                // skill: [],//技能级联选择器筛选信息
+                // skillList: [],//技能级联选择器渲染数组
+                // paper: [],//证书级联选择器筛选信息
+                // paperList: [],//证书级联选择器渲染数组
+                // label: [],//能力标签级联选择器筛选信息
+                // labelList: [],//能力标签级联选择器渲染数组
+                // //地区级联选择字段
+                // areaProps: {
+                //     label: 'name',
+                //     value: 'id'
+                // },
+                // //技能级联选择字段
+                // skillProps: {
+                //     label: 'name',
+                //     value: 'id'
+                // },
+                // //能力标签级联选择字段
+                // labelProps: {
+                //     label: 'name',
+                //     value: 'id'
+                // },
+                // //证书级联选择字段
+                // paperProps: {
+                //     label: 'name',
+                //     value: 'id'
+                // },
+                setProps: {
                     label: 'name',
                     value: 'id'
                 },
-                //技能级联选择字段
-                skillProps: {
-                    label: 'name',
-                    value: 'id'
-                },
-                //能力标签级联选择字段
-                labelProps: {
-                    label: 'name',
-                    value: 'id'
-                },
-                //证书级联选择字段
-                paperProps: {
-                    label: 'name',
-                    value: 'id'
-                },
+
                 /**
                  * 分页信息
                  */
@@ -212,21 +243,31 @@
                     pageNumber: this.pagination.pageNumber,
                     searchSelect: this.searchArray
                 }
+
                 store.commit('setLoading',true)
-                await hrService.getStaffList(tableOption)
-                    .then(data =>{
-                        this.staffTable = data.data.data
-                        
-                        //分页信息
-                        this.pagination.currentPage = data.data.current_page //当前页码
-                        this.pagination.total = data.data.total //列表总条数
-                    }).catch(error =>{
-                        this.$message({
-                            type:'error',
-                            message: error.message
+                try{
+                    await hrService.getStaffList(tableOption).then(data =>{
+                            if(data.code == "0"){
+                                this.staffTable = data.data.data
+                                
+                                //分页信息
+                                this.pagination.currentPage = data.data.current_page //当前页码
+                                this.pagination.total = data.data.total //列表总条数
+                            }
+                        }).catch(error =>{
+                            this.$message({
+                                type:'error',
+                                message: error.message
+                            })
+                        }).finally(() =>{
+                            store.commit('setLoading',false)
                         })
+                } catch(error){
+                    this.$message({
+                        type:'error',
+                        message: error.message
                     })
-                store.commit('setLoading',false)
+                }
             },
             /**
              * 切换页码
@@ -235,53 +276,53 @@
                 this.pagination.currentPage = val
                 await this.getTableList()
             },
-            /**
-             * 地区级联选择器更改时
-             */
-            changeRegion(val){
-                let length = val.length
-                if(length){
-                    this.staffSearch.region_ids.push(val[length - 1])
-                } else {
-                    this.staffSearch.region_ids = []
-                }
+            // /**
+            //  * 地区级联选择器更改时
+            //  */
+            // changeRegion(val){
+            //     let length = val.length
+            //     if(length){
+            //         this.staffSearch.region_ids.push(val[length - 1])
+            //     } else {
+            //         this.staffSearch.region_ids = []
+            //     }
                 
-            },
-            /**
-             * 技能级联选择器更改时
-             */
-            changeSkill(val){
-                let length = val.length
-                if(length){
-                    this.staffSearch.service_category_id = val[length - 1]
-                } else {
-                    this.staffSearch.service_category_id = []
-                }
+            // },
+            // /**
+            //  * 技能级联选择器更改时
+            //  */
+            // changeSkill(val){
+            //     let length = val.length
+            //     if(length){
+            //         this.staffSearch.service_category_id = val[length - 1]
+            //     } else {
+            //         this.staffSearch.service_category_id = []
+            //     }
                 
-            },
-            /**
-             * 能力标签级联选择器更改时
-             */
-            changeLabel(val){
-                let length = val.length
-                if(length){
-                    this.staffSearch.ability_ids.push(val[length - 1])
-                } else {
-                    this.staffSearch.ability_ids = []
-                }
+            // },
+            // /**
+            //  * 能力标签级联选择器更改时
+            //  */
+            // changeLabel(val){
+            //     let length = val.length
+            //     if(length){
+            //         this.staffSearch.ability_ids.push(val[length - 1])
+            //     } else {
+            //         this.staffSearch.ability_ids = []
+            //     }
                 
-            },
-            /**
-             * 证书级联选择器更改时
-             */
-            changePaper(val){
-                let length = val.length
-                if(length){
-                    this.staffSearch.paper_ids.push(val[length - 1])
-                } else {
-                    this.staffSearch.paper_ids = []
-                }
-            },
+            // },
+            // /**
+            //  * 证书级联选择器更改时
+            //  */
+            // changePaper(val){
+            //     let length = val.length
+            //     if(length){
+            //         this.staffSearch.paper_ids.push(val[length - 1])
+            //     } else {
+            //         this.staffSearch.paper_ids = []
+            //     }
+            // },
             /**
              * 查找用户
              */
@@ -292,17 +333,25 @@
              * 重置
              */
             async resetStaff(){
-                Object.keys(this.staffSearch).forEach((item =>{
-                    if(Array.isArray(this.staffSearch[item])){
-                        this.staffSearch[item] = []
-                    } else {
-                        this.staffSearch[item] = ''
-                    }
-                }))
-                this.region = []
-                this.skill = []
-                this.label = []
-                this.paper = []
+                // Object.keys(this.staffSearch).forEach((item =>{
+                //     if(Array.isArray(this.staffSearch[item])){
+                //         this.staffSearch[item] = []
+                //     } else if(typeof this.staffSearch[item] == 'string') {
+                //         this.staffSearch[item] = ''
+                //     } else {
+                //         this.staffSearch[item] = 0
+                //     }
+                // }))
+                    this.staffSearch.name= '' //姓名
+                    this.staffSearch.region_ids= []//服务地区
+                    this.staffSearch.service_category_id= 0//技能分类
+                    this.staffSearch.ability_ids= []//能力标签
+                    this.staffSearch.paper_ids= []//证书
+                // }
+                // this.region = []
+                // this.skill = []
+                // this.label = []
+                // this.paper = []
                 await this.getTableList()
             }, 
             /**
@@ -333,28 +382,27 @@
         },
         async mounted(){
 
+            await this.getTableList()
+            // store.commit('setLoading',true)
+            // try{
+            //     let data = await Promise.all([
+            //         hrService.getAreaTree(), //省市区数据获取
+            //         hrService.getSkillTree(), //获取技能树
+            //         hrService.getPaperSelection(), //获取证书列表
+            //         hrService.getAbilityTree(), //获取能力标签树
+            //     ])
+            //     this.areaList = data[0].data
+            //     this.skillList = data[1].data
+            //     this.paperList = data[2].data
+            //     this.labelList = data[3].data
+            // }catch(e){
+            //     this.$message({
+            //         type:'error',
+            //         message: e.message
+            //     })
+            // }
             
-            store.commit('setLoading',true)
-            try{
-                let data = await Promise.all([
-                    hrService.getAreaTree(), //省市区数据获取
-                    hrService.getSkillTree(), //获取技能树
-                    hrService.getPaperSelection(), //获取证书列表
-                    hrService.getAbilityTree(), //获取能力标签树
-                    this.getTableList()
-                ])
-                this.areaList = data[0].data
-                this.skillList = data[1].data
-                this.paperList = data[2].data
-                this.labelList = data[3].data
-            }catch(e){
-                this.$message({
-                    type:'error',
-                    message: e.message
-                })
-            }
-            
-            store.commit('setLoading',false)
+            // store.commit('setLoading',false)
         }
     }
 </script>

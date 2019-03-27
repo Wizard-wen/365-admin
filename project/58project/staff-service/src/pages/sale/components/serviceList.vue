@@ -19,11 +19,11 @@
                             :body-style="{padding: 0 }">
                             <div style="padding: 7px;">
                                 <p>{{`姓名：${item.staff_name}`}}</p>
-                                <p>{{`id：${item.staff_id}`}}</p>
+                                <p>{{`员工id：${item.staff_id}`}}</p>
                                 <div class="bottom clearfix">
                                     <el-button type="text" size="mini" @click="showSignPage(item)">签约</el-button>
                                     <el-button type="text" size="mini" @click="showRefusePage(item)">拒绝</el-button>
-                                    <el-button type="text" size="mini" @click="deleteOrderStaff(item.id)">删除</el-button>
+                                    <el-button type="text" size="mini" @click="deleteOrderStaff(item.order_staff_id, item.order_id)">删除</el-button>
                                 </div>
                             </div>
                         </el-card>
@@ -32,19 +32,23 @@
             </div>
             <div v-else>暂无内容</div>
         </div>
-
+        <!-- 签约弹出框 -->
         <sign-dialog
             v-if="signDialogVisible"
             :openSignDialog="signDialogVisible"
             @closeSignDialog="signDialogVisible=false"
-            :staffId="selectedStaffId"></sign-dialog>
-
-        <refuse-dialog
-            v-if="refuseDialogVisible"
-            :openRefuseDialog="refuseDialogVisible"
-            @closeRefuseDialog="refuseDialogVisible=false"
+            :order_staff_id="sign_order_staff_id"
             :staffId="selectedStaffId"
-            :staffName="selectedStaffName"></refuse-dialog>
+            :staffName="selectedStaffName"></sign-dialog>
+        <!-- 拒绝日志弹出框 -->
+        <log-dialog
+            v-if="refuseDialogVisible"
+            :openLogDialog="refuseDialogVisible"
+            @closeLogDialog="refuseDialogVisible=false"
+            :logType="'refuse'"
+            :order_staff_id="sign_order_staff_id"
+            :staffId="selectedStaffId"
+            :staffName="selectedStaffName"></log-dialog>
 
     </el-card>  
 </template>
@@ -53,25 +57,32 @@
 import {orderService} from '../../../../common'
 
 import signDialog from './signDialog.vue'
-import refuseDialog from './refuseDialog.vue'
+import logDialog from './logDialog.vue'
 
 export default {
     components: {
         signDialog,
-        refuseDialog
+        logDialog
     },
     data(){
         return {
             //是否展示表单
             isShow:true,
+            
             //打开签约对话框
             signDialogVisible: false,
+
             //拒绝对话框
             refuseDialogVisible: false,
+
             //被选中服务人员id
             selectedStaffId: 0,
+
             //被选中服务人员姓名
             selectedStaffName: "",
+            
+            //候选人员信息id
+            sign_order_staff_id: 0
         }
     },
     computed:{
@@ -82,8 +93,10 @@ export default {
     methods: {
         /**
          * 删除备选服务人员
+         * @param order_staff_id 候选人员信息id
+         * @param order_id 订单id
          */
-        async deleteOrderStaff(id){
+        async deleteOrderStaff(order_staff_id, order_id){
             
             this.$confirm('确定删除该备选服务人员吗?', '提示', {
                 confirmButtonText: '确定',
@@ -92,7 +105,7 @@ export default {
             }).then(async () => {
                 store.commit('setLoading',1)
 
-                await orderService.deleteOrderStaff(id) 
+                await orderService.deleteOrderStaff(order_staff_id, order_id) 
                     .then(data =>{
                         if(data.code == "0"){
                             this.$message({
@@ -108,17 +121,15 @@ export default {
                         })
                     })
                 
-                await orderService.getOrder(this.$route.query.id)
+                await orderService.getOrder(this.$route.query.order_id)
 
                 store.commit('setLoading',false)
             }).catch(() => {
-
                 this.$message({
                     type: 'info',
                     message: '已取消删除'
                 });          
             });
-            
         },
         //改变表单的显示隐藏状态
         changeFormState(){
@@ -128,17 +139,23 @@ export default {
          * 打开拒绝对话框
          */
         showRefusePage(item){
+            
+            this.sign_order_staff_id = item.order_staff_id
             this.selectedStaffId = item.staff_id
             this.selectedStaffName = item.staff_name
+            //打开拒绝弹窗
             this.refuseDialogVisible = true
         }, 
         /**
          * 打开签约对话框
          */
         showSignPage(item){
+            
+            this.sign_order_staff_id = item.order_staff_id
+            this.selectedStaffId = item.staff_id
+            this.selectedStaffName = item.staff_name
             //打开签约弹窗
             this.signDialogVisible = true
-            this.selectedStaffId = item.staff_id
         },
     }
 }

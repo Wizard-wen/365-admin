@@ -43,9 +43,10 @@
                             class="avatar-uploader"
                             action="/api/admin/common/uploadImage"
                             :show-file-list="true"
-                            :on-success="handleAvatarSuccess"
+                            :on-success="iconUploadSuccess"
+                            :on-remove="iconUploadDelete"
                             :before-upload="beforeAvatarUpload">
-                            <img v-if="staffForm.imageUrl" :src="staffForm.imageUrl" class="avatar">
+                            <img v-if="staffForm.icon!='' ? './api/resource/'+staffForm.icon : ''" :src="staffForm.icon" class="avatar">
                             <i v-else class="el-icon-plus avatar-uploader-icon"></i>
                         </el-upload>
                     </el-form-item>
@@ -234,7 +235,7 @@ export default {
             staffForm: {
                 id: '',//员工id
 
-                imageUrl: '',
+                icon: '',
                 name: '',//员工姓名
                 identify: '',//身份证号
                 sex: 1,//员工性别
@@ -328,21 +329,20 @@ export default {
         async onSubmit(formName) {
             await this.$refs[formName].validate((valid, fileds) => {
                 if (valid) {
-                    hrService.editStaff(this.staffForm)
-                    .then(data =>{
-                        if(data.code == '0'){
+                    hrService.editStaff(this.staffForm).then(data =>{
+                            if(data.code == '0'){
+                                this.$message({
+                                    type:"success",
+                                    message: "修改成功"
+                                })
+                                this.$router.push('/staff/staffList')
+                            }
+                        }).catch(error =>{
                             this.$message({
-                                type:"success",
-                                message: "修改成功"
+                                type:'error',
+                                message: error.message
                             })
-                            this.$router.push('/staff/staffList')
-                        }
-                    }).catch(error =>{
-                        this.$message({
-                            type:'error',
-                            message: error.message
                         })
-                    })
                 } else {
                     let require = ["name", "sex", "phone", "identify", "address", "bank_card"],
                         base = ["nation", "wechat", "education"];
@@ -363,8 +363,11 @@ export default {
                 }
             });
         },
-        handleAvatarSuccess(res, file) {
-            this.staffForm.imageUrl = URL.createObjectURL(file.raw);
+        iconUploadSuccess(res, file) {
+            this.staffForm.icon = res.data.path;
+        },
+        iconUploadDelete(file, fileList){
+            this.staffForm.icon = ""
         },
         beforeAvatarUpload(file) {
             const isLt2M = file.size / 1024 / 1024 < 2;
@@ -478,6 +481,14 @@ export default {
                     .then(data =>{
                         if(data.code == "0"){
                             this.staffForm = data.data
+
+                            this.staffForm.paper.forEach((item, index) =>{
+                                item.images.forEach((it, index) =>{
+                                    it.url = './api/resource/'+it.path
+                                })
+                            })
+
+                            this.staffForm.icon = './api/resource/'+ this.staffForm.icon
                         }
                     }).catch(err =>{
                         throw err

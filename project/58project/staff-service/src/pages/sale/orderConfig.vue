@@ -6,7 +6,7 @@
                 <div class="order-in-box">
                     <base-component></base-component>
                     <service-list-component></service-list-component>
-                    <match-log-component></match-log-component>
+                    <log-component></log-component>
                 </div>
                 
                 <div class="order-pull" @click="pullSearch" :style="{right: isSearch? '-16px':'0px'}">
@@ -22,7 +22,7 @@
             <div class="order-message-box">
                 <div class="order-in-box">
                     <base-component></base-component>
-                    <sign-log-coponent></sign-log-coponent>
+                    <log-component></log-component>
                     <div class="control" v-if="isSigned==3">
                         <el-button type="primary" @click="showCancelPage">取消订单</el-button>
                         <el-button type="primary" @click="showCompletePage">订单完成</el-button>
@@ -61,8 +61,8 @@
 </template>
 <script>
 import base from './components/base.vue'
-import matchLog from './components/matchLog.vue'
-import signLog from './components/signLog.vue'
+
+import logComponent from './components/logComponent.vue'
 import serviceList from './components/serviceList.vue'
 import matchBox from './components/matchBox.vue'
 
@@ -75,12 +75,12 @@ export default {
             completeDialogVisible: false,
             //取消订单表单
             cancelForm : {
-                order_id: this.$route.query.id,// 订单id
+                order_id: this.$route.query.order_id,// 订单id
                 message: '',//售后日志
             },
             //完成订单表单
             completeForm : {
-                order_id: this.$route.query.id,// 订单id
+                order_id: this.$route.query.order_id,// 订单id
                 message: '',//售后日志
             },
             formLabelWidth: '120px'
@@ -180,14 +180,13 @@ export default {
     components:{
         baseComponent: base,
         serviceListComponent: serviceList,
-        matchLogComponent: matchLog,
         matchBoxComponent: matchBox,
-        signLogCoponent: signLog,
+        logComponent,
     },
     async mounted(){
         store.commit('setLoading',true)
         try{
-            await orderService.getOrder(this.$route.query.id)
+            await orderService.getOrder(this.$route.query.order_id)
         }catch(e){
             this.$message({
                 type:'error',

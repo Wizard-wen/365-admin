@@ -65,8 +65,7 @@
             <el-table-column
                 label="订单号"
                 prop="code"
-                align="center"
-                width="170px">
+                align="center">
             </el-table-column>
             <el-table-column
                 label="手机号"
@@ -101,7 +100,7 @@
                 <template slot-scope="scope">
                     <el-button
                         size="mini"
-                        @click="configOrder(scope.$index, scope.row)">处理订单</el-button>
+                        @click="configOrder(scope.$index, scope.row)">分配订单</el-button>
                 </template>
             </el-table-column>
         </el-table>
@@ -199,31 +198,20 @@
                     pageNumber: this.pagination.pageNumber,
                     searchSelect: this.searchArray
                 }
-                store.commit('setLoading',true)
-                try{
-                    await orderService.getOrderList(tableOption).then(data =>{
-                            if(data.code == "0"){
-                                this.orderTable = data.data.data
 
-                                //分页信息
-                                this.pagination.currentPage = data.data.current_page //当前页码
-                                this.pagination.total = data.data.total //列表总条数
-                            }
-                        }).catch(error =>{
-                            this.$message({
-                                type:'error',
-                                message: error.message
-                            })
-                        }).finally(() =>{
-                            store.commit('setLoading',false)
+                await orderService.getOrderList(tableOption)
+                    .then(data =>{
+                        this.orderTable = data.data.data
+
+                        //分页信息
+                        this.pagination.currentPage = data.data.current_page //当前页码
+                        this.pagination.total = data.data.total //列表总条数
+                    }).catch(error =>{
+                        this.$message({
+                            type:'error',
+                            message: error.message
                         })
-                } catch(error){
-                    this.$message({
-                        type:'error',
-                        message: error.message
                     })
-                }
-
             },
             /**
              * 切换页码
@@ -332,22 +320,21 @@
         },
         async mounted(){
 
-            // store.commit('setLoading',true)
-            // try{
-            //     let data = await Promise.all([
-            //         hrService.getSkillTree(), //获取技能树
-            //         this.getTableList()
-            //     ])
-            //     this.skillList = data[0].data
-            // }catch(e){
-            //     this.$message({
-            //         type:'error',
-            //         message: e.message
-            //     })
-            // }
-            await this.getTableList()
+            store.commit('setLoading',true)
+            try{
+                let data = await Promise.all([
+                    hrService.getSkillTree(), //获取技能树
+                    this.getTableList()
+                ])
+                this.skillList = data[0].data
+            }catch(e){
+                this.$message({
+                    type:'error',
+                    message: e.message
+                })
+            }
 
-            // store.commit('setLoading',false)
+            store.commit('setLoading',false)
         }
     }
 </script>

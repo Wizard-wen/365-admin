@@ -12,6 +12,12 @@ export default {
         return orderRequest.getOrderList(tableOption)
     },
     /**
+     * 获取所有销售人员名单
+     */
+    getManagerSelection(){
+        return orderRequest.getManagerSelection()
+    },
+    /**
      * 创建订单
      * @param obj 新订单表单字段
      */
@@ -20,18 +26,10 @@ export default {
     },
     /**
      * 获取订单信息
+     * @param order_id 订单id
      */
-    async getOrder(id){
-        await orderRequest.getOrder(id) 
-            .then(data =>{
-                store.dispatch('setData', {data})
-            })
-            .catch(e =>{
-                Message({
-                    type:'error',
-                    message: e.message
-                })
-            })
+    async getOrder(order_id){
+        await store.dispatch('setData', order_id)
     },
     /**
      * 编辑订单
@@ -53,10 +51,11 @@ export default {
     },
     /**
      * 删除候选人
-     * @param id 候选人id
+     * @param order_staff_id 候选人员信息id
+     * @param order_id 订单id
      */
-    deleteOrderStaff(id){
-        return orderRequest.deleteOrderStaff(id)
+    deleteOrderStaff(order_staff_id, order_id){
+        return orderRequest.deleteOrderStaff(order_staff_id, order_id)
     },
     /**
      * 签约
@@ -65,22 +64,21 @@ export default {
         return orderRequest.sign(obj)
     },
     /**
-     * 拒签
+     * 日志信息提交
+     * @param obj 
+     * @param type 
      */
-    refuse(obj){
-        return orderRequest.refuse(obj)
-    },
-    /**
-     * 签约日志
-     */
-    writeSignLog(obj){
-        return orderRequest.writeSignLog(obj)
-    },
-    /**
-     * 售后日志
-     */
-    writeMaintainLog(obj){
-        return orderRequest.writeMaintainLog(obj)
+    logCommit(obj, type){
+        //签约前、售后日志
+        if(type == 'normal'){
+            return orderRequest.writeOrderLog(obj)
+        } 
+        //拒绝日志
+        else if(type == 'refuse'){
+            return orderRequest.refuse(obj)
+        } else {
+            return 
+        }
     },
     /**
      * 取消订单

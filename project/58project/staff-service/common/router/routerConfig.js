@@ -166,6 +166,7 @@ const serviceTypeModule = [
 import orderList from '@/pages/sale/orderList.vue'
 import orderConfig from '@/pages/sale/orderConfig.vue'
 import orderEdit from '@/pages/sale/orderEdit.vue'
+import orderAssignList from '@/pages/sale/orderAssignList.vue'
 
 
 const saleModule = [
@@ -183,6 +184,11 @@ const saleModule = [
         path: '/sale/orderEdit',
         name: 'orderEdit',
         component: orderEdit,
+    },
+    {
+        path: '/sale/orderAssignList',
+        name: 'orderAssignList',
+        component: orderAssignList,
     },
 ]
 
