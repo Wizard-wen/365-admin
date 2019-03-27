@@ -42,11 +42,17 @@
                         <el-upload
                             class="avatar-uploader"
                             action="/api/admin/common/uploadImage"
-                            :show-file-list="true"
+                            :show-file-list="false"
+                            :file-list="icon_fileList"
                             :on-success="iconUploadSuccess"
-                            :on-remove="iconUploadDelete"
                             :before-upload="beforeAvatarUpload">
-                            <img v-if="staffForm.icon!='' ? './api/resource/'+staffForm.icon : ''" :src="staffForm.icon" class="avatar">
+                            <div v-if="staffForm.icon!=''" class="avatar-box" @mouseover="showblack('0')" @mouseout="showblack('1')">
+                                <img  :src="staffForm.icon == '' ? '' : `./api/resource/${staffForm.icon}`" class="avatar">
+                                <div class="avatar-back" v-if="isShowBlack">
+                                    <i class="el-icon-edit avatar-uploader-icon" style="color: #fff;font-size: 20px;"></i>
+                                </div>
+                            </div>
+                            
                             <i v-else class="el-icon-plus avatar-uploader-icon"></i>
                         </el-upload>
                     </el-form-item>
@@ -100,27 +106,7 @@
                     </el-form-item>
 
                     <el-form-item label="证书" prop="paper">
-                        <el-button style="margin-bottom:15px;" icon="el-icon-plus"  @click="openPaperDialog('new', {})">添加证书</el-button>
-                        <el-row>
-                            <el-col :span="24" v-for="(item, index) in staffForm.paper" :key="index">
-                                <el-card :body-style="{ padding: '0px' }">
-                                    <div class="paper-imgs">
-                                        <img 
-                                            class="paper-item-img" 
-                                            v-for="(it, inds) in item.images" 
-                                            :key="inds" 
-                                            :src="it.url">
-                                    </div>
-                                    <div class="image-messsage">
-                                        <p>{{item.paper_category_name}}</p>
-                                        <div>
-                                            <el-button @click="deleteFormPaper(item)" class="el-icon-delete" type="text" size="small">删除</el-button>
-                                            <el-button @click="openPaperDialog('edit', item)" class="el-icon-edit" type="text" size="small">编辑</el-button>
-                                        </div>
-                                    </div>
-                                </el-card>
-                            </el-col>
-                        </el-row>
+                        <paper-component v-model="staffForm.paper"></paper-component>
                     </el-form-item>
                 </el-tab-pane>
             </el-tabs>
@@ -130,14 +116,6 @@
                 <el-button @click="goback">取消</el-button>
             </el-form-item>
         </el-form>
-        <paper-dialog 
-            :isEditPaper="paperDialog.isEditPaper"
-            :paperDialogVisible="paperDialog.paperDialogVisible"
-            v-if="paperDialog.paperDialogVisible"
-            :paperProps="paperDialog.paperAddModel"
-            :selectedPapers="staffForm.paper"
-            @changePaper="changePaper"
-            @closePaper="cancelPaperFn"></paper-dialog>
     </div>
 </template>
 
@@ -149,14 +127,14 @@
 import {hrService} from '../../../../common'
 import {hrRequest} from '../../../../common'
 
-import paperDialog from './paperDialog.vue'
 import tagsComponent from './tagsComponent.vue'
+import paperComponent from './paperComponent.vue'
 
 
 export default {
     components: {
-        paperDialog,
-        tagsComponent
+        tagsComponent,
+        paperComponent
     },
     data() {
         //表单验证
@@ -231,6 +209,7 @@ export default {
             },
         }
         return {
+            icon_fileList: [],
             //员工信息表单
             staffForm: {
                 id: '',//员工id
@@ -247,7 +226,6 @@ export default {
                 address: '',//员工住址
                 education: 0,//教育程度
                 bank_card: '',//银行卡号
-                icon: '',//头像
                 version: '',//操作版本号,两个人同时操作
 
                 label: [],//能力标签
@@ -285,16 +263,6 @@ export default {
                     {validator: validator.nationValidate, trigger: 'blur'}
                 ],
             },
-            //证书弹出框
-            paperDialog: {
-                isEditPaper: false,
-                paperDialogVisible: false,
-                paperAddModel:{
-                    paper_category_name: null,
-                    paper_category_id: null,
-                    images: [],
-                }
-            },
 
             region: [],//地区信息
             areaList: [],//地区数组
@@ -312,7 +280,7 @@ export default {
             },
             //tab
             activeName: 'require',
-            ceshi: []
+            isShowBlack: false,
         }
     },
     computed: {
@@ -363,12 +331,25 @@ export default {
                 }
             });
         },
+        stopPropagation(){
+            return false
+        },
+        showblack(type){
+            if(type == '0'){
+                this.isShowBlack = true
+            } else {
+                this.isShowBlack = false
+            }
+        },
         iconUploadSuccess(res, file) {
             this.staffForm.icon = res.data.path;
+
+            this.icon_fileList =  [{
+                url: `./api/resource/${this.staffForm.icon}`,
+                name: 'head'
+            }]
         },
-        iconUploadDelete(file, fileList){
-            this.staffForm.icon = ""
-        },
+
         beforeAvatarUpload(file) {
             const isLt2M = file.size / 1024 / 1024 < 2;
 
@@ -376,78 +357,6 @@ export default {
             this.$message.error('上传头像图片大小不能超过 2MB!');
             }
             return isLt2M;
-        },
-        /**
-         * 删除一条证书数据
-         */
-        deleteFormPaper(paperItem){
-            this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
-                confirmButtonText: '确定',
-                cancelButtonText: '取消',
-                type: 'warning'
-            }).then(() => {
-                this.staffForm.paper.forEach((item, index) =>{
-                    if(item.paper_category_id == paperItem.paper_category_id){
-                        this.staffForm.paper.splice(index, 1)
-                    }
-                })
-                this.$message({
-                    type: 'success',
-                    message: '删除成功!'
-                });
-            }).catch(() => {
-                this.$message({
-                    type: 'info',
-                    message: '已取消删除'
-                });          
-            });
-
-        },
-
-        /**
-         * 新建 或 编辑 证书信息----打开弹窗
-         */
-        openPaperDialog(state, paperItem){
-            if(state == 'edit'){
-                this.paperDialog.isEditPaper = true
-                this.paperDialog.paperAddModel = {
-                    paper_category_name: paperItem.paper_category_name,
-                    paper_category_id: paperItem.paper_category_id,
-                    images: [...paperItem.images],
-                }
-            } else {
-                this.paperDialog.isEditPaper = false
-                this.paperDialog.paperAddModel = {
-                    paper_category_name: '',
-                    paper_category_id: '',
-                    images: [],
-                }
-            }
-            this.paperDialog.paperDialogVisible = true
-        },
-        /**
-         * 添加证书，改变证书信息
-         */
-        changePaper(paperItem, isEdit){
-            //若是编辑，替换证书
-            if(isEdit){
-                 this.staffForm.paper.forEach((item, index) =>{
-                     if(paperItem.paper_category_id == item.paper_category_id){
-                         this.staffForm.paper.splice(index, 1, paperItem)
-                     }
-                 })
-            } else {
-                //新建证书，直接插入
-                this.staffForm.paper.push(paperItem)
-            }
-            //关闭弹窗
-            this.paperDialog.paperDialogVisible = false
-        },
-        /**
-         * 关闭证书编辑弹窗
-         */
-        cancelPaperFn(item){
-            this.paperDialog.paperDialogVisible = false
         },
         /**
          * 返回
@@ -487,8 +396,10 @@ export default {
                                     it.url = './api/resource/'+it.path
                                 })
                             })
-
-                            this.staffForm.icon = './api/resource/'+ this.staffForm.icon
+                            this.icon_fileList = this.staffForm.icon == ''? [] : [{
+                                url: `./api/resource/${this.staffForm.icon}`,
+                                name: 'head'
+                            }]
                         }
                     }).catch(err =>{
                         throw err
@@ -547,11 +458,25 @@ export default {
         line-height: 65px;
         text-align: center;
     }
-    .avatar {
+    .avatar-box{
         width:65px;
         height: 65px;
-        display: block;
+        position: relative;
+        .avatar {
+            width:65px;
+            height: 65px;
+            display: block;
+        }
+        .avatar-back{
+            position: absolute;
+            height: 65px;
+            width: 65px;
+            top: 0;
+            z-index: 4;
+            background: rgba(0,0,0,.5)
+        }
     }
+
 </style>
 
 

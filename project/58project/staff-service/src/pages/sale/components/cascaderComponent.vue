@@ -1,15 +1,15 @@
 <template>
     <el-cascader
-    v-loading="loading"
         class="cascader"
-        size="medium"
-        :options="optionList"
-        @visible-change="getList"
+        v-loading="loading"
         v-model="cascaderData"
+        :options="optionList"
         :props="setProps"
+        @visible-change="getList"
         @change="changeCascader"
-        :show-all-levels="false"
         clearable
+        size=""
+        :show-all-levels="false"
         :placeholder="cascaderName">
     </el-cascader>
 </template>
@@ -65,7 +65,9 @@ export default {
             //为了实现重置效果
             if(val.length == 0){
                 this.cascaderData = []
-            } 
+            } else if(val == 0){
+                this.cascaderData = []
+            }
         }
     },
     data(){

@@ -24,34 +24,23 @@
                 </div>
                 <div class="search-select-box">
                     <el-form-item label="技能分类">
-                        <el-cascader
-                            :options="skillList"
-                            v-model="skill"
-                            :props="skillProps"
-                            @change="changeSkill"
-                            clearable
-                            placeholder="技能分类">
-                        </el-cascader>
+                        <cascader-component
+                            v-model="orderSearch.service_category_id"
+                            :cascaderName="'技能分类'"
+                            :modelType="'int'"
+                            :setProps="setProps"
+                            :requestUrl="'./api/admin/common/getServiceTree'"></cascader-component>
                     </el-form-item>
 
                     <el-form-item label="订单类型">
                         <el-select v-model="orderSearch.type" placeholder="订单类型">
-                            <el-option label="全部" :value="0"></el-option>
-                            <el-option label="待匹配" :value="1"></el-option>
-                            <el-option label="已匹配" :value="2"></el-option>
-                            <el-option label="已签约" :value="3"></el-option>
-                            <el-option label="已取消" :value="4"></el-option>
-                            <el-option label="订单完成" :value="5"></el-option>
-
+                            <el-option v-for="(item, index) in order_type" :key="index" :label="item.label" :value="item.value"></el-option>
                         </el-select>
                     </el-form-item>
 
                     <el-form-item label="订单来源">
                         <el-select v-model="orderSearch.source" placeholder="订单来源">
-                            <el-option label="全部" :value="0"></el-option>
-                            <el-option label="线下" :value="1"></el-option>
-                            <el-option label="线上" :value="2"></el-option>
-                            <el-option label="渠道" :value="3"></el-option>
+                            <el-option v-for="(item, index) in order_source" :key="index" :label="item.label" :value="item.value"></el-option>
                         </el-select>
                     </el-form-item>
                 </div>
@@ -122,7 +111,11 @@
 <script>
     import {orderService} from '../../../common'
     import {hrService} from '../../../common'
+    import cascaderComponent from './components/cascaderComponent.vue'
     export default {
+        components: {
+            cascaderComponent
+        },
         data() {
             return {
                 //丁丹列表
@@ -140,7 +133,7 @@
                 orderSearch: {
                     code: '', //订单号
                     phone: '',
-                    service_category_id: '',//服务分类id
+                    service_category_id: 0,//服务分类id
                     source: 0,//线上线下渠道
                     type: 0,//订单类型
                 },
@@ -152,14 +145,11 @@
                     currentPage: 1,
                     pageNumber: 10,
                 },
-                type: "1",
                 //技能级联选择字段
-                skillProps: {
+                setProps: {
                     label: 'name',
                     value: 'id'
                 },
-                skill: [],//技能级联选择器筛选信息
-                skillList: [],//技能级联选择器渲染数组
             }
         },
         computed:{
@@ -182,6 +172,18 @@
                     }
                 })
                 return arr
+            },
+            /**
+             * 订单类型 from vuex
+             */
+            order_type(){
+                return this.$store.state.orderModule.order_type
+            },
+            /**
+             * 订单来源 from vuex
+             */
+            order_source(){
+                return this.$store.state.orderModule.order_source
             }
         },
         methods: {
@@ -197,9 +199,12 @@
                 let tableOption = {
                     currentPage: this.pagination.currentPage,
                     pageNumber: this.pagination.pageNumber,
-                    searchSelect: this.searchArray
+                    purpose: "deal",
+                    searchSelect: this.searchArray,
                 }
+
                 store.commit('setLoading',true)
+                
                 try{
                     await orderService.getOrderList(tableOption).then(data =>{
                             if(data.code == "0"){
@@ -223,7 +228,6 @@
                         message: error.message
                     })
                 }
-
             },
             /**
              * 切换页码
@@ -233,23 +237,22 @@
                 await this.getTableList()
             },
             /**
-             * 查找用户
+             * 搜索
              */
             async searchOrder(){
                 await this.getTableList()
             },
             /**
-             * 重置
+             * 重置搜索项
              */
             async resetOrder(){
-                Object.keys(this.orderSearch).forEach((item =>{
-                    if(Array.isArray(this.orderSearch[item])){
-                        this.orderSearch[item] = []
-                    } else {
-                        this.orderSearch[item] = ''
-                    }
-                    this.skill = []
-                }))
+
+                this.orderSearch.code= '' //订单号
+                this.orderSearch.phone= ''
+                this.orderSearch.service_category_id= 0//服务分类id
+                this.orderSearch.source= 0//线上线下渠道
+                this.orderSearch.type= 0//订单类型
+
                 await this.getTableList()
             }, 
             /**
@@ -262,14 +265,7 @@
                 })
             },
             /**
-             * 技能级联选择器更改时
-             */
-            changeSkill(val){
-                let length = val.length
-                this.orderSearch.service_category_id = val[length - 1]
-            },
-            /**
-             *
+             * 处理订单
              */
             configOrder(index, row){
                 this.$router.push({
@@ -284,70 +280,21 @@
              * 订单状态匹配字段
              */
             formatterType(row, column){
-                if(row.type == 1){
-                    return "待匹配"
-                } else if(row.type == 2){
-                    return "已匹配"
-                } else if(row.type == 3){
-                    return "已签约"
-                }else if(row.type == 4){
-                    return "已取消"
-                }else if(row.type == 5){
-                    return "订单完成"
-                }
+                return this.order_type.find((item, index) =>{
+                    return row.type == item.value
+                }).label
             },
             /**
              * 订单来源匹配字段
              */
             formatterSource(row, column){
-                if(row.source == 1){
-                    return "线下"
-                } else if(row.source == 2){
-                    return "线上"
-                } else if(row.source == 3){
-                    return "渠道"
-                }
+                return this.order_source.find((item, index) =>{
+                    return row.source == item.value
+                }).label
             },
-            /**
-             * 服务类型匹配字段
-             */
-            // formatterCategory(row, column){
-            //     function findName(arrList, type){
-            //         let len = arrList.length;
-
-            //         for(let i = 0; i<len; i++){
-
-            //             if(arrList[i].children){
-            //                 return findName(arrList[i].children, type)
-            //             } else {
-            //                 if(type == arrList[i].id){
-            //                     return arrList[i].name
-            //                 }
-            //             }
-            //         }
-            //     }
-
-            //    return findName(this.skillList, row.service_category_id)
-            // }
         },
         async mounted(){
-
-            // store.commit('setLoading',true)
-            // try{
-            //     let data = await Promise.all([
-            //         hrService.getSkillTree(), //获取技能树
-            //         this.getTableList()
-            //     ])
-            //     this.skillList = data[0].data
-            // }catch(e){
-            //     this.$message({
-            //         type:'error',
-            //         message: e.message
-            //     })
-            // }
             await this.getTableList()
-
-            // store.commit('setLoading',false)
         }
     }
 </script>

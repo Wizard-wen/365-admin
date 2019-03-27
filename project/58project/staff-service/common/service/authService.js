@@ -138,6 +138,12 @@ export default {
      * @param id 权限id
      */
     deletePermission(id){
-        authRequest.deletePermission(id)
+        return authRequest.deletePermission(id)
+    },
+    /**
+     * 获取权限树
+     */
+    getPermissionTree(){
+        return authRequest.getPermissionTree()
     }
 }

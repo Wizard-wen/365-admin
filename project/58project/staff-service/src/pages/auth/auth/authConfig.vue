@@ -1,33 +1,29 @@
 <template>
     <div class="auth-config">
-        <el-form
-          class="auth-form"
-          ref="form"
-          :model="authForm"
-          label-width="120px"
-          :rules="authRules"
-        >
+        <el-form class="auth-form" ref="form" :model="authForm" label-width="120px" :rules="authRules">
+
             <el-form-item label="权限路由" prop="router">
                 <el-input v-model="authForm.router"></el-input>
             </el-form-item>
+            
             <el-form-item label="权限名字" prop="title">
                 <el-input v-model="authForm.title"></el-input>
             </el-form-item>
+            
             <el-form-item label="权限描述" prop="description">
                 <el-input v-model="authForm.description"></el-input>
             </el-form-item>
+            
             <el-form-item label="权限排序顺序" prop="sort_order">
                 <el-input-number v-model="authForm.sort_order"></el-input-number>
             </el-form-item>
+            
             <el-form-item label="权限父级id">
                 <el-select v-model="authForm.parent_id" placeholder="权限父级id">
-                    <el-option
-                        v-for="(item, index) in selectionList"
-                        :key="index"
-                        :label="item.titles"
-                        :value="item.id"></el-option>
+                    <el-option v-for="(item, index) in selectionList" :key="index" :label="item.titles" :value="item.id"></el-option>
                 </el-select>
             </el-form-item>
+            
             <el-form-item label="是否展示">
                 <el-switch v-model="authForm.is_display"></el-switch>
             </el-form-item>
@@ -69,13 +65,6 @@ export default {
                 callback();
             }
         };
-        const validateSortOrder = (rule, value, callback) => {
-            if (value === '') {
-                callback(new Error('请输入排序顺序'));
-            } else {
-                callback();
-            }
-        };
         return {
             //权限表单
             authForm: {
@@ -97,9 +86,6 @@ export default {
                 description: [
                     { validator: validateDescription, trigger: 'blur' }
                 ],
-                sort_order: [
-                    { validator: validateSortOrder, trigger: 'blur' }
-                ],
             },
             //权限父级id下拉列表
             selectionList: []
@@ -111,12 +97,15 @@ export default {
          * 区分新建和编辑
          */
         async onSubmit(formName) {
+
             let is_show = this.authForm.is_display;
+            
             if(is_show){
                 this.authForm.is_display = 1
             } else {
                 this.authForm.is_display = 2
             }
+            
             await this.$refs[formName].validate((valid) => {
                 if (valid) {
                     authService.editPermission(this.authForm)
@@ -168,12 +157,15 @@ export default {
                 }).catch(error =>{
                     this.$message({
                         type:'error',
-                        message: error.message
+                        mexternal
                     })
                 })
 
         }catch(e){
-
+            this.$message({
+                type:'error',
+                message: e.message
+            })
         }
 
         store.commit('setLoading',false)

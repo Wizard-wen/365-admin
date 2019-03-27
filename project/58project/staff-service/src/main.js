@@ -43,7 +43,7 @@ Vue.config.productionTip = false
 
  //设置ajax根路径
 // axios.defaults.baseURL = config.apiPath
-axios.defaults.timeout = 10000
+// axios.defaults.timeout = 10000
 axios.interceptors.request.use(config => {
     //token加入请求头
     config.headers = {

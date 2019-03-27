@@ -167,9 +167,8 @@
              * 重置
              */
             async resetPaper(){
-                Object.keys(this.paperSearch).forEach((item =>{
-                    this.paperSearch[item] = ''
-                }))
+                this.paperSearch.name = ''
+                this.paperSearch.type = ''
                 await this.getTableList()
             }, 
             /**

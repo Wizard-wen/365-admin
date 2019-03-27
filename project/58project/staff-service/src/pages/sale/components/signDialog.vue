@@ -108,7 +108,7 @@ export default {
             unit_price(rule, value, callback){
                 if (!value) {
                     callback(new Error('请输入单价'));
-                } else if(!/^[0-9]*$/.test(value) && value != 0){
+                } else if(!/^\d+(\.\d+)?$/.test(value) && value != 0){
                     callback(new Error('请输入数字'));
                 } else {
                     callback()

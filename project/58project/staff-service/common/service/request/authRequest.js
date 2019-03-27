@@ -203,5 +203,11 @@ export default {
         return axios.post(`./api/admin/permission/deletePermission`,{
             id: id
         })
+    },
+    /**
+     * 获取权限树
+     */
+    getPermissionTree(){
+        return axios.get(`./api/admin/common/getPermissionTree`)
     }
 }

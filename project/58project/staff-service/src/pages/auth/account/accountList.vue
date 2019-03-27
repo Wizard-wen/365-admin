@@ -1,39 +1,32 @@
 <template>
-    <div class="authority">
+    <div class="account">
         
         <div class="container-box">
 
-            <!-- 搜索项 -->
-            <div class="authority-option">
+            <el-form :inline="true" :model="accountSearch" class="account-form">
                 <div class="search">
-                    <el-input class="input" v-model="accountSearch[0].name" placeholder="请输入用户名"></el-input>
-                    <el-button type="primary" @click="searchAccount">查询</el-button>
+                    <el-form-item>
+                        <el-input class="input" v-model="accountSearch.name" placeholder="请输入用户名"></el-input>
+                    </el-form-item>
+
+                    <el-form-item>
+                        <el-button type="primary" @click="searchAccount">查询</el-button>
+                        <el-button type="primary" @click="resetAccount">重置</el-button>
+                    </el-form-item>
                 </div>
-                <el-button type="primary" @click="createAccount">添加账户</el-button>
-            </div>
+                <el-form-item>
+                    <el-button type="primary" @click="createAccount">添加账户</el-button>
+                </el-form-item>
+            </el-form>
             
             <!-- 表格 -->
-            <el-table   
-                :data="accountTable" 
-                class="authority-table">
-                <el-table-column
-                    label="id"
-                    prop="id"
-                    align="center">
-                </el-table-column>
-                <el-table-column
-                    label="账号"
-                    prop="account"
-                    align="center">
-                </el-table-column>
-                <el-table-column
-                    label="用户名"
-                    prop="name"
-                    align="center">
-                </el-table-column>
-                <el-table-column
-                    label="操作"
-                    align="center">
+            <el-table :data="accountTable" class="account-table">
+
+                <el-table-column label="id" prop="id" align="center"></el-table-column>
+                <el-table-column label="账号" prop="account" align="center"></el-table-column>
+                <el-table-column label="用户名" prop="name" align="center"></el-table-column>
+                
+                <el-table-column label="操作" align="center">
                     <template slot-scope="scope">
                         <el-button
                             size="mini"
@@ -50,7 +43,7 @@
             </el-table>
             <!-- 分页 -->
             <el-pagination
-                style="margin-top:30px;"
+                class="pagination"
                 @current-change="handleCurrentPage"
                 @prev-click="handleCurrentPage"
                 @next-click="handleCurrentPage"
@@ -70,12 +63,9 @@
                 //用户列表
                 accountTable: [],
                 //用户列表搜索条件
-                accountSearch: [
-                    {
-                        key: 'name',
-                        name: ''
-                    },
-                ],
+                accountSearch: {
+                    name:''
+                },
                 /**
                  * 分页信息
                  */
@@ -84,8 +74,6 @@
                     currentPage: 1,
                     pageNumber: 10,
                 }
-                
-
             }
         },
         computed:{
@@ -93,9 +81,18 @@
              * 全部已添加搜索字段
              */
             searchArray(){
-                let arr = this.accountSearch.filter((item, index) =>{
-                    if(item[item.key] != ''){
-                        return item
+                let arr = [],
+                _this = this;
+
+                Object.keys(this.accountSearch).forEach((item, index) =>{
+                    if(_this.accountSearch[item] != ''){
+                        let obj = {}
+                        obj[item] = _this.accountSearch[item]
+                        obj = {
+                            ...obj,
+                            key: item
+                        }
+                        arr.push(obj)
                     }
                 })
                 return arr
@@ -117,20 +114,31 @@
                     searchSelect: this.searchArray
                 }
 
-                await authService.getManagerList(tableOption)
-                    .then(data =>{
-                        
-                        this.accountTable = data.data.data
-                        
-                        //分页信息
-                        this.pagination.currentPage = data.data.current_page //当前页码
-                        this.pagination.total = data.data.total //列表总条数
-                    }).catch(error =>{
-                        this.$message({
-                            type:'error',
-                            message: error.message
+                store.commit('setLoading',true)
+                
+                try{
+                    await authService.getManagerList(tableOption).then(data =>{
+                            if(data.code == "0"){
+                                this.accountTable = data.data.data
+
+                                //分页信息
+                                this.pagination.currentPage = data.data.current_page //当前页码
+                                this.pagination.total = data.data.total //列表总条数
+                            }
+                        }).catch(error =>{
+                            this.$message({
+                                type:'error',
+                                message: error.message
+                            })
+                        }).finally(() =>{
+                            store.commit('setLoading',false)
                         })
+                } catch(error){
+                    this.$message({
+                        type:'error',
+                        message: error.message
                     })
+                }
             },
             /**
              * 切换页码
@@ -143,6 +151,13 @@
              * 查找用户
              */
             async searchAccount(){
+                await this.getTableList()
+            },
+            /**
+             * 重置
+             */
+            async resetAccount(){
+                this.accountSearch.name = ''
                 await this.getTableList()
             },
             /**
@@ -179,82 +194,77 @@
                     }
                 })
             },
-            async realDelete(id){
-                await authService.deleteManager(id)
-                    .then(data =>{
-                        console.log(data)
-                        // done();
-                    }).catch(error =>{
-                        this.$message({
-                            type:'error',
-                            message: error.message
-                        })
-                    })
-            },
             /**
              * 删除用户
              */
-            deleteAccount(index, row) {
+            async deleteAccount(index, row) {
 
-                this.$confirm('此操作将永久删除该账户, 是否继续?', '提示', {
+                let _this= this;
+
+                let response = await this.$confirm('确定删除该账户吗?', '提示', {
                     confirmButtonText: '确定',
                     cancelButtonText: '取消',
-                    type: 'warning',
-                })
-                .then(async () => {
-                    // debugger
-                    await this.realDelete(row.id)
-                })
+                    type: 'warning'
+                }).catch(() => {
+                    this.$message({
+                        type: 'info',
+                        message: '已取消删除'
+                    });          
+                });
+
+                if(response == "confirm"){
+                    store.commit('setLoading',1)
+
+                    try{
+                        await authService.deleteManager(row.id)
+                            .then(data =>{
+                                if(data.code == "0"){
+                                    this.$message({
+                                        type:'success',
+                                        message: `删除成功`
+                                    })
+                                }
+                            }).catch(e =>{
+                                this.$message({
+                                    type:'error',
+                                    message: e.message
+                                })
+                            })
+                    } catch(error){
+                        throw error
+                    }
+
+                    await _this.getTableList()
+                    store.commit('setLoading',false)
+                }
             },
         },
         async mounted(){
-            store.commit('setLoading',true)
-            try{
-                // await authService.getManagerList(this.accountSearch.page,this.accountSearch.username)
-                //     .then(data =>{
-                //         this.accountTable = data.data.data
-                //     }).catch(error =>{
-                //         this.$message({
-                //             type:'error',
-                //             message: error.message
-                //         })
-                //     })
-                await this.getTableList()
-            }catch(e){
-                this.$message({
-                    type:'error',
-                    message: e.message
-                })
-            }
-            store.commit('setLoading',false)
+            await this.getTableList()
         }
     }
 </script>
 <style lang="scss" scoped>
-    .authority{
-        
+    .account{
         padding-top: 30px;
-        .container-box{
+        margin: 0 auto;
+        .account-form{
+            width:90%;
+            min-width:900px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+        }
+        .account-table{
+            width: 90%;
+            min-width: 900px;
+            margin: 0 auto;
+        }
+        .pagination{
             width:80%;
             min-width:1100px;
-            margin: 0 auto;
-            .authority-option{
-                padding-right: 30px;
-                margin-bottom:30px;
-                width:100%;
-                display: flex;
-                justify-content: space-between;
-                .search{
-                    width: 400px;
-                    display: flex;
-                    .input{
-                        margin-right: 30px;
-                    }
-                }
-            }
-            .authority-table{
-                width: 100%;
-            }
+            margin: 30px auto 0 auto;;
         }
+        
     }
 </style>

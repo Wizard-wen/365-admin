@@ -1,67 +1,72 @@
 <template>
     <div class="ability">
-        <el-form :inline="true" :model="abilitySearch" class="ability-form">
-            <div class="search">
-                <el-form-item label="是否启用">
-                    <el-select v-model="abilitySearch.type" placeholder="请选择是否启用">
-                        <el-option label="全部" value=""></el-option>
-                        <el-option label="已启用" value="enable"></el-option>
-                        <el-option label="未启用" value="disable"></el-option>
-                    </el-select>
-                </el-form-item>
-                <el-form-item>
-                    <el-input v-model="abilitySearch.name" placeholder="请输入能力标签名称"></el-input>
-                </el-form-item>
+        <div class="ability-table-box">
+            <el-form :inline="true" :model="abilitySearch" class="ability-form">
+                <div class="search">
+                    <el-form-item label="是否启用">
+                        <el-select v-model="abilitySearch.type" placeholder="请选择是否启用">
+                            <el-option label="全部" value=""></el-option>
+                            <el-option label="已启用" value="enable"></el-option>
+                            <el-option label="未启用" value="disable"></el-option>
+                        </el-select>
+                    </el-form-item>
+                    <el-form-item>
+                        <el-input v-model="abilitySearch.name" placeholder="请输入能力标签名称"></el-input>
+                    </el-form-item>
 
+                    <el-form-item>
+                        <el-button type="primary" @click="searchAbility">查询</el-button>
+                        <el-button type="primary" @click="resetAbility">重置</el-button>
+                    </el-form-item>
+                </div>
                 <el-form-item>
-                    <el-button type="primary" @click="searchAbility">查询</el-button>
-                    <el-button type="primary" @click="resetAbility">重置</el-button>
+                    <el-button type="primary" @click="createAbility">添加能力标签</el-button>
                 </el-form-item>
-            </div>
-            <el-form-item>
-                <el-button type="primary" @click="createAbility">添加能力标签</el-button>
-            </el-form-item>
-        </el-form>
-        
-        <el-table
-            :data="abilityTable" 
-            class="ability-table">
-            <el-table-column
-                label="技能id"
-                prop="id"
-                align="center">
-            </el-table-column>
-            <el-table-column
-                label="技能名称"
-                prop="name"
-                align="center">
-            </el-table-column>
-            <el-table-column
-                label="状态"
-                prop="type"
-                :formatter="formatterType"
-                align="center">
-            </el-table-column>
+            </el-form>
+            
+            <el-table
+                :data="abilityTable" 
+                class="ability-table">
+                <el-table-column
+                    label="技能id"
+                    prop="id"
+                    align="center">
+                </el-table-column>
+                <el-table-column
+                    label="技能名称"
+                    prop="name"
+                    align="center">
+                </el-table-column>
+                <el-table-column
+                    label="状态"
+                    prop="type"
+                    :formatter="formatterType"
+                    align="center">
+                </el-table-column>
 
-            <el-table-column
-                label="操作"
-                align="center">
-                <template slot-scope="scope">
-                    <el-button size="mini" @click="editAbility(scope.$index, scope.row)">配置</el-button>
-                </template>
-            </el-table-column>
-        </el-table>
-        <!-- 分页 -->
-        <el-pagination
-            class="pagination"
-            @current-change="handleCurrentPage"
-            @prev-click="handleCurrentPage"
-            @next-click="handleCurrentPage"
-            :current-page.sync="pagination.currentPage"
-            :page-size="10"
-            layout="prev, pager, next, jumper"
-            :total="pagination.total"></el-pagination>
-        
+                <el-table-column
+                    label="操作"
+                    align="center">
+                    <template slot-scope="scope">
+                        <el-button size="mini" @click="editAbility(scope.$index, scope.row)">配置</el-button>
+                    </template>
+                </el-table-column>
+            </el-table>
+            <!-- 分页 -->
+            <el-pagination
+                class="pagination"
+                @current-change="handleCurrentPage"
+                @prev-click="handleCurrentPage"
+                @next-click="handleCurrentPage"
+                :current-page.sync="pagination.currentPage"
+                :page-size="10"
+                layout="prev, pager, next, jumper"
+                :total="pagination.total"></el-pagination>
+        </div>
+        <div class="ability-tree-box">
+            <div class="title">索引</div>
+            <el-tree :data="treelist" accordion :props="defaultProps"></el-tree>
+        </div>  
     </div>
 </template>
 <script>
@@ -84,6 +89,12 @@
                     currentPage: 1,
                     pageNumber: 10,
                 },
+                //树形列表
+                treelist: [],
+                defaultProps: {
+                    children: 'children',
+                    label: 'name'
+                }
             }
         },
         computed:{
@@ -124,20 +135,31 @@
                     searchSelect: this.searchArray
                 }
 
-                await hrService.getAbilityList(tableOption)
-                    .then(data =>{
-                        
-                        this.abilityTable = data.data.data
-                        
-                        //分页信息
-                        this.pagination.currentPage = data.data.current_page //当前页码
-                        this.pagination.total = data.data.total //列表总条数
-                    }).catch(error =>{
-                        this.$message({
-                            type:'error',
-                            message: error.message
+                store.commit('setLoading',true)
+                
+                try{
+                    await hrService.getAbilityList(tableOption).then(data =>{
+                            if(data.code == "0"){
+                                this.abilityTable = data.data.data
+
+                                //分页信息
+                                this.pagination.currentPage = data.data.current_page //当前页码
+                                this.pagination.total = data.data.total //列表总条数
+                            }
+                        }).catch(error =>{
+                            this.$message({
+                                type:'error',
+                                message: error.message
+                            })
+                        }).finally(() =>{
+                            store.commit('setLoading',false)
                         })
+                } catch(error){
+                    this.$message({
+                        type:'error',
+                        message: error.message
                     })
+                }
             },
             /**
              * 切换页码
@@ -156,9 +178,9 @@
              * 重置
              */
             async resetAbility(){
-                Object.keys(this.abilitySearch).forEach((item =>{
-                    this.abilitySearch[item] = ''
-                }))
+                this.abilitySearch.name = ''
+                this.abilitySearch.type = ''
+
                 await this.getTableList()
             }, 
             /**
@@ -198,16 +220,10 @@
             }
         },
         async mounted(){
-            store.commit('setLoading',true)
-            try{
-                await this.getTableList()
-            }catch(e){
-                this.$message({
-                    type:'error',
-                    message: e.message
-                })
-            }
-            store.commit('setLoading',false)
+            await this.getTableList()
+            await hrService.getAbilityTree().then(data =>{
+                 this.treelist = data.data
+            })
         }
     }
 </script>
@@ -215,22 +231,38 @@
     .ability{
         padding-top: 30px;
         margin: 0 auto;
-        .ability-form{
-            width:80%;
-            min-width:1100px;
-            margin: 0 auto;
-            display: flex;
-            justify-content: space-between;
+        display: flex;
+        .ability-table-box{
+            width: calc(100% - 200px);
+            .ability-form{
+                width:90%;
+                min-width:900px;
+                margin: 0 auto;
+                display: flex;
+                justify-content: space-between;
+            }
+            .ability-table{
+                width: 90%;
+                min-width: 900px;
+                margin: 0 auto;
+            }
+            .pagination{
+                width:80%;
+                min-width:1100px;
+                margin: 30px auto 0 auto;;
+            }
         }
-        .ability-table{
-            width: 80%;
-            min-width: 1100px;
-            margin: 0 auto;
-        }
-        .pagination{
-            width:80%;
-            min-width:1100px;
-            margin: 30px auto 0 auto;;
+        .ability-tree-box{
+            position: relative;
+            width: 200px;
+            border-left:1px solid #ccc;
+            .title{
+                line-height: 40px;
+                height: 40px;
+                width: 100%;
+                text-align:center;
+                font-size: 16px;
+            }
         }
     }
 </style>

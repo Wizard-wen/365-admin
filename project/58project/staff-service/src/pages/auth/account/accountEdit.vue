@@ -134,7 +134,6 @@ export default {
         if(this.$route.query.type == 1){
             await authService.getManager(this.$route.query.id)
                 .then(data =>{
-                    console.log(data)
                     this.accountForm.username = data.data.name
                     this.accountForm.account = data.data.account
                 })

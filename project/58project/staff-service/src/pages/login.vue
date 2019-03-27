@@ -54,7 +54,6 @@ export default {
                         
                         _this.$router.push('/');
                     }catch(e){
-                        console.log(e)
                         this.$message({
                             type: 'error',
                             message: '登录失败'

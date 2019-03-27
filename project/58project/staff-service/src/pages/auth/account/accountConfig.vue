@@ -76,7 +76,6 @@ export default {
              //获取管理员角色绑定信息
             await authService.getManagerRole(this.$route.query.id)
                 .then(data =>{
-                    console.log(data)
                     let roleIds = data.data.roleIds; //当前已具备角色
                     
                     this.roleList = data.data.roleList.reduce((arr, item, index) =>{
@@ -92,7 +91,6 @@ export default {
                             ...chosenObj
                         }]
                     },[])
-                    console.log(this.roleList)
                 }).catch(error =>{
                     this.$message({
                         type:'error',

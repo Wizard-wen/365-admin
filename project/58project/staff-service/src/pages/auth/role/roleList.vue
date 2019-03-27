@@ -1,57 +1,52 @@
 <template>
-    <div class="authority">
-        
-        <div class="container-box">
-            <div class="authority-option">
-                <div class="search">
-                    <el-input class="input" v-model="roleSearch[0].name" placeholder="请输入角色名"></el-input>
+    <div class="role">
+        <el-form :inline="true" :model="roleSearch" class="role-form">
+            <div class="search">
+                <el-form-item>
+                    <el-input class="input" v-model="roleSearch.name" placeholder="请输入角色名"></el-input>
+                </el-form-item>
+
+                <el-form-item>
                     <el-button type="primary" @click="searchRole">查询</el-button>
-                </div>
-                <el-button type="primary" @click="createRole">添加角色</el-button>
+                    <el-button type="primary" @click="resetRole">重置</el-button>
+                </el-form-item>
             </div>
+            <el-form-item>
+                <el-button type="primary" @click="createRole">添加角色</el-button>
+            </el-form-item>
+        </el-form>
+
+        <el-table :data="roleTable" class="role-table">
             
-            <el-table
-                :data="roleTable" 
-                class="authority-table">
-                <el-table-column
-                    label="id"
-                    prop="id"
-                    align="center">
-                </el-table-column>
-                <el-table-column
-                    label="名称"
-                    prop="name"
-                    align="center">
-                </el-table-column>
-                <el-table-column
-                    label="操作"
-                    align="center">
-                    <template slot-scope="scope">
-                        <el-button
-                            size="mini"
-                            @click="editAuth(scope.$index, scope.row)">权限配置</el-button>
-                        <el-button
-                            size="mini"
-                            @click="editRole(scope.$index, scope.row)">角色编辑</el-button>
-                        <el-button
-                            size="mini"
-                            type="danger"
-                            @click="deleteRole(scope.$index, scope.row)">删除</el-button>
-                    </template>
-                </el-table-column>
-            </el-table>
-            <!-- 分页 -->
-            <el-pagination
-                style="margin-top:30px;"
-                @current-change="handleCurrentPage"
-                @prev-click="handleCurrentPage"
-                @next-click="handleCurrentPage"
-                :current-page.sync="pagination.currentPage"
-                :page-size="10"
-                layout="prev, pager, next, jumper"
-                :total="pagination.total"></el-pagination>
-        </div>
+            <el-table-column label="id" prop="id" align="center"></el-table-column>
+            <el-table-column label="名称" prop="name" align="center"></el-table-column>
+            
+            <el-table-column label="操作" align="center">
+                <template slot-scope="scope">
+                    <el-button
+                        size="mini"
+                        @click="editAuth(scope.$index, scope.row)">权限配置</el-button>
+                    <el-button
+                        size="mini"
+                        @click="editRole(scope.$index, scope.row)">角色编辑</el-button>
+                    <el-button
+                        size="mini"
+                        type="danger"
+                        @click="deleteRole(scope.$index, scope.row)">删除</el-button>
+                </template>
+            </el-table-column>
+        </el-table>
         
+        <!-- 分页 -->
+        <el-pagination
+            class="pagination"
+            @current-change="handleCurrentPage"
+            @prev-click="handleCurrentPage"
+            @next-click="handleCurrentPage"
+            :current-page.sync="pagination.currentPage"
+            :page-size="10"
+            layout="prev, pager, next, jumper"
+            :total="pagination.total"></el-pagination>
     </div>
 </template>
 <script>
@@ -62,12 +57,9 @@
                 //角色列表
                 roleTable: [],
                 //角色列表搜索条件
-                roleSearch: [
-                    {
-                        key: 'name',
-                        name: ''
-                    },
-                ],
+                roleSearch: {
+                    name: ''
+                },
                 /**
                  * 分页信息
                  */
@@ -83,9 +75,18 @@
              * 全部已添加搜索字段
              */
             searchArray(){
-                let arr = this.roleSearch.filter((item, index) =>{
-                    if(item[item.key] != ''){
-                        return item
+                let arr = [],
+                _this = this;
+
+                Object.keys(this.roleSearch).forEach((item, index) =>{
+                    if(_this.roleSearch[item] != ''){
+                        let obj = {}
+                        obj[item] = _this.roleSearch[item]
+                        obj = {
+                            ...obj,
+                            key: item
+                        }
+                        arr.push(obj)
                     }
                 })
                 return arr
@@ -107,20 +108,32 @@
                     searchSelect: this.searchArray
                 }
 
-                await authService.getRoleList(tableOption)
-                    .then(data =>{
-                        
-                        this.roleTable = data.data.data
-                        
-                        //分页信息
-                        this.pagination.currentPage = data.data.current_page //当前页码
-                        this.pagination.total = data.data.total //列表总条数
-                    }).catch(error =>{
-                        this.$message({
-                            type:'error',
-                            message: error.message
+                
+                store.commit('setLoading',true)
+                
+                try{
+                    await authService.getRoleList(tableOption).then(data =>{
+                            if(data.code == "0"){
+                                this.roleTable = data.data.data
+
+                                //分页信息
+                                this.pagination.currentPage = data.data.current_page //当前页码
+                                this.pagination.total = data.data.total //列表总条数
+                            }
+                        }).catch(error =>{
+                            this.$message({
+                                type:'error',
+                                message: error.message
+                            })
+                        }).finally(() =>{
+                            store.commit('setLoading',false)
                         })
+                } catch(error){
+                    this.$message({
+                        type:'error',
+                        message: error.message
                     })
+                }
             },
             /**
              * 切换页码
@@ -133,6 +146,13 @@
              * 查找角色
              */
             async searchRole(){
+                await this.getTableList()
+            },
+            /**
+             * 重置角色
+             */
+            async resetRole(){
+                this.roleSearch.name = ''
                 await this.getTableList()
             },
             /**
@@ -173,18 +193,31 @@
              * 删除角色
              */
             deleteRole(index, row) {
-                console.log(index, row);
+
                 this.$confirm('此操作将永久删除该角色, 是否继续?', '提示', {
                     confirmButtonText: '确定',
                     cancelButtonText: '取消',
                     type: 'warning'
                 }).then(async () =>{
-                    await authService.deleteRole(row.id)
-                }).then(() => {
-                    this.$message({
-                        type: 'success',
-                        message: '删除成功!'
-                    });
+                    store.commit('setLoading',1)
+                    
+                    await authService.deleteRole(row.id).then((data) => {
+                        if(data.code == '0'){
+                            this.$message({
+                                type: 'success',
+                                message: '删除成功!'
+                            });
+                        }
+                    }).catch((err) =>{
+                        this.$message({
+                            type: 'success',
+                            message: err.message
+                        });
+                    })
+
+                    await this.getTableList()
+
+                    store.commit('setLoading',false)
                 }).catch(() => {
                     this.$message({
                         type: 'info',
@@ -194,46 +227,32 @@
             },
         },
         async mounted(){
-            store.commit('setLoading',true)
-            try{
-                await this.getTableList()
-            }catch(e){
-                this.$message({
-                    type:'error',
-                    message: e.message
-                })
-            }
-            
-            store.commit('setLoading',false)
+            await this.getTableList()
         }
     }
 </script>
 <style lang="scss" scoped>
-    .authority{
-        
+    .role{
         padding-top: 30px;
-        .container-box{
+        margin: 0 auto;
+        .role-form{
+            width:90%;
+            min-width:900px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+        }
+        .role-table{
+            width: 90%;
+            min-width: 900px;
+            margin: 0 auto;
+        }
+        .pagination{
             width:80%;
             min-width:1100px;
-            margin: 0 auto;
-            .authority-option{
-                padding-right: 30px;
-                margin-bottom:30px;
-                width:100%;
-                display: flex;
-                justify-content: space-between;
-                .search{
-                    width: 400px;
-                    display: flex;
-                    .input{
-                        margin-right: 30px;
-                    }
-                }
-            }
-            .authority-table{
-                width: 100%;
-            }
+            margin: 30px auto 0 auto;;
         }
+        
     }
 </style>
 

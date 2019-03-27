@@ -37,6 +37,11 @@ module.exports = {
         options: vueLoaderConfig
       },
       {
+        test: /\.ts?$/,
+        use: 'ts-loader',
+        exclude: /node_modules/
+      },
+      {
         test: /\.js$/,
         loader: 'babel-loader',
         include: [resolve('src'), resolve('test'), resolve('common'), resolve('node_modules/webpack-dev-server/client')]

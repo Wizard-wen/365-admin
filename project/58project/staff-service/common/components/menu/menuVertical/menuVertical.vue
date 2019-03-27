@@ -135,7 +135,6 @@ export default {
         
         //监听路由变化事件
         this._hashchange = (e)=>{
-            console.log(this.$route.path)
             if(this.routerobject[this.$route.path]){
                 let arr = this.routerobject[this.$route.path]
                 //如果是数组

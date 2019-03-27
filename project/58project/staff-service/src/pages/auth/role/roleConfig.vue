@@ -154,7 +154,6 @@ export default {
 
                     // },[])
 
-                    console.log(this.roleConfigList)
 
                 }).catch(err =>{
 

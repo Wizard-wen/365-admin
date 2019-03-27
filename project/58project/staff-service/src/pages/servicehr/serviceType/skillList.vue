@@ -1,70 +1,58 @@
 <template>
     <div class="skill">
-        <el-form :inline="true" :model="skillSearch" class="skill-form">
-            <div>
-                <el-form-item label="是否启用">
-                    <el-select v-model="skillSearch.type" placeholder="请选择是否启用">
-                        <el-option label="全部" value=""></el-option>
-                        <el-option label="已启用" value="enable"></el-option>
-                        <el-option label="未启用" value="disable"></el-option>
-                    </el-select>
-                </el-form-item>
-                <el-form-item>
-                    <el-input v-model="skillSearch.name" placeholder="请输入技能名称"></el-input>
-                </el-form-item>
+        <div class="skill-table-box">
+            <el-form :inline="true" :model="skillSearch" class="skill-form">
+                <div>
+                    <el-form-item label="是否启用">
+                        <el-select v-model="skillSearch.type" placeholder="请选择是否启用">
+                            <el-option label="全部" value=""></el-option>
+                            <el-option label="已启用" value="enable"></el-option>
+                            <el-option label="未启用" value="disable"></el-option>
+                        </el-select>
+                    </el-form-item>
+                    <el-form-item>
+                        <el-input v-model="skillSearch.name" placeholder="请输入技能名称"></el-input>
+                    </el-form-item>
+
+                    <el-form-item>
+                        <el-button type="primary" @click="searchSkill">查询</el-button>
+                        <el-button type="primary" @click="resetSkill">重置</el-button>
+                    </el-form-item>
+                </div>
 
                 <el-form-item>
-                    <el-button type="primary" @click="searchSkill">查询</el-button>
-                    <el-button type="primary" @click="resetSkill">重置</el-button>
-                </el-form-item>
-            </div>
+                    <el-button type="primary" @click="createSkill">添加技能</el-button>
+                </el-form-item>    
+            </el-form>
+            
+            <el-table :data="skillTable" class="skill-table">
 
+                <el-table-column label="技能id" prop="id" align="center"></el-table-column>
+                <el-table-column label="技能名称" prop="name" align="center"></el-table-column>
+                <el-table-column label="状态" prop="type" align="center" :formatter="formatterType"></el-table-column>
 
-            <el-form-item>
-                <el-button type="primary" @click="createSkill">添加技能</el-button>
-            </el-form-item>    
-        </el-form>
-        
-        <el-table
-            :data="skillTable" 
-            class="skill-table">
-            <el-table-column
-                label="技能id"
-                prop="id"
-                align="center">
-            </el-table-column>
-            <el-table-column
-                label="技能名称"
-                prop="name"
-                align="center">
-            </el-table-column>
-            <el-table-column
-                label="状态"
-                prop="type"
-                :formatter="formatterType"
-                :filter-method="showWords"
-                align="center">
-            </el-table-column>
-
-            <el-table-column
-                label="操作"
-                align="center">
-                <template slot-scope="scope">
-                    <el-button size="mini" @click="editSkill(scope.$index, scope.row)">配置</el-button>
-                </template>
-            </el-table-column>
-        </el-table>
-        <!-- 分页 -->
-        <el-pagination
-            class="pagination"
-            @current-change="handleCurrentPage"
-            @prev-click="handleCurrentPage"
-            @next-click="handleCurrentPage"
-            :current-page.sync="pagination.currentPage"
-            :page-size="10"
-            layout="prev, pager, next, jumper"
-            :total="pagination.total">
-        </el-pagination>
+                <el-table-column label="操作" align="center">
+                    <template slot-scope="scope">
+                        <el-button size="mini" @click="editSkill(scope.$index, scope.row)">配置</el-button>
+                    </template>
+                </el-table-column>
+            </el-table>
+            <!-- 分页 -->
+            <el-pagination
+                class="pagination"
+                @current-change="handleCurrentPage"
+                @prev-click="handleCurrentPage"
+                @next-click="handleCurrentPage"
+                :current-page.sync="pagination.currentPage"
+                :page-size="10"
+                layout="prev, pager, next, jumper"
+                :total="pagination.total">
+            </el-pagination>
+        </div>
+        <div class="skill-tree-box">
+            <div class="title">索引</div>
+            <el-tree :data="treelist" accordion :props="defaultProps"></el-tree>
+        </div>  
     </div>
 </template>
 <script>
@@ -87,6 +75,12 @@
                     currentPage: 1,
                     pageNumber: 10,
                 },
+                //树形列表
+                treelist: [],
+                defaultProps: {
+                    children: 'children',
+                    label: 'name'
+                }
             }
         },
         computed:{
@@ -126,21 +120,30 @@
                     pageNumber: this.pagination.pageNumber,
                     searchSelect: this.searchArray
                 }
+                
+                try{
+                    await hrService.getCategoryList(tableOption).then(data =>{
+                            if(data.code == "0"){
+                                this.skillTable = data.data.data
 
-                await hrService.getCategoryList(tableOption)
-                    .then(data =>{
-                        
-                        this.skillTable = data.data.data
-                        
-                        //分页信息
-                        this.pagination.currentPage = data.data.current_page //当前页码
-                        this.pagination.total = data.data.total //列表总条数
-                    }).catch(error =>{
-                        this.$message({
-                            type:'error',
-                            message: error.message
+                                //分页信息
+                                this.pagination.currentPage = data.data.current_page //当前页码
+                                this.pagination.total = data.data.total //列表总条数
+                            }
+                        }).catch(error =>{
+                            this.$message({
+                                type:'error',
+                                message: error.message
+                            })
+                        }).finally(() =>{
+                            store.commit('setLoading',false)
                         })
+                } catch(error){
+                    this.$message({
+                        type:'error',
+                        message: error.message
                     })
+                }
             },
             /**
              * 切换页码
@@ -159,9 +162,8 @@
              * 重置
              */
             async resetSkill(){
-                Object.keys(this.skillSearch).forEach((item =>{
-                    this.skillSearch[item] = ''
-                }))
+                this.skillSearch.name = ''
+                this.skillSearch.type = ''
                 await this.getTableList()
             }, 
             /**
@@ -189,9 +191,6 @@
                     }
                 })
             },
-            showWords(value, row, column){
-                console.log(value)
-            },
             /**
              * 是否启用的状态
              */
@@ -204,16 +203,10 @@
             }
         },
         async mounted(){
-            store.commit('setLoading',true)
-            try{
-                await this.getTableList()
-            }catch(e){
-                this.$message({
-                    type:'error',
-                    message: e.message
-                })
-            }
-            store.commit('setLoading',false)
+            await this.getTableList()
+            await hrService.getSkillTree().then(data =>{
+                 this.treelist = data.data
+            })
         }
     }
 </script>
@@ -221,22 +214,39 @@
     .skill{
         padding-top: 30px;
         margin: 0 auto;
-        .skill-form{
-            width:80%;
-            min-width:1100px;
-            margin: 0 auto;
-            display: flex;
-            justify-content: space-between;
+        display: flex;
+        .skill-table-box{
+            width: calc(100% - 200px);
+            .skill-form{
+                width:90%;
+                min-width:900px;
+                margin: 0 auto;
+                display: flex;
+                justify-content: space-between;
+            }
+            .skill-table{
+                width: 90%;
+                min-width: 900px;
+                margin: 0 auto;
+            }
+            .pagination{
+                width:80%;
+                min-width:1100px;
+                margin: 30px auto 0 auto;;
+            }
         }
-        .skill-table{
-            width: 80%;
-            min-width: 1100px;
-            margin: 0 auto;
+        .skill-tree-box{
+            position: relative;
+            width: 200px;
+            border-left:1px solid #ccc;
+            .title{
+                line-height: 40px;
+                height: 40px;
+                width: 100%;
+                text-align:center;
+                font-size: 16px;
+            }
         }
-        .pagination{
-            width:80%;
-            min-width:1100px;
-            margin: 30px auto 0 auto;;
-        }
+
     }
 </style>

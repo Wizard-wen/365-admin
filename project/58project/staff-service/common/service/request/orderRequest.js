@@ -7,7 +7,7 @@ export default {
      * 获取订单列表
      */
     getOrderList(tableOption){
-        let baseUrl = `./api/admin/order/getOrderList?pageNumber=${tableOption.pageNumber}&page=${tableOption.currentPage}`
+        let baseUrl = `./api/admin/order/getOrderList?pageNumber=${tableOption.pageNumber}&page=${tableOption.currentPage}&purpose=${tableOption.purpose}`
         if(tableOption.searchSelect.length){
             tableOption.searchSelect.forEach((item, index) => {
                 baseUrl += `&${item.key}=${item[item.key]}`

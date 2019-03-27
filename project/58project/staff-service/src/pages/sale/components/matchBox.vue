@@ -1,12 +1,15 @@
 <template>
     <div class="match-box">
         <el-card class="match-message">
-            <div class="match-box" slot="header">
+            <div class="match-search-box" slot="header">
                 <div class="head-input">
-                    <el-input  placeholder="请输入员工姓名" v-model="staffSearch.name" class="input-with-select"></el-input>
-                    <el-input  placeholder="请输入员工号" v-model="staffSearch.staff_id" class="input-with-select"></el-input>
-                    <el-button type="primary"  @click="searchReset">重置</el-button>
-                    <el-button type="primary"  @click="searchStaff">搜索</el-button>
+                    <div class="head-input-left">
+                        <el-input  placeholder="请输入员工姓名" v-model="staffSearch.name" class="input-with-select" style="margin-right:15px;"></el-input>
+                        <el-input  placeholder="请输入员工号" v-model="staffSearch.staff_id" class="input-with-select" style="margin-right:15px;"></el-input>
+                        <el-button type="primary"  @click="searchReset" style="margin-right:15px;">重置</el-button>
+                        <el-button type="primary"  @click="searchStaff">搜索</el-button>
+                    </div>
+                    
                 </div>
                 <div class="head-cascader">
 
@@ -27,39 +30,26 @@
                         :setProps="cascaderOption.cascaderProps"
                         :requestUrl="'./api/admin/common/getLabelTree'"></cascader-component>
 
-                    <!-- <div class="icon" @click="spread" :title="'下拉展开更多搜索项'">
+                    <div class="spread-icon" @click="spread" :title="'下拉展开更多搜索项'">
                         <el-button icon="el-icon-arrow-down"  type="text" size="medium"  v-if="!showSearchBox">更多</el-button>
                         <el-button icon="el-icon-arrow-up"  type="text" size="medium"  v-else>收起</el-button>
-                    </div> -->
-                </div>
-                <!-- <transition name="el-zoom-in-top">
-                    <div v-if="showSearchBox" class="head-more-cascader" :style="{top: 100+`px`}">
-                        <el-form :inline="true" :model="staffSearch" class="more-cascader-form">
-                            <el-form-item v-for="(n, index) in 8" :key="index" class="form-item-style">
-                                <el-cascader
-                                    class="cascader"
-                                    size="medium"
-                                    :options="cascaderOption.areaList"
-                                    v-model="cascaderOption.area"
-                                    :props="cascaderOption.cascaderProps"
-                                    @change="changeRegion"
-                                    clearable
-                                    placeholder="服务地区">
-                                </el-cascader>
-                            </el-form-item>
-                        </el-form>
                     </div>
-                </transition> -->
+                </div>
+
+                <transition name="el-zoom-in-top">
+                    <div v-if="showSearchBox" class="head-more-cascader" :style="{top: 100+`px`}"></div>
+                </transition>
             </div>
 
             <div class="match-content">
-                <div class="match-list" v-if="staffMatchTable.length">
+                <div class="match-list" v-if="staffMatchTable.length" v-loading="loading">
                     <div
                         class="match-service-item"
                         v-for="(item, index) in staffMatchTable"
                         :key="index">
                         <div class="service-pic">
-
+                            <img class="head-icon" v-if="item.icon != ''" :src="`http://${item.icon}`" alt="">
+                            <img class="head-icon" v-else :src="headIcon" alt="">
                         </div>
                         <div class="service-message">
                             <div class="service-message-line">
@@ -115,6 +105,7 @@ import {orderService} from '../../../../common'
 import staffDetail from './staffDetail.vue'
 import cascaderComponent from './cascaderComponent.vue'
 
+import headIcon from '../../../assets/head-icon.jpg'
 export default {
     components: {
         staffDetail,
@@ -160,6 +151,8 @@ export default {
 
             dialogFormVisible: false,
             detailStaffId: 0,
+            loading:false,
+            headIcon,//头像
         }
     },
     computed:{
@@ -211,7 +204,7 @@ export default {
                 searchSelect: this.searchArray
             }
 
-            store.commit('setLoading',true)
+            this.loading = true
 
             try{
                 await hrService.getStaffList(tableOption)
@@ -229,7 +222,7 @@ export default {
                             message: error.message
                         })
                     }).finally(() =>{
-                        store.commit('setLoading',false)
+                        this.loading = false
                     })
             }catch(error){
                 this.$message({
@@ -248,9 +241,9 @@ export default {
         /**
          * 展开更多搜索选项 ---- 一期不上
          */
-        // spread(){
-        //     this.showSearchBox = !this.showSearchBox
-        // },
+        spread(){
+            this.showSearchBox = !this.showSearchBox
+        },
         /**
          * 查找服务人员
          */
@@ -260,12 +253,14 @@ export default {
         /**
          * 重置搜索信息
          */
-        searchReset(){
+        async searchReset(){
             this.staffSearch.name= ''
             this.staffSearch.staff_id= ''
             this.staffSearch.region_ids= []//服务地区
             this.staffSearch.service_category_id= 0//技能分类
             this.staffSearch.ability_ids= []//能力标签
+
+            await this.getTableList()
         },
         /**
          * 显示服务人员详情
@@ -413,19 +408,21 @@ export default {
 
 
             //搜索项
-            .match-box{
+            .match-search-box{
                 height: 100px;
                 width: 100%;
                 background: #fff;
-                border-bottom: 1px solid #e8e8e8;
                 position: relative;
                 //表单搜索框
                 .head-input{
                     width: 100%;
                     height: 60px;
                     display: flex;
+                    justify-content: space-between;
                     padding:12px 30px;
-                    //
+                    .head-input-left{
+                        display: flex;
+                    }
                     & /deep/ .el-input__inner{
                         width: 200px;
                         height: 36px;
@@ -450,7 +447,7 @@ export default {
                     }
                 }
                 //展开图标
-                .icon{
+                .spread-icon{
                     float: right;
                     width:50px;
                     height: 40px;
@@ -489,7 +486,11 @@ export default {
                         .service-pic{
                             height: 160px;
                             width: 160px;
-                            background: green;
+                            .head-icon{
+                                display: block;
+                                height: 160px;
+                                width: 160px;
+                            }
                         }
                         .service-message{
                             height: 160px;

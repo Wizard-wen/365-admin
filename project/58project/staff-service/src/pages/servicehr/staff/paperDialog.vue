@@ -7,17 +7,14 @@
         :close-on-press-escape="false"
         :close-on-click-modal="false">
         <el-form :model="paperForm" label-width="120px" :rules="paperRules" ref="paperForm">
-            <el-form-item label="证书" prop="paper_category_id">
+            
+            <el-form-item label="证书" prop="paper_category_id" style="margin-bottom:30px;">
                 <el-select v-model="paperForm.paper_category_id" placeholder="请选择" :disabled="isEditPaper">
-                    <el-option
-                    v-for="item in paperList"
-                    :key="item.id"
-                    :label="item.name"
-                    :value="item.id">
-                    </el-option>
+                    <el-option v-for="item in paperList" :key="item.id" :label="item.name" :value="item.id"></el-option>
                 </el-select>
             </el-form-item>
-            <el-form-item label="上传图片">
+
+            <el-form-item label="上传图片" prop="images">
                 <el-upload
                     action="/api/admin/common/uploadImage"
                     :on-success="uploadSuccess"
@@ -27,6 +24,7 @@
                     <i class="el-icon-plus"></i>
                 </el-upload>
             </el-form-item>
+        
         </el-form>
         <div slot="footer" class="dialog-footer">
             <el-button @click="cancelPaper">取 消</el-button>
@@ -42,7 +40,6 @@
  */
 import {hrService} from '../../../../common'
 import {hrRequest} from '../../../../common'
-import ceshi from './ceshi.js'
 
 export default {
     props:{
@@ -100,12 +97,22 @@ export default {
                     callback();
                 }
             },
+            validateImages(rule, value, callback){
+                if (value.length == 0) {
+                    callback(new Error('至少保存一张图片'));
+                } else {
+                    callback();
+                }
+            }
         }
         return {
             //表单校验
             paperRules: {
                 paper_category_id: [
                     {validator: validator.validateTag, trigger:'change'}
+                ],
+                images: [
+                    {validator: validator.validateImages, trigger:'change'}
                 ],
             },
             //props传入的证书信息
@@ -154,21 +161,17 @@ export default {
             let paperItem = {
                 ...this.paperForm
             }
-            
-            let name = this.paperList.find((item, index) =>{
-                return item.id == paperItem.paper_category_id
-            })
-            
-            paperItem.paper_category_name = name.name
+            let _this = this;
 
             this.$refs[formName].validate((valid) => {
                 if (valid) {
-                    this.$emit('changePaper',paperItem, this.isEditPaper)
+                    let name = _this.paperList.find((item, index) =>{
+                        return item.id == paperItem.paper_category_id
+                    })     
+                    paperItem.paper_category_name = name.name
+                    
+                    this.$emit('changePaper', paperItem, this.isEditPaper)
                 } else {
-                    this.$message({
-                        type:'error',
-                        message: '请选择证书'
-                    })
                     return false;
                 }
             });
@@ -199,35 +202,5 @@ export default {
     }
 }
 </script>
-<style lang="scss" scoped>
-
-
-    //弹出框-上传图片边框
-    // .avatar-uploader {
-    //     & /deep/ .el-upload {
-    //     border: 1px dashed #d9d9d9;
-    //     border-radius: 6px;
-    //     cursor: pointer;
-    //     position: relative;
-    //     overflow: hidden;
-    //     }
-    // }
-    // .avatar-uploader .el-upload:hover {
-    //     border-color: #409EFF;
-    // }
-    // .avatar-uploader-icon {
-    //     font-size: 28px;
-    //     color: #8c939d;
-    //     width: 178px;
-    //     height: 178px;
-    //     line-height: 178px;
-    //     text-align: center;
-    // }
-    // .avatar {
-    //     width: 178px;
-    //     height: 178px;
-    //     display: block;
-    // }
-</style>
 
 
