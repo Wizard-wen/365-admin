@@ -173,7 +173,7 @@ export default {
         }
     }
     .box-card{
-        margin: 10px 0;
+        margin: 10px 0 10px 10px;
         & /deep/ .el-card__header{
             padding: 0 30px;
         }

@@ -120,24 +120,31 @@
                     pageNumber: this.pagination.pageNumber,
                     searchSelect: this.searchArray
                 }
-                
+                store.commit('setLoading',1)
                 try{
-                    await hrService.getCategoryList(tableOption).then(data =>{
-                            if(data.code == "0"){
-                                this.skillTable = data.data.data
+                    await Promise.all([
+                        hrService.getCategoryList(tableOption),
+                        hrService.getSkillTree()
+                    ]).then(data =>{
+                        if(data[0].code == "0"){
+                            this.skillTable = data[0].data.data
 
-                                //分页信息
-                                this.pagination.currentPage = data.data.current_page //当前页码
-                                this.pagination.total = data.data.total //列表总条数
-                            }
-                        }).catch(error =>{
+                            //分页信息
+                            this.pagination.currentPage = data[0].data.current_page //当前页码
+                            this.pagination.total = data[0].data.total //列表总条数
+                        }
+                        if(data[1].code == "0"){
+                            this.treelist = data[1].data
+                        }
+                    }).catch(error =>{
                             this.$message({
                                 type:'error',
                                 message: error.message
-                            })
-                        }).finally(() =>{
-                            store.commit('setLoading',false)
-                        })
+                            })                        
+                    }).finally(() =>{
+                        store.commit('setLoading',false)
+                    })
+                    
                 } catch(error){
                     this.$message({
                         type:'error',
@@ -204,9 +211,7 @@
         },
         async mounted(){
             await this.getTableList()
-            await hrService.getSkillTree().then(data =>{
-                 this.treelist = data.data
-            })
+
         }
     }
 </script>

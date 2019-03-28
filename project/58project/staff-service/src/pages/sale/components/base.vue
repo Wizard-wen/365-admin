@@ -22,9 +22,14 @@
                         
                         v-for="(item, index) in baseList"
                         :key="index">
-                        <div class="base-word">   
-                            <div class="base-key">{{`${item.key}：`}}</div>
-                            <div class="base-value">{{item.value}}</div>
+                        <div class="base-word" v-if="item.key">
+                            <div class="base-key">{{item.key+'：'}}</div>
+                            <div class="base-value" v-if="item.value">{{item.value}}</div>
+                            <div class="base-value" style="color: #F56C6C" v-else>暂无数据</div>
+                        </div>
+                        <div class="base-word" v-else>
+                            <div class="base-key"></div>
+                            <div class="base-value"></div>
                         </div>
                     </div>
                 </div>
@@ -48,6 +53,10 @@ export default {
                 service_end_time: '服务终止时间',//服务终止时间
                 source: '订单来源',//订单来源
                 remark: '备注信息',//备注信息
+                create_manager_name: '创建人',
+                hold_manager_name: "拥有人",
+                // maintain_manager_name: "维护人",
+                sign_manager_name: "签约人",
             },
             //是否展示表单
             isShow:true
@@ -79,6 +88,7 @@ export default {
                             value: ''
                         }
                     
+                    //转化订单来源字段格式
                     if(item == "source"){
                         if(realValue == 1){
                             realItemObj.value = "线下"
@@ -92,20 +102,39 @@ export default {
                             ...itemObj,
                             ...realItemObj,
                         }
-                    } else if(item == "service_start_time" || item == "service_end_time"){
-                        realItemObj.value = new Date(realValue * 1000).getFullYear()
+                    } 
+                    //转化时间格式
+                    if(item == "service_start_time" || item == "service_end_time"){
+                        realItemObj.value = formatDate(new Date(realValue * 1000), 'yyyy-MM-dd hh:mm:ss')
                         itemObj = {
                             ...itemObj,
                             ...realItemObj,
                         }
                     }
-                    
-
-
                     newArr.push(itemObj)
                 }
 
             })
+            /**
+             * 时间戳格式转换
+             */
+            function formatDate(date, fmt) {
+                var o = {
+                    "M+": date.getMonth() + 1,                 //月份
+                    "d+": date.getDate(),                    //日
+                    "h+": date.getHours(),                   //小时
+                    "m+": date.getMinutes(),                 //分
+                    "s+": date.getSeconds(),                 //秒
+                    "q+": Math.floor((date.getMonth() + 3) / 3), //季度 
+                    "S": date.getMilliseconds()             //毫秒
+                };
+                if (/(y+)/.test(fmt))
+                    fmt = fmt.replace(RegExp.$1, (date.getFullYear() + "").substr(4 - RegExp.$1.length));
+                for (var k in o)
+                    if (new RegExp("(" + k + ")").test(fmt))
+                        fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
+                return fmt;
+            }
             //获取字符串长度（汉字算两个字符，字母数字算一个）
             function getByteLen(val) {
                 var len = 0;
@@ -147,7 +176,7 @@ export default {
 </script>
 <style lang="scss" scoped>
     .box-card{
-        margin: 10px 0;
+        margin: 10px 0 10px 10px;
         & /deep/ .el-card__header{
             padding: 0 30px;;
         }

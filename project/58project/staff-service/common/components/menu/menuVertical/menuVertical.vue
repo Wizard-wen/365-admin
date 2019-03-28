@@ -132,10 +132,10 @@ export default {
         sliderVertical,
     },
     mounted(){
-        
         //监听路由变化事件
         this._hashchange = (e)=>{
             if(this.routerobject[this.$route.path]){
+                
                 let arr = this.routerobject[this.$route.path]
                 //如果是数组
                 if(Array.isArray(arr)){
@@ -155,7 +155,7 @@ export default {
         
         //遍历目录树，生成路径对象
         this.visitTree(this.propdatalist,'0');
-
+        
         Object.keys(this.routerobject).forEach(key =>{
 
             if(this.routerobject[key].includes('-')){

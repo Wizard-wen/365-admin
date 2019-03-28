@@ -68,3 +68,11 @@ export {
  */
 
 import './style/styleConfig.scss'
+
+/**
+ * utils 工具
+ */
+import $utils from './utils'
+export {
+    $utils
+}

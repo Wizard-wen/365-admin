@@ -24,8 +24,8 @@ export default {
         return {
             isLoaded: false,
             form: {
-                username: 'admin',
-                password: 'admin',
+                username: '',
+                password: '',
             },
             rules: {
                 username: [

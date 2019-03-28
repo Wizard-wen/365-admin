@@ -21,7 +21,6 @@
                             </span>
                             <el-dropdown-menu slot="dropdown">
                                 <el-dropdown-item command="1">注销</el-dropdown-item>
-                                <el-dropdown-item>我的</el-dropdown-item>
                             </el-dropdown-menu>
                         </el-dropdown>
                     </div>
@@ -142,6 +141,8 @@ export default {
             if(type == '1'){
                 loginService.logout()
                 this.$router.push('/login')
+            } else if(type =='2'){
+                this.$router.push('/homePage')
             }
         }
     },

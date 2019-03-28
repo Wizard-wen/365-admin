@@ -1,12 +1,12 @@
 <template>
-    <div class="match-box">
+    <div class="match-box" v-loading="loading">
         <el-card class="match-message">
             <div class="match-search-box" slot="header">
                 <div class="head-input">
                     <div class="head-input-left">
-                        <el-input  placeholder="请输入员工姓名" v-model="staffSearch.name" class="input-with-select" style="margin-right:15px;"></el-input>
-                        <el-input  placeholder="请输入员工号" v-model="staffSearch.staff_id" class="input-with-select" style="margin-right:15px;"></el-input>
-                        <el-button type="primary"  @click="searchReset" style="margin-right:15px;">重置</el-button>
+                        <el-input  placeholder="请输入员工姓名" v-model="staffSearch.name" class="input-with-select" ></el-input>
+                        <el-input  placeholder="请输入员工号" v-model="staffSearch.staff_id" class="input-with-select"></el-input>
+                        <el-button type="primary"  @click="searchReset" >重置</el-button>
                         <el-button type="primary"  @click="searchStaff">搜索</el-button>
                     </div>
                     
@@ -42,7 +42,7 @@
             </div>
 
             <div class="match-content">
-                <div class="match-list" v-if="staffMatchTable.length" v-loading="loading">
+                <div class="match-list" v-if="staffMatchTable.length" >
                     <div
                         class="match-service-item"
                         v-for="(item, index) in staffMatchTable"
@@ -419,9 +419,11 @@ export default {
                     height: 60px;
                     display: flex;
                     justify-content: space-between;
-                    padding:12px 30px;
+                    padding:12px 15px;
                     .head-input-left{
                         display: flex;
+                        justify-content: space-between;
+                        min-width: 550px;
                     }
                     & /deep/ .el-input__inner{
                         width: 200px;

@@ -19,7 +19,7 @@ export default {
      * 获取所有销售人员名单
      */
     getManagerSelection(){
-        let baseUrl = `./api/admin/order/getManagerSelection`
+        let baseUrl = `./api/admin/common/getManagerSelection`
 
         return axios.get(baseUrl)
     },
@@ -110,6 +110,14 @@ export default {
      */ 
     completeOrder(obj){
         return axios.post(`./api/admin/order/completeOrder`,
+            Object.assign({}, obj)
+        )
+    },
+    /**
+     * 派发订单
+     */
+    assignOrder(obj){
+        return axios.post(`./api/admin/order/assignOrder`,
             Object.assign({}, obj)
         )
     }

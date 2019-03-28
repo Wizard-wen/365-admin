@@ -138,22 +138,29 @@
                 store.commit('setLoading',true)
                 
                 try{
-                    await hrService.getAbilityList(tableOption).then(data =>{
-                            if(data.code == "0"){
-                                this.abilityTable = data.data.data
+                    await Promise.all([
+                        hrService.getAbilityList(tableOption),
+                        hrService.getAbilityTree()
+                    ]).then(data =>{
+                        if(data[0].code == "0"){
+                            this.abilityTable = data[0].data.data
 
-                                //分页信息
-                                this.pagination.currentPage = data.data.current_page //当前页码
-                                this.pagination.total = data.data.total //列表总条数
-                            }
-                        }).catch(error =>{
+                            //分页信息
+                            this.pagination.currentPage = data[0].data.current_page //当前页码
+                            this.pagination.total = data[0].data.total //列表总条数
+                        }
+                        if(data[1].code == "0"){
+                            this.treelist = data[1].data
+                        }
+                    }).catch(error =>{
                             this.$message({
                                 type:'error',
                                 message: error.message
-                            })
-                        }).finally(() =>{
-                            store.commit('setLoading',false)
-                        })
+                            })                        
+                    }).finally(() =>{
+                        store.commit('setLoading',false)
+                    })
+
                 } catch(error){
                     this.$message({
                         type:'error',
@@ -221,9 +228,7 @@
         },
         async mounted(){
             await this.getTableList()
-            await hrService.getAbilityTree().then(data =>{
-                 this.treelist = data.data
-            })
+
         }
     }
 </script>

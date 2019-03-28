@@ -91,5 +91,11 @@ export default {
      */ 
     completeOrder(obj){
         return orderRequest.completeOrder(obj)
+    },
+    /**
+     * 派发订单
+     */
+    assignOrder(obj){
+        return orderRequest.assignOrder(obj)
     }
 }

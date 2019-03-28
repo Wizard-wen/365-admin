@@ -1,5 +1,6 @@
 <template>
     <el-dialog 
+        v-loading="isShow"
         title="服务人员详情" 
         :visible.sync="openDetailDialog"
         :show-close="false"
@@ -11,33 +12,41 @@
                 width: item.size == 1? '100%' : '50%'}"
             v-for="(item, index) in staffDetailList"
             :key="index">
-            <div class="base-word">
-                <div class="base-key">{{`${item.key}：`}}</div>
-                <div class="base-value">{{item.value}}</div>
+            <div class="base-word" v-if="item.key">
+                <div class="base-key">{{item.key+'：'}}</div>
+                <div class="base-value" v-if="item.value">{{item.value}}</div>
+                <div class="base-value" style="color: #F56C6C" v-else>暂无数据</div>
+            </div>
+            <div class="base-word" v-else>
+                <div class="base-key"></div>
+                <div class="base-value"></div>
             </div>
         </div>
         <div class="base-line base-array-line">
             <div class="base-word" >
                 <div class="base-key">地区：</div>
-                <div class="base-value">
+                <div class="base-value" v-if="staffDetailForm.region.length">
                     <el-tag v-for="(item, index) in staffDetailForm.region" :key="index">{{item.name}}</el-tag>
                 </div>
+                <div v-else style="color: #F56C6C">暂无数据</div>
             </div>
         </div>
         <div class="base-line base-array-line">
             <div class="base-word" >
                 <div class="base-key">标签：</div>
-                <div class="base-value">
+                <div class="base-value" v-if="staffDetailForm.label.length">
                     <el-tag style="margin-right:10px;" v-for="(item, index) in staffDetailForm.label" :key="index">{{item.name}}</el-tag>
                 </div>
+                <div v-else style="color: #F56C6C">暂无数据</div>
             </div>
         </div>
         <div class="base-line base-array-line">
             <div class="base-word" >
                 <div class="base-key">技能：</div>
-                <div class="base-value">
+                <div class="base-value" v-if="staffDetailForm.skill.length">
                     <el-tag v-for="(item, index) in staffDetailForm.skill" :key="index">{{item.name}}</el-tag>
                 </div>
+                <div v-else style="color: #F56C6C">暂无数据</div>
             </div>
         </div>
         <div slot="footer" class="dialog-footer">
@@ -92,7 +101,8 @@ export default {
              * 服务人员详情对象
              * des 接口请求后得到的数据
              */
-            staffDetailForm: {}
+            staffDetailForm: {},
+            isShow: false,//是否展示
         }
     },
     methods: {
@@ -179,15 +189,13 @@ export default {
         }
     },
     async mounted(){
-        store.commit('setLoading',true)
+        this.isShow = true
         let _this = this
-        await hrService.getStaff(this.staffId)
-            .then(data =>{
+        await hrService.getStaff(this.staffId).then(data =>{
                 if(data.code == "0"){
 
                     _this.staffDetailForm = data.data
                     _this.staffDetailList = _this.changeBaseList(data.data)
-                    // store.commit('setLoading',false)
                 }
             })
             .catch(e =>{
@@ -195,8 +203,9 @@ export default {
                     type:'error',
                     message: e.message
                 })
+            }).finally(() =>{
+                this.isShow = false
             })
-        store.commit('setLoading',false)
     }
 }
 </script>
@@ -206,6 +215,7 @@ export default {
             float: left;
             display: flex;
             line-height: 40px;
+            height:40px;
             margin-bottom: 0px;
             .base-word{
                 display: flex;

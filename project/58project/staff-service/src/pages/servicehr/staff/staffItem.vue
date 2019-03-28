@@ -46,6 +46,7 @@
                             :file-list="icon_fileList"
                             :on-success="iconUploadSuccess"
                             :before-upload="beforeAvatarUpload">
+                            
                             <div v-if="staffForm.icon!=''" class="avatar-box" @mouseover="showblack('0')" @mouseout="showblack('1')">
                                 <img  :src="staffForm.icon == '' ? '' : `./api/resource/${staffForm.icon}`" class="avatar">
                                 <div class="avatar-back" v-if="isShowBlack">
