@@ -1,13 +1,13 @@
 <template>
     <!-- 添加证书 -->
-    <el-dialog 
-        title="添加证书" 
-        :visible.sync="paperDialogVisible" 
+    <el-dialog
+        title="添加证书"
+        :visible.sync="paperDialogVisible"
         :show-close="false"
         :close-on-press-escape="false"
         :close-on-click-modal="false">
         <el-form :model="paperForm" label-width="120px" :rules="paperRules" ref="paperForm">
-            
+
             <el-form-item label="证书" prop="paper_category_id" style="margin-bottom:30px;">
                 <el-select v-model="paperForm.paper_category_id" placeholder="请选择" :disabled="isEditPaper">
                     <el-option v-for="item in paperList" :key="item.id" :label="item.name" :value="item.id"></el-option>
@@ -16,7 +16,7 @@
 
             <el-form-item label="上传图片" prop="images">
                 <el-upload
-                    action="/api/admin/common/uploadImage"
+                    action="/admin/common/uploadImage"
                     :on-success="uploadSuccess"
                     :on-remove="removePic"
                     :file-list="paperForm.images"
@@ -25,7 +25,7 @@
                     <i class="el-icon-plus"></i>
                 </el-upload>
             </el-form-item>
-        
+
         </el-form>
         <div slot="footer" class="dialog-footer">
             <el-button @click="cancelPaper">取 消</el-button>
@@ -172,9 +172,9 @@ export default {
                 if (valid) {
                     let name = _this.paperList.find((item, index) =>{
                         return item.id == paperItem.paper_category_id
-                    })     
+                    })
                     paperItem.paper_category_name = name.name
-                    
+
                     this.$emit('changePaper', paperItem, this.isEditPaper)
                 } else {
                     return false;

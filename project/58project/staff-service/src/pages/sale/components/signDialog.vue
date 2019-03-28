@@ -1,6 +1,6 @@
 <template>
-    <el-dialog 
-        title="签约" 
+    <el-dialog
+        title="签约"
         :visible.sync="openSignDialog"
         :show-close="false"
         :close-on-press-escape="false"
@@ -30,7 +30,7 @@
                     end-placeholder="结束日期">
                 </el-date-picker>
             </el-form-item>
-            
+
             <el-form-item label="单价" prop="unit_price">
                 <el-input v-model="signForm.unit_price" autocomplete="off"></el-input>
             </el-form-item>
@@ -41,7 +41,7 @@
 
             <el-form-item label="合同照片" prop="paper">
                 <el-upload
-                    action="/api/admin/common/uploadImage"
+                    action="/admin/common/uploadImage"
                     :on-success="uploadSuccess"
                     :on-remove="removePic"
                     :file-list="signForm.paper"
@@ -50,7 +50,7 @@
                     <i class="el-icon-plus"></i>
                 </el-upload>
             </el-form-item>
-            
+
             <el-form-item label="是否代发工资" >
                 <el-select v-model="signForm.pay_wage" placeholder="请选择活动区域">
                     <el-option label="是" :value="2"></el-option>
@@ -281,7 +281,7 @@ export default {
                             })
                         }).finally(async () =>{
                             await orderService.getOrder(this.$route.query.order_id)
-                    
+
                             store.commit('setLoading',false)
                         })
                 } else {

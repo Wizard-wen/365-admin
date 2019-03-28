@@ -3,7 +3,7 @@
         <el-form class="staff-form" ref="form" :model="staffForm" :rules="staffRules" label-width="120px">
             <el-tabs v-model="activeName" :tab-position="'left'" @tab-click="tabChange">
                 <el-tab-pane label="必填信息" name="require">
-                    
+
                     <el-form-item label="员工姓名" prop="name">
                         <el-input size="small" v-model="staffForm.name" placeholder="请输入服务人员姓名"></el-input>
                     </el-form-item>
@@ -14,15 +14,15 @@
                             <el-radio :label="2">女</el-radio>
                         </el-radio-group>
                     </el-form-item>
-                    
+
                     <el-form-item label="年龄" prop="age">
                         <el-input-number v-model="staffForm.age"></el-input-number>
-                    </el-form-item>                   
-                    
+                    </el-form-item>
+
                     <el-form-item label="手机号" prop="phone">
                         <el-input v-model="staffForm.phone" placeholder="请输入手机号"></el-input>
                     </el-form-item>
-                    
+
                     <el-form-item label="身份证号" prop="identify">
                         <el-input v-model="staffForm.identify" placeholder="请输入身份证号"></el-input>
                     </el-form-item>
@@ -30,31 +30,31 @@
                     <el-form-item label="住址" prop="address">
                         <el-input v-model="staffForm.address" placeholder="请输入现住址"></el-input>
                     </el-form-item>
-                
+
                     <el-form-item label="银行卡号" prop="bank_card">
                         <el-input v-model="staffForm.bank_card" placeholder="数字"></el-input>
                     </el-form-item>
                 </el-tab-pane>
-                
+
                 <el-tab-pane label="基本信息" name="base">
-                    
+
                     <el-form-item label="员工头像">
                         <el-upload
                             class="avatar-uploader"
-                            action="/api/admin/common/uploadImage"
+                            action="/admin/common/uploadImage"
                             :show-file-list="false"
                             :file-list="icon_fileList"
                             :on-success="iconUploadSuccess"
                             :before-upload="beforeAvatarUpload"
                             :headers="uploadHeader">
-                            
+
                             <div v-if="staffForm.icon!=''" class="avatar-box" @mouseover="showblack('0')" @mouseout="showblack('1')">
                                 <img  :src="staffForm.icon == '' ? '' : `./resource/${staffForm.icon}`" class="avatar">
                                 <div class="avatar-back" v-if="isShowBlack">
                                     <i class="el-icon-edit avatar-uploader-icon" style="color: #fff;font-size: 20px;"></i>
                                 </div>
                             </div>
-                            
+
                             <i v-else class="el-icon-plus avatar-uploader-icon"></i>
                         </el-upload>
                     </el-form-item>
@@ -66,7 +66,7 @@
                     <el-form-item label="微信号" prop="wechat">
                         <el-input v-model="staffForm.wechat" placeholder="请输入微信号"></el-input>
                     </el-form-item>
-                    
+
                     <el-form-item label="教育程度" prop="education">
                         <el-select v-model="staffForm.education" placeholder="请选择教育程度">
                             <el-option
@@ -79,7 +79,7 @@
                 </el-tab-pane>
 
                 <el-tab-pane label="技能证书" name="skill">
-                    
+
                     <el-form-item label="服务地区" prop="region">
                         <tags-component
                         :set-props="setCascaderProps"
@@ -424,9 +424,9 @@ export default {
 <style lang="scss" scoped>
     .staff-box{
         width: 80%;
-        padding-top: 30px; 
+        padding-top: 30px;
         .staff-form{
-            max-width: 750px; 
+            max-width: 750px;
         }
         .paper-imgs{
             height: 110px!important;
