@@ -7,7 +7,7 @@ export default {
      * 获取员工列表
      */
     getStaffList(tableOption){
-        let baseUrl = `./api/admin/staff/getStaffList`,
+        let baseUrl = `./admin/staff/getStaffList`,
             searchObj = {}, //搜索字段对象
             obj = {
                 pageNumber: tableOption.pageNumber,
@@ -31,7 +31,7 @@ export default {
      * @param id 员工id
      */
     getStaff(id){
-        let baseUrl = `./api/admin/staff/getStaff`
+        let baseUrl = `./admin/staff/getStaff`
         if(id){
             baseUrl += `?id=${id}`
         }
@@ -52,13 +52,13 @@ export default {
      */
     editStaff(obj){
         obj = Object.assign({},obj)
-        return axios.post(`./api/admin/staff/editStaff`,obj)
+        return axios.post(`./admin/staff/editStaff`,obj)
     },
     /**
      *  改变订单状态
      */
     changeStaffStatus(id, version){
-        return axios.post(`./api/admin/staff/changeStaffStatus`, {
+        return axios.post(`./admin/staff/changeStaffStatus`, {
             version: version,
             id: id
         })
@@ -74,9 +74,9 @@ export default {
      */
     getAbilityTree(type){
         if (type) {
-            return axios.get(`./api/admin/common/getLabelTree?type=${type}`)
+            return axios.get(`./admin/common/getLabelTree?type=${type}`)
         } else {
-            return axios.get(`./api/admin/common/getLabelTree`)
+            return axios.get(`./admin/common/getLabelTree`)
         }
     },
     /**
@@ -84,9 +84,9 @@ export default {
      */
     getPaperSelection(type){
         if (type) {
-            return axios.get(`./api/admin/common/getPaperSelection?type=${type}`)
+            return axios.get(`./admin/common/getPaperSelection?type=${type}`)
         } else {
-            return axios.get(`./api/admin/common/getPaperSelection`)
+            return axios.get(`./admin/common/getPaperSelection`)
         }
     },
     /**
@@ -94,16 +94,16 @@ export default {
      */
     getSkillTree(type){
         if (type) {
-            return axios.get(`./api/admin/common/getServiceTree?type=${type}`)
+            return axios.get(`./admin/common/getServiceTree?type=${type}`)
         } else {
-            return axios.get(`./api/admin/common/getServiceTree`)
+            return axios.get(`./admin/common/getServiceTree`)
         }
     },
     /**
      * 省市区数据
      */
     getAreaTree(){
-        return axios.get(`./api/admin/common/getAreaTree`)
+        return axios.get(`./admin/common/getAreaTree`)
     },
 
 
@@ -118,7 +118,7 @@ export default {
      * 技能分类接口
      */
     getCategoryList(tableOption){
-        let baseUrl = `./api/admin/service/getCategoryList?pageNumber=${tableOption.pageNumber}&page=${tableOption.currentPage}`
+        let baseUrl = `./admin/service/getCategoryList?pageNumber=${tableOption.pageNumber}&page=${tableOption.currentPage}`
         if(tableOption.searchSelect.length){
             tableOption.searchSelect.forEach((item, index) => {
                 baseUrl += `&${item.key}=${item[item.key]}`
@@ -131,7 +131,7 @@ export default {
      * @param id 技能的id
      */
     getCategory(id){
-        return axios.get(`./api/admin/service/getCategory?id=${id}`)
+        return axios.get(`./admin/service/getCategory?id=${id}`)
     },
     /**
      * 编辑技能接口
@@ -140,7 +140,7 @@ export default {
 
         obj = Object.assign({},obj)
 
-        return axios.post(`./api/admin/service/editCategory`,obj)
+        return axios.post(`./admin/service/editCategory`,obj)
 
     },
 
@@ -155,7 +155,7 @@ export default {
      * 能力标签列表接口
      */
     getAbilityList(tableOption){
-        let baseUrl = `./api/admin/ability/getAbilityList?pageNumber=${tableOption.pageNumber}&page=${tableOption.currentPage}`
+        let baseUrl = `./admin/ability/getAbilityList?pageNumber=${tableOption.pageNumber}&page=${tableOption.currentPage}`
         if(tableOption.searchSelect.length){
             tableOption.searchSelect.forEach((item, index) => {
                 baseUrl += `&${item.key}=${item[item.key]}`
@@ -168,7 +168,7 @@ export default {
      * @param id 能力标签的id
      */
     getAbility(id){
-        return axios.get(`./api/admin/ability/getAbility?id=${id}`)
+        return axios.get(`./admin/ability/getAbility?id=${id}`)
     },
     /**
      * 编辑能力标签接口
@@ -177,7 +177,7 @@ export default {
 
         obj = Object.assign({},obj)
 
-        return axios.post(`./api/admin/ability/editAbility`,obj)
+        return axios.post(`./admin/ability/editAbility`,obj)
 
     },
 
@@ -186,7 +186,7 @@ export default {
      * 证书列表接口
      */
     getPaperList(tableOption){
-        let baseUrl = `./api/admin/paper/getPaperList?pageNumber=${tableOption.pageNumber}&page=${tableOption.currentPage}`
+        let baseUrl = `./admin/paper/getPaperList?pageNumber=${tableOption.pageNumber}&page=${tableOption.currentPage}`
         if(tableOption.searchSelect.length){
             tableOption.searchSelect.forEach((item, index) => {
                 baseUrl += `&${item.key}=${item[item.key]}`
@@ -199,7 +199,7 @@ export default {
      * @param id 证书的id
      */
     getPaper(id){
-        return axios.get(`./api/admin/paper/getPaper?id=${id}`)
+        return axios.get(`./admin/paper/getPaper?id=${id}`)
     },
     /**
      * 编辑证书接口
@@ -208,7 +208,7 @@ export default {
 
         obj = Object.assign({},obj)
 
-        return axios.post(`./api/admin/paper/editPaper`,obj)
+        return axios.post(`./admin/paper/editPaper`,obj)
 
     },
 }

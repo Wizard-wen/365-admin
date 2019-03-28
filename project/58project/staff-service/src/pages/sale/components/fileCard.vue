@@ -14,7 +14,7 @@
             <el-row>
                 <el-col :span="8" v-for="(item, index) in fileList" :key="index" :offset="index > 0 ? 2 : 0">
                     <el-card >
-                        <img :src="`./api/resource/${item.path}`" class="file-image">
+                        <img :src="`./resource/${item.path}`" class="file-image">
                         <!-- <div style="padding: 14px;">
                             <div class="bottom clearfix">
                                 <el-button type="text" class="button">查看大图</el-button>

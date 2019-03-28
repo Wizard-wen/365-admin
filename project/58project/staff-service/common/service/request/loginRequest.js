@@ -11,7 +11,7 @@ export default {
      * @param {password} 密码 
      */
     login(username, password){
-        return axios.post(`./api/admin/login`,{
+        return axios.post(`./admin/login`,{
             account: username,
             password: password
         })
@@ -21,7 +21,7 @@ export default {
      * @param refresh_token
      */
     refreshToken(refresh_token){
-        return axios.post(`./api/admin/changeToken`,{
+        return axios.post(`./admin/changeToken`,{
             refreshToken: refresh_token
         })
     }

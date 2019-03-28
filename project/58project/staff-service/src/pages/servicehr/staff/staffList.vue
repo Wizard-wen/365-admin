@@ -23,7 +23,7 @@
                         v-model="staffSearch.region_ids"
                         :cascaderName="'服务地区'"
                         :setProps="setProps"
-                        :requestUrl="'./api/admin/common/getAreaTree'"></cascader-component>
+                        :requestUrl="'./admin/common/getAreaTree'"></cascader-component>
                 </el-form-item>
                 
                 <el-form-item label="">
@@ -32,7 +32,7 @@
                         :cascaderName="'技能分类'"
                         :modelType="'int'"
                         :setProps="setProps"
-                        :requestUrl="'./api/admin/common/getServiceTree'"></cascader-component>
+                        :requestUrl="'./admin/common/getServiceTree'"></cascader-component>
                 </el-form-item>
 
                 <el-form-item label="">
@@ -40,7 +40,7 @@
                         v-model="staffSearch.ability_ids"
                         :cascaderName="'能力标签'"
                         :setProps="setProps"
-                        :requestUrl="'./api/admin/common/getLabelTree'"></cascader-component>
+                        :requestUrl="'./admin/common/getLabelTree'"></cascader-component>
                 </el-form-item>
 
                 <el-form-item label="">
@@ -48,7 +48,7 @@
                         v-model="staffSearch.paper_ids"
                         :cascaderName="'证书'"
                         :setProps="setProps"
-                        :requestUrl="'./api/admin/common/getPaperSelection'"></cascader-component>
+                        :requestUrl="'./admin/common/getPaperSelection'"></cascader-component>
                 </el-form-item>
 
             </div>

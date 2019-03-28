@@ -49,7 +49,7 @@
                             :headers="uploadHeader">
                             
                             <div v-if="staffForm.icon!=''" class="avatar-box" @mouseover="showblack('0')" @mouseout="showblack('1')">
-                                <img  :src="staffForm.icon == '' ? '' : `./api/resource/${staffForm.icon}`" class="avatar">
+                                <img  :src="staffForm.icon == '' ? '' : `./resource/${staffForm.icon}`" class="avatar">
                                 <div class="avatar-back" v-if="isShowBlack">
                                     <i class="el-icon-edit avatar-uploader-icon" style="color: #fff;font-size: 20px;"></i>
                                 </div>
@@ -351,7 +351,7 @@ export default {
             this.staffForm.icon = res.data.path;
 
             this.icon_fileList =  [{
-                url: `./api/resource/${this.staffForm.icon}`,
+                url: `./resource/${this.staffForm.icon}`,
                 name: 'head'
             }]
         },
@@ -399,11 +399,11 @@ export default {
 
                             this.staffForm.paper.forEach((item, index) =>{
                                 item.images.forEach((it, index) =>{
-                                    it.url = './api/resource/'+it.path
+                                    it.url = './resource/'+it.path
                                 })
                             })
                             this.icon_fileList = this.staffForm.icon == ''? [] : [{
-                                url: `./api/resource/${this.staffForm.icon}`,
+                                url: `./resource/${this.staffForm.icon}`,
                                 name: 'head'
                             }]
                         }

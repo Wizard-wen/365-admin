@@ -26,7 +26,7 @@
                             :cascaderName="'技能分类'"
                             :modelType="'int'"
                             :setProps="setProps"
-                            :requestUrl="'./api/admin/common/getServiceTree'"></cascader-component>
+                            :requestUrl="'./admin/common/getServiceTree'"></cascader-component>
                     </el-form-item>
 
                     <el-form-item label="订单类型">

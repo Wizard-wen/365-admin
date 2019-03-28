@@ -17,18 +17,18 @@
                         v-model="staffSearch.region_ids"
                         :cascaderName="'服务地区'"
                         :setProps="cascaderOption.cascaderProps"
-                        :requestUrl="'./api/admin/common/getAreaTree'"></cascader-component>
+                        :requestUrl="'./admin/common/getAreaTree'"></cascader-component>
                     <cascader-component
                         v-model="staffSearch.service_category_id"
                         :cascaderName="'技能分类'"
                         :modelType="'int'"
                         :setProps="cascaderOption.cascaderProps"
-                        :requestUrl="'./api/admin/common/getServiceTree'"></cascader-component>
+                        :requestUrl="'./admin/common/getServiceTree'"></cascader-component>
                     <cascader-component
                         v-model="staffSearch.ability_ids"
                         :cascaderName="'能力标签'"
                         :setProps="cascaderOption.cascaderProps"
-                        :requestUrl="'./api/admin/common/getLabelTree'"></cascader-component>
+                        :requestUrl="'./admin/common/getLabelTree'"></cascader-component>
 
                     <div class="spread-icon" @click="spread" :title="'下拉展开更多搜索项'">
                         <el-button icon="el-icon-arrow-down"  type="text" size="medium"  v-if="!showSearchBox">更多</el-button>
@@ -48,7 +48,7 @@
                         v-for="(item, index) in staffMatchTable"
                         :key="index">
                         <div class="service-pic">
-                            <img class="head-icon" v-if="item.icon != ''" :src="`./api/resource/${item.icon}`" alt="">
+                            <img class="head-icon" v-if="item.icon != ''" :src="`./resource/${item.icon}`" alt="">
                             <img class="head-icon" v-else :src="headIcon" alt="">
                         </div>
                         <div class="service-message">

@@ -7,7 +7,7 @@ export default {
      * 获取订单列表
      */
     getOrderList(tableOption){
-        let baseUrl = `./api/admin/order/getOrderList?pageNumber=${tableOption.pageNumber}&page=${tableOption.currentPage}&purpose=${tableOption.purpose}`
+        let baseUrl = `./admin/order/getOrderList?pageNumber=${tableOption.pageNumber}&page=${tableOption.currentPage}&purpose=${tableOption.purpose}`
         if(tableOption.searchSelect.length){
             tableOption.searchSelect.forEach((item, index) => {
                 baseUrl += `&${item.key}=${item[item.key]}`
@@ -19,7 +19,7 @@ export default {
      * 获取所有销售人员名单
      */
     getManagerSelection(){
-        let baseUrl = `./api/admin/common/getManagerSelection`
+        let baseUrl = `./admin/common/getManagerSelection`
 
         return axios.get(baseUrl)
     },
@@ -28,7 +28,7 @@ export default {
      * @param obj 新订单表单字段
      */
     createOrder(obj){
-        return axios.post(`./api/admin/order/createOrder`,
+        return axios.post(`./admin/order/createOrder`,
             // Object.assign({}, obj)
             {
                 ...obj
@@ -40,14 +40,14 @@ export default {
      * @param order_id 订单id
      */
     getOrder(order_id){
-        return axios.get(`./api/admin/order/getOrder?order_id=${order_id}`)
+        return axios.get(`./admin/order/getOrder?order_id=${order_id}`)
     },
     /**
      * 编辑订单
      * @param obj 编辑表单字段
      */
     editOrder(obj){
-        return axios.post(`./api/admin/order/editOrder`,
+        return axios.post(`./admin/order/editOrder`,
             Object.assign({}, obj)
         )
     },
@@ -56,7 +56,7 @@ export default {
      * @param obj 候选人字段信息
      */
     createOrderStaff(obj){
-        return axios.post(`./api/admin/order/createOrderStaff`,
+        return axios.post(`./admin/order/createOrderStaff`,
             Object.assign({}, obj)
         )
     },
@@ -66,7 +66,7 @@ export default {
      * @param order_id 订单id
      */
     deleteOrderStaff(order_staff_id, order_id){
-        return axios.post(`./api/admin/order/deleteOrderStaff`,
+        return axios.post(`./admin/order/deleteOrderStaff`,
             {
                 order_staff_id: order_staff_id,
                 order_id: order_id
@@ -77,7 +77,7 @@ export default {
      * 签约
      */
     sign(obj){
-        return axios.post(`./api/admin/order/sign`,
+        return axios.post(`./admin/order/sign`,
             Object.assign({}, obj)
         )
     },
@@ -85,7 +85,7 @@ export default {
      * 拒签
      */
     refuse(obj){
-        return axios.post(`./api/admin/order/refuse`,
+        return axios.post(`./admin/order/refuse`,
             Object.assign({}, obj)
         )
     },
@@ -93,7 +93,7 @@ export default {
      * 签约前、售后日志
      */
     writeOrderLog(obj){
-        return axios.post(`./api/admin/order/writeOrderLog`,
+        return axios.post(`./admin/order/writeOrderLog`,
             Object.assign({}, obj)
         )
     },
@@ -101,7 +101,7 @@ export default {
      * 取消订单
      */ 
     cancelOrder(obj){
-        return axios.post(`./api/admin/order/cancelOrder`,
+        return axios.post(`./admin/order/cancelOrder`,
             Object.assign({}, obj)
         )
     },
@@ -109,7 +109,7 @@ export default {
      * 完成订单
      */ 
     completeOrder(obj){
-        return axios.post(`./api/admin/order/completeOrder`,
+        return axios.post(`./admin/order/completeOrder`,
             Object.assign({}, obj)
         )
     },
@@ -117,7 +117,7 @@ export default {
      * 派发订单
      */
     assignOrder(obj){
-        return axios.post(`./api/admin/order/assignOrder`,
+        return axios.post(`./admin/order/assignOrder`,
             Object.assign({}, obj)
         )
     }

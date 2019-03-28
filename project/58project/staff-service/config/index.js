@@ -25,11 +25,11 @@ module.exports = {
         //       '^/api': ''   //需要rewrite的,
         //   }
         // },
-        '/api': {
+        '/': {
           target: 'http://manage.sy365.cn/', // 接口的域名
           changeOrigin: true, // 如果接口跨域，需要进行这个参数配置
           pathRewrite: {
-              '^/api': ''   //需要rewrite的,
+              '^/': ''   //需要rewrite的,
           }
         },
     },

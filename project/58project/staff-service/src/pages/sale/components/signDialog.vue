@@ -241,7 +241,7 @@ export default {
         uploadSuccess(response, file, fileList) {
             let picItem = {
                 path: response.data.path,
-                url: './api/resource/'+response.data.path,
+                url: './resource/'+response.data.path,
                 name: response.data.name
             }
             this.signForm.paper.push(picItem)
