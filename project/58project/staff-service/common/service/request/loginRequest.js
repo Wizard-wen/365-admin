@@ -7,8 +7,8 @@ export default {
     /**
      * 登录
      * des 获取token 菜单等
-     * @param {username} 用户名 
-     * @param {password} 密码 
+     * @param {username} 用户名
+     * @param {password} 密码
      */
     login(username, password){
         return axios.post(`./admin/login`,{

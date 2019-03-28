@@ -26,7 +26,7 @@ export default {
         } else {
             baseUrl += `&page=${tableOption.currentPage}`
         }
-        
+
         return axios.get(baseUrl)
     },
     /**
@@ -121,7 +121,7 @@ export default {
                 name: name
             })
         }
-        
+
     },
     /**
      * 物理删除角色
@@ -181,7 +181,7 @@ export default {
     },
     /**
      * 编辑权限信息
-     * @param editObj 
+     * @param editObj
      * | id | int | 必填 | 权限id |
      * | route | string | 必填 | 权限路由 |
      * | name | string | 必填 |  权限名字 |

@@ -99,7 +99,7 @@ export default {
     },
     /**
      * 取消订单
-     */ 
+     */
     cancelOrder(obj){
         return axios.post(`./admin/order/cancelOrder`,
             Object.assign({}, obj)
@@ -107,7 +107,7 @@ export default {
     },
     /**
      * 完成订单
-     */ 
+     */
     completeOrder(obj){
         return axios.post(`./admin/order/completeOrder`,
             Object.assign({}, obj)
