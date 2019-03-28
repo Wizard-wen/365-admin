@@ -17,7 +17,7 @@ export default {
      * [{key: 'searchkey', searchkey: ''}]
      */
     getManagerList(tableOption){
-        let baseUrl = `./api/admin/permission/getManagerList?pageNumber=${tableOption.pageNumber}`
+        let baseUrl = `./admin/permission/getManagerList?pageNumber=${tableOption.pageNumber}`
         if(tableOption.searchSelect.length){
             tableOption.searchSelect.forEach((item, index) => {
                 baseUrl += `&${item.key}=${item[item.key]}`
@@ -26,7 +26,7 @@ export default {
         } else {
             baseUrl += `&page=${tableOption.currentPage}`
         }
-        
+
         return axios.get(baseUrl)
     },
     /**
@@ -34,7 +34,7 @@ export default {
      * @param id 管理员id
      */
     getManagerRole(id){
-        return axios.get(`./api/admin/permission/getManagerRole?id=${id}`)
+        return axios.get(`./admin/permission/getManagerRole?id=${id}`)
     },
     /**
      * 分配绑定管理员角色
@@ -42,7 +42,7 @@ export default {
      * @param roleIds 角色id数组
      */
     editManagerRole(id, roleIds){
-        return axios.post(`./api/admin/permission/editManagerRole`,{
+        return axios.post(`./admin/permission/editManagerRole`,{
             id: id,
             roleIds: roleIds,
         })
@@ -52,7 +52,7 @@ export default {
      * @param id 管理员id
      */
     getManager(id){
-        return axios.get(`./api/admin/permission/getManager?id=${id}`)
+        return axios.get(`./admin/permission/getManager?id=${id}`)
     },
     /**
      * 编辑管理员信息
@@ -64,14 +64,14 @@ export default {
      * | repassword | string | 必填 | 确认密码 |
      */
     editManager(editObj){
-        return axios.post(`./api/admin/permission/editManager`,Object.assign({},editObj))
+        return axios.post(`./admin/permission/editManager`,Object.assign({},editObj))
     },
     /**
      * 物理删除管理员
      * @param id 管理员id
      */
     deleteManager(id){
-        return axios.post(`./api/admin/permission/deleteManager`,{
+        return axios.post(`./admin/permission/deleteManager`,{
             id: id
         })
     },
@@ -82,7 +82,7 @@ export default {
      * 获取角色列表
      */
     getRoleList(tableOption){
-        let baseUrl = `./api/admin/permission/getRoleList?pageNumber=${tableOption.pageNumber}`
+        let baseUrl = `./admin/permission/getRoleList?pageNumber=${tableOption.pageNumber}`
         // if(tableOption.searchSelect.length){
         //     tableOption.searchSelect.forEach((item, index) => {
         //         baseUrl += `&${item.key}=${item[item.key]}`
@@ -103,7 +103,7 @@ export default {
      * @param id 角色id
      */
     getRole(id){
-        return axios.get(`./api/admin/permission/getRole?id=${id}`)
+        return axios.get(`./admin/permission/getRole?id=${id}`)
     },
     /**
      * 编辑角色信息
@@ -112,23 +112,23 @@ export default {
      */
     editRole(name, id=''){
         if(id == ''){
-            return axios.post(`./api/admin/permission/editRole`,{
+            return axios.post(`./admin/permission/editRole`,{
                 name: name
             })
         } else {
-            return axios.post(`./api/admin/permission/editRole`,{
+            return axios.post(`./admin/permission/editRole`,{
                 id: id,
                 name: name
             })
         }
-        
+
     },
     /**
      * 物理删除角色
      * @param id 角色id
      */
     deleteRole(id){
-        return axios.post(`./api/admin/permission/deleteRole`,{
+        return axios.post(`./admin/permission/deleteRole`,{
             id: id
         })
     },
@@ -137,7 +137,7 @@ export default {
      * @param id 角色id
      */
     getRolePermission(id){
-        return axios.get(`./api/admin/permission/getRolePermission?id=${id}`)
+        return axios.get(`./admin/permission/getRolePermission?id=${id}`)
     },
     /**
      * 编辑角色权限信息
@@ -145,7 +145,7 @@ export default {
      * @param permission 角色绑定权限id组
      */
     editRolePermission(id, permission){
-        return axios.post(`./api/admin/permission/editRolePermission`,{
+        return axios.post(`./admin/permission/editRolePermission`,{
             id: id,
             permissionIds: permission
         })
@@ -156,7 +156,7 @@ export default {
      * 获取权限列表
      */
     getPermissionList(tableOption){
-        let baseUrl = `./api/admin/permission/getPermissionList?pageNumber=${tableOption.pageNumber}`
+        let baseUrl = `./admin/permission/getPermissionList?pageNumber=${tableOption.pageNumber}`
         // if(tableOption.searchSelect.length){
         //     tableOption.searchSelect.forEach((item, index) => {
         //         baseUrl += `&${item.key}=${item[item.key]}`
@@ -177,11 +177,11 @@ export default {
      * @param id 权限id
      */
     getPermission(id){
-        return axios.get(`./api/admin/permission/getPermission?id=${id}`)
+        return axios.get(`./admin/permission/getPermission?id=${id}`)
     },
     /**
      * 编辑权限信息
-     * @param editObj 
+     * @param editObj
      * | id | int | 必填 | 权限id |
      * | route | string | 必填 | 权限路由 |
      * | name | string | 必填 |  权限名字 |
@@ -193,14 +193,14 @@ export default {
      * | is_display | int | 必填 |  是否展示 |
      */
     editPermission(editObj){
-        return axios.post(`./api/admin/permission/editPermission`,Object.assign({},editObj))
+        return axios.post(`./admin/permission/editPermission`,Object.assign({},editObj))
     },
     /**
      * 物理删除权限
      * @param id 权限id
      */
     deletePermission(id){
-        return axios.post(`./api/admin/permission/deletePermission`,{
+        return axios.post(`./admin/permission/deletePermission`,{
             id: id
         })
     },
@@ -208,6 +208,6 @@ export default {
      * 获取权限树
      */
     getPermissionTree(){
-        return axios.get(`./api/admin/common/getPermissionTree`)
+        return axios.get(`./admin/common/getPermissionTree`)
     }
 }
