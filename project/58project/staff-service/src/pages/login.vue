@@ -42,11 +42,12 @@ export default {
             let _this = this;
             this.$refs[formName].validate(async (valid) => {
                 if (valid) {
+                    this.isLoaded = true
                     try{
-                        this.isLoaded = true
+                        
                         await loginService.getToken(this.form.username, this.form.password)
-                        this.isLoaded  = false
-                        // debugger
+                        
+                        
                         this.$message({
                             type: 'success',
                             message: '登陆成功！'
@@ -59,6 +60,7 @@ export default {
                             message: '登录失败'
                         })
                     }
+                    this.isLoaded  = false
                 } else {
                     return false;
                 }

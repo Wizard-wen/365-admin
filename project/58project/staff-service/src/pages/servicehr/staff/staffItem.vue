@@ -45,7 +45,8 @@
                             :show-file-list="false"
                             :file-list="icon_fileList"
                             :on-success="iconUploadSuccess"
-                            :before-upload="beforeAvatarUpload">
+                            :before-upload="beforeAvatarUpload"
+                            :headers="uploadHeader">
                             
                             <div v-if="staffForm.icon!=''" class="avatar-box" @mouseover="showblack('0')" @mouseout="showblack('1')">
                                 <img  :src="staffForm.icon == '' ? '' : `./api/resource/${staffForm.icon}`" class="avatar">
@@ -281,7 +282,11 @@ export default {
             },
             //tab
             activeName: 'require',
-            isShowBlack: false,
+            isShowBlack: false,//头像阴影
+            //图片上传header
+            uploadHeader:{
+                accessToken: this.$store.state.loginModule.token.access_token
+            }
         }
     },
     computed: {

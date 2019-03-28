@@ -186,7 +186,7 @@ export default {
     },
     computed:{
         total_price(){
-            return Number(this.signForm.service_count) * Number(this.signForm.unit_price)
+            return parseFloat((Number(this.signForm.service_count) * Number(this.signForm.unit_price)).toFixed(10))
         }
     },
     watch: {

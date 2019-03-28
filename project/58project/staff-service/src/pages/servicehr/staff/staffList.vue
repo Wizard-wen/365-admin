@@ -48,7 +48,7 @@
                         v-model="staffSearch.paper_ids"
                         :cascaderName="'证书'"
                         :setProps="setProps"
-                        :requestUrl="'./api/admin/common/getLabelTree'"></cascader-component>
+                        :requestUrl="'./api/admin/common/getPaperSelection'"></cascader-component>
                 </el-form-item>
 
             </div>

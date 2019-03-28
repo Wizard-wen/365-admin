@@ -133,6 +133,7 @@ export default {
                         return item.manager_id == _this.assignOrderForm.manager_id
                     })
                     this.assignOrderForm.manager_name = selectedObject.manager_name
+                    this.assignOrderForm.version = this.$store.state.orderModule.order.version
                     try{
                         this.loading = true
                         await orderService.assignOrder(this.assignOrderForm).then((data) =>{

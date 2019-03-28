@@ -20,7 +20,8 @@
                     :on-success="uploadSuccess"
                     :on-remove="removePic"
                     :file-list="paperForm.images"
-                    list-type="picture-card">
+                    list-type="picture-card"
+                    :headers="uploadHeader">
                     <i class="el-icon-plus"></i>
                 </el-upload>
             </el-form-item>
@@ -129,6 +130,10 @@ export default {
                 label: 'name',
                 value: 'id'
             },
+            //图片上传header
+            uploadHeader:{
+                accessToken: this.$store.state.loginModule.token.access_token
+            }
         }
     },
     methods: {

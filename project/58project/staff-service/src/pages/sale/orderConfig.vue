@@ -10,7 +10,8 @@
                 </div>
                 
                 <div class="order-pull" @click="pullSearch" :style="{right: isSearch? '-16px':'0px'}">
-                    <i class="el-icon-arrow-left pull-icon"></i>
+                    <i v-if="isSearch" class="el-icon-arrow-right pull-icon"></i>
+                    <i v-else class="el-icon-arrow-left pull-icon"></i>
                 </div>
             </div>
 
@@ -228,6 +229,11 @@ export default {
                     height: 100%;
                     width: 100%;
                     overflow-y: scroll;
+                    .control{
+                        height: 100px;
+                        width: 100%;
+                        padding: 30px 10px;
+                    }
                 }
                 .order-pull{
                     position: absolute;
