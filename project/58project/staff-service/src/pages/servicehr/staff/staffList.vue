@@ -55,7 +55,7 @@
         </el-form>
         
         <el-table :data="staffTable" class="staff-table">
-            <el-table-column label="员工id" prop="id" align="center"></el-table-column>
+            <el-table-column label="员工号" prop="staff_code" align="center"></el-table-column>
 
             <el-table-column label="姓名" prop="name" align="center"></el-table-column>
             
@@ -66,7 +66,8 @@
             <el-table-column label="操作" align="center">
                 <template slot-scope="scope">
                     <el-button size="mini" @click="editStaff(scope.$index, scope.row)">编辑</el-button>
-                    <el-button size="mini" type="danger" @click="deleteStaff(scope.$index, scope.row)">删除</el-button>
+                    <el-button size="mini" type="danger" v-if="scope.row.status == 0" @click="changeStaffStatus(scope.row)">停用</el-button>
+                    <el-button size="mini" type="success" @click="changeStaffStatus(scope.row)" v-else>启用</el-button>
                 </template>
             </el-table-column>
         </el-table>
@@ -166,6 +167,7 @@
                 let tableOption = {
                     currentPage: this.pagination.currentPage,
                     pageNumber: this.pagination.pageNumber,
+                    get_for: 'staff',
                     searchSelect: this.searchArray
                 }
 
@@ -244,10 +246,52 @@
                 })
             },
             /**
-             * 删除服务人员
+             * changeStaffStatus
              */
-            deleteStaff(){
+            async changeStaffStatus(row){
+                let _this= this;
 
+                let status = row.status == 0? '停用' : '启用'
+                
+                let response = await this.$confirm(`确定${status}该服务人员吗?`, '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                }).catch(() => {
+                    this.$message({
+                        type: 'info',
+                        message: `已取消${status}`
+                    });          
+                });
+
+                if(response == "confirm"){
+                    store.commit('setLoading',1)
+
+                    try{
+                        await hrService.changeStaffStatus(row.id, row.version)
+                            .then(data =>{
+                                if(data.code == "0"){
+                                    this.$message({
+                                        type:'success',
+                                        message: `${status}成功`
+                                    })
+                                }
+                            }).catch(e =>{
+                                this.$message({
+                                    type:'error',
+                                    message: e.message
+                                })
+                            })
+                    } catch(error){
+                        this.$message({
+                            type:'error',
+                            message: error.message
+                        })
+                    }
+
+                    await _this.getTableList()
+                    store.commit('setLoading',false)
+                }
             }
         },
         async mounted(){

@@ -12,6 +12,7 @@ export default {
             obj = {
                 pageNumber: tableOption.pageNumber,
                 page: tableOption.currentPage,
+                get_for: tableOption.get_for,
             }
 
         if(tableOption.searchSelect.length){
@@ -52,6 +53,15 @@ export default {
     editStaff(obj){
         obj = Object.assign({},obj)
         return axios.post(`./api/admin/staff/editStaff`,obj)
+    },
+    /**
+     *  改变订单状态
+     */
+    changeStaffStatus(id, version){
+        return axios.post(`./api/admin/staff/changeStaffStatus`, {
+            version: version,
+            id: id
+        })
     },
 
 

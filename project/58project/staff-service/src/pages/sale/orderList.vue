@@ -77,6 +77,7 @@
             <el-table-column
                 label="创建时间"
                 prop="created_at"
+                :formatter="formatterCreated_at"
                 align="center">
             </el-table-column>
             <el-table-column
@@ -109,7 +110,7 @@
     </div>
 </template>
 <script>
-    import {orderService} from '../../../common'
+    import {orderService, $utils} from '../../../common'
     import {hrService} from '../../../common'
     import cascaderComponent from './components/cascaderComponent.vue'
     export default {
@@ -292,6 +293,12 @@
                     return row.source == item.value
                 }).label
             },
+            /**
+             * 创建时间
+             */
+            formatterCreated_at(row, column){
+                return $utils.formatDate(new Date(row.created_at * 1000), 'yyyy-MM-dd hh:mm:ss')
+            }
         },
         async mounted(){
             await this.getTableList()

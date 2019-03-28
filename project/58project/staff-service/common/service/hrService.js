@@ -23,7 +23,12 @@ export default {
     editStaff(obj){
         return hrRequest.editStaff(obj)
     },
-
+    /**
+     * 停用服务人员
+     */
+    changeStaffStatus(id, version){
+        return hrRequest.changeStaffStatus(id, version)
+    },
 
 
 

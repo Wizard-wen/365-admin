@@ -51,7 +51,7 @@
             <el-table-column label="手机号" prop="phone" align="center"></el-table-column>
             <el-table-column label="订单状态" prop="type" align="center" :formatter="formatterType"></el-table-column>
             <el-table-column label="订单来源" prop="source" align="center" :formatter="formatterSource"></el-table-column>
-            <el-table-column label="创建时间" prop="created_at" align="center"></el-table-column>
+            <el-table-column label="创建时间" prop="created_at" align="center" :formatter="formatterCreated_at"></el-table-column>
             <el-table-column label="服务类型" prop="name" align="center"></el-table-column>
 
             <el-table-column label="操作" align="center">
@@ -81,7 +81,7 @@
     </div>
 </template>
 <script>
-    import {orderService} from '../../../common'
+    import {orderService, $utils} from '../../../common'
     import {hrService} from '../../../common'
     
     import cascaderComponent from './components/cascaderComponent.vue'
@@ -250,6 +250,12 @@
                     return row.source == item.value
                 }).label
             },
+            /**
+             * 创建时间
+             */
+            formatterCreated_at(row, column){
+                return $utils.formatDate(new Date(row.created_at * 1000), 'yyyy-MM-dd hh:mm:ss')
+            }
         },
         async mounted(){
             await this.getTableList()

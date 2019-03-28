@@ -24,6 +24,8 @@
                 <div class="order-in-box">
                     <base-component></base-component>
                     <log-component></log-component>
+                    <sign-staff-detail :staffId="signStaffId"></sign-staff-detail>
+                    <file-card></file-card>
                     <div class="control" v-if="isSigned==3">
                         <el-button type="primary" @click="showCancelPage">取消订单</el-button>
                         <el-button type="primary" @click="showCompletePage">订单完成</el-button>
@@ -66,6 +68,8 @@ import base from './components/base.vue'
 import logComponent from './components/logComponent.vue'
 import serviceList from './components/serviceList.vue'
 import matchBox from './components/matchBox.vue'
+import signStaffDetail from './components/signStaffDetail.vue'
+import fileCard from './components/fileCard.vue'
 
 import {orderService} from '../../../common'
 export default {
@@ -84,7 +88,7 @@ export default {
                 order_id: this.$route.query.order_id,// 订单id
                 message: '',//售后日志
             },
-            formLabelWidth: '120px'
+            formLabelWidth: '120px',
         }
     },
     methods:{   
@@ -176,13 +180,23 @@ export default {
          */
         isSigned(){
             return store.state.orderModule.order.type
-        }
+        },
+        /**
+         * 签约人id
+         */
+        signStaffId(){
+            return this.$store.state.orderModule.order_staff.find((item, index) =>{
+                return item.type == "sign"
+            }).staff_id
+        },
     },
     components:{
         baseComponent: base,
         serviceListComponent: serviceList,
         matchBoxComponent: matchBox,
         logComponent,
+        signStaffDetail,
+        fileCard
     },
     async mounted(){
         store.commit('setLoading',true)

@@ -5,7 +5,7 @@
                 <div class="head-input">
                     <div class="head-input-left">
                         <el-input  placeholder="请输入员工姓名" v-model="staffSearch.name" class="input-with-select" ></el-input>
-                        <el-input  placeholder="请输入员工号" v-model="staffSearch.staff_id" class="input-with-select"></el-input>
+                        <el-input  placeholder="请输入员工号" v-model="staffSearch.staff_code" class="input-with-select"></el-input>
                         <el-button type="primary"  @click="searchReset" >重置</el-button>
                         <el-button type="primary"  @click="searchStaff">搜索</el-button>
                     </div>
@@ -48,7 +48,7 @@
                         v-for="(item, index) in staffMatchTable"
                         :key="index">
                         <div class="service-pic">
-                            <img class="head-icon" v-if="item.icon != ''" :src="`http://${item.icon}`" alt="">
+                            <img class="head-icon" v-if="item.icon != ''" :src="`./api/resource/${item.icon}`" alt="">
                             <img class="head-icon" v-else :src="headIcon" alt="">
                         </div>
                         <div class="service-message">
@@ -90,25 +90,25 @@
             </div>
         </el-card>
 
-        <staff-detail
+        <staff-detail-dialog
             :staffId="detailStaffId"
             v-if="dialogFormVisible"
             :openDetailDialog="dialogFormVisible"
             @sign="createOrderStaff"
-            @closeDetailDialog="dialogFormVisible = false"></staff-detail>
+            @closeDetailDialog="dialogFormVisible = false"></staff-detail-dialog>
     </div>
 </template>
 <script>
 import {hrService} from '../../../../common'
 import {orderService} from '../../../../common'
 
-import staffDetail from './staffDetail.vue'
+import staffDetailDialog from './staffDetailDialog.vue'
 import cascaderComponent from './cascaderComponent.vue'
 
 import headIcon from '../../../assets/head-icon.jpg'
 export default {
     components: {
-        staffDetail,
+        staffDetailDialog,
         cascaderComponent
     },
     data(){
@@ -118,7 +118,7 @@ export default {
              */
             staffSearch: {
                 name: '',
-                staff_id: '',
+                staff_code: null,
                 region_ids: [],//服务地区
                 service_category_id: 0,//技能分类
                 ability_ids: [],//能力标签
@@ -201,7 +201,10 @@ export default {
         async getTableList(){
 
             let tableOption = {
-                searchSelect: this.searchArray
+                searchSelect: this.searchArray,
+                get_for: "order",
+                currentPage: this.pagination.currentPage,
+                pageNumber: this.pagination.pageNumber,
             }
 
             this.loading = true
@@ -255,7 +258,7 @@ export default {
          */
         async searchReset(){
             this.staffSearch.name= ''
-            this.staffSearch.staff_id= ''
+            this.staffSearch.staff_code= null
             this.staffSearch.region_ids= []//服务地区
             this.staffSearch.service_category_id= 0//技能分类
             this.staffSearch.ability_ids= []//能力标签
@@ -293,13 +296,12 @@ export default {
          * 添加候选人
          */
         async createOrderStaff(item){
-
             //取出所有备选人员
             let order_staff_list = store.state.orderModule.order_staff
 
             //该服务人员是否已经备选
             let isHave = order_staff_list.some((it, index) =>{
-                return it.staff_id == item.id
+                return it.staff_code == item.staff_code
             })
 
             //如果已经匹配
@@ -315,6 +317,7 @@ export default {
             let order_staff_item = {
                 order_id: this.$route.query.order_id,
                 staff_id: item.id ,
+                staff_code: item.staff_code,
                 staff_name: item.name,
             }
 

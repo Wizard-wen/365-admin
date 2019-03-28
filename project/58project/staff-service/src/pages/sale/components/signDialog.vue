@@ -39,6 +39,18 @@
                 <el-input v-model="signForm.total_price" autocomplete="off" disabled=""></el-input>
             </el-form-item>
 
+            <el-form-item label="合同照片" prop="paper">
+                <el-upload
+                    action="/api/admin/common/uploadImage"
+                    :on-success="uploadSuccess"
+                    :on-remove="removePic"
+                    :file-list="signForm.paper"
+                    list-type="picture-card"
+                    :headers="uploadHeader">
+                    <i class="el-icon-plus"></i>
+                </el-upload>
+            </el-form-item>
+            
             <el-form-item label="是否代发工资" >
                 <el-select v-model="signForm.pay_wage" placeholder="请选择活动区域">
                     <el-option label="是" :value="2"></el-option>
@@ -62,7 +74,12 @@
 </template>
 <script>
 import {orderService} from '../../../../common'
+
+import paperComponent from '../../servicehr/staff/paperComponent.vue'
 export default {
+    components: {
+        paperComponent,
+    },
     props: {
         //是否打弹出框
         openSignDialog: {
@@ -137,6 +154,14 @@ export default {
                 } else {
                     callback()
                 }
+            },
+            //合同图片
+            paper(rule, value, callback){
+                if (value.length == 0) {
+                    callback(new Error('请上传合同照片'));
+                } else {
+                    callback()
+                }
             }
         }
         return {
@@ -161,6 +186,10 @@ export default {
                 wage_price: [
                     { validator: validator.wage_price, trigger: 'blur' }
                 ],
+                //合同照片
+                paper: [
+                    { validator: validator.paper, trigger: 'change' }
+                ],
             },
             //签约表单
             signForm: {
@@ -170,7 +199,7 @@ export default {
                 staff_name: this.staffName,//服务人员姓名
                 unit: 0,// 服务周期单位
                 service_count: 0,// 服务次数
-                
+                paper: [],//合同照片
                 service_start_time: 0,//服务开始时间
                 service_end_time: 0,//服务结束时间
 
@@ -182,6 +211,10 @@ export default {
                 version: store.state.orderModule.order.version,
             },
             service_period:[],//服务起止时间段
+            //图片上传header
+            uploadHeader:{
+                accessToken: this.$store.state.loginModule.token.access_token
+            }
         }
     },
     computed:{
@@ -201,6 +234,27 @@ export default {
         changeServicePeriod(param){
             this.signForm.service_start_time = param[0].getTime()
             this.signForm.service_end_time = param[1].getTime()
+        },
+        /**
+         * 上传成功后，接收图片数据，送入图片回显数组
+         */
+        uploadSuccess(response, file, fileList) {
+            let picItem = {
+                path: response.data.path,
+                url: './api/resource/'+response.data.path,
+                name: response.data.name
+            }
+            this.signForm.paper.push(picItem)
+        },
+        /**
+         * 移出图片
+         */
+        removePic(file, fileList){
+            this.signForm.paper.forEach((item, index) =>{
+                if(item.name == file.name){
+                    this.signForm.paper.splice(index,1)
+                }
+            })
         },
         /**
          * 提交签约表单

@@ -19,7 +19,7 @@
                             :body-style="{padding: 0 }">
                             <div style="padding: 7px;">
                                 <p>{{`姓名：${item.staff_name}`}}</p>
-                                <p>{{`员工id：${item.staff_id}`}}</p>
+                                <p>{{`员工号：${item.staff_code}`}}</p>
                                 <div class="bottom clearfix">
                                     <el-button type="text" size="mini" @click="showSignPage(item)">签约</el-button>
                                     <el-button type="text" size="mini" @click="showRefusePage(item)">拒绝</el-button>

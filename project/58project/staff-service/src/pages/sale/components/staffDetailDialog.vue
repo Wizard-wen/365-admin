@@ -9,13 +9,12 @@
         <div>
             <div
                 class="base-line"
-                :style="{
-                    width: item.size == 2? '100%' : '50%'}"
+                :style="{width: item.size == 2? '100%' : '50%'}"
                 v-for="(item, index) in staffDetailList"
                 :key="index">
                 <div class="base-word" v-if="item.key">
                     <div class="base-key">{{item.key+'：'}}</div>
-                    <div class="base-value" v-if="item.value">{{item.value}}</div>
+                    <div class="base-value" v-if="item.value" :style="{color: item.key=='是否已签约'? '#F56C6C' : ''}">{{item.value}}</div>
                     <div class="base-value" style="color: #F56C6C" v-else>暂无数据</div>
                 </div>
                 <div class="base-word" v-else>
@@ -88,6 +87,8 @@ export default {
                 sex: "性别",
                 wechat: "微信",
                 education: "教育程度",
+                type: "是否已签约",
+                staff_code: "员工号"
             },
             /**
              * 服务人员详情数组
@@ -132,6 +133,12 @@ export default {
                     if(item == "sex"){
                         realValue = staffDetail[item] == 1? "男" : "女"
                     }
+
+                    //是否已签约转文字
+                    if(item == "type"){
+                        realValue = staffDetail[item] == 'sign'? "已签约" : "未签约"
+                    }
+
                     //学历转文字
                     if(item == "education"){
                         let educationList = _this.$store.state.hrModule.educationList
