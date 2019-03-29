@@ -58,6 +58,7 @@ export default {
                 hold_manager_name: "拥有人",
                 // maintain_manager_name: "维护人",
                 sign_manager_name: "签约人",
+                code: "订单号"
             },
             //是否展示表单
             isShow:true

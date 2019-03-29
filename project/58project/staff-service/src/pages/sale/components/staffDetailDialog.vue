@@ -145,7 +145,13 @@ export default {
                         let education = educationList.find((it, index) =>{
                             return it.id == staffDetail[item]
                         })
-                        realValue = education.name
+                        if(staffDetail[item] == 0){
+                            realValue = ''
+                        } else {
+                            realValue = education.name
+                        }
+                        // realValue = education.name
+
                     } 
                     
                     //判断处理后的值的长度，决定占半行还是一行
