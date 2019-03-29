@@ -186,6 +186,20 @@
              * 账户编辑
              */
             editAccount(index, row) {
+                // if(row.account == 'admin'){
+                //     this.$message({
+                //         type:'error',
+                //         message: '超级管理员不能修改'
+                //     })
+                // } else {
+                //     this.$router.push({
+                //         path: "/auth/accountEdit",
+                //         query: {
+                //             type: 1, //编辑为1
+                //             id: row.id,
+                //         }
+                //     })
+                // }
                 this.$router.push({
                     path: "/auth/accountEdit",
                     query: {
@@ -193,6 +207,7 @@
                         id: row.id,
                     }
                 })
+
             },
             /**
              * 删除用户

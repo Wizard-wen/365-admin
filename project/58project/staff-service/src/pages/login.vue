@@ -38,34 +38,43 @@ export default {
         }
     },
     methods: {
+        /**
+         * 提交登录
+         */
         submitForm(formName) {
             let _this = this;
             this.$refs[formName].validate(async (valid) => {
                 if (valid) {
                     this.isLoaded = true
                     try{
-                        
-                        await loginService.getToken(this.form.username, this.form.password)
-                        
-                        
-                        this.$message({
-                            type: 'success',
-                            message: '登陆成功！'
-                        });
-                        
-                        _this.$router.push('/');
+                        await loginService.getToken(this.form.username, this.form.password).then((data) =>{
+                                this.$message({
+                                    type: 'success',
+                                    message: data.message
+                                });
+                                _this.$router.push('/');
+                            }).catch(error =>{
+                                this.$message({
+                                    type: 'error',
+                                    message: error.message
+                                });
+                            }).finally(() =>{
+                                this.isLoaded  = false
+                            })
                     }catch(e){
                         this.$message({
                             type: 'error',
-                            message: '登录失败'
+                            message: e.message
                         })
                     }
-                    this.isLoaded  = false
                 } else {
                     return false;
                 }
             });
         },
+        /**
+         * 重置表单
+         */
         resetForm(formName) {
             this.$refs[formName].resetFields();
         }

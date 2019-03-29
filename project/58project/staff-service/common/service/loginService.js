@@ -13,7 +13,7 @@ export default {
     //登录，获取、设置token 
     async getToken(username, password){
 
-        await loginRequest.login(username, password)
+        let login = await loginRequest.login(username, password)
             .then(data =>{
                 let manager = data.data.manager,
                     tree = data.data.tree
@@ -36,9 +36,11 @@ export default {
                     expire: manager.expire,
                     tree: tree,
                 })
+                return data
             }).catch(err =>{
                 throw err
-            })     
+            })    
+        return login 
     },
     /**
      * des 提取树形路由数组的叶节点

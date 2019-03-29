@@ -129,16 +129,37 @@ export default {
         }
     },
     async mounted(){
-        store.commit('setLoading',true)
+        
         //若是编辑，请求编辑数据
         if(this.$route.query.type == 1){
-            await authService.getManager(this.$route.query.id)
-                .then(data =>{
-                    this.accountForm.username = data.data.name
-                    this.accountForm.account = data.data.account
+            store.commit('setLoading',true)
+            try{
+                await authService.getManager(this.$route.query.id)
+                    .then(data =>{
+                        if(data.code == '0'){
+                            this.accountForm.username = data.data.name
+                            this.accountForm.account = data.data.account
+                        }
+                    }).catch(error =>{
+                        if(error.code == "1"){
+                            this.$message({
+                                type: 'error',
+                                message: error.message
+                            })
+                            this.$router.push('/auth/accountList')
+                        }
+                    }).finally(() =>{
+                        store.commit('setLoading',false)
+                    })
+            } catch(error){
+                this.$message({
+                    type: 'error',
+                    message: error.message
                 })
+            }
+
         }
-        store.commit('setLoading',false)
+
     }
 }
 </script>

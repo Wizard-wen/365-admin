@@ -12,14 +12,12 @@
         </div>
         <div v-if="isShow">
             <el-row>
-                <el-col :span="8" v-for="(item, index) in fileList" :key="index" :offset="index > 0 ? 2 : 0">
-                    <el-card >
+                <el-col :span="6" v-for="(item, index) in fileList" :key="index" style="padding: 0 10px">
+                    <el-card :body-style="{ padding: '0px' }">
                         <img :src="`./resource/${item.path}`" class="file-image">
-                        <!-- <div style="padding: 14px;">
-                            <div class="bottom clearfix">
-                                <el-button type="text" class="button">查看大图</el-button>
-                            </div>
-                        </div> -->
+                        <div class="bottom">
+                            <el-button type="text" class="button" @click="showDetialPic(item.path)">查看大图</el-button>
+                        </div>
                     </el-card>
               </el-col>
             </el-row>
@@ -28,8 +26,6 @@
 </template>
 <script>
 export default {
-    components: {
-    },
     data(){
         return {
             //是否展示日志
@@ -49,7 +45,12 @@ export default {
         changeLogState(){
             this.isShow = !this.isShow
         },
+        /**
+         * 图片详情
+         */
+        showDetialPic(path){
 
+        }
     }
 }
 </script>
@@ -95,8 +96,9 @@ export default {
         display: block;
     }
   .bottom {
-    margin-top: 13px;
-    line-height: 12px;
+    line-height: 15px;
+    height: 35px;
+    padding:10px;
   }
 
   .button {

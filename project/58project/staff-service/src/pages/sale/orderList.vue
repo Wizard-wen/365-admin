@@ -119,17 +119,8 @@
         },
         data() {
             return {
-                //丁丹列表
-                orderTable: [{
-                    code: '', //订单号
-                    create_at: '', //创建时间
-                    order_id: '',//订单id
-                    phone: '',
-                    service_category_id: '',//服务分类id
-                    name: '',//服务名称
-                    source: '',//线上线下渠道
-                    type: '',//订单类型
-                }],
+                //订单列表
+                orderTable: [],
                 //用户列表搜索条件
                 orderSearch: {
                     code: '', //订单号
