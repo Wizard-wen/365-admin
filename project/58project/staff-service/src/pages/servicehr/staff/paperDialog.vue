@@ -14,7 +14,7 @@
                 </el-select>
             </el-form-item>
 
-            <el-form-item label="上传图片" prop="images">
+            <el-form-item label="上传图片" prop="images" ref="paper">
                 <el-upload
                     action="/admin/common/uploadImage"
                     :on-success="uploadSuccess"
@@ -147,6 +147,10 @@ export default {
                 name: response.data.name
             }
             this.paperForm.images.push(picItem)
+            //消除表单验证
+            if(this.paperForm.images.length){
+                this.$refs.paper.clearValidate()
+            }
         },
         /**
          * 移出图片

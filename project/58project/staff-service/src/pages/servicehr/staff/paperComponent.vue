@@ -9,7 +9,8 @@
                             class="paper-item-img" 
                             v-for="(it, inds) in item.images" 
                             :key="inds" 
-                            :src="it.url">
+                            :src="it.url"
+                            @click="showDetialPic(it.url)">
                     </div>
                     <div class="image-messsage">
                         <p>{{item.paper_category_name}}</p>
@@ -29,10 +30,16 @@
             :selectedPapers="paperList"
             @changePaper="changePaper"
             @closePaper="cancelPaperFn"></paper-dialog>
+        <picture-detail-dialog
+            :imageUrl="imageUrl"
+            :title="'证书详情'"
+            :openPictureDetailDialog="openPictureDetailDialog"
+            @closePictureDetailDialog="openPictureDetailDialog=false"></picture-detail-dialog>
     </div>
 </template>
 <script>
 import paperDialog from './paperDialog.vue'
+import pictureDetailDialog from '../../sale/components/pictureDetailDialog.vue'
 export default {
     props: {
         value: {
@@ -49,6 +56,7 @@ export default {
     },
     components: {
         paperDialog,
+        pictureDetailDialog
     },
     data(){
         return {
@@ -63,6 +71,8 @@ export default {
                     images: [],
                 }
             },
+            openPictureDetailDialog: false,
+            imageUrl: '',
         }
     },
     methods: {
@@ -142,7 +152,13 @@ export default {
         cancelPaperFn(item){
             this.paperDialog.paperDialogVisible = false
         },
-
+        /**
+         * 查看大图
+         */
+        showDetialPic(path){
+            this.imageUrl = path
+            this.openPictureDetailDialog = true
+        }
     },
     async mounted(){
     }
@@ -157,6 +173,7 @@ export default {
                 height:100px;
                 width: 100px;
                 margin : 0 10px;
+                cursor: pointer;
             }
         }
         .image-messsage{

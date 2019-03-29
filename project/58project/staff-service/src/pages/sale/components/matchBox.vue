@@ -426,6 +426,7 @@ export default {
                     .head-input-left{
                         display: flex;
                         justify-content: space-between;
+                        width: 80%;
                         min-width: 550px;
                     }
                     & /deep/ .el-input__inner{

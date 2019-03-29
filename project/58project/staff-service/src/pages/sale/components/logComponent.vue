@@ -19,15 +19,21 @@
                     <el-table-column
                         prop="created_at"
                         label="创建日期"
-                        :formatter="formatterDate">
+                        :formatter="formatterDate"
+                        width="155px"
+                        align="center">
                     </el-table-column>
                     <el-table-column
                         prop="staff_name"
-                        label="服务人员">
+                        label="服务人员"
+                        width="110px"
+                        align="center">
                     </el-table-column>
                     <el-table-column
                         prop="manager_name"
-                        label="操作人">
+                        label="操作人"
+                        width="110px"
+                        align="center">
                     </el-table-column>
                     <el-table-column
                         prop="message"

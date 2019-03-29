@@ -17,7 +17,7 @@
             </el-form-item>
 
             <el-form-item label="服务次数" prop="service_count">
-                    <el-input-number v-model="signForm.service_count"></el-input-number>
+                    <el-input-number type="number" v-model.number="signForm.service_count"></el-input-number>
             </el-form-item>
 
             <el-form-item label="服务期间" >
@@ -39,7 +39,7 @@
                 <el-input v-model="signForm.total_price" autocomplete="off" disabled=""></el-input>
             </el-form-item>
 
-            <el-form-item label="合同照片" prop="paper">
+            <el-form-item label="合同照片" prop="paper" ref="paper">
                 <el-upload
                     action="/admin/common/uploadImage"
                     :on-success="uploadSuccess"
@@ -172,7 +172,7 @@ export default {
                 ],
                 //服务次数
                 service_count: [
-                    { validator: validator.service_count, trigger: 'blur' }
+                    { validator: validator.service_count, trigger: ['blur', 'change'] }
                 ],
                 //单价
                 unit_price: [
@@ -245,6 +245,10 @@ export default {
                 name: response.data.name
             }
             this.signForm.paper.push(picItem)
+            //消除表单验证
+            if(this.signForm.paper.length){
+                this.$refs.paper.clearValidate()
+            }
         },
         /**
          * 移出图片

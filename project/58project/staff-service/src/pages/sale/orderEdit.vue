@@ -70,7 +70,7 @@
             </el-form-item>
 
             <el-form-item label="备注信息">
-                <el-input type="textarea" v-model="orderForm.remark"></el-input>
+                <el-input placeholder="请最多输入200字符" autosize :maxlength="100" type="textarea" v-model="orderForm.remark"></el-input>
             </el-form-item>
 
             <el-form-item>

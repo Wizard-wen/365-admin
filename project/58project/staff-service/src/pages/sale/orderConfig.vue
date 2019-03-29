@@ -38,7 +38,7 @@
         <el-dialog title="取消订单" :visible.sync="cancelDialogVisible">
             <el-form :model="cancelForm">
                 <el-form-item label="取消原因" :label-width="formLabelWidth">
-                    <el-input v-model="cancelForm.message" type="textarea"></el-input>
+                    <el-input placeholder="请最多输入200字符" :maxlength="100" autosize v-model="cancelForm.message" type="textarea"></el-input>
                 </el-form-item>
             </el-form>
             <div slot="footer" class="dialog-footer">
@@ -51,7 +51,7 @@
         <el-dialog title="完成订单" :visible.sync="completeDialogVisible">
             <el-form :model="completeForm">
                 <el-form-item label="日志" :label-width="formLabelWidth">
-                    <el-input v-model="completeForm.message" type="textarea"></el-input>
+                    <el-input v-model="completeForm.message" autosize type="textarea" :maxlength="100" placeholder="请最多输入200字符"></el-input>
                 </el-form-item>
             </el-form>
             <div slot="footer" class="dialog-footer">

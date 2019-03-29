@@ -10,7 +10,7 @@
                 <el-input v-model="logForm.staff_name" disabled></el-input>
             </el-form-item>
             <el-form-item label="日志信息" prop="message">
-                <el-input v-model="logForm.message" type="textarea"></el-input>
+                <el-input placeholder="请最多输入200字符" :maxlength="100" autosize v-model="logForm.message" type="textarea"></el-input>
             </el-form-item>
         </el-form>
         <div slot="footer" class="dialog-footer">

@@ -22,14 +22,25 @@
               </el-col>
             </el-row>
         </div>
+        <picture-detail-dialog
+            :imageUrl="imageUrl"
+            :title="'合同详情'"
+            :openPictureDetailDialog="openPictureDetailDialog"
+            @closePictureDetailDialog="openPictureDetailDialog=false"></picture-detail-dialog>
     </el-card>  
 </template>
 <script>
+import pictureDetailDialog from './pictureDetailDialog.vue'
 export default {
+    components: {
+        pictureDetailDialog
+    },
     data(){
         return {
             //是否展示日志
             isShow:true,
+            openPictureDetailDialog: false,
+            imageUrl: '',
         }
     },
     computed: {
@@ -49,7 +60,8 @@ export default {
          * 图片详情
          */
         showDetialPic(path){
-
+            this.imageUrl = './resource/'+path
+            this.openPictureDetailDialog = true
         }
     }
 }
