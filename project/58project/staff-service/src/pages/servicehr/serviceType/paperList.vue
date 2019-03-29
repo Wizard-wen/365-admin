@@ -4,13 +4,13 @@
             <div>
                 <el-form-item label="是否启用">
                     <el-select v-model="paperSearch.type" placeholder="请选择是否启用">
-                        <el-option label="全部" value=""></el-option>
+                        <el-option label="请选择" value=""></el-option>
                         <el-option label="已启用" value="enable"></el-option>
                         <el-option label="未启用" value="disable"></el-option>
                     </el-select>
                 </el-form-item>
                 <el-form-item>
-                    <el-input v-model="paperSearch.name" placeholder="请输入证书名称"></el-input>
+                    <el-input v-model="paperSearch.name" :maxlength="30" placeholder="请输入证书名称"></el-input>
                 </el-form-item>
 
                 <el-form-item>
@@ -18,18 +18,18 @@
                     <el-button type="primary" @click="resetPaper">重置</el-button>
                 </el-form-item>
             </div>
-            
+
 
             <el-form-item>
                 <el-button type="primary" @click="createPaper">添加证书</el-button>
-            </el-form-item>    
+            </el-form-item>
         </el-form>
-        
+
         <el-table
-            :data="paperTable" 
+            :data="paperTable"
             class="paper-table">
             <el-table-column
-                label="证书id"
+                label="证书编号"
                 prop="id"
                 align="center">
             </el-table-column>
@@ -62,7 +62,7 @@
             :page-size="10"
             layout="prev, pager, next, jumper"
             :total="pagination.total"></el-pagination>
-        
+
     </div>
 </template>
 <script>
@@ -130,7 +130,7 @@
                     await hrService.getPaperList(tableOption).then(data =>{
                             if(data.code == "0"){
                                 this.paperTable = data.data.data
-                                
+
                                 //分页信息
                                 this.pagination.currentPage = data.data.current_page //当前页码
                                 this.pagination.total = data.data.total //列表总条数
@@ -170,7 +170,7 @@
                 this.paperSearch.name = ''
                 this.paperSearch.type = ''
                 await this.getTableList()
-            }, 
+            },
             /**
              * 创建服务人员
              * des 先创建服务人员，然后才能添加服务人员技能。

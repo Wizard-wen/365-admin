@@ -4,7 +4,7 @@
             <el-form :inline="true" :model="authSearch" class="auth-form">
                 <div class="search">
                     <el-form-item>
-                        <el-input class="input" v-model="authSearch.title" placeholder="请输入权限"></el-input>
+                        <el-input class="input" v-model="authSearch.title" placeholder="请输入权限名" :maxlength="20"></el-input>
                     </el-form-item>
 
                     <el-form-item>
@@ -18,11 +18,11 @@
             </el-form>
 
             <el-table :data="authTable" class="authTable-table">
-                
-                <el-table-column label="id" prop="id" align="center"></el-table-column>
-                <el-table-column label="是否展示" prop="is_display" align="center"></el-table-column>
-                <el-table-column label="名称" prop="title" align="center"></el-table-column>
-                <el-table-column label="路由" prop="router" align="center"></el-table-column>
+
+                <el-table-column label="编号" prop="id" align="center"></el-table-column>
+                <el-table-column label="菜单展示" prop="is_display" align="center" :formatter="formatterDisplay"></el-table-column>
+                <el-table-column label="权限名" prop="title" align="center"></el-table-column>
+                <el-table-column label="请求路由" prop="router" align="center"></el-table-column>
 
                 <el-table-column label="操作" align="center">
                     <template slot-scope="scope">
@@ -60,7 +60,7 @@ export default {
     data(){
         return {
             //权限列表
-            authTable: [], 
+            authTable: [],
             //权限列表搜索
             authSearch: {
                 title: ''
@@ -120,7 +120,7 @@ export default {
             }
 
             store.commit('setLoading',true)
-            
+
             try{
                 await Promise.all([
                         authService.getPermissionList(tableOption),
@@ -140,7 +140,7 @@ export default {
                             this.$message({
                                 type:'error',
                                 message: error.message
-                            })                        
+                            })
                     }).finally(() =>{
                         store.commit('setLoading',false)
                     })
@@ -196,7 +196,7 @@ export default {
             })
         },
         /**
-         * 删除用户 
+         * 删除用户
          */
         async deleteAuth(row) {
             let _this= this;
@@ -209,7 +209,7 @@ export default {
                 this.$message({
                     type: 'info',
                     message: '已取消删除'
-                });          
+                });
             });
 
             if(response == "confirm"){
@@ -238,6 +238,13 @@ export default {
                 store.commit('setLoading',false)
             }
         },
+        formatterDisplay(row, column){
+            if(row.is_display == 1){
+                return "展示"
+            } else if(row.is_display == 2){
+                return "不展示"
+            }
+        }
     },
     async mounted(){
         await this.getTableList()

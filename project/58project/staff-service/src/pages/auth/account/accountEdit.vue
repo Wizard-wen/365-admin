@@ -7,19 +7,19 @@
             :model="accountForm"
             label-width="120px">
             <el-form-item label="账号"  prop="account">
-                <el-input v-model="accountForm.account" :disabled="$route.query.type == 1" ></el-input>
+                <el-input v-model="accountForm.account" :maxlength="20" :disabled="$route.query.type == 1" ></el-input>
             </el-form-item>
             
             <el-form-item label="用户名" prop="username">
-                <el-input autocomplete="off" v-model="accountForm.username"></el-input>
+                <el-input autocomplete="off" v-model="accountForm.username" :maxlength="20"></el-input>
             </el-form-item>
 
             <el-form-item label="密码" prop="password">
-                <el-input autocomplete="off" @focus.native="this.type='password'" v-model="accountForm.password" type="text"></el-input>
+                <el-input :maxlength="50" autocomplete="off" @focus.native="this.type='password'" v-model="accountForm.password" type="text"></el-input>
             </el-form-item>
             
             <el-form-item label="确认密码" prop="repassword">
-                <el-input v-model="accountForm.repassword" @focus.native="this.type='password'" type="text"></el-input>
+                <el-input :maxlength="50" v-model="accountForm.repassword" @focus.native="this.type='password'" type="text"></el-input>
             </el-form-item>
             
             <el-form-item>

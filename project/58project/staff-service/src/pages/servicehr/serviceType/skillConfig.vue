@@ -2,10 +2,10 @@
     <div class="skill-config">
         <el-form class="skill-form" ref="form" :rules="skillRules" :model="skillForm" label-width="120px">
             <el-form-item label="技能名称" prop="name">
-                <el-input v-model="skillForm.name"></el-input>
+                <el-input v-model="skillForm.name" :maxlength="30" placeholder="请输入技能名称"></el-input>
             </el-form-item>
             <el-form-item label="上级技能">
-                <el-select v-model="skillForm.parent_id" placeholder="权限父级id">
+                <el-select v-model="skillForm.parent_id">
                     <el-option
                         v-for="(item, index) in selectionList"
                         :key="index"
@@ -100,14 +100,14 @@ export default {
         }
     },
     async mounted(){
-        
+
         //id
         let categoryId = this.$route.query.id? this.$route.query.id : 0;
-        
+
         store.commit('setLoading',true)
         try{
             await hrService.getCategory(categoryId).then(data =>{
-                
+
                 //若是编辑的话回显数据
                 if(this.$route.query.type == 1){
                     let obj = {

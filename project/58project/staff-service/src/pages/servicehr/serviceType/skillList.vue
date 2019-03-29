@@ -5,13 +5,13 @@
                 <div>
                     <el-form-item label="是否启用">
                         <el-select v-model="skillSearch.type" placeholder="请选择是否启用">
-                            <el-option label="全部" value=""></el-option>
+                            <el-option label="请选择" value=""></el-option>
                             <el-option label="已启用" value="enable"></el-option>
                             <el-option label="未启用" value="disable"></el-option>
                         </el-select>
                     </el-form-item>
                     <el-form-item>
-                        <el-input v-model="skillSearch.name" placeholder="请输入技能名称"></el-input>
+                        <el-input v-model="skillSearch.name" :maxlength="20" placeholder="请输入技能名称"></el-input>
                     </el-form-item>
 
                     <el-form-item>
@@ -22,12 +22,12 @@
 
                 <el-form-item>
                     <el-button type="primary" @click="createSkill">添加技能</el-button>
-                </el-form-item>    
+                </el-form-item>
             </el-form>
-            
+
             <el-table :data="skillTable" class="skill-table">
 
-                <el-table-column label="技能id" prop="id" align="center"></el-table-column>
+                <el-table-column label="技能编号" prop="id" align="center"></el-table-column>
                 <el-table-column label="技能名称" prop="name" align="center"></el-table-column>
                 <el-table-column label="状态" prop="type" align="center" :formatter="formatterType"></el-table-column>
 
@@ -52,7 +52,7 @@
         <div class="skill-tree-box">
             <div class="title">索引</div>
             <el-tree :data="treelist" accordion :props="defaultProps"></el-tree>
-        </div>  
+        </div>
     </div>
 </template>
 <script>
@@ -140,11 +140,11 @@
                             this.$message({
                                 type:'error',
                                 message: error.message
-                            })                        
+                            })
                     }).finally(() =>{
                         store.commit('setLoading',false)
                     })
-                    
+
                 } catch(error){
                     this.$message({
                         type:'error',
@@ -172,7 +172,7 @@
                 this.skillSearch.name = ''
                 this.skillSearch.type = ''
                 await this.getTableList()
-            }, 
+            },
             /**
              * 创建服务人员
              * des 先创建服务人员，然后才能添加服务人员技能。

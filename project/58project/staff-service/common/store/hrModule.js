@@ -13,7 +13,7 @@ export const hrModule = {
        educationList: [
             {
                 id : 0,
-                name: "全部"
+                name: "请选择"
             },
             {
                 id : 1,

@@ -25,11 +25,11 @@
             </el-form-item>
 
             <el-form-item label="客户名称" prop="user_name">
-                <el-input v-model="orderForm.user_name"></el-input>
+                <el-input v-model="orderForm.user_name" :maxlength="20"></el-input>
             </el-form-item>
 
             <el-form-item label="客户联系方式" prop="phone">
-                <el-input v-model="orderForm.phone"></el-input>
+                <el-input v-model="orderForm.phone" :maxlength="11"></el-input>
             </el-form-item>
 
             <el-form-item label="服务地址" class="area-form">
@@ -41,7 +41,7 @@
                     clearable
                     placeholder="省市区">
                 </el-cascader>
-                <el-input placeholder="详细地址" v-model="region_string"></el-input>
+                <el-input placeholder="详细地址" :maxlength="180" v-model="region_string"></el-input>
             </el-form-item>
             <p class="address-details">
                 <span
@@ -62,7 +62,7 @@
 
             <el-form-item label="订单来源" prop="source">
                 <el-select v-model="orderForm.source" placeholder="订单来源">
-                    <el-option label="全部" value="0"></el-option>
+                    <el-option label="请选择" value="0"></el-option>
                     <el-option label="线上" value="2"></el-option>
                     <el-option label="线下" value="1"></el-option>
                     <el-option label="渠道" value="3"></el-option>

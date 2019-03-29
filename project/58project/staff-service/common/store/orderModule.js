@@ -11,7 +11,7 @@ import { Message } from 'element-ui';
  */
 var order_type = [
     {
-        label: '全部',
+        label: '请选择',
         value: 0
     },
     {
@@ -41,7 +41,7 @@ var order_type = [
  */
 var order_source = [
     {
-        label: "全部",
+        label: "请选择",
         value: 0
     },
     {
@@ -82,7 +82,7 @@ export const orderModule = {
     },
     actions: {
         async setData(context, order_id){
-            await orderRequest.getOrder(order_id) 
+            await orderRequest.getOrder(order_id)
                 .then(data =>{
                     context.commit('configData',data)
                 })
@@ -92,7 +92,7 @@ export const orderModule = {
                         message: e.message
                     })
                 })
-            
+
         }
     }
 }

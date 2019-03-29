@@ -2,12 +2,12 @@
     <div class="paper-config">
         <el-form class="paper-form" ref="form" :rules="paperRules" :model="paperForm" label-width="120px">
             <el-form-item label="证书名称" prop="name">
-                <el-input v-model="paperForm.name"></el-input>
+                <el-input v-model="paperForm.name" :maxlength="30" placeholder="请输入证书名称"></el-input>
             </el-form-item>
             <el-form-item label="是否启用">
                 <el-switch v-model="paperForm.type"></el-switch>
             </el-form-item>
-            
+
             <el-form-item>
                 <el-button type="primary" @click="onSubmit('form')">{{$route.query.id? '确认编辑' : '立即创建'}}</el-button>
                 <el-button @click="goback">取消</el-button>

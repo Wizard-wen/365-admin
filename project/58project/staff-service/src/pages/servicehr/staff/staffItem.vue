@@ -5,7 +5,7 @@
                 <el-tab-pane label="必填信息" name="require">
 
                     <el-form-item label="员工姓名" prop="name">
-                        <el-input size="small" v-model="staffForm.name" placeholder="请输入服务人员姓名"></el-input>
+                        <el-input size="small" v-model="staffForm.name" :maxlength="20" placeholder="请输入服务人员姓名"></el-input>
                     </el-form-item>
 
                     <el-form-item label="性别" prop="sex">
@@ -20,19 +20,19 @@
                     </el-form-item>
 
                     <el-form-item label="手机号" prop="phone">
-                        <el-input v-model="staffForm.phone" placeholder="请输入手机号"></el-input>
+                        <el-input v-model="staffForm.phone" :maxlength="11" placeholder="请输入手机号"></el-input>
                     </el-form-item>
 
                     <el-form-item label="身份证号" prop="identify">
-                        <el-input v-model="staffForm.identify" placeholder="请输入身份证号"></el-input>
+                        <el-input v-model="staffForm.identify" :maxlength="17" placeholder="请输入身份证号"></el-input>
                     </el-form-item>
 
                     <el-form-item label="住址" prop="address">
-                        <el-input v-model="staffForm.address" placeholder="请输入现住址"></el-input>
+                        <el-input v-model="staffForm.address" :maxlength="150" placeholder="请输入现住址"></el-input>
                     </el-form-item>
 
                     <el-form-item label="银行卡号" prop="bank_card">
-                        <el-input v-model="staffForm.bank_card" placeholder="数字"></el-input>
+                        <el-input v-model="staffForm.bank_card" :maxlength="30" placeholder="数字"></el-input>
                     </el-form-item>
                 </el-tab-pane>
 
@@ -61,11 +61,11 @@
                     </el-form-item>
 
                     <el-form-item label="民族" prop="nation">
-                        <el-input v-model="staffForm.nation" placeholder="请键入"></el-input>
+                        <el-input v-model="staffForm.nation" :maxlength="10" placeholder="请键入"></el-input>
                     </el-form-item>
 
                     <el-form-item label="微信号" prop="wechat">
-                        <el-input v-model="staffForm.wechat" placeholder="请输入微信号"></el-input>
+                        <el-input v-model="staffForm.wechat" :maxlength="50" placeholder="请输入微信号"></el-input>
                     </el-form-item>
 
                     <el-form-item label="教育程度" prop="education">
@@ -79,7 +79,7 @@
                     </el-form-item>
                 </el-tab-pane>
 
-                <el-tab-pane label="技能证书" name="skill">
+                <el-tab-pane label="技能信息" name="skill">
 
                     <el-form-item label="服务地区" prop="region">
                         <tags-component

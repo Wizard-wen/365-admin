@@ -5,13 +5,13 @@
                 <div class="search">
                     <el-form-item label="是否启用">
                         <el-select v-model="abilitySearch.type" placeholder="请选择是否启用">
-                            <el-option label="全部" value=""></el-option>
+                            <el-option label="请选择" value=""></el-option>
                             <el-option label="已启用" value="enable"></el-option>
                             <el-option label="未启用" value="disable"></el-option>
                         </el-select>
                     </el-form-item>
                     <el-form-item>
-                        <el-input v-model="abilitySearch.name" placeholder="请输入能力标签名称"></el-input>
+                        <el-input v-model="abilitySearch.name" :maxlength="30" placeholder="请输入能力标签名称"></el-input>
                     </el-form-item>
 
                     <el-form-item>
@@ -23,12 +23,12 @@
                     <el-button type="primary" @click="createAbility">添加能力标签</el-button>
                 </el-form-item>
             </el-form>
-            
+
             <el-table
-                :data="abilityTable" 
+                :data="abilityTable"
                 class="ability-table">
                 <el-table-column
-                    label="技能id"
+                    label="技能编号"
                     prop="id"
                     align="center">
                 </el-table-column>
@@ -66,7 +66,7 @@
         <div class="ability-tree-box">
             <div class="title">索引</div>
             <el-tree :data="treelist" accordion :props="defaultProps"></el-tree>
-        </div>  
+        </div>
     </div>
 </template>
 <script>
@@ -136,7 +136,7 @@
                 }
 
                 store.commit('setLoading',true)
-                
+
                 try{
                     await Promise.all([
                         hrService.getAbilityList(tableOption),
@@ -156,7 +156,7 @@
                             this.$message({
                                 type:'error',
                                 message: error.message
-                            })                        
+                            })
                     }).finally(() =>{
                         store.commit('setLoading',false)
                     })
@@ -189,7 +189,7 @@
                 this.abilitySearch.type = ''
 
                 await this.getTableList()
-            }, 
+            },
             /**
              * 创建服务人员
              * des 先创建服务人员，然后才能添加服务人员技能。
