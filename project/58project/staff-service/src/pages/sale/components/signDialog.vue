@@ -41,6 +41,7 @@
 
             <el-form-item label="合同照片" prop="paper" ref="paper">
                 <el-upload
+                    accept=".jpg,.jpeg,.png,.gif,.bmp,.pdf,.JPG,.JPEG,.PBG,.GIF,.BMP,.PDF"
                     action="/admin/common/uploadImage"
                     :on-success="uploadSuccess"
                     :on-remove="removePic"

@@ -9,15 +9,19 @@
             <el-form-item label="账号"  prop="account">
                 <el-input v-model="accountForm.account" :disabled="$route.query.type == 1" ></el-input>
             </el-form-item>
+            
             <el-form-item label="用户名" prop="username">
-                <el-input v-model="accountForm.username"></el-input>
+                <el-input autocomplete="off" v-model="accountForm.username"></el-input>
             </el-form-item>
+
             <el-form-item label="密码" prop="password">
-                <el-input v-model="accountForm.password" type="password"></el-input>
+                <el-input autocomplete="off" @focus.native="this.type='password'" v-model="accountForm.password" type="text"></el-input>
             </el-form-item>
+            
             <el-form-item label="确认密码" prop="repassword">
-                <el-input v-model="accountForm.repassword" type="password"></el-input>
+                <el-input v-model="accountForm.repassword" @focus.native="this.type='password'" type="text"></el-input>
             </el-form-item>
+            
             <el-form-item>
                 <el-button type="primary" @click="onSubmit('form')">提交</el-button>
                 <el-button @click="$router.go(-1)">取消</el-button>

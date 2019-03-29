@@ -16,6 +16,7 @@
 
             <el-form-item label="上传图片" prop="images" ref="paper">
                 <el-upload
+                    accept=".jpg,.jpeg,.png,.gif,.bmp,.pdf,.JPG,.JPEG,.PBG,.GIF,.BMP,.PDF"
                     action="/admin/common/uploadImage"
                     :on-success="uploadSuccess"
                     :on-remove="removePic"

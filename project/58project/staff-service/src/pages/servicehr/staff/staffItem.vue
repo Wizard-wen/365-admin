@@ -40,6 +40,7 @@
 
                     <el-form-item label="员工头像">
                         <el-upload
+                            accept=".jpg,.jpeg,.png,.gif,.bmp,.pdf,.JPG,.JPEG,.PBG,.GIF,.BMP,.PDF"
                             class="avatar-uploader"
                             action="/admin/common/uploadImage"
                             :show-file-list="false"

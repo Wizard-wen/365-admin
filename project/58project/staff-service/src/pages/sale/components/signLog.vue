@@ -36,7 +36,7 @@
         <el-dialog title="售后日志" :visible.sync="maintainDialogVisible">
             <el-form :model="maintainForm">
                 <el-form-item label="日志" :label-width="formLabelWidth">
-                    <el-inputplaceholder="请最多输入200字符" :maxlength="100" autosize v-model="maintainForm.message" type="textarea"></el-input>
+                    <el-input placeholder="请最多输入200字符" :maxlength="100" autosize v-model="maintainForm.message" type="textarea"></el-input>
                 </el-form-item>
             </el-form>
             <div slot="footer" class="dialog-footer">
