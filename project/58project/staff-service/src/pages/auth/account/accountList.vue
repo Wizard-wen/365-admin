@@ -1,12 +1,12 @@
 <template>
     <div class="account">
-        
+
         <div class="container-box">
 
             <el-form :inline="true" :model="accountSearch" class="account-form">
                 <div class="search">
                     <el-form-item>
-                        <el-input class="input" v-model="accountSearch.name" placeholder="请输入用户名"></el-input>
+                        <el-input class="input" v-model="accountSearch.name" placeholder="请输入管理员名" :maxlength="20"></el-input>
                     </el-form-item>
 
                     <el-form-item>
@@ -18,14 +18,14 @@
                     <el-button type="primary" @click="createAccount">添加账户</el-button>
                 </el-form-item>
             </el-form>
-            
+
             <!-- 表格 -->
             <el-table :data="accountTable" class="account-table">
 
-                <el-table-column label="id" prop="id" align="center"></el-table-column>
+                <el-table-column label="编号" prop="id" align="center"></el-table-column>
                 <el-table-column label="账号" prop="account" align="center"></el-table-column>
-                <el-table-column label="用户名" prop="name" align="center"></el-table-column>
-                
+                <el-table-column label="管理员名" prop="name" align="center"></el-table-column>
+
                 <el-table-column label="操作" align="center">
                     <template slot-scope="scope">
                         <el-button
@@ -58,7 +58,7 @@
     import {authService} from '../../../../common'
     export default {
         data() {
-            
+
             return {
                 //用户列表
                 accountTable: [],
@@ -110,12 +110,12 @@
 
                 let tableOption = {
                     currentPage: this.pagination.currentPage,
-                    pageNumber: this.pagination.pageNumber, 
+                    pageNumber: this.pagination.pageNumber,
                     searchSelect: this.searchArray
                 }
 
                 store.commit('setLoading',true)
-                
+
                 try{
                     await authService.getManagerList(tableOption).then(data =>{
                             if(data.code == "0"){
@@ -209,7 +209,7 @@
                     this.$message({
                         type: 'info',
                         message: '已取消删除'
-                    });          
+                    });
                 });
 
                 if(response == "confirm"){
@@ -265,6 +265,6 @@
             min-width:1100px;
             margin: 30px auto 0 auto;;
         }
-        
+
     }
 </style>

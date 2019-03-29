@@ -8,7 +8,7 @@
         <el-form :model="signForm" :rules="signRules" ref="signForm" :label-width="'120px'">
             <el-form-item label="服务周期单位" prop="unit">
                 <el-select v-model="signForm.unit" placeholder="请选择活动区域">
-                    <el-option label="全部" :value="0"></el-option>
+                    <el-option label="请选择" :value="0"></el-option>
                     <el-option label="按月" value="month"></el-option>
                     <el-option label="按日" value="day"></el-option>
                     <el-option label="按时" value="hour"></el-option>
@@ -17,7 +17,7 @@
             </el-form-item>
 
             <el-form-item label="服务次数" prop="service_count">
-                    <el-input-number v-model="signForm.service_count"></el-input-number>
+                    <el-input-number :max="999999" v-model="signForm.service_count"></el-input-number>
             </el-form-item>
 
             <el-form-item label="服务期间" >
@@ -32,11 +32,11 @@
             </el-form-item>
 
             <el-form-item label="单价" prop="unit_price">
-                <el-input v-model="signForm.unit_price" autocomplete="off"></el-input>
+                <el-input v-model="signForm.unit_price" :maxlength="11" autocomplete="off"></el-input>
             </el-form-item>
 
             <el-form-item label="总价" >
-                <el-input v-model="signForm.total_price" autocomplete="off" disabled=""></el-input>
+                <el-input v-model="signForm.total_price" :maxlength="11" autocomplete="off" disabled=""></el-input>
             </el-form-item>
 
             <el-form-item label="合同照片" prop="paper">
@@ -59,11 +59,11 @@
             </el-form-item>
 
             <el-form-item label="代发工资周期" v-if="signForm.pay_wage == 2" prop="wage_count">
-                <el-input-number v-model="signForm.wage_count" autocomplete="off"></el-input-number>
+                <el-input-number :max="999999" v-model="signForm.wage_count" autocomplete="off"></el-input-number>
             </el-form-item>
 
             <el-form-item label="每期代发金额" v-if="signForm.pay_wage == 2" prop="wage_price">
-                <el-input v-model="signForm.wage_price" autocomplete="off"></el-input>
+                <el-input v-model="signForm.wage_price" :maxlength="11" autocomplete="off"></el-input>
             </el-form-item>
         </el-form>
         <div slot="footer" class="dialog-footer">

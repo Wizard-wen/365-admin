@@ -2,7 +2,7 @@
     <div class="ability-config">
         <el-form class="ability-form" ref="form" :rules="abilityRules" :model="abilityForm" label-width="120px">
             <el-form-item label="标签名称" prop="name">
-                <el-input v-model="abilityForm.name"></el-input>
+                <el-input v-model="abilityForm.name" :maxlength="30" placeholder="请输入标签名"></el-input>
             </el-form-item>
             <el-form-item label="标签所属层级">
                 <el-select v-model="abilityForm.parent_id" placeholder="标签父级id">

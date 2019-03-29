@@ -7,16 +7,16 @@
             :model="accountForm"
             label-width="120px">
             <el-form-item label="账号"  prop="account">
-                <el-input v-model="accountForm.account" :disabled="$route.query.type == 1" ></el-input>
+                <el-input v-model="accountForm.account" :maxlength="20" :disabled="$route.query.type == 1" ></el-input>
             </el-form-item>
             <el-form-item label="用户名" prop="username">
-                <el-input v-model="accountForm.username"></el-input>
+                <el-input v-model="accountForm.username" :maxlength="20"></el-input>
             </el-form-item>
             <el-form-item label="密码" prop="password">
-                <el-input v-model="accountForm.password" type="password"></el-input>
+                <el-input v-model="accountForm.password" :maxlength="50" type="password"></el-input>
             </el-form-item>
             <el-form-item label="确认密码" prop="repassword">
-                <el-input v-model="accountForm.repassword" type="password"></el-input>
+                <el-input v-model="accountForm.repassword" :maxlength="50" type="password"></el-input>
             </el-form-item>
             <el-form-item>
                 <el-button type="primary" @click="onSubmit('form')">提交</el-button>

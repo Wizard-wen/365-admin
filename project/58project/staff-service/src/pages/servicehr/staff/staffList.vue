@@ -4,7 +4,7 @@
             <div class="search-up">
                 <div>
                     <el-form-item>
-                        <el-input v-model="staffSearch.name" placeholder="请输入员工姓名"></el-input>
+                        <el-input v-model="staffSearch.name" placeholder="请输入员工姓名" :maxlength="20"></el-input>
                     </el-form-item>
 
                     <el-form-item>
@@ -16,7 +16,7 @@
                     <el-button type="primary" @click="createStaff">添加服务人员</el-button>
                 </el-form-item>
             </div>
-            
+
             <div>
                 <el-form-item label="">
                     <cascader-component
@@ -25,7 +25,7 @@
                         :setProps="setProps"
                         :requestUrl="'./admin/common/getAreaTree'"></cascader-component>
                 </el-form-item>
-                
+
                 <el-form-item label="">
                     <cascader-component
                         v-model="staffSearch.service_category_id"
@@ -46,19 +46,19 @@
                 <el-form-item label="">
                     <cascader-component
                         v-model="staffSearch.paper_ids"
-                        :cascaderName="'证书'"
+                        :cascaderName="'获得证书'"
                         :setProps="setProps"
                         :requestUrl="'./admin/common/getPaperSelection'"></cascader-component>
                 </el-form-item>
 
             </div>
         </el-form>
-        
+
         <el-table :data="staffTable" class="staff-table">
             <el-table-column label="员工号" prop="staff_code" align="center"></el-table-column>
 
             <el-table-column label="姓名" prop="name" align="center"></el-table-column>
-            
+
             <el-table-column label="年龄" prop="age" align="center"></el-table-column>
 
             <el-table-column label="手机号" prop="phone" align="center"></el-table-column>
@@ -139,7 +139,7 @@
                             }
                             arr.push(obj)
                         }
-                    } 
+                    }
                     //如果搜索字段是字符串的话
                     else if(_this.staffSearch[item] != ''){
                         let obj = {}
@@ -176,7 +176,7 @@
                     await hrService.getStaffList(tableOption).then(data =>{
                             if(data.code == "0"){
                                 this.staffTable = data.data.data
-                                
+
                                 //分页信息
                                 this.pagination.currentPage = data.data.current_page //当前页码
                                 this.pagination.total = data.data.total //列表总条数
@@ -219,7 +219,7 @@
                 this.staffSearch.ability_ids= []//能力标签
                 this.staffSearch.paper_ids= []//证书
                 await this.getTableList()
-            }, 
+            },
             /**
              * 创建服务人员
              * des 先创建服务人员，然后才能添加服务人员技能。
@@ -252,7 +252,7 @@
                 let _this= this;
 
                 let status = row.status == 0? '停用' : '启用'
-                
+
                 let response = await this.$confirm(`确定${status}该服务人员吗?`, '提示', {
                     confirmButtonText: '确定',
                     cancelButtonText: '取消',
@@ -261,7 +261,7 @@
                     this.$message({
                         type: 'info',
                         message: `已取消${status}`
-                    });          
+                    });
                 });
 
                 if(response == "confirm"){

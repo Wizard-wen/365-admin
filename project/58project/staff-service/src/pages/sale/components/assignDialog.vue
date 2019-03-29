@@ -1,14 +1,14 @@
 <template>
 
-    <el-dialog 
+    <el-dialog
     v-loading="loading"
-        title="分配订单" 
+        title="分配订单"
         :visible.sync="openAssignDialog"
         :show-close="false"
         :close-on-press-escape="false"
         :close-on-click-modal="false">
         <div class="base-form-box" :style="{height: `${(sizeLong / 2)*40}px`}">
-            <div 
+            <div
                 class="base-line"
                 :style="{
                     width: item.size == 2? '100%' : '50%',
@@ -42,7 +42,7 @@
             <el-button type="primary" @click="assignOrder('assignOrderForm')">分 配</el-button>
         </div>
     </el-dialog>
-        
+
 </template>
 <script>
 
@@ -168,7 +168,7 @@ export default {
             let _this = this,
                 formArray = [],//渲染的数组
                 sizeLong1 = 0;//所占行数
-            
+
             /**
              * key 为渲染字段的属性名
              * value 为某个属性名的值
@@ -176,21 +176,21 @@ export default {
              */
             Object.keys(_this.orderDetail).forEach((item, index) =>{
                 if(_this.orderKeyName.hasOwnProperty(item)){
-                    
+
                     let itemObj = {
                             key: _this.orderKeyName[item], //属性名
                             value: _this.orderDetail[item],//属性值
-                            size: 1,//该条信息所占位数  1 代表只占半行 2 代表占一行 
+                            size: 1,//该条信息所占位数  1 代表只占半行 2 代表占一行
                         }, //原始对象
                         realValue = itemObj.value; //包装后的value值
-                    
+
                     //转化订单来源字段格式
                     if(item == "source"){
-                        
+
                         realValue = this.order_source.find((item, index) =>{
                             return realValue == item.value
                         }).label
-                    } 
+                    }
 
                     //转化时间格式
                     if(item == "service_start_time" || item == "service_end_time"){
@@ -198,7 +198,7 @@ export default {
                         realValue = $utils.formatDate(new Date(realValue * 1000), 'yyyy-MM-dd hh:mm:ss')
 
                     }
-                    
+
                     //判断处理后的值的长度，决定占半行还是一行
                     if($utils.getByteLen(realValue) > 20){
                         itemObj.size = 2 //长字段，独占一行
@@ -233,7 +233,7 @@ export default {
             }
 
 
-            
+
             //size总数若为奇数个，添加一个元素占行
             if(this.sizeLong%2 == 1){
                 formArray.push({
@@ -243,14 +243,14 @@ export default {
                 })
                 this.sizeLong++;
             }
-            
+
             return formArray
         }
     },
     async mounted(){
         try{
             this.loading = true
-            
+
             await Promise.all([
                 orderService.getManagerSelection(),
                 orderService.getOrder(this.assignOrderId),
@@ -258,8 +258,8 @@ export default {
                 if(data[0].code == "0"){
                     this.selectionList = data[0].data
                     this.selectionList.push({
-                        manager_name: '全部',
-                        manager_id: 0,                   
+                        manager_name: '请选择',
+                        manager_id: 0,
                     })
                 }
                 this.baseList = this.setList()

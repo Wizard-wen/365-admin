@@ -5,11 +5,11 @@
                 <div class="search-input-box">
                     <div>
                         <el-form-item class="order-select" label="订单号">
-                            <el-input v-model="orderSearch.code" placeholder="请输入订单号"></el-input>
+                            <el-input v-model="orderSearch.code" :maxlength="20" placeholder="请输入订单号"></el-input>
                         </el-form-item>
 
                         <el-form-item class="order-select" label="手机号">
-                            <el-input v-model="orderSearch.phone" placeholder="请输入手机号"></el-input>
+                            <el-input v-model="orderSearch.phone" :maxlength="11" placeholder="请输入手机号"></el-input>
                         </el-form-item>
 
                         <el-form-item>
@@ -17,7 +17,7 @@
                             <el-button type="primary" @click="resetOrder">重置</el-button>
                         </el-form-item>
                     </div>
-                    
+
                     <el-form-item>
                         <el-button type="primary" @click="createOrder">创建订单</el-button>
                     </el-form-item>
@@ -205,7 +205,7 @@
                 }
 
                 store.commit('setLoading',true)
-                
+
                 try{
                     await orderService.getOrderList(tableOption).then(data =>{
                             if(data.code == "0"){
@@ -255,7 +255,7 @@
                 this.orderSearch.type= 0//订单类型
 
                 await this.getTableList()
-            }, 
+            },
             /**
              * 创建订单
              *

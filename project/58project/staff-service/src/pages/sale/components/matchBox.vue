@@ -4,12 +4,12 @@
             <div class="match-search-box" slot="header">
                 <div class="head-input">
                     <div class="head-input-left">
-                        <el-input  placeholder="请输入员工姓名" v-model="staffSearch.name" class="input-with-select" ></el-input>
-                        <el-input  placeholder="请输入员工号" v-model="staffSearch.staff_code" class="input-with-select"></el-input>
+                        <el-input  placeholder="请输入员工姓名" :maxlength="20" v-model="staffSearch.name" class="input-with-select" ></el-input>
+                        <el-input  placeholder="请输入员工号" :maxlength="10" v-model="staffSearch.staff_code" class="input-with-select"></el-input>
                         <el-button type="primary"  @click="searchReset" >重置</el-button>
                         <el-button type="primary"  @click="searchStaff">搜索</el-button>
                     </div>
-                    
+
                 </div>
                 <div class="head-cascader">
 
@@ -232,7 +232,7 @@ export default {
                     type:'error',
                     message: error.message
                 })
-            }   
+            }
         },
         /**
          * 切换页码
@@ -282,14 +282,14 @@ export default {
                 cancelButtonText: '取消',
                 type: 'warning'
             }).then(async () => {
-                
+
                 await _this.createOrderStaff(item)
 
             }).catch(() => {
                 this.$message({
                     type: 'info',
                     message: '已取消匹配'
-                });          
+                });
             })
         },
         /**
@@ -305,7 +305,7 @@ export default {
             })
 
             //如果已经匹配
-            if(isHave){ 
+            if(isHave){
                 this.$message({
                     type:'error',
                     message: `该人员已经匹配`
@@ -341,7 +341,7 @@ export default {
             }).finally(async () =>{
                 //刷新订单配置页
                 await orderService.getOrder(this.$route.query.order_id)
-                
+
                 store.commit('setLoading',false)
             })
 

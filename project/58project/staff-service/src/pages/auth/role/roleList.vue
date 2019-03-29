@@ -3,7 +3,7 @@
         <el-form :inline="true" :model="roleSearch" class="role-form">
             <div class="search">
                 <el-form-item>
-                    <el-input class="input" v-model="roleSearch.name" placeholder="请输入角色名"></el-input>
+                    <el-input class="input" v-model="roleSearch.name" placeholder="请输入角色名" :maxlength="20"></el-input>
                 </el-form-item>
 
                 <el-form-item>
@@ -17,10 +17,10 @@
         </el-form>
 
         <el-table :data="roleTable" class="role-table">
-            
-            <el-table-column label="id" prop="id" align="center"></el-table-column>
+
+            <el-table-column label="编号" prop="id" align="center"></el-table-column>
             <el-table-column label="名称" prop="name" align="center"></el-table-column>
-            
+
             <el-table-column label="操作" align="center">
                 <template slot-scope="scope">
                     <el-button
@@ -36,7 +36,7 @@
                 </template>
             </el-table-column>
         </el-table>
-        
+
         <!-- 分页 -->
         <el-pagination
             class="pagination"
@@ -108,9 +108,9 @@
                     searchSelect: this.searchArray
                 }
 
-                
+
                 store.commit('setLoading',true)
-                
+
                 try{
                     await authService.getRoleList(tableOption).then(data =>{
                             if(data.code == "0"){
@@ -200,7 +200,7 @@
                     type: 'warning'
                 }).then(async () =>{
                     store.commit('setLoading',1)
-                    
+
                     await authService.deleteRole(row.id).then((data) => {
                         if(data.code == '0'){
                             this.$message({
@@ -222,7 +222,7 @@
                     this.$message({
                         type: 'info',
                         message: '已取消删除'
-                    });          
+                    });
                 });
             },
         },
@@ -252,7 +252,7 @@
             min-width:1100px;
             margin: 30px auto 0 auto;;
         }
-        
+
     }
 </style>
 
