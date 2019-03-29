@@ -6,7 +6,7 @@
                     <el-input autocomplete="off" v-model="form.username" :maxlength="20" size="medium" type="text" placeholder="请输入用户名"></el-input>
                 </el-form-item>
                 <el-form-item label="密码" prop="password">
-                    <el-input autocomplete="off" v-model="form.password" :maxlength="100" size="medium" @focus.native="this.type='password'" type="text" placeholder="请输入密码"></el-input>
+                    <el-input autocomplete="new-password" v-model="form.password" ref="password" :maxlength="100" size="medium"  type="password" placeholder="请输入密码"></el-input>
                 </el-form-item>
                 <el-form-item>
                     <el-button type="primary" size="medium" @click="submitForm('form')">登录</el-button>
@@ -77,6 +77,13 @@ export default {
          */
         resetForm(formName) {
             this.$refs[formName].resetFields();
+        },
+        /**
+         * 改变input类型
+         */
+        changeType(){
+            console.log(1)
+            this.$refs['password'].type = 'password'
         }
     },
 }

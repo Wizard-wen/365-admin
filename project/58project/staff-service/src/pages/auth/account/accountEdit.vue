@@ -15,7 +15,7 @@
             </el-form-item>
 
             <el-form-item label="密码" prop="password">
-                <el-input :maxlength="50" autocomplete="off" @focus.native="this.type='password'" v-model="accountForm.password" type="text"></el-input>
+                <el-input :maxlength="50" autocomplete="new-password"  v-model="accountForm.password" type="password"></el-input>
             </el-form-item>
             
             <el-form-item label="确认密码" prop="repassword">
