@@ -1,6 +1,6 @@
 <template>
     <div class="tag">
-        <div class="tag-add">
+        <div class="tag-add" :style="{marginBottom: showList.length? '20px': ''}">
             <el-cascader
                 clearable
                 :options="optionList"
@@ -12,7 +12,7 @@
         </div>
         <div class="tag-box" v-if="showList.length">
             <el-tag
-                style="margin-right:10px;"
+                :style="{marginRight: (index+1)%5 == 0? '0': '10px'}"
                 v-for="(tag, index) in showList"
                 :key="index"
                 @close="deleteTag(tag)"
@@ -174,12 +174,13 @@ export default {
 </script>
 <style lang="scss" scoped>
     .tag{
+        width: 432px;
         .tag-add{
             width:100%;
-            margin-bottom: 20px;
         }
         .tag-box{
             width: 100%;
+            // width: 432px;
             padding:10px;
             border:1px dashed #ccc;
             border-radius: 4px;

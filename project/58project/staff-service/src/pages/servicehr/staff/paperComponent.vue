@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="paper-box">
         <el-button style="margin-bottom:15px;" icon="el-icon-plus"  @click="openPaperDialog('new', {})">添加证书</el-button>
         <el-row>
             <el-col :span="24" v-for="(item, index) in paperList" :key="index">
@@ -165,6 +165,10 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
+.paper-box{
+    width: 100%;
+    min-width: 600px;
+}
         .paper-imgs{
             height: 110px!important;
             padding: 5px 0;

@@ -19,7 +19,6 @@ export default {
                     tree = data.data.tree
 
                 let routerObj = this.getRouterLeaf(tree,'');
-
                 // 登录信息存入 vuex sessionStorage
                 store.commit('login',{
                     access_token: manager.access_token,

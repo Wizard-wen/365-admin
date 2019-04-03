@@ -1,118 +1,124 @@
 <template>
     <div class="staff-box">
-        <el-form class="staff-form" ref="form" :model="staffForm" :rules="staffRules" label-width="120px">
-            <el-tabs v-model="activeName" :tab-position="'left'" @tab-click="tabChange">
-                <el-tab-pane label="必填信息" name="require">
+        <el-form class="staff-form" :inline="true" ref="form" :model="staffForm" :rules="staffRules" label-width="100px">
+            <div>
+                <el-form-item label="员工姓名" prop="name" class="form-item-size">
+                    <el-input v-model="staffForm.name" :maxlength="20" placeholder="请输入服务人员姓名"></el-input>
+                </el-form-item>
 
-                    <el-form-item label="员工姓名" prop="name">
-                        <el-input size="small" v-model="staffForm.name" :maxlength="20" placeholder="请输入服务人员姓名"></el-input>
-                    </el-form-item>
+                <el-form-item label="手机号" prop="phone" class="form-item-size">
+                    <el-input v-model="staffForm.phone" :maxlength="11" placeholder="请输入手机号"></el-input>
+                </el-form-item>
 
-                    <el-form-item label="性别" prop="sex">
-                        <el-radio-group v-model="staffForm.sex">
-                            <el-radio :label="1">男</el-radio>
-                            <el-radio :label="2">女</el-radio>
-                        </el-radio-group>
-                    </el-form-item>
+                <el-form-item label="员工头像" class="form-item-size">
+                    <el-upload
+                        accept=".jpg,.jpeg,.png,.gif,.bmp,.pdf,.JPG,.JPEG,.PBG,.GIF,.BMP,.PDF"
+                        class="avatar-uploader"
+                        action="/admin/common/uploadImage"
+                        :show-file-list="false"
+                        :file-list="icon_fileList"
+                        :on-success="iconUploadSuccess"
+                        :before-upload="beforeAvatarUpload"
+                        :headers="uploadHeader">
 
-                    <el-form-item label="年龄" prop="age">
-                        <el-input-number v-model="staffForm.age"></el-input-number>
-                    </el-form-item>
-
-                    <el-form-item label="手机号" prop="phone">
-                        <el-input v-model="staffForm.phone" :maxlength="11" placeholder="请输入手机号"></el-input>
-                    </el-form-item>
-
-                    <el-form-item label="身份证号" prop="identify">
-                        <el-input v-model="staffForm.identify" :maxlength="17" placeholder="请输入身份证号"></el-input>
-                    </el-form-item>
-
-                    <el-form-item label="住址" prop="address">
-                        <el-input v-model="staffForm.address" :maxlength="150" placeholder="请输入现住址"></el-input>
-                    </el-form-item>
-
-                    <el-form-item label="银行卡号" prop="bank_card">
-                        <el-input v-model="staffForm.bank_card" :maxlength="30" placeholder="数字"></el-input>
-                    </el-form-item>
-                </el-tab-pane>
-
-                <el-tab-pane label="基本信息" name="base">
-
-                    <el-form-item label="员工头像">
-                        <el-upload
-                            accept=".jpg,.jpeg,.png,.gif,.bmp,.pdf,.JPG,.JPEG,.PBG,.GIF,.BMP,.PDF"
-                            class="avatar-uploader"
-                            action="/admin/common/uploadImage"
-                            :show-file-list="false"
-                            :file-list="icon_fileList"
-                            :on-success="iconUploadSuccess"
-                            :before-upload="beforeAvatarUpload"
-                            :headers="uploadHeader">
-
-                            <div v-if="staffForm.icon!=''" class="avatar-box" @mouseover="showblack('0')" @mouseout="showblack('1')">
-                                <img  :src="staffForm.icon == '' ? '' : `./resource/${staffForm.icon}`" class="avatar">
-                                <div class="avatar-back" v-if="isShowBlack">
-                                    <i class="el-icon-edit avatar-uploader-icon" style="color: #fff;font-size: 20px;"></i>
-                                </div>
+                        <div v-if="staffForm.icon!=''" class="avatar-box" @mouseover="showblack('0')" @mouseout="showblack('1')">
+                            <img  :src="staffForm.icon == '' ? '' : `./resource/${staffForm.icon}`" class="avatar">
+                            <div class="avatar-back" v-if="isShowBlack">
+                                <i class="el-icon-edit avatar-uploader-icon" style="color: #fff;font-size: 20px;"></i>
                             </div>
+                        </div>
 
-                            <i v-else class="el-icon-plus avatar-uploader-icon"></i>
-                        </el-upload>
-                    </el-form-item>
+                        <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+                    </el-upload>
+                </el-form-item>
+            </div>
 
-                    <el-form-item label="民族" prop="nation">
-                        <el-input v-model="staffForm.nation" :maxlength="10" placeholder="请键入"></el-input>
-                    </el-form-item>
+            <div>
+                <el-form-item label="性别" prop="sex" class="form-item-size">
+                    <el-radio-group v-model="staffForm.sex">
+                        <el-radio :label="1">男</el-radio>
+                        <el-radio :label="2">女</el-radio>
+                    </el-radio-group>
+                </el-form-item>
 
-                    <el-form-item label="微信号" prop="wechat">
-                        <el-input v-model="staffForm.wechat" :maxlength="50" placeholder="请输入微信号"></el-input>
-                    </el-form-item>
+                <el-form-item label="年龄" prop="age" class="form-item-size">
+                    <el-input v-model="staffForm.age"></el-input>
+                </el-form-item>
 
-                    <el-form-item label="教育程度" prop="education">
-                        <el-select v-model="staffForm.education" placeholder="请选择教育程度">
-                            <el-option
-                                v-for="(item, index) in educationList"
-                                :key="index"
-                                :label="item.name"
-                                :value="item.id"></el-option>
-                        </el-select>
-                    </el-form-item>
-                </el-tab-pane>
+                <el-form-item label="身份证号" prop="identify" class="form-item-size">
+                    <el-input v-model="staffForm.identify" :maxlength="18" placeholder="请输入身份证号"></el-input>
+                </el-form-item>
+            </div>
 
-                <el-tab-pane label="技能信息" name="skill">
 
-                    <el-form-item label="服务地区" prop="region">
-                        <tags-component
-                        :set-props="setCascaderProps"
-                        v-model="staffForm.region"
-                        :optionList="areaList"
-                        :tagName="'地区'"
-                        :idkey="'region_id'"></tags-component>
-                    </el-form-item>
 
-                    <el-form-item label="能力标签" prop="label">
-                        <tags-component
-                        :set-props="setCascaderProps"
-                        v-model="staffForm.label"
-                        :optionList="labelList"
-                        :tagName="'技能标签'"
-                        :idkey="'ability_id'"></tags-component>
-                    </el-form-item>
+            <el-form-item label="住址" prop="address" class="form-item-size">
+                <el-input v-model="staffForm.address" :maxlength="150" placeholder="请输入现住址"></el-input>
+            </el-form-item>
 
-                    <el-form-item label="技能" prop="skill">
-                        <tags-component
-                        :set-props="setCascaderProps"
-                        v-model="staffForm.skill"
-                        :optionList="skillList"
-                        :tagName="'技能'"
-                        :idkey="'service_category_id'"></tags-component>
-                    </el-form-item>
+            <el-form-item label="银行卡号" prop="bank_card" class="form-item-size">
+                <el-input v-model="staffForm.bank_card" :maxlength="30" placeholder="数字"></el-input>
+            </el-form-item>
 
-                    <el-form-item label="证书" prop="paper">
-                        <paper-component v-model="staffForm.paper"></paper-component>
-                    </el-form-item>
-                </el-tab-pane>
-            </el-tabs>
+            <el-form-item label="微信号" prop="wechat" class="form-item-size">
+                <el-input v-model="staffForm.wechat" :maxlength="50" placeholder="请输入微信号"></el-input>
+            </el-form-item>
+
+            <el-form-item label="民族" prop="nation" class="form-item-size">
+                <el-select v-model="staffForm.nation" filterable placeholder="请选择民族">
+                    <el-option
+                        v-for="(item, index) in nationList"
+                        :key="index"
+                        :label="item.name"
+                        :value="item.id"></el-option>
+                </el-select>
+            </el-form-item>
+
+
+
+            <el-form-item label="教育程度" prop="education" class="form-item-size">
+                <el-select v-model="staffForm.education" placeholder="请选择教育程度">
+                    <el-option
+                        v-for="(item, index) in educationList"
+                        :key="index"
+                        :label="item.name"
+                        :value="item.id"></el-option>
+                </el-select>
+            </el-form-item>
+            <div>
+                <el-form-item label="服务地区" prop="region">
+                    <tags-component
+                    :set-props="setCascaderProps"
+                    v-model="staffForm.region"
+                    :optionList="areaList"
+                    :tagName="'地区'"
+                    :idkey="'region_id'"></tags-component>
+                </el-form-item>
+                <el-form-item label="能力标签" prop="label">
+                    <tags-component
+                    :set-props="setCascaderProps"
+                    v-model="staffForm.label"
+                    :optionList="labelList"
+                    :tagName="'技能标签'"
+                    :idkey="'ability_id'"></tags-component>
+                </el-form-item>
+                <el-form-item label="技能" prop="skill">
+                    <tags-component
+                    :set-props="setCascaderProps"
+                    v-model="staffForm.skill"
+                    :optionList="skillList"
+                    :tagName="'技能'"
+                    :idkey="'service_category_id'"></tags-component>
+                </el-form-item>
+            </div>
+
+            <div>
+                <el-form-item label="证书" prop="paper" >
+                    <paper-component v-model="staffForm.paper"></paper-component>
+                </el-form-item>
+            </div>
+
+
 
             <el-form-item>
                 <el-button type="primary" @click="onSubmit('form')">{{$route.query.id? '确认编辑' : '立即创建'}}</el-button>
@@ -158,6 +164,9 @@ export default {
                 if (!value) {
                     callback(new Error('请输入年龄'));
                 } else {
+                    if (!(/^\d+$/.test(value))) {
+                        callback(new Error('请输入数字'));
+                    }
                     callback();
                 }
             },
@@ -201,15 +210,6 @@ export default {
                     callback();
                 }
             },
-            /***************************非必填********************************* */
-            //民族
-            nationValidate(rule, value, callback){
-                if (value != '' && !(/^[\u4e00-\u9fa5]+$/.test(value))) {
-                    callback(new Error('只能是汉字'));
-                } else {
-                    callback();
-                }
-            },
         }
         return {
             icon_fileList: [],
@@ -221,7 +221,7 @@ export default {
                 name: '',//员工姓名
                 identify: '',//身份证号
                 sex: 1,//员工性别
-                nation: '',//民族
+                nation: '0',//民族
                 phone: '',//员工联系方式
                 wechat: '',//微信号
                 region: [],//地区
@@ -261,10 +261,6 @@ export default {
                 bank_card: [
                     {validator: validator.bankCardValidate, trigger: 'blur'}
                 ],
-                //民族
-                nation: [
-                    {validator: validator.nationValidate, trigger: 'blur'}
-                ],
             },
 
             region: [],//地区信息
@@ -281,8 +277,6 @@ export default {
                 label: 'name',
                 value: 'id'
             },
-            //tab
-            activeName: 'require',
             isShowBlack: false,//头像阴影
             //图片上传header
             uploadHeader:{
@@ -294,6 +288,10 @@ export default {
         //受教育程度数组
         educationList(){
             return this.$store.state.hrModule.educationList
+        },
+        //民族
+        nationList(){
+            return this.$store.state.hrModule.nation
         }
     },
     methods: {
@@ -319,28 +317,13 @@ export default {
                             })
                         })
                 } else {
-                    let require = ["name", "sex", "phone", "identify", "address", "bank_card"],
-                        base = ["nation", "wechat", "education"];
-                    let errorKeys = Object.keys(fileds),
-                        i = 0
-                    while( i< errorKeys.length){
-                        if(require.includes(errorKeys[i])){
-                            this.activeName = "require"
-                            break;
-                        }
-                        if(base.includes(errorKeys[i])){
-                            this.activeName = "base"
-                            break;
-                        }
-                        i++;
-                    }
                     return false;
                 }
             });
         },
-        stopPropagation(){
-            return false
-        },
+        /**
+         * 上传头像，显示阴影
+         */
         showblack(type){
             if(type == '0'){
                 this.isShowBlack = true
@@ -371,12 +354,6 @@ export default {
         goback(){
             this.$router.push("/staff/staffList")
         },
-        /**
-         * 切换tab
-         */
-        tabChange(tab, event) {
-
-        }
     },
     async mounted(){
         store.commit('setLoading',true)
@@ -424,10 +401,16 @@ export default {
 </script>
 <style lang="scss" scoped>
     .staff-box{
-        width: 80%;
+        width: 100%;
         padding-top: 30px;
         .staff-form{
-            max-width: 750px;
+            width: 100%;
+            .form-item-size{
+                width: 30%;
+                & /deep/ .el-input{
+                    min-width: 260px;
+                }
+            }
         }
         .paper-imgs{
             height: 110px!important;

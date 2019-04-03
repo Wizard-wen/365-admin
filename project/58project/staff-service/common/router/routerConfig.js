@@ -191,7 +191,61 @@ const saleModule = [
         component: orderAssignList,
     },
 ]
+/**
+ * 项目管理模块
+ */
+import originList from '@/pages/develop/originList.vue'
+import originRequire from '@/pages/develop/originRequire.vue'
+import reviewList from '@/pages/develop/reviewList.vue'
+import reviewItem from '@/pages/develop/reviewItem.vue'
 
+
+const develop = [
+    {
+        path: '/develop/originList',
+        name: 'originList',
+        component: originList,
+    },
+    {
+        path: '/develop/originRequire',
+        name: 'originRequire',
+        component: originRequire,
+    },
+    {
+        path: '/develop/reviewList',
+        name: 'reviewList',
+        component: reviewList,
+    },
+    {
+        path: '/develop/reviewItem',
+        name: 'reviewItem',
+        component: reviewItem,
+    },
+]
+
+/**
+ * 公司员工管理
+ */
+import employeeList from '@/pages/employee/employeeList.vue'
+
+const employee = [
+    {
+        path: '/employee/employeeList',
+        name: 'employeeList',
+        component: employeeList,
+    }
+]
+/**
+ * 学员列表
+ */
+import studentList from '@/pages/student/studentList.vue'
+let student = [
+    {
+        path: '/student/studentList',
+        name: 'studentList',
+        component: studentList,
+    }
+]
 
 /**
  * 重定向
@@ -203,4 +257,7 @@ export default [
     ...staffModule, //服务人员管理模块
     ...serviceTypeModule,//服务类型管理模块
     ...saleModule,//销售人员模块
+    ...develop,//开发者模块
+    ...employee,//公司员工管理
+    ...student,//学员管理
 ]

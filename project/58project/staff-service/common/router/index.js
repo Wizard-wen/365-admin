@@ -23,7 +23,7 @@ import mainPage from '@/pages/Main.vue'
 
 //vuex数据
 import store from '../store/index.js'
-
+import { Message } from 'element-ui';
 
 window.router = new Router({
     routes: [
@@ -46,6 +46,9 @@ window.router = new Router({
     ]
 })
 
+// var routerNavigator = store.state.loginModule.user.routerNavigator
+
+
 
 /**
  * 路由拦截
@@ -53,8 +56,13 @@ window.router = new Router({
  * 只有登录页被设置 requiresAuth等于false，可以不登录
  */
 router.beforeEach((to, from, next) => {
-
+    /**
+     * 如果要进入的页面路由吧必须要登录
+     */
     if (to.meta.requiresAuth !== false) {
+        /**
+         * 若是页面未登录
+         */
         if (!store.state.loginModule.isLogin) {
             next({
                 path: '/login',
@@ -63,7 +71,27 @@ router.beforeEach((to, from, next) => {
                 }
             })
         } else {
-            next()
+            /**
+             * 如果不是从登录页跳转
+             */
+            if(from.path != '/login'){
+                /**
+                 * 判断to.path在不在权限列表中
+                 */
+                if(store.state.loginModule.user.routerNavigator.hasOwnProperty(to.path)){
+                    next()
+                } else {
+                    //访问权限外路由
+                    Message({
+                        type: 'warning',
+                        message: "非法访问"
+                    })
+                    router.push(from.path)
+                }
+            } else {
+                //从登录页跳转，直接进homePage
+                next()
+            }
         }
     } else {
         next()
