@@ -54,7 +54,10 @@
             </div>
         </el-form>
 
-        <el-table :data="staffTable" class="staff-table">
+        <el-table :data="staffTable" class="staff-table" :stripe="true" border 
+            :cell-style="{height: '30px',padding: '0px!important',}"
+            :header-cell-style="{height: '30px',padding: '0px!important',}">
+
             <el-table-column label="员工号" prop="staff_code" align="center"></el-table-column>
 
             <el-table-column label="姓名" prop="name" align="center"></el-table-column>
@@ -63,7 +66,9 @@
 
             <el-table-column label="手机号" prop="phone" align="center"></el-table-column>
 
-            <el-table-column label="操作" align="center">
+            <el-table-column label="地址" prop="address" align="center" ></el-table-column>
+
+            <el-table-column label="操作" align="center" fixed="right">
                 <template slot-scope="scope">
                     <el-button size="mini" @click="editStaff(scope.$index, scope.row)">编辑</el-button>
                     <el-button size="mini" type="danger" v-if="scope.row.status == 0" @click="changeStaffStatus(scope.row)">停用</el-button>
@@ -291,6 +296,12 @@
 
                     await _this.getTableList()
                     store.commit('setLoading',false)
+                }
+            },
+            rowStyleFunction(row, rowIndex){    
+                console.log(row,rowIndex)
+                if(rowIndex == 0){
+                    return {height:'30px'}
                 }
             }
         },
