@@ -58,9 +58,9 @@
             :cell-style="{height: '30px',padding: '0px!important',}"
             :header-cell-style="{height: '30px',padding: '0px!important',}">
 
-            <el-table-column label="员工号" prop="staff_code" align="center"></el-table-column>
+            <el-table-column  filter-placement="top" label="员工号" prop="staff_code" align="center"></el-table-column>
 
-            <el-table-column label="姓名" prop="name" align="center"></el-table-column>
+            <el-table-column  label="姓名" prop="name" align="center"></el-table-column>
 
             <el-table-column label="年龄" prop="age" align="center"></el-table-column>
 

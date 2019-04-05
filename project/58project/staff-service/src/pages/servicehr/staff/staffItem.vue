@@ -2,7 +2,7 @@
     <div class="staff-box">
         <el-form class="staff-form" :inline="true" ref="form" :model="staffForm" :rules="staffRules" label-width="100px">
             <div>
-                <el-form-item label="员工姓名" prop="name" class="form-item-size">
+                <el-form-item label="员工姓名" prop="name" class="form-item-size" size="mini">
                     <el-input v-model="staffForm.name" :maxlength="20" placeholder="请输入服务人员姓名"></el-input>
                 </el-form-item>
 
@@ -118,7 +118,11 @@
                 </el-form-item>
             </div>
 
-
+            <select-tag
+            :propTagList="tagList"
+            v-model="selectedTag"
+            :isSingle="false"
+            ></select-tag>
 
             <el-form-item>
                 <el-button type="primary" @click="onSubmit('form')">{{$route.query.id? '确认编辑' : '立即创建'}}</el-button>
@@ -138,26 +142,30 @@ import {hrRequest} from '../../../../common'
 
 import tagsComponent from './tagsComponent.vue'
 import paperComponent from './paperComponent.vue'
-
+import selectTag from './selectTag.vue'
 
 export default {
     components: {
         tagsComponent,
-        paperComponent
+        paperComponent,
+        selectTag,
     },
     data() {
         //表单验证
         const validator = {
             //姓名
             nameValidate(rule, value, callback){
-                if (value === '') {
-                    callback(new Error('请输入服务人员姓名'));
-                } else {
-                    if (!/^[\u4e00-\u9fa5]+$/.test(value)) {
-                        callback(new Error('只能输入汉字'));
+                // if (value === '') {
+                //     callback(new Error('请输入服务人员姓名'));
+                // } else {
+                    if(value!=''){
+                        if (!/^[\u4e00-\u9fa5]+$/.test(value)) {
+                            callback(new Error('只能输入汉字'));
+                        }else {
+                            callback();
+                        }
+                        
                     }
-                    callback();
-                }
             },
             //年龄
             ageValidate(rule, value, callback){
@@ -212,6 +220,66 @@ export default {
             },
         }
         return {
+            tagList: [
+                {
+                    id: 1,
+                    name: '1111',
+                },
+                {
+                    id: 2,
+                    name: '2222',
+                },{
+                    id: 3,
+                    name: '3333333',
+                },{
+                    id: 4,
+                    name: '4444444',
+                },{
+                    id: 5,
+                    name: '555555',
+                },{
+                    id: 6,
+                    name: '6666',
+                },{
+                    id: 7,
+                    name: '7777',
+                },{
+                    id: 8,
+                    name: '8888',
+                },{
+                    id: 9,
+                    name: '9999',
+                },{
+                    id: 10,
+                    name: '1010101',
+                },{
+                    id: 11,
+                    name: '111111',
+                },{
+                    id: 12,
+                    name: '121212',
+                },{
+                    id: 13,
+                    name: '131313',
+                },{
+                    id: 14,
+                    name: '141414',
+                },{
+                    id: 15,
+                    name: '151515',
+                },{
+                    id: 16,
+                    name: '161616',
+                },{
+                    id: 17,
+                    name: '171717',
+                },{
+                    id: 18,
+                    name: '181818',
+                },
+            ],
+            selectedTag: [1],
+
             icon_fileList: [],
             //员工信息表单
             staffForm: {
@@ -239,7 +307,9 @@ export default {
             staffRules: {
                 //姓名
                 name: [
-                    { validator: validator.nameValidate, trigger: 'blur' }
+
+                    { required:true,message:'请填写姓名',trigger: 'blur' },
+                    { validator: validator.nameValidate, trigger: 'blur' },
                 ],
                 //年龄
                 age: [

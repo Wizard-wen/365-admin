@@ -20,7 +20,7 @@
         </el-form>
 
         <el-table :data="requireTable" class="require-table">
-            <el-table-column label="需求编号" prop="code" align="center"></el-table-column>
+            <el-table-column  label="需求编号" prop="code" align="center"></el-table-column>
 
             <el-table-column label="状态" prop="state" align="center"></el-table-column>
 
