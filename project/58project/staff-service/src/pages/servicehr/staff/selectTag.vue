@@ -64,7 +64,6 @@ export default {
          * des v-model返回的是数组，元素是主键属性
          */
         changeStatus(item){
-
             if(this.isSingle){
                 //若是单选，直接返回被选中的主键属性               
                 this.$emit('input',[item[this.setLabel.mainKey]])
@@ -137,13 +136,15 @@ export default {
 <style lang="scss" scoped>
     .tag-box{
         width: 760px;
-        padding: 10px;
+        padding: 0 0px 8px 10px;
+        border: 1px dashed #ccc;
+        border-radius: 4px;
     }
     .tag-element{
         display: inline-block;
-        padding: 0 10px;
-        margin: 8px 7px;
-        height: 32px;
+        padding: 0 12px;
+        margin: 8px 14px 0 0;
+        height: 30px;
         line-height: 30px;
         font-size: 12px;
         border: 1px solid #fff;

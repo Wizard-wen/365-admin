@@ -117,12 +117,14 @@
                     <paper-component v-model="staffForm.paper"></paper-component>
                 </el-form-item>
             </div>
+            <el-form-item label="员工姓名">
+                <select-tag
+                :propTagList="tagList"
+                v-model="selectedTag"
+                :isSingle="false"
+                ></select-tag>
+            </el-form-item>
 
-            <select-tag
-            :propTagList="tagList"
-            v-model="selectedTag"
-            :isSingle="false"
-            ></select-tag>
 
             <el-form-item>
                 <el-button type="primary" @click="onSubmit('form')">{{$route.query.id? '确认编辑' : '立即创建'}}</el-button>

@@ -100,6 +100,9 @@ import authConfig from '@/pages/auth/auth/authConfig.vue'
 
  import staffList from '@/pages/servicehr/staff/staffList.vue'
  import staffItem from '@/pages/servicehr/staff/staffItem.vue'
+ import workerList from '@/pages/servicehr/staff/workerList.vue'
+ import workerItem from '@/pages/servicehr/staff/workerItem.vue'
+
 
  const staffModule = [
 
@@ -112,6 +115,16 @@ import authConfig from '@/pages/auth/auth/authConfig.vue'
         path: '/staff/staffItem',
         name: 'staffItem',
         component: staffItem,
+    },
+    {
+        path: '/worker/workerList',
+        name: 'workerList',
+        component: workerList,
+    },
+    {
+        path: '/worker/workerItem',
+        name: 'workerItem',
+        component: workerItem,
     },
  ]
 
