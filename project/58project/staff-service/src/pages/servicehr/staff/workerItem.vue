@@ -274,7 +274,7 @@ export default {
                 version:0,//操作版本号
                 created_at:0,//创建时间
                 type:0,//签约状态
-                sex:0,//性别
+                sex:1,//性别
 
                 /**
                  * 业务字段
@@ -306,7 +306,7 @@ export default {
                 paper:[],//技能证书
                 source:0,//信息来源
                 manager_id:0,//创建人id
-                manager_name:'',//创建人姓名
+                manager_name:this.$store.state.loginModule.user.username,//创建人姓名
             },
             //表单验证规则
             staffRules: {

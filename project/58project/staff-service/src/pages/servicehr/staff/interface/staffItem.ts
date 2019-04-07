@@ -23,6 +23,10 @@ interface satffItem{
     phone:string;//电话
     return_msg?:string;//回访信息
     working_status?:number;//接单状态-----工作状态
+    
+    
+    
+    
     remarks?:string;//备注（商家情况）
     skill:Array<object>;//职业类型
     service_type:number;//服务类型
