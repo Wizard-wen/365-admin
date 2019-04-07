@@ -117,15 +117,6 @@
                     <paper-component v-model="staffForm.paper"></paper-component>
                 </el-form-item>
             </div>
-            <el-form-item label="员工姓名">
-                <select-tag
-                :propTagList="tagList"
-                v-model="selectedTag"
-                :isSingle="false"
-                ></select-tag>
-            </el-form-item>
-
-
             <el-form-item>
                 <el-button type="primary" @click="onSubmit('form')">{{$route.query.id? '确认编辑' : '立即创建'}}</el-button>
                 <el-button @click="goback">取消</el-button>
@@ -144,13 +135,11 @@ import {hrRequest} from '../../../../common'
 
 import tagsComponent from './tagsComponent.vue'
 import paperComponent from './paperComponent.vue'
-import selectTag from './selectTag.vue'
 
 export default {
     components: {
         tagsComponent,
         paperComponent,
-        selectTag,
     },
     data() {
         //表单验证
