@@ -1,7 +1,14 @@
 interface requireItem{
     code?:number;//需求的顺序号，唯一性标识
     /**
-     * 需求所属生命周期
+     * 需求所属生命周期，状态
+     * 
+     * 
+     * 已创建未提交 -> 1 需求待提交 
+     * 已提交原始需求 -> 2 需求已提交
+     * 已添加评审信息但未提交 -> 3 创建评审中
+     * 已提交评审 -> 4 评审待确认
+     * 已确认需求 -> 5 评审通过
      */
     state:number;
 
@@ -16,9 +23,12 @@ interface requireItem{
  */
 interface originalRequireItem{
     readonly id?:number;//原始需求id，创建时生成
+
     readonly initiatorName:string;//原始需求的提出者姓名
     readonly initiatorCode:number;//原始需求的提出者id，有疑惑时便于追溯
+    
     readonly init_create_at:number;//原始需求的创建时间
+    
     readonly init_submit_at:number;//原始需求的提交时间
 
     requireName:string;//需求名

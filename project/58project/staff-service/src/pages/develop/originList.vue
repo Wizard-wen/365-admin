@@ -24,9 +24,9 @@
 
             <el-table-column label="状态" prop="state" align="center"></el-table-column>
 
-            <el-table-column label="需求创建人" prop="initiatorName" align="center"></el-table-column>
+            <el-table-column label="状态" prop="state" align="center"></el-table-column>
 
-            <el-table-column label="手机号" prop="phone" align="center"></el-table-column>
+            <el-table-column label="需求创建人" prop="initiatorName" align="center"></el-table-column>
 
             <el-table-column label="操作" align="center">
                 <template slot-scope="scope">

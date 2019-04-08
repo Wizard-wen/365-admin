@@ -17,41 +17,6 @@
                 </el-form-item>
             </div>
 
-            <div>
-                <el-form-item label="">
-                    <cascader-component
-                        v-model="staffSearch.region_ids"
-                        :cascaderName="'服务地区'"
-                        :setProps="setProps"
-                        :requestUrl="'./admin/common/getAreaTree'"></cascader-component>
-                </el-form-item>
-
-                <el-form-item label="">
-                    <cascader-component
-                        v-model="staffSearch.service_category_id"
-                        :cascaderName="'技能分类'"
-                        :modelType="'int'"
-                        :setProps="setProps"
-                        :requestUrl="'./admin/common/getServiceTree'"></cascader-component>
-                </el-form-item>
-
-                <el-form-item label="">
-                    <cascader-component
-                        v-model="staffSearch.ability_ids"
-                        :cascaderName="'能力标签'"
-                        :setProps="setProps"
-                        :requestUrl="'./admin/common/getLabelTree'"></cascader-component>
-                </el-form-item>
-
-                <el-form-item label="">
-                    <cascader-component
-                        v-model="staffSearch.paper_ids"
-                        :cascaderName="'获得证书'"
-                        :setProps="setProps"
-                        :requestUrl="'./admin/common/getPaperSelection'"></cascader-component>
-                </el-form-item>
-
-            </div>
         </el-form>
 
         <el-table :data="staffTable" class="staff-table" :stripe="true" border 
@@ -66,7 +31,7 @@
 
             <el-table-column label="手机号" prop="phone" align="center"></el-table-column>
 
-            <el-table-column label="地址" prop="address" align="center" ></el-table-column>
+            <el-table-column label="地址" prop="address" width="300px" align="center" ></el-table-column>
 
             <el-table-column label="操作" align="center" fixed="right">
                 <template slot-scope="scope">
@@ -102,17 +67,6 @@
                 //表单搜索项
                 staffSearch: {
                     name: '', //姓名
-                    region_ids: [],//服务地区
-                    service_category_id: 0,//技能分类
-                    ability_ids: [],//能力标签
-                    paper_ids: [],//证书
-                },
-                /**
-                 * 级联选择器配置字段
-                 */
-                setProps: {
-                    label: 'name',
-                    value: 'id'
                 },
                 /**
                  * 分页信息
@@ -219,10 +173,6 @@
              */
             async resetStaff(){
                 this.staffSearch.name= '' //姓名
-                this.staffSearch.region_ids= []//服务地区
-                this.staffSearch.service_category_id= 0//技能分类
-                this.staffSearch.ability_ids= []//能力标签
-                this.staffSearch.paper_ids= []//证书
                 await this.getTableList()
             },
             /**
