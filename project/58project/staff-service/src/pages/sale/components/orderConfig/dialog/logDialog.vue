@@ -20,7 +20,7 @@
     </el-dialog>
 </template>
 <script>
-import {orderService} from '../../../../common'
+import {orderService} from '../../../../../../common'
 
 export default {
     props: {

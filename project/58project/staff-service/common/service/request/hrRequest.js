@@ -105,7 +105,20 @@ export default {
     getAreaTree(){
         return axios.get(`./admin/common/getAreaTree`)
     },
-
+    /**
+     * 人员信息配置
+     */
+    getFormConfig(){
+        return axios.get('./admin/formConfig/getFormConfig')
+    },
+    /**
+     * 标签信息配置
+     */
+    editFormConfig(obj){
+        return axios.post('./admin/formConfig/editFormConfig',{
+            ...obj
+        })
+    },
 
 
 

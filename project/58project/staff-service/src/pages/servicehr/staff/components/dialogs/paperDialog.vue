@@ -40,8 +40,7 @@
 /**
  * type 0 新建  1 编辑
  */
-import {hrService} from '../../../../common'
-import {hrRequest} from '../../../../common'
+import {hrRequest, hrService} from '../../../../../../common'
 
 export default {
     props:{

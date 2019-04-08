@@ -54,10 +54,10 @@
 </template>
 <script>
 
-import {orderService} from '../../../../common'
+import {orderService} from '../../../../../common'
 
-import signDialog from './signDialog.vue'
-import logDialog from './logDialog.vue'
+import signDialog from './dialog/signDialog.vue'
+import logDialog from './dialog/logDialog.vue'
 
 export default {
     components: {

@@ -48,8 +48,8 @@
     </div>
 </template>
 <script>
-    import hrService from '../../../common/service/hrService.js'
-    import cascaderComponent from '../sale/components/cascaderComponent.vue'
+    import {hrService} from '../../../common'
+    import {cascaderComponent} from '@/pages/components'
     export default {
         components: {
             cascaderComponent

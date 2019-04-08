@@ -58,8 +58,7 @@
     </el-card>  
 </template>
 <script>
-import {hrService} from '../../../../common'
-import {orderService, $utils} from '../../../../common'
+import {hrService, $utils} from '../../../../../common'
 export default {
     props: {
         staffId: {

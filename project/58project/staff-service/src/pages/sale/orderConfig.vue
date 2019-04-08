@@ -63,13 +63,14 @@
 
 </template>
 <script>
-import base from './components/base.vue'
-
-import logComponent from './components/logComponent.vue'
-import serviceList from './components/serviceList.vue'
-import matchBox from './components/matchBox.vue'
-import signStaffDetail from './components/signStaffDetail.vue'
-import fileCard from './components/fileCard.vue'
+    import {
+        base,
+        logComponent,
+        serviceList,
+        matchStaffBox,
+        signStaffDetail,
+        fileCard
+    } from './components/orderConfig'
 
 import {orderService} from '../../../common'
 export default {
@@ -193,7 +194,7 @@ export default {
     components:{
         baseComponent: base,
         serviceListComponent: serviceList,
-        matchBoxComponent: matchBox,
+        matchBoxComponent: matchStaffBox,
         logComponent,
         signStaffDetail,
         fileCard

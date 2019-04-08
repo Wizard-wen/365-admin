@@ -21,6 +21,9 @@
     </div>
 </template>
 <script>
+/**
+ *
+ */
 export default {
     model:{
         prop: 'tagList',

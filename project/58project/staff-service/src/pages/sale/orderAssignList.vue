@@ -81,13 +81,15 @@
     </div>
 </template>
 <script>
-    import {orderService, $utils} from '../../../common'
-    import {hrService} from '../../../common'
+    import {
+        hrService, 
+        orderService, 
+        $utils
+    } from '../../../common'
     
-    import cascaderComponent from './components/cascaderComponent.vue'
-    import assignDialog from './components/assignDialog.vue'
+    import {cascaderComponent} from '@/pages/components'
+    import {assignDialog} from './components/assignList'
     
-    // import orderTableObject from './interface/orderTable.ts'
     export default {
         components: {
             cascaderComponent,

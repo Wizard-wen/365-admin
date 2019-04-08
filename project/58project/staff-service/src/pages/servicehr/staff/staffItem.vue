@@ -117,13 +117,6 @@
                     <paper-component v-model="staffForm.paper"></paper-component>
                 </el-form-item>
             </div>
-            <el-form-item label="员工姓名">
-                <select-tag
-                :propTagList="tagList"
-                v-model="selectedTag"
-                :isSingle="false"
-                ></select-tag>
-            </el-form-item>
 
 
             <el-form-item>
@@ -140,17 +133,15 @@
  * type 0 新建  1 编辑
  */
 import {hrService} from '../../../../common'
-import {hrRequest} from '../../../../common'
 
-import tagsComponent from './tagsComponent.vue'
-import paperComponent from './paperComponent.vue'
-import selectTag from './selectTag.vue'
+import {
+    tagsComponent,
+    paperComponent} from './components'
 
 export default {
     components: {
         tagsComponent,
         paperComponent,
-        selectTag,
     },
     data() {
         //表单验证

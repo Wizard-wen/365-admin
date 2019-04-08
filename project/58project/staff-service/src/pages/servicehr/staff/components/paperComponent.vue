@@ -38,8 +38,8 @@
     </div>
 </template>
 <script>
-import paperDialog from './paperDialog.vue'
-import pictureDetailDialog from '../../sale/components/pictureDetailDialog.vue'
+import {paperDialog} from './dialogs'
+import {pictureDetailDialog} from '@/pages/components'
 export default {
     props: {
         value: {

@@ -99,13 +99,15 @@
     </div>
 </template>
 <script>
-import {hrService} from '../../../../common'
-import {orderService} from '../../../../common'
+import {hrService, orderService} from '../../../../../common'
 
-import staffDetailDialog from './staffDetailDialog.vue'
-import cascaderComponent from './cascaderComponent.vue'
+import staffDetailDialog from './dialog/staffDetailDialog.vue'
 
-import headIcon from '../../../assets/head-icon.jpg'
+import {cascaderComponent} from '@/pages/components'
+
+import headIcon from '@/assets/head-icon.jpg'
+
+
 export default {
     components: {
         staffDetailDialog,

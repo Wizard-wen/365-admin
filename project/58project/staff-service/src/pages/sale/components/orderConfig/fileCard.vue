@@ -30,7 +30,7 @@
     </el-card>  
 </template>
 <script>
-import pictureDetailDialog from './pictureDetailDialog.vue'
+import {pictureDetailDialog} from '@/pages/components'
 export default {
     components: {
         pictureDetailDialog

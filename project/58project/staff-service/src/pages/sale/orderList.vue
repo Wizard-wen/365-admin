@@ -112,7 +112,7 @@
 <script>
     import {orderService, $utils} from '../../../common'
     import {hrService} from '../../../common'
-    import cascaderComponent from './components/cascaderComponent.vue'
+    import {cascaderComponent} from '@/pages/components'
     export default {
         components: {
             cascaderComponent

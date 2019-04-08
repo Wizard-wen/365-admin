@@ -89,8 +89,8 @@
     </div>
 </template>
 <script>
-    import hrService from '../../../../common/service/hrService.js'
-    import cascaderComponent from '../../sale/components/cascaderComponent.vue'
+    import {hrService} from '../../../../common'
+    import {cascaderComponent} from '@/pages/components'
     export default {
         components: {
             cascaderComponent
@@ -179,21 +179,21 @@
                 store.commit('setLoading',true)
                 try{
                     await hrService.getStaffList(tableOption).then(data =>{
-                            if(data.code == "0"){
-                                this.staffTable = data.data.data
+                        if(data.code == "0"){
+                            this.staffTable = data.data.data
 
-                                //分页信息
-                                this.pagination.currentPage = data.data.current_page //当前页码
-                                this.pagination.total = data.data.total //列表总条数
-                            }
-                        }).catch(error =>{
-                            this.$message({
-                                type:'error',
-                                message: error.message
-                            })
-                        }).finally(() =>{
-                            store.commit('setLoading',false)
+                            //分页信息
+                            this.pagination.currentPage = data.data.current_page //当前页码
+                            this.pagination.total = data.data.total //列表总条数
+                        }
+                    }).catch(error =>{
+                        this.$message({
+                            type:'error',
+                            message: error.message
                         })
+                    }).finally(() =>{
+                        store.commit('setLoading',false)
+                    })
                 } catch(error){
                     this.$message({
                         type:'error',

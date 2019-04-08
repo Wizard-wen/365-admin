@@ -59,6 +59,18 @@ export default {
     getAreaTree(){
         return hrRequest.getAreaTree()
     },
+    /**
+     * 人员信息配置
+     */
+    getFormConfig(){
+        return hrRequest.getFormConfig()
+    },
+    /**
+     * 标签信息配置
+     */
+    editFormConfig(obj){
+        return hrRequest.editFormConfig(obj)
+    },
 
 
 

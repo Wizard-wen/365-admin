@@ -74,12 +74,12 @@
     </el-dialog>
 </template>
 <script>
-import {orderService} from '../../../../common'
+import {orderService} from '../../../../../../common'
 
-import paperComponent from '../../servicehr/staff/paperComponent.vue'
+// import paperComponent from '../../servicehr/staff/components/paperComponent.vue'
 export default {
     components: {
-        paperComponent,
+        // paperComponent,
     },
     props: {
         //是否打弹出框

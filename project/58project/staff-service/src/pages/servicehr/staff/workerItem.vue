@@ -145,11 +145,11 @@
  * type 0 新建  1 编辑
  */
 import {hrService} from '../../../../common'
-import {hrRequest} from '../../../../common'
 
-import tagsComponent from './tagsComponent.vue'
-import paperComponent from './paperComponent.vue'
-import selectTag from './selectTag.vue'
+import {
+    tagsComponent,
+    paperComponent,
+    selectTag} from './components'
 
 export default {
     components: {
@@ -437,15 +437,6 @@ export default {
     async mounted(){
         store.commit('setLoading',true)
         try{
-            let data = await Promise.all([
-                hrService.getAreaTree(),
-                hrService.getSkillTree('enable'), //获取技能树
-                hrService.getAbilityTree('enable'), //获取能力标签树
-            ])
-            //promise.all 赋值
-            this.areaList = data[0].data
-            this.skillList = data[1].data
-            this.labelList = data[2].data
 
             //如果是编辑则请求接口
             if(this.$route.query.type == 1){
