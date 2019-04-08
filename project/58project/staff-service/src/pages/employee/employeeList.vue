@@ -1,37 +1,45 @@
 <template>
-    <div class="require">
-        <el-form :inline="true" :model="requireSearch" class="require-form">
+    <div class="employee">
+        <el-form :inline="true" :model="employeeSearch" class="employee-form">
             <div class="search-up">
                 <div>
                     <el-form-item>
-                        <el-input v-model="requireSearch.name" placeholder="请输入需求名" :maxlength="20"></el-input>
+                        <el-input v-model="employeeSearch.name" placeholder="请输入员工名" :maxlength="20"></el-input>
+                    </el-form-item>
+
+                    <el-form-item>  
+                        <el-select v-model="employeeSearch.department" placeholder="请选择所属部门">
+                            <el-option
+                            v-for="item in departmentList"
+                            :key="item.id"
+                            :label="item.label"
+                            :value="item.id">
+                            </el-option>
+                        </el-select>                    
                     </el-form-item>
 
                     <el-form-item>
-                        <el-button type="primary" @click="searchRequire">查询</el-button>
-                        <el-button type="primary" @click="resetRequire">重置</el-button>
+                        <el-button type="primary" @click="searchEmployee">查询</el-button>
+                        <el-button type="primary" @click="resetEmployee">重置</el-button>
                     </el-form-item>
                 </div>
                 <el-form-item>
-                    <el-button type="primary" @click="createRequire">创建原始需求</el-button>
+                    <el-button type="primary" @click="createEmployee">添加员工</el-button>
                 </el-form-item>
             </div>
-
         </el-form>
 
-        <el-table :data="requireTable" class="require-table">
-            <el-table-column  label="需求编号" prop="code" align="center"></el-table-column>
+        <el-table :data="employeeTable" class="employee-table">
 
-            <el-table-column label="状态" prop="state" align="center"></el-table-column>
-
-            <el-table-column label="需求创建人" prop="initiatorName" align="center"></el-table-column>
+            <el-table-column label="姓名" prop="name" align="center"></el-table-column>
 
             <el-table-column label="手机号" prop="phone" align="center"></el-table-column>
 
+            <el-table-column label="微信" prop="wechat" align="center"></el-table-column>
+
             <el-table-column label="操作" align="center">
                 <template slot-scope="scope">
-                    <el-button size="mini" type="primary" @click="editRequire(scope.$index, scope.row)">编辑需求</el-button>
-                    <el-button size="mini" type="primary" @click="commitRequire(scope.$index, scope.row)">提交需求</el-button>
+                    <el-button size="mini" @click="editEmployee(scope.$index, scope.row)">编辑员工</el-button>
                 </template>
             </el-table-column>
         </el-table>
@@ -48,30 +56,16 @@
     </div>
 </template>
 <script>
-    import {hrService} from '../../../common'
-    import {cascaderComponent} from '@/pages/components'
+    import {employeeService} from '../../../common'
     export default {
-        components: {
-            cascaderComponent
-        },
         data() {
             return {
                 //需求信息列表
-                requireTable: [],
+                employeeTable: [],
                 //表单搜索项
-                requireSearch: {
+                employeeSearch: {
                     name: '', //姓名
-                    region_ids: [],//服务地区
-                    service_category_id: 0,//技能分类
-                    ability_ids: [],//能力标签
-                    paper_ids: [],//证书
-                },
-                /**
-                 * 级联选择器配置字段
-                 */
-                setProps: {
-                    label: 'name',
-                    value: 'id'
+                    department: 0,//部门
                 },
                 /**
                  * 分页信息
@@ -91,12 +85,12 @@
                 let arr = [],
                 _this = this;
 
-                Object.keys(this.requireSearch).forEach((item, index) =>{
+                Object.keys(this.employeeSearch).forEach((item, index) =>{
                     //如果搜索字段是数组的话
-                    if(Array.isArray(_this.requireSearch[item])){
-                        if(_this.requireSearch[item].length){
+                    if(Array.isArray(_this.employeeSearch[item])){
+                        if(_this.employeeSearch[item].length){
                             let obj = {}
-                            obj[item] = [..._this.requireSearch[item]]
+                            obj[item] = [..._this.employeeSearch[item]]
                             obj = {
                                 ...obj,
                                 key: item
@@ -105,9 +99,9 @@
                         }
                     }
                     //如果搜索字段是字符串的话
-                    else if(_this.requireSearch[item] != ''){
+                    else if(_this.employeeSearch[item] != ''){
                         let obj = {}
-                        obj[item] = _this.requireSearch[item]
+                        obj[item] = _this.employeeSearch[item]
                         obj = {
                             ...obj,
                             key: item
@@ -116,6 +110,12 @@
                     }
                 })
                 return arr
+            },
+            /**
+             * 所属部门
+             */
+            departmentList(){
+                return this.$store.state.employeeModule.departmentList
             }
         },
         methods: {
@@ -131,15 +131,14 @@
                 let tableOption = {
                     currentPage: this.pagination.currentPage,
                     pageNumber: this.pagination.pageNumber,
-                    get_for: 'require',
                     searchSelect: this.searchArray
                 }
 
                 store.commit('setLoading',true)
                 try{
-                    await hrService.getStaffList(tableOption).then(data =>{
+                    await employeeService.getEmployeeList(tableOption).then(data =>{
                             if(data.code == "0"){
-                                this.requireTable = data.data.data
+                                this.employeeTable = data.data.data
 
                                 //分页信息
                                 this.pagination.currentPage = data.data.current_page //当前页码
@@ -170,26 +169,23 @@
             /**
              * 查找用户
              */
-            async searchRequire(){
+            async searchEmployee(){
                 await this.getTableList()
             },
             /**
              * 重置搜索框
              */
-            async resetRequire(){
-                this.requireSearch.name= '' //姓名
-                this.requireSearch.region_ids= []//服务地区
-                this.requireSearch.service_category_id= 0//技能分类
-                this.requireSearch.ability_ids= []//能力标签
-                this.requireSearch.paper_ids= []//证书
+            async resetEmployee(){
+                this.employeeSearch.name= '' //姓名
+                this.employeeSearch.department= 0//部门
                 await this.getTableList()
             },
             /**
              * 创建原始需求
              */
-            createRequire(){
+            createEmployee(){
                 this.$router.push({
-                    path: "/develop/originRequire",
+                    path: "/employee/employeeItem",
                     query: {
                         type: 0
                     }
@@ -198,60 +194,15 @@
             /**
              * 编辑需求信息
              */
-            editRequire(index, row){
+            editEmployee(index, row){
                 this.$router.push({
-                    path: "/develop/originRequire",
+                    path: "/employee/employeeItem",
                     query: {
                         type: 1, //编辑为1
                         id: row.id
                     }
                 })
             },
-            /**
-             * 提交需求
-             */
-            async commitRequire(index, row){
-
-                let response = await this.$confirm(`确定提交该需求吗?`, '提示', {
-                    confirmButtonText: '确定',
-                    cancelButtonText: '取消',
-                    type: 'warning'
-                }).catch(() => {
-                    this.$message({
-                        type: 'info',
-                        message: `已取消提交`
-                    });
-                });
-                if(response == "confirm"){
-                    store.commit('setLoading',1)
-
-                    try{
-                        await hrService.changeStaffStatus(row.id, row.version)
-                            .then(data =>{
-                                if(data.code == "0"){
-                                    this.$message({
-                                        type:'success',
-                                        message: `提交成功`
-                                    })
-                                }
-                            }).catch(e =>{
-                                this.$message({
-                                    type:'error',
-                                    message: e.message
-                                })
-                            })
-                    } catch(error){
-                        this.$message({
-                            type:'error',
-                            message: error.message
-                        })
-                    }
-
-                    await _this.getTableList()
-
-                    store.commit('setLoading',false)
-                }
-            }
         },
         async mounted(){
             await this.getTableList()
@@ -259,10 +210,10 @@
     }
 </script>
 <style lang="scss" scoped>
-        .require{
+        .employee{
         padding-top: 30px;
         margin: 0 auto;
-        .require-form{
+        .employee-form{
             width:80%;
             min-width:1100px;
             margin: 0 auto;
@@ -271,7 +222,7 @@
                 justify-content: space-between;
             }
         }
-        .require-table{
+        .employee-table{
             width: 80%;
             min-width: 1100px;
             margin: 0 auto;

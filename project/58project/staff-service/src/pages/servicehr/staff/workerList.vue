@@ -243,7 +243,7 @@
              */
             editStaff(index, row){
                 this.$router.push({
-                    path: "/staff/staffItem",
+                    path: "/worker/workerItem",
                     query: {
                         type: 1, //编辑为1
                         id: row.id

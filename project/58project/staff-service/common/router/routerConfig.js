@@ -147,36 +147,36 @@ import paperList from '@/pages/servicehr/serviceType/paperList.vue'
 import paperConfig from '@/pages/servicehr/serviceType/paperConfig.vue'
 
 const serviceTypeModule = [
-    {
-        path: '/serviceType/abilityList',
-        name: 'abilityList',
-        component: abilityList,
-    },
-    {
-        path: '/serviceType/abilityConfig',
-        name: 'abilityConfig',
-        component: abilityConfig,
-    },
-    {
-        path: '/serviceType/skillList',
-        name: 'skillList',
-        component: skillList,
-    },
-    {
-        path: '/serviceType/skillConfig',
-        name: 'skillConfig',
-        component: skillConfig,
-    },
-    {
-        path: '/serviceType/paperList',
-        name: 'paperList',
-        component: paperList,
-    },
-    {
-        path: '/serviceType/paperConfig',
-        name: 'paperConfig',
-        component: paperConfig,
-    },
+    // {
+    //     path: '/serviceType/abilityList',
+    //     name: 'abilityList',
+    //     component: abilityList,
+    // },
+    // {
+    //     path: '/serviceType/abilityConfig',
+    //     name: 'abilityConfig',
+    //     component: abilityConfig,
+    // },
+    // {
+    //     path: '/serviceType/skillList',
+    //     name: 'skillList',
+    //     component: skillList,
+    // },
+    // {
+    //     path: '/serviceType/skillConfig',
+    //     name: 'skillConfig',
+    //     component: skillConfig,
+    // },
+    // {
+    //     path: '/serviceType/paperList',
+    //     name: 'paperList',
+    //     component: paperList,
+    // },
+    // {
+    //     path: '/serviceType/paperConfig',
+    //     name: 'paperConfig',
+    //     component: paperConfig,
+    // },
 ]
 
 /**
@@ -246,13 +246,19 @@ const develop = [
  * 公司员工管理
  */
 import employeeList from '@/pages/employee/employeeList.vue'
+import employeeItem from '@/pages/employee/employeeItem.vue'
 
 const employee = [
     {
         path: '/employee/employeeList',
         name: 'employeeList',
         component: employeeList,
-    }
+    },
+    {
+        path: '/employee/employeeItem',
+        name: 'employeeItem',
+        component: employeeItem,
+    },
 ]
 /**
  * 学员列表

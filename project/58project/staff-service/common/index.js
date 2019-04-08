@@ -42,6 +42,7 @@ import loginService from './service/loginService'
 import authService from './service/authService'
 import hrService from './service/hrService'
 import orderService from './service/orderService'
+import employeeService from './service/employeeService'
 
 
 import hrRequest from './service/request/hrRequest'
@@ -52,6 +53,7 @@ export {
     authService,
     hrService,
     orderService,
+    employeeService
 }
 
 /**
