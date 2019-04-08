@@ -75,7 +75,7 @@
             </el-form-item>
         
             <el-form-item label="学历" prop="education" class="form-item-size" size="small">
-                <select-tag :propTagList="tagList" v-model="workerForm.education" :isSingle="false"></select-tag>
+                <select-tag :propTagList="tagList" v-model="workerForm.education" :isSingle="true"></select-tag>
             </el-form-item>
 
             <el-form-item label="紧急联系人电话" prop="urgent" class="form-item-size" size="small">
@@ -109,7 +109,7 @@
             </el-form-item>
         
             <el-form-item label="参加培训" prop="course" class="form-item-size" size="small">
-                <select-tag :propTagList="tagList" v-model="workerForm.course" :isSingle="false"></select-tag>
+                <select-tag :propTagList="tagList" v-model="workerForm.course" :isSingle="true"></select-tag>
             </el-form-item>
 
             <el-form-item label="技能证书" prop="paper" >
@@ -117,7 +117,7 @@
             </el-form-item>
         
             <el-form-item label="信息来源" prop="source" class="form-item-size" size="small">
-                <select-tag :propTagList="tagList" v-model="workerForm.source" :isSingle="false"></select-tag>
+                <select-tag :propTagList="tagList" v-model="workerForm.source" :isSingle="true"></select-tag>
             </el-form-item>
 
             <el-form-item label="创建人姓名" prop="manager_name" class="form-item-size" size="small">
@@ -189,7 +189,9 @@ export default {
                         callback(new Error('请输入18位有效身份证号'));
                     }
                     callback();
-                } 
+                } else {
+                    callback()
+                }
             },
             //紧急联系人电话
             urgentValidate(rule, value, callback){
@@ -198,6 +200,8 @@ export default {
                         callback(new Error('请输入正确格式的手机号'));
                     }
                     callback();
+                } else {
+                    callback()
                 }
             },
             //银行卡号
@@ -208,6 +212,8 @@ export default {
                     } else {
                         callback();
                     }
+                } else {
+                    callback()
                 }
             },
         }
@@ -269,11 +275,11 @@ export default {
                 /**
                  * 逻辑字段
                  */
-                id:0,//员工id
-                code:'',//员工号
-                version:0,//操作版本号
-                created_at:0,//创建时间
-                type:0,//签约状态
+                id:null,//员工id
+                code:null,//员工号
+                version:null,//操作版本号
+                created_at:null,//创建时间
+                type:null,//签约状态
                 sex:1,//性别
 
                 /**
@@ -332,7 +338,7 @@ export default {
                 identify: [
                     {validator: validator.identifyValidate, trigger: 'blur'}
                 ],
-                //身份证
+                //紧急联系人
                 urgent: [
                     {validator: validator.urgentValidate, trigger: 'blur'}
                 ],               
@@ -379,6 +385,7 @@ export default {
          * 区分新建和编辑
          */
         async onSubmit(formName) {
+            debugger
             await this.$refs[formName].validate((valid, fileds) => {
                 if (valid) {
                     hrService.editStaff(this.workerForm).then(data =>{
@@ -387,7 +394,7 @@ export default {
                                     type:"success",
                                     message: "修改成功"
                                 })
-                                this.$router.push('/staff/staffList')
+                                this.$router.push('/worker/workerList')
                             }
                         }).catch(error =>{
                             this.$message({
@@ -431,7 +438,7 @@ export default {
          * 返回
          */
         goback(){
-            this.$router.push("/staff/staffList")
+            this.$router.push("/worker/workerList")
         },
     },
     async mounted(){

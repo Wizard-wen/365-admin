@@ -17,7 +17,7 @@ interface satffItem{
      * 业务字段
      */
     register_at:number;//登记时间
-    authentication?:number;//认证状态
+    authentication?:number;//认证状态--
     name:string;//姓名
     age:number;//年龄
     phone:string;//电话

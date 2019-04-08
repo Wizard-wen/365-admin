@@ -96,6 +96,7 @@ export default {
                         type:'error',
                         message: error.message
                     })
+                    this.$router.push('/auth/accountList')
                 })
         }catch(e){
 

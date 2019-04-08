@@ -15,8 +15,8 @@ export default {
          * v-model数据
          */
         value: {
-            default: function(){return []},
-            type: Array,
+            default: function(){return [] | 0},
+            type: [Array, Number],
         },
         /**
          * tag列表
@@ -66,7 +66,7 @@ export default {
         changeStatus(item){
             if(this.isSingle){
                 //若是单选，直接返回被选中的主键属性               
-                this.$emit('input',[item[this.setLabel.mainKey]])
+                this.$emit('input',item[this.setLabel.mainKey])
             } else {
                 //多选
                 let inputArr = this.showTagList.reduce((arr, it, index) =>{
@@ -98,11 +98,11 @@ export default {
             },[])
             // 如果是单选
             if(this.isSingle){
-
-                if(val.length){
+                // debugger
+                if(val!=0){
                     //在数组中寻找选中标签
                     let selectedTag = this.showTagList.find((item, index) =>{
-                        return item[this.setLabel.mainKey] == val[0]
+                        return item[this.setLabel.mainKey] == val
                     })
                     
                     //若是在数组中可以找到选中标签，渲染数据
@@ -115,15 +115,20 @@ export default {
                 }
 
             } else {
-                this.showTagList = this.showTagList.reduce((arr,item, index) =>{
-                    item.isSelected = false
-                    val.forEach((it, index) =>{
-                        if(item[this.setLabel.mainKey] == it){
-                            item.isSelected = true
-                        }
-                    })
-                    return arr.concat(item)
-                },[])
+                // debugger
+                if(Array.isArray(val) && val.length!=0){
+                    this.showTagList = this.showTagList.reduce((arr,item, index) =>{
+                        item.isSelected = false
+                        // debugger
+                        val.forEach((it, index) =>{
+                            if(item[this.setLabel.mainKey] == it){
+                                item.isSelected = true
+                            }
+                        })
+                        return arr.concat(item)
+                    },[])
+                }
+
             }
         },
     },
