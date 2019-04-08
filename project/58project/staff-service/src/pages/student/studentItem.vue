@@ -12,7 +12,7 @@
             
             <el-form-item label="创建时间" prop="init_create_at" class="form-item-size">
                 <el-input v-model="originRequireForm.init_create_at" disabled></el-input>
-            </el-form-item> 
+            </el-form-item>  
             
             <!-- <el-form-item label="提交时间" prop="init_submit_at" class="form-item-size">
                 <el-input v-model="originRequireForm.init_submit_at" disabled></el-input>
