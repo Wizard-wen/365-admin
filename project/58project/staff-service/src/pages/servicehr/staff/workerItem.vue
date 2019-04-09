@@ -35,7 +35,7 @@
             </el-form-item>
 
             <el-form-item label="职业类型" prop="skill" class="form-item-size" size="small">
-                <select-tag :propTagList="tagList" v-model="workerForm.skill" :isSingle="false"></select-tag>
+                <select-tag :propTagList="workerConfigList.service_category" v-model="workerForm.skill" :isSingle="false"></select-tag>
             </el-form-item> 
 
             <el-form-item label="服务类型" prop="service_type" class="form-item-size" size="small">
@@ -347,21 +347,21 @@ export default {
                     {validator: validator.bankCardValidate, trigger: 'blur'}
                 ],
             },
+            workerConfigList:[],
+            // region: [],//地区信息
+            // areaList: [],//地区数组
 
-            region: [],//地区信息
-            areaList: [],//地区数组
+            // skill: [],//技能级联选择器筛选信息
+            // skillList: [],//技能级联选择器渲染数组
 
-            skill: [],//技能级联选择器筛选信息
-            skillList: [],//技能级联选择器渲染数组
+            // label: [],//能力标签级联选择器筛选信息
+            // labelList: [],//能力标签级联选择器渲染数组
 
-            label: [],//能力标签级联选择器筛选信息
-            labelList: [],//能力标签级联选择器渲染数组
-
-            //地区级联选择字段
-            setCascaderProps: {
-                label: 'name',
-                value: 'id'
-            },
+            // //地区级联选择字段
+            // setCascaderProps: {
+            //     label: 'name',
+            //     value: 'id'
+            // },
             isShowBlack: false,//头像阴影
             //图片上传header
             uploadHeader:{
@@ -385,7 +385,6 @@ export default {
          * 区分新建和编辑
          */
         async onSubmit(formName) {
-            debugger
             await this.$refs[formName].validate((valid, fileds) => {
                 if (valid) {
                     hrService.editStaff(this.workerForm).then(data =>{
@@ -442,37 +441,46 @@ export default {
         },
     },
     async mounted(){
-        store.commit('setLoading',true)
+        
         try{
-
+            await store.commit('setLoading',true)
             //如果是编辑则请求接口
             if(this.$route.query.type == 1){
-                await hrService.getStaff(this.$route.query.id)
-                    .then(data =>{
-                        if(data.code == "0"){
-                            this.workerForm = data.data
+                await hrService.getStaff(this.$route.query.id).then(data =>{
+                    if(data.code == "0"){
 
-                            this.workerForm.paper.forEach((item, index) =>{
-                                item.images.forEach((it, index) =>{
-                                    it.url = './resource/'+it.path
-                                })
+                        this.workerForm = data.data
+
+                        this.workerForm.paper.forEach((item, index) =>{
+                            item.images.forEach((it, index) =>{
+                                it.url = './resource/'+it.path
                             })
-                            this.icon_fileList = this.workerForm.icon == ''? [] : [{
-                                url: `./resource/${this.workerForm.icon}`,
-                                name: 'head'
-                            }]
-                        }
-                    }).catch(err =>{
-                        throw err
+                        })
+                        this.icon_fileList = this.workerForm.icon == ''? [] : [{
+                            url: `./resource/${this.workerForm.icon}`,
+                            name: 'head'
+                        }]
+                    }
+                }).catch(error =>{
+                    this.$message({
+                        type:'error',
+                        message: error.message
                     })
+                })
             }
-        }catch(e){
+            await hrService.getFormConfig().then((data) =>{
+                if(data.code == '0'){
+                    this.workerConfigList = data.data
+                }
+            })
+            
+        }catch(error){
             this.$message({
                 type:'error',
-                message: e.message
+                message: error.message
             })
         }
-        store.commit('setLoading',false)
+    await store.commit('setLoading',false)
     }
 }
 </script>

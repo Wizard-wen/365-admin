@@ -98,13 +98,11 @@ export default {
             },[])
             // 如果是单选
             if(this.isSingle){
-                // debugger
                 if(val!=0){
                     //在数组中寻找选中标签
                     let selectedTag = this.showTagList.find((item, index) =>{
                         return item[this.setLabel.mainKey] == val
                     })
-                    
                     //若是在数组中可以找到选中标签，渲染数据
                     if(typeof selectedTag != 'undefined'){
                         this.showTagList.forEach((item, index) =>{
@@ -113,22 +111,16 @@ export default {
                         selectedTag.isSelected = true
                     }
                 }
-
             } else {
-                // debugger
-                if(Array.isArray(val) && val.length!=0){
-                    this.showTagList = this.showTagList.reduce((arr,item, index) =>{
-                        item.isSelected = false
-                        // debugger
-                        val.forEach((it, index) =>{
-                            if(item[this.setLabel.mainKey] == it){
-                                item.isSelected = true
-                            }
-                        })
-                        return arr.concat(item)
-                    },[])
-                }
-
+                this.showTagList = this.showTagList.reduce((arr,item, index) =>{
+                    item.isSelected = false
+                    val.forEach((it, index) =>{
+                        if(item[this.setLabel.mainKey] == it){
+                            item.isSelected = true
+                        }
+                    })
+                    return arr.concat(item)
+                },[])
             }
         },
     },
