@@ -7,7 +7,7 @@
             </el-form-item>     
             
             <el-form-item label="认证状态" prop="authentication" class="form-item-size" size="small">
-                <select-tag :propTagList="tagList" v-model="workerForm.authentication" :isSingle="true"></select-tag>
+                <select-tag :propTagList="workerConfigList.authentication" v-model="workerForm.authentication" :isSingle="true"></select-tag>
             </el-form-item> 
             
             <el-form-item label="姓名" prop="name" class="form-item-size" size="small">
@@ -39,15 +39,15 @@
             </el-form-item> 
 
             <el-form-item label="服务类型" prop="service_type" class="form-item-size" size="small">
-                <select-tag :propTagList="tagList" v-model="workerForm.service_type" :isSingle="true"></select-tag>
+                <select-tag :propTagList="workerConfigList.service_type" v-model="workerForm.service_type" :isSingle="true"></select-tag>
             </el-form-item> 
 
             <el-form-item label="可服务人群" prop="service_crowd" class="form-item-size" size="small">
-                <select-tag :propTagList="tagList" v-model="workerForm.service_crowd" :isSingle="false"></select-tag>
+                <select-tag :propTagList="workerConfigList.service_crowd" v-model="workerForm.service_crowd" :isSingle="false"></select-tag>
             </el-form-item> 
 
             <el-form-item label="工龄" prop="working_age" class="form-item-size" size="small">
-                <select-tag :propTagList="tagList" v-model="workerForm.working_age" :isSingle="true"></select-tag>
+                <select-tag :propTagList="workerConfigList.working_age" v-model="workerForm.working_age" :isSingle="true"></select-tag>
             </el-form-item> 
 
             <el-form-item label="工作经验（备注）" prop="working_experience" class="form-item-size" size="small">
@@ -109,7 +109,7 @@
             </el-form-item>
         
             <el-form-item label="参加培训" prop="course" class="form-item-size" size="small">
-                <select-tag :propTagList="tagList" v-model="workerForm.course" :isSingle="true"></select-tag>
+                <select-tag :propTagList="workerConfigList.course" v-model="workerForm.course" :isSingle="true"></select-tag>
             </el-form-item>
 
             <el-form-item label="技能证书" prop="paper" >
@@ -117,7 +117,7 @@
             </el-form-item>
         
             <el-form-item label="信息来源" prop="source" class="form-item-size" size="small">
-                <select-tag :propTagList="tagList" v-model="workerForm.source" :isSingle="true"></select-tag>
+                <select-tag :propTagList="workerConfigList.source" v-model="workerForm.source" :isSingle="true"></select-tag>
             </el-form-item>
 
             <el-form-item label="创建人姓名" prop="manager_name" class="form-item-size" size="small">
@@ -347,7 +347,7 @@ export default {
                     {validator: validator.bankCardValidate, trigger: 'blur'}
                 ],
             },
-            workerConfigList:[],
+            workerConfigList:{},
             // region: [],//地区信息
             // areaList: [],//地区数组
 

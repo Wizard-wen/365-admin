@@ -57,6 +57,11 @@ export default {
         value(val){
             this.changeValue(val)
         },
+        propTagList(val){
+            if(val.length){
+                this.changeValue(val)
+            }
+        }
     },
     methods: {
         /**
@@ -89,6 +94,7 @@ export default {
          * 渲染数据
          */
         changeValue(val){
+            // debugger
             //加载渲染数组
             this.showTagList = this.propTagList.reduce((arr,item,index) =>{
                 return arr.concat({
@@ -113,6 +119,7 @@ export default {
                 }
             } else {
                 this.showTagList = this.showTagList.reduce((arr,item, index) =>{
+                    // debugger
                     item.isSelected = false
                     val.forEach((it, index) =>{
                         if(item[this.setLabel.mainKey] == it){
@@ -126,6 +133,7 @@ export default {
     },
     mounted(){
         //加载渲染数组
+        // debugger
         this.changeValue(this.value)
     }
 }
