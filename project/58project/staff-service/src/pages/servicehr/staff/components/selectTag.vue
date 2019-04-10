@@ -16,7 +16,7 @@ export default {
          */
         value: {
             default: function(){return [] | 0},
-            type: [Array, Number],
+            type: [Array, Number, String],
         },
         /**
          * tag列表
@@ -54,8 +54,16 @@ export default {
         /**
          * v-model数据
          */
-        value(val){
-            this.changeValue(val)
+        value:{
+            handler(newName, oldName){
+                if(newName!= oldName){
+                    // debugger
+                    this.changeValue(newName)
+                }
+                
+            },
+            immediate: true,
+            deep: true,
         },
         propTagList(val){
             if(val.length){
@@ -102,9 +110,11 @@ export default {
                     isSelected: false,
                 })
             },[])
+            console.log(this.showTagList)
             // 如果是单选
             if(this.isSingle){
                 if(val!=0){
+                    console.log('val',val)
                     //在数组中寻找选中标签
                     let selectedTag = this.showTagList.find((item, index) =>{
                         return item[this.setLabel.mainKey] == val
@@ -112,9 +122,14 @@ export default {
                     //若是在数组中可以找到选中标签，渲染数据
                     if(typeof selectedTag != 'undefined'){
                         this.showTagList.forEach((item, index) =>{
-                            item.isSelected = false
+                            if(item.id == selectedTag.id){
+                                item.isSelected = true
+                            } else {
+                                item.isSelected = false
+                            }
                         })
-                        selectedTag.isSelected = true
+                        
+                        // selectedTag.isSelected = true
                     }
                 }
             } else {
@@ -151,7 +166,7 @@ export default {
         margin: 8px 14px 0 0;
         height: 30px;
         line-height: 30px;
-        font-size: 12px;
+        font-size: 14px;
         border: 1px solid #fff;
         border-radius: 4px;
         box-sizing: border-box;

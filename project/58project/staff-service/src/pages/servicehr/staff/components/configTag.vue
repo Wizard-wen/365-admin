@@ -98,7 +98,7 @@ export default {
         margin: 8px 14px 0 0;
         height: 30px;
         line-height: 30px;
-        font-size: 12px;
+        font-size: 14px;
         border: 1px solid #fff;
         border-radius: 4px;
         box-sizing: border-box;

@@ -27,7 +27,7 @@
             </el-form-item>
 
             <el-form-item label="接单状态" prop="working_status" class="form-item-size" size="small">
-                <select-tag :propTagList="tagList" v-model="workerForm.working_status" :isSingle="true"></select-tag>
+                <select-tag :propTagList="workerConfigList.working_status" v-model="workerForm.working_status" :isSingle="true"></select-tag>
             </el-form-item> 
 
             <el-form-item label="备注（商家情况）" prop="remarks" class="form-item-size" size="small">
@@ -55,7 +55,7 @@
             </el-form-item>
 
             <el-form-item label="民族" prop="nation" class="form-item-size" size="small">
-                <select-tag :propTagList="tagList" v-model="workerForm.nation" :isSingle="true"></select-tag>
+                <select-tag :propTagList="$store.state.hrModule.nation" v-model="workerForm.nation" :isSingle="true"></select-tag>
             </el-form-item>
 
             <el-form-item label="籍贯" prop="birthPlace" class="form-item-size" size="small">
@@ -71,11 +71,11 @@
             </el-form-item>
 
             <el-form-item label="区域" prop="region" class="form-item-size" size="small">
-                <select-tag :propTagList="tagList" v-model="workerForm.region" :isSingle="false"></select-tag>
+                <select-tag :propTagList="workerConfigList.service_region" v-model="workerForm.region" :isSingle="false"></select-tag>
             </el-form-item>
         
             <el-form-item label="学历" prop="education" class="form-item-size" size="small">
-                <select-tag :propTagList="tagList" v-model="workerForm.education" :isSingle="true"></select-tag>
+                <select-tag :propTagList="$store.state.hrModule.educationList" v-model="workerForm.education" :isSingle="true"></select-tag>
             </el-form-item>
 
             <el-form-item label="紧急联系人电话" prop="urgent" class="form-item-size" size="small">
@@ -112,8 +112,8 @@
                 <select-tag :propTagList="workerConfigList.course" v-model="workerForm.course" :isSingle="true"></select-tag>
             </el-form-item>
 
-            <el-form-item label="技能证书" prop="paper" >
-                <paper-component v-model="workerForm.paper"></paper-component>
+            <el-form-item label="技能证书" prop="paper" class="form-item-size">
+                <paper-component v-model="workerForm.paper" ></paper-component>
             </el-form-item>
         
             <el-form-item label="信息来源" prop="source" class="form-item-size" size="small">
@@ -347,7 +347,11 @@ export default {
                     {validator: validator.bankCardValidate, trigger: 'blur'}
                 ],
             },
-            workerConfigList:{},
+            workerConfigList:{
+                authentication:[],
+                course:[],
+                paper_category:[],
+            },
             // region: [],//地区信息
             // areaList: [],//地区数组
 
@@ -385,9 +389,30 @@ export default {
          * 区分新建和编辑
          */
         async onSubmit(formName) {
-            await this.$refs[formName].validate((valid, fileds) => {
+            await this.$refs[formName].validate(async (valid, fileds) => {
                 if (valid) {
-                    hrService.editStaff(this.workerForm).then(data =>{
+                    //字段转换
+                    this.workerForm.service_crowd = this.setCommitAttr(
+                        this.workerForm.service_crowd,
+                        this.workerConfigList.service_crowd,
+                        'service_crowd_id'
+                    );
+
+                    this.workerForm.region = this.setCommitAttr(
+                        this.workerForm.region,
+                        this.workerConfigList.service_region,
+                        'region_id'
+                    );
+
+                    this.workerForm.skill = this.setCommitAttr(
+                        this.workerForm.skill,
+                        this.workerConfigList.service_category,
+                        'service_category_id'
+                    );
+
+                    try{
+                        store.commit('setLoading',true)
+                        await hrService.editStaff(this.workerForm).then(data =>{
                             if(data.code == '0'){
                                 this.$message({
                                     type:"success",
@@ -400,11 +425,35 @@ export default {
                                 type:'error',
                                 message: error.message
                             })
+                        }).finally(() =>{
+                            store.commit('setLoading',false)
                         })
+                    } catch(error){
+                        this.$message({
+                            type:'error',
+                            message: error.message
+                        }) 
+                    }
                 } else {
                     return false;
                 }
             });
+        },
+        /**
+         * 拼接service_crowd（服务人群）字段  
+         */
+        setCommitAttr(selectedArr, originArr, keyName){
+            return originArr.reduce((arr, item, index)=>{
+                var serviceItem = null
+                selectedArr.forEach((it, index) =>{
+                    if(it == item.id){
+                        serviceItem = {}
+                        serviceItem[keyName] = item.id;
+                        serviceItem['name'] = item.name;
+                    } 
+                })
+                return serviceItem == null ? arr : arr.concat(serviceItem)
+            },[])
         },
         /**
          * 上传头像，显示阴影
@@ -448,18 +497,34 @@ export default {
             if(this.$route.query.type == 1){
                 await hrService.getStaff(this.$route.query.id).then(data =>{
                     if(data.code == "0"){
+                        // debugger
+                        var workerForm = data.data
 
-                        this.workerForm = data.data
-
-                        this.workerForm.paper.forEach((item, index) =>{
+                        workerForm.paper.forEach((item, index) =>{
                             item.images.forEach((it, index) =>{
                                 it.url = './resource/'+it.path
                             })
                         })
-                        this.icon_fileList = this.workerForm.icon == ''? [] : [{
-                            url: `./resource/${this.workerForm.icon}`,
+                        
+                        workerForm.region = workerForm.region.reduce((arr, item, index) =>{
+                            return arr.concat(item.region_id)
+                        },[])
+                        
+                        // workerForm.service_crowd = workerForm.service_crowd.reduce((arr, item, index) =>{
+                        //     return arr.concat(item.service_crowd_id)
+                        // },[])
+
+                        workerForm.skill = workerForm.skill.reduce((arr, item, index) =>{
+                            return arr.concat(item.service_category_id)
+                        },[])
+                        // ce.log(this.workerForm)
+                        // debugger
+                        this.icon_fileList = workerForm.icon == ''? [] : [{
+                            url: `./resource/${workerForm.icon}`,
                             name: 'head'
                         }]
+
+                        this.workerForm = workerForm
                     }
                 }).catch(error =>{
                     this.$message({

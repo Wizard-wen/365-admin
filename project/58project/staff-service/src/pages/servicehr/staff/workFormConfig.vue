@@ -33,6 +33,14 @@
             <el-form-item label="工龄字段" prop="source" class="form-item-size" size="small">
                 <config-tag @reload="getWorkFormConfig" v-model="workConfigForm.working_age" :tableConfig="'working_age'"></config-tag>
             </el-form-item>
+
+            <el-form-item label="服务区域" prop="source" class="form-item-size" size="small">
+                <config-tag @reload="getWorkFormConfig" v-model="workConfigForm.service_region" :tableConfig="'service_region'"></config-tag>
+            </el-form-item>
+
+            <el-form-item label="接单状态" prop="source" class="form-item-size" size="small">
+                <config-tag @reload="getWorkFormConfig" v-model="workConfigForm.working_status" :tableConfig="'working_status'"></config-tag>
+            </el-form-item>
         </el-form>
     </div>
 </template>
@@ -63,6 +71,8 @@ export default {
                 service_type: [],//服务类型字段
                 source: [],//信息来源字段
                 working_age: [],//工龄字段
+                service_region:[],//服务区域
+                working_status:[],//接单状态
             },
         }
     },
