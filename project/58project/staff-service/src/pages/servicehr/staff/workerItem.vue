@@ -196,10 +196,11 @@ export default {
             //紧急联系人电话
             urgentValidate(rule, value, callback){
                 if (value != '') {
-                    if (!(/^1[34578]\d{9}$/.test(value))) {
+                    if (! (/^1[34578]\d{9}$/.test(value)) ) {
                         callback(new Error('请输入正确格式的手机号'));
+                    } else {
+                        callback();
                     }
-                    callback();
                 } else {
                     callback()
                 }
@@ -218,56 +219,6 @@ export default {
             },
         }
         return {
-            tagList: [
-                {
-                    id: 1,
-                    name: '1111',
-                },
-                {
-                    id: 2,
-                    name: '2222',
-                },{
-                    id: 3,
-                    name: '3333333',
-                },{
-                    id: 4,
-                    name: '4444444',
-                },{
-                    id: 5,
-                    name: '555555',
-                },{
-                    id: 6,
-                    name: '6666',
-                },{
-                    id: 7,
-                    name: '7777',
-                },{
-                    id: 8,
-                    name: '8888',
-                },{
-                    id: 9,
-                    name: '9999',
-                },{
-                    id: 10,
-                    name: '1010101',
-                },{
-                    id: 11,
-                    name: '111111',
-                },{
-                    id: 12,
-                    name: '121212',
-                },{
-                    id: 13,
-                    name: '131313',
-                },{
-                    id: 14,
-                    name: '141414',
-                },{
-                    id: 15,
-                    name: '151515',
-                },
-            ],
-            selectedTag: [1],
 
             icon_fileList: [],
             //员工信息表单
@@ -318,7 +269,7 @@ export default {
             staffRules: {
                 //登记日期
                 register_at:[
-                    { type:'date', required:true, message:'选择登记时间', trigger: ['blur','change']},
+                    { type:'date', required:true, message:'选择登记时间', trigger: ['blur', 'change']},
                 ],
                 //姓名
                 name: [
@@ -390,7 +341,9 @@ export default {
          */
         async onSubmit(formName) {
             await this.$refs[formName].validate(async (valid, fileds) => {
+                debugger
                 if (valid) {
+
                     //字段转换
                     this.workerForm.service_crowd = this.setCommitAttr(
                         this.workerForm.service_crowd,

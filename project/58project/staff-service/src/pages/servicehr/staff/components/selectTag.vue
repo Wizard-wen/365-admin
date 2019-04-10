@@ -50,6 +50,20 @@ export default {
             showTagList:[],//渲染的tag标签
         }
     },
+    computed: {
+        /**
+         * v-model数据进来后，统一包装成数组
+         */
+        valueData(){
+            if(typeof  this.value == 'number'){
+                return [this.value]
+            } else if(typeof this.value == 'string') {
+                return [Number(this.value)]
+            } else {
+                return this.value
+            }
+        }
+    },
     watch: {
         /**
          * v-model数据
@@ -102,53 +116,64 @@ export default {
          * 渲染数据
          */
         changeValue(val){
-            // debugger
-            //加载渲染数组
-            this.showTagList = this.propTagList.reduce((arr,item,index) =>{
-                return arr.concat({
-                    ...item,
-                    isSelected: false,
-                })
-            },[])
-            console.log(this.showTagList)
-            // 如果是单选
-            if(this.isSingle){
-                if(val!=0){
-                    console.log('val',val)
-                    //在数组中寻找选中标签
-                    let selectedTag = this.showTagList.find((item, index) =>{
-                        return item[this.setLabel.mainKey] == val
-                    })
-                    //若是在数组中可以找到选中标签，渲染数据
-                    if(typeof selectedTag != 'undefined'){
-                        this.showTagList.forEach((item, index) =>{
-                            if(item.id == selectedTag.id){
-                                item.isSelected = true
-                            } else {
-                                item.isSelected = false
-                            }
-                        })
+            // //加载渲染数组
+            // this.showTagList = this.propTagList.reduce((arr,item,index) =>{
+            //     return arr.concat({
+            //         ...item,
+            //         isSelected: false,
+            //     })
+            // },[])
+
+            // // console.log(this.showTagList)
+            
+            // // 如果是单选
+            // if(this.isSingle){
+            //     if(val!=0){
+
+            //         //在数组中寻找选中标签
+            //         let selectedTag = this.showTagList.find((item, index) =>{
+            //             return item[this.setLabel.mainKey] == val
+            //         })
+            //         //若是在数组中可以找到选中标签，渲染数据
+            //         if(typeof selectedTag != 'undefined'){
+            //             this.showTagList = this.showTagList.map((item, index) =>{
+            //                 if(item.id == selectedTag.id){
+            //                     this.$set(item,'isSelected',true)
+            //                 } else {
+            //                     this.$set(item,'isSelected',false)
+            //                 }
+            //                 return item
+            //             })
                         
-                        // selectedTag.isSelected = true
-                    }
-                }
-            } else {
-                this.showTagList = this.showTagList.reduce((arr,item, index) =>{
-                    // debugger
+            //             // selectedTag.isSelected = true
+            //         }
+            //     }
+            // } else {
+            //     if(Array.isArray(val)){
+            //         this.showTagList = this.showTagList.reduce((arr,item, index) =>{
+            //             item.isSelected = false
+            //             val.forEach((it, index) =>{
+            //                 if(item[this.setLabel.mainKey] == it){
+            //                     this.$set(item,'isSelected',true)
+            //                 }
+            //             })
+            //             return arr.concat(item)
+            //         },[])
+            //     }
+
+            // }
+            this.showTagList = this.propTagList.map((item,index) =>{
+                if(this.valueData.some((it, index) =>{return it == item.id})){
+                    item.isSelected = true
+                } else {
                     item.isSelected = false
-                    val.forEach((it, index) =>{
-                        if(item[this.setLabel.mainKey] == it){
-                            item.isSelected = true
-                        }
-                    })
-                    return arr.concat(item)
-                },[])
-            }
+                }
+                return item
+            })
         },
     },
     mounted(){
         //加载渲染数组
-        // debugger
         this.changeValue(this.value)
     }
 }
