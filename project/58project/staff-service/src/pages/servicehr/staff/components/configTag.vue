@@ -5,8 +5,8 @@
             v-for="(item, index) in value" 
             :key="index"
             @click="changeTag(item)"
-            :class="[ `tag-color${(index%5+1)}`]">{{item[setLabel.label]}}</span>
-        <el-button icon="el-icon-plus" circle @click="changeTag" ></el-button>
+            :class="[ item.type == 'enable'? `tag-color${(index%5+1)}` : '']">{{item[setLabel.label]}}</span>
+        <el-button icon="el-icon-plus" circle @click="changeTag"></el-button>
         <config-tag-dialog
             v-if="tagDialogVisible"
             :openTagDialog="tagDialogVisible"
@@ -88,17 +88,17 @@ export default {
 <style lang="scss" scoped>
     .tag-box{
         width: 760px;
-        padding: 0 0px 8px 10px;
+        padding:  8px 10px;
         border: 1px dashed #ccc;
         border-radius: 4px;
     }
     .tag-element{
         display: inline-block;
         padding: 0 12px;
-        margin: 8px 14px 0 0;
-        height: 30px;
-        line-height: 30px;
-        font-size: 14px;
+        margin: 0px 14px 8px 0;
+        height: 24px;
+        line-height: 24px;
+        font-size: 12px;
         border: 1px solid #fff;
         border-radius: 4px;
         box-sizing: border-box;

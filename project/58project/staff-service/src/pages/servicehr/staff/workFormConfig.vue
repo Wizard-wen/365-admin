@@ -41,6 +41,10 @@
             <el-form-item label="接单状态" prop="source" class="form-item-size" size="small">
                 <config-tag @reload="getWorkFormConfig" v-model="workConfigForm.working_status" :tableConfig="'working_status'"></config-tag>
             </el-form-item>
+
+            <el-form-item label="民族" prop="nation" class="form-item-size" size="small">
+                <config-tag @reload="getWorkFormConfig" v-model="workConfigForm.nation" :tableConfig="'nation'"></config-tag>
+            </el-form-item>
         </el-form>
     </div>
 </template>

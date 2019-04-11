@@ -55,7 +55,7 @@
             </el-form-item>
 
             <el-form-item label="民族" prop="nation" class="form-item-size" size="small">
-                <select-tag :propTagList="$store.state.hrModule.nation" v-model="workerForm.nation" :isSingle="true"></select-tag>
+                <select-tag :propTagList="workerConfigList.nation" v-model="workerForm.nation" :isSingle="true"></select-tag>
             </el-form-item>
 
             <el-form-item label="籍贯" prop="birthPlace" class="form-item-size" size="small">
@@ -367,6 +367,7 @@ export default {
         setCommitAttr(selectedArr, originArr, keyName){
             return originArr.reduce((arr, item, index)=>{
                 var serviceItem = null
+                // debugger
                 selectedArr.forEach((it, index) =>{
                     if(it == item.id){
                         serviceItem = {}
