@@ -25,13 +25,15 @@ export default {
          */
         tableOriginData: {
             default : function(){return [] | 0},
-            type: [Number, Array]
+            type: [Number, Array, String]
         }
     },
     mounted(){
             let setTableOriginData = []
             if(typeof this.tableOriginData == 'number'){
                 setTableOriginData =  [this.tableOriginData]
+            } else if(typeof this.tableOriginData == 'string'){
+                setTableOriginData =  [Number(this.tableOriginData)]
             } else {
                 setTableOriginData =  this.tableOriginData
             }

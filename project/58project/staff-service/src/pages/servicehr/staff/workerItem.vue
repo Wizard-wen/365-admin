@@ -13,6 +13,12 @@
             <el-form-item label="姓名" prop="name" class="form-item-size" size="small">
                 <el-input v-model="workerForm.name" :maxlength="20" placeholder="请输入服务人员姓名"></el-input>
             </el-form-item>
+            <div v-if="nameCheck" class="nameCheckBox">
+                <p>{{`共有${nameCheckObject.count}个可能重名的人`}}</p>
+                <div class="nameBox">
+                    <div class="name-tag" v-for="(item, index) in nameCheckObject.names" :key="index">{{item.name}}</div>
+                </div>
+            </div>
             
             <el-form-item label="年龄" prop="age" class="form-item-size" size="small">
                 <el-input v-model="workerForm.age" :maxlength="2" placeholder="请输入年龄"></el-input>
@@ -39,7 +45,7 @@
             </el-form-item> 
 
             <el-form-item label="服务类型" prop="service_type" class="form-item-size" size="small">
-                <select-tag :propTagList="workerConfigList.service_type" v-model="workerForm.service_type" :isSingle="true"></select-tag>
+                <select-tag :propTagList="workerConfigList.service_type" v-model="workerForm.service_type" :isSingle="false"></select-tag>
             </el-form-item> 
 
             <el-form-item label="可服务人群" prop="service_crowd" class="form-item-size" size="small">
@@ -86,7 +92,7 @@
                 <el-input v-model="workerForm.bank_card" :maxlength="50" placeholder="请输入备注"></el-input>
             </el-form-item>
 
-            <el-form-item label="照片" class="form-item-size">
+            <el-form-item label="头像" class="form-item-size">
                 <el-upload
                     accept=".jpg,.jpeg,.png,.gif,.bmp,.pdf,.JPG,.JPEG,.PBG,.GIF,.BMP,.PDF"
                     class="avatar-uploader"
@@ -107,13 +113,34 @@
                     <i v-else class="el-icon-plus avatar-uploader-icon"></i>
                 </el-upload>
             </el-form-item>
+
+            <el-form-item label="照片" class="form-item-size">
+                
+                <el-upload
+                    accept=".jpg,.jpeg,.png,.gif,.bmp,.pdf,.JPG,.JPEG,.PBG,.GIF,.BMP,.PDF"
+                    class="avatar-uploader"
+                    action="/admin/common/uploadImage"
+                    :show-file-list="false"
+                    :on-success="photoUploadSuccess"
+                    :before-upload="beforeAvatarUpload"
+                    :headers="uploadHeader">
+                    <i  class="el-icon-plus avatar-uploader-icon"></i>
+                </el-upload>
+                <div class="picture-box" v-if="photo_fileList.length">
+                    <img v-for="(item,index) in photo_fileList" :src="item.url"  :key="index" alt="">
+                </div>
+            </el-form-item>
         
             <el-form-item label="参加培训" prop="course" class="form-item-size" size="small">
-                <select-tag :propTagList="workerConfigList.course" v-model="workerForm.course" :isSingle="true"></select-tag>
+                <select-tag :propTagList="workerConfigList.course" v-model="workerForm.course" :isSingle="false"></select-tag>
             </el-form-item>
 
-            <el-form-item label="技能证书" prop="paper" class="form-item-size">
-                <paper-component v-model="workerForm.paper" ></paper-component>
+            <el-form-item label="技能证书" prop="certificate" class="form-item-size">
+                <paper-component v-model="workerForm.certificate" ></paper-component>
+            </el-form-item>
+
+            <el-form-item label="技能证书标签" prop="paper" class="form-item-size">
+                <select-tag :propTagList="workerConfigList.paper_category" v-model="workerForm.paper" :isSingle="false"></select-tag>
             </el-form-item>
         
             <el-form-item label="信息来源" prop="source" class="form-item-size" size="small">
@@ -158,8 +185,31 @@ export default {
         selectTag,
     },
     data() {
+        let _this = this
         //表单验证
         const validator = {
+            //姓名
+            async nameValidate(rule, value, callback){
+                if (!value) {
+                    callback(new Error('请输入姓名'));
+                } else {
+                    try{
+                        await hrService.checkStaffName(_this.workerForm.id, value).then((data) =>{
+                            if(data.code == '0'){
+                                callback()
+                                _this.nameCheck = false
+                                _this.nameCheckObject = {}
+                            } else {
+                                callback(new Error(data.message))
+                            }
+                        })
+                    } catch(error){
+                        _this.nameCheck = true
+                        _this.nameCheckObject = error.data
+                        callback(error.message)
+                    }
+                }
+            },
             //年龄
             ageValidate(rule, value, callback){
                 if (!value) {
@@ -208,7 +258,11 @@ export default {
         }
         return {
 
-            icon_fileList: [],
+            icon_fileList: [],//头像数组
+            photo_fileList: [],//照片数组
+            //姓名检查
+            nameCheck: false,
+            nameCheckObject: {},//重复姓名列表
             //员工信息表单
             workerForm: {
                 /**
@@ -247,8 +301,10 @@ export default {
                 urgent_phone:'',//紧急联系人电话
                 bank_card:'',//银行卡号
                 icon:'',//照片&&头像
-                course:0,//参加培训课程
-                paper:[],//技能证书
+                photo: [],//照片
+                course:[],//参加培训课程
+                paper:[],//技能证书标签
+                certificate: [],//技能证书
                 source:0,//信息来源
                 manager_id:0,//创建人id
                 manager_name:this.$store.state.loginModule.user.username,//创建人姓名
@@ -262,6 +318,7 @@ export default {
                 //姓名
                 name: [
                     { required:true,message:'请输入姓名',trigger: 'blur' },
+                    { validator: validator.nameValidate,trigger: 'blur' },
                 ],
                 //年龄
                 age: [
@@ -332,6 +389,24 @@ export default {
                         'service_category_id'
                     );
 
+                    this.workerForm.course = this.setCommitAttr(
+                        this.workerForm.course,
+                        this.workerConfigList.course,
+                        'course_id'
+                    );
+
+                    this.workerForm.service_type = this.setCommitAttr(
+                        this.workerForm.service_type,
+                        this.workerConfigList.service_type,
+                        'service_type_id'
+                    );
+
+                    this.workerForm.paper = this.setCommitAttr(
+                        this.workerForm.paper,
+                        this.workerConfigList.paper_category,
+                        'paper_category_id'
+                    );
+
                     try{
                         store.commit('setLoading',true)
                         await hrService.editStaff(this.workerForm).then(data =>{
@@ -367,7 +442,7 @@ export default {
         setCommitAttr(selectedArr, originArr, keyName){
             return originArr.reduce((arr, item, index)=>{
                 var serviceItem = null
-                // debugger
+
                 selectedArr.forEach((it, index) =>{
                     if(it == item.id){
                         serviceItem = {}
@@ -388,6 +463,7 @@ export default {
                 this.isShowBlack = false
             }
         },
+        //头像上传成功
         iconUploadSuccess(res, file) {
             this.workerForm.icon = res.data.path;
 
@@ -395,6 +471,17 @@ export default {
                 url: `./resource/${this.workerForm.icon}`,
                 name: 'head'
             }]
+        },
+        //照片上传成功
+        photoUploadSuccess(res, file) {
+            this.workerForm.photo.push(res.data);
+            
+            this.photo_fileList =  this.workerForm.photo.map((item, index) =>{
+                return {
+                    ...item,
+                    url: `./resource/${item.path}`
+                }
+            })
         },
 
         beforeAvatarUpload(file) {
@@ -423,29 +510,48 @@ export default {
                         // debugger
                         var workerForm = data.data
 
-                        workerForm.paper.forEach((item, index) =>{
+                        //技能证书
+                        workerForm.certificate.forEach((item, index) =>{
                             item.images.forEach((it, index) =>{
                                 it.url = './resource/'+it.path
                             })
                         })
+                        //技能证书标签
+                        workerForm.paper = workerForm.paper.reduce((arr, item, index) =>{
+                            return arr.concat(item.paper_category_id)
+                        },[])
                         
                         workerForm.region = workerForm.region.reduce((arr, item, index) =>{
                             return arr.concat(item.region_id)
                         },[])
                         
-                        // workerForm.service_crowd = workerForm.service_crowd.reduce((arr, item, index) =>{
-                        //     return arr.concat(item.service_crowd_id)
-                        // },[])
+                        workerForm.service_crowd = workerForm.service_crowd.reduce((arr, item, index) =>{
+                            return arr.concat(item.service_crowd_id)
+                        },[])
 
                         workerForm.skill = workerForm.skill.reduce((arr, item, index) =>{
                             return arr.concat(item.service_category_id)
                         },[])
-                        // ce.log(this.workerForm)
-                        // debugger
+                        
+                        workerForm.course = workerForm.course.reduce((arr, item, index) =>{
+                            return arr.concat(item.course_id)
+                        },[])
+
+                        workerForm.service_type = workerForm.service_type.reduce((arr, item, index) =>{
+                            return arr.concat(item.service_type_id)
+                        },[])
+
                         this.icon_fileList = workerForm.icon == ''? [] : [{
                             url: `./resource/${workerForm.icon}`,
                             name: 'head'
                         }]
+
+                        this.photo_fileList =  workerForm.photo.map((item, index) =>{
+                            return {
+                                ...item,
+                                url: `./resource/${item.path}`
+                            }
+                        })
 
                         this.workerForm = workerForm
                     }
@@ -485,6 +591,36 @@ export default {
                 width: 900px;
                 & /deep/ .el-input{
                     min-width: 260px;
+                }
+                .picture-box{
+                    border: 1px dashed #ccc;
+                    padding: 10px;
+                    & img{
+                        height: 40px;
+                        width: 40px;
+                    }
+                }
+            }
+            .nameCheckBox{
+                width: 900px;
+                padding-left: 140px;
+                margin-bottom: 20px;
+                & p{
+                    height: 30px;
+                    line-height: 30px;
+                    color: #f56c6c;
+                }
+                .nameBox{
+                    padding: 10px;
+                    border: 1px dashed #ccc;
+                    display: flex;
+                    .name-tag{
+                        height: 24px;
+                        line-height: 24px;
+                        padding: 0 10px;
+                        margin-right: 10px;
+
+                    }
                 }
             }
         }

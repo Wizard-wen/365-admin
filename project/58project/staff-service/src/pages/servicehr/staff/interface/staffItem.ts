@@ -47,6 +47,7 @@ interface satffItem{
     source?:number;//信息来源
     manager_id?:number;//创建人id
     manager_name?:string;//创建人姓名
+    photo?:Array<object>;//照片
 }
 
 

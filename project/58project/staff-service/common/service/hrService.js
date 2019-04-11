@@ -24,6 +24,12 @@ export default {
         return hrRequest.editStaff(obj)
     },
     /**
+     * 姓名查重
+     */
+    checkStaffName(id, name){
+        return hrRequest.checkStaffName(id, name)
+    },
+    /**
      * 停用服务人员
      */
     changeStaffStatus(id, version){

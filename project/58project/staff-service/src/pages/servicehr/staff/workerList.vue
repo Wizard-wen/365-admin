@@ -36,11 +36,14 @@
                     <template slot-scope="scope">
                         <list-show-tag :propList="workerConfigList.authentication" :tableOriginData="scope.row.authentication"></list-show-tag>
                     </template>
-                    
                 </el-table-column>
+                
                 <el-table-column  label="姓名" prop="name" align="center" fixed="left"></el-table-column>
+                
                 <el-table-column  label="年龄" prop="age" align="center" width="60"></el-table-column>
+                
                 <el-table-column  label="电话" prop="phone" align="center" width="120"></el-table-column>
+                
                 <el-table-column  label="回访信息" prop="return_msg" align="center" width="150">
                     <template slot-scope="scope">
                         <el-popover trigger="click" placement="top">
@@ -51,8 +54,11 @@
                         </el-popover>
                     </template>
                 </el-table-column>
-                <el-table-column  label="接单状态" prop="working_status" align="center">
-
+                
+                <el-table-column  label="接单状态" prop="working_status" align="center" width="130">
+                    <template slot-scope="scope">
+                        <list-show-tag :propList="workerConfigList.working_status" :tableOriginData="scope.row.working_status"></list-show-tag>
+                    </template>
                 </el-table-column>
                 <el-table-column  label="备注（商家情况）" prop="remarks" align="center" width="150">
                     <template slot-scope="scope">
@@ -67,7 +73,7 @@
                 <el-table-column  label="职业类型" prop="skill" align="center">
 
                 </el-table-column>
-                <el-table-column  label="服务类型" prop="service_type" align="center">
+                <el-table-column  label="服务类型" prop="service_type" align="center" width="200">
                     <template slot-scope="scope">
                         <list-show-tag :propList="workerConfigList.service_type" :tableOriginData="scope.row.service_type"></list-show-tag>
                     </template>
@@ -77,7 +83,11 @@
                         <list-show-tag :propList="workerConfigList.service_crowd" :tableOriginData="scope.row.service_crowd"></list-show-tag>
                     </template>
                 </el-table-column>
-                <el-table-column  label="工龄" prop="working_age" align="center"></el-table-column>
+                <el-table-column  label="工龄" prop="working_age" align="center" width="100">
+                    <template slot-scope="scope">
+                        <list-show-tag :propList="workerConfigList.working_age" :tableOriginData="scope.row.working_age"></list-show-tag>
+                    </template>
+                </el-table-column>
                 <el-table-column  label="工作经验" prop="working_experience" align="center" width="150">
                     <template slot-scope="scope">
                         <el-popover trigger="click" placement="top">
@@ -88,7 +98,11 @@
                         </el-popover>
                     </template>
                 </el-table-column>
-                <el-table-column  label="民族" prop="nation" align="center"></el-table-column>
+                <el-table-column  label="民族" prop="nation" align="center">
+                    <template slot-scope="scope">
+                        <list-show-tag :propList="workerConfigList.nation" :tableOriginData="scope.row.nation"></list-show-tag>
+                    </template>
+                </el-table-column>
                 <el-table-column  label="籍贯" prop="birthPlace" align="center"></el-table-column>
                 <el-table-column  label="身份证号" prop="identify" align="center"></el-table-column>
                 <el-table-column  label="地址" prop="address" align="center" width="150">
@@ -100,13 +114,17 @@
                     </template>
                 </el-table-column>
                 <el-table-column  label="服务地区" prop="region" align="center" width=""></el-table-column>
-                <el-table-column  label="学历" prop="education" align="center"></el-table-column>
+                <el-table-column  label="学历" prop="education" align="center" :formatter="educationFomatter" width="120"></el-table-column>
                 <el-table-column  label="紧急联系人电话" prop="urgent_phone" align="center" width="150"></el-table-column>
                 <el-table-column  label="银行卡号" prop="bank_card" align="center"></el-table-column>
                 <el-table-column  label="头像" prop="icon" align="center"></el-table-column>
                 <el-table-column  label="课程" prop="course" align="center"></el-table-column>
                 <el-table-column  label="技能证书" prop="paper" align="center"></el-table-column>
-                <el-table-column  label="信息来源" prop="source" align="center"></el-table-column>
+                <el-table-column  label="信息来源" prop="source" align="center">
+                    <template slot-scope="scope">
+                        <list-show-tag :propList="workerConfigList.source" :tableOriginData="scope.row.source"></list-show-tag>
+                    </template>
+                </el-table-column>
                 <el-table-column  label="创建人" prop="manager_name" align="center"></el-table-column>
 
                 <el-table-column label="操作" align="center" fixed="right" width="150">
@@ -216,20 +234,19 @@
                     searchSelect: this.searchArray
                 }
 
-                store.commit('setLoading',true)
+                
                 try{
-                    await hrService.getFormConfig().then((data) =>{
-                        if(data.code == '0'){
-                            this.workerConfigList = data.data
-                        }
-                    })
-                    await hrService.getStaffList(tableOption).then(data =>{
-                        if(data.code == "0"){
-                            this.staffTable = data.data.data
-                            //分页信息
-                            this.pagination.currentPage = data.data.current_page //当前页码
-                            this.pagination.total = data.data.total //列表总条数
-                        }
+                    store.commit('setLoading',true)
+                    await Promise.all([
+                        await hrService.getFormConfig(),
+                        await hrService.getStaffList(tableOption)
+                    ]).then((data) =>{
+                        this.workerConfigList = data[0].data
+
+                        this.staffTable = data[1].data.data
+                        //分页信息
+                        this.pagination.currentPage = data[1].data.current_page //当前页码
+                        this.pagination.total = data[1].data.total //列表总条数
                     }).catch(error =>{
                         this.$message({
                             type:'error',
@@ -238,6 +255,26 @@
                     }).finally(() =>{
                         store.commit('setLoading',false)
                     })
+                    // await hrService.getFormConfig().then((data) =>{
+                    //     if(data.code == '0'){
+                    //         this.workerConfigList = data.data
+                    //     }
+                    // })
+                    // await hrService.getStaffList(tableOption).then(data =>{
+                    //     if(data.code == "0"){
+                    //         this.staffTable = data.data.data
+                    //         //分页信息
+                    //         this.pagination.currentPage = data.data.current_page //当前页码
+                    //         this.pagination.total = data.data.total //列表总条数
+                    //     }
+                    // }).catch(error =>{
+                    //     this.$message({
+                    //         type:'error',
+                    //         message: error.message
+                    //     })
+                    // }).finally(() =>{
+                    //     store.commit('setLoading',false)
+                    // })
                 } catch(error){
                     this.$message({
                         type:'error',
@@ -353,22 +390,27 @@
             //登记时间
             register_atFormatter(row, column){
                 return $utils.formatDate(new Date(row.register_at), 'yyyy-MM-dd')
+            },
+            educationFomatter(row, column){
+                // debugger
+                let a =  this.$store.state.hrModule.educationList.filter(item => item.id == row.education)
+                return a.length? a[0].name : ''
             }
         },
         async mounted(){
-            function getClientHeight()
-            {
-            var clientHeight=0;
-            if(document.body.clientHeight&&document.documentElement.clientHeight)
-            {
-            var clientHeight = (document.body.clientHeight<document.documentElement.clientHeight)?document.body.clientHeight:document.documentElement.clientHeight;
-            }
-            else
-            {
-            var clientHeight = (document.body.clientHeight>document.documentElement.clientHeight)?document.body.clientHeight:document.documentElement.clientHeight;
-            }
-            return clientHeight - 85;
-            }
+            // function getClientHeight()
+            // {
+            // var clientHeight=0;
+            // if(document.body.clientHeight&&document.documentElement.clientHeight)
+            // {
+            // var clientHeight = (document.body.clientHeight<document.documentElement.clientHeight)?document.body.clientHeight:document.documentElement.clientHeight;
+            // }
+            // else
+            // {
+            // var clientHeight = (document.body.clientHeight>document.documentElement.clientHeight)?document.body.clientHeight:document.documentElement.clientHeight;
+            // }
+            // return clientHeight - 85;
+            // }
             // this.maxHeight = getClientHeight()
             await this.getTableList()
         }

@@ -54,6 +54,22 @@ export default {
         obj = Object.assign({},obj)
         return axios.post(`./admin/staff/editStaff`,obj)
     },
+    
+    /**
+     * 姓名查重
+     */
+    checkStaffName(id, name){
+        return axios.post(`./admin/staff/checkStaffName`, {
+            name: name,
+            id: id
+        })
+    },
+
+
+
+
+
+
     /**
      *  改变订单状态
      */
