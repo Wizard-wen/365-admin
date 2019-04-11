@@ -78,8 +78,8 @@
                 <select-tag :propTagList="$store.state.hrModule.educationList" v-model="workerForm.education" :isSingle="true"></select-tag>
             </el-form-item>
 
-            <el-form-item label="紧急联系人电话" prop="urgent" class="form-item-size" size="small">
-                <el-input v-model="workerForm.urgent" :maxlength="11" placeholder="请输入备注"></el-input>
+            <el-form-item label="紧急联系人电话" prop="urgent_phone" class="form-item-size" size="small">
+                <el-input v-model="workerForm.urgent_phone" :maxlength="11" placeholder="请输入备注"></el-input>
             </el-form-item>
 
             <el-form-item label="银行卡号" prop="bank_card" class="form-item-size" size="small">
@@ -193,18 +193,6 @@ export default {
                     callback()
                 }
             },
-            //紧急联系人电话
-            urgentValidate(rule, value, callback){
-                if (value != '') {
-                    if (! (/^1[34578]\d{9}$/.test(value)) ) {
-                        callback(new Error('请输入正确格式的手机号'));
-                    } else {
-                        callback();
-                    }
-                } else {
-                    callback()
-                }
-            },
             //银行卡号
             bankCardValidate(rule, value, callback){
                 if (value != '') {
@@ -227,7 +215,7 @@ export default {
                  * 逻辑字段
                  */
                 id:null,//员工id
-                code:null,//员工号
+                staff_code:null,//员工号
                 version:null,//操作版本号
                 created_at:null,//创建时间
                 type:null,//签约状态
@@ -256,7 +244,7 @@ export default {
                 address:'',//地址
                 region:[],//服务区域 
                 education:0,//学历
-                urgent:'',//紧急联系人电话
+                urgent_phone:'',//紧急联系人电话
                 bank_card:'',//银行卡号
                 icon:'',//照片&&头像
                 course:0,//参加培训课程
@@ -288,10 +276,6 @@ export default {
                 //身份证
                 identify: [
                     {validator: validator.identifyValidate, trigger: 'blur'}
-                ],
-                //紧急联系人
-                urgent: [
-                    {validator: validator.urgentValidate, trigger: 'blur'}
                 ],               
                 //银行卡号
                 bank_card: [
@@ -303,20 +287,6 @@ export default {
                 course:[],
                 paper_category:[],
             },
-            // region: [],//地区信息
-            // areaList: [],//地区数组
-
-            // skill: [],//技能级联选择器筛选信息
-            // skillList: [],//技能级联选择器渲染数组
-
-            // label: [],//能力标签级联选择器筛选信息
-            // labelList: [],//能力标签级联选择器渲染数组
-
-            // //地区级联选择字段
-            // setCascaderProps: {
-            //     label: 'name',
-            //     value: 'id'
-            // },
             isShowBlack: false,//头像阴影
             //图片上传header
             uploadHeader:{
@@ -341,7 +311,6 @@ export default {
          */
         async onSubmit(formName) {
             await this.$refs[formName].validate(async (valid, fileds) => {
-                debugger
                 if (valid) {
 
                     //字段转换

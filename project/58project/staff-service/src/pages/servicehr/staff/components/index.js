@@ -10,6 +10,8 @@ import selectTag from './selectTag.vue'
 //
 import tagsComponent from './tagsComponent.vue'
 
+import listShowTag from './listShowTag.vue'
+
 
 
 export {
@@ -17,4 +19,5 @@ export {
     paperComponent,//证书组件
     selectTag,//
     tagsComponent,//
+    listShowTag
 }
