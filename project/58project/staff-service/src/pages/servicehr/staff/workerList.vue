@@ -1,5 +1,5 @@
 <template>
-    <div class="staff">
+    <div class="staff" v-loading="isLoaded">
             <div class="search-form">
                 <div class="search-left">
                     <el-input v-model="staffSearch.name" placeholder="请输入员工姓名" :maxlength="20"></el-input>
@@ -168,6 +168,7 @@
                 staffSearch: {
                     name: '', //姓名
                 },
+                isLoaded:false,
                 /**
                  * 分页信息
                  */
@@ -236,10 +237,11 @@
 
                 
                 try{
-                    store.commit('setLoading',true)
+                    // debugger
+                    this.isLoaded = true
                     await Promise.all([
-                        await hrService.getFormConfig(),
-                        await hrService.getStaffList(tableOption)
+                        hrService.getFormConfig(),
+                        hrService.getStaffList(tableOption)
                     ]).then((data) =>{
                         this.workerConfigList = data[0].data
 
@@ -253,28 +255,8 @@
                             message: error.message
                         })
                     }).finally(() =>{
-                        store.commit('setLoading',false)
+                        this.isLoaded = false
                     })
-                    // await hrService.getFormConfig().then((data) =>{
-                    //     if(data.code == '0'){
-                    //         this.workerConfigList = data.data
-                    //     }
-                    // })
-                    // await hrService.getStaffList(tableOption).then(data =>{
-                    //     if(data.code == "0"){
-                    //         this.staffTable = data.data.data
-                    //         //分页信息
-                    //         this.pagination.currentPage = data.data.current_page //当前页码
-                    //         this.pagination.total = data.data.total //列表总条数
-                    //     }
-                    // }).catch(error =>{
-                    //     this.$message({
-                    //         type:'error',
-                    //         message: error.message
-                    //     })
-                    // }).finally(() =>{
-                    //     store.commit('setLoading',false)
-                    // })
                 } catch(error){
                     this.$message({
                         type:'error',
@@ -347,7 +329,7 @@
                 });
 
                 if(response == "confirm"){
-                    store.commit('setLoading',1)
+                    store.commit('setLoading',true)
 
                     try{
                         await hrService.changeStaffStatus(row.id, row.version)
@@ -398,6 +380,7 @@
             }
         },
         async mounted(){
+            // debugger
             // function getClientHeight()
             // {
             // var clientHeight=0;

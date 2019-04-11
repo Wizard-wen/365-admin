@@ -127,7 +127,15 @@
                     <i  class="el-icon-plus avatar-uploader-icon"></i>
                 </el-upload>
                 <div class="picture-box" v-if="photo_fileList.length">
-                    <img v-for="(item,index) in photo_fileList" :src="item.url"  :key="index" alt="">
+                    <!-- <img v-for="(item,index) in photo_fileList" :src="item.url"  :key="index" alt=""> -->
+
+
+                    <div v-for="(item,index) in photo_fileList" :key="index" class="avatar-box" @mouseover="showPhotoblack(item, index, '0')" @mouseout="showPhotoblack(item, index, '1')">
+                        <img :src="item.url" class="avatar">
+                        <div class="avatar-back" v-if="item.isBack" @click="deletePhoto">
+                            <i class="el-icon-delete avatar-uploader-icon" style=""></i>
+                        </div>
+                    </div>
                 </div>
             </el-form-item>
         
@@ -177,7 +185,7 @@ import {
     tagsComponent,
     paperComponent,
     selectTag} from './components'
-
+import {pictureDetailDialog} from '../../components/pictureDetailDialog.vue'
 export default {
     components: {
         tagsComponent,
@@ -415,7 +423,9 @@ export default {
                                     type:"success",
                                     message: "修改成功"
                                 })
-                                this.$router.push('/worker/workerList')
+                                store.commit('setLoading',false)
+                                // this.$router.push('/worker/workerList')
+                                this.goback()
                             }
                         }).catch(error =>{
                             this.$message({
@@ -463,6 +473,31 @@ export default {
                 this.isShowBlack = false
             }
         },
+        //展示删除阴影
+        showPhotoblack(item,index, state){
+            if(state == '0'){
+                this.photo_fileList[index].isBack = true
+            } else {
+                this.photo_fileList[index].isBack = false
+            }
+        },
+        //删除照片
+        async deletePhoto(index){
+            let response = await this.$confirm(`确定删除该照片吗?`, '提示', {
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                type: 'warning'
+            }).catch(() => {
+                this.$message({
+                    type: 'info',
+                    message: `已取消删除`
+                });
+            });
+            if(response == "confirm"){
+                this.photo_fileList.splice(index,1)
+                this.workerForm.photo.splice(index,1)
+            }
+        },
         //头像上传成功
         iconUploadSuccess(res, file) {
             this.workerForm.icon = res.data.path;
@@ -475,11 +510,12 @@ export default {
         //照片上传成功
         photoUploadSuccess(res, file) {
             this.workerForm.photo.push(res.data);
-            
+
             this.photo_fileList =  this.workerForm.photo.map((item, index) =>{
                 return {
                     ...item,
-                    url: `./resource/${item.path}`
+                    url: `./resource/${item.path}`,
+                    isBack: false,
                 }
             })
         },
@@ -549,7 +585,8 @@ export default {
                         this.photo_fileList =  workerForm.photo.map((item, index) =>{
                             return {
                                 ...item,
-                                url: `./resource/${item.path}`
+                                url: `./resource/${item.path}`,
+                                isBack: false,
                             }
                         })
 
@@ -594,11 +631,33 @@ export default {
                 }
                 .picture-box{
                     border: 1px dashed #ccc;
-                    padding: 10px;
-                    & img{
-                        height: 40px;
-                        width: 40px;
-                    }
+                    padding: 0 10px 10px 10px;
+                    display: flex;
+                        .avatar-box{
+                            margin: 10px 10px 0 0;
+                            width:100px;
+                            height: 100px;
+                            position: relative;
+                            .avatar {
+                                width:100px;
+                                height: 100px;
+                                display: block;
+                            }
+                            .avatar-back{
+                                position: absolute;
+                                height: 100px;
+                                width: 100px;
+                                line-height: 100px;
+                                text-align: center;
+                                top: 0;
+                                z-index: 4;
+                                cursor: pointer;
+                                background: rgba(0,0,0,.5);
+                                .avatar-uploader-icon{
+                                    color: #fff;font-size: 20px;
+                                }
+                            }
+                        }
                 }
             }
             .nameCheckBox{

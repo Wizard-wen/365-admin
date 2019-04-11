@@ -66,6 +66,7 @@ export default {
             type: Object,
             default: function(){
                 return {
+                    id: '',
                     paper_category_name: "",
                     paper_category_id: "",
                     images: [],
@@ -118,6 +119,7 @@ export default {
             },
             //props传入的证书信息
             paperForm: {
+                id:this.paperProps.id,
                 paper_category_name: this.paperProps.paper_category_name,
                 paper_category_id: this.paperProps.paper_category_id,
                 images: this.paperProps.images,

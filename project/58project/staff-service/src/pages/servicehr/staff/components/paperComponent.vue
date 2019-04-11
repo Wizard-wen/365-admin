@@ -84,6 +84,7 @@ export default {
             if(state == 'edit'){
                 this.paperDialog.isEditPaper = true
                 this.paperDialog.paperAddModel = {
+                    id: paperItem.id,
                     paper_category_name: paperItem.paper_category_name,
                     paper_category_id: paperItem.paper_category_id,
                     images: [...paperItem.images],
