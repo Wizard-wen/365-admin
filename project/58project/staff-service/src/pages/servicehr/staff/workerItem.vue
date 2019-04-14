@@ -13,6 +13,12 @@
             <el-form-item label="姓名" prop="name" class="form-item-size" size="small">
                 <el-input v-model="workerForm.name" :maxlength="20" placeholder="请输入服务人员姓名"></el-input>
             </el-form-item>
+            <div v-if="nameCheck" class="nameCheckBox">
+                <p>{{`共有${nameCheckObject.count}个可能重名的人`}}</p>
+                <div class="nameBox">
+                    <div class="name-tag" v-for="(item, index) in nameCheckObject.names" :key="index">{{item.name}}</div>
+                </div>
+            </div>
             
             <el-form-item label="年龄" prop="age" class="form-item-size" size="small">
                 <el-input v-model="workerForm.age" :maxlength="2" placeholder="请输入年龄"></el-input>
@@ -39,7 +45,7 @@
             </el-form-item> 
 
             <el-form-item label="服务类型" prop="service_type" class="form-item-size" size="small">
-                <select-tag :propTagList="workerConfigList.service_type" v-model="workerForm.service_type" :isSingle="true"></select-tag>
+                <select-tag :propTagList="workerConfigList.service_type" v-model="workerForm.service_type" :isSingle="false"></select-tag>
             </el-form-item> 
 
             <el-form-item label="可服务人群" prop="service_crowd" class="form-item-size" size="small">
@@ -55,7 +61,7 @@
             </el-form-item>
 
             <el-form-item label="民族" prop="nation" class="form-item-size" size="small">
-                <select-tag :propTagList="$store.state.hrModule.nation" v-model="workerForm.nation" :isSingle="true"></select-tag>
+                <select-tag :propTagList="workerConfigList.nation" v-model="workerForm.nation" :isSingle="true"></select-tag>
             </el-form-item>
 
             <el-form-item label="籍贯" prop="birthPlace" class="form-item-size" size="small">
@@ -86,7 +92,7 @@
                 <el-input v-model="workerForm.bank_card" :maxlength="50" placeholder="请输入备注"></el-input>
             </el-form-item>
 
-            <el-form-item label="照片" class="form-item-size">
+            <el-form-item label="头像" class="form-item-size">
                 <el-upload
                     accept=".jpg,.jpeg,.png,.gif,.bmp,.pdf,.JPG,.JPEG,.PBG,.GIF,.BMP,.PDF"
                     class="avatar-uploader"
@@ -107,13 +113,42 @@
                     <i v-else class="el-icon-plus avatar-uploader-icon"></i>
                 </el-upload>
             </el-form-item>
+
+            <el-form-item label="照片" class="form-item-size">
+                
+                <el-upload
+                    accept=".jpg,.jpeg,.png,.gif,.bmp,.pdf,.JPG,.JPEG,.PBG,.GIF,.BMP,.PDF"
+                    class="avatar-uploader"
+                    action="/admin/common/uploadImage"
+                    :show-file-list="false"
+                    :on-success="photoUploadSuccess"
+                    :before-upload="beforeAvatarUpload"
+                    :headers="uploadHeader">
+                    <i  class="el-icon-plus avatar-uploader-icon"></i>
+                </el-upload>
+                <div class="picture-box" v-if="photo_fileList.length">
+                    <!-- <img v-for="(item,index) in photo_fileList" :src="item.url"  :key="index" alt=""> -->
+
+
+                    <div v-for="(item,index) in photo_fileList" :key="index" class="avatar-box" @mouseover="showPhotoblack(item, index, '0')" @mouseout="showPhotoblack(item, index, '1')">
+                        <img :src="item.url" class="avatar">
+                        <div class="avatar-back" v-if="item.isBack" @click="deletePhoto">
+                            <i class="el-icon-delete avatar-uploader-icon" style=""></i>
+                        </div>
+                    </div>
+                </div>
+            </el-form-item>
         
             <el-form-item label="参加培训" prop="course" class="form-item-size" size="small">
-                <select-tag :propTagList="workerConfigList.course" v-model="workerForm.course" :isSingle="true"></select-tag>
+                <select-tag :propTagList="workerConfigList.course" v-model="workerForm.course" :isSingle="false"></select-tag>
             </el-form-item>
 
-            <el-form-item label="技能证书" prop="paper" class="form-item-size">
-                <paper-component v-model="workerForm.paper" ></paper-component>
+            <el-form-item label="技能证书" prop="certificate" class="form-item-size">
+                <paper-component v-model="workerForm.certificate" ></paper-component>
+            </el-form-item>
+
+            <el-form-item label="技能证书标签" prop="paper" class="form-item-size">
+                <select-tag :propTagList="workerConfigList.paper_category" v-model="workerForm.paper" :isSingle="false"></select-tag>
             </el-form-item>
         
             <el-form-item label="信息来源" prop="source" class="form-item-size" size="small">
@@ -131,11 +166,21 @@
                 </el-radio-group>
             </el-form-item>
 
-            <el-form-item>
+            <!-- <el-form-item>
                 <el-button type="primary" @click="onSubmit('form')">{{$route.query.id? '确认编辑' : '立即创建'}}</el-button>
                 <el-button @click="goback">取消</el-button>
-            </el-form-item>
+            </el-form-item> -->
         </el-form>
+        <!-- <img class="qrcode" :src="qrcode" alt=""> -->
+        <!-- <div ref="aaa" style="height:200px;width: 200px;background:#185">
+
+        </div> -->
+        <!-- <img :src="canvasImg" alt=""> -->
+        <div class="control">
+            <el-button type="primary" @click="onSubmit('form')">{{$route.query.id? '确认编辑' : '立即创建'}}</el-button>
+            <el-button @click="goback">取消</el-button>
+            <el-button @click="makeImage">创建图片</el-button>
+        </div>
     </div>
 </template>
 
@@ -150,6 +195,15 @@ import {
     tagsComponent,
     paperComponent,
     selectTag} from './components'
+import {pictureDetailDialog} from '../../components/pictureDetailDialog.vue'
+
+
+import qrcode from '../img/timg.gif'
+
+import html2canvas from 'html2canvas';
+
+
+
 
 export default {
     components: {
@@ -158,8 +212,33 @@ export default {
         selectTag,
     },
     data() {
+        let _this = this
         //表单验证
         const validator = {
+            //姓名
+            async nameValidate(rule, value, callback){
+                if (value == '') {
+                    _this.nameCheck = false
+                    _this.nameCheckObject = {}
+                    callback(new Error('请输入姓名'));
+                } else {
+                    try{
+                        await hrService.checkStaffName(_this.workerForm.id, value).then((data) =>{
+                            if(data.code == '0'){
+                                callback()
+                                _this.nameCheck = false
+                                _this.nameCheckObject = {}
+                            } else {
+                                callback(new Error(data.message))
+                            }
+                        })
+                    } catch(error){
+                        _this.nameCheck = true
+                        _this.nameCheckObject = error.data
+                        callback(error.message)
+                    }
+                }
+            },
             //年龄
             ageValidate(rule, value, callback){
                 if (!value) {
@@ -207,8 +286,13 @@ export default {
             },
         }
         return {
-
-            icon_fileList: [],
+            qrcode,
+            canvasImg:'',
+            icon_fileList: [],//头像数组
+            photo_fileList: [],//照片数组
+            //姓名检查
+            nameCheck: false,
+            nameCheckObject: {},//重复姓名列表
             //员工信息表单
             workerForm: {
                 /**
@@ -247,8 +331,10 @@ export default {
                 urgent_phone:'',//紧急联系人电话
                 bank_card:'',//银行卡号
                 icon:'',//照片&&头像
-                course:0,//参加培训课程
-                paper:[],//技能证书
+                photo: [],//照片
+                course:[],//参加培训课程
+                paper:[],//技能证书标签
+                certificate: [],//技能证书
                 source:0,//信息来源
                 manager_id:0,//创建人id
                 manager_name:this.$store.state.loginModule.user.username,//创建人姓名
@@ -262,6 +348,7 @@ export default {
                 //姓名
                 name: [
                     { required:true,message:'请输入姓名',trigger: 'blur' },
+                    { validator: validator.nameValidate,trigger: 'blur' },
                 ],
                 //年龄
                 age: [
@@ -332,6 +419,24 @@ export default {
                         'service_category_id'
                     );
 
+                    this.workerForm.course = this.setCommitAttr(
+                        this.workerForm.course,
+                        this.workerConfigList.course,
+                        'course_id'
+                    );
+
+                    this.workerForm.service_type = this.setCommitAttr(
+                        this.workerForm.service_type,
+                        this.workerConfigList.service_type,
+                        'service_type_id'
+                    );
+
+                    this.workerForm.paper = this.setCommitAttr(
+                        this.workerForm.paper,
+                        this.workerConfigList.paper_category,
+                        'paper_category_id'
+                    );
+
                     try{
                         store.commit('setLoading',true)
                         await hrService.editStaff(this.workerForm).then(data =>{
@@ -340,7 +445,9 @@ export default {
                                     type:"success",
                                     message: "修改成功"
                                 })
-                                this.$router.push('/worker/workerList')
+                                store.commit('setLoading',false)
+                                // this.$router.push('/worker/workerList')
+                                this.goback()
                             }
                         }).catch(error =>{
                             this.$message({
@@ -367,6 +474,7 @@ export default {
         setCommitAttr(selectedArr, originArr, keyName){
             return originArr.reduce((arr, item, index)=>{
                 var serviceItem = null
+
                 selectedArr.forEach((it, index) =>{
                     if(it == item.id){
                         serviceItem = {}
@@ -387,6 +495,32 @@ export default {
                 this.isShowBlack = false
             }
         },
+        //展示删除阴影
+        showPhotoblack(item,index, state){
+            if(state == '0'){
+                this.photo_fileList[index].isBack = true
+            } else {
+                this.photo_fileList[index].isBack = false
+            }
+        },
+        //删除照片
+        async deletePhoto(index){
+            let response = await this.$confirm(`确定删除该照片吗?`, '提示', {
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                type: 'warning'
+            }).catch(() => {
+                this.$message({
+                    type: 'info',
+                    message: `已取消删除`
+                });
+            });
+            if(response == "confirm"){
+                this.photo_fileList.splice(index,1)
+                this.workerForm.photo.splice(index,1)
+            }
+        },
+        //头像上传成功
         iconUploadSuccess(res, file) {
             this.workerForm.icon = res.data.path;
 
@@ -394,6 +528,18 @@ export default {
                 url: `./resource/${this.workerForm.icon}`,
                 name: 'head'
             }]
+        },
+        //照片上传成功
+        photoUploadSuccess(res, file) {
+            this.workerForm.photo.push(res.data);
+
+            this.photo_fileList =  this.workerForm.photo.map((item, index) =>{
+                return {
+                    ...item,
+                    url: `./resource/${item.path}`,
+                    isBack: false,
+                }
+            })
         },
 
         beforeAvatarUpload(file) {
@@ -410,8 +556,16 @@ export default {
         goback(){
             this.$router.push("/worker/workerList")
         },
+        makeImage(){
+            
+        }
     },
     async mounted(){
+        let _this = this;
+        // await html2canvas(this.$refs.aaa).then(function(canvas){
+        //     console.log(canvas.toDataURL("image/png"))
+        //     _this.canvasImg = canvas.toDataURL("image/png");
+        // });
         
         try{
             await store.commit('setLoading',true)
@@ -422,29 +576,49 @@ export default {
                         // debugger
                         var workerForm = data.data
 
-                        workerForm.paper.forEach((item, index) =>{
+                        //技能证书
+                        workerForm.certificate.forEach((item, index) =>{
                             item.images.forEach((it, index) =>{
                                 it.url = './resource/'+it.path
                             })
                         })
+                        //技能证书标签
+                        workerForm.paper = workerForm.paper.reduce((arr, item, index) =>{
+                            return arr.concat(item.paper_category_id)
+                        },[])
                         
                         workerForm.region = workerForm.region.reduce((arr, item, index) =>{
                             return arr.concat(item.region_id)
                         },[])
                         
-                        // workerForm.service_crowd = workerForm.service_crowd.reduce((arr, item, index) =>{
-                        //     return arr.concat(item.service_crowd_id)
-                        // },[])
+                        workerForm.service_crowd = workerForm.service_crowd.reduce((arr, item, index) =>{
+                            return arr.concat(item.service_crowd_id)
+                        },[])
 
                         workerForm.skill = workerForm.skill.reduce((arr, item, index) =>{
                             return arr.concat(item.service_category_id)
                         },[])
-                        // ce.log(this.workerForm)
-                        // debugger
+                        
+                        workerForm.course = workerForm.course.reduce((arr, item, index) =>{
+                            return arr.concat(item.course_id)
+                        },[])
+
+                        workerForm.service_type = workerForm.service_type.reduce((arr, item, index) =>{
+                            return arr.concat(item.service_type_id)
+                        },[])
+
                         this.icon_fileList = workerForm.icon == ''? [] : [{
                             url: `./resource/${workerForm.icon}`,
                             name: 'head'
                         }]
+
+                        this.photo_fileList =  workerForm.photo.map((item, index) =>{
+                            return {
+                                ...item,
+                                url: `./resource/${item.path}`,
+                                isBack: false,
+                            }
+                        })
 
                         this.workerForm = workerForm
                     }
@@ -477,6 +651,7 @@ export default {
         padding-top: 30px;
         .staff-form{
             width: 100%;
+            margin-bottom: 150px;
             & /deep/ .el-form-item{
                 margin-bottom: 15px;
             }
@@ -484,6 +659,59 @@ export default {
                 width: 900px;
                 & /deep/ .el-input{
                     min-width: 260px;
+                }
+                .picture-box{
+                    border: 1px dashed #ccc;
+                    padding: 0 10px 10px 10px;
+                    display: flex;
+                        .avatar-box{
+                            margin: 10px 10px 0 0;
+                            width:100px;
+                            height: 100px;
+                            position: relative;
+                            .avatar {
+                                width:100px;
+                                height: 100px;
+                                display: block;
+                            }
+                            .avatar-back{
+                                position: absolute;
+                                height: 100px;
+                                width: 100px;
+                                line-height: 100px;
+                                text-align: center;
+                                top: 0;
+                                z-index: 4;
+                                cursor: pointer;
+                                background: rgba(0,0,0,.5);
+                                .avatar-uploader-icon{
+                                    color: #fff;font-size: 20px;
+                                }
+                            }
+                        }
+                }
+            }
+            .nameCheckBox{
+                width: 900px;
+                padding-left: 140px;
+                margin-bottom: 20px;
+                & p{
+                    height: 30px;
+                    line-height: 30px;
+                    color: #f56c6c;
+                }
+                .nameBox{
+                    padding: 10px;
+                    border: 1px dashed #ccc;
+                    display: flex;
+                    flex-wrap: wrap;
+                    .name-tag{
+                        height: 24px;
+                        line-height: 24px;
+                        padding: 0 10px;
+                        margin-right: 10px;
+
+                    }
                 }
             }
         }
@@ -502,6 +730,15 @@ export default {
             display: flex;
             justify-content: space-between;
             padding: 0 20px;
+        }
+        .control{
+            position: fixed;
+            height: 100px;
+            width: 100%;
+            bottom: 0; 
+            background: rgba(0,0,0,.2);
+            // opacity: .1;
+            z-index: 3;
         }
     }
     //图片上传
@@ -541,7 +778,13 @@ export default {
             background: rgba(0,0,0,.5)
         }
     }
-
+.qrcode{
+    height: 120px;
+    width: 120px;
+    position: absolute;
+    right: 20px;
+    top: 100px;
+}
 </style>
 
 

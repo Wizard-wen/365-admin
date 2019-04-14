@@ -10,6 +10,10 @@
             <el-form-item label="标签名" >
                 <el-input v-model="tagConfigForm.name"></el-input>
             </el-form-item>
+
+            <el-form-item label="是否启用" >
+                <el-switch v-model="tagConfigForm.type" active-color="#13ce66" inactive-color="#ff4949"></el-switch>
+            </el-form-item>
         
         </el-form>
         <div slot="footer" class="dialog-footer">
@@ -50,6 +54,7 @@ export default {
             tagConfigForm : {
                 id: this.configForm.id?this.configForm.id:'',
                 table: this.configForm.table,
+                type: this.configForm.type == 'enable' ? true : false,
                 name: this.configForm.name? this.configForm.name : '',
                 version: this.configForm.version?this.configForm.version: '',
             },
@@ -70,7 +75,11 @@ export default {
                 if (valid) {
                     
                     store.commit('setLoading',true)
-            
+                    if(this.tagConfigForm.type){
+                        this.tagConfigForm.type = 'enable'
+                    } else {
+                        this.tagConfigForm.type = 'disable'  
+                    }
                     await hrService.editFormConfig(this.tagConfigForm).then(data =>{
                         if(data.code == "0"){
                             this.$message({

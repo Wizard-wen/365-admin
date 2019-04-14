@@ -1,8 +1,8 @@
 <template>
     <div v-if="showList.length">
-        <el-tag style="margin-right: 10px;" v-for="(item, index) in showList" :key="index">
+        <div class="tag-item-style" v-for="(item, index) in showList" :key="index">
             {{item.name}}
-        </el-tag>
+        </div>
     </div>
 </template>
 <script>
@@ -25,13 +25,15 @@ export default {
          */
         tableOriginData: {
             default : function(){return [] | 0},
-            type: [Number, Array]
+            type: [Number, Array, String]
         }
     },
     mounted(){
             let setTableOriginData = []
             if(typeof this.tableOriginData == 'number'){
                 setTableOriginData =  [this.tableOriginData]
+            } else if(typeof this.tableOriginData == 'string'){
+                setTableOriginData =  [Number(this.tableOriginData)]
             } else {
                 setTableOriginData =  this.tableOriginData
             }
@@ -46,4 +48,20 @@ export default {
     }
 }
 </script>
+<style lang="scss" scoped>
+    .tag-item-style{
+        background-color: rgba(64,158,255,.1);
+        padding: 0 10px;
+        height: 24px;
+        line-height: 24px;
+        font-size: 12px;
+        color: #409EFF;
+        border-radius: 4px;
+        -webkit-box-sizing: border-box;
+        box-sizing: border-box;
+        border: 1px solid rgba(64,158,255,.2);
+        white-space: nowrap;
+    }
+</style>
+
 
