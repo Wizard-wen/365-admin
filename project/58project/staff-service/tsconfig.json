@@ -1,11 +1,21 @@
-
 {
-    "compilerOptions": {
-      "module": "commonjs",
-      "target": "es5",
-      "sourceMap": true
-    },
-    "exclude": [
-      "node_modules"
-    ]
+  "compilerOptions": {
+      "module": "es2015",//组织代码方式       
+      "noImplicitAny": true,//为true时，将进行强类型检查，无法推断类型时，提示错误。
+      "strict": true, //启用所有严格类型检查选项。
+      "noImplicitReturns": true,  //true 时，不是函数的所有返回路径都有返回值时报错
+      "removeComments": true, //编译生成的 JavaScript 文件是否移除注释
+      "preserveConstEnums": true,
+      "sourceMap": true, //编译文件对应关系
+      "moduleResolution": "node",//决定如何处理模块。
+      "target": "es5"//编译目标平台
+  },
+  "include": [//包含的编译目录
+      "src/**/*",
+      "common/**/*"
+  ],
+  "exclude": [    //排出不编译的目录
+      "node_modules",
+      "**/*.spec.ts"
+  ]
 }

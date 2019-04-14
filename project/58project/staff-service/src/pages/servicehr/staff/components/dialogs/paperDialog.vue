@@ -10,7 +10,7 @@
 
             <el-form-item label="证书" prop="paper_category_id" style="margin-bottom:30px;">
                 <el-select v-model="paperForm.paper_category_id" placeholder="请选择" :disabled="isEditPaper">
-                    <el-option v-for="item in paperList" :key="item.id" :label="item.name" :value="item.id"></el-option>
+                    <el-option v-for="item in paperCategoryList" :key="item.id" :label="item.name" :value="item.id"></el-option>
                 </el-select>
             </el-form-item>
 
@@ -40,7 +40,7 @@
 /**
  * type 0 新建  1 编辑
  */
-import {hrRequest, hrService} from '../../../../../../common'
+import {hrService} from '../../../../../../common'
 
 export default {
     props:{
@@ -60,32 +60,25 @@ export default {
             type: Boolean,
         },
         /**
-         * 传入数据
+         * 传入的证书数据
+         * 若是编辑则为全部数据，若为新建则为空
          */
         paperProps: {
             type: Object,
-            default: function(){
-                return {
-                    paper_category_name: "",
-                    paper_category_id: "",
-                    images: [],
-                }
-            }
+            default: function(){ return {} }
         },
         /**
-         * 已经选择的证书
+         * 已经添加的证书
          */
         selectedPapers: {
             type: Array,
-            default: function(){
-                return []
-            }
+            default: function(){ return [] }
         },
     },
     data() {
         var _this = this;
         const validator = {
-            validateTag(rule, value, callback){
+            validatePaper_category_id(rule, value, callback){
                 //判断是否已经存在这个证书
                 let isHave = _this.selectedPapers.some((item, index) =>{
                     return item.paper_category_id == value
@@ -110,7 +103,7 @@ export default {
             //表单校验
             paperRules: {
                 paper_category_id: [
-                    {validator: validator.validateTag, trigger:'change'}
+                    {validator: validator.validatePaper_category_id, trigger:'change'}
                 ],
                 images: [
                     {validator: validator.validateImages, trigger:'change'}
@@ -118,18 +111,13 @@ export default {
             },
             //props传入的证书信息
             paperForm: {
-                paper_category_name: this.paperProps.paper_category_name,
-                paper_category_id: this.paperProps.paper_category_id,
-                images: this.paperProps.images,
+                id: null,
+                paper_category_name: this.paperProps.paper_category_name,//证书分类名
+                paper_category_id: this.paperProps.paper_category_id,//证书分类id
+                images: this.paperProps.images,//证书图片数组
             },
-            paperView: [],//证书级联选择器筛选信息
-            paperList: [],//证书级联选择器渲染数组
-
-            //地区级联选择字段
-            setPaperProps: {
-                label: 'name',
-                value: 'id'
-            },
+            //证书分类数组
+            paperCategoryList: [],
             //图片上传header
             uploadHeader:{
                 accessToken: this.$store.state.loginModule.token.access_token
@@ -147,6 +135,7 @@ export default {
                 name: response.data.name
             }
             this.paperForm.images.push(picItem)
+            
             //消除表单验证
             if(this.paperForm.images.length){
                 this.$refs.paper.clearValidate()
@@ -167,19 +156,24 @@ export default {
          */
         surePaper(formName){
 
-            let paperItem = {
-                ...this.paperForm
-            }
             let _this = this;
 
             this.$refs[formName].validate((valid) => {
                 if (valid) {
-                    let name = _this.paperList.find((item, index) =>{
-                        return item.id == paperItem.paper_category_id
-                    })
-                    paperItem.paper_category_name = name.name
+                    /**
+                     * 若当前证书是新建的，从证书分类数组中取出当前创建证书的“证书分类名”
+                     * des: 后台U存储证书分类数组用了一张表，其中主键是id，所以从this.paperCategoryList中选择证书的时候
+                     * 取的是id，但是this.paperForm是证书的信息，证书信息里面需要存储证书分类的id，用的字段是paper_category_id
+                     * 
+                     * 这个find函数筛选出当前选择的证书分类，并且取出证书分类名，赋值给this.paperForm
+                     */
+                    this.paperForm.paper_category_name = this.paperCategoryList.find((item, index) =>{
+                        return item.id == _this.paperForm.paper_category_id
+                    }).name
+                    
+                    //触发上层组件事件
+                    this.$emit('changePaper', this.paperForm, this.isEditPaper)
 
-                    this.$emit('changePaper', paperItem, this.isEditPaper)
                 } else {
                     return false;
                 }
@@ -196,15 +190,16 @@ export default {
         store.commit('setLoading',true)
         try{
             let data = await Promise.all([
-                hrService.getPaperSelection('enable'), //获取证书列表
+                hrService.getPaperSelection('enable'), //获取证书字段列表
             ])
-            //promise.all 赋值
-            this.paperList = data[0].data
 
-        }catch(e){
+            //promise.all 赋值
+            this.paperCategoryList = data[0].data
+
+        }catch(error){
             this.$message({
                 type:'error',
-                message: e.message
+                message: error.message
             })
         }
         store.commit('setLoading',false)

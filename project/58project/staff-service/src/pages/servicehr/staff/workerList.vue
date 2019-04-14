@@ -78,13 +78,17 @@
                 <el-table-column  label="学历" prop="education" align="center"></el-table-column>
                 <el-table-column  label="紧急联系人电话" prop="urgent_phone" align="center"></el-table-column>
                 <el-table-column  label="银行卡号" prop="bank_card" align="center"></el-table-column>
-                <el-table-column  label="头像" prop="icon" align="center"></el-table-column>
+                <el-table-column  label="头像" prop="icon" align="center">
+                    <template slot-scope="scope">
+                        <img :src="scope.row.icon?'./resource/'+scope.row.icon:''" alt="" style="height: 24px;width: 24px;">
+                    </template>
+                </el-table-column>
                 <el-table-column  label="课程" prop="course" align="center"></el-table-column>
                 <el-table-column  label="技能证书" prop="paper" align="center"></el-table-column>
                 <el-table-column  label="信息来源" prop="source" align="center"></el-table-column>
                 <el-table-column  label="创建人" prop="manager_name" align="center"></el-table-column>
 
-                <el-table-column label="操作" align="center" fixed="right">
+                <el-table-column label="操作" align="center" fixed="right" width="180">
                     <template slot-scope="scope">
                         <el-button size="mini" @click="editStaff(scope.$index, scope.row)">编辑</el-button>
                         <el-button size="mini" type="danger" v-if="scope.row.status == 0" @click="changeStaffStatus(scope.row)">停用</el-button>
