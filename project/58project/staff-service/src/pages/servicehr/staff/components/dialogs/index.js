@@ -4,7 +4,10 @@ import configTagDialog from './configTagDialog.vue'
 //配置证书弹窗
 import paperDialog from './paperDialog.vue'
 
+import makeImageDialog from './makeImageDialog.vue'
+
 export{
     configTagDialog,
     paperDialog,
+    makeImageDialog
 }

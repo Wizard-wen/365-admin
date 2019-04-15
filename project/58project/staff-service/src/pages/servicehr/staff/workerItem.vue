@@ -181,6 +181,13 @@
             <el-button @click="goback">取消</el-button>
             <el-button @click="makeImage">创建图片</el-button>
         </div>
+        <make-image-dialog
+            :openMakeImageDialog="openMakeImageDialog"
+            v-if="openMakeImageDialog"
+            @closeMakeImageDialog="openMakeImageDialog = false"
+            :openMakeImage="openMakeImage">
+
+        </make-image-dialog>
     </div>
 </template>
 
@@ -195,6 +202,8 @@ import {
     tagsComponent,
     paperComponent,
     selectTag} from './components'
+
+import {makeImageDialog} from './components/dialogs'
 import {pictureDetailDialog} from '../../components/pictureDetailDialog.vue'
 
 
@@ -210,6 +219,7 @@ export default {
         tagsComponent,
         paperComponent,
         selectTag,
+        makeImageDialog
     },
     data() {
         let _this = this
@@ -288,6 +298,11 @@ export default {
         return {
             qrcode,
             canvasImg:'',
+            openMakeImageDialog:false,
+            openMakeImage: {},
+
+
+            
             icon_fileList: [],//头像数组
             photo_fileList: [],//照片数组
             //姓名检查
@@ -557,7 +572,8 @@ export default {
             this.$router.push("/worker/workerList")
         },
         makeImage(){
-            
+            this.openMakeImageDialog = true
+            this.openMakeImage = this.workerForm
         }
     },
     async mounted(){
