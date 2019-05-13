@@ -14,8 +14,6 @@
                 <a :href="canvasImage" download="logo.png">下载图片</a>
             </div>
         </div>
-
-
     </div>
 </template>
 <script>
