@@ -1,7 +1,7 @@
 <template>
     <Hog-page>
         <div class="home">
-            <div class="home-search">
+            <div class="home-search" slot="header">
                 <div class="home-address">
                     沈阳
                     <img :src="downPic" alt="">
@@ -145,6 +145,11 @@ export default {
                     @include textStyle(.3rem, 100%, .12rem, #333);
                 }
             }
+        }
+        .hot-service{
+            height: 10rem;
+            width: 100%;
+            background: #ccc;
         }
     }
 }

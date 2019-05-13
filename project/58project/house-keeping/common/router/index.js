@@ -30,19 +30,19 @@ window.router = new Router({
 })
 
 //登录验证，要求用户必须先登录系统在访问网页
-router.beforeEach((to, from, next) => {
-    //如果用户配置了requiresAuth等于false，则可以不校验，否则会校验用户是否登录。要求登录页一定要配置requiresAuth为false
-    if (to.meta.requiresAuth !== false) {
-        if (!store.state.loginModule.isLogin) {
-            next({
-                path: '/login',
-                query: {redirect: to.fullPath}
-            })
-        } else {
-            next()
-        }
-    } else {
-        next()
-    }
-})
+// router.beforeEach((to, from, next) => {
+//     //如果用户配置了requiresAuth等于false，则可以不校验，否则会校验用户是否登录。要求登录页一定要配置requiresAuth为false
+//     if (to.meta.requiresAuth !== false) {
+//         if (!store.state.loginModule.isLogin) {
+//             next({
+//                 path: '/login',
+//                 query: {redirect: to.fullPath}
+//             })
+//         } else {
+//             next()
+//         }
+//     } else {
+//         next()
+//     }
+// })
 export default router

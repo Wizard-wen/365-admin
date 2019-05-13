@@ -2,7 +2,55 @@
     <div v-if="openMakeImageDialog" class="imageBox" v-loading="isMakingImage">
         <div class="imageBox-contains">
             <div ref="imageCutBox" class="imageCutBox canvasDiv" :style="{zIndex: isImage? '-200': '200'}">
-                <div>{{openMakeImage.name}}</div>
+                <div class="picture-contains">
+                    <div class="base">
+                        <div class="item">
+                            <div class="label">姓名：</div>
+                            <div class="value">{{openMakeImage.name}}</div>
+                        </div>
+                        <div class="item">
+                            <div class="label">民族：</div>
+                            <div class="value">{{openMakeImage.name}}</div>
+                        </div>
+                        <div class="item">
+                            <div class="label">年龄</div>
+                            <div class="value">{{openMakeImage.age}}</div>
+                        </div>
+                        <div class="item">
+                            <div class="label">学历：</div>
+                            <div class="value">{{openMakeImage.education}}</div>
+                        </div>
+                        <div class="item">
+                            <div class="label">籍贯：</div>
+                            <div class="value">{{openMakeImage.birthplace}}</div>
+                        </div>
+                        <div class="item">
+                            <div class="label">民族：</div>
+                            <div class="value">{{openMakeImage.name}}</div>
+                        </div>
+                        <div class="item">
+                            <div class="label">籍贯：</div>
+                            <div class="value">{{openMakeImage.birthplace}}</div>
+                        </div>
+                        <div class="item">
+                            <div class="label">民族：</div>
+                            <div class="value">{{openMakeImage.name}}</div>
+                        </div>
+                        <div class="item">
+                            <div class="label">籍贯：</div>
+                            <div class="value">{{openMakeImage.birthplace}}</div>
+                        </div>
+                        <div class="item">
+                            <div class="label">民族：</div>
+                            <div class="value">{{openMakeImage.name}}</div>
+                        </div>
+                    </div>
+                    <div class="icon">
+                        <img :src="'./resource/'+openMakeImage.icon" alt="">
+                    </div>
+                </div>
+
+
             </div>
 
             <div class="imageCutBox" :style="{zIndex: isImage? '200' : '-200'}">
@@ -11,7 +59,9 @@
 
             <div class="imageBox-footer">
                 <el-button @click="closeMakeImageDialog">取 消</el-button>
-                <a :href="canvasImage" download="logo.png">下载图片</a>
+                <!-- <el-button type="primary"> -->
+                    <a class="down" :href="canvasImage" download="logo.png">下载图片</a>
+                    <!-- </el-button> -->
             </div>
         </div>
     </div>
@@ -104,34 +154,77 @@ export default {
     .imageBox{
         position: fixed;
         // z-index: -200;
-        top:calc(50% - 250px);
+        top:calc(50% - 200px);
         left: calc(50% - 400px);
-        height: 600px;
+        height: 460px;
         width: 800px;
+        background: #fff;
+        box-shadow: 0 2px 12px 0 rgba(0,0,0,.1);
         .imageBox-contains{
-            height: 600px;
+            height: 460px;
             width: 800px;
             position: relative;
             .imageCutBox{
                 position: absolute;
                 left: 0;
                 top:0;
-                height: 500px;
+                height: 400px;
                 width: 800px;
                 .canvas-img{
-                    height: 500px;
+                    height: 400px;
                     width: 800px;
                 }
             }
             .canvasDiv{
-                background: #185;
+                background: url(../img/back2.jpg) no-repeat;
+                background-size: 800px 400px;
+                padding: 35px 60px;
+                .picture-contains{
+                    position: relative;
+                    height: 100%;
+                    width: 100%;
+                    .base{
+                        height: 200px;
+                        width: 460px;
+                        display: flex;
+                        flex-wrap: wrap;
+                        justify-content: space-between;
+                        .item{
+                            height: 40px;
+                            line-height: 40px;
+                            width: 230px;
+                            display: flex;
+                            font-size: 16px;
+                            font-weight: bold;
+                            .label{
+                                width: 60px;
+                            }
+                            .value{
+                                width: 170px;
+                            }
+                        }
+                    }
+                    .icon{
+                        position:absolute;
+                        right:0;
+                        top: 0;
+                        height: 100px;
+                        width: 100px;
+                        background:#185;
+                    }
+                }
+
             }
             .imageBox-footer{
-                 position: absolute;
-                left: 0;
+                padding: 10px 0;
+                position: absolute;
+                right: 30px;
                 bottom:0;
-                height: 100px;
-                width: 100%;
+                height: 60px;
+                width: 200px;
+                .down{
+                    color: #000;
+                }
             }
         }
 

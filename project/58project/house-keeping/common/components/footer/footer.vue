@@ -1,24 +1,25 @@
 <template>
-<div class="footer">
-    <div class="footer-box">
-        <div 
-            class="footer-item"
-            v-for="(item,index) in footerConfig"
-            :key="index">
+    <div class="footer">
+        <div class="footer-box">
             <div 
-                class="footer-item-menu" 
-                @click="changeActive(index,item)">
-                <img v-if="activeIndex!=index" class="footer-icon" :src="item.icon" alt="">
-                <img v-else class="footer-icon" :src="item.highIcon" alt="">
+                class="footer-item"
+                v-for="(item,index) in footerConfig"
+                :key="index">
                 <div 
-                    class="footer-text" 
-                    :style="{color:activeIndex==index?'#d81e06':'#333' }">
-                    {{item.name}}
+                    class="footer-item-menu" 
+                    @click="changeActive(index,item)">
+                    <img v-if="activeIndex!=index" class="footer-icon" :src="item.icon" alt="">
+                    <img v-else class="footer-icon" :src="item.highIcon" alt="">
+                    <div 
+                        class="footer-text" 
+                        :style="{color:activeIndex==index?'#d81e06':'#333' }">
+                        {{item.name}}
+                    </div>
                 </div>
             </div>
+
         </div>
     </div>
-</div>
     
 </template>
 <script>
@@ -60,11 +61,17 @@ export default {
     .footer{
         height: .5rem;
         width: 100%;
+        /* position: fixed;
+        bottom: 0; */
     }
     .footer-box{
         position: fixed;
         bottom: 0;
+        left: 0;
+        right: 0;
+        z-index: 99;
         background: #fff;
+        /* background: red; */
         height: .5rem;
         width:100%;
         display: flex;

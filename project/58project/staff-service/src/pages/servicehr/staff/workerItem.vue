@@ -178,8 +178,8 @@
         <!-- <img :src="canvasImg" alt=""> -->
         <div class="control">
             <el-button type="primary" @click="onSubmit('form')">{{$route.query.id? '确认编辑' : '立即创建'}}</el-button>
-            <el-button @click="goback">取消</el-button>
-            <el-button @click="makeImage">创建图片</el-button>
+            <el-button type="primary" @click="makeImage">创建图片</el-button>
+            <el-button @click="goback">返回</el-button>
         </div>
         <make-image-dialog
             :openMakeImageDialog="openMakeImageDialog"
@@ -749,7 +749,8 @@ export default {
         }
         .control{
             position: fixed;
-            height: 100px;
+            height: 60px;
+            padding: 10px 0;
             width: 100%;
             bottom: 0; 
             background: rgba(0,0,0,.2);

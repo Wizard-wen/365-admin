@@ -88,6 +88,7 @@ const usersModule = [
 
 ]
 
+import testPage from '@/pages/testPage.vue'
 
 /**
  * 重定向
@@ -98,4 +99,10 @@ export default [
     ...classifyModule,
     ...cartModule,
     ...usersModule,
+    {
+        path: '/testPage',
+        name: testPage,
+        component: testPage,
+        
+    },
 ]
