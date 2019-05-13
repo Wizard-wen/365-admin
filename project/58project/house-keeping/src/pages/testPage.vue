@@ -8,9 +8,6 @@
     </div>
 </template>
 <script>
-import LocalScrollFix from 'localscrollfix' 
-var a = LocalScrollFix('.content')
-console.log(a)
 export default {
     
 }
