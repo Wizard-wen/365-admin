@@ -219,7 +219,7 @@ export default {
         tagsComponent,
         paperComponent,
         selectTag,
-        makeImageDialog
+        makeImageDialog, //创建图片组件
     },
     data() {
         let _this = this

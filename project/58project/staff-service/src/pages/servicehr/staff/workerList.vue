@@ -13,7 +13,7 @@
                         <el-button type="primary" @click="resetStaff">重置</el-button>
                     </div>
                     <el-button type="primary" @click="createStaff">添加服务人员</el-button>
-                </div>
+                </div>  
                 <el-table :data="staffTable" class="staff-table" :stripe="true" border :fit="true"
                     height="calc(100vh-90px)"
                     :cell-style="{height: '30px',padding: '2px 0',}"
@@ -245,11 +245,12 @@
 
                 
                 try{
-                    // debugger
+                    
                     this.isLoaded = true
+
                     await Promise.all([
-                        hrService.getFormConfig(),
-                        hrService.getStaffList(tableOption)
+                        hrService.getFormConfig(), //获取表单配置字段
+                        hrService.getStaffList(tableOption) //获取列表数据
                     ]).then((data) =>{
                         this.workerConfigList = data[0].data
 
@@ -265,6 +266,7 @@
                     }).finally(() =>{
                         this.isLoaded = false
                     })
+
                 } catch(error){
                     this.$message({
                         type:'error',
@@ -436,7 +438,6 @@
                     .search-left{
                         display: flex;
                     }
-                    
                 }
                 // background: #185;
                 .staff-table{
