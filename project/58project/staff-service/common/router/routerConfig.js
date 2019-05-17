@@ -243,21 +243,21 @@ const develop = [
 ]
 
 /**
- * 公司员工管理
+ * 门店
  */
-import employeeList from '@/pages/employee/employeeList.vue'
-import employeeItem from '@/pages/employee/employeeItem.vue'
+import shopList from '@/pages/shop/shopList.vue'
+import shopItem from '@/pages/shop/shopItem.vue'
 
-const employee = [
+const shop = [
     {
-        path: '/employee/employeeList',
-        name: 'employeeList',
-        component: employeeList,
+        path: '/shop/shopList',
+        name: 'shopList',
+        component: shopList,
     },
     {
-        path: '/employee/employeeItem',
-        name: 'employeeItem',
-        component: employeeItem,
+        path: '/shop/shopItem',
+        name: 'shopItem',
+        component: shopItem,
     },
 ]
 /**
@@ -283,6 +283,6 @@ export default [
     ...serviceTypeModule,//服务类型管理模块
     ...saleModule,//销售人员模块
     ...develop,//开发者模块
-    ...employee,//公司员工管理
+    ...shop,//公司员工管理
     ...student,//学员管理
 ]

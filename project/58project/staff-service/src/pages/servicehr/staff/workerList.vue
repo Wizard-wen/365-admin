@@ -2,7 +2,7 @@
     <div class="staff" v-loading="isLoaded">
         <div class="list-table">
             <div class="search-list">
-
+                <query-component></query-component>
             </div>
             <div class="table-list">
                 <div class="search-form">
@@ -39,7 +39,7 @@
                     
                     <el-table-column  label="认证状态" prop="authentication" align="center" width="160">
                         <template slot-scope="scope">
-                            <list-show-tag :propList="workerConfigList.authentication" :tableOriginData="scope.row.authentication"></list-show-tag>
+                            <table-tag-component v-if="workerConfigList.authentication" :propList="workerConfigList.authentication" :tableOriginData="scope.row.authentication"></table-tag-component>
                         </template>
                     </el-table-column>
                     
@@ -62,9 +62,10 @@
                     
                     <el-table-column  label="接单状态" prop="working_status" align="center" width="130">
                         <template slot-scope="scope">
-                            <list-show-tag :propList="workerConfigList.working_status" :tableOriginData="scope.row.working_status"></list-show-tag>
+                            <table-tag-component v-if="workerConfigList.working_status" :propList="workerConfigList.working_status" :tableOriginData="scope.row.working_status"></table-tag-component>
                         </template>
                     </el-table-column>
+                    
                     <el-table-column  label="备注（商家情况）" prop="remarks" align="center" width="150">
                         <template slot-scope="scope">
                             <el-popover trigger="click" placement="top">
@@ -80,17 +81,17 @@
                     </el-table-column>
                     <el-table-column  label="服务类型" prop="service_type" align="center" width="200">
                         <template slot-scope="scope">
-                            <list-show-tag :propList="workerConfigList.service_type" :tableOriginData="scope.row.service_type"></list-show-tag>
+                            <table-tag-component v-if="workerConfigList.service_type" :propList="workerConfigList.service_type" :tableOriginData="scope.row.service_type"></table-tag-component>
                         </template>
                     </el-table-column>
                     <el-table-column  label="可服务人群" prop="service_crowd" align="center" width="120">
                         <template slot-scope="scope">
-                            <list-show-tag :propList="workerConfigList.service_crowd" :tableOriginData="scope.row.service_crowd"></list-show-tag>
+                            <table-tag-component v-if="workerConfigList.service_crowd" :propList="workerConfigList.service_crowd" :tableOriginData="scope.row.service_crowd"></table-tag-component>
                         </template>
                     </el-table-column>
                     <el-table-column  label="工龄" prop="working_age" align="center" width="100">
                         <template slot-scope="scope">
-                            <list-show-tag :propList="workerConfigList.working_age" :tableOriginData="scope.row.working_age"></list-show-tag>
+                            <table-tag-component v-if="workerConfigList.working_age" :propList="workerConfigList.working_age" :tableOriginData="scope.row.working_age"></table-tag-component>
                         </template>
                     </el-table-column>
                     <el-table-column  label="工作经验" prop="working_experience" align="center" width="150">
@@ -105,7 +106,7 @@
                     </el-table-column>
                     <el-table-column label="民族" prop="nation" align="center">
                         <template slot-scope="scope">
-                            <list-show-tag :propList="workerConfigList.nation" :tableOriginData="scope.row.nation"></list-show-tag>
+                            <table-tag-component v-if="workerConfigList.nation" :propList="workerConfigList.nation" :tableOriginData="scope.row.nation"></table-tag-component>
                         </template>
                     </el-table-column>
                     <el-table-column  label="籍贯" prop="birthPlace" align="center"></el-table-column>
@@ -131,7 +132,7 @@
                     <el-table-column  label="技能证书" prop="paper" align="center"></el-table-column>
                     <el-table-column  label="信息来源" prop="source" align="center">
                         <template slot-scope="scope">
-                            <list-show-tag :propList="workerConfigList.source" :tableOriginData="scope.row.source"></list-show-tag>
+                            <table-tag-component v-if="workerConfigList.source" :propList="workerConfigList.source" :tableOriginData="scope.row.source"></table-tag-component>
                         </template>
                     </el-table-column>
                     <el-table-column  label="创建人" prop="manager_name" align="center" width="150"></el-table-column>
@@ -161,11 +162,12 @@
 <script>
     import {hrService, $utils} from '../../../../common'
     import {cascaderComponent} from '@/pages/components'
-    import {listShowTag} from './components'
+    import {tableTagComponent, queryComponent} from './components'
     export default {
         components: {
             cascaderComponent,
-            listShowTag
+            tableTagComponent,
+            queryComponent
         },
         data() {
             return {
@@ -185,9 +187,9 @@
                     currentPage: 1,
                     pageNumber: 20,
                 },
-                workerConfigList:{
+                // workerConfigList:{
 
-                },
+                // },
                 maxHeight:0
             }
         },
@@ -224,6 +226,9 @@
                     }
                 })
                 return arr
+            },
+            workerConfigList(){
+                return this.$store.state.hrModule.configForm
             }
         },
         methods: {
@@ -251,7 +256,10 @@
                         hrService.getFormConfig(),
                         hrService.getStaffList(tableOption)
                     ]).then((data) =>{
-                        this.workerConfigList = data[0].data
+                        // this.workerConfigList = data[0].data
+                        this.$store.commit('setConfigForm',data[0].data)
+
+
 
                         this.staffTable = data[1].data.data
                         //分页信息
@@ -422,7 +430,8 @@
             .search-list{
                 width: 180px;
                 height: 100%;
-                background: #ccc;
+                overflow-y: scroll;
+                background: #eaedf1;
             }
             .table-list{
                 flex:1;
