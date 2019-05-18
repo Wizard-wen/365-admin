@@ -30,14 +30,11 @@
                     <template slot-scope="scope">
                         <el-button
                             size="mini"
-                            @click="editRole(scope.$index, scope.row)">角色配置</el-button>
-                        <el-button
-                            size="mini"
                             @click="editAccount(scope.$index, scope.row)">账户编辑</el-button>
                         <el-button
                             size="mini"
                             type="danger"
-                            @click="deleteAccount(scope.$index, scope.row)">删除</el-button>
+                            @click="deleteAccount(scope.$index, scope.row)">停用</el-button>
                     </template>
                 </el-table-column>
             </el-table>
@@ -159,17 +156,6 @@
             async resetAccount(){
                 this.accountSearch.name = ''
                 await this.getTableList()
-            },
-            /**
-             * 角色配置
-             */
-            editRole(index, row){
-                this.$router.push({
-                    path: "/auth/accountConfig",
-                    query: {
-                        id: row.id
-                    }
-                })
             },
             /**
              * 创建账户

@@ -13,14 +13,30 @@
             <el-form-item label="用户名" prop="username">
                 <el-input autocomplete="off" v-model="accountForm.username" :maxlength="20"></el-input>
             </el-form-item>
-
-            <el-form-item label="密码" prop="password">
-                <el-input :maxlength="50" autocomplete="new-password"  v-model="accountForm.password" type="password"></el-input>
-            </el-form-item>
             
-            <el-form-item label="确认密码" prop="repassword">
-                <el-input :maxlength="50" v-model="accountForm.repassword" @focus.native="this.type='password'" type="text"></el-input>
+            <el-form-item v-if="this.$route.query.type == 1" label="明文密码" prop="clear_password">
+                <el-input :maxlength="50" autocomplete="new-password" :disabled="true" v-model="accountForm.clear_password" type="text"></el-input>
+                <el-button type="text" @click="isSetPassword=!isSetPassword">{{isSetPassword? '收起' : '密码重置'}}</el-button>
             </el-form-item>
+
+            <div v-if="isSetPassword == true || this.$route.query.type == 0">
+                <el-form-item :label="$route.query.type == 1? '重置密码' : '密码'" prop="password">
+                    <el-input :maxlength="50" autocomplete="new-password"  v-model="accountForm.password" type="password"></el-input>
+                </el-form-item>
+                
+                <el-form-item label="确认密码" prop="repassword">
+                    <el-input :maxlength="50" v-model="accountForm.repassword" @focus.native="this.type='password'" type="password"></el-input>
+                </el-form-item>
+            </div>
+
+
+            <el-form-item label="角色配置" prop="roleIds">
+                <select-tag-component :propTagList="roleList" v-model="accountForm.roleIds" :isSingle="false"></select-tag-component>
+            </el-form-item>
+
+            <!-- <el-form-item label="部门配置" prop="roleIds">
+                <select-tag-component :propTagList="roleList" v-model="accountForm.roleIds" :isSingle="false"></select-tag-component>
+            </el-form-item> -->
             
             <el-form-item>
                 <el-button type="primary" @click="onSubmit('form')">提交</el-button>
@@ -30,7 +46,10 @@
     </div>
 </template>
 <script>
+
 import {authService} from '../../../../common'
+import {selectTagComponent} from '@/pages/components'
+
 export default {
     data(){
         const validatePassword = (rule, value, callback) => {
@@ -72,8 +91,10 @@ export default {
                 id: this.$route.query.id ? this.$route.query.id : '',
                 account: '',
                 username: '', //用户名
+                clear_password: '',//明文密码
                 password: '', //密码
                 repassword: '',//确认密码
+                roleIds: [],
             },
             accountRules: {
                 account: [
@@ -88,27 +109,29 @@ export default {
                 repassword: [
                     { validator: validateRePassword, trigger: 'blur' }
                 ]
-            }
+            },
+            roleList: [],//角色id
+            isSetPassword: false,//是否展示设置密码
         }
     },
+    components: {
+        selectTagComponent
+    },
     methods:{
+        /**
+         * 提交数据
+         */
         async onSubmit(formName){
-            let accountObj = {}
-            if(this.$route.query.type == 1){
-                accountObj = {
-                    id: this.$route.query.id,
-                    name: this.accountForm.username,
-                    password: this.accountForm.password,
-                    repassword: this.accountForm.repassword,
-                }
-            } else {
-                accountObj = {
-                    account: this.accountForm.account,
-                    name: this.accountForm.username,
-                    password: this.accountForm.password,
-                    repassword: this.accountForm.repassword,
-                }
-            }
+            let accountObj = {
+                id: this.$route.query.id,
+                account: this.accountForm.account, //编辑状态不可修改
+
+                name: this.accountForm.username,
+                password: this.accountForm.password,
+                repassword: this.accountForm.repassword,
+                roleIds: this.accountForm.roleIds,
+            } //
+
             await this.$refs[formName].validate((valid) => {
                 if (valid) {
                     authService.editManager(accountObj)
@@ -133,37 +156,40 @@ export default {
         }
     },
     async mounted(){
-        
-        //若是编辑，请求编辑数据
-        if(this.$route.query.type == 1){
-            store.commit('setLoading',true)
-            try{
-                await authService.getManager(this.$route.query.id)
-                    .then(data =>{
-                        if(data.code == '0'){
-                            this.accountForm.username = data.data.name
-                            this.accountForm.account = data.data.account
-                        }
-                    }).catch(error =>{
-                        if(error.code == "1"){
-                            this.$message({
-                                type: 'error',
-                                message: error.message
-                            })
-                            this.$router.push('/auth/accountList')
-                        }
-                    }).finally(() =>{
-                        store.commit('setLoading',false)
+        store.commit('setLoading',true)
+        try{
+            let managerId = this.$route.query.id?this.$route.query.id: '' //判断是不是有id
+
+            await authService.getManager(managerId).then(data =>{
+                console.log(data)
+                if(data.code == '0'){
+                    //全部角色列表
+                    this.roleList =  data.data.roleList
+                    
+                    //账户表单配置项
+                    this.accountForm.roleIds = data.data.manager.roleIds
+                    this.accountForm.username = data.data.manager.name
+                    this.accountForm.account = data.data.manager.account
+                    this.accountForm.clear_password = data.data.manager.clear_password
+                }
+
+            }).catch(error =>{
+                if(error.code == "1"){
+                    this.$message({
+                        type: 'error',
+                        message: error.message
                     })
-            } catch(error){
-                this.$message({
-                    type: 'error',
-                    message: error.message
-                })
-            }
-
+                    this.$router.push('/auth/accountList')
+                }
+            }).finally(() =>{
+                store.commit('setLoading',false)
+            })
+        } catch(error){
+            this.$message({
+                type: 'error',
+                message: error.message
+            })
         }
-
     }
 }
 </script>

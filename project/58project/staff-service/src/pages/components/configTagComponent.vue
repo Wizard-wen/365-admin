@@ -16,7 +16,7 @@
 </template>
 
 <script>
-import {configTagDialog} from './dialogs'
+import {configTagDialog} from './configTag'
 export default {
     components: {
         configTagDialog

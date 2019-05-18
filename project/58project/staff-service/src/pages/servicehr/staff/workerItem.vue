@@ -7,7 +7,7 @@
             </el-form-item>     
             
             <el-form-item label="认证状态" prop="authentication" class="form-item-size" size="small">
-                <select-tag :propTagList="workerConfigList.authentication" v-model="workerForm.authentication" :isSingle="true"></select-tag>
+                <select-tag-component :propTagList="workerConfigList.authentication" v-model="workerForm.authentication" :isSingle="true"></select-tag-component>
             </el-form-item> 
             
             <el-form-item label="姓名" prop="name" class="form-item-size" size="small">
@@ -33,7 +33,7 @@
             </el-form-item>
 
             <el-form-item label="接单状态" prop="working_status" class="form-item-size" size="small">
-                <select-tag :propTagList="workerConfigList.working_status" v-model="workerForm.working_status" :isSingle="true"></select-tag>
+                <select-tag-component :propTagList="workerConfigList.working_status" v-model="workerForm.working_status" :isSingle="true"></select-tag-component>
             </el-form-item> 
 
             <el-form-item label="备注（商家情况）" prop="remarks" class="form-item-size" size="small">
@@ -41,19 +41,19 @@
             </el-form-item>
 
             <el-form-item label="职业类型" prop="skill" class="form-item-size" size="small">
-                <select-tag :propTagList="workerConfigList.service_category" v-model="workerForm.skill" :isSingle="false"></select-tag>
+                <select-tag-component :propTagList="workerConfigList.service_category" v-model="workerForm.skill" :isSingle="false"></select-tag-component>
             </el-form-item> 
 
             <el-form-item label="服务类型" prop="service_type" class="form-item-size" size="small">
-                <select-tag :propTagList="workerConfigList.service_type" v-model="workerForm.service_type" :isSingle="false"></select-tag>
+                <select-tag-component :propTagList="workerConfigList.service_type" v-model="workerForm.service_type" :isSingle="false"></select-tag-component>
             </el-form-item> 
 
             <el-form-item label="可服务人群" prop="service_crowd" class="form-item-size" size="small">
-                <select-tag :propTagList="workerConfigList.service_crowd" v-model="workerForm.service_crowd" :isSingle="false"></select-tag>
+                <select-tag-component :propTagList="workerConfigList.service_crowd" v-model="workerForm.service_crowd" :isSingle="false"></select-tag-component>
             </el-form-item> 
 
             <el-form-item label="工龄" prop="working_age" class="form-item-size" size="small">
-                <select-tag :propTagList="workerConfigList.working_age" v-model="workerForm.working_age" :isSingle="true"></select-tag>
+                <select-tag-component :propTagList="workerConfigList.working_age" v-model="workerForm.working_age" :isSingle="true"></select-tag-component>
             </el-form-item> 
 
             <el-form-item label="工作经验（备注）" prop="working_experience" class="form-item-size" size="small">
@@ -61,7 +61,7 @@
             </el-form-item>
 
             <el-form-item label="民族" prop="nation" class="form-item-size" size="small">
-                <select-tag :propTagList="workerConfigList.nation" v-model="workerForm.nation" :isSingle="true"></select-tag>
+                <select-tag-component :propTagList="workerConfigList.nation" v-model="workerForm.nation" :isSingle="true"></select-tag-component>
             </el-form-item>
 
             <el-form-item label="籍贯" prop="birthPlace" class="form-item-size" size="small">
@@ -77,11 +77,11 @@
             </el-form-item>
 
             <el-form-item label="区域" prop="region" class="form-item-size" size="small">
-                <select-tag :propTagList="workerConfigList.service_region" v-model="workerForm.region" :isSingle="false"></select-tag>
+                <select-tag-component :propTagList="workerConfigList.service_region" v-model="workerForm.region" :isSingle="false"></select-tag-component>
             </el-form-item>
         
             <el-form-item label="学历" prop="education" class="form-item-size" size="small">
-                <select-tag :propTagList="$store.state.hrModule.educationList" v-model="workerForm.education" :isSingle="true"></select-tag>
+                <select-tag-component :propTagList="$store.state.hrModule.educationList" v-model="workerForm.education" :isSingle="true"></select-tag-component>
             </el-form-item>
 
             <el-form-item label="紧急联系人电话" prop="urgent_phone" class="form-item-size" size="small">
@@ -140,7 +140,7 @@
             </el-form-item>
         
             <el-form-item label="参加培训" prop="course" class="form-item-size" size="small">
-                <select-tag :propTagList="workerConfigList.course" v-model="workerForm.course" :isSingle="false"></select-tag>
+                <select-tag-component :propTagList="workerConfigList.course" v-model="workerForm.course" :isSingle="false"></select-tag-component>
             </el-form-item>
 
             <el-form-item label="技能证书" prop="certificate" class="form-item-size">
@@ -148,11 +148,11 @@
             </el-form-item>
 
             <el-form-item label="技能证书标签" prop="paper" class="form-item-size">
-                <select-tag :propTagList="workerConfigList.paper_category" v-model="workerForm.paper" :isSingle="false"></select-tag>
+                <select-tag-component :propTagList="workerConfigList.paper_category" v-model="workerForm.paper" :isSingle="false"></select-tag-component>
             </el-form-item>
         
             <el-form-item label="信息来源" prop="source" class="form-item-size" size="small">
-                <select-tag :propTagList="workerConfigList.source" v-model="workerForm.source" :isSingle="true"></select-tag>
+                <select-tag-component :propTagList="workerConfigList.source" v-model="workerForm.source" :isSingle="true"></select-tag-component>
             </el-form-item>
 
             <el-form-item label="创建人姓名" prop="manager_name" class="form-item-size" size="small">
@@ -181,13 +181,13 @@
             <el-button type="primary" @click="makeImage">创建图片</el-button>
             <el-button @click="goback">返回</el-button>
         </div>
-        <make-image-dialog
+        <make-image-component
             :openMakeImageDialog="openMakeImageDialog"
             v-if="openMakeImageDialog"
             @closeMakeImageDialog="openMakeImageDialog = false"
             :openMakeImage="openMakeImage">
 
-        </make-image-dialog>
+        </make-image-component>
     </div>
 </template>
 
@@ -199,12 +199,12 @@
 import {hrService} from '../../../../common'
 
 import {
-    tagsComponent,
     paperComponent,
-    selectTag} from './components'
+    makeImageComponent} from './components'
 
-import {makeImageDialog} from './components/dialogs'
-import {pictureDetailDialog} from '../../components/pictureDetailDialog.vue'
+import {
+    pictureDetailDialog,
+    selectTagComponent} from '@/pages/components'
 
 
 import qrcode from '../img/timg.gif'
@@ -216,10 +216,9 @@ import html2canvas from 'html2canvas';
 
 export default {
     components: {
-        tagsComponent,
         paperComponent,
-        selectTag,
-        makeImageDialog, //创建图片组件
+        selectTagComponent,
+        makeImageComponent, //创建图片组件
     },
     data() {
         let _this = this

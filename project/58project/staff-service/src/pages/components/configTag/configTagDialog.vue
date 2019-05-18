@@ -23,7 +23,8 @@
     </el-dialog>
 </template>
 <script>
-import {hrService} from '../../../../../../common'
+
+import {hrService} from '../../../../common'
 
 export default {
     props: {

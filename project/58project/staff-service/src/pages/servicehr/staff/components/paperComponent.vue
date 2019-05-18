@@ -40,7 +40,7 @@
 </template>
 <script>
 
-import {paperDialog} from './dialogs'
+import {paperDialog} from './paper'
 import {pictureDetailDialog} from '@/pages/components'
 
 

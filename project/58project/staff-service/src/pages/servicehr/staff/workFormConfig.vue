@@ -3,47 +3,47 @@
         <el-form class="worker-config-form" ref="form" :model="workConfigForm" label-width="140px">
         
             <el-form-item label="认证状态字段" prop="source" class="form-item-size" size="small">
-                <config-tag @reload="getWorkFormConfig" v-model="workConfigForm.authentication" :tableConfig="'authentication'"></config-tag>
+                <config-tag-component @reload="getWorkFormConfig" v-model="workConfigForm.authentication" :tableConfig="'authentication'"></config-tag-component>
             </el-form-item>
 
             <el-form-item label="课程字段" prop="source" class="form-item-size" size="small">
-                <config-tag @reload="getWorkFormConfig" v-model="workConfigForm.course" :tableConfig="'course'"></config-tag>
+                <config-tag-component @reload="getWorkFormConfig" v-model="workConfigForm.course" :tableConfig="'course'"></config-tag-component>
             </el-form-item>
             
             <el-form-item label="证书字段" prop="source" class="form-item-size" size="small">
-                <config-tag @reload="getWorkFormConfig" v-model="workConfigForm.paper_category" :tableConfig="'paper_category'"></config-tag>
+                <config-tag-component @reload="getWorkFormConfig" v-model="workConfigForm.paper_category" :tableConfig="'paper_category'"></config-tag-component>
             </el-form-item>
             
             <el-form-item label="技能字段" prop="source" class="form-item-size" size="small">
-                <config-tag @reload="getWorkFormConfig" v-model="workConfigForm.service_category" :tableConfig="'service_category'"></config-tag>
+                <config-tag-component @reload="getWorkFormConfig" v-model="workConfigForm.service_category" :tableConfig="'service_category'"></config-tag-component>
             </el-form-item>
             
             <el-form-item label="可服务人群字段" prop="source" class="form-item-size" size="small">
-                <config-tag @reload="getWorkFormConfig" v-model="workConfigForm.service_crowd" :tableConfig="'service_crowd'"></config-tag>
+                <config-tag-component @reload="getWorkFormConfig" v-model="workConfigForm.service_crowd" :tableConfig="'service_crowd'"></config-tag-component>
             </el-form-item>
             
             <el-form-item label="服务类型字段" prop="source" class="form-item-size" size="small">
-                <config-tag @reload="getWorkFormConfig" v-model="workConfigForm.service_type" :tableConfig="'service_type'"></config-tag>
+                <config-tag-component @reload="getWorkFormConfig" v-model="workConfigForm.service_type" :tableConfig="'service_type'"></config-tag-component>
             </el-form-item>
             
             <el-form-item label="信息来源字段" prop="source" class="form-item-size" size="small">
-                <config-tag @reload="getWorkFormConfig" v-model="workConfigForm.source" :tableConfig="'source'"></config-tag>
+                <config-tag-component @reload="getWorkFormConfig" v-model="workConfigForm.source" :tableConfig="'source'"></config-tag-component>
             </el-form-item>
             
             <el-form-item label="工龄字段" prop="source" class="form-item-size" size="small">
-                <config-tag @reload="getWorkFormConfig" v-model="workConfigForm.working_age" :tableConfig="'working_age'"></config-tag>
+                <config-tag-component @reload="getWorkFormConfig" v-model="workConfigForm.working_age" :tableConfig="'working_age'"></config-tag-component>
             </el-form-item>
 
             <el-form-item label="服务区域" prop="source" class="form-item-size" size="small">
-                <config-tag @reload="getWorkFormConfig" v-model="workConfigForm.service_region" :tableConfig="'service_region'"></config-tag>
+                <config-tag-component @reload="getWorkFormConfig" v-model="workConfigForm.service_region" :tableConfig="'service_region'"></config-tag-component>
             </el-form-item>
 
             <el-form-item label="接单状态" prop="source" class="form-item-size" size="small">
-                <config-tag @reload="getWorkFormConfig" v-model="workConfigForm.working_status" :tableConfig="'working_status'"></config-tag>
+                <config-tag-component @reload="getWorkFormConfig" v-model="workConfigForm.working_status" :tableConfig="'working_status'"></config-tag-component>
             </el-form-item>
 
             <el-form-item label="民族" prop="nation" class="form-item-size" size="small">
-                <config-tag @reload="getWorkFormConfig" v-model="workConfigForm.nation" :tableConfig="'nation'"></config-tag>
+                <config-tag-component @reload="getWorkFormConfig" v-model="workConfigForm.nation" :tableConfig="'nation'"></config-tag-component>
             </el-form-item>
         </el-form>
     </div>
@@ -56,11 +56,11 @@
  */
 import {hrService} from '../../../../common'
 
-import {configTag} from './components'
+import {configTagComponent} from '@/pages/components'
 
 export default {
     components: {
-        configTag,
+        configTagComponent,
     },
     data() {
 

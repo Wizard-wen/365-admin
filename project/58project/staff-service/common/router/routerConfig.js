@@ -27,7 +27,6 @@ const homeModule = [
 //账户管理
 import accountList from '@/pages/auth/account/accountList.vue'
 import accountEdit from '@/pages/auth/account/accountEdit.vue'
-import accountConfig from '@/pages/auth/account/accountConfig.vue'
 
 //角色管理
 import roleList from '@/pages/auth/role/roleList.vue'
@@ -37,7 +36,6 @@ import roleConfig from '@/pages/auth/role/roleConfig.vue'
 //权限配置
 import authList from '@/pages/auth/auth/authList.vue'
 import authConfig from '@/pages/auth/auth/authConfig.vue'
- 
 
  const authModule = [
     //账户管理
@@ -57,11 +55,6 @@ import authConfig from '@/pages/auth/auth/authConfig.vue'
                 next()
             }
         }
-    },
-    {
-        path: '/auth/accountConfig',
-        name: 'accountConfig',
-        component: accountConfig,
     },
     //角色配置
     {
@@ -98,8 +91,8 @@ import authConfig from '@/pages/auth/auth/authConfig.vue'
  */
 
 
- import staffList from '@/pages/servicehr/staff/staffList.vue'
- import staffItem from '@/pages/servicehr/staff/staffItem.vue'
+//  import staffList from '@/pages/servicehr/staff/staffList.vue'
+//  import staffItem from '@/pages/servicehr/staff/staffItem.vue'
  import workerList from '@/pages/servicehr/staff/workerList.vue'
  import workerItem from '@/pages/servicehr/staff/workerItem.vue'
  import workFormConfig from '@/pages/servicehr/staff/workFormConfig.vue'
@@ -107,16 +100,16 @@ import authConfig from '@/pages/auth/auth/authConfig.vue'
 
  const staffModule = [
 
-    {
-        path: '/staff/staffList',
-        name: 'staffList',
-        component: staffList,
-    },
-    {
-        path: '/staff/staffItem',
-        name: 'staffItem',
-        component: staffItem,
-    },
+    // {
+    //     path: '/staff/staffList',
+    //     name: 'staffList',
+    //     component: staffList,
+    // },
+    // {
+    //     path: '/staff/staffItem',
+    //     name: 'staffItem',
+    //     component: staffItem,
+    // },
     {
         path: '/worker/workerList',
         name: 'workerList',
@@ -210,37 +203,6 @@ const saleModule = [
         component: orderAssignList,
     },
 ]
-/**
- * 项目管理模块
- */
-import originList from '@/pages/develop/originList.vue'
-import originRequire from '@/pages/develop/originRequire.vue'
-import reviewList from '@/pages/develop/reviewList.vue'
-import reviewItem from '@/pages/develop/reviewItem.vue'
-
-
-const develop = [
-    {
-        path: '/develop/originList',
-        name: 'originList',
-        component: originList,
-    },
-    {
-        path: '/develop/originRequire',
-        name: 'originRequire',
-        component: originRequire,
-    },
-    {
-        path: '/develop/reviewList',
-        name: 'reviewList',
-        component: reviewList,
-    },
-    {
-        path: '/develop/reviewItem',
-        name: 'reviewItem',
-        component: reviewItem,
-    },
-]
 
 /**
  * 门店
@@ -282,7 +244,6 @@ export default [
     ...staffModule, //服务人员管理模块
     ...serviceTypeModule,//服务类型管理模块
     ...saleModule,//销售人员模块
-    ...develop,//开发者模块
     ...shop,//公司员工管理
     ...student,//学员管理
 ]

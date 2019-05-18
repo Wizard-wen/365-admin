@@ -68,7 +68,7 @@
 </template>
 <script>
 
-import {hrService} from '../../../../../../common'
+import {hrService} from '../../../../../common'
 import html2canvas from 'html2canvas';
 import axios from 'axios'
 
@@ -176,7 +176,7 @@ export default {
                 }
             }
             .canvasDiv{
-                background: url(../img/back2.jpg) no-repeat;
+                background: url(./makeImage/images/back2.jpg) no-repeat;
                 background-size: 800px 400px;
                 padding: 35px 60px;
                 .picture-contains{

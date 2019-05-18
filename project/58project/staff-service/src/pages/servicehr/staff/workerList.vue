@@ -161,8 +161,12 @@
 </template>
 <script>
     import {hrService, $utils} from '../../../../common'
-    import {cascaderComponent} from '@/pages/components'
-    import {tableTagComponent, queryComponent} from './components'
+    import {
+        cascaderComponent,
+        tableTagComponent} from '@/pages/components'
+
+    import {queryComponent} from './components'
+    
     export default {
         components: {
             cascaderComponent,
