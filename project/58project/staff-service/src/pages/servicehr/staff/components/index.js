@@ -9,8 +9,10 @@ import paperComponent from './paperComponent.vue'
 import selectTag from './selectTag.vue'
 //
 import tagsComponent from './tagsComponent.vue'
-
-import listShowTag from './listShowTag.vue'
+//列表项标签组件
+import tableTagComponent from './tableTagComponent.vue'
+//列表查询组件
+import queryComponent from './queryComponent.vue'
 
 
 
@@ -19,5 +21,6 @@ export {
     paperComponent,//证书组件
     selectTag,//
     tagsComponent,//
-    listShowTag
+    tableTagComponent,
+    queryComponent
 }

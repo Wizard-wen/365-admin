@@ -10,7 +10,7 @@ import {loginModule} from './loginModule.js'
 import {loadingModule} from './loadingModule.js'
 import {orderModule} from './orderModule.js'
 import {hrModule} from './hrModule.js'
-import {employeeModule} from './employeeModule.js'
+import {shopModule} from './shopModule.js' //门店
 
 Vue.use(vuex);
 
@@ -21,7 +21,7 @@ window.store = new vuex.Store({
         loadingModule,
         orderModule,
         hrModule,
-        employeeModule,
+        shopModule,
     },
     plugins: [createPersistedState({
         key: 'staff',

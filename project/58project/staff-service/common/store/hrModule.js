@@ -9,7 +9,46 @@ import Vuex from 'vuex'
 Vue.use(Vuex)
 
 export const hrModule = {
+    mutations:{
+        setConfigForm(state, configForm){
+            state.configForm = configForm
+        }
+    },
+
     state: {
+        configForm: {}, //全部劳动者配置项
+        queryedList: {
+            staff_code: '',//员工号
+            sex: '',
+            type: '',//签约状态
+            create_at: '', //创建时间
+            register_at: '',//登记时间
+            authentication: '',//认证状态
+            name: '', //姓名
+            age: '',//年龄
+            phone: '',//电话
+            return_msg: '',//回访信息
+            working_status: '',//接单状态 ------
+            remarks: '',//备注（商家情况）
+            skill: '', //职业类型
+            service_type: '',//服务类型
+            service_crowd: '',//可服务人群
+            working_age: '',//工龄
+            working_experience: '',//工作经验
+            nation: '',//民族
+            birthPlace: '',//籍贯
+            identify: '',//身份证号
+            address: '',//地址
+            region: '',//服务地区
+            education: '',//学历
+            urgent_phone: '',//紧急联系人电话
+            bank_card: '',//银行卡号
+            course: '',//课程
+            paper: '',//技能证书
+            source: '',//信息来源
+            manager_name: ''//创建人
+
+        }, //全部查询参数
         educationList: [
             {
                 id : 1,

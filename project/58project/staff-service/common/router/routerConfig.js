@@ -186,7 +186,6 @@ import orderList from '@/pages/sale/orderList.vue'
 import orderConfig from '@/pages/sale/orderConfig.vue'
 import orderEdit from '@/pages/sale/orderEdit.vue'
 import orderAssignList from '@/pages/sale/orderAssignList.vue'
-import orderTest from '@/pages/sale/orderTest.vue'
 
 
 const saleModule = [
@@ -209,11 +208,6 @@ const saleModule = [
         path: '/sale/orderAssignList',
         name: 'orderAssignList',
         component: orderAssignList,
-    },
-    {
-        path: '/sale/orderTest',
-        name: 'orderTest',
-        component: orderTest,
     },
 ]
 /**
@@ -249,21 +243,21 @@ const develop = [
 ]
 
 /**
- * 公司员工管理
+ * 门店
  */
-import employeeList from '@/pages/employee/employeeList.vue'
-import employeeItem from '@/pages/employee/employeeItem.vue'
+import shopList from '@/pages/shop/shopList.vue'
+import shopItem from '@/pages/shop/shopItem.vue'
 
-const employee = [
+const shop = [
     {
-        path: '/employee/employeeList',
-        name: 'employeeList',
-        component: employeeList,
+        path: '/shop/shopList',
+        name: 'shopList',
+        component: shopList,
     },
     {
-        path: '/employee/employeeItem',
-        name: 'employeeItem',
-        component: employeeItem,
+        path: '/shop/shopItem',
+        name: 'shopItem',
+        component: shopItem,
     },
 ]
 /**
@@ -289,6 +283,6 @@ export default [
     ...serviceTypeModule,//服务类型管理模块
     ...saleModule,//销售人员模块
     ...develop,//开发者模块
-    ...employee,//公司员工管理
+    ...shop,//公司员工管理
     ...student,//学员管理
 ]
