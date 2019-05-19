@@ -32,7 +32,7 @@ import accountEdit from '@/pages/auth/account/accountEdit.vue'
 import roleList from '@/pages/auth/role/roleList.vue'
 import roleEdit from '@/pages/auth/role/roleEdit.vue'
 import roleConfig from '@/pages/auth/role/roleConfig.vue'
- 
+
 //权限配置
 import authList from '@/pages/auth/auth/authList.vue'
 import authConfig from '@/pages/auth/auth/authConfig.vue'
@@ -96,6 +96,8 @@ import authConfig from '@/pages/auth/auth/authConfig.vue'
  import workerList from '@/pages/servicehr/staff/workerList.vue'
  import workerItem from '@/pages/servicehr/staff/workerItem.vue'
  import workFormConfig from '@/pages/servicehr/staff/workFormConfig.vue'
+ import returnList from '@/pages/servicehr/staff/returnList.vue'
+ import returnItem from '@/pages/servicehr/staff/returnItem.vue'
 
 
  const staffModule = [
@@ -124,6 +126,16 @@ import authConfig from '@/pages/auth/auth/authConfig.vue'
         path: '/worker/workFormConfig',
         name: 'workFormConfig',
         component: workFormConfig,
+    },
+    {
+        path: '/worker/returnList',
+        name: 'returnList',
+        component: returnList,
+    },
+    {
+        path: '/worker/returnItem',
+        name: 'returnItem',
+        component: returnItem,
     },
  ]
 
