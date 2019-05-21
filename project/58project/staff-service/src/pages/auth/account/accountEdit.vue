@@ -9,11 +9,11 @@
             <el-form-item label="账号"  prop="account">
                 <el-input v-model="accountForm.account" :maxlength="20" :disabled="$route.query.type == 1" ></el-input>
             </el-form-item>
-            
+
             <el-form-item label="用户名" prop="username">
                 <el-input autocomplete="off" v-model="accountForm.username" :maxlength="20"></el-input>
             </el-form-item>
-            
+
             <el-form-item v-if="this.$route.query.type == 1" label="明文密码" prop="clear_password">
                 <el-input :maxlength="50" autocomplete="new-password" :disabled="true" v-model="accountForm.clear_password" type="text"></el-input>
                 <el-button type="text" @click="isSetPassword=!isSetPassword">{{isSetPassword? '收起' : '密码重置'}}</el-button>
@@ -23,7 +23,7 @@
                 <el-form-item :label="$route.query.type == 1? '重置密码' : '密码'" prop="password">
                     <el-input :maxlength="50" autocomplete="new-password"  v-model="accountForm.password" type="password"></el-input>
                 </el-form-item>
-                
+
                 <el-form-item label="确认密码" prop="repassword">
                     <el-input :maxlength="50" v-model="accountForm.repassword" @focus.native="this.type='password'" type="password"></el-input>
                 </el-form-item>
@@ -34,10 +34,10 @@
                 <select-tag-component :propTagList="roleList" v-model="accountForm.roleIds" :isSingle="false"></select-tag-component>
             </el-form-item>
 
-            <!-- <el-form-item label="部门配置" prop="roleIds">
-                <select-tag-component :propTagList="roleList" v-model="accountForm.roleIds" :isSingle="false"></select-tag-component>
-            </el-form-item> -->
-            
+            <el-form-item label="部门配置" prop="department_id">
+                <select-tag-component :propTagList="departmentList" v-model="accountForm.department_id" :isSingle="true"></select-tag-component>
+            </el-form-item>
+
             <el-form-item>
                 <el-button type="primary" @click="onSubmit('form')">提交</el-button>
                 <el-button @click="$router.go(-1)">取消</el-button>
@@ -95,6 +95,7 @@ export default {
                 password: '', //密码
                 repassword: '',//确认密码
                 roleIds: [],
+                department_id: 0
             },
             accountRules: {
                 account: [
@@ -112,6 +113,7 @@ export default {
             },
             roleList: [],//角色id
             isSetPassword: false,//是否展示设置密码
+            departmentList: [{id:0,name:'没有'},{id:1,name:'办公室'},{id:2,name:'运营部'},{id:3,name:'培训部'},{id:4,name:'加盟店'}] //部门
         }
     },
     components: {
@@ -130,6 +132,7 @@ export default {
                 password: this.accountForm.password,
                 repassword: this.accountForm.repassword,
                 roleIds: this.accountForm.roleIds,
+                department_id: this.accountForm.department_id
             } //
 
             await this.$refs[formName].validate((valid) => {
@@ -165,12 +168,13 @@ export default {
                 if(data.code == '0'){
                     //全部角色列表
                     this.roleList =  data.data.roleList
-                    
+
                     //账户表单配置项
                     this.accountForm.roleIds = data.data.manager.roleIds
                     this.accountForm.username = data.data.manager.name
                     this.accountForm.account = data.data.manager.account
                     this.accountForm.clear_password = data.data.manager.clear_password
+                    this.accountForm.department_id = data.data.manager.department_id
                 }
 
             }).catch(error =>{

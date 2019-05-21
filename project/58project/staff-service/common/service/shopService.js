@@ -6,13 +6,13 @@ export default {
      * 获取全部门店列表
      * @param obj 搜索字段
      */
-    getShopList(obj){
-        return shopRequest.getShopList(obj)
+    getStoreList(obj){
+        return shopRequest.getStoreList(obj)
     },
     /**
      * 获取某门店信息信息
      */
-    getShop(id){
-        return shopRequest.getShop(id)
+    getStore(id){
+        return shopRequest.getStore(id)
     },
 }

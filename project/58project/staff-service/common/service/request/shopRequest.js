@@ -10,8 +10,8 @@ export default {
      * @param obj 搜索字段
      */
 
-    getShopList(tableOption){
-        let baseUrl = `./admin/shop/getShopList?pageNumber=${tableOption.pageNumber}&page=${tableOption.currentPage}`
+    getStoreList(tableOption){
+        let baseUrl = `./admin/store/getStoreList?pageNumber=${tableOption.pageNumber}&page=${tableOption.currentPage}`
         if(tableOption.searchSelect.length){
             tableOption.searchSelect.forEach((item, index) => {
                 baseUrl += `&${item.key}=${item[item.key]}`
@@ -23,7 +23,28 @@ export default {
      * 请求某一门店数据
      * @param id 员工的id
      */
-    getShop(id){
-        return axios.get(`./admin/shop/getShop?id=${id}`)
+    getStore(id){
+        return axios.get(`./admin/store/getStore?id=${id}`)
     },
+
+    /**
+     * 编辑门店信息
+     * @param editObj
+     *
+     *
+     *
+     */
+    editStore(editObj){
+        return axios.post(`./admin/store/editStore`,Object.assign({},editObj))
+    },
+    /**
+     * 物理删除管理员
+     * @param id 管理员id
+     */
+    deleteStore(id){
+        return axios.post(`./admin/store/deleteStore`,{
+            id: id
+        })
+    },
+
 }

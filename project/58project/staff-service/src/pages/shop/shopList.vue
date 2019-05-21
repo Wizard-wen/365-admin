@@ -7,12 +7,12 @@
                         <el-input v-model="shopSearch.name" placeholder="请输入门店名" :maxlength="20"></el-input>
                     </el-form-item>
 
-                    <el-form-item>  
+                    <el-form-item>
                         <el-select v-model="shopSearch.type" placeholder="请选择门店类型">
                             <el-option :label="'全部'" :value="0"></el-option>
                             <el-option :label="'直营店'" :value="1"></el-option>
                             <el-option :label="'加盟店'" :value="2"></el-option>
-                        </el-select>                    
+                        </el-select>
                     </el-form-item>
 
                     <el-form-item>
@@ -28,17 +28,15 @@
 
         <el-table :data="shopTable" class="shop-table">
 
-            <el-table-column label="门店类型" prop="type" align="center"></el-table-column>
+            <el-table-column label="编号" prop="id" align="center"></el-table-column>
 
             <el-table-column label="门店名" prop="name" align="center"></el-table-column>
 
-            <el-table-column label="门店经理" prop="manager" align="center"></el-table-column>
-
-            <el-table-column label="销售人数" prop="number" align="center"></el-table-column>
+            <el-table-column label="地区" prop="address" align="center"></el-table-column>
 
             <el-table-column label="操作" align="center">
                 <template slot-scope="scope">
-                    <el-button size="mini" @click="editShop(scope.$index, scope.row)">编辑员工</el-button>
+                    <el-button size="mini" @click="editShop(scope.$index, scope.row)">编辑门店</el-button>
                 </template>
             </el-table-column>
         </el-table>
@@ -135,7 +133,7 @@
 
                 store.commit('setLoading',true)
                 try{
-                    await shopService.getShopList(tableOption).then(data =>{
+                    await shopService.getStoreList(tableOption).then(data =>{
                             if(data.code == "0"){
                                 this.shopTable = data.data.data
 
@@ -184,24 +182,36 @@
              */
             createShop(){
                 this.$router.push({
-                    path: "/shop/createShop",
+                    path: "/shop/shopEdit",
                     query: {
                         type: 0
                     }
                 })
             },
             /**
-             * 进入门店
+             * 编辑门店
              */
             editShop(index, row){
                 this.$router.push({
-                    path: "/shop/shopItem",
+                    path: "/shop/shopEdit",
                     query: {
                         type: 1, //编辑为1
                         id: row.id
                     }
                 })
             },
+            /**
+             * 进入门店
+             */
+            enterShop(index, row){
+                this.$router.push({
+                    path: "/shop/shopItem",
+                    query: {
+                        id: row.id
+                    }
+                })
+            },
+
         },
         async mounted(){
             await this.getTableList()

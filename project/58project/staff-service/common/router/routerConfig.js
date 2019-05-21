@@ -221,6 +221,7 @@ const saleModule = [
  */
 import shopList from '@/pages/shop/shopList.vue'
 import shopItem from '@/pages/shop/shopItem.vue'
+import shopEdit from '@/pages/shop/shopEdit.vue'
 
 const shop = [
     {
@@ -232,6 +233,11 @@ const shop = [
         path: '/shop/shopItem',
         name: 'shopItem',
         component: shopItem,
+    },
+    {
+        path: '/shop/shopEdit',
+        name: 'shopEdit',
+        component: shopEdit,
     },
 ]
 /**
@@ -256,6 +262,6 @@ export default [
     ...staffModule, //服务人员管理模块
     ...serviceTypeModule,//服务类型管理模块
     ...saleModule,//销售人员模块
-    ...shop,//公司员工管理
+    ...shop,//门店管理
     ...student,//学员管理
 ]
