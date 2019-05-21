@@ -1,16 +1,60 @@
 <template>
     <div class="">
-        <search-list :queryName="'认证状态'" :queryList="configForm.authentication"></search-list>
-        <search-list :queryName="'参加培训'" :queryList="configForm.course"></search-list>
-        <search-list :queryName="'民族'" :queryList="configForm.nation"></search-list>
-        <search-list :queryName="'技能证书标签'" :queryList="configForm.paper_category"></search-list>
-        <search-list :queryName="'职业类型'" :queryList="configForm.service_category"></search-list>
-        <search-list :queryName="'可服务人群'" :queryList="configForm.service_crowd"></search-list>
-        <search-list :queryName="'区域'" :queryList="configForm.service_region"></search-list>
-        <search-list :queryName="'服务类型'" :queryList="configForm.service_type"></search-list>        <search-list @changeQuery="changeAuthentication" :queryName="'职业类型'" :queryList="configForm.service_category"></search-list>
-        <search-list :queryName="'信息来源'" :queryList="configForm.source"></search-list>
-        <search-list :queryName="'工龄'" :queryList="configForm.working_age"></search-list>
-        <search-list :queryName="'接单状态'" :queryList="configForm.working_status"></search-list>
+        <search-list
+            @updateTable="updateTable" 
+            :queryKey="'authentication_ids'" 
+            :queryName="'认证状态'" 
+            :queryList="configForm.authentication"></search-list>
+        <search-list
+            @updateTable="updateTable" 
+            :queryKey="'course_ids'" 
+            :queryName="'参加培训'" 
+            :queryList="configForm.course"></search-list>
+        <search-list
+            @updateTable="updateTable" 
+            :queryKey="'nation_ids'" 
+            :queryName="'民族'" 
+            :queryList="configForm.nation"></search-list>
+        <search-list
+            @updateTable="updateTable" 
+            :queryKey="'paper_category_ids'" 
+            :queryName="'技能证书标签'" 
+            :queryList="configForm.paper_category"></search-list>
+        <search-list
+            @updateTable="updateTable" 
+            :queryKey="'service_category_ids'" 
+            :queryName="'职业类型'" 
+            :queryList="configForm.service_category"></search-list>
+        <search-list
+            @updateTable="updateTable" 
+            :queryKey="'service_crowd_ids'" 
+            :queryName="'可服务人群'" 
+            :queryList="configForm.service_crowd"></search-list>
+        <search-list
+            @updateTable="updateTable" 
+            :queryKey="'service_region_ids'" 
+            :queryName="'区域'" 
+            :queryList="configForm.service_region"></search-list>
+        <search-list
+            @updateTable="updateTable" 
+            :queryKey="'service_type_ids'" 
+            :queryName="'服务类型'" 
+            :queryList="configForm.service_type"></search-list>        
+        <search-list
+            @updateTable="updateTable" 
+            :queryKey="'source_ids'" 
+            :queryName="'信息来源'" 
+            :queryList="configForm.source"></search-list>
+        <search-list
+            @updateTable="updateTable" 
+            :queryKey="'working_age_ids'" 
+            :queryName="'工龄'" 
+            :queryList="configForm.working_age"></search-list>
+        <search-list
+            @updateTable="updateTable" 
+            :queryKey="'working_status_ids'" 
+            :queryName="'接单状态'" 
+            :queryList="configForm.working_status"></search-list>
     </div>
 </template>
 <script>
@@ -22,7 +66,7 @@ export default {
         }
     },
     components: {
-        searchList
+        searchList,
     },
     computed:{
         configForm(){
@@ -33,13 +77,11 @@ export default {
         
     },
     methods: {
-        changeAuthentication(){
-            
+        // 更新表格数据
+        updateTable(){
+            this.$emit('updateTable')
         }
     },
-    mounted(){
-
-    }
 }
 </script>
 <style lang="scss" scoped>

@@ -32,6 +32,13 @@ export default {
         queryName:{
             type: String,
             default: ''
+        },
+        /**
+         * vuex 中存储的查询参数键名
+         */
+        queryKey: {
+            type:String,
+            default:''
         }
     },
     watch: {
@@ -47,6 +54,7 @@ export default {
         }
     },
     mounted(){
+        //渲染初始数据
         this.showQueryList = this.queryList.map((item, index) =>{
             return {
                 ...item,
@@ -65,13 +73,26 @@ export default {
          * 改变查询条件
          */
         addQuery(item){
+            
             item.isSelected = !item.isSelected;
+            
+            // 清空id数组
+            this.queryedList = [];
+            
             this.showQueryList.forEach((item, index) =>{
                 if(item.isSelected){
-                    this.queryedList.push(item)
+                    this.queryedList.push(item.id)
                 }
             })
-            this.$emit('changeQuery', this.queryedList)
+
+            //将查询组件数据变化存入vuex
+            this.$store.commit('setQueryList', {
+                queryKey: this.queryKey, 
+                queryedList: this.queryedList
+            })
+
+            //更新表格数据
+            this.$emit('updateTable')
         }
     }
 }

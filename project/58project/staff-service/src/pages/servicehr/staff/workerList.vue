@@ -2,7 +2,7 @@
     <div class="staff" v-loading="isLoaded">
         <div class="list-table">
             <div class="search-list">
-                <query-component></query-component>
+                <query-component @updateTable="updateTable"></query-component>
             </div>
             <div class="table-list">
                 <div class="search-form">
@@ -16,22 +16,22 @@
                 </div>  
                 <el-table :data="staffTable" class="staff-table" :stripe="true" border :fit="true"
                     height="calc(100vh-90px)"
-                    :cell-style="{height: '30px',padding: '2px 0',}"
+                    :cell-style="{height: '30px',fontSize: '12px',padding: '2px 0',color: '#333'}"
                     :header-cell-style="{height: '30px',fontSize: '12px',padding: '0px!important',}">
 
-                    <el-table-column  label="员工号" prop="staff_code" align="center" width="150"></el-table-column>
+                    <!-- <el-table-column  label="员工号" prop="staff_code" align="center" width="150"></el-table-column> -->
 
-                    <el-table-column  label="性别" prop="sex" align="center" width="70">
+                    <!-- <el-table-column  label="性别" prop="sex" align="center" width="70">
                         <template slot-scope="scope">
                             <el-tag class="tag-style" size="medium">{{ scope.row.sex == 1?'男':'女' }}</el-tag>
                         </template>
-                    </el-table-column>
+                    </el-table-column> -->
 
-                    <el-table-column  label="签约状态" prop="type" align="center" width="100">
+                    <!-- <el-table-column  label="签约状态" prop="type" align="center" width="100">
                         <template slot-scope="scope">
                             <el-tag class="tag-style" size="medium">{{ scope.row.sex == 'sign'?'已签约':'未签约' }}</el-tag>
                         </template>
-                    </el-table-column>
+                    </el-table-column> -->
 
                     <el-table-column  label="创建时间" prop="created_at" align="center" :formatter="created_atFormatter" width="155"></el-table-column>
 
@@ -123,17 +123,28 @@
                     <el-table-column  label="学历" prop="education" align="center" :formatter="educationFomatter" width="120"></el-table-column>
                     <el-table-column  label="紧急联系人电话" prop="urgent_phone" align="center" width="150"></el-table-column>
                     <el-table-column  label="银行卡号" prop="bank_card" align="center"></el-table-column>
-                    <el-table-column  label="头像" prop="icon" align="center">
+                    
+                    <el-table-column  label="照片" prop="" align="center">
+                        <!-- <template slot-scope="scope">
+                            <img :src="scope.row.icon?'./resource/'+scope.row.icon:''" alt="" style="height: 24px;width: 24px;">
+                        </template> -->
+                    </el-table-column>
+
+                    <!-- <el-table-column  label="头像" prop="icon" align="center">
                         <template slot-scope="scope">
                             <img :src="scope.row.icon?'./resource/'+scope.row.icon:''" alt="" style="height: 24px;width: 24px;">
                         </template>
-                    </el-table-column>
-                    <el-table-column  label="课程" prop="course" align="center"></el-table-column>
+                    </el-table-column> -->
+
+                    <el-table-column  label="参加培训" prop="course" align="center"></el-table-column>
                     <el-table-column  label="技能证书" prop="paper" align="center"></el-table-column>
                     <el-table-column  label="信息来源" prop="source" align="center">
                         <template slot-scope="scope">
                             <table-tag-component v-if="workerConfigList.source" :propList="workerConfigList.source" :tableOriginData="scope.row.source"></table-tag-component>
                         </template>
+                    </el-table-column>
+                    <el-table-column  label="来源名称" prop="" align="center">
+                        
                     </el-table-column>
                     <el-table-column  label="创建人" prop="manager_name" align="center" width="150"></el-table-column>
 
@@ -191,82 +202,37 @@
                     currentPage: 1,
                     pageNumber: 20,
                 },
-                // workerConfigList:{
-
-                // },
                 maxHeight:0
             }
         },
         computed:{
             /**
-             * 全部已添加搜索字段
+             * 
              */
-            searchArray(){
-                let arr = [],
-                _this = this;
-
-                Object.keys(this.staffSearch).forEach((item, index) =>{
-                    //如果搜索字段是数组的话
-                    if(Array.isArray(_this.staffSearch[item])){
-                        if(_this.staffSearch[item].length){
-                            let obj = {}
-                            obj[item] = [..._this.staffSearch[item]]
-                            obj = {
-                                ...obj,
-                                key: item
-                            }
-                            arr.push(obj)
-                        }
-                    }
-                    //如果搜索字段是字符串的话
-                    else if(_this.staffSearch[item] != ''){
-                        let obj = {}
-                        obj[item] = _this.staffSearch[item]
-                        obj = {
-                            ...obj,
-                            key: item
-                        }
-                        arr.push(obj)
-                    }
-                })
-                return arr
-            },
             workerConfigList(){
+                
                 return this.$store.state.hrModule.configForm
             }
         },
         methods: {
              /**
              * 请求表格数据
-             * @param tableOption 表格配置项
-             * @param tableOption.currentPage 当前页
-             * @param tableOption.searchSelect Array 页面筛选项
-             * [{searchkey: '', searchValue: ''}]
+             * des 表格查询参数存储在vuex中，刷新，参数重置
              */
-            async getTableList(){
-
-                let tableOption = {
-                    currentPage: this.pagination.currentPage,
-                    pageNumber: this.pagination.pageNumber,
-                    get_for: 'staff',
-                    searchSelect: this.searchArray
-                }
-
-                
+            async getTableList(){                
                 try{
                     
                     this.isLoaded = true
 
                     await Promise.all([
                         hrService.getFormConfig(), //获取表单配置字段
-                        hrService.getStaffList(tableOption) //获取列表数据
+                        hrService.getStaffList() //获取列表数据
                     ]).then((data) =>{
-                        // this.workerConfigList = data[0].data
+                        // 将表单配置数据存入 vuex 
                         this.$store.commit('setConfigForm',data[0].data)
 
-
-
                         this.staffTable = data[1].data.data
+                        
                         //分页信息
                         this.pagination.currentPage = data[1].data.current_page //当前页码
                         this.pagination.total = data[1].data.total //列表总条数
@@ -286,6 +252,10 @@
                     })
                 }
             },
+            // 由查询组件触发的更新表格事件
+            async updateTable(){
+                await this.getTableList()
+            },
             /**
              * 切换页码
              */
@@ -297,6 +267,16 @@
              * 查找用户
              */
             async searchStaff(){
+                //设置name查询参数
+                this.$store.commit('setQueryList', {
+                    queryKey: 'name', 
+                    queryedList: this.staffSearch.name
+                })
+                //设置手机号查询参数
+                this.$store.commit('setQueryList', {
+                    queryKey: 'phone', 
+                    queryedList: this.staffSearch.phone
+                })
                 await this.getTableList()
             },
             /**
@@ -380,7 +360,6 @@
                 }
             },
             rowStyleFunction(row, rowIndex){    
-                console.log(row,rowIndex)
                 if(rowIndex == 0){
                     return {height:'30px'}
                 }
@@ -389,34 +368,18 @@
              * 创建时间字段转换
              */
             created_atFormatter(row, column){
-                return $utils.formatDate(new Date(row.created_at), 'yyyy-MM-dd hh:mm:ss')
+                return $utils.formatDate(new Date(row.created_at), 'yyyy-MM-dd')
             },
             //登记时间
             register_atFormatter(row, column){
                 return $utils.formatDate(new Date(row.register_at), 'yyyy-MM-dd')
             },
             educationFomatter(row, column){
-                // debugger
                 let a =  this.$store.state.hrModule.educationList.filter(item => item.id == row.education)
                 return a.length? a[0].name : ''
             }
         },
         async mounted(){
-            // debugger
-            // function getClientHeight()
-            // {
-            // var clientHeight=0;
-            // if(document.body.clientHeight&&document.documentElement.clientHeight)
-            // {
-            // var clientHeight = (document.body.clientHeight<document.documentElement.clientHeight)?document.body.clientHeight:document.documentElement.clientHeight;
-            // }
-            // else
-            // {
-            // var clientHeight = (document.body.clientHeight>document.documentElement.clientHeight)?document.body.clientHeight:document.documentElement.clientHeight;
-            // }
-            // return clientHeight - 85;
-            // }
-            // this.maxHeight = getClientHeight()
             await this.getTableList()
         }
     }
@@ -436,7 +399,7 @@
             .search-list{
                 width: 180px;
                 height: 100%;
-                overflow-y: scroll;
+                overflow-y: auto;
                 background: #eaedf1;
             }
             .table-list{

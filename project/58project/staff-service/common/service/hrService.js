@@ -6,8 +6,8 @@ export default {
     /**
      * 获取员工列表
      */
-    getStaffList(tableOption){
-        return hrRequest.getStaffList(tableOption)
+    getStaffList(){
+        return hrRequest.getStaffList()
     },
     /**
      * 获取人员信息

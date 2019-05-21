@@ -2,28 +2,17 @@
  * 人力资源接口
  */
 import axios from 'axios'
+
 export default {
     /**
      * 获取员工列表
      */
-    getStaffList(tableOption){
-        let baseUrl = `./admin/staff/getStaffList`,
-            searchObj = {}, //搜索字段对象
-            obj = {
-                pageNumber: tableOption.pageNumber,
-                page: tableOption.currentPage,
-                get_for: tableOption.get_for,
-            }
-
-        if(tableOption.searchSelect.length){
-            tableOption.searchSelect.forEach((item, index) => {
-                searchObj[item.key] = item[item.key]
-            });
-        }
+    getStaffList(){
+        let baseUrl = `./admin/staff/getStaffList`;
 
         return axios.post(
             baseUrl,
-            Object.assign({}, searchObj, obj)
+            store.state.hrModule.queryedList
         )
     },
     /**

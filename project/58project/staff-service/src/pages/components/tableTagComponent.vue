@@ -30,6 +30,7 @@ export default {
     },
     mounted(){
             let setTableOriginData = []
+
             if(typeof this.tableOriginData == 'number'){
                 setTableOriginData =  [this.tableOriginData]
             } else if(typeof this.tableOriginData == 'string'){
@@ -41,9 +42,9 @@ export default {
             setTableOriginData.forEach((item, index) =>{
                 // debugger
                 let a = this.propList.filter(it => it.id == item)
-                // debugger
-                if(a.length){
-                    this.showList.push(a[0])
+
+                if(typeof this.propList.find(it => it.id == item) != 'undefined'){
+                    this.showList.push(this.propList.find(it => it.id == item))
                 }
             })
     }
