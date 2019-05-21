@@ -1,5 +1,5 @@
 <template>
-    <div v-if="showList.length">
+    <div v-if="showList.length" class="tag-box">
         <div class="tag-item-style" v-for="(item, index) in showList" :key="index">
             {{item.name}}
         </div>
@@ -51,6 +51,9 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
+.tag-box{
+    width:200px;
+    display: flex;
     .tag-item-style{
         background-color: rgba(64,158,255,.1);
         padding: 0 10px;
@@ -63,7 +66,10 @@ export default {
         box-sizing: border-box;
         border: 1px solid rgba(64,158,255,.2);
         white-space: nowrap;
+        margin-right:5px;
     }
+}
+
 </style>
 
 
