@@ -35,7 +35,7 @@
                         </template>
                     </el-table-column> -->
 
-                    <el-table-column  label="创建时间" prop="created_at" align="center" :formatter="created_atFormatter" width="155"></el-table-column>
+                    <el-table-column  label="创建时间" prop="created_at" align="center" :formatter="created_atFormatter" width="110"></el-table-column>
 
                     <el-table-column  label="登记时间" prop="register_at" :formatter="register_atFormatter" align="center" width="110"></el-table-column>
                     
@@ -134,6 +134,7 @@
                     </el-table-column>
                     <el-table-column  label="籍贯" prop="birthPlace" align="center"></el-table-column>
                     <el-table-column  label="身份证号" prop="identify" align="center" width="145"></el-table-column>
+                    
                     <el-table-column  label="地址" prop="address" align="center" width="150">
                         <template slot-scope="scope">
                             <el-popover trigger="click" placement="top">
