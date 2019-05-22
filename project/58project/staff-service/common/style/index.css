@@ -146,7 +146,15 @@ input[type=search]::-webkit-search-cancel-button {
     background-color: rgba(136,136,136,0.4);
 } */
 
+
+body .el-table th.gutter{
+    display: table-cell!important;
+}
+ 
 body .el-table colgroup.gutter{
     display: table-cell!important;
 }
 
+th{
+    padding: 0!important;
+}

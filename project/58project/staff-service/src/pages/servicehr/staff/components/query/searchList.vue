@@ -1,9 +1,17 @@
 <template>
     <div class="search-box" >
-        <div class="search-label" @click="toggle">{{queryName}}</div>
+        <div class="search-label" @click="toggle">
+            {{queryName}}
+            <i class="arrow-position" :class="isShow?'el-icon-arrow-up':'el-icon-arrow-down'"></i>
+        </div>
         <div class="search-list" v-if="isShow">
-            <div class="list-item" :class="item.isSelected? 'list-item-active' : ''" v-for="(item, index) in showQueryList" :key="index" @click="addQuery(item)">
-                <span class="list-item-block" :class="'list-item-color'+(index+1)%5"></span>
+            <div 
+                class="list-item" 
+                :class="item.isSelected? 'list-item-active' : ''" 
+                v-for="(item, index) in showQueryList" 
+                :key="index" 
+                @click="addQuery(item)">
+                <span class="list-item-block" :class="'list-item-color'+ ((index+1)%5+1)"></span>
                 {{item.name}}
             </div>
         </div>
@@ -110,6 +118,14 @@ export default {
             background: #D9DEE4;
             cursor: pointer;
             position:relative;
+            .arrow-position{
+                position: absolute;
+                right:10px;
+                // height: 12px;
+                // width:12px;
+                font-size:12px;
+                top: 9px;
+            }
             &:after{
                 position:absolute;
                 bottom: 0;
@@ -128,13 +144,13 @@ export default {
                 line-height: 30px;
                 width:100%;
                 text-indent:30px;   
-                background: #eaedf1;
+                background-color: #eaedf1;
                 color: #333;
                 font-size: 12px;
                 cursor: pointer;
                 position: relative;
                 &:hover{
-                    background: #fff;
+                    background-color: #fff;
                 }
                 .list-item-block{
                     position: absolute;
@@ -147,21 +163,16 @@ export default {
             }
             .list-item-active{
                 &:after{
-                    content: "\E643";
-                    text-align: center;
-                    font-weight: 400!important;
-                    text-decoration: none!important;
-                    -webkit-font-smoothing: antialiased;
-                    -moz-osx-font-smoothing: grayscale;
-                    -webkit-text-stroke-width: .22px;
-                    position: relative;
-                    font-family: hbicon;
-                    padding-left: 1px;
-                    font-size: 13px;
-                    color: #008ed2;
-                    font-weight: 700;
+                    content: '';
+                    display: block;
+                    height: 10px;
+                    width: 10px;
+                    background-image: url(./images/selected.svg);
+                    background-size: 10px 10px;
                     position: absolute;
                     right: 10px;
+                    top: 10px;
+                    z-index: 22;
                 }
             }
         }
@@ -191,6 +202,7 @@ export default {
         // border-color: rgba(245,108,108,.2);
         background: #f56c6c;       
     }
+
 </style>
 
 
