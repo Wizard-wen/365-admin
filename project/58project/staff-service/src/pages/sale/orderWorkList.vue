@@ -185,7 +185,7 @@
                     </el-table-column>
                     <el-table-column  label="创建人" prop="manager_name" align="center" width="150"></el-table-column>
 
-                    <el-table-column label="操作" align="center" fixed="right" width="120">
+                    <el-table-column label="操作" align="center" fixed="right" width="150">
                         <template slot-scope="scope">
                             <el-button size="mini" type="text" @click="showStaff(scope.$index, scope.row)">查看</el-button>
                             <el-button size="mini" style="color:#f56c6c" type="text" @click="sendErrorMessage(scope.$index, scope.row)">提交异常信息</el-button>
