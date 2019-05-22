@@ -5,19 +5,21 @@
                 <query-component @updateTable="updateTable"></query-component>
             </div>
             <div class="table-list">
-                <!-- <div class="search-form">
+                <div class="search-form">
                     <div class="search-left">
                         <el-input v-model="staffSearch.name" placeholder="请输入员工姓名" :maxlength="20"></el-input>
                         <el-input v-model="staffSearch.phone" placeholder="请输入电话" :maxlength="20"></el-input>
                         <el-button type="primary" @click="searchStaff">查询</el-button>
                         <el-button type="primary" @click="resetStaff">重置</el-button>
                     </div>
+                    <el-button type="primary" @click="createStaff">导出回访</el-button>
                     <el-button type="primary" @click="createStaff">添加服务人员</el-button>
-                </div>   -->
+                </div>  
                 <el-table :data="staffTable" class="staff-table" :stripe="true" border :fit="true"
                     height="calc(100vh-90px)"
-                    :cell-style="{height: '30px',fontSize: '12px',padding: '2px 0',color: '#333'}"
-                    :header-cell-style="{height: '30px',fontSize: '12px',padding: '0px!important',}">
+                    row-key="1233444"
+                    :header-cell-style="{height: '30px',padding: '0px',fontSize:'12px'}"
+                    :cell-style="{height: '30px',padding: 0,fontSize:'12px',}">
 
                     <!-- <el-table-column  label="员工号" prop="staff_code" align="center" width="150"></el-table-column> -->
 
@@ -37,9 +39,12 @@
 
                     <el-table-column  label="登记时间" prop="register_at" :formatter="register_atFormatter" align="center" width="110"></el-table-column>
                     
-                    <el-table-column  label="认证状态" prop="authentication" align="center" :width="maxLength.authentication *12">
+                    <el-table-column  label="认证状态" prop="authentication" align="center" :width="maxLength.authentication">
                         <template slot-scope="scope">
-                            <table-tag-component v-if="workerConfigList.authentication" :propList="workerConfigList.authentication" :tableOriginData="scope.row.authentication"></table-tag-component>
+                            <table-tag-component 
+                            v-if="workerConfigList.authentication" 
+                            :propList="workerConfigList.authentication" 
+                            :tableOriginData="scope.row.authentication"></table-tag-component>
                         </template>
                     </el-table-column>
                     
@@ -60,9 +65,12 @@
                         </template>
                     </el-table-column>
                     
-                    <el-table-column  label="接单状态" prop="working_status" align="center" :width="maxLength.working_status *12">
+                    <el-table-column  label="接单状态" prop="working_status" align="center" :width="maxLength.working_status">
                         <template slot-scope="scope">
-                            <table-tag-component v-if="workerConfigList.working_status" :propList="workerConfigList.working_status" :tableOriginData="scope.row.working_status"></table-tag-component>
+                            <table-tag-component 
+                            v-if="workerConfigList.working_status" 
+                            :propList="workerConfigList.working_status" 
+                            :tableOriginData="scope.row.working_status"></table-tag-component>
                         </template>
                     </el-table-column>
                     
@@ -76,24 +84,37 @@
                             </el-popover>
                         </template>
                     </el-table-column>
-                    <el-table-column  label="职业类型" prop="skill_ids" :width="maxLength.skill_ids *12">
+                    <el-table-column  label="职业类型" prop="skill_ids" :width="maxLength.skill_ids" >
                         <template slot-scope="scope">
-                            <table-tag-component v-if="workerConfigList.service_category" :propList="workerConfigList.service_category" :tableOriginData="scope.row.skill_ids"></table-tag-component>
+                            <table-tag-component 
+                            v-if="workerConfigList.service_category" 
+                            :propList="workerConfigList.service_category" 
+                            :tableOriginData="scope.row.skill_ids"></table-tag-component>
                         </template>
                     </el-table-column>
-                    <el-table-column  label="服务类型" prop="service_type_ids" align="center" :width="maxLength.service_type_ids *12">
+                    <el-table-column  label="服务类型" prop="service_type_ids" align="center" :width="maxLength.service_type_ids">
                         <template slot-scope="scope">
-                            <table-tag-component v-if="workerConfigList.service_type" :propList="workerConfigList.service_type" :tableOriginData="scope.row.service_type_ids"></table-tag-component>
+                            <table-tag-component 
+                            v-if="workerConfigList.service_type" 
+                            :propList="workerConfigList.service_type" 
+                            :tableOriginData="scope.row.service_type_ids"></table-tag-component>
                         </template>
                     </el-table-column>
-                    <el-table-column  label="可服务人群" prop="service_crowd_ids" align="center" :width="maxLength.service_crowd_ids *12">
+                    <el-table-column  label="可服务人群" prop="service_crowd_ids" :width="maxLength.service_crowd_ids">
                         <template slot-scope="scope">
-                            <table-tag-component v-if="workerConfigList.service_crowd" :propList="workerConfigList.service_crowd" :tableOriginData="scope.row.service_crowd_ids"></table-tag-component>
+                            <table-tag-component 
+                            :width="maxLength.service_crowd_ids" 
+                            v-if="workerConfigList.service_crowd" 
+                            :propList="workerConfigList.service_crowd" 
+                            :tableOriginData="scope.row.service_crowd_ids"></table-tag-component>
                         </template>
                     </el-table-column>
-                    <el-table-column  label="工龄" prop="working_age" align="center" :width="maxLength.working_age *12">
+                    <el-table-column  label="工龄" prop="working_age" align="center" :width="maxLength.working_age">
                         <template slot-scope="scope">
-                            <table-tag-component v-if="workerConfigList.working_age" :propList="workerConfigList.working_age" :tableOriginData="scope.row.working_age"></table-tag-component>
+                            <table-tag-component 
+                            v-if="workerConfigList.working_age" 
+                            :propList="workerConfigList.working_age" 
+                            :tableOriginData="scope.row.working_age"></table-tag-component>
                         </template>
                     </el-table-column>
                     <el-table-column  label="工作经验" prop="working_experience" align="center" width="150">
@@ -106,7 +127,7 @@
                             </el-popover>
                         </template>
                     </el-table-column>
-                    <el-table-column label="民族" prop="nation" align="center" :width="maxLength.nation *12">
+                    <el-table-column label="民族" prop="nation" align="center" :width="maxLength.nation">
                         <template slot-scope="scope">
                             <table-tag-component v-if="workerConfigList.nation" :propList="workerConfigList.nation" :tableOriginData="scope.row.nation"></table-tag-component>
                         </template>
@@ -122,7 +143,7 @@
                         </template>
                     </el-table-column>
                     
-                    <el-table-column  label="服务地区" prop="region_ids" align="center" :width="maxLength.region_ids *12">
+                    <el-table-column  label="服务地区" prop="region_ids" align="center" :width="maxLength.region_ids">
                         <template slot-scope="scope">
                             <table-tag-component v-if="workerConfigList.service_region" :propList="workerConfigList.service_region" :tableOriginData="scope.row.region_ids"></table-tag-component>
                         </template>
@@ -132,11 +153,11 @@
                     <el-table-column  label="紧急联系人电话" prop="urgent_phone" align="center" width="150"></el-table-column>
                     <el-table-column  label="银行卡号" prop="bank_card" align="center"></el-table-column>
                     
-                    <el-table-column  label="照片" prop="" align="center">
-                        <!-- <template slot-scope="scope">
+                    <!-- <el-table-column  label="照片" prop="" align="center">
+                        <template slot-scope="scope">
                             <img :src="scope.row.icon?'./resource/'+scope.row.icon:''" alt="" style="height: 24px;width: 24px;">
-                        </template> -->
-                    </el-table-column>
+                        </template>
+                    </el-table-column> -->
 
                     <!-- <el-table-column  label="头像" prop="icon" align="center">
                         <template slot-scope="scope">
@@ -144,17 +165,17 @@
                         </template>
                     </el-table-column> -->
 
-                    <el-table-column  label="参加培训" prop="course_ids" :width="maxLength.course_ids * 12" align="center">
+                    <el-table-column  label="参加培训" prop="course_ids" :width="maxLength.course_ids" align="center">
                         <template slot-scope="scope">
                             <table-tag-component v-if="workerConfigList.course" :propList="workerConfigList.course" :tableOriginData="scope.row.course_ids"></table-tag-component>
                         </template>
                     </el-table-column>
-                    <el-table-column  label="技能证书" prop="paper_ids" align="center" :width="maxLength.paper_ids *12">
+                    <el-table-column  label="技能证书" prop="paper_ids" align="center" :width="maxLength.paper_ids">
                         <template slot-scope="scope">
                             <table-tag-component v-if="workerConfigList.paper_category" :propList="workerConfigList.paper_category" :tableOriginData="scope.row.paper_ids"></table-tag-component>
                         </template>
                     </el-table-column>
-                    <el-table-column  label="信息来源" prop="source" align="center" :width="maxLength.source *12">
+                    <el-table-column  label="信息来源" prop="source" align="center" :width="maxLength.source">
                         <template slot-scope="scope">
                             <table-tag-component v-if="workerConfigList.source" :propList="workerConfigList.source" :tableOriginData="scope.row.source"></table-tag-component>
                         </template>
@@ -164,7 +185,7 @@
                     </el-table-column>
                     <el-table-column  label="创建人" prop="manager_name" align="center" width="150"></el-table-column>
 
-                    <el-table-column label="操作" align="center" fixed="right" width="150">
+                    <el-table-column label="操作" align="center" fixed="right" width="110">
                         <template slot-scope="scope">
                             <el-button size="mini" type="text" @click="editStaff(scope.$index, scope.row)">编辑</el-button>
                             <el-button size="mini" type="text" style="color:#f56c6c" v-if="scope.row.status == 0" @click="changeStaffStatus(scope.row)">停用</el-button>
@@ -173,15 +194,18 @@
                     </el-table-column>
                 </el-table>
                 <!-- 分页 -->
-                <el-pagination
-                    class="pagination"
-                    @current-change="handleCurrentPage"
-                    @prev-click="handleCurrentPage"
-                    @next-click="handleCurrentPage"
-                    :current-page.sync="pagination.currentPage"
-                    :page-size="pagination.pageNumber"
-                    layout="prev, pager, next, jumper"
-                    :total="pagination.total"></el-pagination>
+                <div class="pagination-box">
+                    <el-pagination
+                        class="pagination"
+                        @current-change="handleCurrentPage"
+                        @prev-click="handleCurrentPage"
+                        @next-click="handleCurrentPage"
+                        :current-page.sync="pagination.currentPage"
+                        :page-size="pagination.pageNumber"
+                        layout="prev, pager, next, jumper"
+                        :total="pagination.total"></el-pagination>
+                </div>
+                
             </div>
         </div>
     </div>
@@ -218,7 +242,6 @@
                     currentPage: 1,
                     pageNumber: 20,
                 },
-                maxHeight:0,
                 //计算列表每一列的最大宽度
                 maxLength: {
                     authentication: 0, //认证状态
@@ -244,28 +267,48 @@
                 return this.$store.state.hrModule.configForm
             }
         },
+        watch: {    
+            maxLength: {
+                handler: function (val, oldVal) {
+                    console.log(val, oldVal)
+                },
+                deep: true
+            },
+        },
         methods: {
             computeStringLength(array, listKey, configKey){
                 let string = 0
                 if(Array.isArray(array)){
-                    // debugger
                     array.forEach((it, inds) =>{
                         if(this.workerConfigList[configKey].find(i => i.id == it)){
-                            string += this.workerConfigList[configKey].filter(i => i.id == it)[0].name.length + 2.5
+                            let baseLength = parseInt(this.workerConfigList[configKey].filter(i => i.id == it)[0].name.length *12 )
+                            string += (baseLength + 27)
                         }
                     })
                 } else {
                     if(this.workerConfigList[configKey].find(i => i.id == array)){
-                        string = this.workerConfigList[configKey].filter(i => i.id == array)[0].name.length + 2.5
+                        string = parseInt(this.workerConfigList[configKey].filter(i => i.id == array)[0].name.length * 12) + 27
                     } else {
                         string = 0
                     }
                     
                 }
                 
+                // debugger
                 if(string > this.maxLength[listKey]){
-                    this.maxLength[listKey] = string+0.5
+                    if(listKey == 'service_crowd_ids'){
+                        console.log(string)
+                        // debugger
+                    }
+                    this.maxLength[listKey] = (string + 20) > 80 ? (string + 20) : 80
                 }
+                
+            },
+            setCellStyle({row, column, rowIndex, columnIndex}){
+                if(columnIndex == 11){
+                    // console.log(column,column.width)
+                }
+                return  "height: 30px;padding: 0;fontSize:12px;"
             },
              /**
              * 请求表格数据
@@ -284,8 +327,9 @@
                         this.$store.commit('setConfigForm',data[0].data)
 
                         let tableList = data[1].data.data
-
+                        //  debugger
                         tableList.forEach((item, index) =>{
+                           
                             this.computeStringLength(item.authentication, 'authentication', 'authentication')
                             this.computeStringLength(item.working_status, 'working_status', 'working_status')
                             this.computeStringLength(item.skill_ids, 'skill_ids', 'service_category')
@@ -298,23 +342,6 @@
                             this.computeStringLength(item.paper_ids, 'paper_ids', 'paper_category')
                             this.computeStringLength(item.source, 'source', 'source')
                         })  
-                        console.log(this.maxLength)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
                         this.staffTable = data[1].data.data
                         
@@ -345,7 +372,12 @@
              * 切换页码
              */
             async handleCurrentPage(val){
-                this.pagination.currentPage = val
+                // this.pagination.currentPage = val
+                //设置page查询参数
+                this.$store.commit('setQueryList', {
+                    queryKey: 'page', 
+                    queryedList: val
+                })
                 await this.getTableList()
             },
             /**
@@ -368,7 +400,18 @@
              * 重置
              */
             async resetStaff(){
-                this.staffSearch.name= '' //姓名
+                this.staffSearch.name = ''
+                this.staffSearch.phone = ''
+                //重置name查询参数
+                this.$store.commit('setQueryList', {
+                    queryKey: 'name', 
+                    queryedList: null
+                })
+                //重置手机号查询参数
+                this.$store.commit('setQueryList', {
+                    queryKey: 'phone', 
+                    queryedList: null
+                })
                 await this.getTableList()
             },
             /**
@@ -475,14 +518,11 @@
         line-height: 24px;
     }
     .staff{
-
-
         .list-table{
             height: calc(100vh - 50px);
             width:100%;
             display: flex;
             .search-list{
-                // float: left;
                 width: 180px;
                 height: 100%;
                 overflow-y: auto;
@@ -503,16 +543,17 @@
                         display: flex;
                     }
                 }
-                // background: #185;
                 .staff-table{
-                    // overflow: auto;
                     height: calc(100% - 72px);
                     width: 100%;
-                    // min-width: 1100px;
                     margin: 0 auto;
                 }
-                .pagination{
+                .pagination-box{
                     height:32px;
+                    .pagination{
+                        margin: 0 auto;
+                        width: 600px;
+                    }
                 }
             }
         }
