@@ -193,20 +193,9 @@
              */
             editShop(index, row){
                 this.$router.push({
-                    path: "/shop/shopEdit",
-                    query: {
-                        type: 1, //编辑为1
-                        id: row.id
-                    }
-                })
-            },
-            /**
-             * 进入门店
-             */
-            enterShop(index, row){
-                this.$router.push({
                     path: "/shop/shopItem",
                     query: {
+                        type: 1, //编辑为1
                         id: row.id
                     }
                 })
