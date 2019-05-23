@@ -5,7 +5,7 @@
                 <query-component @updateTable="updateTable"></query-component>
             </div>
             <div class="table-list">
-                <!-- <div class="search-form">
+                <div class="search-form">
                     <div class="search-left">
                         <el-input v-model="staffSearch.name" placeholder="请输入员工姓名" :maxlength="20"></el-input>
                         <el-input v-model="staffSearch.phone" placeholder="请输入电话" :maxlength="20"></el-input>
@@ -13,11 +13,12 @@
                         <el-button type="primary" @click="resetStaff">重置</el-button>
                     </div>
                     <el-button type="primary" @click="createStaff">添加服务人员</el-button>
-                </div>   -->
+                </div>  
                 <el-table :data="staffTable" class="staff-table" :stripe="true" border :fit="true"
                     height="calc(100vh-90px)"
                     row-key="1233444"
-                    :cell-style="setCellStyle">
+                    :header-cell-style="{height: '30px',padding: '0px',fontSize:'12px'}"
+                    :cell-style="{height: '30px',padding: 0,fontSize:'12px',}">
 
                     <!-- <el-table-column  label="员工号" prop="staff_code" align="center" width="150"></el-table-column> -->
 
@@ -33,7 +34,7 @@
                         </template>
                     </el-table-column> -->
 
-                    <el-table-column  label="创建时间" prop="created_at" align="center" :formatter="created_atFormatter" width="155"></el-table-column>
+                    <el-table-column  label="创建时间" prop="created_at" align="center" :formatter="created_atFormatter" width="110"></el-table-column>
 
                     <el-table-column  label="登记时间" prop="register_at" :formatter="register_atFormatter" align="center" width="110"></el-table-column>
                     
@@ -132,6 +133,7 @@
                     </el-table-column>
                     <el-table-column  label="籍贯" prop="birthPlace" align="center"></el-table-column>
                     <el-table-column  label="身份证号" prop="identify" align="center" width="145"></el-table-column>
+                    
                     <el-table-column  label="地址" prop="address" align="center" width="150">
                         <template slot-scope="scope">
                             <el-popover trigger="click" placement="top">
@@ -185,39 +187,48 @@
 
                     <el-table-column label="操作" align="center" fixed="right" width="150">
                         <template slot-scope="scope">
-                            <el-button size="mini" type="text" @click="editStaff(scope.$index, scope.row)">编辑</el-button>
-                            <el-button size="mini" type="text" style="color:#f56c6c" v-if="scope.row.status == 0" @click="changeStaffStatus(scope.row)">停用</el-button>
-                            <el-button size="mini" type="text" style="color:#67c23a" @click="changeStaffStatus(scope.row)" v-else>启用</el-button>
+                            <el-button size="mini" type="text" @click="showStaff(scope.$index, scope.row)">查看</el-button>
+                            <el-button size="mini" style="color:#f56c6c" type="text" @click="sendErrorMessage(scope.$index, scope.row)">提交异常信息</el-button>
                         </template>
                     </el-table-column>
                 </el-table>
                 <!-- 分页 -->
-                <el-pagination
-                    class="pagination"
-                    @current-change="handleCurrentPage"
-                    @prev-click="handleCurrentPage"
-                    @next-click="handleCurrentPage"
-                    :current-page.sync="pagination.currentPage"
-                    :page-size="pagination.pageNumber"
-                    layout="prev, pager, next, jumper"
-                    :total="pagination.total"></el-pagination>
+                <div class="pagination-box">
+                    <el-pagination
+                        class="pagination"
+                        @current-change="handleCurrentPage"
+                        @prev-click="handleCurrentPage"
+                        @next-click="handleCurrentPage"
+                        :current-page.sync="pagination.currentPage"
+                        :page-size="pagination.pageNumber"
+                        layout="prev, pager, next, jumper"
+                        :total="pagination.total"></el-pagination>
+                </div>
             </div>
         </div>
+        <!-- 申请添加服务人员 -->
+        <create-staff-dialog
+            v-if="createStaffDialogVisible"
+            :openCreateStaffDialog="createStaffDialogVisible"
+            @closeCreateStaffDialog="createStaffDialogVisible=false"></create-staff-dialog>
     </div>
 </template>
 <script>
-    import {hrService, $utils} from '../../../../common'
+    import {hrService, $utils} from '../../../common'
+
     import {
         cascaderComponent,
         tableTagComponent} from '@/pages/components'
 
-    import {queryComponent} from './components'
+    import {queryComponent} from '@/pages/servicehr/staff/components'
+    import createStaffDialog from './components/createStaff/createStaffDialog.vue'
     
     export default {
         components: {
             cascaderComponent,
             tableTagComponent,
-            queryComponent
+            queryComponent,
+            createStaffDialog
         },
         data() {
             return {
@@ -250,7 +261,9 @@
                     course_ids: 0,//参加培训
                     paper_ids: 0, //技能证书
                     source: 0,//信息来源
-                }
+                },
+                //控制弹出框显示异常
+                createStaffDialogVisible: false,
             }
         },
         computed:{
@@ -258,23 +271,13 @@
              * 
              */
             workerConfigList(){
-                
                 return this.$store.state.hrModule.configForm
             }
-        },
-        watch: {
-            maxLength: {
-                handler: function (val, oldVal) {
-                    console.log(val, oldVal)
-                },
-                deep: true
-            },
         },
         methods: {
             computeStringLength(array, listKey, configKey){
                 let string = 0
                 if(Array.isArray(array)){
-                    // debugger
                     array.forEach((it, inds) =>{
                         if(this.workerConfigList[configKey].find(i => i.id == it)){
                             let baseLength = parseInt(this.workerConfigList[configKey].filter(i => i.id == it)[0].name.length *12 )
@@ -290,21 +293,10 @@
                     
                 }
                 
-                // debugger
                 if(string > this.maxLength[listKey]){
-                    if(listKey == 'service_crowd_ids'){
-                        console.log(string)
-                        // debugger 
-                    }
-                    this.maxLength[listKey] = (string) > 80 ? (string) : 80
+                    this.maxLength[listKey] = (string + 20) > 80 ? (string + 20) : 80
                 }
                 
-            },
-            setCellStyle({row, column, rowIndex, columnIndex}){
-                if(columnIndex == 11){
-                    // console.log(column,column.width)
-                }
-                return  "height: 30px;padding: 0;fontSize:12px;"
             },
              /**
              * 请求表格数据
@@ -312,7 +304,6 @@
              */
             async getTableList(){                
                 try{
-                    
                     this.isLoaded = true
 
                     await Promise.all([
@@ -396,7 +387,18 @@
              * 重置
              */
             async resetStaff(){
-                this.staffSearch.name= '' //姓名
+                this.staffSearch.name = ''
+                this.staffSearch.phone = ''
+                //重置name查询参数
+                this.$store.commit('setQueryList', {
+                    queryKey: 'name', 
+                    queryedList: null
+                })
+                //重置手机号查询参数
+                this.$store.commit('setQueryList', {
+                    queryKey: 'phone', 
+                    queryedList: null
+                })
                 await this.getTableList()
             },
             /**
@@ -404,78 +406,18 @@
              * des 先创建服务人员，然后才能添加服务人员技能。
              */
             createStaff(){
-                this.$router.push({
-                    path: "/worker/workerItem",
-                    query: {
-                        type: 0
-                    }
-                })
+                this.createStaffDialogVisible = true;
             },
             /**
-             * 编辑服务人员信息
-             * 编辑时可以添加服务人员技能
+             * 查看服务人员详情
              */
-            editStaff(index, row){
+            showStaff(index, row){
                 this.$router.push({
-                    path: "/worker/workerItem",
+                    path: "/sale/orderWorkerItem",
                     query: {
-                        type: 1, //编辑为1
                         id: row.id
                     }
                 })
-            },
-            /**
-             * changeStaffStatus
-             */
-            async changeStaffStatus(row){
-                let _this= this;
-
-                let status = row.status == 0? '停用' : '启用'
-
-                let response = await this.$confirm(`确定${status}该服务人员吗?`, '提示', {
-                    confirmButtonText: '确定',
-                    cancelButtonText: '取消',
-                    type: 'warning'
-                }).catch(() => {
-                    this.$message({
-                        type: 'info',
-                        message: `已取消${status}`
-                    });
-                });
-
-                if(response == "confirm"){
-                    store.commit('setLoading',true)
-
-                    try{
-                        await hrService.changeStaffStatus(row.id, row.version)
-                            .then(data =>{
-                                if(data.code == "0"){
-                                    this.$message({
-                                        type:'success',
-                                        message: `${status}成功`
-                                    })
-                                }
-                            }).catch(e =>{
-                                this.$message({
-                                    type:'error',
-                                    message: e.message
-                                })
-                            })
-                    } catch(error){
-                        this.$message({
-                            type:'error',
-                            message: error.message
-                        })
-                    }
-
-                    await _this.getTableList()
-                    store.commit('setLoading',false)
-                }
-            },
-            rowStyleFunction(row, rowIndex){    
-                if(rowIndex == 0){
-                    return {height:'30px'}
-                }
             },
             /**
              * 创建时间字段转换
@@ -503,14 +445,11 @@
         line-height: 24px;
     }
     .staff{
-
-
         .list-table{
             height: calc(100vh - 50px);
             width:100%;
             display: flex;
             .search-list{
-                // float: left;
                 width: 180px;
                 height: 100%;
                 overflow-y: auto;
@@ -531,16 +470,17 @@
                         display: flex;
                     }
                 }
-                // background: #185;
                 .staff-table{
-                    // overflow: auto;
                     height: calc(100% - 72px);
                     width: 100%;
-                    // min-width: 1100px;
                     margin: 0 auto;
                 }
-                .pagination{
+                .pagination-box{
                     height:32px;
+                    .pagination{
+                        margin: 0 auto;
+                        width: 600px;
+                    }
                 }
             }
         }

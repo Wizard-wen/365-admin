@@ -1,228 +1,68 @@
 <template>
     <div class="staff" v-loading="isLoaded">
-        <div class="list-table">
-            <div class="search-list">
-                <query-component @updateTable="updateTable"></query-component>
-            </div>
-            <div class="table-list">
-                <div class="search-form">
-                    <div class="search-left">
-                        <el-input v-model="staffSearch.name" placeholder="请输入员工姓名" :maxlength="20"></el-input>
-                        <el-input v-model="staffSearch.phone" placeholder="请输入电话" :maxlength="20"></el-input>
-                        <el-button type="primary" @click="searchStaff">查询</el-button>
-                        <el-button type="primary" @click="resetStaff">重置</el-button>
-                    </div>
-                    <el-button type="primary" @click="createStaff">导出回访</el-button>
-                    <el-button type="primary" @click="createStaff">添加服务人员</el-button>
-                </div>  
-                <el-table :data="staffTable" class="staff-table" :stripe="true" border :fit="true"
-                    height="calc(100vh-90px)"
-                    row-key="1233444"
-                    :header-cell-style="{height: '30px',padding: '0px',fontSize:'12px'}"
-                    :cell-style="{height: '30px',padding: 0,fontSize:'12px',}">
-
-                    <!-- <el-table-column  label="员工号" prop="staff_code" align="center" width="150"></el-table-column> -->
-
-                    <!-- <el-table-column  label="性别" prop="sex" align="center" width="70">
-                        <template slot-scope="scope">
-                            <el-tag class="tag-style" size="medium">{{ scope.row.sex == 1?'男':'女' }}</el-tag>
-                        </template>
-                    </el-table-column> -->
-
-                    <!-- <el-table-column  label="签约状态" prop="type" align="center" width="100">
-                        <template slot-scope="scope">
-                            <el-tag class="tag-style" size="medium">{{ scope.row.sex == 'sign'?'已签约':'未签约' }}</el-tag>
-                        </template>
-                    </el-table-column> -->
-
-                    <el-table-column  label="创建时间" prop="created_at" align="center" :formatter="created_atFormatter" width="155"></el-table-column>
-
-                    <el-table-column  label="登记时间" prop="register_at" :formatter="register_atFormatter" align="center" width="110"></el-table-column>
-                    
-                    <el-table-column  label="认证状态" prop="authentication" align="center" :width="maxLength.authentication">
-                        <template slot-scope="scope">
-                            <table-tag-component 
-                            v-if="workerConfigList.authentication" 
-                            :propList="workerConfigList.authentication" 
-                            :tableOriginData="scope.row.authentication"></table-tag-component>
-                        </template>
-                    </el-table-column>
-                    
-                    <el-table-column  label="姓名" prop="name" align="center" fixed="left"></el-table-column>
-                    
-                    <el-table-column  label="年龄" prop="age" align="center" width="60"></el-table-column>
-                    
-                    <el-table-column  label="电话" prop="phone" align="center" width="120"></el-table-column>
-                    
-                    <el-table-column  label="回访信息" prop="return_msg" align="center" width="150">
-                        <template slot-scope="scope">
-                            <el-popover trigger="click" placement="top">
-                                <p>{{ scope.row.return_msg }}</p>
-                                <div slot="reference" >
-                                    <p style=" overflow:hidden;text-overflow:ellipsis;white-space:nowrap;width: 129px;">{{ scope.row.return_msg }}</p>
-                                </div>
-                            </el-popover>
-                        </template>
-                    </el-table-column>
-                    
-                    <el-table-column  label="接单状态" prop="working_status" align="center" :width="maxLength.working_status">
-                        <template slot-scope="scope">
-                            <table-tag-component 
-                            v-if="workerConfigList.working_status" 
-                            :propList="workerConfigList.working_status" 
-                            :tableOriginData="scope.row.working_status"></table-tag-component>
-                        </template>
-                    </el-table-column>
-                    
-                    <el-table-column  label="备注（商家情况）" prop="remarks" align="center" width="150">
-                        <template slot-scope="scope">
-                            <el-popover trigger="click" placement="top">
-                                <p>{{ scope.row.remarks }}</p>
-                                <div slot="reference" >
-                                    <p style=" overflow:hidden;text-overflow:ellipsis;white-space:nowrap;width: 129px;">{{ scope.row.remarks }}</p>
-                                </div>
-                            </el-popover>
-                        </template>
-                    </el-table-column>
-                    <el-table-column  label="职业类型" prop="skill_ids" :width="maxLength.skill_ids" >
-                        <template slot-scope="scope">
-                            <table-tag-component 
-                            v-if="workerConfigList.service_category" 
-                            :propList="workerConfigList.service_category" 
-                            :tableOriginData="scope.row.skill_ids"></table-tag-component>
-                        </template>
-                    </el-table-column>
-                    <el-table-column  label="服务类型" prop="service_type_ids" align="center" :width="maxLength.service_type_ids">
-                        <template slot-scope="scope">
-                            <table-tag-component 
-                            v-if="workerConfigList.service_type" 
-                            :propList="workerConfigList.service_type" 
-                            :tableOriginData="scope.row.service_type_ids"></table-tag-component>
-                        </template>
-                    </el-table-column>
-                    <el-table-column  label="可服务人群" prop="service_crowd_ids" :width="maxLength.service_crowd_ids">
-                        <template slot-scope="scope">
-                            <table-tag-component 
-                            :width="maxLength.service_crowd_ids" 
-                            v-if="workerConfigList.service_crowd" 
-                            :propList="workerConfigList.service_crowd" 
-                            :tableOriginData="scope.row.service_crowd_ids"></table-tag-component>
-                        </template>
-                    </el-table-column>
-                    <el-table-column  label="工龄" prop="working_age" align="center" :width="maxLength.working_age">
-                        <template slot-scope="scope">
-                            <table-tag-component 
-                            v-if="workerConfigList.working_age" 
-                            :propList="workerConfigList.working_age" 
-                            :tableOriginData="scope.row.working_age"></table-tag-component>
-                        </template>
-                    </el-table-column>
-                    <el-table-column  label="工作经验" prop="working_experience" align="center" width="150">
-                        <template slot-scope="scope">
-                            <el-popover trigger="click" placement="top">
-                                <p>{{ scope.row.working_experience }}</p>
-                                <div slot="reference" >
-                                    <p style=" overflow:hidden;text-overflow:ellipsis;white-space:nowrap;width: 129px;">{{ scope.row.working_experience }}</p>
-                                </div>
-                            </el-popover>
-                        </template>
-                    </el-table-column>
-                    <el-table-column label="民族" prop="nation" align="center" :width="maxLength.nation">
-                        <template slot-scope="scope">
-                            <table-tag-component v-if="workerConfigList.nation" :propList="workerConfigList.nation" :tableOriginData="scope.row.nation"></table-tag-component>
-                        </template>
-                    </el-table-column>
-                    <el-table-column  label="籍贯" prop="birthPlace" align="center"></el-table-column>
-                    <el-table-column  label="身份证号" prop="identify" align="center" width="145"></el-table-column>
-                    <el-table-column  label="地址" prop="address" align="center" width="150">
-                        <template slot-scope="scope">
-                            <el-popover trigger="click" placement="top">
-                                <p>{{ scope.row.address }}</p>
-                                <p slot="reference" style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap;width: 129px;">{{ scope.row.address }}</p>
-                            </el-popover>
-                        </template>
-                    </el-table-column>
-                    
-                    <el-table-column  label="服务地区" prop="region_ids" align="center" :width="maxLength.region_ids">
-                        <template slot-scope="scope">
-                            <table-tag-component v-if="workerConfigList.service_region" :propList="workerConfigList.service_region" :tableOriginData="scope.row.region_ids"></table-tag-component>
-                        </template>
-                    </el-table-column>
-
-                    <el-table-column  label="学历" prop="education" align="center" :formatter="educationFomatter" width="120"></el-table-column>
-                    <el-table-column  label="紧急联系人电话" prop="urgent_phone" align="center" width="150"></el-table-column>
-                    <el-table-column  label="银行卡号" prop="bank_card" align="center"></el-table-column>
-                    
-                    <!-- <el-table-column  label="照片" prop="" align="center">
-                        <template slot-scope="scope">
-                            <img :src="scope.row.icon?'./resource/'+scope.row.icon:''" alt="" style="height: 24px;width: 24px;">
-                        </template>
-                    </el-table-column> -->
-
-                    <!-- <el-table-column  label="头像" prop="icon" align="center">
-                        <template slot-scope="scope">
-                            <img :src="scope.row.icon?'./resource/'+scope.row.icon:''" alt="" style="height: 24px;width: 24px;">
-                        </template>
-                    </el-table-column> -->
-
-                    <el-table-column  label="参加培训" prop="course_ids" :width="maxLength.course_ids" align="center">
-                        <template slot-scope="scope">
-                            <table-tag-component v-if="workerConfigList.course" :propList="workerConfigList.course" :tableOriginData="scope.row.course_ids"></table-tag-component>
-                        </template>
-                    </el-table-column>
-                    <el-table-column  label="技能证书" prop="paper_ids" align="center" :width="maxLength.paper_ids">
-                        <template slot-scope="scope">
-                            <table-tag-component v-if="workerConfigList.paper_category" :propList="workerConfigList.paper_category" :tableOriginData="scope.row.paper_ids"></table-tag-component>
-                        </template>
-                    </el-table-column>
-                    <el-table-column  label="信息来源" prop="source" align="center" :width="maxLength.source">
-                        <template slot-scope="scope">
-                            <table-tag-component v-if="workerConfigList.source" :propList="workerConfigList.source" :tableOriginData="scope.row.source"></table-tag-component>
-                        </template>
-                    </el-table-column>
-                    <el-table-column  label="来源名称" prop="" align="center">
-                        
-                    </el-table-column>
-                    <el-table-column  label="创建人" prop="manager_name" align="center" width="150"></el-table-column>
-
-                    <el-table-column label="操作" align="center" fixed="right" width="110">
-                        <template slot-scope="scope">
-                            <el-button size="mini" type="text" @click="editStaff(scope.$index, scope.row)">编辑</el-button>
-                            <el-button size="mini" type="text" style="color:#f56c6c" v-if="scope.row.status == 0" @click="changeStaffStatus(scope.row)">停用</el-button>
-                            <el-button size="mini" type="text" style="color:#67c23a" @click="changeStaffStatus(scope.row)" v-else>启用</el-button>
-                        </template>
-                    </el-table-column>
-                </el-table>
-                <!-- 分页 -->
-                <div class="pagination-box">
-                    <el-pagination
-                        class="pagination"
-                        @current-change="handleCurrentPage"
-                        @prev-click="handleCurrentPage"
-                        @next-click="handleCurrentPage"
-                        :current-page.sync="pagination.currentPage"
-                        :page-size="pagination.pageNumber"
-                        layout="prev, pager, next, jumper"
-                        :total="pagination.total"></el-pagination>
+        <staff-table-component
+            :staffTable="staffTable"
+            :maxLength="maxLength"
+            :controlScopeLength="170">
+            
+            <template slot="searchList">
+                <div class="search-list">
+                    <query-component @updateTable="updateTable"></query-component>
                 </div>
-                
-            </div>
-        </div>
+            </template>
+            
+            <template slot="searchForm">
+                <div class="search-left">
+                    <el-input v-model="staffSearch.name" placeholder="请输入员工姓名" :maxlength="20"></el-input>
+                    <el-input v-model="staffSearch.phone" placeholder="请输入电话" :maxlength="20"></el-input>
+                    <el-button type="primary" @click="searchStaff">查询</el-button>
+                    <el-button type="primary" @click="resetStaff">重置</el-button>
+                </div>
+                <div>
+                    <el-button type="primary" @click="exportReturnStaff(1)">导入回访</el-button>
+                    <el-button type="primary" @click="editStaff(0)">创建服务人员</el-button>
+                </div>
+            </template>
+
+            <template slot="control" slot-scope="controler">
+                <el-button size="mini" type="text" @click="editStaff(1, controler.scoper.row)">编辑</el-button>
+                <el-button size="mini" type="text" style="color:#f56c6c" v-if="controler.scoper.row.status == 0" @click="changeStaffStatus(control.scoper.row)">停用</el-button>
+                <el-button size="mini" type="text" style="color:#67c23a" @click="changeStaffStatus(controler.scoper.row)" v-else>启用</el-button>
+                <el-button size="mini" type="text" @click="exportReturnStaff(0, controler.scoper.row)">导入回访</el-button>
+            </template>
+
+            <template slot="pagination">
+                <el-pagination
+                    class="pagination"
+                    @current-change="handleCurrentPage"
+                    @prev-click="handleCurrentPage"
+                    @next-click="handleCurrentPage"
+                    :current-page.sync="pagination.currentPage"
+                    :page-size="pagination.pageNumber"
+                    layout="prev, pager, next, jumper"
+                    :total="pagination.total"></el-pagination>
+            </template>
+        </staff-table-component>
+        <!-- 申请添加服务人员 -->
+        <return-staff-dialog
+            v-if="returnStaffDialofVisible"
+            :openReturnStaffDialog="returnStaffDialofVisible"
+            @closeReturnStaffDialog="returnStaffDialofVisible=false"></return-staff-dialog>
     </div>
 </template>
 <script>
-    import {hrService, $utils} from '../../../../common'
-    import {
-        cascaderComponent,
-        tableTagComponent} from '@/pages/components'
+    import {hrService} from '../../../../common'
 
-    import {queryComponent} from './components'
-    
+    import {
+        queryComponent,
+        staffTableComponent,
+    } from './components'
+    import returnStaffDialog from './components/workerList/returnStaffDialog.vue'
     export default {
         components: {
-            cascaderComponent,
-            tableTagComponent,
-            queryComponent
+            queryComponent,
+            staffTableComponent,
+            returnStaffDialog
         },
         data() {
             return {
@@ -255,7 +95,8 @@
                     course_ids: 0,//参加培训
                     paper_ids: 0, //技能证书
                     source: 0,//信息来源
-                }
+                },
+                returnStaffDialofVisible: false,//添加回访数据显示隐藏
             }
         },
         computed:{
@@ -266,14 +107,6 @@
                 
                 return this.$store.state.hrModule.configForm
             }
-        },
-        watch: {    
-            maxLength: {
-                handler: function (val, oldVal) {
-                    console.log(val, oldVal)
-                },
-                deep: true
-            },
         },
         methods: {
             computeStringLength(array, listKey, configKey){
@@ -294,21 +127,9 @@
                     
                 }
                 
-                // debugger
                 if(string > this.maxLength[listKey]){
-                    if(listKey == 'service_crowd_ids'){
-                        console.log(string)
-                        // debugger
-                    }
                     this.maxLength[listKey] = (string + 20) > 80 ? (string + 20) : 80
                 }
-                
-            },
-            setCellStyle({row, column, rowIndex, columnIndex}){
-                if(columnIndex == 11){
-                    // console.log(column,column.width)
-                }
-                return  "height: 30px;padding: 0;fontSize:12px;"
             },
              /**
              * 请求表格数据
@@ -327,7 +148,6 @@
                         this.$store.commit('setConfigForm',data[0].data)
 
                         let tableList = data[1].data.data
-                        //  debugger
                         tableList.forEach((item, index) =>{
                            
                             this.computeStringLength(item.authentication, 'authentication', 'authentication')
@@ -344,7 +164,6 @@
                         })  
 
                         this.staffTable = data[1].data.data
-                        
                         //分页信息
                         this.pagination.currentPage = data[1].data.current_page //当前页码
                         this.pagination.total = data[1].data.total //列表总条数
@@ -415,27 +234,71 @@
                 await this.getTableList()
             },
             /**
-             * 创建服务人员
-             * des 先创建服务人员，然后才能添加服务人员技能。
+             * 导入回访服务人员
+             * @param type 是全部导出还是单个导出 全部导出 1 单个导出 0
              */
-            createStaff(){
-                this.$router.push({
-                    path: "/worker/workerItem",
-                    query: {
-                        type: 0
+            async exportReturnStaff(type, row){
+                if(type == 0){
+                    let _this= this;
+
+                    let response = await this.$confirm(`确定将该服务人员导入回访列表吗?`, '提示', {
+                        confirmButtonText: '确定',
+                        cancelButtonText: '取消',
+                        type: 'warning'
+                    }).catch(() => {
+                        this.$message({
+                            type: 'info',
+                            message: `已取消导入`
+                        });
+                    });
+
+                    if(response == "confirm"){
+                        store.commit('setLoading',true)
+
+                        try{
+                            await hrService.addReturnStaffSingle(row.id)
+                                .then(data =>{
+                                    if(data.code == "0"){
+                                        this.$message({
+                                            type:'success',
+                                            message: `导入成功`
+                                        })
+                                    }
+                                }).catch(e =>{
+                                    this.$message({
+                                        type:'error',
+                                        message: e.message
+                                    })
+                                })
+                        } catch(error){
+                            this.$message({
+                                type:'error',
+                                message: error.message
+                            })
+                        }
+
+                        await _this.getTableList()
+                        store.commit('setLoading',false)
                     }
-                })
+                } else{
+                    this.returnStaffDialofVisible = true
+                }
             },
             /**
-             * 编辑服务人员信息
-             * 编辑时可以添加服务人员技能
+             * 创建、编辑服务人员信息
+             * des type字段在 创建，编辑，回访，处理异常，创建申请 都能用到
+             * 运营人员创建 0
+             * 运营人员编辑 1
+             * 运营人员回访时编辑 2
+             * 运营人员处理异常时编辑 3
+             * 运营人员处理新建申请 4
              */
-            editStaff(index, row){
+            editStaff(type, row){
                 this.$router.push({
                     path: "/worker/workerItem",
                     query: {
-                        type: 1, //编辑为1
-                        id: row.id
+                        type: type, //编辑为1
+                        id: type == 1? row.id : 0
                     }
                 })
             },
@@ -487,25 +350,6 @@
                     store.commit('setLoading',false)
                 }
             },
-            rowStyleFunction(row, rowIndex){    
-                if(rowIndex == 0){
-                    return {height:'30px'}
-                }
-            },
-            /**
-             * 创建时间字段转换
-             */
-            created_atFormatter(row, column){
-                return $utils.formatDate(new Date(row.created_at), 'yyyy-MM-dd')
-            },
-            //登记时间
-            register_atFormatter(row, column){
-                return $utils.formatDate(new Date(row.register_at), 'yyyy-MM-dd')
-            },
-            educationFomatter(row, column){
-                let a =  this.$store.state.hrModule.educationList.filter(item => item.id == row.education)
-                return a.length? a[0].name : ''
-            }
         },
         async mounted(){
             await this.getTableList()
@@ -513,54 +357,18 @@
     }
 </script>
 <style lang="scss" scoped>
-    .tag-style{
-        height:24px;
-        line-height: 24px;
-    }
-    .staff{
-        .list-table{
-            height: calc(100vh - 50px);
-            width:100%;
-            display: flex;
-            .search-list{
-                width: 180px;
-                height: 100%;
-                overflow-y: auto;
-                background: #eaedf1;
-            }
-            .table-list{
-                overflow: auto;
-                flex:1;
-                width: calc(100% - 180px);
-                height: calc(100vh - 50px);
-                .search-form{
-                    display: none;
-                    height: 40px;
-                    width: 100%;
-                    display: flex;
-                    justify-content: space-between;
-                    .search-left{
-                        display: flex;
-                    }
-                }
-                .staff-table{
-                    height: calc(100% - 72px);
-                    width: 100%;
-                    margin: 0 auto;
-                }
-                .pagination-box{
-                    height:32px;
-                    .pagination{
-                        margin: 0 auto;
-                        width: 600px;
-                    }
-                }
-            }
-        }
-            
-            
-        
 
-
+.search-form{
+    height: 40px;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    .search-left{
+        display: flex;
     }
+}
+.pagination{
+    margin: 0 auto;
+    width: 600px;
+}
 </style>

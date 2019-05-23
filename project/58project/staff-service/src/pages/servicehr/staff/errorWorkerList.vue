@@ -12,12 +12,11 @@
                     <el-button type="primary" @click="searchStaff">查询</el-button>
                     <el-button type="primary" @click="resetStaff">重置</el-button>
                 </div>
-                <el-button type="primary" @click="exportReturnStaff(1)">全部导出</el-button>
             </template>
 
             <template slot="control" slot-scope="controler">
                 <el-button size="mini" type="text" @click="editStaff(controler.scoper.$index, controler.scoper.row)">编辑</el-button>
-                <el-button size="mini" type="text" style="color:#67c23a" @click="exportReturnStaff(1, controler.scoper.row)">导出</el-button>
+                <el-button size="mini" type="text" style="color:#67c23a" @click="recoverStaff(controler.scoper.row)">恢复</el-button>
             </template>
 
             <template slot="pagination">
@@ -55,7 +54,6 @@
                 staffSearch: {
                     name: '', //姓名
                     phone:'',//手机号
-                    return_id: this.$store.state.loginModule.user.id
                 },
                 isLoaded:false,
                 /**
@@ -91,9 +89,6 @@
             }
         },
         methods: {
-            /**
-             * 
-             */
             computeStringLength(array, listKey, configKey){
                 let string = 0
                 if(Array.isArray(array)){
@@ -222,20 +217,18 @@
                 this.$router.push({
                     path: "/worker/workerItem",
                     query: {
-                        type: 2 , //回访为2
-                        id: row.id,
+                        type: 3, //处理错误数据为3
+                        id: row.id
                     }
                 })
             },
             /**
-             * 导出服务人员
-             * @param type 是 全部导出还是部分导出  1 全部导出 0 部分导出
-             * @param row 服务人员信息
+             * 恢复服务人员为正常状态
              */
-            async exportReturnStaff(type, row){
+            async recoverStaff(row){
                 let _this= this;
 
-                let response = await this.$confirm(`确定导出该服务人员吗?`, '提示', {
+                let response = await this.$confirm(`确定已准确核实该服务人员信息吗?`, '提示', {
                     confirmButtonText: '确定',
                     cancelButtonText: '取消',
                     type: 'warning'
@@ -250,7 +243,7 @@
                     store.commit('setLoading',true)
 
                     try{
-                        await hrService.exportReturnStaff(row.id, row.version)
+                        await hrService.recoverStaff(row.id, row.version)
                             .then(data =>{
                                 if(data.code == "0"){
                                     this.$message({

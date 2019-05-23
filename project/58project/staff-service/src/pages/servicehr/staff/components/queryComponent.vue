@@ -55,10 +55,20 @@
             :queryKey="'working_status_ids'" 
             :queryName="'接单状态'" 
             :queryList="configForm.working_status"></search-list>
+        <search-input
+            :queryKey="'name'" 
+            :queryName="'姓名'"></search-input>
+        <search-input
+            :queryKey="'phone'" 
+            :queryName="'电话'"></search-input>
+        <search-input
+            :queryKey="'phone'" 
+            :queryName="'电话'"></search-input>
     </div>
 </template>
 <script>
 import searchList from './query/searchList.vue'
+import searchInput from './query/searchInput.vue'
 export default {
     data(){
         return {
@@ -67,6 +77,7 @@ export default {
     },
     components: {
         searchList,
+        searchInput,
     },
     computed:{
         configForm(){

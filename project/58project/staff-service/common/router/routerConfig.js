@@ -91,37 +91,31 @@ import authConfig from '@/pages/auth/auth/authConfig.vue'
  */
 
 
-//  import staffList from '@/pages/servicehr/staff/staffList.vue'
-//  import staffItem from '@/pages/servicehr/staff/staffItem.vue'
  import workerList from '@/pages/servicehr/staff/workerList.vue'
- import testWorkerList from '@/pages/servicehr/staff/testWorkerList.vue'
+ import newWorkerList from '@/pages/servicehr/staff/newWorkerList.vue'
+ import errorWorkerList from '@/pages/servicehr/staff/errorWorkerList.vue'
  import workerItem from '@/pages/servicehr/staff/workerItem.vue'
  import workFormConfig from '@/pages/servicehr/staff/workFormConfig.vue'
+
  import returnList from '@/pages/servicehr/staff/returnList.vue'
  import returnItem from '@/pages/servicehr/staff/returnItem.vue'
 
 
  const staffModule = [
-
-    // {
-    //     path: '/staff/staffList',
-    //     name: 'staffList',
-    //     component: staffList,
-    // },
-    // {
-    //     path: '/staff/staffItem',
-    //     name: 'staffItem',
-    //     component: staffItem,
-    // },
     {
         path: '/worker/workerList',
         name: 'workerList',
         component: workerList,
     },
     {
-        path: '/worker/testWorkerList',
-        name: 'testWorkerList',
-        component: testWorkerList,
+        path: '/worker/errorWorkerList',
+        name: 'errorWorkerList',
+        component: errorWorkerList,
+    },
+    {
+        path: '/worker/newWorkerList',
+        name: 'newWorkerList',
+        component: newWorkerList,
     },
     {
         path: '/worker/workerItem',
@@ -197,6 +191,7 @@ import orderList from '@/pages/sale/orderList.vue'
 import orderConfig from '@/pages/sale/orderConfig.vue'
 import orderEdit from '@/pages/sale/orderEdit.vue'
 import orderAssignList from '@/pages/sale/orderAssignList.vue'
+import orderWorkList from '@/pages/sale/orderWorkList.vue'
 
 
 const saleModule = [
@@ -219,6 +214,11 @@ const saleModule = [
         path: '/sale/orderAssignList',
         name: 'orderAssignList',
         component: orderAssignList,
+    },
+    {
+        path: '/sale/orderWorkList',
+        name: 'orderWorkList',
+        component: orderWorkList,
     },
 ]
 
