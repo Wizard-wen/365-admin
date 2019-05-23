@@ -5,6 +5,7 @@
 
 import Vue from 'vue'
 import Vuex from 'vuex'
+// import store from './index'
 
 Vue.use(Vuex)
 
@@ -14,11 +15,18 @@ export const hrModule = {
             state.configForm = configForm
         },
         /** 
-        * @param key queryList 键名 
-        * @param newValueArray 键值，可能是数组，也可能是字符串
+        * @param queryKey queryList 键名 
+        * @param queryedList 键值，可能是数组，也可能是字符串
         */
         setQueryList(state,payload){
             state.queryedList[payload.queryKey] = payload.queryedList
+        },
+        /** 
+        * @param queryKey queryList 键名 
+        * @param queryedList 键值，可能是数组，也可能是字符串
+        */
+        setReturnList(state,payload){
+            state.returnList[payload.queryKey] = payload.queryedList
         }
     },
 

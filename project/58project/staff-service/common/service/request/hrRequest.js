@@ -6,9 +6,17 @@ import axios from 'axios'
 export default {
     /**
      * 获取员工列表
+     * @param type 列表类别
      */
-    getStaffList(){
+    getStaffList(type){
         let baseUrl = `./admin/staff/getStaffList`;
+        if(type == 2){
+            return axios.post(
+                baseUrl,
+                store.state.hrModule.returnList
+            )
+        }
+        
 
         return axios.post(
             baseUrl,
@@ -148,7 +156,21 @@ export default {
      * 恢复全部回访人员
      */
     removeReturnStaff(){
-        return axios.post(`./admin/staff/removeReturnStaff`)
+        return axios.post(`./admin/staff/removeReturnStaff`,{})
+    },
+    /**
+     * 恢复单个回访人员
+     */
+    removeReturnStaffSingle(type,id){
+        if(type == "list"){
+            return axios.post(`./admin/staff/removeReturnStaffSingle`,{
+                from: "list",
+                id:id,
+            })
+        } else {
+
+        }
+        
     },
 
 

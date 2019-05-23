@@ -6,9 +6,10 @@ import {store} from '../../common'
 export default {
     /**
      * 获取员工列表
+     * @param type 列表类别
      */
-    getStaffList(){
-        return hrRequest.getStaffList()
+    getStaffList(type){
+        return hrRequest.getStaffList(type)
     },
     /**
      * 获取人员信息
@@ -36,7 +37,12 @@ export default {
     changeStaffStatus(id, version){
         return hrRequest.changeStaffStatus(id, version)
     },
-
+    /**
+     * 恢复单个回访人员
+     */
+    removeReturnStaffSingle(type,id){
+        return hrRequest.removeReturnStaffSingle(type,id)
+    },
 
 
 
