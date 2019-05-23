@@ -36,14 +36,14 @@ module.exports = {
             target: 'http://60.205.200.55:1001/', // 接口的域名
             changeOrigin: true, // 如果接口跨域，需要进行这个参数配置
             pathRewrite: {
-                '^/': ''   //需要rewrite的,
+                '^/': '/'   //需要rewrite的,
             }
           },
     },
 
     // Various Dev Server settings
     host: 'localhost', // can be overwritten by process.env.HOST
-    port: 8088, // can be overwritten by process.env.PORT, if port is in use, a free one will be determined
+    port: 8085, // can be overwritten by process.env.PORT, if port is in use, a free one will be determined
     autoOpenBrowser: false,
     errorOverlay: true,
     notifyOnErrors: true,

@@ -1,5 +1,5 @@
 <template>
   <div>
-    门店详情
+    编辑门店
   </div>
 </template>

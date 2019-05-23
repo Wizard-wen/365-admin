@@ -36,7 +36,7 @@
 
             <el-table-column label="操作" align="center">
                 <template slot-scope="scope">
-                    <el-button size="mini" @click="editShop(scope.$index, scope.row)">编辑门店</el-button>
+                    <el-button size="mini" @click="editShop(scope.$index, scope.row)">详情</el-button>
                 </template>
             </el-table-column>
         </el-table>
