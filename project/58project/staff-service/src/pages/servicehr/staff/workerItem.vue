@@ -165,17 +165,7 @@
                     <el-radio :label="2">女</el-radio>
                 </el-radio-group>
             </el-form-item>
-
-            <!-- <el-form-item>
-                <el-button type="primary" @click="onSubmit('form')">{{$route.query.id? '确认编辑' : '立即创建'}}</el-button>
-                <el-button @click="goback">取消</el-button>
-            </el-form-item> -->
         </el-form>
-        <!-- <img class="qrcode" :src="qrcode" alt=""> -->
-        <!-- <div ref="aaa" style="height:200px;width: 200px;background:#185">
-
-        </div> -->
-        <!-- <img :src="canvasImg" alt=""> -->
         <div class="control">
             <el-button type="primary" @click="onSubmit('form')">{{$route.query.id? '确认编辑' : '立即创建'}}</el-button>
             <el-button type="primary" @click="makeImage">创建图片</el-button>

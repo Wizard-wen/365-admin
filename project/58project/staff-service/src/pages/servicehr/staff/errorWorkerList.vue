@@ -235,7 +235,7 @@
                 }).catch(() => {
                     this.$message({
                         type: 'info',
-                        message: `已取消${status}`
+                        message: `已取消恢复`
                     });
                 });
 
@@ -248,7 +248,7 @@
                                 if(data.code == "0"){
                                     this.$message({
                                         type:'success',
-                                        message: `${status}成功`
+                                        message: `恢复成功`
                                     })
                                 }
                             }).catch(e =>{

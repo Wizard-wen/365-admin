@@ -1,5 +1,5 @@
 <template>
-    <div class="tag-box">
+    <div class="tag-box" :style="{width: maxWidth}">
         <span 
             class="tag-element" 
             v-for="(item, index) in showTagList" 
@@ -43,6 +43,13 @@ export default {
                 }
             },
             type: Object,
+        },
+        /**
+         * 最大宽度
+         */
+        maxWidth: {
+            default: 760,
+            type: Number
         }
     },
     data(){

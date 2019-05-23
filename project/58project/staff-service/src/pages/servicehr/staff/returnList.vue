@@ -187,7 +187,7 @@
             async handleCurrentPage(val){
                 // this.pagination.currentPage = val
                 //设置page查询参数
-                this.$store.commit('setQueryList', {
+                this.$store.commit('setReturnList', {
                     queryKey: 'page', 
                     queryedList: val
                 })
@@ -198,12 +198,12 @@
              */
             async searchStaff(){
                 //设置name查询参数
-                this.$store.commit('setQueryList', {
+                this.$store.commit('setReturnList', {
                     queryKey: 'name', 
                     queryedList: this.staffSearch.name
                 })
                 //设置手机号查询参数
-                this.$store.commit('setQueryList', {
+                this.$store.commit('setReturnList', {
                     queryKey: 'phone', 
                     queryedList: this.staffSearch.phone
                 })
@@ -216,12 +216,12 @@
                 this.staffSearch.name = ''
                 this.staffSearch.phone = ''
                 //重置name查询参数
-                this.$store.commit('setQueryList', {
+                this.$store.commit('setReturnList', {
                     queryKey: 'name', 
                     queryedList: null
                 })
                 //重置手机号查询参数
-                this.$store.commit('setQueryList', {
+                this.$store.commit('setReturnList', {
                     queryKey: 'phone', 
                     queryedList: null
                 })

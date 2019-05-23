@@ -144,13 +144,13 @@ export default {
      * 多个回访人员到回访列表
      */
     addReturnStaff(obj){
-        return axios.post(`./admin/staff/addReturnStaff`,...obj)
+        return axios.post(`./admin/staff/addReturnStaff`,{...obj})
     },
     /**
      * 获取可回访人员数量
      */
     getReturnStaff(obj){
-        return axios.post(`./admin/staff/getReturnStaff`,...obj)
+        return axios.post(`./admin/staff/getReturnStaff`,{...obj})
     },
     /**
      * 恢复全部回访人员

@@ -8,12 +8,12 @@
         <el-form :model="returnStaffForm" :label-width="'120px'" ref="returnStaffForm" >
             <el-form-item label="回访数量">
                 <el-input-number v-model="returnStaffForm.number" :max="50"></el-input-number>
-                <p style="color: red">{{`备注：共有${staffCount}数据，最多可以导出50条数据，按列表顺序导出`}}</p>
+                <p style="color: red">{{`备注：共有${staffCount}数据，最多可以导入50条数据，按列表顺序导入`}}</p>
             </el-form-item>
         </el-form>
         <div slot="footer" class="dialog-footer">
             <el-button @click="closeReturnStaffDialog">取 消</el-button>
-            <el-button type="primary" @click="commitRetrunStaff">确认导出回访</el-button>
+            <el-button type="primary" @click="commitRetrunStaff">确认导入回访</el-button>
         </div>
     </el-dialog>
 </template>
@@ -36,7 +36,7 @@ export default {
     data(){
         return {
             returnStaffForm : {
-                number: 0,
+                number: 50,
             },
             staffCount: 0,
         }
