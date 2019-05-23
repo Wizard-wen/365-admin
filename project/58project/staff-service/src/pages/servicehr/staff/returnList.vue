@@ -55,6 +55,7 @@
                 staffSearch: {
                     name: '', //姓名
                     phone:'',//手机号
+                    return_id: this.$store.state.loginModule.user.id
                 },
                 isLoaded:false,
                 /**
@@ -90,6 +91,9 @@
             }
         },
         methods: {
+            /**
+             * 
+             */
             computeStringLength(array, listKey, configKey){
                 let string = 0
                 if(Array.isArray(array)){

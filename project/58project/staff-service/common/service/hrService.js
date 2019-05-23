@@ -2,6 +2,7 @@
  * 人力资源及技能管理模块
  */
 import hrRequest from './request/hrRequest.js'
+import {store} from '../../common'
 export default {
     /**
      * 获取员工列表
@@ -78,6 +79,37 @@ export default {
         return hrRequest.editFormConfig(obj)
     },
 
+    /**
+     * 单个服务人员添加回访
+     */
+    addReturnStaffSingle(id){
+        return hrRequest.addReturnStaffSingle(id)
+    },
+    /**
+     * 多个回访人员到回访列表
+     */
+    addReturnStaff(){
+        let obj = store.state.hrModule.queryedList
+        return hrRequest.addReturnStaff(obj)
+    },
+    /**
+     * 获取可回访人员数量
+     */
+    getReturnStaff(){
+        //设置回访count查询参数
+        store.commit('setQueryList', {
+            queryKey: 'count', 
+            queryedList: 0
+        })
+        let obj = store.state.hrModule.queryedList
+        return hrRequest.getReturnStaff(obj)
+    },
+    /**
+     * 恢复全部回访人员
+     */
+    removeReturnStaff(){
+        return hrRequest.removeReturnStaff()
+    },
 
 
 

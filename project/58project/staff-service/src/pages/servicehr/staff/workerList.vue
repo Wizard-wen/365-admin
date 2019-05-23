@@ -19,7 +19,7 @@
                     <el-button type="primary" @click="resetStaff">重置</el-button>
                 </div>
                 <div>
-                    <el-button type="primary" @click="exportReturnStaff(1)">导出回访</el-button>
+                    <el-button type="primary" @click="exportReturnStaff(1)">导入回访</el-button>
                     <el-button type="primary" @click="editStaff(0)">创建服务人员</el-button>
                 </div>
             </template>
@@ -28,7 +28,7 @@
                 <el-button size="mini" type="text" @click="editStaff(1, controler.scoper.row)">编辑</el-button>
                 <el-button size="mini" type="text" style="color:#f56c6c" v-if="controler.scoper.row.status == 0" @click="changeStaffStatus(control.scoper.row)">停用</el-button>
                 <el-button size="mini" type="text" style="color:#67c23a" @click="changeStaffStatus(controler.scoper.row)" v-else>启用</el-button>
-                <el-button size="mini" type="text" @click="exportReturnStaff(0, controler.scoper.row)">导出回访</el-button>
+                <el-button size="mini" type="text" @click="exportReturnStaff(0, controler.scoper.row)">导入回访</el-button>
             </template>
 
             <template slot="pagination">
@@ -234,52 +234,52 @@
                 await this.getTableList()
             },
             /**
-             * 导出回访服务人员
+             * 导入回访服务人员
              * @param type 是全部导出还是单个导出 全部导出 1 单个导出 0
              */
             async exportReturnStaff(type, row){
                 if(type == 0){
                     let _this= this;
 
-                    let response = await this.$confirm(`确定回访该服务人员吗?`, '提示', {
+                    let response = await this.$confirm(`确定将该服务人员导入回访列表吗?`, '提示', {
                         confirmButtonText: '确定',
                         cancelButtonText: '取消',
                         type: 'warning'
                     }).catch(() => {
                         this.$message({
                             type: 'info',
-                            message: `已取消备选`
+                            message: `已取消导入`
                         });
                     });
 
-                    // if(response == "confirm"){
-                    //     store.commit('setLoading',true)
+                    if(response == "confirm"){
+                        store.commit('setLoading',true)
 
-                    //     try{
-                    //         await hrService.changeStaffStatus(row.id, row.version)
-                    //             .then(data =>{
-                    //                 if(data.code == "0"){
-                    //                     this.$message({
-                    //                         type:'success',
-                    //                         message: `${status}成功`
-                    //                     })
-                    //                 }
-                    //             }).catch(e =>{
-                    //                 this.$message({
-                    //                     type:'error',
-                    //                     message: e.message
-                    //                 })
-                    //             })
-                    //     } catch(error){
-                    //         this.$message({
-                    //             type:'error',
-                    //             message: error.message
-                    //         })
-                    //     }
+                        try{
+                            await hrService.addReturnStaffSingle(row.id)
+                                .then(data =>{
+                                    if(data.code == "0"){
+                                        this.$message({
+                                            type:'success',
+                                            message: `导入成功`
+                                        })
+                                    }
+                                }).catch(e =>{
+                                    this.$message({
+                                        type:'error',
+                                        message: e.message
+                                    })
+                                })
+                        } catch(error){
+                            this.$message({
+                                type:'error',
+                                message: error.message
+                            })
+                        }
 
-                    //     await _this.getTableList()
-                    //     store.commit('setLoading',false)
-                    // }
+                        await _this.getTableList()
+                        store.commit('setLoading',false)
+                    }
                 } else{
                     this.returnStaffDialofVisible = true
                 }

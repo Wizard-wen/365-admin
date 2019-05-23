@@ -243,7 +243,7 @@
                 this.$router.push({
                     path: "/worker/workerItem",
                     query: {
-                        type: 1, //编辑为1
+                        type: 5, //编辑为1
                         id: row.id
                     }
                 })

@@ -8,12 +8,12 @@
         <el-form :model="returnStaffForm" :label-width="'120px'" ref="returnStaffForm" >
             <el-form-item label="回访数量">
                 <el-input-number v-model="returnStaffForm.number" :max="50"></el-input-number>
-                <p style="color: red">备注：最多导出50条数据，按列表顺序导出</p>
+                <p style="color: red">{{`备注：共有${staffCount}数据，最多可以导出50条数据，按列表顺序导出`}}</p>
             </el-form-item>
         </el-form>
         <div slot="footer" class="dialog-footer">
             <el-button @click="closeReturnStaffDialog">取 消</el-button>
-            <el-button type="primary" @click="commitLog('returnStaffForm')">确认导出回访</el-button>
+            <el-button type="primary" @click="commitRetrunStaff">确认导出回访</el-button>
         </div>
     </el-dialog>
 </template>
@@ -38,34 +38,40 @@ export default {
             returnStaffForm : {
                 number: 0,
             },
+            staffCount: 0,
         }
     },
     methods: {
         /**
          * 提交回访
          */
-        async commitLog(formName){ 
-                    
-            // store.commit('setLoading',true)
+        async commitRetrunStaff(formName){ 
+            let _this = this
+            //设置回访count查询参数
+            this.$store.commit('setQueryList', {
+                queryKey: 'count', 
+                queryedList: this.returnStaffForm.number
+            })
+            store.commit('setLoading',true)
     
-            // await hrService.logCommit(this.returnStaffForm,) 
-            //     .then(data =>{
-            //         if(data.code == "0"){
-            //             this.$message({
-            //                 type:'success',
-            //                 message: data.message
-            //             })
-            //         }
-            //     })
-            //     .catch(e =>{
-            //         this.$message({
-            //             type:'error',
-            //             message: e.message
-            //         })
-            //     })
+            await hrService.addReturnStaff() 
+                .then(data =>{
+                    if(data.code == "0"){
+                        this.$message({
+                            type:'success',
+                            message: data.message
+                        })
+                    }
+                })
+                .catch(e =>{
+                    this.$message({
+                        type:'error',
+                        message: e.message
+                    })
+                })
             
 
-            // store.commit('setLoading',false)
+            store.commit('setLoading',false)
 
             //关闭日志弹出框
             this.$emit('closeReturnStaffDialog')
@@ -76,6 +82,25 @@ export default {
             //关闭日志弹出框
             this.$emit('closeReturnStaffDialog')
         }
+    },
+    async mounted(){
+        store.commit('setLoading',true)
+
+        await hrService.getReturnStaff() 
+            .then(data =>{
+                if(data.code == "0"){
+                    this.staffCount = data.data.count
+                }
+            })
+            .catch(e =>{
+                this.$message({
+                    type:'error',
+                    message: e.message
+                })
+            })
+        
+
+        store.commit('setLoading',false)
     }
 }
 </script>
