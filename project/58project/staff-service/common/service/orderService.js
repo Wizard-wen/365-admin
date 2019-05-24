@@ -103,5 +103,17 @@ export default {
      */
     editStaffBySale(obj){
         return orderRequest.editStaffBySale(obj)
+    },
+    /**
+     * 销售创建服务人员
+     */
+    createStaffBySeller(obj){
+        return orderRequest.createStaffBySeller(obj)
+    },
+    /**
+     * 销售创建服务人员
+     */
+    changeWorkingStatus(obj){
+        return orderRequest.changeWorkingStatus(obj)
     }
 }

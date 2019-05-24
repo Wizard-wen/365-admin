@@ -5,12 +5,6 @@
             :maxLength="maxLength"
             :controlScopeLength="110">
             
-            <template slot="searchList">
-                <div class="search-list">
-                    <query-component @updateTable="updateTable"></query-component>
-                </div>
-            </template>
-            
             <template slot="searchForm">
                 <div class="search-left">
                     <el-input v-model="staffSearch.name" placeholder="请输入员工姓名" :maxlength="20"></el-input>
@@ -18,8 +12,6 @@
                     <el-button type="primary" @click="searchStaff">查询</el-button>
                     <el-button type="primary" @click="resetStaff">重置</el-button>
                 </div>
-                <el-button type="primary" @click="createStaff">导出回访</el-button>
-                <el-button type="primary" @click="createStaff">添加服务人员</el-button>
             </template>
 
             <template slot="control" slot-scope="controler">
@@ -127,12 +119,26 @@
              */
             async getTableList(){                
                 try{
-                    
+                    //设置name查询参数
+                    this.$store.commit('setNewList', {
+                        queryKey: 'name', 
+                        queryedList: this.staffSearch.name
+                    })
+                    //设置手机号查询参数
+                    this.$store.commit('setNewList', {
+                        queryKey: 'phone', 
+                        queryedList: this.staffSearch.phone
+                    })
+                    //设置return_id查询参数
+                    this.$store.commit('setNewList', {
+                        queryKey: 'data_status', 
+                        queryedList: 'apply'
+                    })                    
                     this.isLoaded = true
 
                     await Promise.all([
                         hrService.getFormConfig(), //获取表单配置字段
-                        hrService.getStaffList() //获取列表数据
+                        hrService.getStaffList(4) //获取列表数据
                     ]).then((data) =>{
                         // 将表单配置数据存入 vuex 
                         this.$store.commit('setConfigForm',data[0].data)
@@ -243,7 +249,7 @@
                 this.$router.push({
                     path: "/worker/workerItem",
                     query: {
-                        type: 5, //编辑为1
+                        type: 4, //编辑为1
                         id: row.id
                     }
                 })

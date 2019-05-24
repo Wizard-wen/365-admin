@@ -42,7 +42,8 @@
             v-if="errorStaffDialogVisible"
             :openErrorStaffDialog="errorStaffDialogVisible"
             @closeErrorStaffDialog="errorStaffDialogVisible=false"
-            :errorStaffWorkingStatus="errorStaffRow.working_status"></error-staff-dialog>
+            :errorStaffWorkingStatus="errorStaffRow.working_status"
+            :staffId="errorStaffId"></error-staff-dialog>
     </div>
 </template>
 <script>
@@ -96,6 +97,8 @@
                 createStaffDialogVisible: false,
                 //控制异常信息弹出框显示隐藏
                 errorStaffDialogVisible: false,
+                //异常服务人员id
+                errorStaffId: 0,
                 //异常服务人员信息
                 errorStaffRow: null,
             }
@@ -247,6 +250,7 @@
              */
             sendErrorMessage(row){
                 this.errorStaffRow = row
+                this.errorStaffId = row.id
                 this.errorStaffDialogVisible = true;
             },
             /**

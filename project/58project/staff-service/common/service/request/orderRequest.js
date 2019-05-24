@@ -128,5 +128,21 @@ export default {
         return axios.post(`./admin/order/editStaffBySale`,
             Object.assign({}, obj)
         )
+    },
+    /**
+     * 销售创建服务人员
+     */
+    createStaffBySeller(obj){
+        return axios.post(`./admin/staff/createStaffBySeller`,
+            Object.assign({}, obj)
+        )
+    },
+    /**
+     * 修改服务人员接单状态
+     */
+    changeWorkingStatus(obj){
+        return axios.post(`./admin/staff/changeWorkingStatus`,
+            Object.assign({}, obj)
+        )
     }
 }

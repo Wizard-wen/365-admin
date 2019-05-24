@@ -15,6 +15,11 @@ export default {
                 baseUrl,
                 store.state.hrModule.returnList
             )
+        }else if(type == 4){
+            return axios.post(
+                baseUrl,
+                store.state.hrModule.newList
+            )
         }
         
 

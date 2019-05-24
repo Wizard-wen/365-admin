@@ -27,6 +27,13 @@ export const hrModule = {
         */
         setReturnList(state,payload){
             state.returnList[payload.queryKey] = payload.queryedList
+        },
+        /** 
+        * @param queryKey queryList 键名 
+        * @param queryedList 键值，可能是数组，也可能是字符串
+        */
+       setNewList(state,payload){
+            state.newList[payload.queryKey] = payload.queryedList
         }
     },
 
@@ -41,6 +48,20 @@ export const hrModule = {
             /*********************逻辑字段查询*****************************/
             
             return_id: 0,
+            /*********************业务字段查询*****************************/
+            name: '',
+            phone: '',
+
+        },
+        // 请求申请新建数据
+        newList: {
+            /*********************表格字段查询******************************/
+            get_for: 'staff',
+            page: 1, //请求页码
+            pageNumber: 20,//单页信息数量
+            /*********************逻辑字段查询*****************************/
+            
+            data_status: '',//申请新建服务人员  apply
             /*********************业务字段查询*****************************/
             name: '',
             phone: '',
@@ -61,6 +82,7 @@ export const hrModule = {
             // sex: '',//性别
             // create_at: '', //创建时间
             count: 0,//添加回访人员数量
+            data_status: '',//申请新建服务人员  apply
             /*********************业务字段查询*****************************/
             authentication_ids: [],//认证状态
             course_ids: [],//参加培训
