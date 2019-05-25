@@ -305,7 +305,7 @@
                 width: 180px;
                 height: 100%;
                 overflow-y: auto;
-                background: #eaedf1;
+                // background: #eaedf1;
             }
             .table-list{
                 overflow: auto;
