@@ -105,51 +105,34 @@ export const hrModule = {
             count: 0,//添加回访人员数量
             data_status: '',//申请新建服务人员  apply
             /*********************业务字段查询*****************************/
+            // register_at:'',//登记时间
+            // updated_at:'',更新时间
             authentication_ids: [],//认证状态
-            course_ids: [],//参加培训
-            nation_ids: [],//民族
-            paper_category_ids: [],//证书
-            service_category_ids: [],//职业类型
-            service_crowd_ids: [],//可服务人群
-            service_region_ids: [],//服务地区
-            service_type_ids: [],//服务类型
-            source_ids: [],//信息来源
-            working_age_ids: [],//工龄
-            working_status_ids: [],//接单状态 ------
-
-            // 以下字段非配置项字段
-            
-            // register_at: '',//登记时间
-            // updated_at: '',//更新时间
-            
-            // type: '',//签约状态
-            
-            
-            
             name: null, //姓名
-            age: null,//年龄
-            // phone: '',//电话
-            // return_msg: '',//回访信息
-            
+            // age: null,//年龄--按年龄段搜索
+            phone: '',//电话
+            return_msg: '',//回访信息
+            working_status_ids: [],//接单状态 ------
             // remarks: '',//备注（商家情况）
-            // skill: '', //职业类型
-            
-            
-            
+            service_category_ids: [],//职业类型
+            service_type_ids: [],//服务类型
+            service_crowd_ids: [],//可服务人群
+            working_age_ids: [],//工龄
             // working_experience: '',//工作经验
-            
+            nation_ids: [],//民族
             // birthPlace: '',//籍贯
             // identify: '',//身份证号
+
             // address: '',//地址
-            
+            service_region_ids: [],//服务地区
             // education: '',//学历
             // urgent_phone: '',//紧急联系人电话
             // bank_card: '',//银行卡号
-            
-            // paper: '',//技能证书
-            
-            // manager_name: ''//创建人
-
+            course_ids: [],//参加培训
+            teacher_comment:'',//教师评语
+            paper_category_ids: [],//证书
+            source_ids: [],//信息来源
+            manager_ids: []//创建人
         }, //全部查询参数
         educationList: [
             {
