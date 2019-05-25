@@ -110,9 +110,9 @@ export default {
         // height:40px;
         width:100%;
         .search-label{
-            height: 30px;
+            height: 39px;
             width: 100%;
-            line-height: 30px;
+            line-height: 39px;
             color: #333;
             text-indent: 25px;
             background: #D9DEE4;
@@ -124,7 +124,7 @@ export default {
                 // height: 12px;
                 // width:12px;
                 font-size:12px;
-                top: 9px;
+                top: 13px;
             }
             &:after{
                 position:absolute;

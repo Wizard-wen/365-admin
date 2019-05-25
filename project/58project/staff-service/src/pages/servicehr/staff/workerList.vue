@@ -26,7 +26,7 @@
 
             <template slot="control" slot-scope="controler">
                 <el-button size="mini" type="text" @click="editStaff(1, controler.scoper.row)">编辑</el-button>
-                <el-button size="mini" type="text" style="color:#f56c6c" v-if="controler.scoper.row.status == 0" @click="changeStaffStatus(control.scoper.row)">停用</el-button>
+                <el-button size="mini" type="text" style="color:#f56c6c" v-if="controler.scoper.row.type == 'enable'" @click="changeStaffStatus(control.scoper.row)">停用</el-button>
                 <el-button size="mini" type="text" style="color:#67c23a" @click="changeStaffStatus(controler.scoper.row)" v-else>启用</el-button>
                 <el-button size="mini" type="text" @click="exportReturnStaff(0, controler.scoper.row)">导入回访</el-button>
             </template>

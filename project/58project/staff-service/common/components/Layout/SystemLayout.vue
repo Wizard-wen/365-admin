@@ -48,7 +48,7 @@
                         :datalist="menuNav"></menu-spread>
 
                     <!-- 菜单缩进 -->
-                    <div class="menucontrol" :style="{width : `${siderWidth}px`}" v-if="menuState == 1">
+                    <div class="menucontrol" :style="{width : `${siderWidth}px`}" v-if="menuState == 2">
                         <div class="icon-place" v-if="closeAble">
                             <i class="el-icon-menu icon-position" type="md-menu" size="18" @click="changesider"></i>
                         </div>

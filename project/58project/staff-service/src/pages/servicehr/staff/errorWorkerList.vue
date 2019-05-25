@@ -250,11 +250,6 @@
                         queryKey: 'phone', 
                         queryedList: this.staffSearch.phone
                     })
-                    //设置return_id查询参数
-                    this.$store.commit('setErrorList', {
-                        queryKey: 'data_status', 
-                        queryedList: 'warning'
-                    }) 
                     
                     store.commit('setLoading',true)
 

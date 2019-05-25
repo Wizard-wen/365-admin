@@ -26,9 +26,9 @@
                     </template>
                 </el-table-column> -->
 
-                <!-- <el-table-column  label="签约状态" prop="type" align="center" width="100">
+                <!-- <el-table-column  label="是否启用" prop="type" align="center" width="100">
                     <template slot-scope="scope">
-                        <el-tag class="tag-style" size="medium">{{ scope.row.sex == 'sign'?'已签约':'未签约' }}</el-tag>
+                        <el-tag class="tag-style" size="medium">{{ scope.row.sex == 'enable'?'停用':'启用' }}</el-tag>
                     </template>
                 </el-table-column> -->
 
@@ -278,7 +278,7 @@
             width:100%;
             display: flex;
             .search-list{
-                width: 180px;
+                width: 200px;
                 height: 100%;
                 overflow-y: auto;
                 background: #eaedf1;

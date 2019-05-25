@@ -12,8 +12,13 @@ interface satffItem{
     
     version:number;//操作版本号
     created_at:number;//创建时间
-    type:number;//签约状态   
+    /**
+     * enable 启用
+     * disable 已停用
+     */
+    type:number;//停用  启用状态 
     sex:number;//性别
+    status:string;//签约状态
     
     /*****************************业务字段***********************************************/
 

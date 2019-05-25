@@ -126,12 +126,7 @@
                     this.$store.commit('setNewList', {
                         queryKey: 'phone', 
                         queryedList: this.staffSearch.phone
-                    })
-                    //设置return_id查询参数
-                    this.$store.commit('setNewList', {
-                        queryKey: 'data_status', 
-                        queryedList: 'apply'
-                    })                    
+                    })                  
                     this.isLoaded = true
 
                     await Promise.all([
