@@ -3,7 +3,11 @@
         <el-form class="staff-form"  ref="form" :model="workerForm" :rules="staffRules" label-width="140px">
             <!-- 等同于更新时间 -->
             <el-form-item label="登记日期" prop="register_at" class="form-item-size" size="small">
-                <el-date-picker v-model="workerForm.register_at" type="date" placeholder="请选择登记日期"></el-date-picker>
+                <el-date-picker v-model="workerForm.register_at" value-format="timestamp" type="date" placeholder="请选择登记日期"></el-date-picker>
+            </el-form-item>   
+
+            <el-form-item label="更新日期" prop="updated_at" class="form-item-size" size="small">
+                <el-date-picker v-model="workerForm.updated_at" value-format="timestamp" type="date" placeholder="请选择更新日期" disabled></el-date-picker>
             </el-form-item>     
             
             <el-form-item label="认证状态" prop="authentication" class="form-item-size" size="small">
@@ -26,7 +30,7 @@
             </el-form-item>
 
             <el-form-item label="出生日期" prop="birthday" class="form-item-size" size="small">
-                <el-date-picker v-model="workerForm.birthday" type="date" placeholder="请选择出生日期"></el-date-picker>
+                <el-date-picker v-model="workerForm.birthday" value-format="timestamp" type="date" placeholder="请选择出生日期"></el-date-picker>
             </el-form-item>
             
             <el-form-item label="电话" prop="phone" class="form-item-size" size="small">
@@ -69,8 +73,8 @@
                 <select-tag-component :propTagList="workerConfigList.nation" v-model="workerForm.nation" :isSingle="true"></select-tag-component>
             </el-form-item>
 
-            <el-form-item label="籍贯" prop="birthPlace" class="form-item-size" size="small">
-                <el-input v-model="workerForm.birthPlace" :maxlength="20" placeholder="请输入籍贯信息"></el-input>
+            <el-form-item label="籍贯" prop="birthplace" class="form-item-size" size="small">
+                <el-input v-model="workerForm.birthplace" :maxlength="20" placeholder="请输入籍贯信息"></el-input>
             </el-form-item>
 
             <el-form-item label="身份证号码" prop="identify" class="form-item-size" size="small">
@@ -107,7 +111,7 @@
             </el-form-item>
         
             <el-form-item label="学历" prop="education" class="form-item-size" size="small">
-                <select-tag-component :propTagList="$store.state.hrModule.educationList" v-model="workerForm.education" :isSingle="true"></select-tag-component>
+                <select-tag-component :propTagList="workerConfigList.education" v-model="workerForm.education" :isSingle="true"></select-tag-component>
             </el-form-item>
 
             <el-form-item label="紧急联系人电话" prop="urgent_phone" class="form-item-size" size="small">
@@ -153,9 +157,6 @@
                     <i  class="el-icon-plus avatar-uploader-icon"></i>
                 </el-upload>
                 <div class="picture-box" v-if="photo_fileList.length">
-                    <!-- <img v-for="(item,index) in photo_fileList" :src="item.url"  :key="index" alt=""> -->
-
-
                     <div v-for="(item,index) in photo_fileList" :key="index" class="avatar-box" @mouseover="showPhotoblack(item, index, '0')" @mouseout="showPhotoblack(item, index, '1')">
                         <img :src="item.url" class="avatar">
                         <div class="avatar-back" v-if="item.isBack" @click="deletePhoto">
@@ -167,6 +168,10 @@
         
             <el-form-item label="参加培训" prop="course" class="form-item-size" size="small">
                 <select-tag-component :propTagList="workerConfigList.course" v-model="workerForm.course" :isSingle="false"></select-tag-component>
+            </el-form-item>
+
+            <el-form-item label="教师评语" prop="teacher_comment" class="form-item-size" size="small">
+                <el-input v-model="workerForm.teacher_comment" :maxlength="200" placeholder="请输入教师评语"></el-input>
             </el-form-item>
 
             <el-form-item label="技能证书" prop="certificate" class="form-item-size">
@@ -181,8 +186,12 @@
                 <select-tag-component :propTagList="workerConfigList.source" v-model="workerForm.source" :isSingle="true"></select-tag-component>
             </el-form-item>
 
+            <el-form-item label="来源名称" prop="source_name" class="form-item-size" size="small">
+                <el-input v-model="workerForm.source_name" :maxlength="50" placeholder="请输入来源名城"></el-input>
+            </el-form-item>
+
             <el-form-item label="创建人姓名" prop="manager_name" class="form-item-size" size="small">
-                <el-input v-model="workerForm.manager_name" :maxlength="50" disabled=""></el-input>
+                <el-input v-model="workerForm.manager_name" :maxlength="50" disabled></el-input>
             </el-form-item>
 
             <el-form-item label="性别" prop="sex" class="form-item-size">
@@ -343,7 +352,7 @@ export default {
                 working_age:0,//工龄
                 working_experience:'',//工作经验（备注）
                 nation:0,//民族
-                birthPlace:'',//籍贯
+                birthplace:'',//籍贯
                 identify:'',//身份证号码
                 id_photo: [],//证件照
                 address:'',//地址
@@ -358,6 +367,7 @@ export default {
                 paper:[],//技能证书标签
                 certificate: [],//技能证书图片
                 source:0,//信息来源
+                source_name:'',//来源名称
                 manager_id:0,//创建人id
                 manager_name:this.$store.state.loginModule.user.username,//创建人姓名
             },

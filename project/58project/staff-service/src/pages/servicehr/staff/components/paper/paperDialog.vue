@@ -111,7 +111,7 @@ export default {
             },
             //props传入的证书信息
             paperForm: {
-                id: null,
+                id: this.paperProps.id? this.paperProps.id : null,
                 paper_category_name: this.paperProps.paper_category_name,//证书分类名
                 paper_category_id: this.paperProps.paper_category_id,//证书分类id
                 images: this.paperProps.images,//证书图片数组
@@ -134,6 +134,7 @@ export default {
                 url: './resource/'+response.data.path,
                 name: response.data.name
             }
+            // debugger
             this.paperForm.images.push(picItem)
             
             //消除表单验证
@@ -146,7 +147,7 @@ export default {
          */
         removePic(file, fileList){
             this.paperForm.images.forEach((item, index) =>{
-                if(item.name == file.name){
+                if(item.uid == file.uid){
                     this.paperForm.images.splice(index,1)
                 }
             })

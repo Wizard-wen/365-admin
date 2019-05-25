@@ -47,7 +47,7 @@ export const hrModule = {
         * @param queryedList 键值，可能是数组，也可能是字符串
         */
         setSellerList(state,payload){
-            state.newList[payload.queryKey] = payload.queryedList
+            state.sellerList[payload.queryKey] = payload.queryedList
         },
     },
 
@@ -125,16 +125,16 @@ export const hrModule = {
             working_age_ids: [],//工龄
             working_experience: '',//工作经验
             nation_ids: [],//民族
-            birthPlace: '',//籍贯
+            birthplace: '',//籍贯
             identify: '',//身份证号
             address: '',//地址
             service_region_ids: [],//服务地区
-            // education: '',//学历
+            education_ids: [],//教育程度
             urgent_phone: '',//紧急联系人电话
             bank_card: '',//银行卡号
             course_ids: [],//参加培训
             teacher_comment:'',//教师评语
-            paper_category_ids: [],//证书
+            paper_category_ids: [],//证书标签
             source_ids: [],//信息来源
             // manager_ids: []//创建人
         }, //全部查询参数
@@ -170,16 +170,16 @@ export const hrModule = {
             working_age_ids: [],//工龄
             working_experience: '',//工作经验
             nation_ids: [],//民族
-            birthPlace: '',//籍贯
+            birthplace: '',//籍贯
             identify: '',//身份证号
             address: '',//地址
             service_region_ids: [],//服务地区
-            // education: '',//学历
+            education: '',//教育程度
             urgent_phone: '',//紧急联系人电话
             bank_card: '',//银行卡号
             course_ids: [],//参加培训
             teacher_comment:'',//教师评语
-            paper_category_ids: [],//证书
+            paper_category_ids: [],//证书标签
             source_ids: [],//信息来源
             // manager_ids: []//创建人
         }, //全部查询参数

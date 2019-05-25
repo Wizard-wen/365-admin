@@ -70,7 +70,7 @@
         <search-input
             :queryFrom="queryFrom"
             @updateTable="updateTable"
-            :queryKey="'birthPlace'" 
+            :queryKey="'birthplace'" 
             :queryName="'籍贯'"></search-input>
         <search-input
             :queryFrom="queryFrom"
@@ -88,6 +88,12 @@
             :queryKey="'service_region_ids'" 
             :queryName="'服务地区'" 
             :queryList="configForm.service_region"></search-list>
+        <search-list
+            :queryFrom="queryFrom"
+            @updateTable="updateTable" 
+            :queryKey="'education_ids'" 
+            :queryName="'教育程度'" 
+            :queryList="configForm.education"></search-list>
         <search-input
             :queryFrom="queryFrom"
             @updateTable="updateTable"
@@ -121,6 +127,17 @@
             :queryKey="'source_ids'" 
             :queryName="'信息来源'" 
             :queryList="configForm.source"></search-list>
+        <search-input
+            :queryFrom="queryFrom"
+            @updateTable="updateTable"
+            :queryKey="'source_name'" 
+            :queryName="'来源名称'"></search-input>
+        <search-list
+            :queryFrom="queryFrom"
+            @updateTable="updateTable" 
+            :queryKey="'manager_ids'" 
+            :queryName="'创建人'" 
+            :queryList="configForm.manager"></search-list>
 
 
 
@@ -161,7 +178,6 @@ export default {
     methods: {
         // 更新表格数据
         updateTable(){
-            debugger
             this.$emit('updateTable')
         }
     },

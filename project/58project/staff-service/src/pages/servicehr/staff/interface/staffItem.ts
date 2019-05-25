@@ -67,7 +67,7 @@ interface satffItem{
     working_age?:number;//工龄
     working_experience?:string;//工作经验（备注）
     nation?:number;//民族
-    birthPlace?:string;//籍贯
+    birthplace?:string;//籍贯
     identify?:string;//身份证号码
     id_photo?:Array<object>;//身份证正反面照片
     address:string;//地址-----现住址
@@ -99,11 +99,11 @@ interface satffItem{
      * 新字段
      */
     teacher_comment?:string;//教师评语
-    paper?:Array<object>;//技能证书
-    certificate?:Array<object>,//技能证书图片
+    paper?:Array<object>;//技能证书标签
+    certificate?:Array<object>,//技能证书
     
     source?:number;//信息来源
-    // 来源名称
+    source_name?:string;// 来源名称
     
     
     

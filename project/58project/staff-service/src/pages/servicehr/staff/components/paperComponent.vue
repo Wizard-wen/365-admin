@@ -184,7 +184,7 @@ export default {
         }
     },
     mounted(){
-        console.log(this.$children)
+
     }
 }
 </script>
@@ -194,7 +194,7 @@ export default {
         min-width: 600px;
     }
     .paper-imgs{
-        height: 110px!important;
+        // height: 110px!important;
         padding: 5px 0;
         .paper-item-img{
             display: inline-block;
