@@ -82,8 +82,17 @@ export default {
         .getStore(this.$route.query.id)
         .then(data => {
           if (data.code == "0") {
-            this.shopForm = {...data.data.store};
+            this.shopForm.id = data.data.store.id;
+            this.shopForm.name = data.data.store.name;
+            this.shopForm.address = data.data.store.address;
+            this.shopForm.is_third = data.data.store.is_third;
+            this.shopForm.remarks = data.data.store.remarks;
+            this.shopForm.phone = data.data.store.phone;
+            this.shopForm.start_time = data.data.store.start_time;
+            this.shopForm.end_time = data.data.store.end_time;
+            this.shopForm.type = data.data.store.type;
             this.shopForm.manager_ids = data.data.manager_ids;
+
             this.roleList = data.data.store_manager;
           }
         })
