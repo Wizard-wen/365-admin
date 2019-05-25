@@ -30,25 +30,14 @@ export default {
     /**
      * 编辑门店信息
      * @param editObj
-     *
-     *
-     *
      */
     editStore(editObj){
         return axios.post(`./admin/store/editStore`,Object.assign({},editObj))
     },
     /**
-     * 物理删除管理员
-     * @param id 管理员id
-     */
-    deleteStore(id){
-        return axios.post(`./admin/store/deleteStore`,{
-            id: id
-        })
-    },
-    /**
      * 根据门店id获取门店绑定的账号分页列表
-     * @param
+     * @param id 门店的id
+     * @param pageNumber 分页
      */
     getStoreManagerList(obj){
       return axios.post(`./admin/store/getStoreManagerList?pageNumber=${obj.pageNumber}&id=${obj.id}`)

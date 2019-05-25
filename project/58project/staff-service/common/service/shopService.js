@@ -17,23 +17,15 @@ export default {
       /**
      * 编辑门店信息
      * @param editObj
-     * | id | int | 必填 | 门店id |
-     * | name | string | 必填 | 门店名 |
-     * | address | string | 必填 | 门店地址 |
-     * | is_third | int | 必填 | 门店类型 |
-     * | remarks | string | 选填 | 备注 |
-     * | managerIds | array | 选填 | 角色组 |
      */
     editStore(editObj){
       return shopRequest.editStore(editObj)
     },
     /**
-     * 物理删除管理员
-     * @param id 管理员id
+     * 根据门店id获取门店绑定的账号分页列表
+     * @param id 门店的id
+     * @param pageNumber 分页
      */
-    deleteStore(id){
-        return shopRequest.deleteStore(id)
-    },
     getStoreManagerList(obj){
       return shopRequest.getStoreManagerList(obj)
     }

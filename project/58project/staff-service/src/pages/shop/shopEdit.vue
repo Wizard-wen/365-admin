@@ -62,12 +62,14 @@ export default {
         end_time: 0,
         type: ""
       },
+      //店铺规则
       shopRules: {
         name: [{ validator: validateName, trigger: "blur" }],
         address: [{ validator: validateAddress, trigger: "blur" }]
       },
+      //店铺类型列表
       typeList: [{ id: 1, name: "直营店" }, { id: 2, name: "加盟店" }],
-      //
+      //绑定的员工列表
       roleList: []
     };
   },
@@ -80,7 +82,6 @@ export default {
         .getStore(this.$route.query.id)
         .then(data => {
           if (data.code == "0") {
-            this.shopForm = data.data.store;
             this.shopForm.id = data.data.store.id;
             this.shopForm.name = data.data.store.name;
             this.shopForm.address = data.data.store.address;
@@ -128,7 +129,16 @@ export default {
                   type: "success",
                   message: data.message
                 });
-                this.$router.push("/shop/shopList");
+                if(this.$route.query.type == 1){
+                    this.$router.push({
+                      path: "/shop/shopItem",
+                      query: {
+                        id: this.$route.query.id
+                      }
+                    });
+                }else{
+                  this.$router.push("/shop/shopList");
+                }
               }
             })
             .catch(error => {
