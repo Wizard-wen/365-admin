@@ -514,6 +514,44 @@ export default {
             } else if(type == 4){
                 module_type = 'apply'
             }
+
+            //字段转换
+            this.workerForm.service_crowd = this.setCommitAttr(
+                this.workerForm.service_crowd,
+                this.workerConfigList.service_crowd,
+                'service_crowd_id'
+            );
+
+            this.workerForm.region = this.setCommitAttr(
+                this.workerForm.region,
+                this.workerConfigList.service_region,
+                'region_id'
+            );
+
+            this.workerForm.skill = this.setCommitAttr(
+                this.workerForm.skill,
+                this.workerConfigList.service_category,
+                'service_category_id'
+            );
+
+            this.workerForm.course = this.setCommitAttr(
+                this.workerForm.course,
+                this.workerConfigList.course,
+                'course_id'
+            );
+
+            this.workerForm.service_type = this.setCommitAttr(
+                this.workerForm.service_type,
+                this.workerConfigList.service_type,
+                'service_type_id'
+            );
+
+            this.workerForm.paper = this.setCommitAttr(
+                this.workerForm.paper,
+                this.workerConfigList.paper_category,
+                'paper_category_id'
+            );
+        
             try{
                 store.commit('setLoading',true)
                 await hrService.agreeStaffSingle(module_type, 'edit',this.workerForm).then(data =>{
@@ -662,7 +700,7 @@ export default {
             if(fromPage == 0 || fromPage == 1){
                 this.$router.push("/worker/workerList")
             } else if (fromPage == 2){
-                this.$router.push("/worker/returnWorkerList")
+                this.$router.push("/worker/returnList")
             } else if (fromPage == 3){
                 this.$router.push("/worker/errorWorkerList")
             } else if (fromPage == 4){

@@ -47,6 +47,14 @@ export default {
         queryKey: {
             type:String,
             default:''
+        },
+        /**
+         * 查询来自于什么组件
+         * staff 运营 order 销售
+         */
+        queryFrom: {
+            type: String,
+            defeult: 'staff'
         }
     },
     watch: {
@@ -94,11 +102,18 @@ export default {
             })
 
             //将查询组件数据变化存入vuex
-            this.$store.commit('setQueryList', {
-                queryKey: this.queryKey, 
-                queryedList: this.queryedList
-            })
-
+            if(this.queryFrom == 'staff'){
+                this.$store.commit('setQueryList', {
+                    queryKey: this.queryKey, 
+                    queryedList: this.queryedList
+                })
+            } else {
+                this.$store.commit('setSellerList', {
+                    queryKey: this.queryKey, 
+                    queryedList: this.queryedList
+                })
+            }
+            
             //更新表格数据
             this.$emit('updateTable')
         }
@@ -107,50 +122,47 @@ export default {
 </script>
 <style lang="scss" scoped>
     .search-box{
-        // height:40px;
         width:100%;
+        position:relative;
+        .arrow-position{
+            position: absolute;
+            right:10px;
+            font-size:12px;
+            top: 13px;
+        }
+        &:after{
+            position:absolute;
+            bottom: 0;
+            left: 0;
+            content: '';
+            display: block;
+            height:1px;
+            width:100%;
+            background: #eeecec;
+        }
         .search-label{
             height: 39px;
             width: 100%;
             line-height: 39px;
             color: #333;
             text-indent: 25px;
-            background: #D9DEE4;
+            // background: #D9DEE4;
+            background: #fff;
             cursor: pointer;
-            position:relative;
-            .arrow-position{
-                position: absolute;
-                right:10px;
-                // height: 12px;
-                // width:12px;
-                font-size:12px;
-                top: 13px;
-            }
-            &:after{
-                position:absolute;
-                bottom: 0;
-                left: 0;
-                content: '';
-                display: block;
-                height:1px;
-                width:100%;
-                background: #fff;
-            }
+
         }
         .search-list{
-            // display: none;
             .list-item{
                 height:30px;
                 line-height: 30px;
                 width:100%;
                 text-indent:30px;   
-                background-color: #eaedf1;
                 color: #333;
                 font-size: 12px;
                 cursor: pointer;
                 position: relative;
                 &:hover{
-                    background-color: #fff;
+                    background-color: #FAFAFA;
                 }
                 .list-item-block{
                     position: absolute;

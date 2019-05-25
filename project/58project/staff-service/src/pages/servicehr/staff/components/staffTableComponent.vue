@@ -281,7 +281,10 @@
                 width: 200px;
                 height: 100%;
                 overflow-y: auto;
-                background: #eaedf1;
+                // background: #eaedf1;
+                background: #fff;
+                margin-right: 5px;
+                margin-left: 5px;
             }
             .table-list{
                 overflow: auto;

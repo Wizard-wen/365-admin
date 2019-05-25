@@ -10,7 +10,7 @@ export default {
      */
     getStaffList(type){
         let baseUrl = `./admin/staff/getStaffList`;
-        if(type == 0 || type == 4){
+        if(type == 0){
             return axios.post(
                 baseUrl,
                 store.state.hrModule.queryedList
@@ -29,6 +29,11 @@ export default {
             return axios.post(
                 baseUrl,
                 store.state.hrModule.newList
+            )
+        } else if(type == 4){
+            return axios.post(
+                baseUrl,
+                store.state.hrModule.sellerList
             )
         }
     },
