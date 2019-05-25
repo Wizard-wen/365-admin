@@ -46,5 +46,11 @@ export default {
             id: id
         })
     },
-
+    /**
+     * 根据门店id获取门店绑定的账号分页列表
+     * @param
+     */
+    getStoreManagerList(obj){
+      return axios.post(`./admin/store/getStoreManagerList?pageNumber=${obj.pageNumber}&id=${obj.id}`)
+  },
 }
