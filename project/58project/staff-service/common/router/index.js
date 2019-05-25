@@ -86,7 +86,6 @@ router.beforeEach((to, from, next) => {
                         type: 'warning',
                         message: "非法访问"
                     })
-                    debugger
                     router.push(from.path)
                 }
             } else {

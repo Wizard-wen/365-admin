@@ -5,6 +5,12 @@
             :maxLength="maxLength"
             :controlScopeLength="150">
             
+            <template slot="searchList">
+                <div class="search-list">
+                    <query-component :queryFrom="'order'" @updateTable="updateTable"></query-component>
+                </div>
+            </template>
+
             <template slot="searchForm">
                 <div class="search-left">
                     <el-input v-model="staffSearch.name" placeholder="请输入员工姓名" :maxlength="20"></el-input>
@@ -54,12 +60,13 @@
 
     import createStaffDialog from './components/createStaff/createStaffDialog.vue'
     import errorStaffDialog from './components/errorStaff/errorStaffDialog.vue'
-    
+    import {queryComponent} from '../servicehr/staff/components'
     export default {
         components: {
             staffTableComponent,
             createStaffDialog,
-            errorStaffDialog
+            errorStaffDialog,
+            queryComponent
         },
         data() {
             return {
@@ -198,7 +205,7 @@
             async handleCurrentPage(val){
                 // this.pagination.currentPage = val
                 //设置page查询参数
-                this.$store.commit('setQueryList', {
+                this.$store.commit('setSellerList', {
                     queryKey: 'page', 
                     queryedList: val
                 })
@@ -209,12 +216,12 @@
              */
             async searchStaff(){
                 //设置name查询参数
-                this.$store.commit('setQueryList', {
+                this.$store.commit('setSellerList', {
                     queryKey: 'name', 
                     queryedList: this.staffSearch.name
                 })
                 //设置手机号查询参数
-                this.$store.commit('setQueryList', {
+                this.$store.commit('setSellerList', {
                     queryKey: 'phone', 
                     queryedList: this.staffSearch.phone
                 })
@@ -227,12 +234,12 @@
                 this.staffSearch.name = ''
                 this.staffSearch.phone = ''
                 //重置name查询参数
-                this.$store.commit('setQueryList', {
+                this.$store.commit('setSellerList', {
                     queryKey: 'name', 
                     queryedList: null
                 })
                 //重置手机号查询参数
-                this.$store.commit('setQueryList', {
+                this.$store.commit('setSellerList', {
                     queryKey: 'phone', 
                     queryedList: null
                 })

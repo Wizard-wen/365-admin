@@ -39,9 +39,16 @@ export const hrModule = {
         * @param queryKey queryList 键名 
         * @param queryedList 键值，可能是数组，也可能是字符串
         */
-       setErrorList(state,payload){
+        setErrorList(state,payload){
             state.newList[payload.queryKey] = payload.queryedList
-        }
+        },
+        /** 
+        * @param queryKey queryList 键名 
+        * @param queryedList 键值，可能是数组，也可能是字符串
+        */
+        setSellerList(state,payload){
+            state.newList[payload.queryKey] = payload.queryedList
+        },
     },
 
     state: {
@@ -86,7 +93,7 @@ export const hrModule = {
 
         },
         /**
-         * 全部服务人员 / 服务人员信息库 查询字段 
+         * 全部服务人员 查询字段 
          */
         queryedList: {
             /*********************表格字段查询******************************/
@@ -100,6 +107,51 @@ export const hrModule = {
             // sex: '',//性别
             // create_at: '', //创建时间
             count: 0,//添加回访人员数量
+
+            /*********************业务字段查询*****************************/
+            
+            // register_at:'',//登记时间
+            // updated_at:'',更新时间
+            authentication_ids: [],//认证状态
+            name: null, //姓名
+            // age: null,//年龄--按年龄段搜索
+            phone: '',//电话
+            return_msg: '',//回访信息
+            working_status_ids: [],//接单状态 ------
+            remarks: '',//备注（商家情况）
+            service_category_ids: [],//职业类型
+            service_type_ids: [],//服务类型
+            service_crowd_ids: [],//可服务人群
+            working_age_ids: [],//工龄
+            working_experience: '',//工作经验
+            nation_ids: [],//民族
+            birthPlace: '',//籍贯
+            identify: '',//身份证号
+            address: '',//地址
+            service_region_ids: [],//服务地区
+            // education: '',//学历
+            urgent_phone: '',//紧急联系人电话
+            bank_card: '',//银行卡号
+            course_ids: [],//参加培训
+            teacher_comment:'',//教师评语
+            paper_category_ids: [],//证书
+            source_ids: [],//信息来源
+            // manager_ids: []//创建人
+        }, //全部查询参数
+        /**
+         *  服务人员信息库 查询字段 
+         */
+        sellerList: {
+            /*********************表格字段查询******************************/
+            get_for: 'seller',
+            page: 1, //请求页码
+            pageNumber: 20,//单页信息数量
+
+            /*********************逻辑字段查询*****************************/
+            
+            // staff_code: '',//员工号
+            // sex: '',//性别
+            // create_at: '', //创建时间
 
             /*********************业务字段查询*****************************/
             
