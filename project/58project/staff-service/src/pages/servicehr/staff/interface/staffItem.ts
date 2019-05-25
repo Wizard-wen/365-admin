@@ -12,8 +12,13 @@ interface satffItem{
     
     version:number;//操作版本号
     created_at:number;//创建时间
-    type:number;//签约状态   
+    /**
+     * enable 启用
+     * disable 已停用
+     */
+    type:number;//停用  启用状态 
     sex:number;//性别
+    status:string;//签约状态
     
     /*****************************业务字段***********************************************/
 
@@ -64,7 +69,7 @@ interface satffItem{
     nation?:number;//民族
     birthPlace?:string;//籍贯
     identify?:string;//身份证号码
-
+    id_photo?:Array<object>;//身份证正反面照片
     address:string;//地址-----现住址
 
     /**
@@ -76,7 +81,7 @@ interface satffItem{
     /**
      * 格式一般为:  姓名/与劳动者的关系 +
      */
-    urgent?:string;//紧急联系人电话
+    urgent_phone?:string;//紧急联系人电话
 
     bank_card?:string;//银行卡号
     /**
@@ -95,7 +100,7 @@ interface satffItem{
      */
     teacher_comment?:string;//教师评语
     paper?:Array<object>;//技能证书
-    // paper
+    certificate?:Array<object>,//技能证书图片
     
     source?:number;//信息来源
     // 来源名称

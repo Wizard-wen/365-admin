@@ -3,13 +3,7 @@
         <staff-table-component
             :staffTable="staffTable"
             :maxLength="maxLength"
-            :controlScopeLength="110">
-            
-            <template slot="searchList">
-                <div class="search-list">
-                    <query-component @updateTable="updateTable"></query-component>
-                </div>
-            </template>
+            :controlScopeLength="140">
             
             <template slot="searchForm">
                 <div class="search-left">
@@ -18,14 +12,12 @@
                     <el-button type="primary" @click="searchStaff">查询</el-button>
                     <el-button type="primary" @click="resetStaff">重置</el-button>
                 </div>
-                <el-button type="primary" @click="createStaff">导出回访</el-button>
-                <el-button type="primary" @click="createStaff">添加服务人员</el-button>
             </template>
 
             <template slot="control" slot-scope="controler">
-                <el-button size="mini" type="text" @click="editStaff(controler.scoper.$index, controler.scoper.row)">编辑</el-button>
-                <el-button size="mini" type="text" style="color:#f56c6c" v-if="controler.scoper.row.status == 0" @click="changeStaffStatus(control.scoper.row)">停用</el-button>
-                <el-button size="mini" type="text" style="color:#67c23a" @click="changeStaffStatus(controler.scoper.row)" v-else>启用</el-button>
+                <el-button size="mini" type="text" @click="agreeStaffSingle(controler.scoper.row)" style="color:#67c23a">提交</el-button>
+                <el-button size="mini" type="text" @click="editStaff(3, controler.scoper.row)">编辑</el-button>
+                <el-button size="mini" type="text" style="color:#f56c6c" @click="deleteNewStaff(controler.scoper.row)">删除</el-button>
             </template>
 
             <template slot="pagination">
@@ -75,17 +67,17 @@
                 },
                 //计算列表每一列的最大宽度
                 maxLength: {
-                    authentication: 0, //认证状态
-                    working_status: 0,//接单状态
-                    skill_ids: 0,// 职业类型
-                    service_type_ids: 0,//服务类型
-                    service_crowd_ids: 0,//可服务人群
-                    working_age: 0,// 工龄
-                    nation: 0,// 民族
-                    region_ids: 0,//服务地区
-                    course_ids: 0,//参加培训
-                    paper_ids: 0, //技能证书
-                    source: 0,//信息来源
+                    authentication: 80, //认证状态
+                    working_status: 80,//接单状态
+                    skill_ids: 80,// 职业类型
+                    service_type_ids: 80,//服务类型
+                    service_crowd_ids: 100,//可服务人群
+                    working_age: 80,// 工龄
+                    nation: 80,// 民族
+                    region_ids:80,//服务地区
+                    course_ids: 80,//参加培训
+                    paper_ids: 80, //技能证书
+                    source: 80,//信息来源
                 }
             }
         },
@@ -93,8 +85,7 @@
             /**
              * 
              */
-            workerConfigList(){
-                
+            workerConfigList(){ 
                 return this.$store.state.hrModule.configForm
             }
         },
@@ -127,12 +118,21 @@
              */
             async getTableList(){                
                 try{
-                    
+                    //设置name查询参数
+                    this.$store.commit('setNewList', {
+                        queryKey: 'name', 
+                        queryedList: this.staffSearch.name
+                    })
+                    //设置手机号查询参数
+                    this.$store.commit('setNewList', {
+                        queryKey: 'phone', 
+                        queryedList: this.staffSearch.phone
+                    })                  
                     this.isLoaded = true
 
                     await Promise.all([
                         hrService.getFormConfig(), //获取表单配置字段
-                        hrService.getStaffList() //获取列表数据
+                        hrService.getStaffList(3) //获取列表数据
                     ]).then((data) =>{
                         // 将表单配置数据存入 vuex 
                         this.$store.commit('setConfigForm',data[0].data)
@@ -173,17 +173,13 @@
                     })
                 }
             },
-            // 由查询组件触发的更新表格事件
-            async updateTable(){
-                await this.getTableList()
-            },
             /**
              * 切换页码
              */
             async handleCurrentPage(val){
                 // this.pagination.currentPage = val
                 //设置page查询参数
-                this.$store.commit('setQueryList', {
+                this.$store.commit('setNewList', {
                     queryKey: 'page', 
                     queryedList: val
                 })
@@ -194,12 +190,12 @@
              */
             async searchStaff(){
                 //设置name查询参数
-                this.$store.commit('setQueryList', {
+                this.$store.commit('setNewList', {
                     queryKey: 'name', 
                     queryedList: this.staffSearch.name
                 })
                 //设置手机号查询参数
-                this.$store.commit('setQueryList', {
+                this.$store.commit('setNewList', {
                     queryKey: 'phone', 
                     queryedList: this.staffSearch.phone
                 })
@@ -212,58 +208,43 @@
                 this.staffSearch.name = ''
                 this.staffSearch.phone = ''
                 //重置name查询参数
-                this.$store.commit('setQueryList', {
+                this.$store.commit('setNewList', {
                     queryKey: 'name', 
                     queryedList: null
                 })
                 //重置手机号查询参数
-                this.$store.commit('setQueryList', {
+                this.$store.commit('setNewList', {
                     queryKey: 'phone', 
                     queryedList: null
                 })
                 await this.getTableList()
             },
             /**
-             * 创建服务人员
-             * des 先创建服务人员，然后才能添加服务人员技能。
-             */
-            createStaff(){
-                this.$router.push({
-                    path: "/worker/workerItem",
-                    query: {
-                        type: 0, //新建
-                    }
-                })
-            },
-            /**
              * 编辑服务人员信息
-             * 编辑时可以添加服务人员技能
              */
-            editStaff(index, row){
+            editStaff(type, row){
                 this.$router.push({
                     path: "/worker/workerItem",
                     query: {
-                        type: 5, //编辑为1
+                        type: 4, //编辑为1
                         id: row.id
                     }
                 })
             },
             /**
-             * changeStaffStatus
+             * 删除服务人员
              */
-            async changeStaffStatus(row){
+            async deleteNewStaff(row){
                 let _this= this;
 
-                let status = row.status == 0? '停用' : '启用'
-
-                let response = await this.$confirm(`确定${status}该服务人员吗?`, '提示', {
+                let response = await this.$confirm(`确定删除该服务人员吗?`, '提示', {
                     confirmButtonText: '确定',
                     cancelButtonText: '取消',
                     type: 'warning'
                 }).catch(() => {
                     this.$message({
                         type: 'info',
-                        message: `已取消${status}`
+                        message: `已取消删除`
                     });
                 });
 
@@ -271,12 +252,69 @@
                     store.commit('setLoading',true)
 
                     try{
-                        await hrService.changeStaffStatus(row.id, row.version)
+                        await hrService.deleteApplyStaff(row.id)
                             .then(data =>{
                                 if(data.code == "0"){
                                     this.$message({
                                         type:'success',
-                                        message: `${status}成功`
+                                        message: `删除成功`
+                                    })
+                                }
+                            }).catch(e =>{
+                                this.$message({
+                                    type:'error',
+                                    message: e.message
+                                })
+                            })
+                    } catch(error){
+                        this.$message({
+                            type:'error',
+                            message: error.message
+                        })
+                    }
+
+                    await _this.getTableList()
+                    store.commit('setLoading',false)
+                }
+            },
+            /**
+             * 提交保姆
+             */
+            async agreeStaffSingle(row){
+                let _this= this;
+
+                let response = await this.$confirm(`确定提交该服务人员信息吗?`, '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                }).catch(() => {
+                    this.$message({
+                        type: 'info',
+                        message: `已取消提交`
+                    });
+                });
+
+                if(response == "confirm"){
+                    // //设置name查询参数
+                    // this.$store.commit('setErrorList', {
+                    //     queryKey: 'name', 
+                    //     queryedList: this.staffSearch.name
+                    // })
+                    // //设置手机号查询参数
+                    // this.$store.commit('setErrorList', {
+                    //     queryKey: 'phone', 
+                    //     queryedList: this.staffSearch.phone
+                    // })
+                    
+                    store.commit('setLoading',true)
+
+                    try{
+                        await hrService.agreeStaffSingle('apply', 'list', row.id)
+                            .then(data =>{
+                                if(data.code == "0"){
+                                    this.$message({
+                                        type:'success',
+                                        message: `提交成功`
                                     })
                                 }
                             }).catch(e =>{

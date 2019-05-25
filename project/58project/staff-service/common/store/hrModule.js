@@ -27,31 +27,70 @@ export const hrModule = {
         */
         setReturnList(state,payload){
             state.returnList[payload.queryKey] = payload.queryedList
+        },
+        /** 
+        * @param queryKey queryList 键名 
+        * @param queryedList 键值，可能是数组，也可能是字符串
+        */
+       setNewList(state,payload){
+            state.newList[payload.queryKey] = payload.queryedList
+        },
+        /** 
+        * @param queryKey queryList 键名 
+        * @param queryedList 键值，可能是数组，也可能是字符串
+        */
+       setErrorList(state,payload){
+            state.newList[payload.queryKey] = payload.queryedList
         }
     },
 
     state: {
         configForm: {}, //全部劳动者配置项
-        // 请求回访数据
+        // 回访服务人员查询
         returnList: {
             /*********************表格字段查询******************************/
-            get_for: 'staff',
+            get_for: 'return',
+            page: 1, //请求页码
+            pageNumber: 20,//单页信息数量
+            /*********************逻辑字段查询*****************************/
+
+            /*********************业务字段查询*****************************/
+            name: '',
+            phone: '',
+
+        },
+        // 审核新服务人员查询
+        newList: {
+            /*********************表格字段查询******************************/
+            get_for: 'apply',
             page: 1, //请求页码
             pageNumber: 20,//单页信息数量
             /*********************逻辑字段查询*****************************/
             
-            return_id: 0,
+            /*********************业务字段查询*****************************/
+            name: '',
+            phone: '',
+
+        },
+        // 异常服务人员查询
+        errorList: {
+            /*********************表格字段查询******************************/
+            get_for: 'warning',
+            page: 1, //请求页码
+            pageNumber: 20,//单页信息数量
+            /*********************逻辑字段查询*****************************/
+            
             /*********************业务字段查询*****************************/
             name: '',
             phone: '',
 
         },
         /**
-         * 服务人员列表 查询条件
+         * 全部服务人员 / 服务人员信息库 查询字段 
          */
         queryedList: {
             /*********************表格字段查询******************************/
-            get_for: 'staff',
+            get_for: 'total',
             page: 1, //请求页码
             pageNumber: 20,//单页信息数量
 
@@ -61,52 +100,36 @@ export const hrModule = {
             // sex: '',//性别
             // create_at: '', //创建时间
             count: 0,//添加回访人员数量
+
             /*********************业务字段查询*****************************/
+            
+            // register_at:'',//登记时间
+            // updated_at:'',更新时间
             authentication_ids: [],//认证状态
-            course_ids: [],//参加培训
-            nation_ids: [],//民族
-            paper_category_ids: [],//证书
-            service_category_ids: [],//职业类型
-            service_crowd_ids: [],//可服务人群
-            service_region_ids: [],//服务地区
-            service_type_ids: [],//服务类型
-            source_ids: [],//信息来源
-            working_age_ids: [],//工龄
-            working_status_ids: [],//接单状态 ------
-
-            // 以下字段非配置项字段
-            
-            // register_at: '',//登记时间
-            // updated_at: '',//更新时间
-            
-            // type: '',//签约状态
-            
-            
-            
             name: null, //姓名
-            age: null,//年龄
-            // phone: '',//电话
-            // return_msg: '',//回访信息
-            
-            // remarks: '',//备注（商家情况）
-            // skill: '', //职业类型
-            
-            
-            
-            // working_experience: '',//工作经验
-            
-            // birthPlace: '',//籍贯
-            // identify: '',//身份证号
-            // address: '',//地址
-            
+            // age: null,//年龄--按年龄段搜索
+            phone: '',//电话
+            return_msg: '',//回访信息
+            working_status_ids: [],//接单状态 ------
+            remarks: '',//备注（商家情况）
+            service_category_ids: [],//职业类型
+            service_type_ids: [],//服务类型
+            service_crowd_ids: [],//可服务人群
+            working_age_ids: [],//工龄
+            working_experience: '',//工作经验
+            nation_ids: [],//民族
+            birthPlace: '',//籍贯
+            identify: '',//身份证号
+            address: '',//地址
+            service_region_ids: [],//服务地区
             // education: '',//学历
-            // urgent_phone: '',//紧急联系人电话
-            // bank_card: '',//银行卡号
-            
-            // paper: '',//技能证书
-            
-            // manager_name: ''//创建人
-
+            urgent_phone: '',//紧急联系人电话
+            bank_card: '',//银行卡号
+            course_ids: [],//参加培训
+            teacher_comment:'',//教师评语
+            paper_category_ids: [],//证书
+            source_ids: [],//信息来源
+            // manager_ids: []//创建人
         }, //全部查询参数
         educationList: [
             {

@@ -10,18 +10,27 @@ export default {
      */
     getStaffList(type){
         let baseUrl = `./admin/staff/getStaffList`;
-        if(type == 2){
+        if(type == 0 || type == 4){
+            return axios.post(
+                baseUrl,
+                store.state.hrModule.queryedList
+            )
+        }else if(type == 1){
             return axios.post(
                 baseUrl,
                 store.state.hrModule.returnList
             )
+        } else if(type == 2){
+            return axios.post(
+                baseUrl,
+                store.state.hrModule.errorList
+            )
+        } else if(type == 3){
+            return axios.post(
+                baseUrl,
+                store.state.hrModule.newList
+            )
         }
-        
-
-        return axios.post(
-            baseUrl,
-            store.state.hrModule.queryedList
-        )
     },
     /**
      * 获取人员信息
@@ -36,16 +45,7 @@ export default {
     },
     /**
      * 编辑员工
-     * @param id | int | 非必填 | 员工id |
-     * @param name |string|必填|姓名|
-     * @param phone |string|必填|手机号|
-     * @param age |int|必填|年龄|
-     * @param address |string|必填|地址|
-     * @param bank_card |string|必填|银行卡号|
-     * @param version |int|必填|操作版本号|
-     * @param labels |对象数组|非必填|能力标签|
-     * @param papers |对象数组|非必填|证书|
-     * @param skills |对象数组|非必填|技能|
+     * @param obj 参考staffItem.ts
      */
     editStaff(obj){
         obj = Object.assign({},obj)
@@ -76,10 +76,6 @@ export default {
             id: id
         })
     },
-
-
-
-
 
     /********************************通用模块**************************************88 */
     /**
@@ -159,119 +155,35 @@ export default {
         return axios.post(`./admin/staff/removeReturnStaff`,{})
     },
     /**
-     * 恢复单个回访人员
+     * 删除申请添加服务人员
      */
-    removeReturnStaffSingle(type,id){
-        if(type == "list"){
-            return axios.post(`./admin/staff/removeReturnStaffSingle`,{
-                from: "list",
-                id:id,
+    deleteApplyStaff(id){
+        return axios.post(`./admin/staff/deleteApplyStaff`,{id,})
+    },
+
+    /**
+     * 提交新申请服务人员 / 恢复异常服务人员 / 导出回访人员 
+     * @param module  apply warning return 
+     * @param from list 从列表提交 还是从编辑详情提交
+     * @param id 若是from=list id为人员id  若是from=edit id是服务人员信息object
+     */
+    agreeStaffSingle(module_type, from, id){
+        if(from == 'list'){
+            return axios.post(`./admin/staff/agreeStaffSingle`,{
+                module: module_type,
+                from,
+                id,
             })
         } else {
-
+            let obj = {
+                module: module_type,
+                from,
+                ...id
+            }
+            return axios.post(`./admin/staff/agreeStaffSingle`,{
+                ...obj
+            })
         }
-        
-    },
-
-
-
-
-    /***************************技能分类模块*************************************/
-    /**
-     * 技能分类接口
-     */
-    getCategoryList(tableOption){
-        let baseUrl = `./admin/service/getCategoryList?pageNumber=${tableOption.pageNumber}&page=${tableOption.currentPage}`
-        if(tableOption.searchSelect.length){
-            tableOption.searchSelect.forEach((item, index) => {
-                baseUrl += `&${item.key}=${item[item.key]}`
-            });
-        }
-        return axios.get(baseUrl)
-    },
-    /**
-     * 请求某一具体技能接口
-     * @param id 技能的id
-     */
-    getCategory(id){
-        return axios.get(`./admin/service/getCategory?id=${id}`)
-    },
-    /**
-     * 编辑技能接口
-     */
-    editCategory(obj){
-
-        obj = Object.assign({},obj)
-
-        return axios.post(`./admin/service/editCategory`,obj)
-
-    },
-
-
-
-
-
-
-
-    /*********************************能力标签模块*************************************************/
-    /**
-     * 能力标签列表接口
-     */
-    getAbilityList(tableOption){
-        let baseUrl = `./admin/ability/getAbilityList?pageNumber=${tableOption.pageNumber}&page=${tableOption.currentPage}`
-        if(tableOption.searchSelect.length){
-            tableOption.searchSelect.forEach((item, index) => {
-                baseUrl += `&${item.key}=${item[item.key]}`
-            });
-        }
-        return axios.get(baseUrl)
-    },
-    /**
-     * 请求某一具体能力标签接口
-     * @param id 能力标签的id
-     */
-    getAbility(id){
-        return axios.get(`./admin/ability/getAbility?id=${id}`)
-    },
-    /**
-     * 编辑能力标签接口
-     */
-    editAbility(obj){
-
-        obj = Object.assign({},obj)
-
-        return axios.post(`./admin/ability/editAbility`,obj)
-
-    },
-
-    /*********************************证书模块*************************************************/
-    /**
-     * 证书列表接口
-     */
-    getPaperList(tableOption){
-        let baseUrl = `./admin/paper/getPaperList?pageNumber=${tableOption.pageNumber}&page=${tableOption.currentPage}`
-        if(tableOption.searchSelect.length){
-            tableOption.searchSelect.forEach((item, index) => {
-                baseUrl += `&${item.key}=${item[item.key]}`
-            });
-        }
-        return axios.get(baseUrl)
-    },
-    /**
-     * 请求某一具体证书接口
-     * @param id 证书的id
-     */
-    getPaper(id){
-        return axios.get(`./admin/paper/getPaper?id=${id}`)
-    },
-    /**
-     * 编辑证书接口
-     */
-    editPaper(obj){
-
-        obj = Object.assign({},obj)
-
-        return axios.post(`./admin/paper/editPaper`,obj)
 
     },
 

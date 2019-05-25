@@ -98,10 +98,18 @@ export default {
     assignOrder(obj){
         return orderRequest.assignOrder(obj)
     },
+
+    
     /**
-     * 申请创建服务人员
+     * 销售创建服务人员
      */
-    editStaffBySale(obj){
-        return orderRequest.editStaffBySale(obj)
+    createStaffBySeller(obj){
+        return orderRequest.createStaffBySeller(obj)
+    },
+    /**
+     * 销售创建服务人员
+     */
+    changeWorkingStatus(obj){
+        return orderRequest.changeWorkingStatus(obj)
     }
 }

@@ -49,7 +49,7 @@ export default {
          */
         maxWidth: {
             default: 760,
-            type: Number
+            type: [Number, String]
         }
     },
     data(){

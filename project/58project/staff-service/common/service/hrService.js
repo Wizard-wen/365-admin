@@ -37,12 +37,6 @@ export default {
     changeStaffStatus(id, version){
         return hrRequest.changeStaffStatus(id, version)
     },
-    /**
-     * 恢复单个回访人员
-     */
-    removeReturnStaffSingle(type,id){
-        return hrRequest.removeReturnStaffSingle(type,id)
-    },
 
 
 
@@ -116,74 +110,26 @@ export default {
     removeReturnStaff(){
         return hrRequest.removeReturnStaff()
     },
-
-
-
-    /****************************技能列表模块****************************************/
     /**
-     * 技能分类接口
+     * 恢复全部回访人员
      */
-    getCategoryList(tableOption){
-        return hrRequest.getCategoryList(tableOption)
-    },
-    /**
-     * 请求某一具体技能接口
-     * @param id 技能的id
-     */
-    getCategory(id){
-        return hrRequest.getCategory(id)
-    },
-    /**
-     * 编辑技能接口
-     */
-    editCategory(obj){
-        return hrRequest.editCategory(obj)
+    removeReturnStaff(){
+        return hrRequest.removeReturnStaff()
     },
 
-    /*****************************能力标签模块******************************************************* */
     /**
-     * 能力标签列表接口
+     * 删除申请添加服务人员
      */
-    getAbilityList(tableOption){
-
-        return hrRequest.getAbilityList(tableOption)
+    deleteApplyStaff(id){
+        return hrRequest.deleteApplyStaff(id)
     },
     /**
-     * 请求某一具体能力标签接口
-     * @param id 能力标签的id
+     * 提交新申请服务人员 / 恢复异常服务人员 / 导出回访人员 
+     * @param module  apply warning return 
+     * @param from list 从列表提交 还是从编辑详情提交
+     * @param id 服务人员id
      */
-    getAbility(id){
-        return hrRequest.getAbility(id)
-    },
-    /**
-     * 编辑能力标签接口
-     */
-    editAbility(obj){
-
-        return hrRequest.editAbility(obj)
-
-    },
-    /*****************************证书模块******************************************************* */
-    /**
-     * 证书列表接口
-     */
-    getPaperList(tableOption){
-
-        return hrRequest.getPaperList(tableOption)
-    },
-    /**
-     * 请求某一证书接口
-     * @param id 证书的id
-     */
-    getPaper(id){
-        return hrRequest.getPaper(id)
-    },
-    /**
-     * 编辑证书接口
-     */
-    editPaper(obj){
-
-        return hrRequest.editPaper(obj)
-
+    agreeStaffSingle(module_type, from, id){
+        return hrRequest.agreeStaffSingle(module_type, from,id)
     },
 }

@@ -51,9 +51,9 @@ export default {
         // height:40px;
         width:100%;
         .search-label{
-            height: 30px;
+            height: 39px;
             width: 100%;
-            line-height: 30px;
+            line-height: 39px;
             color: #333;
             text-indent: 25px;
             background: #D9DEE4;
@@ -65,7 +65,7 @@ export default {
                 // height: 12px;
                 // width:12px;
                 font-size:12px;
-                top: 9px;
+                top: 13px;
             }
             &:after{
                 position:absolute;
@@ -81,7 +81,7 @@ export default {
         .search-list{
             height: 40px;
             width: 100%;
-            padding: 10px 0;
+            padding: 6px 0 6px 25px;
             // position: relative;
             // &:after{
             //     position:absolute;
@@ -96,8 +96,8 @@ export default {
             .input{
                 box-sizing: border-box;
                 margin: 0 auto;
-                height: 20px;
-                width: 150px;
+                height: 27px;
+                width: 175px;
                 display: block;
                 outline: none;
                 border: none;

@@ -10,8 +10,8 @@
                 <select-tag-component :maxWidth="'100%'" :propTagList="workerConfigList.working_status" v-model="errorStaffForm.working_status" :isSingle="true"></select-tag-component>
             </el-form-item>
             
-            <el-form-item label="备注" prop="remarks">
-                <el-input placeholder="请最多输入200字符" :maxlength="100" autosize v-model="errorStaffForm.remarks" type="textarea"></el-input>
+            <el-form-item label="备注" prop="warning_log">
+                <el-input placeholder="请最多输入200字符" :maxlength="100" autosize v-model="errorStaffForm.warning_log" type="textarea"></el-input>
             </el-form-item>
         </el-form>
         <div slot="footer" class="dialog-footer">
@@ -39,6 +39,11 @@ export default {
         errorStaffWorkingStatus: {
             type: Number,
             default: 0
+        },
+        //服务人员id
+        staffId:{
+            type: Number,
+            default: 0,
         }
     },
     components: {
@@ -64,7 +69,8 @@ export default {
             //申请创建劳动者信息
             errorStaffForm : {
                 working_status: this.errorStaffWorkingStatus,
-                remarks: '',//日志信息
+                warning_log: '',//日志信息
+                id: this.staffId,//
             },
             //申请创建劳动者表单验证
             errorStaffRules: {
@@ -84,7 +90,7 @@ export default {
                     
                     store.commit('setLoading',true)
             
-                    await orderService.editStaffBySale(this.errorStaffForm) 
+                    await orderService.changeWorkingStatus(this.errorStaffForm) 
                         .then(data =>{
                             if(data.code == "0"){
                                 this.$message({

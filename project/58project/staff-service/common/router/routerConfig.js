@@ -90,15 +90,12 @@ import authConfig from '@/pages/auth/auth/authConfig.vue'
  * 服务人员管理
  */
 
-
  import workerList from '@/pages/servicehr/staff/workerList.vue'
+ import workFormConfig from '@/pages/servicehr/staff/workFormConfig.vue'
+ import workerItem from '@/pages/servicehr/staff/workerItem.vue'
  import newWorkerList from '@/pages/servicehr/staff/newWorkerList.vue'
  import errorWorkerList from '@/pages/servicehr/staff/errorWorkerList.vue'
- import workerItem from '@/pages/servicehr/staff/workerItem.vue'
- import workFormConfig from '@/pages/servicehr/staff/workFormConfig.vue'
-
  import returnList from '@/pages/servicehr/staff/returnList.vue'
- import returnItem from '@/pages/servicehr/staff/returnItem.vue'
 
 
  const staffModule = [
@@ -132,57 +129,7 @@ import authConfig from '@/pages/auth/auth/authConfig.vue'
         name: 'returnList',
         component: returnList,
     },
-    {
-        path: '/worker/returnItem',
-        name: 'returnItem',
-        component: returnItem,
-    },
  ]
-
-/**
- * 服务类型管理
- */
-
-
-import abilityList from '@/pages/servicehr/serviceType/abilityList.vue'
-import abilityConfig from '@/pages/servicehr/serviceType/abilityConfig.vue'
-import skillList from '@/pages/servicehr/serviceType/skillList.vue'
-import skillConfig from '@/pages/servicehr/serviceType/skillConfig.vue'
-import paperList from '@/pages/servicehr/serviceType/paperList.vue'
-import paperConfig from '@/pages/servicehr/serviceType/paperConfig.vue'
-
-const serviceTypeModule = [
-    // {
-    //     path: '/serviceType/abilityList',
-    //     name: 'abilityList',
-    //     component: abilityList,
-    // },
-    // {
-    //     path: '/serviceType/abilityConfig',
-    //     name: 'abilityConfig',
-    //     component: abilityConfig,
-    // },
-    // {
-    //     path: '/serviceType/skillList',
-    //     name: 'skillList',
-    //     component: skillList,
-    // },
-    // {
-    //     path: '/serviceType/skillConfig',
-    //     name: 'skillConfig',
-    //     component: skillConfig,
-    // },
-    // {
-    //     path: '/serviceType/paperList',
-    //     name: 'paperList',
-    //     component: paperList,
-    // },
-    // {
-    //     path: '/serviceType/paperConfig',
-    //     name: 'paperConfig',
-    //     component: paperConfig,
-    // },
-]
 
 /**
  * 销售管理模块
@@ -252,6 +199,7 @@ const shop = [
         component: salePersonList,
     },
 ]
+
 /**
  * 学员列表
  */
@@ -272,7 +220,6 @@ export default [
     ...homeModule, //我的模块
     ...authModule,//权限管理模块
     ...staffModule, //服务人员管理模块
-    ...serviceTypeModule,//服务类型管理模块
     ...saleModule,//销售人员模块
     ...shop,//门店管理
     ...student,//学员管理

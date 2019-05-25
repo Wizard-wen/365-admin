@@ -14,8 +14,8 @@
                 <el-input v-model="createStaffForm.phone"></el-input>
             </el-form-item>
             
-            <el-form-item label="备注" prop="remarks">
-                <el-input placeholder="请最多输入200字符" :maxlength="100" autosize v-model="createStaffForm.remarks" type="textarea"></el-input>
+            <el-form-item label="备注" prop="seller_remarks">
+                <el-input placeholder="请最多输入200字符" :maxlength="100" autosize v-model="createStaffForm.seller_remarks" type="textarea"></el-input>
             </el-form-item>
         </el-form>
         <div slot="footer" class="dialog-footer">
@@ -53,7 +53,7 @@ export default {
             createStaffForm : {
                 name: '',//服务人员姓名
                 phone: '',//服务人员电话
-                remarks: '',//日志信息
+                seller_remarks: '',//备注信息
             },
             //申请创建劳动者表单验证
             createStaffRules: {
@@ -73,7 +73,7 @@ export default {
                     
                     store.commit('setLoading',true)
             
-                    await orderService.editStaffBySale(this.createStaffForm) 
+                    await orderService.createStaffBySeller(this.createStaffForm) 
                         .then(data =>{
                             if(data.code == "0"){
                                 this.$message({

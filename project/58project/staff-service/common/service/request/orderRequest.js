@@ -121,11 +121,21 @@ export default {
             Object.assign({}, obj)
         )
     },
+
+    
     /**
-     * 申请创建服务人员
+     * 销售创建服务人员
      */
-    editStaffBySale(obj){
-        return axios.post(`./admin/order/editStaffBySale`,
+    createStaffBySeller(obj){
+        return axios.post(`./admin/staff/createStaffBySeller`,
+            Object.assign({}, obj)
+        )
+    },
+    /**
+     * 修改服务人员接单状态
+     */
+    changeWorkingStatus(obj){
+        return axios.post(`./admin/staff/changeWorkingStatus`,
             Object.assign({}, obj)
         )
     }
