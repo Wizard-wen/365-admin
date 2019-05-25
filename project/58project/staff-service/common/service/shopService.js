@@ -28,7 +28,7 @@ export default {
       return shopRequest.editStore(editObj)
     },
     /**
-     * 物理删除管理员
+     * 物理删除门店
      * @param id 管理员id
      */
     deleteStore(id){

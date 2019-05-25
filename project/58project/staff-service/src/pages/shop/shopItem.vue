@@ -26,7 +26,7 @@
       </div>
     </el-card>
     <!-- 编辑按钮 -->
-    <el-form :inline="true" :model="shopSearch" class="shop-form">
+    <el-form :inline="true" class="shop-form">
       <div class="addPerson">
         <el-form-item>
           <el-button type="primary" @click="edit">编辑</el-button>
@@ -43,7 +43,7 @@
 
       <el-table-column label="操作" align="center">
         <template slot-scope="scope">
-          <el-button size="mini" @click="deleteStore(scope.$index, scope.row)">解绑</el-button>
+          <!-- <el-button size="mini" @click="deleteStore(scope.$index, scope.row)">解绑</el-button> -->
         </template>
       </el-table-column>
     </el-table>
@@ -58,7 +58,7 @@ export default {
       //是否展示表单
       isShow: true,
       //门店详情
-      shopDetail: null,
+      shopDetail: {},
       //员工列表
       salesPersonTable: [],
     };
@@ -123,7 +123,7 @@ export default {
         .getStore(this.$route.query.id)
         .then(data => {
           if (data.code == "0") {
-            this.shopDetail = data.data.store;
+            this.shopDetail = {...data.data.store};
           }
         })
         .catch(error => {
@@ -145,7 +145,7 @@ export default {
           .getStoreManagerList(tableOption)
           .then(data => {
             if (data.code == "0") {
-              this.salesPersonTable = data.data.data;
+              this.salesPersonTable = [...data.data.data];
             }
           })
           .catch(error => {
