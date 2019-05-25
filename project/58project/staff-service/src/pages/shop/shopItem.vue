@@ -42,9 +42,9 @@
       <el-table-column label="电话" prop="phone" align="center"></el-table-column>
 
       <el-table-column label="操作" align="center">
-        <template slot-scope="scope">
-          <!-- <el-button size="mini" @click="deleteStore(scope.$index, scope.row)">解绑</el-button> -->
-        </template>
+        <!-- <template slot-scope="scope">
+          <el-button size="mini" @click="deleteStore(scope.$index, scope.row)">解绑</el-button>
+        </template> -->
       </el-table-column>
     </el-table>
   </div>
@@ -162,7 +162,7 @@ export default {
       }
     },
     /**
-     * 进入员工列表
+     * 编辑
      */
     edit() {
       this.$router.push({
@@ -226,6 +226,7 @@ export default {
     margin: 0 auto;
     .addPerson {
       float: right;
+      margin: 10px 0;
     }
   }
 }

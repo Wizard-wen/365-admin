@@ -26,7 +26,7 @@
       </div>
     </el-form>
 
-    <el-table :data="shopTable" class="shop-table">
+    <el-table :data="shopList" class="shop-table">
       <el-table-column label="编号" prop="id" align="center"></el-table-column>
 
       <el-table-column label="门店名" prop="name" align="center"></el-table-column>
@@ -58,7 +58,7 @@
         data() {
             return {
                 //门店列表
-                shopTable: [],
+                shopList: [],
                 //表单搜索项
                 shopSearch: {
                     name: '', //门店名
@@ -108,12 +108,6 @@
                 })
                 return arr
             },
-            /**
-             * 所属部门
-             */
-            departmentList(){
-                return this.$store.state.shopModule.departmentList
-            }
         },
         methods: {
              /**
@@ -135,7 +129,7 @@
                 try{
                     await shopService.getStoreList(tableOption).then(data =>{
                             if(data.code == "0"){
-                                this.shopTable = data.data.data
+                                this.shopList = data.data.data
 
                                 //分页信息
                                 this.pagination.currentPage = data.data.current_page //当前页码
