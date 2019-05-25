@@ -686,7 +686,7 @@ export default {
         try{
             await store.commit('setLoading',true)
             //如果是编辑则请求接口
-            if(this.$route.query.type == 1){
+            if(this.$route.query.type != 0){
                 await hrService.getStaff(this.$route.query.id).then(data =>{
                     if(data.code == "0"){
 

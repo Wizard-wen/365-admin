@@ -178,6 +178,15 @@ export default {
         
     },
 
+    /**
+     * 删除申请添加服务人员
+     */
+    deleteApplyStaff(id){
+        return axios.post(`./admin/staff/deleteApplyStaff`,{
+            id:id,
+        })
+    },
+
 
 
 

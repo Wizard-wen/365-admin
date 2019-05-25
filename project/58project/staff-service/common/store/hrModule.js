@@ -34,6 +34,13 @@ export const hrModule = {
         */
        setNewList(state,payload){
             state.newList[payload.queryKey] = payload.queryedList
+        },
+        /** 
+        * @param queryKey queryList 键名 
+        * @param queryedList 键值，可能是数组，也可能是字符串
+        */
+       setErrorList(state,payload){
+            state.newList[payload.queryKey] = payload.queryedList
         }
     },
 
@@ -62,6 +69,20 @@ export const hrModule = {
             /*********************逻辑字段查询*****************************/
             
             data_status: '',//申请新建服务人员  apply
+            /*********************业务字段查询*****************************/
+            name: '',
+            phone: '',
+
+        },
+        // 异常服务人员数据
+        errorList: {
+            /*********************表格字段查询******************************/
+            get_for: 'staff',
+            page: 1, //请求页码
+            pageNumber: 20,//单页信息数量
+            /*********************逻辑字段查询*****************************/
+            
+            data_status: '',//异常服务人员  warning
             /*********************业务字段查询*****************************/
             name: '',
             phone: '',

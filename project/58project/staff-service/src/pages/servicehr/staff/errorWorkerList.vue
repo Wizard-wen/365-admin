@@ -66,17 +66,17 @@
                 },
                 //计算列表每一列的最大宽度
                 maxLength: {
-                    authentication: 0, //认证状态
-                    working_status: 0,//接单状态
-                    skill_ids: 0,// 职业类型
-                    service_type_ids: 0,//服务类型
-                    service_crowd_ids: 0,//可服务人群
-                    working_age: 0,// 工龄
-                    nation: 0,// 民族
-                    region_ids: 0,//服务地区
-                    course_ids: 0,//参加培训
-                    paper_ids: 0, //技能证书
-                    source: 0,//信息来源
+                    authentication: 80, //认证状态
+                    working_status: 80,//接单状态
+                    skill_ids: 80,// 职业类型
+                    service_type_ids: 80,//服务类型
+                    service_crowd_ids: 100,//可服务人群
+                    working_age: 80,// 工龄
+                    nation: 80,// 民族
+                    region_ids:80,//服务地区
+                    course_ids: 80,//参加培训
+                    paper_ids: 80, //技能证书
+                    source: 80,//信息来源
                 }
             }
         },
@@ -169,7 +169,7 @@
             async handleCurrentPage(val){
                 // this.pagination.currentPage = val
                 //设置page查询参数
-                this.$store.commit('setQueryList', {
+                this.$store.commit('setErrorList', {
                     queryKey: 'page', 
                     queryedList: val
                 })
@@ -180,12 +180,12 @@
              */
             async searchStaff(){
                 //设置name查询参数
-                this.$store.commit('setQueryList', {
+                this.$store.commit('setErrorList', {
                     queryKey: 'name', 
                     queryedList: this.staffSearch.name
                 })
                 //设置手机号查询参数
-                this.$store.commit('setQueryList', {
+                this.$store.commit('setErrorList', {
                     queryKey: 'phone', 
                     queryedList: this.staffSearch.phone
                 })
@@ -198,12 +198,12 @@
                 this.staffSearch.name = ''
                 this.staffSearch.phone = ''
                 //重置name查询参数
-                this.$store.commit('setQueryList', {
+                this.$store.commit('setErrorList', {
                     queryKey: 'name', 
                     queryedList: null
                 })
                 //重置手机号查询参数
-                this.$store.commit('setQueryList', {
+                this.$store.commit('setErrorList', {
                     queryKey: 'phone', 
                     queryedList: null
                 })
@@ -240,6 +240,22 @@
                 });
 
                 if(response == "confirm"){
+                    //设置name查询参数
+                    this.$store.commit('setErrorList', {
+                        queryKey: 'name', 
+                        queryedList: this.staffSearch.name
+                    })
+                    //设置手机号查询参数
+                    this.$store.commit('setErrorList', {
+                        queryKey: 'phone', 
+                        queryedList: this.staffSearch.phone
+                    })
+                    //设置return_id查询参数
+                    this.$store.commit('setErrorList', {
+                        queryKey: 'data_status', 
+                        queryedList: 'warning'
+                    }) 
+                    
                     store.commit('setLoading',true)
 
                     try{

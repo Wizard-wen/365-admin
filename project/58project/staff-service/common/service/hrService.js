@@ -37,12 +37,6 @@ export default {
     changeStaffStatus(id, version){
         return hrRequest.changeStaffStatus(id, version)
     },
-    /**
-     * 恢复单个回访人员
-     */
-    removeReturnStaffSingle(type,id){
-        return hrRequest.removeReturnStaffSingle(type,id)
-    },
 
 
 
@@ -116,6 +110,26 @@ export default {
     removeReturnStaff(){
         return hrRequest.removeReturnStaff()
     },
+    /**
+     * 恢复全部回访人员
+     */
+    removeReturnStaff(){
+        return hrRequest.removeReturnStaff()
+    },
+    /**
+     * 恢复单个回访人员
+     */
+    removeReturnStaffSingle(type,id){
+        return hrRequest.removeReturnStaffSingle(type,id)
+    },
+    /**
+     * 删除申请添加服务人员
+     */
+    deleteApplyStaff(id){
+        return hrRequest.deleteApplyStaff(id)
+    },
+
+
 
 
 
