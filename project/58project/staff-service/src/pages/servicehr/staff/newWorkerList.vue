@@ -3,7 +3,7 @@
         <staff-table-component
             :staffTable="staffTable"
             :maxLength="maxLength"
-            :controlScopeLength="110">
+            :controlScopeLength="140">
             
             <template slot="searchForm">
                 <div class="search-left">
@@ -15,7 +15,8 @@
             </template>
 
             <template slot="control" slot-scope="controler">
-                <el-button size="mini" type="text" @click="editNewStaff(controler.scoper.$index, controler.scoper.row)">编辑</el-button>
+                <el-button size="mini" type="text" @click="agreeStaffSingle(controler.scoper.row)" style="color:#67c23a">提交</el-button>
+                <el-button size="mini" type="text" @click="editStaff(3, controler.scoper.row)">编辑</el-button>
                 <el-button size="mini" type="text" style="color:#f56c6c" @click="deleteNewStaff(controler.scoper.row)">删除</el-button>
             </template>
 
@@ -131,7 +132,7 @@
 
                     await Promise.all([
                         hrService.getFormConfig(), //获取表单配置字段
-                        hrService.getStaffList(4) //获取列表数据
+                        hrService.getStaffList(3) //获取列表数据
                     ]).then((data) =>{
                         // 将表单配置数据存入 vuex 
                         this.$store.commit('setConfigForm',data[0].data)
@@ -220,9 +221,8 @@
             },
             /**
              * 编辑服务人员信息
-             * 编辑时可以添加服务人员技能
              */
-            editNewStaff(index, row){
+            editStaff(type, row){
                 this.$router.push({
                     path: "/worker/workerItem",
                     query: {
@@ -232,7 +232,7 @@
                 })
             },
             /**
-             * deleteNewStaff
+             * 删除服务人员
              */
             async deleteNewStaff(row){
                 let _this= this;
@@ -258,6 +258,63 @@
                                     this.$message({
                                         type:'success',
                                         message: `删除成功`
+                                    })
+                                }
+                            }).catch(e =>{
+                                this.$message({
+                                    type:'error',
+                                    message: e.message
+                                })
+                            })
+                    } catch(error){
+                        this.$message({
+                            type:'error',
+                            message: error.message
+                        })
+                    }
+
+                    await _this.getTableList()
+                    store.commit('setLoading',false)
+                }
+            },
+            /**
+             * 提交保姆
+             */
+            async agreeStaffSingle(row){
+                let _this= this;
+
+                let response = await this.$confirm(`确定提交该服务人员信息吗?`, '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                }).catch(() => {
+                    this.$message({
+                        type: 'info',
+                        message: `已取消提交`
+                    });
+                });
+
+                if(response == "confirm"){
+                    // //设置name查询参数
+                    // this.$store.commit('setErrorList', {
+                    //     queryKey: 'name', 
+                    //     queryedList: this.staffSearch.name
+                    // })
+                    // //设置手机号查询参数
+                    // this.$store.commit('setErrorList', {
+                    //     queryKey: 'phone', 
+                    //     queryedList: this.staffSearch.phone
+                    // })
+                    
+                    store.commit('setLoading',true)
+
+                    try{
+                        await hrService.agreeStaffSingle('apply', 'list', row.id)
+                            .then(data =>{
+                                if(data.code == "0"){
+                                    this.$message({
+                                        type:'success',
+                                        message: `提交成功`
                                     })
                                 }
                             }).catch(e =>{

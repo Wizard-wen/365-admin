@@ -142,7 +142,7 @@
 
                     await Promise.all([
                         hrService.getFormConfig(), //获取表单配置字段
-                        hrService.getStaffList() //获取列表数据
+                        hrService.getStaffList(0) //获取列表数据
                     ]).then((data) =>{
                         // 将表单配置数据存入 vuex 
                         this.$store.commit('setConfigForm',data[0].data)
@@ -297,7 +297,7 @@
                 this.$router.push({
                     path: "/worker/workerItem",
                     query: {
-                        type: type, //编辑为1
+                        type: type, //编辑为1 创建为 0
                         id: type == 1? row.id : 0
                     }
                 })

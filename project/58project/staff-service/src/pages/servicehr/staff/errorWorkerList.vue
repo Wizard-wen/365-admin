@@ -15,8 +15,8 @@
             </template>
 
             <template slot="control" slot-scope="controler">
-                <el-button size="mini" type="text" @click="editStaff(controler.scoper.$index, controler.scoper.row)">编辑</el-button>
-                <el-button size="mini" type="text" style="color:#67c23a" @click="recoverStaff(controler.scoper.row)">恢复</el-button>
+                <el-button size="mini" type="text" @click="editStaff(3, controler.scoper.row)">编辑</el-button>
+                <el-button size="mini" type="text" style="color:#67c23a" @click="agreeStaffSingle(controler.scoper.row)">恢复</el-button>
             </template>
 
             <template slot="pagination">
@@ -122,7 +122,7 @@
 
                     await Promise.all([
                         hrService.getFormConfig(), //获取表单配置字段
-                        hrService.getStaffList() //获取列表数据
+                        hrService.getStaffList(2) //获取列表数据
                     ]).then((data) =>{
                         // 将表单配置数据存入 vuex 
                         this.$store.commit('setConfigForm',data[0].data)
@@ -213,7 +213,7 @@
              * 编辑服务人员信息
              * 编辑时可以添加服务人员技能
              */
-            editStaff(index, row){
+            editStaff(type, row){
                 this.$router.push({
                     path: "/worker/workerItem",
                     query: {
@@ -225,7 +225,7 @@
             /**
              * 恢复服务人员为正常状态
              */
-            async recoverStaff(row){
+            async agreeStaffSingle(row){
                 let _this= this;
 
                 let response = await this.$confirm(`确定已准确核实该服务人员信息吗?`, '提示', {
@@ -240,21 +240,21 @@
                 });
 
                 if(response == "confirm"){
-                    //设置name查询参数
-                    this.$store.commit('setErrorList', {
-                        queryKey: 'name', 
-                        queryedList: this.staffSearch.name
-                    })
-                    //设置手机号查询参数
-                    this.$store.commit('setErrorList', {
-                        queryKey: 'phone', 
-                        queryedList: this.staffSearch.phone
-                    })
+                    // //设置name查询参数
+                    // this.$store.commit('setErrorList', {
+                    //     queryKey: 'name', 
+                    //     queryedList: this.staffSearch.name
+                    // })
+                    // //设置手机号查询参数
+                    // this.$store.commit('setErrorList', {
+                    //     queryKey: 'phone', 
+                    //     queryedList: this.staffSearch.phone
+                    // })
                     
                     store.commit('setLoading',true)
 
                     try{
-                        await hrService.recoverStaff(row.id, row.version)
+                        await hrService.agreeStaffSingle('warning', 'list', row.id)
                             .then(data =>{
                                 if(data.code == "0"){
                                     this.$message({

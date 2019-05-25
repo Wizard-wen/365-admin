@@ -78,7 +78,6 @@
             </el-form-item>
 
             <el-form-item label="证件照" class="form-item-size">
-                
                 <el-upload
                     accept=".jpg,.jpeg,.png,.gif,.bmp,.pdf,.JPG,.JPEG,.PBG,.GIF,.BMP,.PDF"
                     class="avatar-uploader"
@@ -194,8 +193,10 @@
             </el-form-item>
         </el-form>
         <div class="control">
+            <!-- 创建/编辑 -->
             <el-button type="primary" @click="editStaff('form')">{{editText}}</el-button>
             <el-button type="primary" @click="makeImage" v-if="isShowImageButton">生成名片</el-button>
+            <!-- 导出回访 / 恢复 / 提交至信息库-->
             <el-button type="primary" @click="submitStaff" v-if="submitText != ''">{{submitText}}</el-button>
             <el-button @click="goback">返回</el-button>
         </div>
@@ -503,8 +504,42 @@ export default {
         /**
          * 提交信息
          */
-        submitStaff(type){
+        async submitStaff(){
+            let type = this.$route.query.type,
+                module_type = '';
+            if(type == 2){
+                module_type = 'return'
+            } else if(type == 3){
+                module_type = 'warning'
+            } else if(type == 4){
+                module_type = 'apply'
+            }
+            try{
+                store.commit('setLoading',true)
+                await hrService.agreeStaffSingle(module_type, 'edit',this.workerForm).then(data =>{
+                    if(data.code == '0'){
+                        this.$message({
+                            type:"success",
+                            message: "提交成功"
+                        })
+                        store.commit('setLoading',false)
 
+                        this.goback()
+                    }
+                }).catch(error =>{
+                    this.$message({
+                        type:'error',
+                        message: error.message
+                    })
+                }).finally(() =>{
+                    store.commit('setLoading',false)
+                })
+            } catch(error){
+                this.$message({
+                    type:'error',
+                    message: error.message
+                }) 
+            }
         },
         /**
          * 上传头像，显示阴影
@@ -660,6 +695,8 @@ export default {
                 return '导出回访'
             } else if(type == 3){
                 return '恢复'
+            } else if(type == 4){
+                return '提交至信息库'
             } else {
                 return ''
             }

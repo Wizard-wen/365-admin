@@ -81,7 +81,7 @@ export default {
         .search-list{
             height: 40px;
             width: 100%;
-            padding: 6px 0 6px 15px;
+            padding: 6px 0 6px 25px;
             // position: relative;
             // &:after{
             //     position:absolute;
@@ -97,7 +97,7 @@ export default {
                 box-sizing: border-box;
                 margin: 0 auto;
                 height: 27px;
-                width: 150px;
+                width: 175px;
                 display: block;
                 outline: none;
                 border: none;

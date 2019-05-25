@@ -16,7 +16,7 @@
             </template>
 
             <template slot="control" slot-scope="controler">
-                <el-button size="mini" type="text" @click="editStaff(controler.scoper.$index, controler.scoper.row)">编辑</el-button>
+                <el-button size="mini" type="text" @click="editStaff(2,controler.scoper.row)">编辑</el-button>
                 <el-button size="mini" type="text" style="color:#67c23a" @click="exportReturnStaff(0, controler.scoper.row)">导出</el-button>
             </template>
 
@@ -131,16 +131,11 @@
                         queryKey: 'phone', 
                         queryedList: this.staffSearch.phone
                     })
-                    //设置return_id查询参数
-                    this.$store.commit('setReturnList', {
-                        queryKey: 'return_id', 
-                        queryedList: this.$store.state.loginModule.user.id
-                    })
                     this.isLoaded = true
 
                     await Promise.all([
                         hrService.getFormConfig(), //获取表单配置字段
-                        hrService.getStaffList(2) //获取列表数据
+                        hrService.getStaffList(1) //获取列表数据
                     ]).then((data) =>{
                         // 将表单配置数据存入 vuex 
                         this.$store.commit('setConfigForm',data[0].data)
@@ -248,6 +243,7 @@
             async exportReturnStaff(type, row){
                 let _this= this,
                     status = type == 0? '该': '全部';
+
                 let response = await this.$confirm(`确定导出${status}服务人员吗?`, '提示', {
                     confirmButtonText: '确定',
                     cancelButtonText: '取消',
@@ -258,8 +254,6 @@
                         message: `已取消导出`
                     });
                 });
-
-                
 
                 if(response == "confirm"){
                     if(type == 1){
@@ -294,7 +288,7 @@
                         store.commit('setLoading',true)
 
                         try{
-                            await hrService.removeReturnStaffSingle('list',row.id)
+                            await hrService.agreeStaffSingle('return','list',row.id)
                                 .then(data =>{
                                     if(data.code == "0"){
                                         this.$message({
