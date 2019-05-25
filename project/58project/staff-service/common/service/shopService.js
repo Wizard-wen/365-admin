@@ -34,4 +34,7 @@ export default {
     deleteStore(id){
         return shopRequest.deleteStore(id)
     },
+    getStoreManagerList(obj){
+      return shopRequest.getStoreManagerList(obj)
+    }
 }

@@ -175,6 +175,7 @@ const saleModule = [
 import shopList from '@/pages/shop/shopList.vue'
 import shopItem from '@/pages/shop/shopItem.vue'
 import shopEdit from '@/pages/shop/shopEdit.vue'
+import salePersonList from '@/pages/shop/salePersonList.vue'
 
 const shop = [
     {
@@ -191,6 +192,11 @@ const shop = [
         path: '/shop/shopEdit',
         name: 'shopEdit',
         component: shopEdit,
+    },
+    {
+        path: '/shop/salePersonList',
+        name: 'salePersonList',
+        component: salePersonList,
     },
 ]
 

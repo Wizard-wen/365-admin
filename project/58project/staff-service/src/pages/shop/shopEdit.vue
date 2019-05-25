@@ -13,6 +13,10 @@
         <select-tag-component :propTagList="typeList" v-model="shopForm.is_third" :isSingle="true"></select-tag-component>
       </el-form-item>
 
+      <el-form-item label="绑定员工" prop="manager_ids" v-if="$route.query.type==1">
+        <select-tag-component :propTagList="roleList" v-model="shopForm.manager_ids" :isSingle="false"></select-tag-component>
+      </el-form-item>
+
       <el-form-item label="备注" prop="remarks">
         <el-input v-model="shopForm.remarks" :maxlength="20"></el-input>
       </el-form-item>
@@ -50,20 +54,54 @@ export default {
         id: 0,
         name: "",
         address: "",
-        is_third: 1,
-        remarks: ""
+        is_third: 0,
+        remarks: "",
+        phone: "",
+        manager_ids: [],
+        start_time: 0,
+        end_time: 0,
+        type: ""
       },
       shopRules: {
         name: [{ validator: validateName, trigger: "blur" }],
         address: [{ validator: validateAddress, trigger: "blur" }]
       },
-      typeList: [{ id: 1, name: "直营店" }, { id: 2, name: "加盟店" }] //部门
+      typeList: [{ id: 1, name: "直营店" }, { id: 2, name: "加盟店" }],
+      //
+      roleList: []
     };
   },
   components: {
     selectTagComponent
   },
   methods: {
+    async getStore() {
+      await shopService
+        .getStore(this.$route.query.id)
+        .then(data => {
+          if (data.code == "0") {
+            this.shopForm = data.data.store;
+            this.shopForm.id = data.data.store.id;
+            this.shopForm.name = data.data.store.name;
+            this.shopForm.address = data.data.store.address;
+            this.shopForm.is_third = data.data.store.is_third;
+            this.shopForm.remarks = data.data.store.remarks;
+            this.shopForm.phone = data.data.store.phone;
+            this.shopForm.start_time = data.data.store.start_time;
+            this.shopForm.end_time = data.data.store.end_time;
+            this.shopForm.type = data.data.store.type;
+            this.shopForm.manager_ids = data.data.manager_ids;
+
+            this.roleList = data.data.store_manager;
+          }
+        })
+        .catch(error => {
+          this.$message({
+            type: "error",
+            message: error.message
+          });
+        });
+    },
     /**
      * 提交数据
      */
@@ -73,11 +111,17 @@ export default {
         name: this.shopForm.name,
         address: this.shopForm.address,
         is_third: this.shopForm.is_third,
-        remarks: this.shopForm.remarks
+        remarks: this.shopForm.remarks,
+        phone: this.shopForm.phone,
+        manager_ids: this.shopForm.manager_ids,
+        start_time: this.shopForm.start_time,
+        end_time: this.shopForm.end_time,
+        type: this.shopForm.type
       };
       await this.$refs[formName].validate(valid => {
         if (valid) {
-            shopService.editStore(shopObj)
+          shopService
+            .editStore(shopObj)
             .then(data => {
               if (data.code == "0") {
                 this.$message({
@@ -98,6 +142,9 @@ export default {
         }
       });
     }
+  },
+  mounted() {
+    this.getStore();
   }
 };
 </script>
