@@ -19,7 +19,7 @@
         <div class="base-message-box" v-if="isShow">
           <div class="base-line">门店名：{{shopDetail.name}}</div>
           <div class="base-line">门店地址：{{shopDetail.address}}</div>
-          <div class="base-line">门店类型：{{shopDetail.is_third == 0 ? '直营店': '加盟店'}}</div>
+          <div class="base-line">门店类型：{{shopDetail.is_third == 1 ? '直营店': shopDetail.is_third == 2 ?'加盟店': ''}}</div>
           <div class="base-line">门店状态：{{shopDetail.type == 'enable'?'正常':'停业'}}</div>
           <div class="base-line">备注信息：{{shopDetail.remark}}</div>
         </div>

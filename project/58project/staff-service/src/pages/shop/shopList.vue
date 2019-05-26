@@ -8,7 +8,7 @@
           </el-form-item>
 
           <el-form-item>
-            <el-select v-model="shopSearch.type" placeholder="请选择门店类型">
+            <el-select v-model="shopSearch.is_third" placeholder="请选择门店类型">
               <el-option :label="'全部'" :value="0"></el-option>
               <el-option :label="'直营店'" :value="1"></el-option>
               <el-option :label="'加盟店'" :value="2"></el-option>
@@ -30,6 +30,8 @@
       <el-table-column label="编号" prop="id" align="center"></el-table-column>
 
       <el-table-column label="门店名" prop="name" align="center"></el-table-column>
+
+      <el-table-column label="门店类型" prop="type" align="center"></el-table-column>
 
       <el-table-column label="地区" prop="address" align="center"></el-table-column>
 
@@ -62,7 +64,7 @@
                 //表单搜索项
                 shopSearch: {
                     name: '', //门店名
-                    type: 0,//门店类型
+                    is_third: 0,//门店类型
                 },
                 /**
                  * 分页信息
@@ -130,6 +132,14 @@
                     await shopService.getStoreList(tableOption).then(data =>{
                             if(data.code == "0"){
                                 this.shopList = data.data.data
+                                this.shopList.forEach(item=>{
+                                this.$set(item,'type','')
+                                  if(item.is_third == 1){
+                                    item.type = '直营店'
+                                  }else if(item.is_third == 2){
+                                    item.type = '加盟店'
+                                  }
+                                })
 
                                 //分页信息
                                 this.pagination.currentPage = data.data.current_page //当前页码
@@ -168,7 +178,7 @@
              */
             async resetShop(){
                 this.shopSearch.name= '' //门店名
-                this.shopSearch.type= 0//门店类型
+                this.shopSearch.is_third= 0//门店类型
                 await this.getTableList()
             },
             /**
