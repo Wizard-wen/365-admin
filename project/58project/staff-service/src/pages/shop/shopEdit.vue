@@ -31,7 +31,7 @@
 
 <script>
 import { shopService } from "../../../common";
-import { selectTagComponent } from "@/pages/components";
+import { selectTagComponent,cascaderTagComponent } from "@/pages/components";
 export default {
   data() {
     const validateName = (rule, value, callback) => {
@@ -74,7 +74,8 @@ export default {
     };
   },
   components: {
-    selectTagComponent
+    selectTagComponent,
+    cascaderTagComponent
   },
   methods: {
     async getStore() {

@@ -282,7 +282,13 @@
              */
             async agreeStaffSingle(row){
                 let _this= this;
-
+            if(row.name == '' || row.age == '' || row.phone == ''){
+                this.$message({
+                    type:'error',
+                    message: `该服务人员字段不完整，不能提交！`
+                })
+                return;
+            } 
                 let response = await this.$confirm(`确定提交该服务人员信息吗?`, '提示', {
                     confirmButtonText: '确定',
                     cancelButtonText: '取消',

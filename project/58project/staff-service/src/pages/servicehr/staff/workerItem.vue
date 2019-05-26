@@ -30,7 +30,7 @@
             </el-form-item>
 
             <el-form-item label="出生日期" prop="birthday" class="form-item-size" size="small">
-                <el-date-picker v-model="workerForm.birthday" value-format="timestamp" type="date" placeholder="请选择出生日期"></el-date-picker>
+                <el-date-picker :picker-options="datePickerOption" :default-value="timeDefaultShow" v-model="workerForm.birthday" value-format="timestamp" type="date" placeholder="请选择出生日期"></el-date-picker>
             </el-form-item>
             
             <el-form-item label="电话" prop="phone" class="form-item-size" size="small">
@@ -38,7 +38,7 @@
             </el-form-item>           
             
             <el-form-item label="回访信息" prop="return_msg" class="form-item-size" size="small">
-                <el-input v-model="workerForm.return_msg" :maxlength="200" placeholder="请输入回访信息"></el-input>
+                <el-input type="textarea" v-model="workerForm.return_msg" :maxlength="200" placeholder="请输入回访信息"></el-input>
             </el-form-item>
 
             <el-form-item label="接单状态" prop="working_status" class="form-item-size" size="small">
@@ -46,7 +46,7 @@
             </el-form-item> 
 
             <el-form-item label="备注（商家情况）" prop="remarks" class="form-item-size" size="small">
-                <el-input v-model="workerForm.remarks" :maxlength="200" placeholder="请输入备注信息"></el-input>
+                <el-input type="textarea" v-model="workerForm.remarks" :maxlength="200" placeholder="请输入备注信息"></el-input>
             </el-form-item>
 
             <el-form-item label="职业类型" prop="skill" class="form-item-size" size="small">
@@ -66,7 +66,7 @@
             </el-form-item> 
 
             <el-form-item label="工作经验（备注）" prop="working_experience" class="form-item-size" size="small">
-                <el-input v-model="workerForm.working_experience" :maxlength="200" placeholder="请输入备注信息"></el-input>
+                <el-input type="textarea" v-model="workerForm.working_experience" :maxlength="200" placeholder="请输入备注信息"></el-input>
             </el-form-item>
 
             <el-form-item label="民族" prop="nation" class="form-item-size" size="small">
@@ -74,7 +74,7 @@
             </el-form-item>
 
             <el-form-item label="籍贯" prop="birthplace" class="form-item-size" size="small">
-                <el-input v-model="workerForm.birthplace" :maxlength="20" placeholder="请输入籍贯信息"></el-input>
+                <el-input v-model="workerForm.birthplace" :maxlength="50" placeholder="请输入籍贯"></el-input>
             </el-form-item>
 
             <el-form-item label="身份证号码" prop="identify" class="form-item-size" size="small">
@@ -103,7 +103,7 @@
             </el-form-item>
 
             <el-form-item label="地址" prop="address" class="form-item-size" size="small">
-                <el-input v-model="workerForm.address" :maxlength="50" placeholder="请输入备注"></el-input>
+                <el-input v-model="workerForm.address" :maxlength="50" placeholder="请输入地址"></el-input>
             </el-form-item>
 
             <el-form-item label="区域" prop="region" class="form-item-size" size="small">
@@ -115,11 +115,11 @@
             </el-form-item>
 
             <el-form-item label="紧急联系人电话" prop="urgent_phone" class="form-item-size" size="small">
-                <el-input v-model="workerForm.urgent_phone" :maxlength="11" placeholder="请输入备注"></el-input>
+                <el-input v-model="workerForm.urgent_phone" :maxlength="50" placeholder="请输入紧急联系人电话"></el-input>
             </el-form-item>
 
             <el-form-item label="银行卡号" prop="bank_card" class="form-item-size" size="small">
-                <el-input v-model="workerForm.bank_card" :maxlength="50" placeholder="请输入备注"></el-input>
+                <el-input v-model="workerForm.bank_card" :maxlength="50" placeholder="请输入银行卡号"></el-input>
             </el-form-item>
 
             <el-form-item label="头像" class="form-item-size">
@@ -171,7 +171,7 @@
             </el-form-item>
 
             <el-form-item label="教师评语" prop="teacher_comment" class="form-item-size" size="small">
-                <el-input v-model="workerForm.teacher_comment" :maxlength="200" placeholder="请输入教师评语"></el-input>
+                <el-input type="textarea" v-model="workerForm.teacher_comment" :maxlength="200" placeholder="请输入教师评语"></el-input>
             </el-form-item>
 
             <el-form-item label="技能证书" prop="certificate" class="form-item-size">
@@ -323,6 +323,7 @@ export default {
             icon_fileList: [],//头像数组
             photo_fileList: [],//照片数组
             id_photo_fileList: [],//证件照片数组
+            timeDefaultShow: '',//当前日期
             //姓名检查
             nameCheck: false,
             nameCheckObject: {},//重复姓名列表
@@ -398,8 +399,13 @@ export default {
                 ],               
                 //银行卡号
                 bank_card: [
-                    {validator: validator.bankCardValidate, trigger: 'blur'}
+                    // {validator: validator.bankCardValidate, trigger: 'blur'}
                 ],
+            },
+            datePickerOption: {
+                disabledDate(time) {
+                    return time.getTime() > Date.now();//如果没有后面的-8.64e6就是不可以选择今天的
+                }
             },
             isShowBlack: false,//头像阴影
             //图片上传header
@@ -425,47 +431,51 @@ export default {
         async editStaff(formName) {
             await this.$refs[formName].validate(async (valid, fileds) => {
                 if (valid) {
-
+                    //提交前，拷贝出一份数据做字段转换
+                    let workerFormSend = {
+                        ...this.workerForm
+                    }
+                    
                     //字段转换
-                    this.workerForm.service_crowd = this.setCommitAttr(
-                        this.workerForm.service_crowd,
+                    workerFormSend.service_crowd = this.setCommitAttr(
+                        workerFormSend.service_crowd,
                         this.workerConfigList.service_crowd,
                         'service_crowd_id'
                     );
 
-                    this.workerForm.region = this.setCommitAttr(
-                        this.workerForm.region,
+                    workerFormSend.region = this.setCommitAttr(
+                        workerFormSend.region,
                         this.workerConfigList.service_region,
                         'region_id'
                     );
 
-                    this.workerForm.skill = this.setCommitAttr(
-                        this.workerForm.skill,
+                    workerFormSend.skill = this.setCommitAttr(
+                        workerFormSend.skill,
                         this.workerConfigList.service_category,
                         'service_category_id'
                     );
 
-                    this.workerForm.course = this.setCommitAttr(
-                        this.workerForm.course,
+                    workerFormSend.course = this.setCommitAttr(
+                        workerFormSend.course,
                         this.workerConfigList.course,
                         'course_id'
                     );
 
-                    this.workerForm.service_type = this.setCommitAttr(
-                        this.workerForm.service_type,
+                    workerFormSend.service_type = this.setCommitAttr(
+                        workerFormSend.service_type,
                         this.workerConfigList.service_type,
                         'service_type_id'
                     );
 
-                    this.workerForm.paper = this.setCommitAttr(
-                        this.workerForm.paper,
+                    workerFormSend.paper = this.setCommitAttr(
+                        workerFormSend.paper,
                         this.workerConfigList.paper_category,
                         'paper_category_id'
                     );
 
                     try{
                         store.commit('setLoading',true)
-                        await hrService.editStaff(this.workerForm).then(data =>{
+                        await hrService.editStaff(workerFormSend).then(data =>{
                             if(data.code == '0'){
                                 this.$message({
                                     type:"success",
@@ -716,7 +726,6 @@ export default {
             } else if (fromPage == 4){
                 this.$router.push("/worker/newWorkerList")
             }
-            
         },
         /**
          * 生成图片
@@ -729,10 +738,12 @@ export default {
          * 控制编辑按钮文案
          */
         setEditButtonText(type){
-            if(type == 0 ||type == 4){
+            if(type == 0){
                 return '立即创建'
             } else if(type == 1 || type == 2 || type == 3){
                 return '确认编辑'
+            } else if(type == 4){
+                return '保存'
             }
         },
         /**
@@ -744,7 +755,7 @@ export default {
             } else if(type == 3){
                 return '恢复'
             } else if(type == 4){
-                return '提交至信息库'
+                return '保存并提交'
             } else {
                 return ''
             }
@@ -762,6 +773,8 @@ export default {
     },
     async mounted(){
         let _this = this;
+
+        this.timeDefaultShow = Date.parse(new Date());
         //按钮显示隐藏，文案
         this.editText = this.setEditButtonText(this.$route.query.type)
         this.submitText  = this.setSubmitButtonText(this.$route.query.type)
@@ -861,7 +874,7 @@ export default {
         padding-top: 30px;
         .staff-form{
             width: 100%;
-            margin-bottom: 150px;
+            margin-bottom: 30px;
             & /deep/ .el-form-item{
                 margin-bottom: 15px;
             }
@@ -874,6 +887,7 @@ export default {
                     border: 1px dashed #ccc;
                     padding: 0 10px 10px 10px;
                     display: flex;
+                    flex-wrap: wrap;
                         .avatar-box{
                             margin: 10px 10px 0 0;
                             width:100px;
@@ -942,14 +956,14 @@ export default {
             padding: 0 20px;
         }
         .control{
-            position: fixed;
+            // position: fixed;
             height: 60px;
             padding: 10px 0;
             width: 100%;
-            bottom: 0; 
+            // bottom: 0; 
             background: rgba(0,0,0,.2);
             // opacity: .1;
-            z-index: 3;
+            // z-index: 3;
         }
     }
     //图片上传

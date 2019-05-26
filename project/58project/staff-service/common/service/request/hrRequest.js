@@ -123,7 +123,7 @@ export default {
      * 人员信息配置
      */
     getFormConfig(){
-        return axios.get('./admin/formConfig/getFormConfig')
+        return axios.get('./admin/formConfig/getFormConfig?get_for=config')
     },
     /**
      * 标签信息配置

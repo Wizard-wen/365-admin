@@ -145,14 +145,6 @@
             :queryKey="'updated_ids'" 
             :queryName="'更新时间'" 
             :queryList="queryUpdated_at"></search-list>
-
-
-
-
-
-
-
-
     </div>
 </template>
 <script>

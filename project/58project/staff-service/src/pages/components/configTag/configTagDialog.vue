@@ -57,6 +57,7 @@ export default {
                 table: this.configForm.table,
                 type: this.configForm.type == 'enable' ? true : false,
                 name: this.configForm.name? this.configForm.name : '',
+                get_for: 'config',
                 version: this.configForm.version?this.configForm.version: '',
             },
             //标签配置表单验证

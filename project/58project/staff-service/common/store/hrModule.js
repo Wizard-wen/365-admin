@@ -40,7 +40,7 @@ export const hrModule = {
         * @param queryedList 键值，可能是数组，也可能是字符串
         */
         setErrorList(state,payload){
-            state.newList[payload.queryKey] = payload.queryedList
+            state.errorList[payload.queryKey] = payload.queryedList
         },
         /** 
         * @param queryKey queryList 键名 
