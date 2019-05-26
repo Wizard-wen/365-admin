@@ -138,6 +138,13 @@
             :queryKey="'manager_ids'" 
             :queryName="'创建人'" 
             :queryList="configForm.manager"></search-list>
+        <search-list
+            :queryFrom="queryFrom"
+            @updateTable="updateTable" 
+            :isSingleQuery="true"
+            :queryKey="'updated_ids'" 
+            :queryName="'更新时间'" 
+            :queryList="queryUpdated_at"></search-list>
 
 
 
@@ -151,10 +158,12 @@
 <script>
 import searchList from './query/searchList.vue'
 import searchInput from './query/searchInput.vue'
+import {queryUpdated_at} from '../interface/query.js'
 export default {
     data(){
         return {
             setConfigForm: [],//本地接收的搜索config字段
+            queryUpdated_at,
         }
     },
     components: {

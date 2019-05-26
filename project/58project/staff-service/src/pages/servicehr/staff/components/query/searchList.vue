@@ -55,6 +55,13 @@ export default {
         queryFrom: {
             type: String,
             defeult: 'staff'
+        },
+        /**
+         * 是否是单选
+         */
+        isSingleQuery: {
+            type: Boolean,
+            default: false
         }
     },
     watch: {
@@ -89,17 +96,27 @@ export default {
          * 改变查询条件
          */
         addQuery(item){
-            
-            item.isSelected = !item.isSelected;
-            
-            // 清空id数组
-            this.queryedList = [];
-            
-            this.showQueryList.forEach((item, index) =>{
-                if(item.isSelected){
-                    this.queryedList.push(item.id)
-                }
-            })
+            if(this.isSingleQuery){
+                this.showQueryList.forEach((it, index) => {
+                    it.isSelected = false
+                })
+                item.isSelected = true
+                // 清空id数组
+                this.queryedList = [];
+                this.queryedList.push(item.id)
+            } else {
+                item.isSelected = !item.isSelected;
+                
+                // 清空id数组
+                this.queryedList = [];
+                
+                this.showQueryList.forEach((item, index) =>{
+                    if(item.isSelected){
+                        this.queryedList.push(item.id)
+                    }
+                })
+            }
+
 
             //将查询组件数据变化存入vuex
             if(this.queryFrom == 'staff'){
