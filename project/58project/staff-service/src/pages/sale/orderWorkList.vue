@@ -22,7 +22,7 @@
             </template>
 
             <template slot="control" slot-scope="controler">
-                <el-button size="mini" type="text" @click="showStaff(controler.scoper.$index, scoper.row)">查看</el-button>
+                <el-button size="mini" type="text" @click="showStaff(controler.scoper.$index, controler.scoper.row)">查看</el-button>
                 <el-button size="mini" style="color:#f56c6c" type="text" @click="sendErrorMessage(controler.scoper.row)">提交异常信息</el-button>
             </template>
 
@@ -265,7 +265,7 @@
              */
             showStaff(index, row){
                 this.$router.push({
-                    path: "/sale/orderWorkerItem",
+                    path: "/worker/workerItemShow",
                     query: {
                         id: row.id
                     }

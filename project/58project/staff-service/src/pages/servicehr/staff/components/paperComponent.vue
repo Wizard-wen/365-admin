@@ -1,27 +1,28 @@
 <template>
     <div class="paper-box">
-        <el-button style="margin-bottom:15px;" icon="el-icon-plus"  @click="openPaperDialog('new', {})">添加证书</el-button>
-        <el-row>
-            <el-col :span="24" v-for="(item, index) in paperList" :key="index">
-                <el-card :body-style="{ padding: '0px' }">
-                    <div class="paper-imgs">
-                        <img 
-                            class="paper-item-img" 
-                            v-for="(it, inds) in item.images" 
-                            :key="inds" 
-                            :src="it.url"
-                            @click="showDetialPic(it.url)">
-                    </div>
-                    <div class="image-messsage">
-                        <p>{{item.paper_category_name}}</p>
-                        <div>
-                            <el-button @click="deleteFormPaper(item)" class="el-icon-delete" type="text" size="small">删除</el-button>
-                            <el-button @click="openPaperDialog('edit', item)" class="el-icon-edit" type="text" size="small">编辑</el-button>
-                        </div>
-                    </div>
-                </el-card>
-            </el-col>
-        </el-row>
+        <el-button 
+            v-if="isEdit" 
+            style="margin-bottom:15px;" 
+            icon="el-icon-plus"  
+            @click="openPaperDialog('new', {})">添加证书</el-button>
+        
+        <div class="paper-imgs-box" v-for="(item, index) in paperList" :key="index">
+            <div class="paper-imgs">
+                <img 
+                    class="paper-item-img" 
+                    v-for="(it, inds) in item.images" 
+                    :key="inds" 
+                    :src="it.url"
+                    @click="showDetialPic(it.url)">
+            </div>
+            <div class="image-messsage">
+                <p>{{item.paper_category_name}}</p>
+                <div v-if="isEdit">
+                    <el-button @click="deleteFormPaper(item)" class="el-icon-delete" type="text" size="small">删除</el-button>
+                    <el-button @click="openPaperDialog('edit', item)" class="el-icon-edit" type="text" size="small">编辑</el-button>
+                </div>
+            </div>
+        </div>
         <paper-dialog 
             :isEditPaper="paperDialog.isEditPaper"
             :paperDialogVisible="paperDialog.paperDialogVisible"
@@ -52,6 +53,13 @@ export default {
         value: {
             type: Array,
             default: function(){return []}
+        },
+        /**
+         * 是否可以编辑
+         */
+        isEdit: {
+            type: Boolean,
+            default: true,
         }
     },
     watch:{
@@ -190,26 +198,37 @@ export default {
 </script>
 <style lang="scss" scoped>
     .paper-box{
-        width: 100%;
-        min-width: 600px;
+        width: 760px;
     }
-    .paper-imgs{
-        // height: 110px!important;
-        padding: 5px 0;
-        .paper-item-img{
-            display: inline-block;
-            height:100px;
-            width: 100px;
-            margin : 0 10px;
-            cursor: pointer;
+    .paper-imgs-box{
+        margin-bottom: 15px;
+        border: 1px solid #ebeef5;
+        background-color: #fff;
+        box-shadow: 0 2px 12px 0 rgba(0,0,0,.1);
+        &:last-child{
+            margin-bottom: 0;
+        }
+        .paper-imgs{
+            display: flex;
+            flex-wrap: wrap;
+            .paper-item-img{
+                display: block;
+                height:100px;
+                width: 100px;
+                margin-left : 10px;
+                margin-top: 10px;
+                cursor: pointer;
+            }
+        }
+        .image-messsage{
+            line-height: 30px;
+            display: flex;
+            justify-content: space-between;
+            padding: 0 20px;
         }
     }
-    .image-messsage{
-        line-height: 40px;
-        display: flex;
-        justify-content: space-between;
-        padding: 0 20px;
-    }
+
+
 </style>
 
 

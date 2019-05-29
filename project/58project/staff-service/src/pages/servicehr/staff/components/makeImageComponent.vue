@@ -132,7 +132,6 @@ export default {
             await axios.post("/admin/common/uploadImage",canvasFormData).then(data =>{
                 _this.canvasImage = './resource/'+data.data.path
                 _this.isImage = true
-                // debugger
                 if(_this.isImage){
                     _this.isMakingImage = false
                 }
@@ -143,8 +142,9 @@ export default {
                     type: 'error'
                 })
                 _this.isMakingImage = false
+            }).finally(() => {
+                _this.isMakingImage = false
             })
-            // await (_this.isMakingImage = false)()
         });
     }
 }

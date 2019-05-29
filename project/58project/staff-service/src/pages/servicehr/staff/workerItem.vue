@@ -82,24 +82,9 @@
             </el-form-item>
 
             <el-form-item label="证件照" class="form-item-size">
-                <el-upload
-                    accept=".jpg,.jpeg,.png,.gif,.bmp,.pdf,.JPG,.JPEG,.PBG,.GIF,.BMP,.PDF"
-                    class="avatar-uploader"
-                    action="/admin/common/uploadImage"
-                    :show-file-list="false"
-                    :on-success="idPhotoUploadSuccess"
-                    :before-upload="beforeAvatarUpload"
-                    :headers="uploadHeader">
-                    <i  class="el-icon-plus avatar-uploader-icon"></i>
-                </el-upload>
-                <div class="picture-box" v-if="id_photo_fileList.length">
-                    <div v-for="(item,index) in id_photo_fileList" :key="index" class="avatar-box" @mouseover="showIdPhotoblack(item, index, '0')" @mouseout="showIdPhotoblack(item, index, '1')">
-                        <img :src="item.url" class="avatar">
-                        <div class="avatar-back" v-if="item.isBack" @click="deleteIdPhoto">
-                            <i class="el-icon-delete avatar-uploader-icon" style=""></i>
-                        </div>
-                    </div>
-                </div>
+                <photo-component 
+                    v-model="id_photo_fileList" 
+                    :title="'证件照'"></photo-component>
             </el-form-item>
 
             <el-form-item label="地址" prop="address" class="form-item-size" size="small">
@@ -125,7 +110,7 @@
             <el-form-item label="头像" class="form-item-size">
                 <el-upload
                     accept=".jpg,.jpeg,.png,.gif,.bmp,.pdf,.JPG,.JPEG,.PBG,.GIF,.BMP,.PDF"
-                    class="avatar-uploader"
+                    class="icon-uploader"
                     action="/admin/common/uploadImage"
                     :show-file-list="false"
                     :file-list="icon_fileList"
@@ -133,37 +118,25 @@
                     :before-upload="beforeAvatarUpload"
                     :headers="uploadHeader">
 
-                    <div v-if="workerForm.icon!=''" class="avatar-box" @mouseover="showblack('0')" @mouseout="showblack('1')">
-                        <img  :src="workerForm.icon == '' ? '' : `./resource/${workerForm.icon}`" class="avatar">
-                        <div class="avatar-back" v-if="isShowBlack">
-                            <i class="el-icon-edit avatar-uploader-icon" style="color: #fff;font-size: 20px;"></i>
+                    <div 
+                        v-if="workerForm.icon!=''" 
+                        class="icon-box" 
+                        @mouseover="showblack('0')" 
+                        @mouseout="showblack('1')">
+                        <img class="icon-item" :src="workerForm.icon == '' ? '' : `./resource/${workerForm.icon}`" >
+                        <div class="icon-item-back" v-if="isShowBlack">
+                            <i class="el-icon-edit icon-uploader-icon" style="color: #fff;font-size: 20px;"></i>
                         </div>
                     </div>
 
-                    <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+                    <i v-else class="el-icon-plus icon-uploader-icon"></i>
                 </el-upload>
             </el-form-item>
 
             <el-form-item label="照片" class="form-item-size">
-                
-                <el-upload
-                    accept=".jpg,.jpeg,.png,.gif,.bmp,.pdf,.JPG,.JPEG,.PBG,.GIF,.BMP,.PDF"
-                    class="avatar-uploader"
-                    action="/admin/common/uploadImage"
-                    :show-file-list="false"
-                    :on-success="photoUploadSuccess"
-                    :before-upload="beforeAvatarUpload"
-                    :headers="uploadHeader">
-                    <i  class="el-icon-plus avatar-uploader-icon"></i>
-                </el-upload>
-                <div class="picture-box" v-if="photo_fileList.length">
-                    <div v-for="(item,index) in photo_fileList" :key="index" class="avatar-box" @mouseover="showPhotoblack(item, index, '0')" @mouseout="showPhotoblack(item, index, '1')">
-                        <img :src="item.url" class="avatar">
-                        <div class="avatar-back" v-if="item.isBack" @click="deletePhoto">
-                            <i class="el-icon-delete avatar-uploader-icon" style=""></i>
-                        </div>
-                    </div>
-                </div>
+                <photo-component 
+                    v-model="photo_fileList" 
+                    :title="'照片'"></photo-component>
             </el-form-item>
         
             <el-form-item label="参加培训" prop="course" class="form-item-size" size="small">
@@ -202,12 +175,14 @@
             </el-form-item>
         </el-form>
         <div class="control">
-            <!-- 创建/编辑 -->
-            <el-button type="primary" @click="editStaff('form')">{{editText}}</el-button>
-            <el-button type="primary" @click="makeImage" v-if="isShowImageButton">生成名片</el-button>
-            <!-- 导出回访 / 恢复 / 提交至信息库-->
-            <el-button type="primary" @click="submitStaff" v-if="submitText != ''">{{submitText}}</el-button>
-            <el-button @click="goback">返回</el-button>
+            <div class="control-contains">
+                <!-- 创建/编辑 -->
+                <el-button type="primary" @click="editStaff('form')">{{editText}}</el-button>
+                <el-button type="primary" @click="makeImage" v-if="isShowImageButton">生成名片</el-button>
+                <!-- 导出回访 / 恢复 / 提交至信息库-->
+                <el-button type="primary" @click="submitStaff" v-if="submitText != ''">{{submitText}}</el-button>
+                <el-button @click="goback">返回</el-button>
+            </div>
         </div>
         <!-- 生成服务人员名片组件 -->
         <make-image-component
@@ -228,6 +203,7 @@ import {hrService} from '../../../../common'
 
 import {
     paperComponent,
+    photoComponent,
     makeImageComponent} from './components'
 
 import {
@@ -236,8 +212,9 @@ import {
 
 export default {
     components: {
-        paperComponent,
-        selectTagComponent,
+        paperComponent,//证书组件
+        photoComponent,//照片组件
+        selectTagComponent,//单选、多选框组件
         makeImageComponent, //创建图片组件
     },
     data() {
@@ -297,18 +274,6 @@ export default {
                         callback(new Error('请输入18位有效身份证号'));
                     }
                     callback();
-                } else {
-                    callback()
-                }
-            },
-            //银行卡号
-            bankCardValidate(rule, value, callback){
-                if (value != '') {
-                    if (!(/^[0-9]+$/.test(value))) {
-                        callback(new Error('银行卡号只能是数字'));
-                    } else {
-                        callback();
-                    }
                 } else {
                     callback()
                 }
@@ -396,11 +361,7 @@ export default {
                 //身份证
                 identify: [
                     {validator: validator.identifyValidate, trigger: 'blur'}
-                ],               
-                //银行卡号
-                bank_card: [
-                    // {validator: validator.bankCardValidate, trigger: 'blur'}
-                ],
+                ], 
             },
             datePickerOption: {
                 disabledDate(time) {
@@ -425,54 +386,58 @@ export default {
         }
     },
     methods: {
+        setFormItem(){
+            //提交前，拷贝出一份数据做字段转换
+            let workerFormSend = {
+                ...this.workerForm
+            }
+            workerFormSend.photo = this.photo_fileList
+            workerFormSend.id_photo = this.id_photo_fileList
+            //字段转换
+            workerFormSend.service_crowd = this.setCommitAttr(
+                workerFormSend.service_crowd,
+                this.workerConfigList.service_crowd,
+                'service_crowd_id'
+            );
+
+            workerFormSend.region = this.setCommitAttr(
+                workerFormSend.region,
+                this.workerConfigList.service_region,
+                'region_id'
+            );
+
+            workerFormSend.skill = this.setCommitAttr(
+                workerFormSend.skill,
+                this.workerConfigList.service_category,
+                'service_category_id'
+            );
+
+            workerFormSend.course = this.setCommitAttr(
+                workerFormSend.course,
+                this.workerConfigList.course,
+                'course_id'
+            );
+
+            workerFormSend.service_type = this.setCommitAttr(
+                workerFormSend.service_type,
+                this.workerConfigList.service_type,
+                'service_type_id'
+            );
+
+            workerFormSend.paper = this.setCommitAttr(
+                workerFormSend.paper,
+                this.workerConfigList.paper_category,
+                'paper_category_id'
+            );
+            return workerFormSend
+        },
         /**
          * 提交表单
          */
         async editStaff(formName) {
             await this.$refs[formName].validate(async (valid, fileds) => {
                 if (valid) {
-                    //提交前，拷贝出一份数据做字段转换
-                    let workerFormSend = {
-                        ...this.workerForm
-                    }
-                    
-                    //字段转换
-                    workerFormSend.service_crowd = this.setCommitAttr(
-                        workerFormSend.service_crowd,
-                        this.workerConfigList.service_crowd,
-                        'service_crowd_id'
-                    );
-
-                    workerFormSend.region = this.setCommitAttr(
-                        workerFormSend.region,
-                        this.workerConfigList.service_region,
-                        'region_id'
-                    );
-
-                    workerFormSend.skill = this.setCommitAttr(
-                        workerFormSend.skill,
-                        this.workerConfigList.service_category,
-                        'service_category_id'
-                    );
-
-                    workerFormSend.course = this.setCommitAttr(
-                        workerFormSend.course,
-                        this.workerConfigList.course,
-                        'course_id'
-                    );
-
-                    workerFormSend.service_type = this.setCommitAttr(
-                        workerFormSend.service_type,
-                        this.workerConfigList.service_type,
-                        'service_type_id'
-                    );
-
-                    workerFormSend.paper = this.setCommitAttr(
-                        workerFormSend.paper,
-                        this.workerConfigList.paper_category,
-                        'paper_category_id'
-                    );
-
+                    let workerFormSend = this.setFormItem()
                     try{
                         store.commit('setLoading',true)
                         await hrService.editStaff(workerFormSend).then(data =>{
@@ -534,47 +499,11 @@ export default {
             } else if(type == 4){
                 module_type = 'apply'
             }
+            let workerFormSend = this.setFormItem()
 
-            //字段转换
-            this.workerForm.service_crowd = this.setCommitAttr(
-                this.workerForm.service_crowd,
-                this.workerConfigList.service_crowd,
-                'service_crowd_id'
-            );
-
-            this.workerForm.region = this.setCommitAttr(
-                this.workerForm.region,
-                this.workerConfigList.service_region,
-                'region_id'
-            );
-
-            this.workerForm.skill = this.setCommitAttr(
-                this.workerForm.skill,
-                this.workerConfigList.service_category,
-                'service_category_id'
-            );
-
-            this.workerForm.course = this.setCommitAttr(
-                this.workerForm.course,
-                this.workerConfigList.course,
-                'course_id'
-            );
-
-            this.workerForm.service_type = this.setCommitAttr(
-                this.workerForm.service_type,
-                this.workerConfigList.service_type,
-                'service_type_id'
-            );
-
-            this.workerForm.paper = this.setCommitAttr(
-                this.workerForm.paper,
-                this.workerConfigList.paper_category,
-                'paper_category_id'
-            );
-        
             try{
                 store.commit('setLoading',true)
-                await hrService.agreeStaffSingle(module_type, 'edit',this.workerForm).then(data =>{
+                await hrService.agreeStaffSingle(module_type, 'edit',workerFormSend).then(data =>{
                     if(data.code == '0'){
                         this.$message({
                             type:"success",
@@ -609,55 +538,6 @@ export default {
                 this.isShowBlack = false
             }
         },
-        //展示照片删除阴影
-        showPhotoblack(item,index, state){
-            if(state == '0'){
-                this.photo_fileList[index].isBack = true
-            } else {
-                this.photo_fileList[index].isBack = false
-            }
-        },
-        //展示证件照删除阴影
-        showIdPhotoblack(item,index, state){
-            if(state == '0'){
-                this.id_photo_fileList[index].isBack = true
-            } else {
-                this.id_photo_fileList[index].isBack = false
-            }
-        },
-        //删除照片
-        async deletePhoto(index){
-            let response = await this.$confirm(`确定删除该照片吗?`, '提示', {
-                confirmButtonText: '确定',
-                cancelButtonText: '取消',
-                type: 'warning'
-            }).catch(() => {
-                this.$message({
-                    type: 'info',
-                    message: `已取消删除`
-                });
-            });
-            if(response == "confirm"){
-                this.photo_fileList.splice(index,1)
-                this.workerForm.photo.splice(index,1)
-            }
-        },
-        async deleteIdPhoto(index){
-            let response = await this.$confirm(`确定删除该证件照片吗?`, '提示', {
-                confirmButtonText: '确定',
-                cancelButtonText: '取消',
-                type: 'warning'
-            }).catch(() => {
-                this.$message({
-                    type: 'info',
-                    message: `已取消删除`
-                });
-            });
-            if(response == "confirm"){
-                this.id_photo_fileList.splice(index,1)
-                this.workerForm.id_photo.splice(index,1)
-            }
-        },
         //头像上传成功
         iconUploadSuccess(res, file) {
             this.workerForm.icon = res.data.path;
@@ -667,43 +547,6 @@ export default {
                 name: 'head'
             }]
         },
-        //证件照片上传成功
-        id_photoUploadSuccess(res, file) {
-            this.workerForm.id_photo.push(res.data);
-
-            this.id_photo_fileList =  this.workerForm.id_photo.map((item, index) =>{
-                return {
-                    ...item,
-                    url: `./resource/${item.path}`,
-                    isBack: false,
-                }
-            })
-        },
-        //照片上传成功
-        photoUploadSuccess(res, file) {
-            this.workerForm.photo.push(res.data);
-
-            this.photo_fileList =  this.workerForm.photo.map((item, index) =>{
-                return {
-                    ...item,
-                    url: `./resource/${item.path}`,
-                    isBack: false,
-                }
-            })
-        },
-        //证件照片上传成功
-        idPhotoUploadSuccess(res, file) {
-            this.workerForm.id_photo.push(res.data);
-
-            this.id_photo_fileList =  this.workerForm.id_photo.map((item, index) =>{
-                return {
-                    ...item,
-                    url: `./resource/${item.path}`,
-                    isBack: false,
-                }
-            })
-        },
-
         beforeAvatarUpload(file) {
             const isLt2M = file.size / 1024 / 1024 < 2;
 
@@ -834,14 +677,13 @@ export default {
                             }
                         })
                         //证件照片
-                        // this.id_photo_fileList =  workerForm.id_photo.map((item, index) =>{
-                        //     return {
-                        //         ...item,
-                        //         url: `./resource/${item.path}`,
-                        //         isBack: false,
-                        //     }
-                        // })
-                        workerForm.id_photo = []
+                        this.id_photo_fileList =  workerForm.id_photo.map((item, index) =>{
+                            return {
+                                ...item,
+                                url: `./resource/${item.path}`,
+                                isBack: false,
+                            }
+                        })
                         this.workerForm = workerForm
                     }
                 }).catch(error =>{
@@ -874,7 +716,7 @@ export default {
         padding-top: 30px;
         .staff-form{
             width: 100%;
-            margin-bottom: 30px;
+            margin-bottom: 60px;
             & /deep/ .el-form-item{
                 margin-bottom: 15px;
             }
@@ -883,38 +725,50 @@ export default {
                 & /deep/ .el-input{
                     min-width: 260px;
                 }
-                .picture-box{
-                    border: 1px dashed #ccc;
-                    padding: 0 10px 10px 10px;
-                    display: flex;
-                    flex-wrap: wrap;
-                        .avatar-box{
-                            margin: 10px 10px 0 0;
-                            width:100px;
-                            height: 100px;
-                            position: relative;
-                            .avatar {
-                                width:100px;
-                                height: 100px;
-                                display: block;
-                            }
-                            .avatar-back{
-                                position: absolute;
-                                height: 100px;
-                                width: 100px;
-                                line-height: 100px;
-                                text-align: center;
-                                top: 0;
-                                z-index: 4;
-                                cursor: pointer;
-                                background: rgba(0,0,0,.5);
-                                .avatar-uploader-icon{
-                                    color: #fff;font-size: 20px;
-                                }
-                            }
+                //表单校验样式
+                // & /deep/ .el-form-item__error{
+                //     height: 32px;
+                //     width: 230px;
+                //     color: #f56c6c;
+                //     font-size: 12px;
+                //     line-height: 32px;
+                //     position: absolute;
+                //     top: 0;
+                //     right: -250px;
+                // }
+                //头像上传
+                .icon-uploader{
+                    & /deep/ .el-upload {
+                        border: 1px dashed #d9d9d9;
+                        border-radius: 6px;
+                        cursor: pointer;
+                        position: relative;
+                        overflow: hidden;
+                    }
+                    & /deep/ .el-upload:hover {
+                        border-color: #409EFF;
+                    }
+                    .icon-box{
+                        width:65px;
+                        height: 65px;
+                        position: relative;
+                        .icon-item {
+                            width:65px;
+                            height: 65px;
+                            display: block;
                         }
-                }
+                        .icon-item-back{
+                            position: absolute;
+                            height: 65px;
+                            width: 65px;
+                            top: 0;
+                            z-index: 4;
+                            background: rgba(0,0,0,.5)
+                        }
+                    }
+                } 
             }
+            // 姓名查重组件
             .nameCheckBox{
                 width: 900px;
                 padding-left: 140px;
@@ -939,70 +793,26 @@ export default {
                 }
             }
         }
-        .paper-imgs{
-            height: 110px!important;
-            padding: 5px 0;
-            .paper-item-img{
-                display: inline-block;
-                height:100px;
-                width: 100px;
-                margin : 0 10px;
+        .control{
+            position: fixed;
+            right: 0;
+            bottom: 0;
+            z-index: 9;
+            width: calc(100% - 180px);
+            height: 56px;
+            padding: 0 24px;
+            line-height: 56px;
+            background: #fff;
+            border-top: 1px solid #e8e8e8;
+            box-shadow: 0 -1px 2px rgba(0,0,0,.03);
+            .control-contains{
+                float: right;
             }
         }
-        .image-messsage{
-            line-height: 40px;
-            display: flex;
-            justify-content: space-between;
-            padding: 0 20px;
-        }
-        .control{
-            // position: fixed;
-            height: 60px;
-            padding: 10px 0;
-            width: 100%;
-            // bottom: 0; 
-            background: rgba(0,0,0,.2);
-            // opacity: .1;
-            // z-index: 3;
-        }
     }
-    //图片上传
-    .avatar-uploader /deep/ .el-upload {
-        border: 1px dashed #d9d9d9;
-        border-radius: 6px;
-        cursor: pointer;
-        position: relative;
-        overflow: hidden;
-    }
-    .avatar-uploader /deep/ .el-upload:hover {
-        border-color: #409EFF;
-    }
-    .avatar-uploader-icon {
-        font-size: 16px;
-        color: #8c939d;
-        width: 65px;
-        height: 65px;
-        line-height: 65px;
-        text-align: center;
-    }
-    .avatar-box{
-        width:65px;
-        height: 65px;
-        position: relative;
-        .avatar {
-            width:65px;
-            height: 65px;
-            display: block;
-        }
-        .avatar-back{
-            position: absolute;
-            height: 65px;
-            width: 65px;
-            top: 0;
-            z-index: 4;
-            background: rgba(0,0,0,.5)
-        }
-    }
+
+
+
 
 </style>
 

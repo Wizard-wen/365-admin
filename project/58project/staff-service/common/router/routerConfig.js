@@ -93,6 +93,7 @@ import authConfig from '@/pages/auth/auth/authConfig.vue'
  import workerList from '@/pages/servicehr/staff/workerList.vue'
  import workFormConfig from '@/pages/servicehr/staff/workFormConfig.vue'
  import workerItem from '@/pages/servicehr/staff/workerItem.vue'
+ import workerItemShow from '@/pages/servicehr/staff/workerItemShow.vue'
  import newWorkerList from '@/pages/servicehr/staff/newWorkerList.vue'
  import errorWorkerList from '@/pages/servicehr/staff/errorWorkerList.vue'
  import returnList from '@/pages/servicehr/staff/returnList.vue'
@@ -118,6 +119,11 @@ import authConfig from '@/pages/auth/auth/authConfig.vue'
         path: '/worker/workerItem',
         name: 'workerItem',
         component: workerItem,
+    },
+    {
+        path: '/worker/workerItemShow',
+        name: 'workerItemShow',
+        component: workerItemShow,
     },
     {
         path: '/worker/workFormConfig',
