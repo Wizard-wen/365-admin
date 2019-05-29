@@ -46,7 +46,7 @@
                         </div>
                     </div>
                     <div class="icon">
-                        <img :src="'./resource/'+openMakeImage.icon" alt="">
+                        <img style="height:100px;width:100px;" :src="'./resource/'+openMakeImage.icon" alt="">
                     </div>
                 </div>
 
@@ -59,9 +59,7 @@
 
             <div class="imageBox-footer">
                 <el-button @click="closeMakeImageDialog">取 消</el-button>
-                <!-- <el-button type="primary"> -->
-                    <a class="down" :href="canvasImage" download="logo.png">下载图片</a>
-                    <!-- </el-button> -->
+                <a class="down" :href="canvasImage" download="card.png">下载图片</a>
             </div>
         </div>
     </div>
@@ -223,7 +221,26 @@ export default {
                 height: 60px;
                 width: 200px;
                 .down{
-                    color: #000;
+                    color: #fff;
+                    background-color: #409EFF;
+                    border-color: #409EFF;
+                    display: inline-block;
+                    line-height: 1;
+                    white-space: nowrap;
+                    cursor: pointer;
+                    border: 1px solid #dcdfe6;
+                    -webkit-appearance: none;
+                    text-align: center;
+                    -webkit-box-sizing: border-box;
+                    box-sizing: border-box;
+                    outline: 0;
+                    margin: 0;
+                    -webkit-transition: .1s;
+                    transition: .1s;
+                    font-weight: 500;
+                    padding: 12px 20px;
+                    font-size: 14px;
+                    border-radius: 4px;
                 }
             }
         }
