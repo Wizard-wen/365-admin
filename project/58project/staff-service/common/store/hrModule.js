@@ -51,22 +51,6 @@ export const hrModule = {
             state.sellerList[payload.queryKey] = payload.queryedList
         },
     },
-    // getters: {
-    //     queryConfigList: state =>{
-    //         let obj = {}
-    //         console.log(1)
-    //         Object.keys(state.configForm).forEach((item, index) =>{
-    //             obj[item] = state.configForm[item].reduce((arr, it, ind) =>{
-    //                 console.log(state.queryedList[item.substring(0,item.length-4)])
-    //                 return arr.concat({
-    //                     ...it,
-    //                     isSelected:  true 
-    //                 })
-    //             }, [])
-    //         })
-    //         return obj
-    //     }
-    // },
     state: {
         configForm: {}, //全部劳动者配置项
         // 回访服务人员查询
@@ -93,7 +77,6 @@ export const hrModule = {
             /*********************业务字段查询*****************************/
             name: '',
             phone: '',
-
         },
         // 异常服务人员查询
         errorList: {
