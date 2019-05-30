@@ -12,12 +12,13 @@
             </template>
             
             <template slot="searchForm">
-                <div class="search-left">
+                <!-- <div class="search-left">
                     <el-input v-model="staffSearch.name" placeholder="请输入员工姓名" :maxlength="20"></el-input>
                     <el-input v-model="staffSearch.phone" placeholder="请输入电话" :maxlength="20"></el-input>
                     <el-button type="primary" @click="searchStaff">查询</el-button>
                     <el-button type="primary" @click="resetStaff">重置</el-button>
-                </div>
+                </div> -->
+                <query-tag-component @updateTable="updateTable"></query-tag-component>
                 <div>
                     <el-button type="primary" @click="exportReturnStaff(1)">导入回访</el-button>
                     <el-button type="primary" @click="editStaff(0)">创建服务人员</el-button>
@@ -56,13 +57,15 @@
     import {
         queryComponent,
         staffTableComponent,
+        queryTagComponent,
     } from './components'
     import returnStaffDialog from './components/workerList/returnStaffDialog.vue'
     export default {
         components: {
             queryComponent,
             staffTableComponent,
-            returnStaffDialog
+            returnStaffDialog,
+            queryTagComponent
         },
         data(){
             return {

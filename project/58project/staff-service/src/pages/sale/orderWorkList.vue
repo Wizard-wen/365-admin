@@ -47,7 +47,7 @@
         <error-staff-dialog
             v-if="errorStaffDialogVisible"
             :openErrorStaffDialog="errorStaffDialogVisible"
-            @closeErrorStaffDialog="errorStaffDialogVisible=false"
+            @closeErrorStaffDialog="closeErrorStaffDialog"
             :errorStaffWorkingStatus="errorStaffRow.working_status"
             :staffId="errorStaffId"></error-staff-dialog>
     </div>
@@ -270,6 +270,13 @@
                         id: row.id
                     }
                 })
+            },
+            /**
+             * 关闭异常弹窗
+             */
+            async closeErrorStaffDialog(){
+                this.errorStaffDialogVisible = false;
+                await this.getTableList()
             },
             /**
              * 创建时间字段转换

@@ -41,8 +41,17 @@ export default {
             defeult: 'staff'
         }
     },
-    mounted(){
-
+    watch: {
+        inputText: function(val, oldVal){
+            if(val == ''){
+                this.searchText = ''
+            }
+        }
+    },
+    computed: {
+        inputText(){
+            return this.$store.state.hrModule.queryedList[this.queryKey]
+        }
     },
     methods: {
         /**

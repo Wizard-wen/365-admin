@@ -12,6 +12,9 @@ import photoComponent from './photoComponent.vue'
 //列表查询组件
 import queryComponent from './queryComponent.vue'
 
+//列表查询标签组件
+import queryTagComponent from './queryTagComponent.vue'
+
 
 //创建服务人员名片组件
 import makeImageComponent from './makeImageComponent.vue'
@@ -23,6 +26,7 @@ export {
     paperComponent,//证书组件
     photoComponent,//上传图片组件
     queryComponent,
+    queryTagComponent,
     makeImageComponent,
     staffTableComponent
 }

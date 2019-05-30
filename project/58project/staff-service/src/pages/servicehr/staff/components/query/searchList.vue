@@ -22,7 +22,7 @@ export default {
     data(){
         return {
             isShow:false, //是否展示列表
-            showQueryList:[], //展示的列表
+            // showQueryList:[], //展示的列表
             queryedList: [], //当前筛选的字段
         }
     },
@@ -64,26 +64,19 @@ export default {
             default: false
         }
     },
-    watch: {
-        queryList(val, oldVal){
-            if(oldVal.length == 0 && val.length!=0){
-                this.showQueryList = this.queryList.map((item, index) =>{
-                    return {
-                        ...item,
-                        isSelected :false
-                    }
-                })
-            }
+    computed: {
+        showQueryList(){
+            let _this = this;
+            return this.queryList.map((item, index) =>{
+                return {
+                    ...item,
+                    isSelected: _this.selectedArr.includes(item.id)? true : false 
+                }
+            })
+        },
+        selectedArr(){
+            return this.$store.state.hrModule.queryedList[this.queryKey]
         }
-    },
-    mounted(){
-        //渲染初始数据
-        this.showQueryList = this.queryList.map((item, index) =>{
-            return {
-                ...item,
-                isSelected :false
-            }
-        })
     },
     methods: {
         /**
@@ -96,38 +89,34 @@ export default {
          * 改变查询条件
          */
         addQuery(item){
+            let queryedList = []
             if(this.isSingleQuery){
-                this.showQueryList.forEach((it, index) => {
-                    it.isSelected = false
-                })
-                item.isSelected = true
                 // 清空id数组
-                this.queryedList = [];
-                this.queryedList.push(item.id)
+                queryedList = [];
+                queryedList.push(item.id);
             } else {
-                item.isSelected = !item.isSelected;
-                
                 // 清空id数组
-                this.queryedList = [];
-                
-                this.showQueryList.forEach((item, index) =>{
-                    if(item.isSelected){
-                        this.queryedList.push(item.id)
-                    }
-                })
-            }
+                queryedList = this.selectedArr;
 
+                let indexNumber = this.selectedArr.indexOf(item.id)
+               
+               if(indexNumber!=-1){
+                   queryedList.splice(indexNumber, 1)
+               } else {
+                   queryedList.push(item.id)
+               }
+            }
 
             //将查询组件数据变化存入vuex
             if(this.queryFrom == 'staff'){
                 this.$store.commit('setQueryList', {
                     queryKey: this.queryKey, 
-                    queryedList: this.queryedList
+                    queryedList: queryedList
                 })
             } else {
                 this.$store.commit('setSellerList', {
                     queryKey: this.queryKey, 
-                    queryedList: this.queryedList
+                    queryedList: queryedList
                 })
             }
             
