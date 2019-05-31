@@ -8,6 +8,11 @@
                     <el-form-item>
                         <el-input class="input" v-model="accountSearch.name" placeholder="请输入管理员名" :maxlength="20"></el-input>
                     </el-form-item>
+                    <el-form-item>
+                        <el-select v-model="accountSearch.department" placeholder="部门查询">
+                            <el-option v-for="(item, index) in departmentList" :key="index" :label="item.name" :value="item.id"></el-option>
+                        </el-select>
+                    </el-form-item>
 
                     <el-form-item>
                         <el-button type="primary" @click="searchAccount">查询</el-button>
@@ -20,11 +25,20 @@
             </el-form>
 
             <!-- 表格 -->
-            <el-table :data="accountTable" class="account-table">
+            <el-table :data="accountTable" class="account-table" :header-cell-style="{height: '48px',background: '#fafafa'}">
 
                 <el-table-column label="编号" prop="id" align="center"></el-table-column>
                 <el-table-column label="账号" prop="account" align="center"></el-table-column>
                 <el-table-column label="用户名" prop="name" align="center"></el-table-column>
+                <el-table-column label="部门" prop="department_id"  align="center">
+                    <template slot-scope="scope">
+                        <table-tag-component 
+                        v-if="departmentList" 
+                        :propList="departmentList" 
+                        :tableOriginData="scope.row.department_id"></table-tag-component>
+                    </template>
+                </el-table-column>
+                <el-table-column label="门店名" prop="store_name" align="center"></el-table-column>
 
                 <el-table-column label="操作" align="center">
                     <template slot-scope="scope">
@@ -34,7 +48,13 @@
                         <el-button
                             size="mini"
                             type="danger"
-                            @click="deleteAccount(scope.$index, scope.row)">停用</el-button>
+                            v-if="scope.row.type == 'enable'"
+                            @click="setAccountState('disable', scope.row)">停用</el-button>
+                        <el-button
+                            size="mini"
+                            type="success"
+                            v-else
+                            @click="setAccountState('enable', scope.row)">启用</el-button>
                     </template>
                 </el-table-column>
             </el-table>
@@ -52,6 +72,9 @@
     </div>
 </template>
 <script>
+    import {
+        cascaderComponent,
+        tableTagComponent} from '@/pages/components'
     import {authService} from '../../../../common'
     export default {
         data() {
@@ -61,7 +84,8 @@
                 accountTable: [],
                 //用户列表搜索条件
                 accountSearch: {
-                    name:''
+                    name:'',
+                    department: 0
                 },
                 /**
                  * 分页信息
@@ -93,7 +117,16 @@
                     }
                 })
                 return arr
+            },
+            /**
+             * 部门信息
+             */
+            departmentList(){
+                return this.$store.state.authModule.departmentList
             }
+        },
+        components: {
+            tableTagComponent
         },
         methods: {
             /**
@@ -172,20 +205,6 @@
              * 账户编辑
              */
             editAccount(index, row) {
-                // if(row.account == 'admin'){
-                //     this.$message({
-                //         type:'error',
-                //         message: '超级管理员不能修改'
-                //     })
-                // } else {
-                //     this.$router.push({
-                //         path: "/auth/accountEdit",
-                //         query: {
-                //             type: 1, //编辑为1
-                //             id: row.id,
-                //         }
-                //     })
-                // }
                 this.$router.push({
                     path: "/auth/accountEdit",
                     query: {
@@ -196,20 +215,21 @@
 
             },
             /**
-             * 删除用户
+             * 停用或启用账户
              */
-            async deleteAccount(index, row) {
+            async setAccountState(type, row) {
 
-                let _this= this;
+                let _this= this,
+                    status = type == 'disable' ? '停用' : '启用'
 
-                let response = await this.$confirm('确定删除该账户吗?', '提示', {
+                let response = await this.$confirm(`确定${status}该账户吗?`, '提示', {
                     confirmButtonText: '确定',
                     cancelButtonText: '取消',
                     type: 'warning'
                 }).catch(() => {
                     this.$message({
                         type: 'info',
-                        message: '已取消删除'
+                        message: `已取消${status}`
                     });
                 });
 
@@ -222,23 +242,37 @@
                                 if(data.code == "0"){
                                     this.$message({
                                         type:'success',
-                                        message: `删除成功`
+                                        message: `${status}成功`
                                     })
+                                    store.commit('setLoading',false)
                                 }
-                            }).catch(e =>{
+                            }).catch(error =>{
                                 this.$message({
                                     type:'error',
-                                    message: e.message
+                                    message: error.message
                                 })
+                                store.commit('setLoading',false)
+                            }).finally(() =>{
+                                store.commit('setLoading',false)
                             })
                     } catch(error){
-                        throw error
+                        this.$message({
+                            type:'error',
+                            message: error.message
+                        })
+                        store.commit('setLoading',false)
                     }
 
                     await _this.getTableList()
-                    store.commit('setLoading',false)
+                    
                 }
             },
+            /**
+             * 部门字段转换
+             */
+            departmentFormatter(row, column){
+                return this.departmentList.filter(item => item.id == row.department_id)[0].name
+            }
         },
         async mounted(){
             await this.getTableList()

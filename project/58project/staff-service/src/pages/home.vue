@@ -8,7 +8,7 @@
                     </div>
                     <div class="home-staff">
                         <div class="staff-hello">你好！{{users.username}}，祝你开心每一天！</div>
-                        <div class="staff-department">{{data1}} | 中彤实业 - 365家政服务平台 - {{data2}}</div>
+                        <div class="staff-department">{{data1}} | 中彤实业 - 365生活服务平台 - {{data2}}</div>
                     </div>
                 </div>
                 <div class="home-right">

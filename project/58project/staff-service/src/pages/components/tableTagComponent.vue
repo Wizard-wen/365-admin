@@ -74,6 +74,7 @@ export default {
 .tag-box{
     // width:200px;
     display: flex;
+    justify-content: center;
     .tag-item-style{
         // background-color: rgba(64,158,255,.1);
         // padding: 0 10px;

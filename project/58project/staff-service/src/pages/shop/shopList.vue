@@ -26,7 +26,7 @@
       </div>
     </el-form>
 
-    <el-table :data="shopList" class="shop-table">
+    <el-table :data="shopList" class="shop-table" :header-cell-style="{height: '48px',background: '#fafafa'}">
       <el-table-column label="编号" prop="id" align="center"></el-table-column>
 
       <el-table-column label="门店名" prop="name" align="center"></el-table-column>

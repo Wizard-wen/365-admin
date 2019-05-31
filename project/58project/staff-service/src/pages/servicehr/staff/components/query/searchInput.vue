@@ -50,7 +50,12 @@ export default {
     },
     computed: {
         inputText(){
-            return this.$store.state.hrModule.queryedList[this.queryKey]
+            if(this.$route.path == '/sale/orderWorkList'){
+                return this.$store.state.hrModule.sellerList[this.queryKey]
+            } else {
+                return this.$store.state.hrModule.queryedList[this.queryKey]
+            }
+            
         }
     },
     methods: {

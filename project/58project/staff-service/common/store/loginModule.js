@@ -9,7 +9,9 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 
 Vue.use(Vuex)
-
+/**
+ * 被持久化的信息
+ */
 export const loginModule = {
     state: {
         isLogin: false,//是否登录

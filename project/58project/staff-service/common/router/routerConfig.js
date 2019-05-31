@@ -48,13 +48,6 @@ import authConfig from '@/pages/auth/auth/authConfig.vue'
         path: '/auth/accountEdit',
         name: 'accountEdit',
         component: accountEdit,
-        beforeEnter: (to, from, next) => {
-            if(!(from.path == '/auth/accountList' || from.path == '/auth/accountEdit')){
-                next(false)
-            } else {
-                next()
-            }
-        }
     },
     //角色配置
     {

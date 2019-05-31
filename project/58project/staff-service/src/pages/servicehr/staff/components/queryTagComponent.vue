@@ -34,7 +34,11 @@ export default {
             return this.$store.state.hrModule.configForm
         },
         queryedList(){
-            return this.$store.state.hrModule.queryedList
+            if(this.$route.path == '/sale/orderWorkList'){
+                return this.$store.state.hrModule.sellerList
+            } else {
+                return this.$store.state.hrModule.queryedList
+            }
         },
         queryListLength(){
             return this.queryTag.reduce((allNumber, item, index) =>{
@@ -43,7 +47,9 @@ export default {
         },
         queryTag(){
             let arr = [],
+                arrList = [],
                 _this = this;
+            
             Object.keys(this.queryedList).forEach((item, index) =>{
                 if(Array.isArray(this.queryedList[item])){
                     if(this.queryedList[item].length){

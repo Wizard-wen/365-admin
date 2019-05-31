@@ -11,24 +11,25 @@ import {loadingModule} from './loadingModule.js'
 import {orderModule} from './orderModule.js'
 import {hrModule} from './hrModule.js'
 import {shopModule} from './shopModule.js' //门店
+import {authModule} from './authModule.js' 
 
 Vue.use(vuex);
 
 window.store = new vuex.Store({
     //保存
     modules: {
-        loginModule,
+        loginModule, //持久化
         loadingModule,
         orderModule,
         hrModule,
         shopModule,
+        authModule
     },
     plugins: [createPersistedState({
         key: 'staff',
         storage: window.sessionStorage,
         reducer(val) {
             return {
-            // 只储存state中的user
             loginModule: val.loginModule
           }
        }

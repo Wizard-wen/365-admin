@@ -19,6 +19,9 @@ import cascaderTagComponent from './cascaderTagComponent.vue'
 //列表项内的标签组件
 import tableTagComponent from './tableTagComponent.vue'
 
+//表单页面组件
+import pageEditComponent from './pageEditComponent.vue'
+
 /****************** tag相关组件结束***************************************************/
 
 
@@ -30,4 +33,5 @@ export {
     selectTagComponent,
     cascaderTagComponent,
     tableTagComponent,
+    pageEditComponent
 }

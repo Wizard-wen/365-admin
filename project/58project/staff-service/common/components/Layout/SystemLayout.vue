@@ -3,7 +3,7 @@
         <div class="">
             <div class="header" ref="header">
                 <div class="logo">
-                    365后台管理系统
+                    365生活服务平台
                 </div>
                 <div class="header-right">
                     <div class="breadcrumb-box">
