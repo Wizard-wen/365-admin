@@ -120,10 +120,11 @@ export default {
         return axios.get(`./admin/common/getAreaTree`)
     },
     /**
-     * 人员信息配置
+     * 请求标签配置数据
+     * @param type config 
      */
-    getFormConfig(){
-        return axios.get('./admin/formConfig/getFormConfig?get_for=config')
+    getFormConfig(type){
+        return axios.get(`./admin/formConfig/getFormConfig?get_for=${type}`)
     },
     /**
      * 标签信息配置

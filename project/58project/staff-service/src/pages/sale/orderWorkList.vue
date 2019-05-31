@@ -12,12 +12,7 @@
             </template>
 
             <template slot="searchForm">
-                <div class="search-left">
-                    <el-input v-model="staffSearch.name" placeholder="请输入员工姓名" :maxlength="20"></el-input>
-                    <el-input v-model="staffSearch.phone" placeholder="请输入电话" :maxlength="20"></el-input>
-                    <el-button type="primary" @click="searchStaff">查询</el-button>
-                    <el-button type="primary" @click="resetStaff">重置</el-button>
-                </div>
+                <query-tag-component :queryFrom="'order'" @updateTable="updateTable"></query-tag-component>
                 <el-button type="primary" @click="createStaff">申请创建服务人员</el-button>
             </template>
 
@@ -56,17 +51,21 @@
     import {hrService, $utils} from '../../../common'
 
 
-    import {staffTableComponent} from '@/pages/servicehr/staff/components'
+    import {
+        staffTableComponent,
+        queryComponent,
+        queryTagComponent} from '@/pages/servicehr/staff/components'
 
     import createStaffDialog from './components/createStaff/createStaffDialog.vue'
     import errorStaffDialog from './components/errorStaff/errorStaffDialog.vue'
-    import {queryComponent} from '../servicehr/staff/components'
+
     export default {
         components: {
             staffTableComponent,
             createStaffDialog,
             errorStaffDialog,
-            queryComponent
+            queryComponent,
+            queryTagComponent
         },
         data() {
             return {
@@ -151,7 +150,7 @@
                     this.isLoaded = true
 
                     await Promise.all([
-                        hrService.getFormConfig(), //获取表单配置字段
+                        hrService.getFormConfig('edit'), //获取表单配置字段
                         hrService.getStaffList(4) //获取列表数据
                     ]).then((data) =>{
                         // 将表单配置数据存入 vuex 
@@ -281,17 +280,17 @@
             /**
              * 创建时间字段转换
              */
-            created_atFormatter(row, column){
-                return $utils.formatDate(new Date(row.created_at), 'yyyy-MM-dd')
-            },
-            //登记时间
-            register_atFormatter(row, column){
-                return $utils.formatDate(new Date(row.register_at), 'yyyy-MM-dd')
-            },
-            educationFomatter(row, column){
-                let a =  this.$store.state.hrModule.educationList.filter(item => item.id == row.education)
-                return a.length? a[0].name : ''
-            }
+            // created_atFormatter(row, column){
+            //     return $utils.formatDate(new Date(row.created_at), 'yyyy-MM-dd')
+            // },
+            // //登记时间
+            // register_atFormatter(row, column){
+            //     return $utils.formatDate(new Date(row.register_at), 'yyyy-MM-dd')
+            // },
+            // educationFomatter(row, column){
+            //     let a =  this.$store.state.hrModule.educationList.filter(item => item.id == row.education)
+            //     return a.length? a[0].name : ''
+            // }
         },
         async mounted(){
             await this.getTableList()
@@ -299,54 +298,5 @@
     }
 </script>
 <style lang="scss" scoped>
-    .tag-style{
-        height:24px;
-        line-height: 24px;
-    }
-    .staff{
-        .list-table{
-            height: calc(100vh - 50px);
-            width:100%;
-            display: flex;
-            .search-list{
-                width: 180px;
-                height: 100%;
-                overflow-y: auto;
-                // background: #eaedf1;
-            }
-            .table-list{
-                overflow: auto;
-                flex:1;
-                width: calc(100% - 180px);
-                height: calc(100vh - 50px);
-                .search-form{
-                    display: none;
-                    height: 40px;
-                    width: 100%;
-                    display: flex;
-                    justify-content: space-between;
-                    .search-left{
-                        display: flex;
-                    }
-                }
-                .staff-table{
-                    height: calc(100% - 72px);
-                    width: 100%;
-                    margin: 0 auto;
-                }
-                .pagination-box{
-                    height:32px;
-                    .pagination{
-                        margin: 0 auto;
-                        width: 600px;
-                    }
-                }
-            }
-        }
-            
-            
-        
 
-
-    }
 </style>

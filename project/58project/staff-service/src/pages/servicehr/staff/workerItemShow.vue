@@ -352,7 +352,7 @@ export default {
                     })
                 })
             }
-            await hrService.getFormConfig().then((data) =>{
+            await hrService.getFormConfig('edit').then((data) =>{
                 if(data.code == '0'){
                     // 将表单配置数据存入 vuex 
                     this.$store.commit('setConfigForm',data.data)

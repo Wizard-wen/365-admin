@@ -121,7 +121,7 @@
                     this.isLoaded = true
 
                     await Promise.all([
-                        hrService.getFormConfig(), //获取表单配置字段
+                        hrService.getFormConfig('edit'), //获取表单配置字段
                         hrService.getStaffList(2) //获取列表数据
                     ]).then((data) =>{
                         // 将表单配置数据存入 vuex 

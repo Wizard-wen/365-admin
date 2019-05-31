@@ -113,7 +113,13 @@ export default {
             },
             roleList: [],//角色id
             isSetPassword: false,//是否展示设置密码
-            departmentList: [{id:0,name:'全部'},{id:1,name:'办公室'},{id:2,name:'运营部'},{id:3,name:'培训部'},{id:4,name:'加盟店'}] //部门
+            departmentList: [
+                {id:0,name:'全部'},
+                {id:1,name:'办公室'},
+                {id:2,name:'运营部'},
+                {id:3,name:'培训部'},
+                {id:4,name:'加盟店'}
+            ] //部门
         }
     },
     components: {

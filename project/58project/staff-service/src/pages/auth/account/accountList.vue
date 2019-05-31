@@ -24,7 +24,7 @@
 
                 <el-table-column label="编号" prop="id" align="center"></el-table-column>
                 <el-table-column label="账号" prop="account" align="center"></el-table-column>
-                <el-table-column label="管理员名" prop="name" align="center"></el-table-column>
+                <el-table-column label="用户名" prop="name" align="center"></el-table-column>
 
                 <el-table-column label="操作" align="center">
                     <template slot-scope="scope">

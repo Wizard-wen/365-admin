@@ -12,17 +12,14 @@
             </template>
             
             <template slot="searchForm">
-                <!-- <div class="search-left">
-                    <el-input v-model="staffSearch.name" placeholder="请输入员工姓名" :maxlength="20"></el-input>
-                    <el-input v-model="staffSearch.phone" placeholder="请输入电话" :maxlength="20"></el-input>
-                    <el-button type="primary" @click="searchStaff">查询</el-button>
-                    <el-button type="primary" @click="resetStaff">重置</el-button>
-                </div> -->
-                <query-tag-component @updateTable="updateTable"></query-tag-component>
-                <div>
+                <div class="search-tag-list">
+                    <query-tag-component @updateTable="updateTable"></query-tag-component>
+                </div>
+                
+                <!-- <div> -->
                     <el-button type="primary" @click="exportReturnStaff(1)">导入回访</el-button>
                     <el-button type="primary" @click="editStaff(0)">创建服务人员</el-button>
-                </div>
+                <!-- </div> -->
             </template>
 
             <template slot="control" slot-scope="controler">
@@ -144,7 +141,7 @@
                     this.isLoaded = true
 
                     await Promise.all([
-                        hrService.getFormConfig(), //获取表单配置字段
+                        hrService.getFormConfig('edit'), //获取表单配置字段
                         hrService.getStaffList(0) //获取列表数据
                     ]).then((data) =>{
                         // 将表单配置数据存入 vuex 
@@ -360,18 +357,4 @@
     }
 </script>
 <style lang="scss" scoped>
-
-.search-form{
-    height: 40px;
-    width: 100%;
-    display: flex;
-    justify-content: space-between;
-    .search-left{
-        display: flex;
-    }
-}
-.pagination{
-    margin: 0 auto;
-    width: 600px;
-}
 </style>

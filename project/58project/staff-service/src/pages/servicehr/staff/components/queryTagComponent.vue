@@ -1,16 +1,23 @@
 <template>
     <div class="query-tag">
-        <div class="tag-item" :class="'tag-color'+`${(index%5)}`" v-for="(item, index) in queryTag" :key="index">
-            {{item.name}}
-            <i class="el-icon-close" @click="closeTag(item)"></i>
+        <i class="el-icon-arrow-left" @click="rightChange"></i>
+        <div class="query-tag-box" ref="query">
+            <div class="query-tag-list" 
+                :style="{left: leftPosition+'px'}">
+                <div class="tag-item" :class="'tag-color'+`${(index%5)}`" v-for="(item, index) in queryTag" :key="index">
+                    {{item.name}}
+                    <i class="el-icon-close" @click="closeTag(item)"></i>
+                </div>
+            </div>
         </div>
+        <i class="el-icon-arrow-right" @click="leftChange"></i>
     </div>
 </template>
 <script>
 export default {
     data(){
         return {
-
+            leftPosition: 0,
         }
     },
     props: {
@@ -28,6 +35,11 @@ export default {
         },
         queryedList(){
             return this.$store.state.hrModule.queryedList
+        },
+        queryListLength(){
+            return this.queryTag.reduce((allNumber, item, index) =>{
+                return allNumber + 45 + item.name.length * 14
+            }, 0);
         },
         queryTag(){
             let arr = [],
@@ -103,33 +115,72 @@ export default {
 
             //更新表格数据
             this.$emit('updateTable')
+        },
+        leftChange(){
+            if(Math.abs(this.leftPosition) + this.$refs.query.offsetWidth > this.queryListLength+50){
+                return false
+            } else {
+                this.leftPosition = this.leftPosition - 100
+            }
+            
+        },
+        rightChange(){
+            if(this.leftPosition == 0){
+                // this.leftPosition = 0
+                return false
+            } else {
+                this.leftPosition = this.leftPosition + 100
+            }
+            
         }
+    },
+    mounted(){
+        
     }
 }
 </script>
 <style lang="scss" scoped>
     .query-tag{
-        // width: 100%;
+        width: 100%;
         height: 40px;
         padding: 5px 0;
         display: flex;
-        flex-wrap: wrap;
-        .tag-item{
-            margin-right: 5px;
-            padding: 0 12px;
-            height: 30px;
+        .el-icon-arrow-left{
+            font-size: 17px;
             line-height: 30px;
-            font-size: 14px;
-            border: 1px solid #fff;
-            border-radius: 4px;
-            box-sizing: border-box;
-            white-space: nowrap;
-            .el-icon-close{
-                &:hover{
-                    cursor: pointer;
+        }
+        .el-icon-arrow-right{
+            font-size: 17px;
+            line-height: 30px;
+        }
+        .query-tag-box{
+            width: calc(100% - 34px);
+            overflow: hidden;
+            position:relative;
+            .query-tag-list{
+                padding-right: 100px;
+                position: absolute;
+                display: flex;
+                .tag-item{
+                    margin-right: 5px;
+                    padding: 0 12px;
+                    height: 30px;
+                    line-height: 30px;
+                    font-size: 14px;
+                    border: 1px solid #fff;
+                    border-radius: 4px;
+                    box-sizing: border-box;
+                    white-space: nowrap;
+                    .el-icon-close{
+                        &:hover{
+                            cursor: pointer;
+                        }
+                    }
                 }
             }
         }
+
+
     }
     .tag-color0{
         color: #409eff;

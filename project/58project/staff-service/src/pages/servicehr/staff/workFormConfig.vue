@@ -92,7 +92,7 @@ export default {
         async getWorkFormConfig(){
             store.commit('setLoading',true)
             try{
-                await hrService.getFormConfig().then(data =>{
+                await hrService.getFormConfig('config').then(data =>{
                     if(data.code == "0"){
                         this.workConfigForm = data.data
                     }
