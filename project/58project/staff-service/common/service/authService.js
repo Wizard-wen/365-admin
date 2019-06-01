@@ -51,8 +51,8 @@ export default {
      * 物理删除管理员
      * @param id 管理员id
      */
-    deleteManager(id){
-        return authRequest.deleteManager(id)
+    changeManagerType(id){
+        return authRequest.changeManagerType(id)
     },
 
 

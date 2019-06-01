@@ -70,8 +70,8 @@ export default {
      * 物理删除管理员
      * @param id 管理员id
      */
-    deleteManager(id){
-        return axios.post(`./admin/permission/deleteManager`,{
+    changeManagerType(id){
+        return axios.post(`./admin/permission/changeManagerType`,{
             id: id
         })
     },

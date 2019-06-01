@@ -1,8 +1,12 @@
 <template>
     <page-edit-component
-        :title="'账户配置'"
-        @goback="goback"
-        @edit="onSubmit('form')">
+        :title="'账户配置'">
+        <template slot="control">
+            <el-button size="mini" @click="goback">返回</el-button>
+            <el-button size="mini" @click="onSubmit('form')">修改</el-button>
+        </template>
+
+        
         <el-form
             slot="form"
             class="form-style"
@@ -14,12 +18,20 @@
                 <el-input v-model="accountForm.account" :maxlength="20" :disabled="$route.query.type == 1" ></el-input>
             </el-form-item>
 
-            <el-form-item label="用户名" prop="username">
-                <el-input autocomplete="off" v-model="accountForm.username" :maxlength="20"></el-input>
+            <el-form-item label="用户名" prop="name">
+                <el-input autocomplete="off" v-model="accountForm.name" :maxlength="20"></el-input>
             </el-form-item>
 
             <el-form-item label="手机号" prop="phone">
                 <el-input autocomplete="off" v-model="accountForm.phone" :maxlength="11"></el-input>
+            </el-form-item>
+
+            <el-form-item label="真实姓名" prop="real_name">
+                <el-input autocomplete="off" v-model="accountForm.real_name" ></el-input>
+            </el-form-item>
+
+            <el-form-item label="微信号" prop="wechat">
+                <el-input autocomplete="off" v-model="accountForm.wechat"></el-input>
             </el-form-item>
 
             <el-form-item v-if="this.$route.query.type == 1" label="明文密码" prop="clear_password">
@@ -36,7 +48,6 @@
                     <el-input :maxlength="50" v-model="accountForm.repassword" @focus.native="this.type='password'" type="password"></el-input>
                 </el-form-item>
             </div>
-
 
             <el-form-item label="角色配置" prop="roleIds">
                 <select-tag-component :propTagList="roleList" v-model="accountForm.roleIds" :isSingle="false"></select-tag-component>
@@ -98,19 +109,21 @@ export default {
             accountForm: {
                 id: this.$route.query.id ? this.$route.query.id : '',
                 account: '',
-                phoneL: '',//手机号
-                username: '', //用户名
+                name: '', //用户名
                 clear_password: '',//明文密码
                 password: '', //密码
                 repassword: '',//确认密码
-                roleIds: [],
-                department_id: 0
+                real_name: '',//真实姓名
+                wechat: '',//微信
+                phone: '',//手机号
+                roleIds: [],//角色数组
+                department_id: 0,//部门
             },
             accountRules: {
                 account: [
                     { validator: validateAccount, trigger: 'blur' }
                 ],
-                username: [
+                name: [
                     { validator: validateUsername, trigger: 'blur' }
                 ],
                 password: [
@@ -141,34 +154,36 @@ export default {
          * 提交数据
          */
         async onSubmit(formName){
-            let accountObj = {
-                id: this.$route.query.id,
-                account: this.accountForm.account, //编辑状态不可修改
-
-                name: this.accountForm.username,
-                password: this.accountForm.password,
-                repassword: this.accountForm.repassword,
-                roleIds: this.accountForm.roleIds,
-                department_id: this.accountForm.department_id
-            } //
-
-            await this.$refs[formName].validate((valid) => {
+            
+            await this.$refs[formName].validate(async (valid) => {
                 if (valid) {
-                    authService.editManager(accountObj)
-                    .then(data =>{
-                        if(data.code == '0'){
+                    store.commit('setLoading',true)
+                    try {
+                        await authService.editManager(this.accountForm).then(data =>{
+                            if(data.code == '0'){
+                                this.$message({
+                                    type: "success",
+                                    message: data.message
+                                })
+                                // store.commit('setLoading',false)
+                                this.$router.push("/auth/accountList")
+                            }
+                        }).catch(error =>{
                             this.$message({
-                                type: "success",
-                                message: data.message
+                                type: "error",
+                                message: error.message
                             })
-                            this.$router.push("/auth/accountList")
-                        }
-                    }).catch(error =>{
+                            store.commit('setLoading',false)
+                        }).finally(() =>{
+                            store.commit('setLoading',false)
+                        })
+                    } catch (error) {
                         this.$message({
                             type: "error",
                             message: error.message
                         })
-                    })
+                        store.commit('setLoading',false)
+                    }
                 } else {
                     return false;
                 }
@@ -184,17 +199,12 @@ export default {
             let managerId = this.$route.query.id?this.$route.query.id: '' //判断是不是有id
 
             await authService.getManager(managerId).then(data =>{
-                console.log(data)
                 if(data.code == '0'){
                     //全部角色列表
                     this.roleList =  data.data.roleList
 
                     //账户表单配置项
-                    this.accountForm.roleIds = data.data.manager.roleIds
-                    this.accountForm.username = data.data.manager.name
-                    this.accountForm.account = data.data.manager.account
-                    this.accountForm.clear_password = data.data.manager.clear_password
-                    this.accountForm.department_id = data.data.manager.department_id
+                    this.accountForm = data.data.manager
                 }
 
             }).catch(error =>{

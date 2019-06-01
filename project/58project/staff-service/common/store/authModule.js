@@ -13,12 +13,13 @@ Vue.use(Vuex)
 export const authModule = {
     state: {
         departmentList: [
-            {id:0,name:'开发部'},
+            {id:0,name:'全部'},
             {id:1,name:'办公室'},
             {id:2,name:'运营中心'},
             {id:3,name:'培训部'},
             {id:4,name:'加盟店'},
             {id:5,name:'直营店'},
+            {id:6,name:'开发部'}
         ]
     },
     mutations: {

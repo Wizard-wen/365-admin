@@ -5,37 +5,21 @@
                 <h4>{{title}}</h4>
             </div>
             <div class="btn-group">
-                <el-button size="mini" @click="goback">返回</el-button>
-                <el-button size="mini" @click="edit">修改</el-button>
+                <slot name="control"></slot>
             </div>
-            <!-- <div class="edit-detail">
-                <div class="detail-left">
-                    <div class="detail-left-box">
-                        <div class="detail-left-line">创建人：</div>
-                        <div class="detail-left-line">创建时间：</div>
-                        <div class="detail-left-line">门店类型：{{shopDetail.is_third == 1 ? '直营店': shopDetail.is_third == 2 ?'加盟店': ''}}</div>
-                        <div class="detail-left-line">门店负责人：</div>
-                        <div class="detail-left-line">门店状态：{{shopDetail.type == 'enable'?'正常':'停业'}}</div>
-                        <div class="detail-left-line">门店地址：{{shopDetail.address}}</div>
-                    </div>
-                </div>
-                <div class="detail-right">
-                    <div class="right-box">
-                        <div class="title">状态</div>
-                        <div class="value">{{shopDetail.type == 'enable'?'正常':'停业'}}</div>
-                    </div>
-                    <div class="right-box">
-                        <div class="title">员工数量</div>
-                        <div class="value">4</div>
-                    </div>
-                </div>
-            </div> -->
+            <div class="edit-detail">
+                <slot name="detail"></slot>
+            </div>
         </div>
         <div class="page-edit-contains">
             <div class="form-box">
-                <slot name="form"></slot>
+                <div class="form-size">
+                    <slot name="form"></slot>
+                </div>
             </div>
+            <slot name="log"></slot>
         </div>
+        <slot></slot>
     </div>
 </template>
 <script>
@@ -55,12 +39,7 @@ export default {
         }
     },
     methods: {
-        goback(){
-            this.$emit('goback')
-        },
-        edit(){
-            this.$emit('edit')
-        }
+
     }
 }
 </script>
@@ -71,7 +50,7 @@ export default {
         background: #f0f2f5; 
         .edit-header{
             background: #fff;
-            padding: 30px 24px 24px 24px;
+            padding: 30px 24px 10px 24px;
             position: relative;
             .edit-name{
                 line-height: 28px;
@@ -89,46 +68,26 @@ export default {
             .edit-detail{
                 padding-top: 12px;
                 display: flex;
-                .detail-left{
-                    flex:1;
-                    .detail-left-box{
-                        display: flex;
-                        flex-wrap: wrap;
-                        .detail-left-line{
-                            width: 50%;
-                            color: rgba(0,0,0,.65);
-                            line-height: 20px;
-                            padding-bottom: 8px;
-                        }
-                    }
-                }
-                .detail-right{
-                    min-width: 400px;
-                    display: flex;
-                    .right-box{
-                        height: 80px;
-                        width: 50%;
-                        .title{
-                            color: rgba(0,0,0,.45);
-                            font-size: 14px;
-                            line-height: 1.5;
-                        }
-                        .value{
-                            font-size: 20px;
-                            color: rgba(0,0,0,.85);
-                            line-height: 1.5;
-                        }
-                    }
-                }
             }
         }
         .page-edit-contains{
             margin: 24px 24px 0;
-            background: #fff;
-            padding: 24px;
+            display: flex;
             .form-box{
-                width: 780px;
-                margin: 0 auto;
+                padding: 24px;
+                flex:1;
+                background: #fff;
+                // margin: 0 auto;
+                .form-size{
+                    width: 100%;
+                    margin: 0 auto;
+                }
+            }
+            .log-box{
+                // padding: 24px;
+                background: #fff;
+                // width: 300px;
+                // margin-left: 24px;
             }
         }
     }
