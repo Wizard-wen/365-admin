@@ -41,8 +41,22 @@ export default {
             defeult: 'staff'
         }
     },
-    mounted(){
-
+    watch: {
+        inputText: function(val, oldVal){
+            if(val == ''){
+                this.searchText = ''
+            }
+        }
+    },
+    computed: {
+        inputText(){
+            if(this.$route.path == '/sale/orderWorkList'){
+                return this.$store.state.hrModule.sellerList[this.queryKey]
+            } else {
+                return this.$store.state.hrModule.queryedList[this.queryKey]
+            }
+            
+        }
     },
     methods: {
         /**

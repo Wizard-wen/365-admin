@@ -1,6 +1,10 @@
 <template>
-    <div class="account-edit">
+    <page-edit-component
+        :title="'账户配置'"
+        @goback="goback"
+        @edit="onSubmit('form')">
         <el-form
+            slot="form"
             class="form-style"
             ref="form"
             :rules="accountRules"
@@ -12,6 +16,10 @@
 
             <el-form-item label="用户名" prop="username">
                 <el-input autocomplete="off" v-model="accountForm.username" :maxlength="20"></el-input>
+            </el-form-item>
+
+            <el-form-item label="手机号" prop="phone">
+                <el-input autocomplete="off" v-model="accountForm.phone" :maxlength="11"></el-input>
             </el-form-item>
 
             <el-form-item v-if="this.$route.query.type == 1" label="明文密码" prop="clear_password">
@@ -39,16 +47,16 @@
             </el-form-item>
 
             <el-form-item>
-                <el-button type="primary" @click="onSubmit('form')">提交</el-button>
-                <el-button @click="$router.go(-1)">取消</el-button>
+                <el-button type="primary" size="medium" @click="onSubmit('form')">提交</el-button>
+                <el-button size="medium" @click="goback">取消</el-button>
             </el-form-item>
         </el-form>
-    </div>
+    </page-edit-component>
 </template>
 <script>
 
 import {authService} from '../../../../common'
-import {selectTagComponent} from '@/pages/components'
+import {selectTagComponent,pageEditComponent} from '@/pages/components'
 
 export default {
     data(){
@@ -90,6 +98,7 @@ export default {
             accountForm: {
                 id: this.$route.query.id ? this.$route.query.id : '',
                 account: '',
+                phoneL: '',//手机号
                 username: '', //用户名
                 clear_password: '',//明文密码
                 password: '', //密码
@@ -113,11 +122,19 @@ export default {
             },
             roleList: [],//角色id
             isSetPassword: false,//是否展示设置密码
-            departmentList: [{id:0,name:'全部'},{id:1,name:'办公室'},{id:2,name:'运营部'},{id:3,name:'培训部'},{id:4,name:'加盟店'}] //部门
         }
     },
     components: {
-        selectTagComponent
+        selectTagComponent,
+        pageEditComponent
+    },
+    computed: {
+        /**
+         * 部门信息
+         */
+        departmentList(){
+            return this.$store.state.authModule.departmentList
+        }
     },
     methods:{
         /**
@@ -156,6 +173,9 @@ export default {
                     return false;
                 }
             });
+        },
+        goback(){
+            this.$router.push('/auth/accountList')
         }
     },
     async mounted(){

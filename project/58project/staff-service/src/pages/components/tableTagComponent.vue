@@ -74,6 +74,7 @@ export default {
 .tag-box{
     // width:200px;
     display: flex;
+    justify-content: center;
     .tag-item-style{
         // background-color: rgba(64,158,255,.1);
         // padding: 0 10px;
@@ -144,6 +145,39 @@ export default {
         border-color: rgba(185,29,85,.2);
         color: #b91d55;       
     }
+    // .tag-color0{  
+    //     color: #fff;
+    //     background:#409eff;    
+    // }
+    // .tag-color1{
+    //     color: #fff;
+    //     background:#67c23a;
+    // }
+    // .tag-color2{
+    //     color: #fff;
+    //     background:#909399;
+    // }
+    // .tag-color3{
+    //     color: #fff;
+    //     background:#e6a23c;
+    // }
+    // .tag-color4{
+    //     color: #fff;
+    //     background:#f56c6c;  
+    // }
+
+    // .tag-color5{
+    //     color: #fff;
+    //     background:#086751;     
+    // }
+    // .tag-color6{
+    //     color: #fff;
+    //     background:#08658B;      
+    // }
+    // .tag-color7{   
+    //     color: #fff;
+    //     background:#b91d55;   
+    // }
 </style>
 
 

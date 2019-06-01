@@ -1,52 +1,65 @@
 <template>
   <div class="shop">
     <!-- 门店详情 -->
-    <el-card class="box-card">
-      <div slot="header" class="card-header">
-        <h3>门店基本信息</h3>
-        <div class="control">
-          <el-button
-            type="text"
-            :icon="isShow? 'el-icon-arrow-up' : 'el-icon-arrow-down'"
-            circle
-            size="small"
-            @click="changeFormState"
-          >{{isShow?`收起`:`展开`}}</el-button>
-        </div>
-      </div>
+	<div class="shop-header">
+		<div class="shop-name">
+			<h4>{{shopDetail.name}}</h4>
+		</div>
+		<div class="btn-group">
+			<el-button size="mini" @click="goback">返回</el-button>
+			<el-button size="mini">修改</el-button>
+		</div>
+		<div class="shop-detail">
+			<div class="detail-left">
+				<div class="detail-left-box">
+					<div class="detail-left-line">创建人：</div>
+					<div class="detail-left-line">创建时间：</div>
+					<div class="detail-left-line">门店类型：{{shopDetail.is_third == 1 ? '直营店': shopDetail.is_third == 2 ?'加盟店': ''}}</div>
+					<div class="detail-left-line">门店负责人：</div>
+					<div class="detail-left-line">门店状态：{{shopDetail.type == 'enable'?'正常':'停业'}}</div>
+					<div class="detail-left-line">门店地址：{{shopDetail.address}}</div>
+				</div>
+			</div>
+			<div class="detail-right">
+				<div class="right-box">
+					<div class="title">状态</div>
+					<div class="value">{{shopDetail.type == 'enable'?'正常':'停业'}}</div>
+				</div>
+				<div class="right-box">
+					<div class="title">员工数量</div>
+					<div class="value">4</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="layout-content">
+		<div class="card-box">
+			<div class="card-title">
+				<div class="title">
+					员工列表
+				</div>
+				<div class="control">
+					<el-button size="small" type="primary" @click="edit">编辑</el-button>
+				</div>
+			</div>
+			<div class="card-contains">
+				<!-- 员工列表 -->
+				<el-table :data="salesPersonTable" class="person-table" :header-cell-style="{height: '48px',background: '#fafafa'}">
+					<el-table-column label="编号" prop="id" align="center"></el-table-column>
 
-      <div class="base-form-box">
-        <div class="base-message-box" v-if="isShow">
-          <div class="base-line">门店名：{{shopDetail.name}}</div>
-          <div class="base-line">门店地址：{{shopDetail.address}}</div>
-          <div class="base-line">门店类型：{{shopDetail.is_third == 1 ? '直营店': shopDetail.is_third == 2 ?'加盟店': ''}}</div>
-          <div class="base-line">门店状态：{{shopDetail.type == 'enable'?'正常':'停业'}}</div>
-          <div class="base-line">备注信息：{{shopDetail.remark}}</div>
-        </div>
-      </div>
-    </el-card>
-    <!-- 编辑按钮 -->
-    <el-form :inline="true" class="shop-form">
-      <div class="addPerson">
-        <el-form-item>
-          <el-button type="primary" @click="edit">编辑</el-button>
-        </el-form-item>
-      </div>
-    </el-form>
-    <!-- 员工列表 -->
-    <el-table :data="salesPersonTable" class="person-table">
-      <el-table-column label="编号" prop="id" align="center"></el-table-column>
+					<el-table-column label="姓名" prop="name" align="center"></el-table-column>
 
-      <el-table-column label="姓名" prop="name" align="center"></el-table-column>
+					<el-table-column label="电话" prop="phone" align="center"></el-table-column>
 
-      <el-table-column label="电话" prop="phone" align="center"></el-table-column>
-
-      <el-table-column label="操作" align="center">
-        <!-- <template slot-scope="scope">
-          <el-button size="mini" @click="deleteStore(scope.$index, scope.row)">解绑</el-button>
-        </template> -->
-      </el-table-column>
-    </el-table>
+					<el-table-column label="操作" align="center">
+						<!-- <template slot-scope="scope">
+						<el-button size="mini" @click="deleteStore(scope.$index, scope.row)">解绑</el-button>
+						</template> -->
+					</el-table-column>
+				</el-table>
+			</div>
+		</div>
+	</div>
   </div>
 </template>
 
@@ -172,7 +185,10 @@ export default {
           id: this.$route.query.id
         }
       });
-    }
+	},
+	goback(){
+		this.$router.push('/shop/shopList')
+	}
   },
   mounted() {
     this.getStore();
@@ -218,16 +234,107 @@ export default {
 }
 
 .shop {
-  padding-top: 30px;
-  margin: 0 auto;
-  .shop-form {
-    width: 80%;
-    min-width: 1100px;
-    margin: 0 auto;
-    .addPerson {
-      float: right;
-      margin: 10px 0;
-    }
-  }
+	background: #f0f2f5;
+	min-height: calc(100vh - 50px);
+	width: 100%;
+	.shop-header{
+		background: #fff;
+		padding: 30px 24px 24px 24px;
+		position: relative;
+		.shop-name{
+			line-height: 28px;
+			font-size: 20px;
+			font-weight: 700;
+		}
+		.btn-group{
+			& /deep/ .el-button{
+				margin-left: 0px; 
+			}
+			position: absolute;
+			right: 24px;
+			top: 20px;
+		}
+		.shop-detail{
+			padding-top: 12px;
+			display: flex;
+			.detail-left{
+				flex:1;
+				.detail-left-box{
+					display: flex;
+					flex-wrap: wrap;
+					.detail-left-line{
+						width: 50%;
+						color: rgba(0,0,0,.65);
+    					line-height: 20px;
+						padding-bottom: 8px;
+					}
+				}
+			}
+			.detail-right{
+				min-width: 400px;
+				display: flex;
+				.right-box{
+					height: 80px;
+					width: 50%;
+					.title{
+						color: rgba(0,0,0,.45);
+						font-size: 14px;
+						line-height: 1.5;
+					}
+					.value{
+						font-size: 20px;
+						color: rgba(0,0,0,.85);
+						line-height: 1.5;
+					}
+				}
+			}
+		}
+	}
+	.layout-content{
+		margin: 24px 48px;
+		.card-box{
+			box-sizing: border-box;
+			margin: 0;
+			padding: 0;
+			color: rgba(0,0,0,.65);
+			font-size: 14px;
+			line-height: 1.5;
+			position: relative;
+			background: #fff;
+			border-radius: 2px;
+			transition: all .3s;
+			margin-bottom: 24px;
+			.card-title{
+				display: flex;
+				justify-content: space-between;
+				min-height: 48px;
+				padding: 0 24px;
+				color: rgba(0,0,0,.85);
+				font-weight: 500;
+				font-size: 16px;
+				background: transparent;
+				border-bottom: 1px solid #e8e8e8;
+				border-radius: 2px 2px 0 0;
+				.title{
+					line-height: 55px;
+				}
+				.control{
+					padding: 11.5px 0;
+				}
+			}
+			.card-contains{
+				padding: 24px;
+			}
+		}
+	}
+	.shop-form {
+		width: 80%;
+		min-width: 1100px;
+		margin: 0 auto;
+		.addPerson {
+			float: right;
+			margin: 10px 0;
+		}
+	}
 }
 </style>

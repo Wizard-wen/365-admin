@@ -34,7 +34,7 @@
 
                 <el-table-column  label="创建时间" prop="created_at" align="center" :formatter="created_atFormatter" width="110"></el-table-column>
 
-                <el-table-column  label="登记时间" prop="register_at" :formatter="register_atFormatter" align="center" width="110"></el-table-column>
+                <!-- <el-table-column  label="登记时间" prop="register_at" :formatter="register_atFormatter" align="center" width="110"></el-table-column> -->
 
                 <el-table-column  label="更新时间" prop="updated_at" :formatter="updated_atFormatter" align="center" width="110"></el-table-column>
                 
@@ -348,7 +348,6 @@
                 width: 200px;
                 height: 100%;
                 overflow-y: auto;
-                // background: #eaedf1;
                 background: #fff;
                 margin-right: 5px;
                 margin-left: 5px;
@@ -363,6 +362,9 @@
                     width: 100%;
                     display: flex;
                     justify-content: space-between;
+                    .search-tag-list{
+                        flex: 1;
+                    }
                 }
                 .staff-table{
                     height: calc(100% - 72px);

@@ -19,6 +19,7 @@ interface satffItem{
     type:number;//停用  启用状态 
     sex:number;//性别
     status:string;//签约状态
+    log:Array<object>;//日志
     
     /*****************************业务字段***********************************************/
 

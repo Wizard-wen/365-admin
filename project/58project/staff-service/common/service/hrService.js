@@ -69,8 +69,8 @@ export default {
     /**
      * 人员信息配置
      */
-    getFormConfig(){
-        return hrRequest.getFormConfig()
+    getFormConfig(type){
+        return hrRequest.getFormConfig(type)
     },
     /**
      * 标签信息配置

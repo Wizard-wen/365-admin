@@ -1,12 +1,22 @@
 <template>
-    <div class="tag-box" :style="{width: maxWidth}">
-        <span 
-            class="tag-element" 
-            v-for="(item, index) in showTagList" 
-            :key="index"
-            @click="changeStatus(item)"
-            :class="[item.isSelected? 'tag-color'+`${(index%5+1)}` : '']">{{item[setLabel.label]}}</span>
+    <div>
+        <div class="tag-edit-box" :style="{width: maxWidth}" v-if="isEdit">
+            <div 
+                class="tag-element" 
+                v-for="(item, index) in editTagList" 
+                :key="index"
+                @click="changeStatus(item)"
+                :class="[item.isSelected? 'tag-color'+`${(index%5)}` : '']">{{item[setLabel.label]}}</div>
+        </div>
+        <div class="tag-show-box" v-else>
+            <div
+                class="tag-element" 
+                v-for="(item, index) in showTagList" 
+                :key="index"
+                :class="'tag-color'+`${(index%5)}`">{{item[setLabel.label]}}</div>
+        </div>
     </div>
+
 </template>
 <script>
 export default {
@@ -50,11 +60,18 @@ export default {
         maxWidth: {
             default: 760,
             type: [Number, String]
+        },
+        /**
+         * 是否可以编辑
+         */
+        isEdit: {
+            default: true,
+            type: Boolean,
         }
     },
     data(){
         return {
-            showTagList:[],//渲染的tag标签
+            editTagList:[],//渲染的tag标签
         }
     },
     computed: {
@@ -69,7 +86,16 @@ export default {
             } else {
                 return this.value
             }
+        },
+        /**
+         * 非编辑状态下的纯展示
+         */
+        showTagList(){
+            return this.editTagList.reduce((arr,item,index) =>{
+                return item.isSelected? arr.concat(item) : arr
+            },[])
         }
+
     },
     watch: {
         /**
@@ -78,10 +104,8 @@ export default {
         value:{
             handler(newName, oldName){
                 if(newName!= oldName){
-                    // debugger
                     this.changeValue(newName)
                 }
-                
             },
             immediate: true,
             deep: true,
@@ -98,12 +122,16 @@ export default {
          * des v-model返回的是数组，元素是主键属性
          */
         changeStatus(item){
+            //非编辑状态直接退出
+            if(!this.isEdit){
+                return false 
+            }
             if(this.isSingle){
                 //若是单选，直接返回被选中的主键属性               
                 this.$emit('input',item[this.setLabel.mainKey])
             } else {
                 //多选
-                let inputArr = this.showTagList.reduce((arr, it, index) =>{
+                let inputArr = this.editTagList.reduce((arr, it, index) =>{
                     //改变当前被改变的元素的isSelecetd属性
                     if(it.id == item.id){
                         it.isSelected = !it.isSelected
@@ -123,53 +151,7 @@ export default {
          * 渲染数据
          */
         changeValue(val){
-            // //加载渲染数组
-            // this.showTagList = this.propTagList.reduce((arr,item,index) =>{
-            //     return arr.concat({
-            //         ...item,
-            //         isSelected: false,
-            //     })
-            // },[])
-
-            // // console.log(this.showTagList)
-            
-            // // 如果是单选
-            // if(this.isSingle){
-            //     if(val!=0){
-
-            //         //在数组中寻找选中标签
-            //         let selectedTag = this.showTagList.find((item, index) =>{
-            //             return item[this.setLabel.mainKey] == val
-            //         })
-            //         //若是在数组中可以找到选中标签，渲染数据
-            //         if(typeof selectedTag != 'undefined'){
-            //             this.showTagList = this.showTagList.map((item, index) =>{
-            //                 if(item.id == selectedTag.id){
-            //                     this.$set(item,'isSelected',true)
-            //                 } else {
-            //                     this.$set(item,'isSelected',false)
-            //                 }
-            //                 return item
-            //             })
-                        
-            //             // selectedTag.isSelected = true
-            //         }
-            //     }
-            // } else {
-            //     if(Array.isArray(val)){
-            //         this.showTagList = this.showTagList.reduce((arr,item, index) =>{
-            //             item.isSelected = false
-            //             val.forEach((it, index) =>{
-            //                 if(item[this.setLabel.mainKey] == it){
-            //                     this.$set(item,'isSelected',true)
-            //                 }
-            //             })
-            //             return arr.concat(item)
-            //         },[])
-            //     }
-
-            // }
-            this.showTagList = this.propTagList.map((item,index) =>{
+            this.editTagList = this.propTagList.map((item,index) =>{
                 if(this.valueData.some((it, index) =>{return it == item.id})){
                     item.isSelected = true
                 } else {
@@ -186,48 +168,114 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-    .tag-box{
+    .tag-edit-box{
         width: 760px;
         padding: 0 0px 8px 10px;
         border: 1px dashed #ccc;
         border-radius: 4px;
+        display: flex;
+        flex-wrap: wrap;
+        .tag-element{
+            padding: 0 12px;
+            margin: 8px 14px 0 0;
+            height: 30px;
+            line-height: 30px;
+            font-size: 14px;
+            border: 1px solid #fff;
+            border-radius: 4px;
+            box-sizing: border-box;
+            white-space: nowrap;
+        }
     }
-    .tag-element{
-        display: inline-block;
-        padding: 0 12px;
-        margin: 8px 14px 0 0;
-        height: 30px;
-        line-height: 30px;
-        font-size: 14px;
-        border: 1px solid #fff;
-        border-radius: 4px;
-        box-sizing: border-box;
-        white-space: nowrap;
+    .tag-show-box{
+        width: 760px;
+        display: flex;
+        flex-wrap: wrap;
+        .tag-element{
+            padding: 0 12px;
+            margin: 0 14px 8px 0;
+            height: 30px;
+            line-height: 30px;
+            font-size: 14px;
+            border: 1px solid #fff;
+            border-radius: 4px;
+            box-sizing: border-box;
+            white-space: nowrap;
+        }
     }
-    .tag-color1{
+    // .tag-color0{  
+    //     color: #fff;
+    //     background:#409eff;    
+    // }
+    // .tag-color1{
+    //     color: #fff;
+    //     background:#67c23a;
+    // }
+    // .tag-color2{
+    //     color: #fff;
+    //     background:#909399;
+    // }
+    // .tag-color3{
+    //     color: #fff;
+    //     background:#e6a23c;
+    // }
+    // .tag-color4{
+    //     color: #fff;
+    //     background:#f56c6c;  
+    // }
+
+    // .tag-color5{
+    //     color: #fff;
+    //     background:#086751;     
+    // }
+    // .tag-color6{
+    //     color: #fff;
+    //     background:#08658B;      
+    // }
+    // .tag-color7{  
+    //     color: #fff;
+    //     background:#b91d55;   
+    // }
+    .tag-color0{
         color: #409eff;
         border: 1px solid rgba(64,158,255,.2);
         background-color: rgba(64,158,255,.1);           
     }
-    .tag-color2{
+    .tag-color1{
         background-color: rgba(103,194,58,.1);
         border-color: rgba(103,194,58,.2);
         color: #67c23a;
     }
-    .tag-color3{
+    .tag-color2{
         background-color: rgba(144,147,153,.1);
         border-color: rgba(144,147,153,.2);
         color: #909399;
     }
-    .tag-color4{
+    .tag-color3{
         background-color: rgba(230,162,60,.1);
         border-color: rgba(230,162,60,.2);
         color: #e6a23c;
     }
-    .tag-color5{
+    .tag-color4{
         background-color: rgba(245,108,108,.1);
         border-color: rgba(245,108,108,.2);
         color: #f56c6c;       
+    }
+
+    .tag-color5{
+        background-color: rgba(8,103,81,.1);
+        border-color: rgba(8,103,81,.2);
+        color: #086751;       
+    }
+    .tag-color6{
+        background-color: rgba(8,101,139,.1);
+        border-color: rgba(8,101,139,.2);
+        color: #08658B;       
+    }
+    .tag-color7{
+        background-color: rgba(185,29,85,.1);
+        border-color: rgba(185,29,85,.2);
+        color: #b91d55;       
     }
 </style>
 
