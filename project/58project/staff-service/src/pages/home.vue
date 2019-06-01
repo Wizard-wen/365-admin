@@ -7,8 +7,10 @@
                         <img src="./home/image/icon.png" alt="">
                     </div>
                     <div class="home-staff">
-                        <div class="staff-hello">你好！{{users.username}}，祝你开心每一天！</div>
-                        <div class="staff-department">{{data1}} | 中彤实业 - 365生活服务平台 - {{data2}}</div>
+                        <div class="staff-hello">你好！{{users.name}}，祝你开心每一天！</div>
+                        <div class="staff-department">
+                            <span v-for="(item, index) in users.role_name" :key="index">{{item}} |</span>
+                            中彤实业 - 365生活服务平台 - {{department_name}}</div>
                     </div>
                 </div>
                 <div class="home-right">
@@ -30,6 +32,9 @@ export default {
     computed: {
         users(){
             return this.$store.state.loginModule.user
+        },
+        department_name(){
+            return this.$store.state.authModule.departmentList.filter(item => item.id == this.users.department_id)[0].name
         }
     },
     methods:{

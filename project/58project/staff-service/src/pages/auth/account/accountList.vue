@@ -9,8 +9,14 @@
                         <el-input class="input" v-model="accountSearch.name" placeholder="请输入管理员名" :maxlength="20"></el-input>
                     </el-form-item>
                     <el-form-item>
-                        <el-select v-model="accountSearch.department" placeholder="部门查询">
+                        <el-select v-model="accountSearch.department_id" placeholder="请选择部门">
                             <el-option v-for="(item, index) in departmentList" :key="index" :label="item.name" :value="item.id"></el-option>
+                        </el-select>
+                    </el-form-item>
+
+                    <el-form-item>
+                        <el-select v-model="accountSearch.store_id" placeholder="请选择门店">
+                            <el-option v-for="(item, index) in store_selection" :key="index" :label="item.name" :value="item.id"></el-option>
                         </el-select>
                     </el-form-item>
 
@@ -82,10 +88,13 @@
             return {
                 //用户列表
                 accountTable: [],
+                //门店基本信息列表
+                store_selection: [],
                 //用户列表搜索条件
                 accountSearch: {
                     name:'',
-                    department: 0
+                    department_id: 0,
+                    store_id: 0,
                 },
                 /**
                  * 分页信息
@@ -148,21 +157,24 @@
 
                 try{
                     await authService.getManagerList(tableOption).then(data =>{
-                            if(data.code == "0"){
-                                this.accountTable = data.data.data
+                        if(data.code == "0"){
+                            this.accountTable = data.data.list.data
 
-                                //分页信息
-                                this.pagination.currentPage = data.data.current_page //当前页码
-                                this.pagination.total = data.data.total //列表总条数
-                            }
-                        }).catch(error =>{
-                            this.$message({
-                                type:'error',
-                                message: error.message
-                            })
-                        }).finally(() =>{
+                            this.store_selection = data.data.store_selection
+
+                            //分页信息
+                            this.pagination.currentPage = data.data.list.current_page //当前页码
+                            this.pagination.total = data.data.list.total //列表总条数
                             store.commit('setLoading',false)
+                        }
+                    }).catch(error =>{
+                        this.$message({
+                            type:'error',
+                            message: error.message
                         })
+                    }).finally(() =>{
+                        store.commit('setLoading',false)
+                    })
                 } catch(error){
                     this.$message({
                         type:'error',
@@ -188,6 +200,8 @@
              */
             async resetAccount(){
                 this.accountSearch.name = ''
+                this.accountSearch.department_id = 0
+                this.accountSearch.store_id = 0
                 await this.getTableList()
             },
             /**
@@ -237,7 +251,7 @@
                     store.commit('setLoading',1)
 
                     try{
-                        await authService.deleteManager(row.id)
+                        await authService.changeManagerType(row.id)
                             .then(data =>{
                                 if(data.code == "0"){
                                     this.$message({

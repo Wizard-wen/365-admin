@@ -26,14 +26,15 @@ export default {
                 })
                 //用户信息存入 vuex sessionStorage
                 store.commit('setUser', {
-                    menu: menuArr, //树形菜单就是据此渲染
-                    routerNavigator: routerObj,
+                    // menu: menuArr, //树形菜单就是据此渲染
+                    routerNavigator: routerObj,//路由、地址对象
 
-                    username: manager.name,//用户名
-                    id: manager.id, //用户id
-                    account: manager.account,//账号
-                    expire: manager.expire,
-                    tree: tree,
+                    // username: manager.name,//用户名
+                    // id: manager.id, //用户id
+                    // account: manager.account,//账号
+                    // expire: manager.expire,
+                    ...manager,
+                    menuList: tree,
                 })
                 return data
             }).catch(err =>{
