@@ -6,7 +6,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 // import store from './index'
-
+import {queryUpdated_at} from '../../src/pages/servicehr/staff/interface/query.js'
 Vue.use(Vuex)
 
 export const hrModule = {
@@ -52,7 +52,9 @@ export const hrModule = {
         },
     },
     state: {
-        configForm: {}, //全部劳动者配置项
+        configForm: {
+
+        }, //全部劳动者配置项
         // 回访服务人员查询
         returnList: {
             /*********************表格字段查询******************************/
@@ -135,7 +137,8 @@ export const hrModule = {
             teacher_comment:'',//教师评语
             paper_category_ids: [],//证书标签
             source_ids: [],//信息来源
-            // manager_ids: []//创建人
+            manager_ids: [],//创建人
+            updated_type_ids: [],//更新时间
         }, //全部查询参数
         /**
          *  服务人员信息库 查询字段 
@@ -145,7 +148,6 @@ export const hrModule = {
             get_for: 'seller',
             page: 1, //请求页码
             pageNumber: 20,//单页信息数量
-
             /*********************逻辑字段查询*****************************/
             
             // staff_code: '',//员工号
@@ -180,7 +182,8 @@ export const hrModule = {
             teacher_comment:'',//教师评语
             paper_category_ids: [],//证书标签
             source_ids: [],//信息来源
-            // manager_ids: []//创建人
+            manager_ids: [],//创建人
+            updated_type_ids: [],//更新时间
         }, //全部查询参数
     },
 }

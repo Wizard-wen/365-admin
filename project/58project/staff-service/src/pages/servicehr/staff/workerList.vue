@@ -325,7 +325,7 @@
                     store.commit('setLoading',true)
 
                     try{
-                        await hrService.changeStaffStatus(row.id, row.version)
+                        await hrService.changeStaffType(row.id, row.version)
                             .then(data =>{
                                 if(data.code == "0"){
                                     this.$message({

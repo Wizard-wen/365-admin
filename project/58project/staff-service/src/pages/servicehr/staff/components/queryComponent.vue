@@ -142,9 +142,9 @@
             :queryFrom="queryFrom"
             @updateTable="updateTable" 
             :isSingleQuery="true"
-            :queryKey="'updated_ids'" 
+            :queryKey="'updated_type_ids'" 
             :queryName="'更新时间'" 
-            :queryList="queryUpdated_at"></search-list>
+            :queryList="configForm.updated_type"></search-list>
     </div>
 </template>
 <script>

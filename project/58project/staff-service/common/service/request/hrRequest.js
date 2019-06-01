@@ -75,8 +75,8 @@ export default {
     /**
      *  改变订单状态
      */
-    changeStaffStatus(id, version){
-        return axios.post(`./admin/staff/changeStaffStatus`, {
+    changeStaffType(id, version){
+        return axios.post(`./admin/staff/changeStaffType`, {
             version: version,
             id: id
         })

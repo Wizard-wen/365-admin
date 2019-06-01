@@ -34,8 +34,8 @@ export default {
     /**
      * 停用服务人员
      */
-    changeStaffStatus(id, version){
-        return hrRequest.changeStaffStatus(id, version)
+    changeStaffType(id, version){
+        return hrRequest.changeStaffType(id, version)
     },
 
 

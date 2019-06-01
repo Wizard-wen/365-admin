@@ -49,6 +49,10 @@
             <el-form-item label="学历" prop="education" class="form-item-size" size="small">
                 <config-tag-component @reload="getWorkFormConfig" v-model="workConfigForm.education" :tableConfig="'education'"></config-tag-component>
             </el-form-item>
+
+            <el-form-item label="更新时间" prop="updated_types" class="form-item-size" size="small">
+                <config-tag-component @reload="getWorkFormConfig" v-model="workConfigForm.updated_types" :tableConfig="'updated_types'"></config-tag-component>
+            </el-form-item>
         </el-form>
     </div>
 </template>
