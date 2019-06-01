@@ -7,47 +7,48 @@
                     <div class="base">
                         <div class="item">
                             <div class="label">姓名：</div>
-                            <div class="value">{{openMakeImage.name}}</div>
+                            <div class="value">{{openMakeImage.name || ''}}</div>
                         </div>
                         <div class="item">
-                            <div class="label">民族：</div>
-                            <div class="value">{{openMakeImage.nation}}</div>
+                            <div class="label">工龄：</div>
+                            <div class="value">{{openMakeImage.working_age_val || ''}}</div>
                         </div>
                         <div class="item">
                             <div class="label">年龄</div>
-                            <div class="value">{{openMakeImage.age}}</div>
+                            <div class="value">{{openMakeImage.age || ''}}</div>
                         </div>
                         <div class="item">
                             <div class="label">学历：</div>
-                            <div class="value">{{openMakeImage.education}}</div>
+                            <div class="value">{{openMakeImage.education_val || ''}}</div>
                         </div>
                         <div class="item">
                             <div class="label">籍贯：</div>
-                            <div class="value">{{openMakeImage.birthplace}}</div>
+                            <div class="value">{{openMakeImage.birthplace || ''}}</div>
                         </div>
                         <div class="item">
-                            <div class="label">普通话水平：</div>
-                            <div class="value">{{openMakeImage.name}}</div>
+                            <div class="label">电话：</div>
+                            <div class="value">{{openMakeImage.phone || ''}}</div>
                         </div>
                         <div class="item">
-                            <div class="label">现居住地：</div>
-                            <div class="value">{{openMakeImage.birthplace}}</div>
+                            <div class="label">服务类型：</div>
+                            <div class="value">{{openMakeImage.type || ''}}</div>
                         </div>
-                        <div class="item">
-                            <div class="label">证书：</div>
-                            <div class="value">{{openMakeImage.name}}</div>
+                        <div class="item maxitem">
+                            <div class="label">联系地址：</div>
+                            <div class="value maxvalue">{{openMakeImage.address || ''}}</div>
                         </div>
-                        <div class="item">
-                            <div class="label">求职意向：</div>
-                            <div class="value">{{openMakeImage.birthplace}}</div>
+
+                        <div class="item maxitem">
+                            <div class="label">职业类型：</div>
+                            <div class="value maxvalue">{{openMakeImage.service_category || ''}}</div>
                         </div>
-                        <div class="item">
-                            <div class="label">个人技能：</div>
-                            <div class="value">{{openMakeImage.name}}</div>
+                        <div class="item maxitem">
+                            <div class="label">服务区域：</div>
+                            <div class="value maxvalue">{{openMakeImage.service_region || ''}}</div>
                         </div>
-                        <div class="item">
-                            <div class="label">工作经历：</div>
-                            <div class="value">{{openMakeImage.name}}</div>
+                        <div class="item maxitem">
+                            <div class="label">技能证书：</div>
+                            <div class="value maxvalue">{{openMakeImage.paper_category || ''}}</div>
                         </div>
                     </div>
                     <div class="icon">
@@ -106,6 +107,7 @@ export default {
             canvasImage: '',//已上传到后台的图片
             isImage:false,//是否已经生成图片
             isMakingImage: false,
+            service_type:''
         }
     },
     methods: {
@@ -120,7 +122,6 @@ export default {
         await html2canvas(_this.$refs.imageCutBox).then(async function(canvas){
             //生成base64图片
             _this.canvasBase64Img = canvas.toDataURL("image/png");
-
             //base64 -> blob
             var bytes = window.atob(_this.canvasBase64Img.split(',')[1]);
             var array = [];
@@ -197,28 +198,34 @@ export default {
                     width: 100%;
                     .base{
                         height: 200px;
-                        width: 460px;
+                        width: 500px;
                         display: flex;
                         flex-wrap: wrap;
                         justify-content: space-between;
                         .item{
-                            height: 40px;
-                            line-height: 40px;
-                            width: 230px;
+                            height: 30px;
+                            line-height: 30px;
+                            width: 250px;
                             display: flex;
                             font-size: 16px;
                             font-weight: bold;
                             .label{
-                                width: 60px;
+                                width: 80px;
                             }
                             .value{
                                 width: 170px;
                             }
                         }
+                        .maxitem {
+                          width: 500px;
+                          .maxvalue {
+                            width: 420px;
+                          }
+                        }
                     }
                     .icon{
                         position:absolute;
-                        right:0;
+                        right:50px;
                         top: 0;
                         height: 100px;
                         width: 100px;

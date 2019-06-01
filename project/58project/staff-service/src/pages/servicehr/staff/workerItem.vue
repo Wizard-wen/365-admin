@@ -5,16 +5,16 @@
                 <!-- 等同于更新时间 -->
                 <el-form-item label="登记日期" prop="register_at" class="form-item-size" size="small">
                     <el-date-picker v-model="workerForm.register_at" value-format="timestamp" type="date" placeholder="请选择登记日期"></el-date-picker>
-                </el-form-item>   
+                </el-form-item>
 
                 <el-form-item label="更新日期" prop="updated_at" class="form-item-size" size="small">
                     <el-date-picker v-model="workerForm.updated_at" value-format="timestamp" type="date" placeholder="请选择更新日期" disabled></el-date-picker>
-                </el-form-item>     
-                
+                </el-form-item>
+
                 <el-form-item label="认证状态" prop="authentication" class="form-item-size" size="small">
                     <select-tag-component :propTagList="workerConfigList.authentication" v-model="workerForm.authentication" :isSingle="true"></select-tag-component>
-                </el-form-item> 
-                
+                </el-form-item>
+
                 <el-form-item label="姓名" prop="name" class="form-item-size" size="small">
                     <el-input v-model="workerForm.name" :maxlength="20" placeholder="请输入服务人员姓名"></el-input>
                 </el-form-item>
@@ -25,7 +25,7 @@
                         <div class="name-tag" v-for="(item, index) in nameCheckObject.names" :key="index">{{item.name}}</div>
                     </div>
                 </div>
-                
+
                 <el-form-item label="年龄" prop="age" class="form-item-size" size="small">
                     <el-input v-model="workerForm.age" :maxlength="2" placeholder="请输入年龄"></el-input>
                 </el-form-item>
@@ -33,18 +33,18 @@
                 <el-form-item label="出生日期" prop="birthday" class="form-item-size" size="small">
                     <el-date-picker :picker-options="datePickerOption" :default-value="timeDefaultShow" v-model="workerForm.birthday" value-format="timestamp" type="date" placeholder="请选择出生日期"></el-date-picker>
                 </el-form-item>
-                
+
                 <el-form-item label="电话" prop="phone" class="form-item-size" size="small">
                     <el-input v-model="workerForm.phone" :maxlength="11" placeholder="请输入手机号"></el-input>
-                </el-form-item>           
-                
+                </el-form-item>
+
                 <el-form-item label="回访信息" prop="return_msg" class="form-item-size" size="small">
                     <el-input type="textarea" v-model="workerForm.return_msg" :maxlength="200" placeholder="请输入回访信息"></el-input>
                 </el-form-item>
 
                 <el-form-item label="接单状态" prop="working_status" class="form-item-size" size="small">
                     <select-tag-component :propTagList="workerConfigList.working_status" v-model="workerForm.working_status" :isSingle="true"></select-tag-component>
-                </el-form-item> 
+                </el-form-item>
 
                 <el-form-item label="备注（商家情况）" prop="remarks" class="form-item-size" size="small">
                     <el-input type="textarea" v-model="workerForm.remarks" :maxlength="200" placeholder="请输入备注信息"></el-input>
@@ -52,19 +52,19 @@
 
                 <el-form-item label="职业类型" prop="skill" class="form-item-size" size="small">
                     <select-tag-component :propTagList="workerConfigList.service_category" v-model="workerForm.skill" :isSingle="false"></select-tag-component>
-                </el-form-item> 
+                </el-form-item>
 
                 <el-form-item label="服务类型" prop="service_type" class="form-item-size" size="small">
                     <select-tag-component :propTagList="workerConfigList.service_type" v-model="workerForm.service_type" :isSingle="false"></select-tag-component>
-                </el-form-item> 
+                </el-form-item>
 
                 <el-form-item label="可服务人群" prop="service_crowd" class="form-item-size" size="small">
                     <select-tag-component :propTagList="workerConfigList.service_crowd" v-model="workerForm.service_crowd" :isSingle="false"></select-tag-component>
-                </el-form-item> 
+                </el-form-item>
 
                 <el-form-item label="工龄" prop="working_age" class="form-item-size" size="small">
                     <select-tag-component :propTagList="workerConfigList.working_age" v-model="workerForm.working_age" :isSingle="true"></select-tag-component>
-                </el-form-item> 
+                </el-form-item>
 
                 <el-form-item label="工作经验（备注）" prop="working_experience" class="form-item-size" size="small">
                     <el-input type="textarea" v-model="workerForm.working_experience" :maxlength="200" placeholder="请输入备注信息"></el-input>
@@ -83,8 +83,8 @@
                 </el-form-item>
 
                 <el-form-item label="证件照" class="form-item-size">
-                    <photo-component 
-                        v-model="id_photo_fileList" 
+                    <photo-component
+                        v-model="id_photo_fileList"
                         :title="'证件照'"></photo-component>
                 </el-form-item>
 
@@ -95,7 +95,7 @@
                 <el-form-item label="区域" prop="region" class="form-item-size" size="small">
                     <select-tag-component :propTagList="workerConfigList.service_region" v-model="workerForm.region" :isSingle="false"></select-tag-component>
                 </el-form-item>
-            
+
                 <el-form-item label="学历" prop="education" class="form-item-size" size="small">
                     <select-tag-component :propTagList="workerConfigList.education" v-model="workerForm.education" :isSingle="true"></select-tag-component>
                 </el-form-item>
@@ -119,10 +119,10 @@
                         :before-upload="beforeAvatarUpload"
                         :headers="uploadHeader">
 
-                        <div 
-                            v-if="workerForm.icon!=''" 
-                            class="icon-box" 
-                            @mouseover="showblack('0')" 
+                        <div
+                            v-if="workerForm.icon!=''"
+                            class="icon-box"
+                            @mouseover="showblack('0')"
                             @mouseout="showblack('1')">
                             <img class="icon-item" :src="workerForm.icon == '' ? '' : `./resource/${workerForm.icon}`" >
                             <div class="icon-item-back" v-if="isShowBlack">
@@ -135,11 +135,11 @@
                 </el-form-item>
 
                 <el-form-item label="照片" class="form-item-size">
-                    <photo-component 
-                        v-model="photo_fileList" 
+                    <photo-component
+                        v-model="photo_fileList"
                         :title="'照片'"></photo-component>
                 </el-form-item>
-            
+
                 <el-form-item label="参加培训" prop="course" class="form-item-size" size="small">
                     <select-tag-component :propTagList="workerConfigList.course" v-model="workerForm.course" :isSingle="false"></select-tag-component>
                 </el-form-item>
@@ -155,7 +155,7 @@
                 <el-form-item label="技能证书标签" prop="paper" class="form-item-size">
                     <select-tag-component :propTagList="workerConfigList.paper_category" v-model="workerForm.paper" :isSingle="false"></select-tag-component>
                 </el-form-item>
-            
+
                 <el-form-item label="信息来源" prop="source" class="form-item-size" size="small">
                     <select-tag-component :propTagList="workerConfigList.source" v-model="workerForm.source" :isSingle="true"></select-tag-component>
                 </el-form-item>
@@ -180,10 +180,10 @@
                     <el-step :title="item.message" :key="index" v-for="(item, index) in workerForm.log"></el-step>
                 </el-steps>
             </div>
-            
+
         </div>
 
-        
+
         <div class="control">
             <div class="control-contains">
                 <!-- 创建/编辑 -->
@@ -333,7 +333,7 @@ export default {
                 identify:'',//身份证号码
                 id_photo: [],//证件照
                 address:'',//地址
-                region:[],//服务区域 
+                region:[],//服务区域
                 education:0,//学历
                 urgent_phone:'',//紧急联系人电话
                 bank_card:'',//银行卡号
@@ -372,7 +372,7 @@ export default {
                 //身份证
                 identify: [
                     {validator: validator.identifyValidate, trigger: 'blur'}
-                ], 
+                ],
             },
             datePickerOption: {
                 disabledDate(time) {
@@ -473,7 +473,7 @@ export default {
                         this.$message({
                             type:'error',
                             message: error.message
-                        }) 
+                        })
                     }
                 } else {
                     return false;
@@ -481,7 +481,7 @@ export default {
             });
         },
         /**
-         * 拼接service_crowd（服务人群）字段  
+         * 拼接service_crowd（服务人群）字段
          */
         setCommitAttr(selectedArr, originArr, keyName){
             return originArr.reduce((arr, item, index)=>{
@@ -492,7 +492,7 @@ export default {
                         serviceItem = {}
                         serviceItem[keyName] = item.id;
                         serviceItem['name'] = item.name;
-                    } 
+                    }
                 })
                 return serviceItem == null ? arr : arr.concat(serviceItem)
             },[])
@@ -536,7 +536,7 @@ export default {
                 this.$message({
                     type:'error',
                     message: error.message
-                }) 
+                })
             }
         },
         /**
@@ -587,6 +587,55 @@ export default {
         makeImage(){
             this.openMakeImageDialog = true
             this.openMakeImage = this.workerForm
+            var _workerConfigList = this.workerConfigList;
+            var _type = _workerConfigList.service_type.map(val=>{
+              let _item = [];
+              if(val.isSelected){
+                _item.push(val.name)
+              }
+              return _item
+            })
+            var _service_category = _workerConfigList.service_category.map(val=>{
+            let _item = [];
+            if(val.isSelected){
+              _item.push(val.name)
+            }
+            return _item
+          })
+            var _service_region = _workerConfigList.service_region.map(val=>{
+            let _item = [];
+            if(val.isSelected){
+              _item.push(val.name)
+            }
+            return _item
+          })
+            var _paper_category = _workerConfigList.paper_category.map(val=>{
+            let _item = [];
+            if(val.isSelected){
+              _item.push(val.name)
+            }
+            return _item
+          })
+           var _working_age_val = _workerConfigList.working_age.map(val=>{
+            let _item = [];
+            if(val.isSelected){
+              _item.push(val.name)
+            }
+            return _item
+          })
+           var _education_val = _workerConfigList.education.map(val=>{
+            let _item = [];
+            if(val.isSelected){
+              _item.push(val.name)
+            }
+            return _item
+          })
+            this.openMakeImage.type = _type.length?_type.join(' '):'';
+            this.openMakeImage.service_category = _service_category.length?_service_category.join(' '):'';
+            this.openMakeImage.service_region =_service_region.length? _service_region.join(' '):'';
+            this.openMakeImage.paper_category = _paper_category.length?_paper_category.join(' '):'';
+            this.openMakeImage.working_age_val = _working_age_val.length?_working_age_val.join(' '):'';
+            this.openMakeImage.education_val = _education_val.length?_education_val.join(' '):'';
         },
         /**
          * 控制编辑按钮文案
@@ -706,11 +755,11 @@ export default {
             }
             await hrService.getFormConfig('edit').then((data) =>{
                 if(data.code == '0'){
-                    // 将表单配置数据存入 vuex 
+                    // 将表单配置数据存入 vuex
                     this.$store.commit('setConfigForm',data.data)
                 }
             })
-            
+
         }catch(error){
             this.$message({
                 type:'error',
@@ -751,7 +800,7 @@ export default {
                     // }
                     //头像上传
                     .icon-uploader{
-                        
+
                         & /deep/ .el-upload {
                             height: 65px;
                             width: 65px;
@@ -783,7 +832,7 @@ export default {
                                 background: rgba(0,0,0,.5)
                             }
                         }
-                    } 
+                    }
                 }
                 // 姓名查重组件
                 .nameCheckBox{
