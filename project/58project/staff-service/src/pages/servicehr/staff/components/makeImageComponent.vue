@@ -1,5 +1,6 @@
 <template>
-    <div v-if="openMakeImageDialog" class="imageBox" v-loading="isMakingImage">
+    <div v-if="openMakeImageDialog" class="imageBoxMark" v-loading="isMakingImage">
+      <div class="imageBox">
         <div class="imageBox-contains">
             <div ref="imageCutBox" class="imageCutBox canvasDiv" :style="{zIndex: isImage? '-200': '200'}">
                 <div class="picture-contains">
@@ -25,23 +26,27 @@
                             <div class="value">{{openMakeImage.birthplace}}</div>
                         </div>
                         <div class="item">
-                            <div class="label">民族：</div>
+                            <div class="label">普通话水平：</div>
                             <div class="value">{{openMakeImage.name}}</div>
                         </div>
                         <div class="item">
-                            <div class="label">籍贯：</div>
+                            <div class="label">现居住地：</div>
                             <div class="value">{{openMakeImage.birthplace}}</div>
                         </div>
                         <div class="item">
-                            <div class="label">民族：</div>
+                            <div class="label">证书：</div>
                             <div class="value">{{openMakeImage.name}}</div>
                         </div>
                         <div class="item">
-                            <div class="label">籍贯：</div>
+                            <div class="label">求职意向：</div>
                             <div class="value">{{openMakeImage.birthplace}}</div>
                         </div>
                         <div class="item">
-                            <div class="label">民族：</div>
+                            <div class="label">个人技能：</div>
+                            <div class="value">{{openMakeImage.name}}</div>
+                        </div>
+                        <div class="item">
+                            <div class="label">工作经历：</div>
                             <div class="value">{{openMakeImage.name}}</div>
                         </div>
                     </div>
@@ -64,6 +69,7 @@
                     <!-- </el-button> -->
             </div>
         </div>
+      </div>
     </div>
 </template>
 <script>
@@ -92,7 +98,7 @@ export default {
     watch: {
         openMakeImage:async function(val){
             if(val.hasOwnProperty('name')){
-                
+
             }
         }
     },
@@ -116,7 +122,7 @@ export default {
         await html2canvas(_this.$refs.imageCutBox).then(async function(canvas){
             //生成base64图片
             _this.canvasBase64Img = canvas.toDataURL("image/png");
-            
+
             //base64 -> blob
             var bytes = window.atob(_this.canvasBase64Img.split(',')[1]);
             var array = [];
@@ -136,7 +142,7 @@ export default {
                 if(_this.isImage){
                     _this.isMakingImage = false
                 }
-                
+
             }).catch((error)=>{
                 _this.$message({
                     message: error.message,
@@ -150,7 +156,15 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-
+    .imageBoxMark{
+      position: fixed;
+      z-index: 11;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(1, 1, 1, 0.8);
+    }
     .imageBox{
         position: fixed;
         // z-index: -200;
