@@ -1,7 +1,7 @@
 <template>
     <div v-if="openMakeImageDialog" class="imageBox" v-loading="isMakingImage">
         <div class="imageBox-contains">
-            <div ref="imageCutBox" class="imageCutBox canvasDiv" :style="{zIndex: isImage? '-200': '200'}">
+            <div ref="imageCutBox" class="imageCutBox canvasDiv" :style="{zIndex: isImage? '300': '200'}">
                 <div class="picture-contains">
                     <div class="base">
                         <div class="item">
@@ -10,7 +10,7 @@
                         </div>
                         <div class="item">
                             <div class="label">民族：</div>
-                            <div class="value">{{openMakeImage.name}}</div>
+                            <div class="value">{{openMakeImage.nation}}</div>
                         </div>
                         <div class="item">
                             <div class="label">年龄</div>
@@ -174,9 +174,9 @@ export default {
                 }
             }
             .canvasDiv{
-                background: url(./makeImage/images/back2.jpg) no-repeat;
+                background: url(./makeImage/images/backImage.jpeg) no-repeat;
                 background-size: 800px 400px;
-                padding: 35px 60px;
+                padding: 60px;
                 .picture-contains{
                     position: relative;
                     height: 100%;

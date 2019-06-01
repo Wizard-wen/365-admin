@@ -1,5 +1,8 @@
 <template>
-    <page-edit-component>
+    <page-edit-component
+        :title="'账户配置'"
+        @goback="goback"
+        @edit="onSubmit('form')">
         <el-form
             slot="form"
             class="form-style"
@@ -44,8 +47,8 @@
             </el-form-item>
 
             <el-form-item>
-                <el-button type="primary" @click="onSubmit('form')">提交</el-button>
-                <el-button @click="$router.go(-1)">取消</el-button>
+                <el-button type="primary" size="medium" @click="onSubmit('form')">提交</el-button>
+                <el-button size="medium" @click="goback">取消</el-button>
             </el-form-item>
         </el-form>
     </page-edit-component>
@@ -170,6 +173,9 @@ export default {
                     return false;
                 }
             });
+        },
+        goback(){
+            this.$router.push('/auth/accountList')
         }
     },
     async mounted(){
