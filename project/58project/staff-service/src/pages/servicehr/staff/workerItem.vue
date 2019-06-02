@@ -13,8 +13,8 @@
             <div class="detail-left">
                 <div class="detail-left-box">
                     <div class="detail-left-line">创建人：{{workerForm.manager_name}}</div>
-                    <div class="detail-left-line">创建时间：{{workerForm.created_at}}</div>
-                    <div class="detail-left-line">更新时间：{{workerForm.updated_at}}</div>
+                    <div class="detail-left-line">创建时间：{{workerForm.created_at | formDate}}</div>
+                    <div class="detail-left-line">更新时间：{{workerForm.updated_at | formDate}}</div>
                 </div>
             </div>
         </template>
@@ -233,7 +233,7 @@
 /**
  * type 0 新建  1 编辑
  */
-import {hrService} from '../../../../common'
+import {hrService, $utils} from '../../../../common'
 
 import {
     paperComponent,
@@ -420,6 +420,11 @@ export default {
         //服务人员表单配置项
         workerConfigList(){
             return this.$store.state.hrModule.configForm
+        },
+    },
+    filters: {
+        formDate(timestamp){
+           return $utils.formatDate(new Date(timestamp), 'yyyy-MM-dd')
         }
     },
     methods: {

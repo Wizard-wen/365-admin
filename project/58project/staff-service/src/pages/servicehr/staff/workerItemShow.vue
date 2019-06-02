@@ -4,20 +4,20 @@
             <!-- 等同于更新时间 -->
             <el-form-item label="登记日期" prop="register_at" class="form-item-size" size="small">
                 {{created_atFormatter}}
-            </el-form-item>   
+            </el-form-item>
 
             <el-form-item label="更新日期" prop="updated_at" class="form-item-size" size="small">
                 {{updated_atFormatter}}
-            </el-form-item>     
-            
+            </el-form-item>
+
             <el-form-item label="认证状态" prop="authentication" class="form-item-size" size="small">
                 <select-tag-component :isEdit="false" :propTagList="workerConfigList.authentication" v-model="workerForm.authentication" :isSingle="true"></select-tag-component>
-            </el-form-item> 
-            
+            </el-form-item>
+
             <el-form-item label="姓名" prop="name" class="form-item-size" size="small">
                 {{workerForm.name}}
             </el-form-item>
-            
+
             <el-form-item label="年龄" prop="age" class="form-item-size" size="small">
                 {{workerForm.age}}
             </el-form-item>
@@ -25,18 +25,18 @@
             <el-form-item label="出生日期" prop="birthday" class="form-item-size" size="small">
                 {{birthdayFormatter}}
             </el-form-item>
-            
+
             <el-form-item label="电话" prop="phone" class="form-item-size" size="small">
                 {{workerForm.phone}}
-            </el-form-item>           
-            
+            </el-form-item>
+
             <el-form-item label="回访信息" prop="return_msg" class="form-item-size" size="small">
                 {{workerForm.return_msg}}
             </el-form-item>
 
             <el-form-item label="接单状态" prop="working_status" class="form-item-size" size="small">
                 <select-tag-component :isEdit="false" :propTagList="workerConfigList.working_status" v-model="workerForm.working_status" :isSingle="true"></select-tag-component>
-            </el-form-item> 
+            </el-form-item>
 
             <el-form-item label="备注（商家情况）" prop="remarks" class="form-item-size" size="small">
                 {{workerForm.remarks}}
@@ -44,19 +44,19 @@
 
             <el-form-item label="职业类型" prop="skill" class="form-item-size" size="small">
                 <select-tag-component :isEdit="false" :propTagList="workerConfigList.service_category" v-model="workerForm.skill" :isSingle="false"></select-tag-component>
-            </el-form-item> 
+            </el-form-item>
 
             <el-form-item label="服务类型" prop="service_type" class="form-item-size" size="small">
                 <select-tag-component :isEdit="false" :propTagList="workerConfigList.service_type" v-model="workerForm.service_type" :isSingle="false"></select-tag-component>
-            </el-form-item> 
+            </el-form-item>
 
             <el-form-item label="可服务人群" prop="service_crowd" class="form-item-size" size="small">
                 <select-tag-component :isEdit="false" :propTagList="workerConfigList.service_crowd" v-model="workerForm.service_crowd" :isSingle="false"></select-tag-component>
-            </el-form-item> 
+            </el-form-item>
 
             <el-form-item label="工龄" prop="working_age" class="form-item-size" size="small">
                 <select-tag-component :isEdit="false" :propTagList="workerConfigList.working_age" v-model="workerForm.working_age" :isSingle="true"></select-tag-component>
-            </el-form-item> 
+            </el-form-item>
 
             <el-form-item label="工作经验（备注）" prop="working_experience" class="form-item-size" size="small">
                 {{workerForm.working_experience}}
@@ -89,7 +89,7 @@
             <el-form-item label="区域" prop="region" class="form-item-size" size="small">
                 <select-tag-component :isEdit="false" :propTagList="workerConfigList.service_region" v-model="workerForm.region" :isSingle="false"></select-tag-component>
             </el-form-item>
-        
+
             <el-form-item label="学历" prop="education" class="form-item-size" size="small">
                 <select-tag-component :isEdit="false" :propTagList="workerConfigList.education" v-model="workerForm.education" :isSingle="true"></select-tag-component>
             </el-form-item>
@@ -118,7 +118,7 @@
                     </div>
                 </div>
             </el-form-item>
-        
+
             <el-form-item label="参加培训" prop="course" class="form-item-size" size="small">
                 <select-tag-component :isEdit="false" :propTagList="workerConfigList.course" v-model="workerForm.course" :isSingle="false"></select-tag-component>
             </el-form-item>
@@ -134,7 +134,7 @@
             <el-form-item label="技能证书标签" prop="paper" class="form-item-size">
                 <select-tag-component :isEdit="false" :propTagList="workerConfigList.paper_category" v-model="workerForm.paper" :isSingle="false"></select-tag-component>
             </el-form-item>
-        
+
             <el-form-item label="信息来源" prop="source" class="form-item-size" size="small">
                 <select-tag-component :isEdit="false" :propTagList="workerConfigList.source" v-model="workerForm.source" :isSingle="true"></select-tag-component>
             </el-form-item>
@@ -223,7 +223,7 @@ export default {
                 identify:'',//身份证号码
                 id_photo: [],//证件照
                 address:'',//地址
-                region:[],//服务区域 
+                region:[],//服务区域
                 education:0,//学历
                 urgent_phone:'',//紧急联系人电话
                 bank_card:'',//银行卡号
@@ -275,6 +275,55 @@ export default {
         makeImage(){
             this.openMakeImageDialog = true
             this.openMakeImage = this.workerForm
+            var _workerConfigList = this.workerConfigList;
+            var _type = _workerConfigList.service_type.map(val=>{
+              let _item = [];
+              if(val.isSelected){
+                _item.push(val.name)
+              }
+              return _item
+            })
+            var _service_category = _workerConfigList.service_category.map(val=>{
+            let _item = [];
+            if(val.isSelected){
+              _item.push(val.name)
+            }
+            return _item
+          })
+            var _service_region = _workerConfigList.service_region.map(val=>{
+            let _item = [];
+            if(val.isSelected){
+              _item.push(val.name)
+            }
+            return _item
+          })
+            var _paper_category = _workerConfigList.paper_category.map(val=>{
+            let _item = [];
+            if(val.isSelected){
+              _item.push(val.name)
+            }
+            return _item
+          })
+           var _working_age_val = _workerConfigList.working_age.map(val=>{
+            let _item = [];
+            if(val.isSelected){
+              _item.push(val.name)
+            }
+            return _item
+          })
+           var _education_val = _workerConfigList.education.map(val=>{
+            let _item = [];
+            if(val.isSelected){
+              _item.push(val.name)
+            }
+            return _item
+          })
+            this.openMakeImage.type = _type.length?_type.join(' '):'';
+            this.openMakeImage.service_category = _service_category.length?_service_category.join(' '):'';
+            this.openMakeImage.service_region =_service_region.length? _service_region.join(' '):'';
+            this.openMakeImage.paper_category = _paper_category.length?_paper_category.join(' '):'';
+            this.openMakeImage.working_age_val = _working_age_val.length?_working_age_val.join(' '):'';
+            this.openMakeImage.education_val = _education_val.length?_education_val.join(' '):'';
         },
 
     },
@@ -354,11 +403,11 @@ export default {
             }
             await hrService.getFormConfig('edit').then((data) =>{
                 if(data.code == '0'){
-                    // 将表单配置数据存入 vuex 
+                    // 将表单配置数据存入 vuex
                     this.$store.commit('setConfigForm',data.data)
                 }
             })
-            
+
         }catch(error){
             this.$message({
                 type:'error',
@@ -438,7 +487,7 @@ export default {
             height: 60px;
             padding: 10px 0;
             width: 100%;
-            // bottom: 0; 
+            // bottom: 0;
             background: rgba(0,0,0,.2);
             // opacity: .1;
             // z-index: 3;

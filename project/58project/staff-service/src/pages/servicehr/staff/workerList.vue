@@ -4,18 +4,18 @@
             :staffTable="staffTable"
             :maxLength="maxLength"
             :controlScopeLength="170">
-            
+
             <template slot="searchList">
                 <div class="search-list">
                     <query-component @updateTable="updateTable"></query-component>
                 </div>
             </template>
-            
+
             <template slot="searchForm">
                 <div class="search-tag-list">
                     <query-tag-component @updateTable="updateTable"></query-tag-component>
                 </div>
-                
+
                 <!-- <div> -->
                     <el-button type="primary" @click="exportReturnStaff(1)">导入回访</el-button>
                     <el-button type="primary" @click="editStaff(0)">创建服务人员</el-button>
@@ -101,10 +101,10 @@
         },
         computed:{
             /**
-             * 
+             *
              */
             workerConfigList(){
-                
+
                 return this.$store.state.hrModule.configForm
             }
         },
@@ -124,9 +124,9 @@
                     } else {
                         string = 0
                     }
-                    
+
                 }
-                
+
                 if(string > this.maxLength[listKey]){
                     this.maxLength[listKey] = (string + 20) > 80 ? (string + 20) : 80
                 }
@@ -135,21 +135,21 @@
              * 请求表格数据
              * des 表格查询参数存储在vuex中，刷新，参数重置
              */
-            async getTableList(){                
+            async getTableList(){
                 try{
-                    
+
                     this.isLoaded = true
 
                     await Promise.all([
                         hrService.getFormConfig('edit'), //获取表单配置字段
                         hrService.getStaffList(0) //获取列表数据
                     ]).then((data) =>{
-                        // 将表单配置数据存入 vuex 
+                        // 将表单配置数据存入 vuex
                         this.$store.commit('setConfigForm',data[0].data)
 
                         let tableList = data[1].data.data
                         tableList.forEach((item, index) =>{
-                           
+
                             this.computeStringLength(item.authentication, 'authentication', 'authentication')
                             this.computeStringLength(item.working_status, 'working_status', 'working_status')
                             this.computeStringLength(item.skill_ids, 'skill_ids', 'service_category')
@@ -161,7 +161,7 @@
                             this.computeStringLength(item.course_ids, 'course_ids', 'course')
                             this.computeStringLength(item.paper_ids, 'paper_ids', 'paper_category')
                             this.computeStringLength(item.source, 'source', 'source')
-                        })  
+                        })
 
                         this.staffTable = data[1].data.data
                         //分页信息
@@ -194,7 +194,7 @@
                 // this.pagination.currentPage = val
                 //设置page查询参数
                 this.$store.commit('setQueryList', {
-                    queryKey: 'page', 
+                    queryKey: 'page',
                     queryedList: val
                 })
                 await this.getTableList()
@@ -205,12 +205,12 @@
             async searchStaff(){
                 //设置name查询参数
                 this.$store.commit('setQueryList', {
-                    queryKey: 'name', 
+                    queryKey: 'name',
                     queryedList: this.staffSearch.name
                 })
                 //设置手机号查询参数
                 this.$store.commit('setQueryList', {
-                    queryKey: 'phone', 
+                    queryKey: 'phone',
                     queryedList: this.staffSearch.phone
                 })
                 await this.getTableList()
@@ -223,12 +223,12 @@
                 this.staffSearch.phone = ''
                 //重置name查询参数
                 this.$store.commit('setQueryList', {
-                    queryKey: 'name', 
+                    queryKey: 'name',
                     queryedList: null
                 })
                 //重置手机号查询参数
                 this.$store.commit('setQueryList', {
-                    queryKey: 'phone', 
+                    queryKey: 'phone',
                     queryedList: null
                 })
                 await this.getTableList()

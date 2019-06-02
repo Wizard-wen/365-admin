@@ -12,11 +12,11 @@
 		<div class="shop-detail">
 			<div class="detail-left">
 				<div class="detail-left-box">
-					<div class="detail-left-line">创建人：</div>
-					<div class="detail-left-line">创建时间：</div>
+					<div class="detail-left-line">创建人：{{ shopDetail.manager_name }}</div>
+					<div class="detail-left-line">创建时间：{{ shopDetail.created_at | formDate }}</div>
 					<div class="detail-left-line">门店类型：{{shopDetail.is_third == 1 ? '直营店': shopDetail.is_third == 2 ?'加盟店': ''}}</div>
-					<div class="detail-left-line">门店负责人：</div>
-					<div class="detail-left-line">门店状态：{{shopDetail.type == 'enable'?'正常':'停业'}}</div>
+					<!-- <div class="detail-left-line">门店负责人：</div> -->
+					<!-- <div class="detail-left-line">门店状态：{{shopDetail.type == 'enable'?'正常':'停业'}}</div> -->
 					<div class="detail-left-line">门店地址：{{shopDetail.address}}</div>
 				</div>
 			</div>
@@ -27,7 +27,7 @@
 				</div>
 				<div class="right-box">
 					<div class="title">员工数量</div>
-					<div class="value">4</div>
+					<div class="value">{{ shopDetail.staff_count }}</div>
 				</div>
 			</div>
 		</div>
@@ -51,11 +51,11 @@
 
 					<el-table-column label="电话" prop="phone" align="center"></el-table-column>
 
-					<el-table-column label="操作" align="center">
+					<!-- <el-table-column label="操作" align="center"> -->
 						<!-- <template slot-scope="scope">
 						<el-button size="mini" @click="deleteStore(scope.$index, scope.row)">解绑</el-button>
 						</template> -->
-					</el-table-column>
+					<!-- </el-table-column> -->
 				</el-table>
 			</div>
 		</div>
@@ -64,7 +64,7 @@
 </template>
 
 <script>
-import { shopService, store } from "../../../common";
+import { shopService, store, $utils } from "../../../common";
 export default {
   data() {
     return {
@@ -185,10 +185,15 @@ export default {
           id: this.$route.query.id
         }
       });
-	},
-	goback(){
-		this.$router.push('/shop/shopList')
-	}
+    },
+    goback(){
+      this.$router.push('/shop/shopList')
+    }
+  },
+  filters: {
+      formDate(timestamp){
+          return $utils.formatDate(new Date(timestamp), 'yyyy-MM-dd')
+      }
   },
   mounted() {
     this.getStore();
@@ -248,7 +253,7 @@ export default {
 		}
 		.btn-group{
 			& /deep/ .el-button{
-				margin-left: 0px; 
+				margin-left: 0px;
 			}
 			position: absolute;
 			right: 24px;
