@@ -2,8 +2,8 @@
     <div class="picture-box">
         <div v-for="(item,index) in id_photo_fileList" :key="index" class="image-box" @mouseover="showIdPhotoblack(item, index, '0')" @mouseout="showIdPhotoblack(item, index, '1')">
             <img :src="item.url" class="image-item">
-            <div class="image-item-back" v-if="item.isBack" @click="deleteIdPhoto">
-                <i class="el-icon-delete image-uploader-icon" s></i>
+            <div class="image-item-back" v-if="item.isBack" @click="deleteIdPhoto(index)">
+                <i class="el-icon-delete image-uploader-icon"></i>
             </div>
         </div>
         <el-upload

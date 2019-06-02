@@ -159,7 +159,7 @@ export const hrModule = {
             // register_at:'',//登记时间
             // updated_at:'',更新时间
             authentication_ids: [],//认证状态
-            name: null, //姓名
+            name: '', //姓名
             // age: null,//年龄--按年龄段搜索
             phone: '',//电话
             return_msg: '',//回访信息

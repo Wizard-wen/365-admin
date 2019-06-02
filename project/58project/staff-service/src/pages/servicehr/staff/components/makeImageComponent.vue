@@ -52,7 +52,8 @@
                         </div>
                     </div>
                     <div class="icon">
-                        <img style="height:100px;width:100px;" :src="'./resource/'+openMakeImage.icon" alt="">
+                        <img v-if="openMakeImage.icon" style="height:100px;width:100px;" :src="'./resource/'+openMakeImage.icon" alt="">
+                        <div v-else class="no-img">暂无头像</div>
                     </div>
                 </div>
 
@@ -229,7 +230,16 @@ export default {
                         top: 0;
                         height: 100px;
                         width: 100px;
-                        background:#185;
+                        // background:#185;
+                        .no-img{
+                            height: 100px;
+                            width: 100px;
+                            background: #dcdfe6;
+                            line-height: 100px;
+                            font-size: 16px;
+                            text-align: center;
+
+                        }
                     }
                 }
 

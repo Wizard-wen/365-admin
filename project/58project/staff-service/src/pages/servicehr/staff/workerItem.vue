@@ -51,7 +51,10 @@
             </el-form-item>      -->
 
             <el-form-item label="认证状态" prop="authentication" class="form-item-size" size="small">
-                <select-tag-component :propTagList="workerConfigList.authentication" v-model="workerForm.authentication" :isSingle="true"></select-tag-component>
+                <select-tag-component 
+                    :propTagList="workerConfigList.authentication" 
+                    v-model="workerForm.authentication" 
+                    :isSingle="true"></select-tag-component>
             </el-form-item>
 
             <el-form-item label="姓名" prop="name" class="form-item-size" size="small">
@@ -82,7 +85,10 @@
             </el-form-item>
 
             <el-form-item label="接单状态" prop="working_status" class="form-item-size" size="small">
-                <select-tag-component :propTagList="workerConfigList.working_status" v-model="workerForm.working_status" :isSingle="true"></select-tag-component>
+                <select-tag-component 
+                :propTagList="workerConfigList.working_status" 
+                v-model="workerForm.working_status" 
+                :isSingle="true"></select-tag-component>
             </el-form-item>
 
             <el-form-item label="备注（商家情况）" prop="remarks" class="form-item-size" size="small">
@@ -90,19 +96,31 @@
             </el-form-item>
 
             <el-form-item label="职业类型" prop="skill" class="form-item-size" size="small">
-                <select-tag-component :propTagList="workerConfigList.service_category" v-model="workerForm.skill" :isSingle="false"></select-tag-component>
+                <select-tag-component 
+                :propTagList="workerConfigList.service_category" 
+                v-model="workerForm.skill" 
+                :isSingle="false"></select-tag-component>
             </el-form-item>
 
             <el-form-item label="服务类型" prop="service_type" class="form-item-size" size="small">
-                <select-tag-component :propTagList="workerConfigList.service_type" v-model="workerForm.service_type" :isSingle="false"></select-tag-component>
+                <select-tag-component 
+                :propTagList="workerConfigList.service_type" 
+                v-model="workerForm.service_type" 
+                :isSingle="false"></select-tag-component>
             </el-form-item>
 
             <el-form-item label="可服务人群" prop="service_crowd" class="form-item-size" size="small">
-                <select-tag-component :propTagList="workerConfigList.service_crowd" v-model="workerForm.service_crowd" :isSingle="false"></select-tag-component>
+                <select-tag-component 
+                :propTagList="workerConfigList.service_crowd" 
+                v-model="workerForm.service_crowd" 
+                :isSingle="false"></select-tag-component>
             </el-form-item>
 
             <el-form-item label="工龄" prop="working_age" class="form-item-size" size="small">
-                <select-tag-component :propTagList="workerConfigList.working_age" v-model="workerForm.working_age" :isSingle="true"></select-tag-component>
+                <select-tag-component 
+                :propTagList="workerConfigList.working_age" 
+                v-model="workerForm.working_age" 
+                :isSingle="true"></select-tag-component>
             </el-form-item>
 
             <el-form-item label="工作经验（备注）" prop="working_experience" class="form-item-size" size="small">
@@ -110,7 +128,10 @@
             </el-form-item>
 
             <el-form-item label="民族" prop="nation" class="form-item-size" size="small">
-                <select-tag-component :propTagList="workerConfigList.nation" v-model="workerForm.nation" :isSingle="true"></select-tag-component>
+                <select-tag-component 
+                :propTagList="workerConfigList.nation" 
+                v-model="workerForm.nation" 
+                :isSingle="true"></select-tag-component>
             </el-form-item>
 
             <el-form-item label="籍贯" prop="birthplace" class="form-item-size" size="small">
@@ -132,11 +153,17 @@
             </el-form-item>
 
             <el-form-item label="区域" prop="region" class="form-item-size" size="small">
-                <select-tag-component :propTagList="workerConfigList.service_region" v-model="workerForm.region" :isSingle="false"></select-tag-component>
+                <select-tag-component 
+                :propTagList="workerConfigList.service_region" 
+                v-model="workerForm.region" 
+                :isSingle="false"></select-tag-component>
             </el-form-item>
 
             <el-form-item label="学历" prop="education" class="form-item-size" size="small">
-                <select-tag-component :propTagList="workerConfigList.education" v-model="workerForm.education" :isSingle="true"></select-tag-component>
+                <select-tag-component 
+                :propTagList="workerConfigList.education" 
+                v-model="workerForm.education" 
+                :isSingle="true"></select-tag-component>
             </el-form-item>
 
             <el-form-item label="紧急联系人电话" prop="urgent_phone" class="form-item-size" size="small">
@@ -180,7 +207,10 @@
             </el-form-item>
 
             <el-form-item label="参加培训" prop="course" class="form-item-size" size="small">
-                <select-tag-component :propTagList="workerConfigList.course" v-model="workerForm.course" :isSingle="false"></select-tag-component>
+                <select-tag-component 
+                :propTagList="workerConfigList.course" 
+                v-model="workerForm.course" 
+                :isSingle="false"></select-tag-component>
             </el-form-item>
 
             <el-form-item label="教师评语" prop="teacher_comment" class="form-item-size" size="small">
@@ -192,11 +222,17 @@
             </el-form-item>
 
             <el-form-item label="技能证书标签" prop="paper" class="form-item-size">
-                <select-tag-component :propTagList="workerConfigList.paper_category" v-model="workerForm.paper" :isSingle="false"></select-tag-component>
+                <select-tag-component 
+                :propTagList="workerConfigList.paper_category" 
+                v-model="workerForm.paper" 
+                :isSingle="false"></select-tag-component>
             </el-form-item>
 
             <el-form-item label="信息来源" prop="source" class="form-item-size" size="small">
-                <select-tag-component :propTagList="workerConfigList.source" v-model="workerForm.source" :isSingle="true"></select-tag-component>
+                <select-tag-component 
+                :propTagList="workerConfigList.source" 
+                v-model="workerForm.source" 
+                :isSingle="true"></select-tag-component>
             </el-form-item>
 
             <el-form-item label="来源名称" prop="source_name" class="form-item-size" size="small">
@@ -350,7 +386,7 @@ export default {
                 working_status:0,//接单状态
                 remarks:'',//备注（商家情况）
                 skill:[],//职业类型
-                service_type:0,//服务类型
+                service_type:[],//服务类型
                 service_crowd:[],//可服务人群
                 working_age:0,//工龄
                 working_experience:'',//工作经验（备注）
@@ -517,8 +553,9 @@ export default {
         setCommitAttr(selectedArr, originArr, keyName){
             return originArr.reduce((arr, item, index)=>{
                 var serviceItem = null
-
+                console.log(selectedArr,keyName)
                 selectedArr.forEach((it, index) =>{
+                    
                     if(it == item.id){
                         serviceItem = {}
                         serviceItem[keyName] = item.id;
@@ -754,6 +791,9 @@ export default {
                         workerForm.service_type = workerForm.service_type.reduce((arr, item, index) =>{
                             return arr.concat(item.service_type_id)
                         },[])
+                        if(workerForm.birthday == 0){
+                            workerForm.birthday = null
+                        }
                         //头像
                         this.icon_fileList = workerForm.icon == ''? [] : [{
                             url: `./resource/${workerForm.icon}`,
@@ -906,7 +946,8 @@ export default {
     margin-left: 24px;
     background: #fff;
     & /deep/ .el-step__title{
-        font-size: 14px;
+        font-size: 12px;
+        color: #333;
     }
 }
 </style>
