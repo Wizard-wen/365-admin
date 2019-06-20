@@ -6,7 +6,7 @@
                 <div class="userData" v-else>
                     <div class="headerImg"></div>
                     <div class="nickname">{{userData.nickname}}</div>
-                    <div class="editImage"><img src="./home/img/set.svg" alt="">
+                    <div class="editImage" @click="edit"><img src="./home/img/set.svg" alt="">
                     </div>
                 </div>
             </div>
@@ -31,7 +31,7 @@
     export default {
         data() {
             return {
-                hasLogin: true,
+                hasLogin: false,
                 userData: {
                     nickname: 'wizard',
 
@@ -62,6 +62,9 @@
             goLogin() {
                 this.$router.push('/login');
             },
+            edit(){
+                this.$router.push('/personal');
+            }
         }
     }
 

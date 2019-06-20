@@ -73,6 +73,7 @@ const cartModule = [
 import userpage from '@/pages/userPage.vue'
 import address from '@/pages/userPage/address.vue'
 import createAddress from '@/pages/userPage/createAddress.vue'
+import personal from '@/pages/userPage/personal.vue'
 
 const usersModule = [
     {
@@ -90,6 +91,12 @@ const usersModule = [
         path: '/createAddress',
         name: createAddress,
         component: createAddress,
+
+    },
+    {
+        path: '/personal',
+        name: personal,
+        component: personal,
 
     },
 
