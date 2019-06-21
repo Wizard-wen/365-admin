@@ -1,6 +1,8 @@
 <template>
     <div class="header">
-        <div v-show="isShowImg" class="back" @click="goBack">后退</div>
+        <div v-show="isShowImg" class="back" @click="goBack">
+            <img src="./img/back.svg" alt="">
+        </div>
         <div class="header-title">{{title}}</div>
         <!-- <div class="px-line"></div> -->
     </div>
@@ -53,6 +55,11 @@ export default {
             height: 0.16rem;
             position: absolute;
             left: 0.1rem;
+            img {
+                width: 100%;
+                height: 100%;
+                color: #ccc;
+            }
         }
     }
 </style>
