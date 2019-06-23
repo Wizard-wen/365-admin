@@ -1,15 +1,13 @@
 <template>
     <Hog-page>
-        <Hog-header :title="'我的地址'" :isShowImg="true"></Hog-header>
-        <div class="address">
+        <Hog-header :title="'我的订单'" :isShowImg="true"></Hog-header>
+        <div class="orderList">
             <div v-for="item in list" :key="item.id" class="list">
-                <div>
+                <div @click="goOrder">
                     <div>hhhh</div>
                     <div>222222</div>
                 </div>
-                <img src="./img/right.svg" alt="" @click="goCreate">
             </div>
-            <div @click="goCreate" class="add" v-show="list.length == 0">添加服务地址</div>
         </div>
     </Hog-page>
 </template>
@@ -21,29 +19,18 @@
             }
         },
         methods: {
-            goCreate() {
-                this.$router.push('/createAddress')
+            goOrder(){
+                this.$router.push('/orderDetail')
             }
         },
     }
 
 </script>
 <style scoped lang="scss">
-    .address {
+    .orderList {
         height: 100vh;
         background-color: #fff;
         padding: .5rem 0.2rem;
-        .add {
-            margin: 1rem auto;
-            background-color: pink;
-            height: 0.4rem;
-            line-height: 0.4rem;
-            text-align: center;
-            border-radius: 0.2rem;
-            font-size: 0.16rem;
-            color: #fff;
-            width: 2rem;
-        }
         .list {
             padding: 0.1rem;
             line-height: 0.2rem;

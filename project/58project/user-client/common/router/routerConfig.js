@@ -74,6 +74,10 @@ import userpage from '@/pages/userPage.vue'
 import address from '@/pages/userPage/address.vue'
 import createAddress from '@/pages/userPage/createAddress.vue'
 import personal from '@/pages/userPage/personal.vue'
+import orderList from '@/pages/userPage/orderList.vue'
+import orderDetail from '@/pages/userPage/orderDetail.vue'
+
+
 
 const usersModule = [
     {
@@ -97,6 +101,17 @@ const usersModule = [
         path: '/personal',
         name: personal,
         component: personal,
+
+    },
+    {
+        path: '/orderList',
+        name: orderList,
+        component: orderList,
+    },
+    {
+        path: '/orderDetail',
+        name: orderDetail,
+        component: orderDetail,
 
     },
 

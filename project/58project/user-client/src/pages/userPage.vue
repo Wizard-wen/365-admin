@@ -6,14 +6,14 @@
                 <div class="userData" v-else>
                     <div class="headerImg"></div>
                     <div class="nickname">{{userData.nickname}}</div>
-                    <div class="editImage" @click="edit"><img src="./home/img/set.svg" alt="">
+                    <div class="editImage" @click="edit"><img src="./userPage/img/edit.svg" alt="">
                     </div>
                 </div>
             </div>
             <div class="serviceList">
                 <div class="item" v-for="item in serviceList" :key="item.id" @click="goItem(item)">
                     <span>{{item.name}}</span>
-                    <img src="./home/img/right-arrow.svg" alt="">
+                    <img src="./userPage/img/right.svg" alt="">
                 </div>
             </div>
         </div>
@@ -42,15 +42,15 @@
                     },
                     {
                         name: '我的订单',
-                        router: '/'
+                        router: '/orderList'
                     },
                     {
                         name: '联系客服',
-                        router: '/'
+                        router: ''
                     },
                     {
                         name: '关于我们',
-                        router: '/'
+                        router: ''
                     },
                 ]
             }
