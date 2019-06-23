@@ -17,6 +17,8 @@
 
 </script>
 <style scoped lang="scss">
-
+.personal {
+    height: 100vh;
+}
 
 </style>
