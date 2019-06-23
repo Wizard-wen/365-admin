@@ -12,8 +12,23 @@ Vue.use(Vuex)
 
 export const loginModule = {
     state: {
-        isLogin: false, //是否已经登录
+        isLogin: false,//是否登录
+        token: null,//存储token
         user: {},//用户信息
-        token: null //存储的token
+    },
+    mutations: {
+        login(state, token){
+            state.isLogin = true
+            state.token = token
+        },
+        setUser(state, user){
+            if(state.isLogin)
+                state.user = user
+        },
+        logout(state){
+            state.isLogin = false
+            state.token = null
+            state.user = {}
+        },
     }
 }

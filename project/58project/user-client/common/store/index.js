@@ -15,9 +15,14 @@ window.store = new vuex.Store({
     modules: {
         loginModule,
     },
-    // plugins: [createPersistedState({
-    //     paths: ['login'],
-    //     key: config.namespace,
-    // })]
+    plugins: [createPersistedState({
+        key: 'staff',
+        storage: window.sessionStorage,
+        reducer(val) {
+            return {
+            loginModule: val.loginModule
+          }
+       }
+    })]
 })
 export default store
