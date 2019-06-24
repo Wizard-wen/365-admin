@@ -10,6 +10,10 @@ import '../common/style/styleConfig.scss'
 import router from '../common/router'
 import store from '../common/store'
 
+import ElementUI from 'element-ui';
+import 'element-ui/lib/theme-chalk/index.css';
+Vue.use(ElementUI);
+
 //全局引入组件
 import {
     HogFooter,
@@ -36,7 +40,7 @@ axios.interceptors.response.use(async response => {
     else if(response.data.code == "10001"){
 
         //刷新token
-        // await loginService.refreshToken(store.state.loginModule.token.refresh_token)
+        await loginService.changeToken(store.state.loginModule.token.refresh_token)
 
         //重发请求
         return axios(response.config)

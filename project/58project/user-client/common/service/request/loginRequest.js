@@ -28,5 +28,14 @@ export default {
             password: password,
         })
     },
+    /**
+     * 刷新token
+     * @param {token}
+     */
+    changeToken(token){
+        return axios.post(`/user/changeToken`, {
+            refreshToken: token
+        })
+    }
 
 }
