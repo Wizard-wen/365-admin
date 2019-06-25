@@ -8,7 +8,7 @@
             <div class="px-line"></div>
             <div class="classify-contains">
                 <div class="classify-list">
-                    <div 
+                    <div
                     class="list-item"
                     v-for="(item, index) in classifyList"
                     :key="index"
@@ -18,32 +18,28 @@
                 </div>
                 <div class="px-line"></div>
                 <div class="classify-second">
-                    <img class="classify-pic" :src="secondLevel.sliderPic" alt="">
+                    <!-- <img class="classify-pic" :src="secondLevel.sliderPic" alt=""> -->
                     <div class="second-level-name">
-                        <div 
-                            class="level-name" 
-                            :style="{width: secondLevel.name.length * 0.2 +'rem'}">
+                        <div
+                            class="level-name">
                             <div class="px-line-left" :style="{left: '-'+0.4 + 'rem'}"></div>
                             {{secondLevel.name}}
                             <div class="px-line-right" :style="{right: '-'+0.4 + 'rem'}"></div>
                         </div>
                     </div>
+
                     <div class="second-level-contains">
-                        <div 
+                        <div
                             class="level-item"
-                            v-for="(item, index) in secondLevel.typeList"
-                            :key="item.name+index">{{item.name}}</div>
-                            <div 
-                                class="level-item-help"
-                                v-for="(i,index1) in (3 - (secondLevel.typeList.length)%3)"
-                                :key="i+index1"></div>
+                            v-for="item in secondLevel.children"
+                            :key="item.id">{{item.name}}</div>
                     </div>
                 </div>
             </div>
             <router-view></router-view>
         </div>
         <Hog-footer></Hog-footer>
-    </Hog-page> 
+    </Hog-page>
 </template>
 <script>
 //组件
@@ -89,17 +85,12 @@ export default {
          * 二级目录列表
          */
         secondLevel(){
-            let obj = {
-                name: '',
-                sliderPic: '',
-                typeList: [],
-                ...this.classifyList[this.highIndex]
-            }
-            return  obj
+             return this.classifyList[this.highIndex]
         }
     },
     async mounted(){
-        this.classifyList = await classifyService.getClassifyList()
+        this.classifyList = (await classifyService.getClassifyList()).data
+        console.log(this.classifyList)
     }
 }
 </script>
