@@ -28,7 +28,7 @@
                             class="level-item"
                             v-for="val in item.children"
                             :key="val.id"
-                            @click="goPage">{{val.name}}</div>
+                            @click="goPage(val)">{{val.name}}</div>
                             <div class="level-item" style="height: 0"></div>
                     </div>
                 </div>
@@ -59,7 +59,7 @@ export default {
         /**
          * 跳转分类列表页
          */
-        goPage(){
+        goPage(val){
             this.$router.push('/classify/serviceList')
         },
         /**
