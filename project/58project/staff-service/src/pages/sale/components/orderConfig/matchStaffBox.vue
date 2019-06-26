@@ -212,7 +212,7 @@ export default {
             this.loading = true
 
             try{
-                await hrService.getStaffList(tableOption)
+                await hrService.getStaffList(4)
                     .then(data =>{
                         //匹配的服务人员列表
                         this.staffMatchTable = data.data.data

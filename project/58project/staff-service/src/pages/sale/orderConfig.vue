@@ -2,7 +2,7 @@
     <div class="order-box">
         <!-- 未签约 -->
         <div class="order-edit" v-if="isSigned < 3">
-            <div class="order-message-box" :style="{width: isSearch? 'calc(50% - 8px)' : '100%'}" >
+            <div class="order-message-box" :style="{width: isSearch? 'calc(40% - 8px)' : '100%'}" >
                 <div class="order-in-box">
                     <base-component></base-component>
                     <service-list-component></service-list-component>
@@ -15,7 +15,8 @@
                 </div>
             </div>
 
-            <match-box-component v-if="isSearch" :style="{width: isSearch? 'calc(50% - 8px)' : 0}"></match-box-component>
+            <!-- <match-box-component v-if="isSearch" :style="{width: isSearch? 'calc(60% - 8px)' : 0}"></match-box-component> -->
+            <new-match-staff-box v-if="isSearch" :style="{width: isSearch? 'calc(60% - 8px)' : 0}"></new-match-staff-box>
         </div>
 
         <!-- 已签约 -->
@@ -68,6 +69,7 @@
         logComponent,
         serviceList,
         matchStaffBox,
+        newMatchStaffBox,
         signStaffDetail,
         fileCard
     } from './components/orderConfig'
@@ -197,7 +199,8 @@ export default {
         matchBoxComponent: matchStaffBox,
         logComponent,
         signStaffDetail,
-        fileCard
+        fileCard,
+        newMatchStaffBox
     },
     async mounted(){
         store.commit('setLoading',true)

@@ -5,7 +5,6 @@
         class="vertical-menu-item"
         :style="{background: backColor}"
         v-for="(item, index) in menulist"
-        v-if="!item.hasOwnProperty('isShow')"
         onselectstart="return false"
         :key="index">   
         <div 

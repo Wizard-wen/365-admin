@@ -49,7 +49,7 @@ export default {
             let arr = [],
                 arrList = [],
                 _this = this;
-            debugger
+
             Object.keys(this.queryedList).forEach((item, index) =>{
                 if(Array.isArray(this.queryedList[item])){
                     if(this.queryedList[item].length){

@@ -5,9 +5,7 @@
         :colorList="colorlist"
         :level="level"
         @changeHighState="changeHighLight"
-        :highLight="highArr">
-        
-        </slider-vertical>
+        :highLight="highArr"></slider-vertical>
     </div>
 </template>
 <script>
@@ -42,10 +40,8 @@ export default {
             
             //创建符合组件渲染需求的树形结构，增加一个level层级字段
             let arr = this.createTree(this.datalist, '0')
-            // debugger
             //修改树形结构中的level字段，
             this.editTree(arr)
-            
             return arr
         },
         level(){
@@ -100,20 +96,22 @@ export default {
             if(Array.isArray(Treelist)){
                 Treelist.forEach((item, index) =>{
                     
-
+                    //非路由节点
                     if(item.children){
                         this.visitTree(item.children, valuenode+'-'+index)
                     }else{
+                        //终端页面包含子页面
                         if(item.contains){
-                            
+                            //子页面数组
                             let contains_arr = item.contains
-                            
+                            //子页面对应的终端页面
                             let father_router = item.router
-
+                            //给子页面添加终端节点指针
                             contains_arr.forEach((it, index) => {
                                 _this.routerobject[it.router] = father_router
                             })
                         }
+                        //终端页面不含子页面
                         this.routerobject[item.router] =  valuenode+'-'+index
                     }
                 })
@@ -122,11 +120,11 @@ export default {
             }
         },
         /**
-         * 
+         * 改变高亮
          */
         changeHighLight(item){
             this.highArr = item
-        }
+        },
     },
     components:{
         sliderVertical,
@@ -134,18 +132,20 @@ export default {
     mounted(){
         //监听路由变化事件
         this._hashchange = (e)=>{
+            //确认高亮层级
             if(this.routerobject[this.$route.path]){
-                
-                let arr = this.routerobject[this.$route.path]
-                //如果是数组
-                if(Array.isArray(arr)){
-                    // this.highArr = arr
+                let routerLevelArr = this.routerobject[this.$route.path]
+                //如果是数组，证明这是终端页面
+                if(Array.isArray(routerLevelArr)){
+                    this.highArr = routerLevelArr
                 } 
-                //若不是数组
+                //若不是数组，证明是子页面，根据子页面指针，找到对应的终端页面
                 else {
-                    let arr1 = this.routerobject[arr]
-                    if(Array.isArray(arr1)){
-                        this.highArr = arr1
+                    let fatherRouterLevelArr = this.routerobject[routerLevelArr]
+                    if(Array.isArray(fatherRouterLevelArr)){
+                        this.highArr = fatherRouterLevelArr
+                    } else {
+                        return;
                     }
                 }
             }
@@ -155,35 +155,32 @@ export default {
         
         //遍历目录树，生成路径对象
         this.visitTree(this.propdatalist,'0');
-        
-        Object.keys(this.routerobject).forEach(key =>{
 
+        //改造routerobject对象的值为数组形式
+        Object.keys(this.routerobject).forEach(key =>{
             if(this.routerobject[key].includes('-')){
                 this.routerobject[key] = this.routerobject[key].split("-")
                 this.routerobject[key] = this.routerobject[key].splice(1,this.routerobject[key].length)
             } 
             
         })
-
-        //找到当前目录的一级高亮
-        // if(this.routerobject[this.$route.path]){
-        //     this.highArr = this.routerobject[this.$route.path]
-        // }
+        //确认高亮层级
         if(this.routerobject[this.$route.path]){
-                let arr = this.routerobject[this.$route.path]
-                //如果是数组
-                if(Array.isArray(arr)){
-                    this.highArr = arr
-                } 
-                //若不是数组
-                else {
-                    // debugger
-                    let arr1 = this.routerobject[arr]
-                    if(Array.isArray(arr1)){
-                        this.highArr = arr1
-                    }
+            let routerLevelArr = this.routerobject[this.$route.path]
+            //如果是数组，证明这是终端页面
+            if(Array.isArray(routerLevelArr)){
+                this.highArr = routerLevelArr
+            } 
+            //若不是数组，证明是子页面，根据子页面指针，找到对应的终端页面
+            else {
+                let fatherRouterLevelArr = this.routerobject[routerLevelArr]
+                if(Array.isArray(fatherRouterLevelArr)){
+                    this.highArr = fatherRouterLevelArr
+                } else {
+                    return;
                 }
             }
+        }
     }
 }
 </script>

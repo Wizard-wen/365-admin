@@ -9,6 +9,8 @@ import fileCard from './fileCard.vue'
 import logComponent from './logComponent.vue'
 //服务人员搜索
 import matchStaffBox from './matchStaffBox.vue'
+//服务人员搜索
+import newMatchStaffBox from './newMatchStaffBox.vue'
 //备选服务人员
 import serviceList from './serviceList.vue'
 //签约服务人员详情
@@ -19,6 +21,7 @@ export {
     fileCard,
     logComponent,
     matchStaffBox,
+    newMatchStaffBox,
     serviceList,
     signStaffDetail
 }
