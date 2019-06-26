@@ -82,7 +82,6 @@ export default {
          * 改变input类型
          */
         changeType(){
-            console.log(1)
             this.$refs['password'].type = 'password'
         }
     },

@@ -2,7 +2,7 @@
     <div class="query-tag">
         <i class="el-icon-arrow-left" @click="rightChange"></i>
         <div class="query-tag-box" ref="query">
-            <div class="query-tag-list" 
+            <div class="query-tag-list"
                 :style="{left: leftPosition+'px'}">
                 <div class="tag-item" :class="'tag-color'+`${(index%5)}`" v-for="(item, index) in queryTag" :key="index">
                     {{item.name}}
@@ -49,12 +49,12 @@ export default {
             let arr = [],
                 arrList = [],
                 _this = this;
-
+            // debugger
             Object.keys(this.queryedList).forEach((item, index) =>{
                 if(Array.isArray(this.queryedList[item])){
                     if(this.queryedList[item].length){
                         this.queryedList[item].forEach((it, ind) =>{
-                            let itemKey = item.substring(0,item.length-4) 
+                            let itemKey = item.substring(0,item.length-4)
                             arr.push({
                                 type: 'array',
                                 key: item,
@@ -92,7 +92,7 @@ export default {
         /**
          * 名字
          */
-        analysisValue(item, key){    
+        analysisValue(item, key){
             return this.configForm[item].find(item => item.id == key).name
         },
         closeTag(item){
@@ -109,12 +109,12 @@ export default {
             //将查询组件数据变化存入vuex
             if(this.queryFrom == 'staff'){
                 this.$store.commit('setQueryList', {
-                    queryKey: item.key, 
+                    queryKey: item.key,
                     queryedList: newValue
                 })
             } else {
                 this.$store.commit('setSellerList', {
-                    queryKey: item.key, 
+                    queryKey: item.key,
                     queryedList: newValue
                 })
             }
@@ -128,7 +128,7 @@ export default {
             } else {
                 this.leftPosition = this.leftPosition - 100
             }
-            
+
         },
         rightChange(){
             if(this.leftPosition == 0){
@@ -137,11 +137,11 @@ export default {
             } else {
                 this.leftPosition = this.leftPosition + 100
             }
-            
+
         }
     },
     mounted(){
-        
+
     }
 }
 </script>
@@ -191,7 +191,7 @@ export default {
     .tag-color0{
         color: #409eff;
         border: 1px solid rgba(64,158,255,.2);
-        background-color: rgba(64,158,255,.1);           
+        background-color: rgba(64,158,255,.1);
     }
     .tag-color1{
         background-color: rgba(103,194,58,.1);
@@ -211,23 +211,23 @@ export default {
     .tag-color4{
         background-color: rgba(245,108,108,.1);
         border-color: rgba(245,108,108,.2);
-        color: #f56c6c;       
+        color: #f56c6c;
     }
 
     .tag-color5{
         background-color: rgba(8,103,81,.1);
         border-color: rgba(8,103,81,.2);
-        color: #086751;       
+        color: #086751;
     }
     .tag-color6{
         background-color: rgba(8,101,139,.1);
         border-color: rgba(8,101,139,.2);
-        color: #08658B;       
+        color: #08658B;
     }
     .tag-color7{
         background-color: rgba(185,29,85,.1);
         border-color: rgba(185,29,85,.2);
-        color: #b91d55;       
+        color: #b91d55;
     }
 </style>
 

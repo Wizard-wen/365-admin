@@ -51,9 +51,9 @@
             </el-form-item>      -->
 
             <el-form-item label="认证状态" prop="authentication" class="form-item-size" size="small">
-                <select-tag-component 
-                    :propTagList="workerConfigList.authentication" 
-                    v-model="workerForm.authentication" 
+                <select-tag-component
+                    :propTagList="workerConfigList.authentication"
+                    v-model="workerForm.authentication"
                     :isSingle="true"></select-tag-component>
             </el-form-item>
 
@@ -85,9 +85,9 @@
             </el-form-item>
 
             <el-form-item label="接单状态" prop="working_status" class="form-item-size" size="small">
-                <select-tag-component 
-                :propTagList="workerConfigList.working_status" 
-                v-model="workerForm.working_status" 
+                <select-tag-component
+                :propTagList="workerConfigList.working_status"
+                v-model="workerForm.working_status"
                 :isSingle="true"></select-tag-component>
             </el-form-item>
 
@@ -96,30 +96,30 @@
             </el-form-item>
 
             <el-form-item label="职业类型" prop="skill" class="form-item-size" size="small">
-                <select-tag-component 
-                :propTagList="workerConfigList.service_category" 
-                v-model="workerForm.skill" 
+                <select-tag-component
+                :propTagList="workerConfigList.service_category"
+                v-model="workerForm.skill"
                 :isSingle="false"></select-tag-component>
             </el-form-item>
 
             <el-form-item label="服务类型" prop="service_type" class="form-item-size" size="small">
-                <select-tag-component 
-                :propTagList="workerConfigList.service_type" 
-                v-model="workerForm.service_type" 
+                <select-tag-component
+                :propTagList="workerConfigList.service_type"
+                v-model="workerForm.service_type"
                 :isSingle="false"></select-tag-component>
             </el-form-item>
 
             <el-form-item label="可服务人群" prop="service_crowd" class="form-item-size" size="small">
-                <select-tag-component 
-                :propTagList="workerConfigList.service_crowd" 
-                v-model="workerForm.service_crowd" 
+                <select-tag-component
+                :propTagList="workerConfigList.service_crowd"
+                v-model="workerForm.service_crowd"
                 :isSingle="false"></select-tag-component>
             </el-form-item>
 
             <el-form-item label="工龄" prop="working_age" class="form-item-size" size="small">
-                <select-tag-component 
-                :propTagList="workerConfigList.working_age" 
-                v-model="workerForm.working_age" 
+                <select-tag-component
+                :propTagList="workerConfigList.working_age"
+                v-model="workerForm.working_age"
                 :isSingle="true"></select-tag-component>
             </el-form-item>
 
@@ -128,9 +128,9 @@
             </el-form-item>
 
             <el-form-item label="民族" prop="nation" class="form-item-size" size="small">
-                <select-tag-component 
-                :propTagList="workerConfigList.nation" 
-                v-model="workerForm.nation" 
+                <select-tag-component
+                :propTagList="workerConfigList.nation"
+                v-model="workerForm.nation"
                 :isSingle="true"></select-tag-component>
             </el-form-item>
 
@@ -153,16 +153,16 @@
             </el-form-item>
 
             <el-form-item label="区域" prop="region" class="form-item-size" size="small">
-                <select-tag-component 
-                :propTagList="workerConfigList.service_region" 
-                v-model="workerForm.region" 
+                <select-tag-component
+                :propTagList="workerConfigList.service_region"
+                v-model="workerForm.region"
                 :isSingle="false"></select-tag-component>
             </el-form-item>
 
             <el-form-item label="学历" prop="education" class="form-item-size" size="small">
-                <select-tag-component 
-                :propTagList="workerConfigList.education" 
-                v-model="workerForm.education" 
+                <select-tag-component
+                :propTagList="workerConfigList.education"
+                v-model="workerForm.education"
                 :isSingle="true"></select-tag-component>
             </el-form-item>
 
@@ -207,9 +207,9 @@
             </el-form-item>
 
             <el-form-item label="参加培训" prop="course" class="form-item-size" size="small">
-                <select-tag-component 
-                :propTagList="workerConfigList.course" 
-                v-model="workerForm.course" 
+                <select-tag-component
+                :propTagList="workerConfigList.course"
+                v-model="workerForm.course"
                 :isSingle="false"></select-tag-component>
             </el-form-item>
 
@@ -222,16 +222,16 @@
             </el-form-item>
 
             <el-form-item label="技能证书标签" prop="paper" class="form-item-size">
-                <select-tag-component 
-                :propTagList="workerConfigList.paper_category" 
-                v-model="workerForm.paper" 
+                <select-tag-component
+                :propTagList="workerConfigList.paper_category"
+                v-model="workerForm.paper"
                 :isSingle="false"></select-tag-component>
             </el-form-item>
 
             <el-form-item label="信息来源" prop="source" class="form-item-size" size="small">
-                <select-tag-component 
-                :propTagList="workerConfigList.source" 
-                v-model="workerForm.source" 
+                <select-tag-component
+                :propTagList="workerConfigList.source"
+                v-model="workerForm.source"
                 :isSingle="true"></select-tag-component>
             </el-form-item>
 
@@ -553,9 +553,8 @@ export default {
         setCommitAttr(selectedArr, originArr, keyName){
             return originArr.reduce((arr, item, index)=>{
                 var serviceItem = null
-                console.log(selectedArr,keyName)
                 selectedArr.forEach((it, index) =>{
-                    
+
                     if(it == item.id){
                         serviceItem = {}
                         serviceItem[keyName] = item.id;

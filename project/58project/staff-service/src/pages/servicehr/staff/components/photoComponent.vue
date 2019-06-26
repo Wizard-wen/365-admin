@@ -102,7 +102,7 @@ export default {
 <style lang="scss" scoped>
 //图片组件
 .picture-box{
-    height: 120px;
+    // height: 120px;
     border: 1px dashed #ccc;
     display: flex;
     flex-wrap: wrap;
@@ -133,15 +133,15 @@ export default {
         }
     }
     //图片上传
-    .image-uploader{
-        height: 100px!important;
-    }
+    // .image-uploader{
+    //     height: 100px!important;
+    // }
     .image-uploader /deep/ .el-upload {
         display: block;
         height: 100px;
         width: 100px;
         margin: 10px;
-        
+
         cursor: pointer;
         position: relative;
         overflow: hidden;
