@@ -1,0 +1,4 @@
+<view>
+<button bindtap="setDisabled">微信登录</button>
+<button bindtap="setDisabled">手机号注册登录</button>
+</view>
