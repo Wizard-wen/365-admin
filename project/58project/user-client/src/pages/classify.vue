@@ -17,22 +17,19 @@
                     >{{item.name}}</div>
                 </div>
                 <div class="px-line"></div>
-                <div class="classify-second">
+                <div class="classify-second" v-for="item in secondLevel" :key="item.id">
                     <!-- <img class="classify-pic" :src="secondLevel.sliderPic" alt=""> -->
                     <div class="second-level-name">
-                        <div
-                            class="level-name">
-                            <div class="px-line-left" :style="{left: '-'+0.4 + 'rem'}"></div>
-                            {{secondLevel.name}}
-                            <div class="px-line-right" :style="{right: '-'+0.4 + 'rem'}"></div>
-                        </div>
+                        <div class="level-name" v-show="item.children">{{item.name}}</div>
                     </div>
 
                     <div class="second-level-contains">
                         <div
                             class="level-item"
-                            v-for="item in secondLevel.children"
-                            :key="item.id">{{item.name}}</div>
+                            v-for="val in item.children"
+                            :key="val.id"
+                            @click="goPage(val)">{{val.name}}</div>
+                            <div class="level-item" style="height: 0"></div>
                     </div>
                 </div>
             </div>
@@ -62,7 +59,7 @@ export default {
         /**
          * 跳转分类列表页
          */
-        goPage(){
+        goPage(val){
             this.$router.push('/classify/serviceList')
         },
         /**
@@ -85,7 +82,7 @@ export default {
          * 二级目录列表
          */
         secondLevel(){
-             return this.classifyList[this.highIndex]
+             return this.classifyList[this.highIndex]?this.classifyList[this.highIndex].children:[]
         }
     },
     async mounted(){
@@ -158,7 +155,6 @@ export default {
             .classify-second{
                 float : left;
                 width: calc(100% - .91rem);
-                height: calc(100vh - 1.01rem);
                 padding: .2rem .15rem;
                 .classify-pic{
                     width: 100%;
@@ -172,6 +168,7 @@ export default {
                 .second-level-name{
                     height: .5rem;
                     padding: .15rem 0;
+                    font-weight: 700;
                     .level-name{
                         position: relative;
                         margin: 0 auto;
