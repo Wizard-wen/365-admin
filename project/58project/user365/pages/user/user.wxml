@@ -1,3 +1,11 @@
-<view>
-
+<view class='userPage'>
+  <view class='topContainer'>
+    <view class='image'></view>
+    <view class='name' bindtap='login'>
+      <text>{{isLogin? "" : "请点击登录"}}</text>
+    </view>
+  </view>
+  <view class='bottomContainer'>
+    <view wx:for="{{menuList}}" wx:key="{{item.id}}" class='item' bindtap="goItem" data-router="{{item.router}}">{{ item.title }}</view>
+  </view>
 </view>

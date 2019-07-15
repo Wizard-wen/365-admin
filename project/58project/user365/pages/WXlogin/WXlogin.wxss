@@ -1,6 +1,6 @@
-.button-hover {
-  background-color: red;
-}
-.other-button-hover {
-  background-color: blue;
+.button {
+   width: 500rpx;
+   height: 100rpx;
+   line-height: 100rpx;
+   margin-top: 50rpx;
 }
