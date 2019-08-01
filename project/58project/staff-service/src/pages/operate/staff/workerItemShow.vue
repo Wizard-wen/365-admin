@@ -170,7 +170,7 @@
 /**
  * type 0 新建  1 编辑
  */
-import {hrService, $utils} from '../../../../common'
+import {operateService, $utils} from '../../../../common'
 
 import {
     paperComponent,
@@ -335,7 +335,7 @@ export default {
             await store.commit('setLoading',true)
             //如果是编辑则请求接口
             if(this.$route.query.type != 0){
-                await hrService.getStaff(this.$route.query.id).then(data =>{
+                await operateService.getStaff(this.$route.query.id).then(data =>{
                     if(data.code == "0"){
 
                         var workerForm = data.data
@@ -401,7 +401,7 @@ export default {
                     })
                 })
             }
-            await hrService.getFormConfig('edit').then((data) =>{
+            await operateService.getFormConfig('edit').then((data) =>{
                 if(data.code == '0'){
                     // 将表单配置数据存入 vuex
                     this.$store.commit('setConfigForm',data.data)

@@ -99,7 +99,7 @@
     </div>
 </template>
 <script>
-import {hrService, orderService} from '../../../../../common'
+import {operateService, orderService} from '../../../../../common'
 
 import staffDetailDialog from './dialog/staffDetailDialog.vue'
 
@@ -212,7 +212,7 @@ export default {
             this.loading = true
 
             try{
-                await hrService.getStaffList(4)
+                await operateService.getStaffList(4)
                     .then(data =>{
                         //匹配的服务人员列表
                         this.staffMatchTable = data.data.data

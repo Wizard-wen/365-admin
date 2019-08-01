@@ -205,7 +205,7 @@ export default {
     async mounted(){
         store.commit('setLoading',true)
         try{
-            await orderService.getOrder(this.$route.query.order_id)
+            // await orderService.getOrder(this.$route.query.order_id)
         }catch(e){
             this.$message({
                 type:'error',

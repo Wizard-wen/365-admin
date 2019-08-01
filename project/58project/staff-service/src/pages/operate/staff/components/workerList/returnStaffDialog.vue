@@ -18,7 +18,7 @@
     </el-dialog>
 </template>
 <script>
-import {hrService} from '../../../../../../common'
+import {operateService} from '../../../../../../common'
 
 export default {
     props: {
@@ -54,7 +54,7 @@ export default {
             })
             store.commit('setLoading',true)
     
-            await hrService.addReturnStaff() 
+            await operateService.addReturnStaff() 
                 .then(data =>{
                     if(data.code == "0"){
                         this.$message({
@@ -86,7 +86,7 @@ export default {
     async mounted(){
         store.commit('setLoading',true)
 
-        await hrService.getReturnStaff() 
+        await operateService.getReturnStaff() 
             .then(data =>{
                 if(data.code == "0"){
                     this.staffCount = data.data.count

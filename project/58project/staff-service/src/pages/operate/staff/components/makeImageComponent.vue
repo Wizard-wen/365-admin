@@ -74,7 +74,7 @@
 </template>
 <script>
 
-import {hrService} from '../../../../../common'
+import {operateService} from '../../../../../common'
 import html2canvas from 'html2canvas';
 import axios from 'axios'
 

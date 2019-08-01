@@ -82,7 +82,7 @@
 </template>
 <script>
     import {
-        hrService, 
+        operateService, 
         orderService, 
         $utils
     } from '../../../common'

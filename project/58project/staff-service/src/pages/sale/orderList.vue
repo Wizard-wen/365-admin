@@ -19,7 +19,7 @@
                     </div>
 
                     <el-form-item>
-                        <el-button type="primary" @click="createOrder">创建订单</el-button>
+                        <el-button type="primary" @click="createOrder">创建订单申请</el-button>
                     </el-form-item>
                 </div>
                 <div class="search-select-box">
@@ -52,7 +52,43 @@
             :data="orderTable"
             class="order-table">
             <el-table-column
-                label="订单号"
+                label="订单编号"
+                prop="code"
+                align="center"
+                width="170px">
+            </el-table-column>
+            <el-table-column
+                label="家政顾问"
+                prop="code"
+                align="center"
+                width="170px">
+            </el-table-column>
+            <el-table-column
+                label="工种"
+                prop="code"
+                align="center"
+                width="170px">
+            </el-table-column>
+            <el-table-column
+                label="地址"
+                prop="code"
+                align="center"
+                width="170px">
+            </el-table-column>
+            <el-table-column
+                label="工资"
+                prop="code"
+                align="center"
+                width="170px">
+            </el-table-column>
+            <el-table-column
+                label="工作时间"
+                prop="code"
+                align="center"
+                width="170px">
+            </el-table-column>
+            <el-table-column
+                label="节假休息"
                 prop="code"
                 align="center"
                 width="170px">
@@ -86,6 +122,15 @@
                 align="center">
             </el-table-column>
             <el-table-column
+                label="订单详情"
+                prop="name"
+                align="center">
+            </el-table-column>
+
+
+
+
+            <el-table-column
                 label="操作"
                 align="center">
                 <template slot-scope="scope">
@@ -111,7 +156,7 @@
 </template>
 <script>
     import {orderService, $utils} from '../../../common'
-    import {hrService} from '../../../common'
+    import {operateService} from '../../../common'
     import {cascaderComponent} from '@/pages/components'
     export default {
         components: {

@@ -1,7 +1,7 @@
 /**
  * 人力资源及技能管理模块
  */
-import hrRequest from './request/hrRequest.js'
+import operateRequest from './request/operateRequest.js'
 import {store} from '../../common'
 export default {
     /**
@@ -9,33 +9,33 @@ export default {
      * @param type 列表类别
      */
     getStaffList(type){
-        return hrRequest.getStaffList(type)
+        return operateRequest.getStaffList(type)
     },
     /**
      * 获取人员信息
      * @param id 员工id
      */
     getStaff(id){
-        return hrRequest.getStaff(id)
+        return operateRequest.getStaff(id)
     },
     /**
      * 创建、编辑员工信息
      * @param obj
      */
     editStaff(obj){
-        return hrRequest.editStaff(obj)
+        return operateRequest.editStaff(obj)
     },
     /**
      * 姓名查重
      */
     checkStaffName(id, name){
-        return hrRequest.checkStaffName(id, name)
+        return operateRequest.checkStaffName(id, name)
     },
     /**
      * 停用服务人员
      */
     changeStaffType(id, version){
-        return hrRequest.changeStaffType(id, version)
+        return operateRequest.changeStaffType(id, version)
     },
 
 
@@ -46,51 +46,51 @@ export default {
      * 获取能力标签树
      */
     getAbilityTree(type = ''){
-        return hrRequest.getAbilityTree(type)
+        return operateRequest.getAbilityTree(type)
     },
     /**
      * 获取证书列表
      */
     getPaperSelection(type = ''){
-        return hrRequest.getPaperSelection(type)
+        return operateRequest.getPaperSelection(type)
     },
     /**
      * 获取技能树
      */
     getSkillTree(type = ''){
-        return hrRequest.getSkillTree(type)
+        return operateRequest.getSkillTree(type)
     },
     /**
      * 省市区数据获取
      */
     getAreaTree(){
-        return hrRequest.getAreaTree()
+        return operateRequest.getAreaTree()
     },
     /**
      * 人员信息配置
      */
     getFormConfig(type){
-        return hrRequest.getFormConfig(type)
+        return operateRequest.getFormConfig(type)
     },
     /**
      * 标签信息配置
      */
     editFormConfig(obj){
-        return hrRequest.editFormConfig(obj)
+        return operateRequest.editFormConfig(obj)
     },
 
     /**
      * 单个服务人员添加回访
      */
     addReturnStaffSingle(id){
-        return hrRequest.addReturnStaffSingle(id)
+        return operateRequest.addReturnStaffSingle(id)
     },
     /**
      * 多个回访人员到回访列表
      */
     addReturnStaff(){
         let obj = store.state.hrModule.queryedList
-        return hrRequest.addReturnStaff(obj)
+        return operateRequest.addReturnStaff(obj)
     },
     /**
      * 获取可回访人员数量
@@ -102,26 +102,26 @@ export default {
             queryedList: 0
         })
         let obj = store.state.hrModule.queryedList
-        return hrRequest.getReturnStaff(obj)
+        return operateRequest.getReturnStaff(obj)
     },
     /**
      * 恢复全部回访人员
      */
     removeReturnStaff(){
-        return hrRequest.removeReturnStaff()
+        return operateRequest.removeReturnStaff()
     },
     /**
      * 恢复全部回访人员
      */
     removeReturnStaff(){
-        return hrRequest.removeReturnStaff()
+        return operateRequest.removeReturnStaff()
     },
 
     /**
      * 删除申请添加服务人员
      */
     deleteApplyStaff(id){
-        return hrRequest.deleteApplyStaff(id)
+        return operateRequest.deleteApplyStaff(id)
     },
     /**
      * 提交新申请服务人员 / 恢复异常服务人员 / 导出回访人员 
@@ -130,6 +130,6 @@ export default {
      * @param id 服务人员id
      */
     agreeStaffSingle(module_type, from, id){
-        return hrRequest.agreeStaffSingle(module_type, from,id)
+        return operateRequest.agreeStaffSingle(module_type, from,id)
     },
 }

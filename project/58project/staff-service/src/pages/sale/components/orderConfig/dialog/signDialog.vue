@@ -76,7 +76,7 @@
 <script>
 import {orderService} from '../../../../../../common'
 
-// import paperComponent from '../../servicehr/staff/components/paperComponent.vue'
+// import paperComponent from '../../operate/staff/components/paperComponent.vue'
 export default {
     components: {
         // paperComponent,

@@ -40,7 +40,7 @@
 
 <script>
 
-// import {hrService} from '../../../common'
+// import {operateService} from '../../../common'
 
 
 export default {
@@ -156,7 +156,7 @@ export default {
         async onSubmit(formName) {
             await this.$refs[formName].validate((valid, fileds) => {
                 if (valid) {
-                    hrService.editStaff(this.originRequireForm).then(data =>{
+                    operateService.editStaff(this.originRequireForm).then(data =>{
                             if(data.code == '0'){
                                 this.$message({
                                     type:"success",
@@ -190,7 +190,7 @@ export default {
             //如果是编辑则请求接口
             if(this.$route.query.type == 1){
                 store.commit('setLoading',true)
-                await hrService.getStaff(this.$route.query.id).then(data =>{
+                await operateService.getStaff(this.$route.query.id).then(data =>{
                     if(data.code == "0"){
                         this.originRequireForm = data.data
                     }
