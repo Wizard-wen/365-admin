@@ -155,7 +155,7 @@
     </div>
 </template>
 <script>
-    import {orderService, $utils} from '../../../common'
+    import {saleService, $utils} from '../../../common'
     import {operateService} from '../../../common'
     import {cascaderComponent} from '@/pages/components'
     export default {
@@ -243,7 +243,7 @@
                 store.commit('setLoading',true)
 
                 try{
-                    await orderService.getOrderList(tableOption).then(data =>{
+                    await saleService.getOrderList(tableOption).then(data =>{
                             if(data.code == "0"){
                                 this.orderTable = data.data.data
 

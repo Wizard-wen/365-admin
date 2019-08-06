@@ -4,7 +4,7 @@ import Vuex from 'vuex'
 
 Vue.use(Vuex)
 
-import orderRequest from '../service/request/orderRequest.js'
+import saleRequest from '../service/request/saleRequest.js'
 import { Message } from 'element-ui';
 /**
  * 订单状态类型
@@ -82,7 +82,7 @@ export const orderModule = {
     },
     actions: {
         async setData(context, order_id){
-            await orderRequest.getOrder(order_id)
+            await saleRequest.getOrder(order_id)
                 .then(data =>{
                     context.commit('configData',data)
                 })

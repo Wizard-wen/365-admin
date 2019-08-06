@@ -58,7 +58,7 @@
     </el-dialog>
 </template>
 <script>
-import {operateService, orderService, $utils} from '../../../../../../common'
+import {operateService, saleService, $utils} from '../../../../../../common'
 export default {
     props: {
         //打开服务人员详情弹框

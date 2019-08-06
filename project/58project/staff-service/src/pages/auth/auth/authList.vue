@@ -55,7 +55,7 @@
 </template>
 <script>
 import {authService} from '../../../../common'
-import {orderService} from '../../../../common'
+import {saleService} from '../../../../common'
 export default {
     data(){
         return {

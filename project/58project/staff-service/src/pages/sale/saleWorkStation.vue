@@ -128,8 +128,8 @@
                         </div>
                     </div>
                     <div class="operation-list">
-                        <div class="control">申请订单</div>
-                        <div class="control" @click="goWorkerList" :title="'服务人员信息库'">服务人员信息库</div>
+                        <div class="control" @click="openOrderApplyDialog">申请订单</div>
+                        <div class="control" @click="openWorkerList" :title="'服务人员信息库'">服务人员信息库</div>
                         <div class="control">我的订单</div>
                         <div class="control">我的客户</div>
                         <div class="control">我的合同</div>
@@ -156,19 +156,36 @@
                 </div>
             </div>
         </div>
+        <!-- 申请添加服务人员 -->
+        <apply-order-dialog
+            v-if="applyOrderDialogVisible"
+            :applyOrderDialogVisible="applyOrderDialogVisible"
+            @closeCreateStaffDialog="applyOrderDialogVisible=false"></apply-order-dialog>
     </div>
 </template>
 <script>
+import applyOrderDialog from './components/applyOrder/applyOrderDialog.vue'
 export default {
     data(){
         return {
+            applyOrderDialogVisible: false,//订单申请弹窗显示隐藏
+
 
         }
     },
+    components: {
+        applyOrderDialog,
+    },
     methods: {
-        goWorkerList(){
-            this.$router.push('/sale/orderWorkList')
+        //打开订单申请弹窗
+        openOrderApplyDialog(){
+            this.applyOrderDialogVisible = true
+        },
+        //打开服务人员列表
+        openWorkerList(){
+            this.$router.push('/worker/workerList')
         }
+
     }
 }
 </script>

@@ -5,6 +5,26 @@ import axios from 'axios'
 
 export default {
     /**
+     * 订单申请列表 
+     */
+    getApplicationList(){
+        return axios.get(`./admin/order/applicationList`)
+    },
+    /**
+     * 通过或拒绝订单申请
+     */
+    dealApplication(type){
+        return axios.get(`./admin/order/dealApplication?type=${type}`)
+    },
+    
+
+
+
+
+
+
+
+    /**
      * 获取员工列表
      * @param type 列表类别
      */

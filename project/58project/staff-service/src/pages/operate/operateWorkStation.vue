@@ -141,16 +141,16 @@
                         </div>
                     </div>
                     <div class="operation-list">
-                        <div class="control">全部服务人员</div>
-                        <div class="control">回访服务人员</div>
-                        <div class="control">我维护的劳动者</div>
-                        <div class="control">审核新服务人员</div>
-                        <div class="control">异常服务人员</div>
-                        <div class="control">全部订单</div>
-                        <div class="control">已签约订单</div>
-                        <div class="control">公海订单</div>
-                        <div class="control">门店订单申请</div>
-                        <div class="control">合同列表</div>
+                        <div class="control" @click="goWorkerList">全部服务人员</div>
+                        <div class="control" @click="goWorkerList">回访服务人员</div>
+                        <div class="control" @click="goWorkerList">我维护的劳动者</div>
+                        <div class="control" @click="goWorkerList">审核新服务人员</div>
+                        <div class="control" @click="goWorkerList">异常服务人员</div>
+                        <div class="control" @click="goWorkerList">全部订单</div>
+                        <div class="control" @click="goWorkerList">已签约订单</div>
+                        <div class="control" @click="goWorkerList">公海订单</div>
+                        <div class="control" @click="goWorkerList">门店订单申请</div>
+                        <div class="control" @click="goWorkerList">合同列表</div>
                     </div>
                 </div>
                 <div class="rank-box">

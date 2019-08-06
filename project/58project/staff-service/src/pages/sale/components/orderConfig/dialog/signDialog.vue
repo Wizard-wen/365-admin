@@ -74,7 +74,7 @@
     </el-dialog>
 </template>
 <script>
-import {orderService} from '../../../../../../common'
+import {saleService} from '../../../../../../common'
 
 // import paperComponent from '../../operate/staff/components/paperComponent.vue'
 export default {
@@ -270,7 +270,7 @@ export default {
 
                     store.commit('setLoading',true)
 
-                    await orderService.sign(this.signForm).then(data =>{
+                    await saleService.sign(this.signForm).then(data =>{
                             if(data.code == "0"){
                                 this.$message({
                                     type:'success',
@@ -285,7 +285,7 @@ export default {
                                 message: e.message
                             })
                         }).finally(async () =>{
-                            await orderService.getOrder(this.$route.query.order_id)
+                            await saleService.getOrder(this.$route.query.order_id)
 
                             store.commit('setLoading',false)
                         })

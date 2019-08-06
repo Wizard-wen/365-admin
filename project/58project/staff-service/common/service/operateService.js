@@ -5,6 +5,20 @@ import operateRequest from './request/operateRequest.js'
 import {store} from '../../common'
 export default {
     /**
+     * 获取订单申请列表
+     */
+    getApplicationList(){
+        return operateRequest.getApplicationList()
+    },
+    /**
+     * 通过或拒绝订单申请
+     */
+    dealApplication(type){
+        return operateRequest.dealApplication(type)
+    },
+
+
+    /**
      * 获取员工列表
      * @param type 列表类别
      */

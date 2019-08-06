@@ -74,7 +74,7 @@
         fileCard
     } from './components/orderConfig'
 
-import {orderService} from '../../../common'
+import {saleService} from '../../../common'
 export default {
     data(){
         return {
@@ -125,7 +125,7 @@ export default {
         async cancelOrder(){  
             store.commit('setLoading',true)
 
-            await orderService.cancelOrder(this.cancelForm) 
+            await saleService.cancelOrder(this.cancelForm) 
                 .then(data =>{
                     if(data.code == "0"){
                         this.$message({
@@ -154,7 +154,7 @@ export default {
         async completeOrder(){
             store.commit('setLoading',true)
 
-            await orderService.completeOrder(this.completeForm) 
+            await saleService.completeOrder(this.completeForm) 
                 .then(data =>{
                     if(data.code == "0"){
                         this.$message({
@@ -205,7 +205,7 @@ export default {
     async mounted(){
         store.commit('setLoading',true)
         try{
-            // await orderService.getOrder(this.$route.query.order_id)
+            // await saleService.getOrder(this.$route.query.order_id)
         }catch(e){
             this.$message({
                 type:'error',

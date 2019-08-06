@@ -18,228 +18,118 @@
                 :header-cell-style="{height: '30px',padding: '0px',fontSize:'12px'}"
                 :cell-style="{height: '30px',padding: 0,fontSize:'12px',}">
 
-                <el-table-column  label="员工号" prop="staff_code" align="center" width="110"></el-table-column>
-
-                <!-- <el-table-column  label="性别" prop="sex" align="center" width="70">
-                    <template slot-scope="scope">
-                        <el-tag class="tag-style" size="medium">{{ scope.row.sex == 1?'男':'女' }}</el-tag>
-                    </template>
-                </el-table-column> -->
-
-                <!-- <el-table-column  label="是否启用" prop="type" align="center" width="100">
-                    <template slot-scope="scope">
-                        <el-tag class="tag-style" size="medium">{{ scope.row.sex == 'enable'?'停用':'启用' }}</el-tag>
-                    </template>
-                </el-table-column> -->
-
-                <el-table-column  label="创建时间" prop="created_at" align="center" :formatter="created_atFormatter" width="110"></el-table-column>
-
-                <!-- <el-table-column  label="登记时间" prop="register_at" :formatter="register_atFormatter" align="center" width="110"></el-table-column> -->
-
-                <el-table-column  label="更新时间" prop="updated_at" :formatter="updated_atFormatter" align="center" width="110"></el-table-column>
+                <el-table-column  label="申请编号" prop="code" align="center" width="160"></el-table-column>
                 
-                <el-table-column  label="认证状态" prop="authentication" align="center" :width="maxLength.authentication">
-                    <template slot-scope="scope">
-                        <table-tag-component 
-                        v-if="workerConfigList.authentication" 
-                        :propList="workerConfigList.authentication" 
-                        :tableOriginData="scope.row.authentication"></table-tag-component>
-                    </template>
-                </el-table-column>
-                
-                <el-table-column  label="姓名" prop="name" align="center" fixed="left" width="120"></el-table-column>
-                
-                <el-table-column  label="年龄" prop="age" align="center" width="60"></el-table-column>
-
-                <el-table-column  label="出生日期" prop="birthday" :formatter="birthdayFormatter" align="center" width="110"></el-table-column>
-                
-                <el-table-column  label="电话" prop="phone" align="center" width="120"></el-table-column>
-                
-                <el-table-column  label="回访信息" prop="return_msg" align="center" width="150">
+                <el-table-column  label="工种" prop="work_type" align="center" width="150">
                     <template slot-scope="scope">
                         <el-popover trigger="click" placement="top">
-                            <p>{{ scope.row.return_msg }}</p>
+                            <p>{{ scope.row.work_type }}</p>
                             <div slot="reference" >
-                                <p style=" overflow:hidden;text-overflow:ellipsis;white-space:nowrap;width: 129px;">{{ scope.row.return_msg }}</p>
+                                <p style=" overflow:hidden;text-overflow:ellipsis;white-space:nowrap;width: 129px;">{{ scope.row.work_type }}</p>
                             </div>
                         </el-popover>
                     </template>
                 </el-table-column>
-                
-                <el-table-column  label="接单状态" prop="working_status" align="center" :width="maxLength.working_status">
-                    <template slot-scope="scope">
-                        <table-tag-component 
-                        v-if="workerConfigList.working_status" 
-                        :propList="workerConfigList.working_status" 
-                        :tableOriginData="scope.row.working_status"></table-tag-component>
-                    </template>
-                </el-table-column>
-                
-                <el-table-column  label="备注（商家情况）" prop="remarks" align="center" width="150">
+
+                <el-table-column  label="服务地址" prop="service_address" align="center" width="150">
                     <template slot-scope="scope">
                         <el-popover trigger="click" placement="top">
-                            <p>{{ scope.row.remarks }}</p>
+                            <p>{{ scope.row.service_address }}</p>
                             <div slot="reference" >
-                                <p style=" overflow:hidden;text-overflow:ellipsis;white-space:nowrap;width: 129px;">{{ scope.row.remarks }}</p>
+                                <p style=" overflow:hidden;text-overflow:ellipsis;white-space:nowrap;width: 129px;">{{ scope.row.service_address }}</p>
                             </div>
                         </el-popover>
                     </template>
                 </el-table-column>
-                <el-table-column  label="职业类型" prop="skill_ids" :width="maxLength.skill_ids" >
-                    <template slot-scope="scope">
-                        <table-tag-component 
-                        v-if="workerConfigList.service_category" 
-                        :propList="workerConfigList.service_category" 
-                        :tableOriginData="scope.row.skill_ids"></table-tag-component>
-                    </template>
-                </el-table-column>
-                <el-table-column  label="服务类型" prop="service_type_ids" align="center" :width="maxLength.service_type_ids">
-                    <template slot-scope="scope">
-                        <table-tag-component 
-                        v-if="workerConfigList.service_type" 
-                        :propList="workerConfigList.service_type" 
-                        :tableOriginData="scope.row.service_type_ids"></table-tag-component>
-                    </template>
-                </el-table-column>
-                <el-table-column  label="可服务人群" prop="service_crowd_ids" :width="maxLength.service_crowd_ids">
-                    <template slot-scope="scope">
-                        <table-tag-component 
-                        :width="maxLength.service_crowd_ids" 
-                        v-if="workerConfigList.service_crowd" 
-                        :propList="workerConfigList.service_crowd" 
-                        :tableOriginData="scope.row.service_crowd_ids"></table-tag-component>
-                    </template>
-                </el-table-column>
-                <el-table-column  label="工龄" prop="working_age" align="center" :width="maxLength.working_age">
-                    <template slot-scope="scope">
-                        <table-tag-component 
-                        v-if="workerConfigList.working_age" 
-                        :propList="workerConfigList.working_age" 
-                        :tableOriginData="scope.row.working_age"></table-tag-component>
-                    </template>
-                </el-table-column>
-                
-                <el-table-column  label="工作经验" prop="working_experience" align="center" width="150">
+
+                <el-table-column  label="工作时间" prop="service_duration" align="center" width="150">
                     <template slot-scope="scope">
                         <el-popover trigger="click" placement="top">
-                            <p>{{ scope.row.working_experience }}</p>
+                            <p>{{ scope.row.service_duration }}</p>
                             <div slot="reference" >
-                                <p style=" overflow:hidden;text-overflow:ellipsis;white-space:nowrap;width: 129px;">{{ scope.row.working_experience }}</p>
+                                <p style=" overflow:hidden;text-overflow:ellipsis;white-space:nowrap;width: 129px;">{{ scope.row.service_duration }}</p>
                             </div>
                         </el-popover>
                     </template>
                 </el-table-column>
-                
-                <el-table-column label="民族" prop="nation" align="center" :width="maxLength.nation">
-                    <template slot-scope="scope">
-                        <table-tag-component v-if="workerConfigList.nation" :propList="workerConfigList.nation" :tableOriginData="scope.row.nation"></table-tag-component>
-                    </template>
-                </el-table-column>
 
-                <el-table-column  label="籍贯" prop="birthplace" align="center" width="150">
+                <el-table-column  label="工资" prop="wage" align="center" width="150">
                     <template slot-scope="scope">
                         <el-popover trigger="click" placement="top">
-                            <p>{{ scope.row.birthplace }}</p>
+                            <p>{{ scope.row.wage }}</p>
                             <div slot="reference" >
-                                <p style=" overflow:hidden;text-overflow:ellipsis;white-space:nowrap;width: 129px;">{{ scope.row.birthplace }}</p>
-                            </div>
-                        </el-popover>
-                    </template>
-                </el-table-column>
-                
-                <el-table-column  label="身份证号" prop="identify" align="center" width="145"></el-table-column>
-                
-                <el-table-column  label="地址" prop="address" align="center" width="150">
-                    <template slot-scope="scope">
-                        <el-popover trigger="click" placement="top">
-                            <p>{{ scope.row.address }}</p>
-                            <p slot="reference" style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap;width: 129px;">{{ scope.row.address }}</p>
-                        </el-popover>
-                    </template>
-                </el-table-column>
-                
-                <el-table-column  label="服务区域" prop="region_ids" align="center" :width="maxLength.region_ids">
-                    <template slot-scope="scope">
-                        <table-tag-component v-if="workerConfigList.service_region" :propList="workerConfigList.service_region" :tableOriginData="scope.row.region_ids"></table-tag-component>
-                    </template>
-                </el-table-column>
-
-                <el-table-column  label="学历" prop="education" align="center" :formatter="educationFomatter" width="120">
-                    <template slot-scope="scope">
-                        <table-tag-component 
-                            v-if="workerConfigList.education" 
-                            :propList="workerConfigList.education" 
-                            :tableOriginData="scope.row.education"></table-tag-component>
-                    </template>
-                </el-table-column>
-
-                <el-table-column  label="紧急联系人电话" prop="urgent_phone" align="center" width="150">
-                    <template slot-scope="scope">
-                        <el-popover trigger="click" placement="top">
-                            <p>{{ scope.row.urgent_phone }}</p>
-                            <p slot="reference" style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap;width: 129px;">{{ scope.row.urgent_phone }}</p>
-                        </el-popover>
-                    </template>
-                </el-table-column>
-                
-                <el-table-column  label="银行卡号" prop="bank_card" align="center" width="150">
-                    <template slot-scope="scope">
-                        <el-popover trigger="click" placement="top">
-                            <p>{{ scope.row.bank_card }}</p>
-                            <p slot="reference" style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap;width: 129px;">{{ scope.row.bank_card }}</p>
-                        </el-popover>
-                    </template>
-                </el-table-column>
-
-                <el-table-column  label="头像" prop="icon" align="center">
-                    <template slot-scope="scope">
-                        <el-popover trigger="click" placement="top">
-                            <img :src="scope.row.icon?'./resource/'+scope.row.icon:''" alt="" style="height: 200px; width: 200px;">
-                            <div slot="reference" style="height: 30px;width: 30px;margin: 0 auto;">
-                                <img :src="scope.row.icon?'./resource/'+scope.row.icon:''" alt="" style="height: 30px;width: 30px;">
+                                <p style=" overflow:hidden;text-overflow:ellipsis;white-space:nowrap;width: 129px;">{{ scope.row.wage }}</p>
                             </div>
                         </el-popover>
                     </template>
                 </el-table-column>
 
-                <el-table-column  label="参加培训" prop="course_ids" :width="maxLength.course_ids" align="center">
-                    <template slot-scope="scope">
-                        <table-tag-component v-if="workerConfigList.course" :propList="workerConfigList.course" :tableOriginData="scope.row.course_ids"></table-tag-component>
-                    </template>
-                </el-table-column>
-
-                <el-table-column  label="教师评语" prop="teacher_comment" align="center" width="150">
+                <el-table-column  label="订单详情" prop="order_details" align="center" width="150">
                     <template slot-scope="scope">
                         <el-popover trigger="click" placement="top">
-                            <p>{{ scope.row.teacher_comment }}</p>
-                            <p slot="reference" style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap;width: 129px;">{{ scope.row.teacher_comment }}</p>
+                            <p>{{ scope.row.order_details }}</p>
+                            <div slot="reference" >
+                                <p style=" overflow:hidden;text-overflow:ellipsis;white-space:nowrap;width: 129px;">{{ scope.row.order_details }}</p>
+                            </div>
                         </el-popover>
                     </template>
                 </el-table-column>
 
-                <el-table-column  label="技能证书" prop="paper_ids" align="center" :width="maxLength.paper_ids">
+                <el-table-column  label="客户联系电话" prop="user_phone" align="center" width="150">
                     <template slot-scope="scope">
-                        <table-tag-component v-if="workerConfigList.paper_category" :propList="workerConfigList.paper_category" :tableOriginData="scope.row.paper_ids"></table-tag-component>
+                        <el-popover trigger="click" placement="top">
+                            <p>{{ scope.row.user_phone }}</p>
+                            <div slot="reference" >
+                                <p style=" overflow:hidden;text-overflow:ellipsis;white-space:nowrap;width: 129px;">{{ scope.row.user_phone }}</p>
+                            </div>
+                        </el-popover>
                     </template>
                 </el-table-column>
 
-                <el-table-column  label="信息来源" prop="source" align="center" :width="maxLength.source">
-                    <template slot-scope="scope">
-                        <table-tag-component v-if="workerConfigList.source" :propList="workerConfigList.source" :tableOriginData="scope.row.source"></table-tag-component>
-                    </template>
-                </el-table-column>
-                
-                <el-table-column  label="来源名称" prop="source_name" align="center" width="150">
+                <el-table-column  label="客户姓名" prop="user_name" align="center" width="150">
                     <template slot-scope="scope">
                         <el-popover trigger="click" placement="top">
-                            <p>{{ scope.row.source_name }}</p>
-                            <p slot="reference" style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap;width: 129px;">{{ scope.row.source_name }}</p>
+                            <p>{{ scope.row.user_name }}</p>
+                            <div slot="reference" >
+                                <p style=" overflow:hidden;text-overflow:ellipsis;white-space:nowrap;width: 129px;">{{ scope.row.user_name }}</p>
+                            </div>
+                        </el-popover>
+                    </template>
+                </el-table-column>
+
+                <el-table-column  label="申请创建人" prop="created_manager_name" align="center" width="150">
+                    <template slot-scope="scope">
+                        <el-popover trigger="click" placement="top">
+                            <p>{{ scope.row.created_manager_name }}</p>
+                            <div slot="reference" >
+                                <p style=" overflow:hidden;text-overflow:ellipsis;white-space:nowrap;width: 129px;">{{ scope.row.created_manager_name }}</p>
+                            </div>
                         </el-popover>
                     </template>
                 </el-table-column>
                 
-                <el-table-column  label="创建人" prop="manager_name" align="center" width="100">
+                <el-table-column  label="申请创建时间" prop="created_at" align="center" :formatter="created_atFormatter" width="150"></el-table-column>
 
+                <el-table-column  label="来源门店" prop="store_id" align="center" width="150">
+                    <template slot-scope="scope">
+                        <el-popover trigger="click" placement="top">
+                            <p>{{ scope.row.store_id }}</p>
+                            <div slot="reference" >
+                                <p style=" overflow:hidden;text-overflow:ellipsis;white-space:nowrap;width: 129px;">{{ scope.row.store_id }}</p>
+                            </div>
+                        </el-popover>
+                    </template>
+                </el-table-column>
+
+                <el-table-column  label="来源人" prop="apply_manager_name" align="center" width="150">
+                    <template slot-scope="scope">
+                        <el-popover trigger="click" placement="top">
+                            <p>{{ scope.row.apply_manager_name }}</p>
+                            <div slot="reference" >
+                                <p style=" overflow:hidden;text-overflow:ellipsis;white-space:nowrap;width: 129px;">{{ scope.row.apply_manager_name }}</p>
+                            </div>
+                        </el-popover>
+                    </template>
                 </el-table-column>
 
                 <el-table-column label="操作" align="center" fixed="right" :width="controlScopeLength">

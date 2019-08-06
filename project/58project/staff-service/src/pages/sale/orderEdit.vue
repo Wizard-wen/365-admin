@@ -82,7 +82,7 @@
 </template>
 <script>
 import {operateService} from '../../../common'
-import {orderService} from '../../../common'
+import {saleService} from '../../../common'
 export default {
     data(){
         const validator = {
@@ -197,7 +197,7 @@ export default {
             //校验并提交
             await this.$refs[formName].validate((valid) => {
                 if (valid) {
-                    orderService.createOrder(this.orderForm)
+                    saleService.createOrder(this.orderForm)
                     .then(data =>{
 
                         if(data.code == '0'){

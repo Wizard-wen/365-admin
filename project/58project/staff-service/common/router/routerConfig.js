@@ -88,6 +88,7 @@ import operateWorkStation from '@/pages/operate/operateWorkStation.vue'
  */
 import operateOrderList from '@/pages/operate/order/orderList.vue'
 import operateOrderApplyList from '@/pages/operate/order/orderApplyList.vue'
+import operateOrderApplyItem from '@/pages/operate/order/orderApplyItem.vue'
 
 /**
  * 运营---服务人员管理
@@ -117,6 +118,11 @@ import operateOrderApplyList from '@/pages/operate/order/orderApplyList.vue'
         path: '/operate/operateOrderApplyList',
         name: 'operateOrderApplyList',
         component: operateOrderApplyList,
+    },
+    {
+        path: '/operate/operateOrderApplyItem',
+        name: 'operateOrderApplyItem',
+        component: operateOrderApplyItem,
     },
     {
         path: '/worker/workerList',
