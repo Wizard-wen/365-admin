@@ -3,38 +3,40 @@
     "pages/index/index",
     "pages/user/user",
     "pages/classify/classify",
-    "pages/WXlogin/WXlogin"
- 
+    "pages/WXlogin/WXlogin",
+    "pages/mobileLogin/mobileLogin",
+    "pages/myOrder/myOrder",
+    "pages/myAddress/myAddress"
   ],
   "window": {
     "backgroundTextStyle": "light",
     "navigationBarBackgroundColor": "#fff",
-    "navigationBarTitleText": "WeChat",
+    "navigationBarTitleText": "小程序学习",
     "navigationBarTextStyle": "black"
   },
   "tabBar": {
-"color": "#dadada",
-"selectedColor": "#09bb07",
-"backgroundColor": "#fff",
-"borderStyle": "black",
+    "color": "#dadada",
+    "selectedColor": "#09bb07",
+    "backgroundColor": "#fff",
+    "borderStyle": "black",
     "list": [
       {
         "pagePath": "pages/index/index",
         "text": "首页",
-        "iconPath":"",
-        "selectIconPath":""
+        "iconPath": "",
+        "selectIconPath": ""
       },
       {
-        "pagePath": "pages/WXlogin/WXlogin",
+        "pagePath": "pages/classify/classify",
         "text": "分类",
-                "iconPath": "",
-                "selectIconPath": ""
+        "iconPath": "",
+        "selectIconPath": ""
       },
       {
         "pagePath": "pages/user/user",
         "text": "我的",
-                "iconPath": "",
-                "selectIconPath": ""
+        "iconPath": "",
+        "selectIconPath": ""
       }
     ]
   },

@@ -1,44 +1,17 @@
-var types = ['default', 'primary', 'warn']
-var pageObject = {
+Page({
   data: {
-    defaultSize: 'default',
-    primarySize: 'default',
-    warnSize: 'default',
-    disabled: false,
-    plain: false,
-    loading: false
   },
-  setDisabled: function (e) {
-    this.setData({
-      disabled: !this.data.disabled
+  tip() {
+    wx.showToast({
+      title: '敬请期待',
+      icon: 'success',
+      duration: 2000
     })
   },
-  setPlain: function (e) {
-    this.setData({
-      plain: !this.data.plain
+  login() {
+    wx.navigateTo({
+      url: "/pages/mobileLogin/mobileLogin"
     })
   },
-  setLoading: function (e) {
-    this.setData({
-      loading: !this.data.loading
-    })
-  },
-  onGotUserInfo: function (e) {
-    console.log(e.detail.errMsg)
-    console.log(e.detail.userInfo)
-    console.log(e.detail.rawData)
-  },
-}
-for (var i = 0; i < types.length; ++i) {
-  (function (type) {
-    pageObject[type] = function (e) {
-      var key = type + 'Size'
-      var changedData = {}
-      changedData[key] =
-        this.data[key] === 'default' ? 'mini' : 'default'
-      this.setData(changedData)
-    }
-  })(types[i])
-}
+})
 
-Page(pageObject)
