@@ -16,6 +16,46 @@ export default {
     dealApplication(type){
         return operateRequest.dealApplication(type)
     },
+    /**
+     * 订单申请详情
+     */
+    getApplication(id){
+        return operateRequest.getApplication(id)
+    },
+    /**
+     * 订单申请字段修改
+     */
+    editApplication(changeObj){
+        return operateRequest.editApplication(changeObj)
+    },
+    /**
+     * 订单申请来源修改
+     */
+    editAppLySource(changeObj){
+        return operateRequest.editAppLySource(changeObj)
+    },
+    /**
+     * 获取全部门店列表
+     */
+    getStoreSelection(){
+        return operateRequest.getStoreSelection()
+    },
+    /**
+     * 获取全部门店列表
+     */
+    getStoreManagerSelection(){
+        return operateRequest.getStoreManagerSelection()
+    },
+
+
+
+
+
+
+
+
+
+
 
 
     /**

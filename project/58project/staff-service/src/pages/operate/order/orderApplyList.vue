@@ -123,40 +123,6 @@
                 await this.getTableList()
             },
             /**
-             * 查找用户
-             */
-            async searchStaff(){
-                //设置name查询参数
-                this.$store.commit('setQueryList', {
-                    queryKey: 'name',
-                    queryedList: this.staffSearch.name
-                })
-                //设置手机号查询参数
-                this.$store.commit('setQueryList', {
-                    queryKey: 'phone',
-                    queryedList: this.staffSearch.phone
-                })
-                await this.getTableList()
-            },
-            /**
-             * 重置
-             */
-            async resetStaff(){
-                this.staffSearch.name = ''
-                this.staffSearch.phone = ''
-                //重置name查询参数
-                this.$store.commit('setQueryList', {
-                    queryKey: 'name',
-                    queryedList: null
-                })
-                //重置手机号查询参数
-                this.$store.commit('setQueryList', {
-                    queryKey: 'phone',
-                    queryedList: null
-                })
-                await this.getTableList()
-            },
-            /**
              * 导入回访服务人员
              * @param type 是全部导出还是单个导出 全部导出 1 单个导出 0
              */

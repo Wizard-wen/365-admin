@@ -16,6 +16,40 @@ export default {
     dealApplication(type){
         return axios.get(`./admin/order/dealApplication?type=${type}`)
     },
+    /**
+     * 订单申请详情
+     */
+    getApplication(id){
+        return axios.get(`./admin/order/getApplication?id=${id}`)
+    },
+    /**
+     * 订单申请字段修改
+     */
+    editApplication(changeObj){
+        return axios.post(`./admin/order/editApplication`,{
+            ...changeObj
+        })
+    },
+    /**
+     * 订单申请来源修改
+     */
+    editAppLySource(changeObj){
+        return axios.post(`./admin/order/editAppLySource`,{
+            ...changeObj
+        })
+    },
+    /**
+     * 获取全部门店列表
+     */
+    getStoreSelection(){
+        return axios.get(`./admin/common/getStoreSelection`)
+    },
+    /**
+     * 获取全部门店列表
+     */
+    getStoreManagerSelection(){
+        return axios.get(`./admin/common/getStoreManagerSelection`)
+    },
     
 
 

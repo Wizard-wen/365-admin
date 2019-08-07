@@ -333,7 +333,7 @@ export default {
                 if (value === '') {
                     callback(new Error('请输入手机号'));
                 } else {
-                    if (!(/^1[34578]\d{9}$/.test(value))) {
+                    if (!(/^1[345678]\d{9}$/.test(value))) {
                         callback(new Error('请输入正确格式的手机号'));
                     }
                     callback();
