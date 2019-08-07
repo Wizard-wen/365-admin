@@ -20,7 +20,7 @@
     </el-dialog>
 </template>
 <script>
-import {orderService} from '../../../../../../common'
+import {saleService} from '../../../../../../common'
 
 export default {
     props: {
@@ -94,7 +94,7 @@ export default {
                     
                     store.commit('setLoading',true)
             
-                    await orderService.logCommit(this.logForm, this.logType) 
+                    await saleService.logCommit(this.logForm, this.logType) 
                         .then(data =>{
                             if(data.code == "0"){
                                 this.$message({
@@ -110,7 +110,7 @@ export default {
                             })
                         })
                     
-                    await orderService.getOrder(this.$route.query.order_id)
+                    await saleService.getOrder(this.$route.query.order_id)
 
                     store.commit('setLoading',false)
 

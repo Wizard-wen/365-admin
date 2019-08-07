@@ -40,7 +40,7 @@ module.exports = {
             }
           },
         // '/': {
-        //   target: 'http://10.0.0.33:1000', // 接口的域名
+        //   target: 'http://192.168.110.59:1001', // 接口的域名
         //   changeOrigin: true, // 如果接口跨域，需要进行这个参数配置
         //   pathRewrite: {
         //       '^/': '/'   //需要rewrite的,

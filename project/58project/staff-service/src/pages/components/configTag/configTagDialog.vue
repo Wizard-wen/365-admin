@@ -24,7 +24,7 @@
 </template>
 <script>
 
-import {hrService} from '../../../../common'
+import {operateService} from '../../../../common'
 
 export default {
     props: {
@@ -82,7 +82,7 @@ export default {
                     } else {
                         this.tagConfigForm.type = 'disable'  
                     }
-                    await hrService.editFormConfig(this.tagConfigForm).then(data =>{
+                    await operateService.editFormConfig(this.tagConfigForm).then(data =>{
                         if(data.code == "0"){
                             this.$message({
                                 type:'success',

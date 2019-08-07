@@ -54,7 +54,7 @@
 </template>
 <script>
 
-import {orderService} from '../../../../../common'
+import {saleService} from '../../../../../common'
 
 import signDialog from './dialog/signDialog.vue'
 import logDialog from './dialog/logDialog.vue'
@@ -105,7 +105,7 @@ export default {
             }).then(async () => {
                 store.commit('setLoading',1)
 
-                await orderService.deleteOrderStaff(order_staff_id, order_id) 
+                await saleService.deleteOrderStaff(order_staff_id, order_id) 
                     .then(data =>{
                         if(data.code == "0"){
                             this.$message({
@@ -121,7 +121,7 @@ export default {
                         })
                     })
                 
-                await orderService.getOrder(this.$route.query.order_id)
+                await saleService.getOrder(this.$route.query.order_id)
 
                 store.commit('setLoading',false)
             }).catch(() => {

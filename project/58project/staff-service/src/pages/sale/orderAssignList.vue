@@ -82,8 +82,8 @@
 </template>
 <script>
     import {
-        hrService, 
-        orderService, 
+        operateService, 
+        saleService, 
         $utils
     } from '../../../common'
     
@@ -180,7 +180,7 @@
                 store.commit('setLoading',true)
                 
                 try{
-                    await orderService.getOrderList(tableOption).then(data =>{
+                    await saleService.getOrderList(tableOption).then(data =>{
                             if(data.code == "0"){
                                 this.orderTable = data.data.data
 

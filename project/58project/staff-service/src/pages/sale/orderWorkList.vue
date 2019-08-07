@@ -48,13 +48,13 @@
     </div>
 </template>
 <script>
-    import {hrService, $utils} from '../../../common'
+    import {operateService, $utils} from '../../../common'
 
 
     import {
         staffTableComponent,
         queryComponent,
-        queryTagComponent} from '@/pages/servicehr/staff/components'
+        queryTagComponent} from '@/pages/operate/staff/components'
 
     import createStaffDialog from './components/createStaff/createStaffDialog.vue'
     import errorStaffDialog from './components/errorStaff/errorStaffDialog.vue'
@@ -150,8 +150,8 @@
                     this.isLoaded = true
 
                     await Promise.all([
-                        hrService.getFormConfig('edit'), //获取表单配置字段
-                        hrService.getStaffList(4) //获取列表数据
+                        operateService.getFormConfig('edit'), //获取表单配置字段
+                        operateService.getStaffList(4) //获取列表数据
                     ]).then((data) =>{
                         // 将表单配置数据存入 vuex 
                         this.$store.commit('setConfigForm',data[0].data)

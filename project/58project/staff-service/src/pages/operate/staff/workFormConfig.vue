@@ -62,7 +62,7 @@
 /**
  * type 0 新建  1 编辑
  */
-import {hrService} from '../../../../common'
+import {operateService} from '../../../../common'
 
 import {configTagComponent} from '@/pages/components'
 
@@ -96,7 +96,7 @@ export default {
         async getWorkFormConfig(){
             store.commit('setLoading',true)
             try{
-                await hrService.getFormConfig('config').then(data =>{
+                await operateService.getFormConfig('config').then(data =>{
                     if(data.code == "0"){
                         this.workConfigForm = data.data
                     }

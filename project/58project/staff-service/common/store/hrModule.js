@@ -6,7 +6,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 // import store from './index'
-import {queryUpdated_at} from '../../src/pages/servicehr/staff/interface/query.js'
+// import {queryUpdated_at} from '../../src/pages/operate/staff/interface/query.js'
 Vue.use(Vuex)
 
 export const hrModule = {

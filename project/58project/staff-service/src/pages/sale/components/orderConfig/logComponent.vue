@@ -53,7 +53,7 @@
     </el-card>  
 </template>
 <script>
-import {orderService} from '../../../../../common'
+import {saleService} from '../../../../../common'
 import logDialog from './dialog/logDialog.vue'
 export default {
     components: {

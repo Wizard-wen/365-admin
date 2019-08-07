@@ -47,7 +47,7 @@
     </el-dialog>
 </template>
 <script>
-import {orderService} from '../../../../../common'
+import {saleService} from '../../../../../common'
 import selectTagComponent from '../../../components/selectTagComponent'
 export default {
     components: {
@@ -179,7 +179,7 @@ export default {
                     store.commit('setLoading',true)
                     let staffFormSend = this.setFormItem()
 
-                    await orderService.createStaffBySeller(staffFormSend)
+                    await saleService.createStaffBySeller(staffFormSend)
                         .then(data =>{
                             if(data.code == "0"){
                                 this.$message({

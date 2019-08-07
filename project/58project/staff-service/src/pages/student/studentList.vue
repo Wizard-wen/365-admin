@@ -48,7 +48,7 @@
     </div>
 </template>
 <script>
-    import {hrService} from '../../../common'
+    import {operateService} from '../../../common'
     import {cascaderComponent} from '@/pages/components'
     export default {
         components: {
@@ -137,7 +137,7 @@
 
                 store.commit('setLoading',true)
                 try{
-                    await hrService.getStaffList(tableOption).then(data =>{
+                    await operateService.getStaffList(tableOption).then(data =>{
                             if(data.code == "0"){
                                 this.requireTable = data.data.data
 
@@ -226,7 +226,7 @@
                     store.commit('setLoading',1)
 
                     try{
-                        await hrService.changeStaffStatus(row.id, row.version)
+                        await operateService.changeStaffStatus(row.id, row.version)
                             .then(data =>{
                                 if(data.code == "0"){
                                     this.$message({

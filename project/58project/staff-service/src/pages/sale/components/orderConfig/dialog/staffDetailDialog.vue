@@ -58,7 +58,7 @@
     </el-dialog>
 </template>
 <script>
-import {hrService, orderService, $utils} from '../../../../../../common'
+import {operateService, saleService, $utils} from '../../../../../../common'
 export default {
     props: {
         //打开服务人员详情弹框
@@ -212,7 +212,7 @@ export default {
         let _this = this
         
         try{
-            await hrService.getStaff(this.staffId).then(data =>{
+            await operateService.getStaff(this.staffId).then(data =>{
                 if(data.code == "0"){
 
                     _this.staffDetailForm = data.data

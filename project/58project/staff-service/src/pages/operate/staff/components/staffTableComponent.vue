@@ -256,7 +256,7 @@
     </div>
 </template>
 <script>
-    import {hrService, $utils} from '../../../../../common'
+    import {operateService, $utils} from '../../../../../common'
     import {
         cascaderComponent,
         tableTagComponent} from '@/pages/components'

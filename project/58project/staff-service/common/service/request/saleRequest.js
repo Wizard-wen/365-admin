@@ -4,6 +4,36 @@
 import axios from 'axios'
 export default {
     /**
+     * 获取门店员工信息
+     * @param id 门店id
+     */
+    getStoreManagerSelection(id){
+        return axios.get(`./admin/common/getStoreManagerSelection?store=${id}`)
+    },
+    /**
+     * 订单申请
+     * @param applyObject 订单申请字段
+     */
+    applyOrder(applyObject){
+        return axios.post(`./admin/order/applyOrder`,{
+            ...applyObject
+        })
+    },
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    /**
      * 获取订单列表
      */
     getOrderList(tableOption){

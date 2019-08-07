@@ -1,7 +1,7 @@
 
 
 /**
- * 首页
+ * 个人中心
  */
 
 import homePage from '@/pages/home.vue'
@@ -78,22 +78,52 @@ import authConfig from '@/pages/auth/auth/authConfig.vue'
         component: authConfig,
     },
  ]
+ /**
+  * 运营---工作台
+  */
+import operateWorkStation from '@/pages/operate/operateWorkStation.vue'
 
 /**
- * 服务人员管理
+ * 运营---订单管理
  */
+import operateOrderList from '@/pages/operate/order/orderList.vue'
+import operateOrderApplyList from '@/pages/operate/order/orderApplyList.vue'
+import operateOrderApplyItem from '@/pages/operate/order/orderApplyItem.vue'
 
- import workerList from '@/pages/servicehr/staff/workerList.vue'
- import workFormConfig from '@/pages/servicehr/staff/workFormConfig.vue'
- import workerItem from '@/pages/servicehr/staff/workerItem.vue'
- import workerItemNew from '@/pages/servicehr/staff/workerItemNew.vue'
- import workerItemShow from '@/pages/servicehr/staff/workerItemShow.vue'
- import newWorkerList from '@/pages/servicehr/staff/newWorkerList.vue'
- import errorWorkerList from '@/pages/servicehr/staff/errorWorkerList.vue'
- import returnList from '@/pages/servicehr/staff/returnList.vue'
+/**
+ * 运营---服务人员管理
+ */
+ import workerList from '@/pages/operate/staff/workerList.vue'
+ import workFormConfig from '@/pages/operate/staff/workFormConfig.vue'
+ import workerItem from '@/pages/operate/staff/workerItem.vue'
+ import workerItemNew from '@/pages/operate/staff/workerItemNew.vue'
+ import workerItemShow from '@/pages/operate/staff/workerItemShow.vue'
+ import newWorkerList from '@/pages/operate/staff/newWorkerList.vue'
+ import errorWorkerList from '@/pages/operate/staff/errorWorkerList.vue'
+ import returnList from '@/pages/operate/staff/returnList.vue'
 
 
- const staffModule = [
+ const operateModule = [
+    {
+        path: '/operate/operateWorkStation',
+        name: 'operateWorkStation',
+        component: operateWorkStation,
+    },
+    {
+        path: '/operate/operateOrderList',
+        name: 'operateOrderList',
+        component: operateOrderList,
+    },
+    {
+        path: '/operate/operateOrderApplyList',
+        name: 'operateOrderApplyList',
+        component: operateOrderApplyList,
+    },
+    {
+        path: '/operate/operateOrderApplyItem',
+        name: 'operateOrderApplyItem',
+        component: operateOrderApplyItem,
+    },
     {
         path: '/worker/workerList',
         name: 'workerList',
@@ -137,20 +167,32 @@ import authConfig from '@/pages/auth/auth/authConfig.vue'
  ]
 
 /**
- * 销售管理模块
+ * 销售门店模块
  */
 import orderList from '@/pages/sale/orderList.vue'
 import orderConfig from '@/pages/sale/orderConfig.vue'
+import newOrderConfig from '@/pages/sale/newOrderConfig.vue'
 import orderEdit from '@/pages/sale/orderEdit.vue'
 import orderAssignList from '@/pages/sale/orderAssignList.vue'
 import orderWorkList from '@/pages/sale/orderWorkList.vue'
 
+import saleWorkStation from '@/pages/sale/saleWorkStation.vue' //门店工作台
 
 const saleModule = [
+    {
+        path: '/sale/saleWorkStation',
+        name: 'saleWorkStation',
+        component: saleWorkStation,
+    },
     {
         path: '/sale/orderList',
         name: 'orderList',
         component: orderList,
+    },
+    {
+        path: '/sale/newOrderConfig',
+        name: 'newOrderConfig',
+        component: newOrderConfig,
     },
     {
         path: '/sale/orderConfig',
@@ -218,7 +260,7 @@ export default [
     {path: '/', redirect: '/homePage'},
     ...homeModule, //我的模块
     ...authModule,//权限管理模块
-    ...staffModule, //服务人员管理模块
+    ...operateModule, //服务人员管理模块
     ...saleModule,//销售人员模块
     ...shop,//门店管理
     ...student,//学员管理

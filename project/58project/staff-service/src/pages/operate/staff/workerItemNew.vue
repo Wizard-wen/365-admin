@@ -213,7 +213,7 @@
 /**
  * type 0 新建  1 编辑
  */
-import {hrService} from '../../../../common'
+import {operateService} from '../../../../common'
 
 import {
     paperComponent,
@@ -243,7 +243,7 @@ export default {
                     callback(new Error('请输入姓名'));
                 } else {
                     try{
-                        await hrService.checkStaffName(_this.workerForm.id, value).then((data) =>{
+                        await operateService.checkStaffName(_this.workerForm.id, value).then((data) =>{
                             if(data.code == '0'){
                                 callback()
                                 _this.nameCheck = false
@@ -455,7 +455,7 @@ export default {
                     let workerFormSend = this.setFormItem()
                     try{
                         store.commit('setLoading',true)
-                        await hrService.editStaff(workerFormSend).then(data =>{
+                        await operateService.editStaff(workerFormSend).then(data =>{
                             if(data.code == '0'){
                                 this.$message({
                                     type:"success",
@@ -518,7 +518,7 @@ export default {
 
             try{
                 store.commit('setLoading',true)
-                await hrService.agreeStaffSingle(module_type, 'edit',workerFormSend).then(data =>{
+                await operateService.agreeStaffSingle(module_type, 'edit',workerFormSend).then(data =>{
                     if(data.code == '0'){
                         this.$message({
                             type:"success",
@@ -643,7 +643,7 @@ export default {
             await store.commit('setLoading',true)
             //如果是编辑则请求接口
             if(this.$route.query.type != 0){
-                await hrService.getStaff(this.$route.query.id).then(data =>{
+                await operateService.getStaff(this.$route.query.id).then(data =>{
                     if(data.code == "0"){
 
                         var workerForm = data.data
@@ -708,7 +708,7 @@ export default {
                     })
                 })
             }
-            await hrService.getFormConfig('edit').then((data) =>{
+            await operateService.getFormConfig('edit').then((data) =>{
                 if(data.code == '0'){
                     // 将表单配置数据存入 vuex 
                     this.$store.commit('setConfigForm',data.data)

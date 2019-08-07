@@ -47,7 +47,7 @@
     </el-card>  
 </template>
 <script>
-import {orderService} from '../../../../common'
+import {saleService} from '../../../../common'
 export default {
     data(){
         return {
@@ -98,7 +98,7 @@ export default {
         async maintainStaff(){  
             store.commit('setLoading',true)
 
-            await orderService.writeMaintainLog(this.maintainForm) 
+            await saleService.writeMaintainLog(this.maintainForm) 
                 .then(data =>{
                     if(data.code == "0"){
                         this.$message({
@@ -114,7 +114,7 @@ export default {
                     })
                 })
             
-            await orderService.getOrder(this.$route.query.order_id)
+            await saleService.getOrder(this.$route.query.order_id)
             
             store.commit('setLoading',false)
 

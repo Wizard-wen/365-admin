@@ -3,22 +3,20 @@
         <staff-table-component
             :staffTable="staffTable"
             :maxLength="maxLength"
-            :controlScopeLength="150">
+            :controlScopeLength="110">
             
-            <template slot="searchList">
-                <div class="search-list">
-                    <query-component :queryFrom="'order'" @updateTable="updateTable"></query-component>
+            <template slot="searchForm">
+                <div class="search-left">
+                    <el-input v-model="staffSearch.name" placeholder="请输入员工姓名" :maxlength="20"></el-input>
+                    <el-input v-model="staffSearch.phone" placeholder="请输入电话" :maxlength="20"></el-input>
+                    <el-button type="primary" @click="searchStaff">查询</el-button>
+                    <el-button type="primary" @click="resetStaff">重置</el-button>
                 </div>
             </template>
 
-            <template slot="searchForm">
-                <query-tag-component :queryFrom="'order'" @updateTable="updateTable"></query-tag-component>
-                <!-- <el-button type="primary" @click="createStaff">申请创建服务人员</el-button> -->
-            </template>
-
             <template slot="control" slot-scope="controler">
-                <el-button size="mini" type="text" @click="showStaff(controler.scoper.$index, controler.scoper.row)">查看</el-button>
-                <el-button size="mini" style="color:#f56c6c" type="text" @click="sendErrorMessage(controler.scoper.row)">提交异常信息</el-button>
+                <el-button size="mini" type="text" @click="editStaff(3, controler.scoper.row)">编辑</el-button>
+                <el-button size="mini" type="text" style="color:#67c23a" @click="agreeStaffSingle(controler.scoper.row)">恢复</el-button>
             </template>
 
             <template slot="pagination">
@@ -33,39 +31,20 @@
                     :total="pagination.total"></el-pagination>
             </template>
         </staff-table-component>
-        <!-- 申请添加服务人员 -->
-        <create-staff-dialog
-            v-if="createStaffDialogVisible"
-            :openCreateStaffDialog="createStaffDialogVisible"
-            @closeCreateStaffDialog="createStaffDialogVisible=false"></create-staff-dialog>
-        <!-- 提交服务人员异常信息 -->
-        <error-staff-dialog
-            v-if="errorStaffDialogVisible"
-            :openErrorStaffDialog="errorStaffDialogVisible"
-            @closeErrorStaffDialog="closeErrorStaffDialog"
-            :errorStaffWorkingStatus="errorStaffRow.working_status"
-            :staffId="errorStaffId"></error-staff-dialog>
     </div>
 </template>
 <script>
-    import {operateService, $utils} from '../../../../../common'
-
+    import {operateService} from '../../../../common'
 
     import {
-        staffTableComponent,
         queryComponent,
-        queryTagComponent} from '@/pages/operate/staff/components'
-
-    import createStaffDialog from '../createStaff/createStaffDialog.vue'
-    import errorStaffDialog from '../errorStaff/errorStaffDialog.vue'
-
+        staffTableComponent,
+    } from './components'
+    
     export default {
         components: {
-            staffTableComponent,
-            createStaffDialog,
-            errorStaffDialog,
             queryComponent,
-            queryTagComponent
+            staffTableComponent
         },
         data() {
             return {
@@ -98,20 +77,12 @@
                     course_ids: 80,//参加培训
                     paper_ids: 80, //技能证书
                     source: 80,//信息来源
-                },
-                //控制申请创建服务人员弹出框显示异常
-                createStaffDialogVisible: false,
-                //控制异常信息弹出框显示隐藏
-                errorStaffDialogVisible: false,
-                //异常服务人员id
-                errorStaffId: 0,
-                //异常服务人员信息
-                errorStaffRow: null,
+                }
             }
         },
         computed:{
             /**
-             * 
+             * 服务人员配置数据
              */
             workerConfigList(){
                 return this.$store.state.hrModule.configForm
@@ -139,7 +110,6 @@
                 if(string > this.maxLength[listKey]){
                     this.maxLength[listKey] = (string + 20) > 80 ? (string + 20) : 80
                 }
-                
             },
              /**
              * 请求表格数据
@@ -147,17 +117,17 @@
              */
             async getTableList(){                
                 try{
+                    
                     this.isLoaded = true
 
                     await Promise.all([
                         operateService.getFormConfig('edit'), //获取表单配置字段
-                        operateService.getStaffList(4) //获取列表数据
+                        operateService.getStaffList(2) //获取列表数据
                     ]).then((data) =>{
                         // 将表单配置数据存入 vuex 
                         this.$store.commit('setConfigForm',data[0].data)
 
                         let tableList = data[1].data.data
-                        //  debugger
                         tableList.forEach((item, index) =>{
                            
                             this.computeStringLength(item.authentication, 'authentication', 'authentication')
@@ -174,7 +144,6 @@
                         })  
 
                         this.staffTable = data[1].data.data
-                        
                         //分页信息
                         this.pagination.currentPage = data[1].data.current_page //当前页码
                         this.pagination.total = data[1].data.total //列表总条数
@@ -194,17 +163,13 @@
                     })
                 }
             },
-            // 由查询组件触发的更新表格事件
-            async updateTable(){
-                await this.getTableList()
-            },
             /**
              * 切换页码
              */
             async handleCurrentPage(val){
                 // this.pagination.currentPage = val
                 //设置page查询参数
-                this.$store.commit('setSellerList', {
+                this.$store.commit('setErrorList', {
                     queryKey: 'page', 
                     queryedList: val
                 })
@@ -215,12 +180,12 @@
              */
             async searchStaff(){
                 //设置name查询参数
-                this.$store.commit('setSellerList', {
+                this.$store.commit('setErrorList', {
                     queryKey: 'name', 
                     queryedList: this.staffSearch.name
                 })
                 //设置手机号查询参数
-                this.$store.commit('setSellerList', {
+                this.$store.commit('setErrorList', {
                     queryKey: 'phone', 
                     queryedList: this.staffSearch.phone
                 })
@@ -233,64 +198,87 @@
                 this.staffSearch.name = ''
                 this.staffSearch.phone = ''
                 //重置name查询参数
-                this.$store.commit('setSellerList', {
+                this.$store.commit('setErrorList', {
                     queryKey: 'name', 
                     queryedList: null
                 })
                 //重置手机号查询参数
-                this.$store.commit('setSellerList', {
+                this.$store.commit('setErrorList', {
                     queryKey: 'phone', 
                     queryedList: null
                 })
                 await this.getTableList()
             },
             /**
-             * 申请创建服务人员
-             * des 先创建服务人员，然后才能添加服务人员技能。
+             * 编辑服务人员信息
+             * 编辑时可以添加服务人员技能
              */
-            createStaff(){
-                this.createStaffDialogVisible = true;
-            },
-            /**
-             * 异常服务人员申请
-             */
-            sendErrorMessage(row){
-                this.errorStaffRow = row
-                this.errorStaffId = row.id
-                this.errorStaffDialogVisible = true;
-            },
-            /**
-             * 查看服务人员详情
-             */
-            showStaff(index, row){
+            editStaff(type, row){
                 this.$router.push({
-                    path: "/worker/workerItemShow",
+                    path: "/worker/workerItem",
                     query: {
+                        type: 3, //处理错误数据为3
                         id: row.id
                     }
                 })
             },
             /**
-             * 关闭异常弹窗
+             * 恢复服务人员为正常状态
              */
-            async closeErrorStaffDialog(){
-                this.errorStaffDialogVisible = false;
-                await this.getTableList()
+            async agreeStaffSingle(row){
+                let _this= this;
+
+                let response = await this.$confirm(`确定已准确核实该服务人员信息吗?`, '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                }).catch(() => {
+                    this.$message({
+                        type: 'info',
+                        message: `已取消恢复`
+                    });
+                });
+
+                if(response == "confirm"){
+                    // //设置name查询参数
+                    // this.$store.commit('setErrorList', {
+                    //     queryKey: 'name', 
+                    //     queryedList: this.staffSearch.name
+                    // })
+                    // //设置手机号查询参数
+                    // this.$store.commit('setErrorList', {
+                    //     queryKey: 'phone', 
+                    //     queryedList: this.staffSearch.phone
+                    // })
+                    
+                    store.commit('setLoading',true)
+
+                    try{
+                        await operateService.agreeStaffSingle('warning', 'list', row.id)
+                            .then(data =>{
+                                if(data.code == "0"){
+                                    this.$message({
+                                        type:'success',
+                                        message: `恢复成功`
+                                    })
+                                }
+                            }).catch(e =>{
+                                this.$message({
+                                    type:'error',
+                                    message: e.message
+                                })
+                            })
+                    } catch(error){
+                        this.$message({
+                            type:'error',
+                            message: error.message
+                        })
+                    }
+
+                    await _this.getTableList()
+                    store.commit('setLoading',false)
+                }
             },
-            /**
-             * 创建时间字段转换
-             */
-            // created_atFormatter(row, column){
-            //     return $utils.formatDate(new Date(row.created_at), 'yyyy-MM-dd')
-            // },
-            // //登记时间
-            // register_atFormatter(row, column){
-            //     return $utils.formatDate(new Date(row.register_at), 'yyyy-MM-dd')
-            // },
-            // educationFomatter(row, column){
-            //     let a =  this.$store.state.hrModule.educationList.filter(item => item.id == row.education)
-            //     return a.length? a[0].name : ''
-            // }
         },
         async mounted(){
             await this.getTableList()
@@ -299,4 +287,17 @@
 </script>
 <style lang="scss" scoped>
 
+.search-form{
+    height: 40px;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    .search-left{
+        display: flex;
+    }
+}
+.pagination{
+    margin: 0 auto;
+    width: 600px;
+}
 </style>

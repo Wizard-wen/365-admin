@@ -35,7 +35,7 @@
     </div>
 </template>
 <script>
-    import {hrService} from '../../../../common'
+    import {operateService} from '../../../../common'
 
     import {
         queryComponent,
@@ -131,8 +131,8 @@
                     this.isLoaded = true
 
                     await Promise.all([
-                        hrService.getFormConfig('edit'), //获取表单配置字段
-                        hrService.getStaffList(3) //获取列表数据
+                        operateService.getFormConfig('edit'), //获取表单配置字段
+                        operateService.getStaffList(3) //获取列表数据
                     ]).then((data) =>{
                         // 将表单配置数据存入 vuex 
                         this.$store.commit('setConfigForm',data[0].data)
@@ -252,7 +252,7 @@
                     store.commit('setLoading',true)
 
                     try{
-                        await hrService.deleteApplyStaff(row.id)
+                        await operateService.deleteApplyStaff(row.id)
                             .then(data =>{
                                 if(data.code == "0"){
                                     this.$message({
@@ -315,7 +315,7 @@
                     store.commit('setLoading',true)
 
                     try{
-                        await hrService.agreeStaffSingle('apply', 'list', row.id)
+                        await operateService.agreeStaffSingle('apply', 'list', row.id)
                             .then(data =>{
                                 if(data.code == "0"){
                                     this.$message({

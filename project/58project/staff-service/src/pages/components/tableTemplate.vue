@@ -50,7 +50,7 @@
     </div>
 </template>
 <script>
-import {authService, orderService} from '../../../../common'
+import {authService, saleService} from '../../../../common'
 export default {
     data(){
         return {

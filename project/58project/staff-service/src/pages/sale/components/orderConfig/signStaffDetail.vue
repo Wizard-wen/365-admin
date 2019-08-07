@@ -58,7 +58,7 @@
     </el-card>  
 </template>
 <script>
-import {hrService, $utils} from '../../../../../common'
+import {operateService, $utils} from '../../../../../common'
 export default {
     props: {
         staffId: {
@@ -204,7 +204,7 @@ export default {
         let _this = this
         
         try{
-            await hrService.getStaff(this.staffId).then(data =>{
+            await operateService.getStaff(this.staffId).then(data =>{
                 if(data.code == "0"){
 
                     _this.staffDetailForm = data.data

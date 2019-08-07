@@ -40,7 +40,7 @@
 /**
  * type 0 新建  1 编辑
  */
-import {hrService} from '../../../../../../common'
+import {operateService} from '../../../../../../common'
 
 export default {
     props:{
@@ -191,7 +191,7 @@ export default {
         store.commit('setLoading',true)
         try{
             let data = await Promise.all([
-                hrService.getPaperSelection('enable'), //获取证书字段列表
+                operateService.getPaperSelection('enable'), //获取证书字段列表
             ])
 
             //promise.all 赋值

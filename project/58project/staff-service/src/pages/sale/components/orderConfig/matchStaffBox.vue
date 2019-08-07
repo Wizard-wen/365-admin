@@ -99,7 +99,7 @@
     </div>
 </template>
 <script>
-import {hrService, orderService} from '../../../../../common'
+import {operateService, saleService} from '../../../../../common'
 
 import staffDetailDialog from './dialog/staffDetailDialog.vue'
 
@@ -212,7 +212,7 @@ export default {
             this.loading = true
 
             try{
-                await hrService.getStaffList(4)
+                await operateService.getStaffList(4)
                     .then(data =>{
                         //匹配的服务人员列表
                         this.staffMatchTable = data.data.data
@@ -326,7 +326,7 @@ export default {
             store.commit('setLoading',true)
 
             //添加服务人员接口
-            await orderService.createOrderStaff(order_staff_item).then(data =>{
+            await saleService.createOrderStaff(order_staff_item).then(data =>{
                 if(data.code == "0"){
                     this.$message({
                         type:'success',
@@ -342,7 +342,7 @@ export default {
                 })
             }).finally(async () =>{
                 //刷新订单配置页
-                await orderService.getOrder(this.$route.query.order_id)
+                await saleService.getOrder(this.$route.query.order_id)
 
                 store.commit('setLoading',false)
             })

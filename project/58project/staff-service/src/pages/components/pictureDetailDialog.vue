@@ -15,7 +15,7 @@
 </template>
 <script>
 
-import {orderService, $utils} from '../../../common'
+import {saleService, $utils} from '../../../common'
 export default {
     props: {
         //是否打弹出框

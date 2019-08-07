@@ -21,7 +21,7 @@
     </el-dialog>
 </template>
 <script>
-import {orderService} from '../../../../../common'
+import {saleService} from '../../../../../common'
 import {selectTagComponent} from '@/pages/components'
 export default {
     props: {
@@ -90,7 +90,7 @@ export default {
                     
                     store.commit('setLoading',true)
             
-                    await orderService.changeWorkingStatus(this.errorStaffForm) 
+                    await saleService.changeWorkingStatus(this.errorStaffForm) 
                         .then(data =>{
                             if(data.code == "0"){
                                 this.$message({

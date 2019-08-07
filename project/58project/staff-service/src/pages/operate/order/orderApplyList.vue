@@ -1,29 +1,14 @@
 <template>
     <div class="staff" v-loading="isLoaded">
-        <staff-table-component
-            :staffTable="staffTable"
+        <order-apply-table-component
+            :staffTable="orderApplyTable"
             :maxLength="maxLength"
             :controlScopeLength="170">
 
-            <template slot="searchList">
-                <div class="search-list">
-                    <query-component @updateTable="updateTable"></query-component>
-                </div>
-            </template>
-
-            <template slot="searchForm">
-                <div class="search-tag-list">
-                    <query-tag-component @updateTable="updateTable"></query-tag-component>
-                </div>
-                <el-button type="primary" @click="exportReturnStaff(1)">导入回访</el-button>
-                <el-button type="primary" @click="editStaff(0)">创建服务人员</el-button>
-            </template>
-
             <template slot="control" slot-scope="controler">
-                <el-button size="mini" type="text" @click="editStaff(1, controler.scoper.row)">编辑</el-button>
-                <el-button size="mini" type="text" style="color:#f56c6c" v-if="controler.scoper.row.type == 'enable'" @click="changeStaffStatus(controler.scoper.row)">停用</el-button>
-                <el-button size="mini" type="text" style="color:#67c23a" @click="changeStaffStatus(controler.scoper.row)" v-else>启用</el-button>
-                <el-button size="mini" type="text" @click="exportReturnStaff(0, controler.scoper.row)">导入回访</el-button>
+                <el-button size="mini" type="text" @click="editOrderApply(1, controler.scoper.row)">编辑</el-button>
+                <el-button size="mini" type="text" style="color:#f56c6c" @click="refuseOrderApply(controler.scoper.row)">拒绝</el-button>
+                <el-button size="mini" type="text" style="color:#67c23a" @click="exportReturnStaff(0, controler.scoper.row)">通过</el-button>
             </template>
 
             <template slot="pagination">
@@ -37,34 +22,23 @@
                     layout="prev, pager, next, jumper"
                     :total="pagination.total"></el-pagination>
             </template>
-        </staff-table-component>
-        <!-- 申请添加服务人员 -->
-        <return-staff-dialog
-            v-if="returnStaffDialofVisible"
-            :openReturnStaffDialog="returnStaffDialofVisible"
-            @closeReturnStaffDialog="returnStaffDialofVisible=false"></return-staff-dialog>
+        </order-apply-table-component>
     </div>
 </template>
 <script>
-    import {hrService} from '../../../../common'
+    import {operateService} from '../../../../common/'
 
     import {
-        queryComponent,
-        staffTableComponent,
-        queryTagComponent,
+        orderApplyTableComponent,
     } from './components'
-    import returnStaffDialog from './components/workerList/returnStaffDialog.vue'
     export default {
         components: {
-            queryComponent,
-            staffTableComponent,
-            returnStaffDialog,
-            queryTagComponent
+            orderApplyTableComponent,
         },
         data(){
             return {
                 //员工信息列表
-                staffTable: [],
+                orderApplyTable: [],
                 //表单搜索项
                 staffSearch: {
                     name: '', //姓名
@@ -97,40 +71,11 @@
             }
         },
         computed:{
-            /**
-             *
-             */
-            workerConfigList(){
 
-                return this.$store.state.hrModule.configForm
-            }
         },
         methods: {
-            computeStringLength(array, listKey, configKey){
-                let string = 0
-                if(Array.isArray(array)){
-                    array.forEach((it, inds) =>{
-                        if(this.workerConfigList[configKey].find(i => i.id == it)){
-                            let baseLength = parseInt(this.workerConfigList[configKey].filter(i => i.id == it)[0].name.length *12 )
-                            string += (baseLength + 27)
-                        }
-                    })
-                } else {
-                    if(this.workerConfigList[configKey].find(i => i.id == array)){
-                        string = parseInt(this.workerConfigList[configKey].filter(i => i.id == array)[0].name.length * 12) + 27
-                    } else {
-                        string = 0
-                    }
-
-                }
-
-                if(string > this.maxLength[listKey]){
-                    this.maxLength[listKey] = (string + 20) > 80 ? (string + 20) : 80
-                }
-            },
              /**
              * 请求表格数据
-             * des 表格查询参数存储在vuex中，刷新，参数重置
              */
             async getTableList(){
                 try{
@@ -138,32 +83,13 @@
                     this.isLoaded = true
 
                     await Promise.all([
-                        hrService.getFormConfig('edit'), //获取表单配置字段
-                        hrService.getStaffList(0) //获取列表数据
+                        operateService.getApplicationList(), //
                     ]).then((data) =>{
-                        // 将表单配置数据存入 vuex
-                        this.$store.commit('setConfigForm',data[0].data)
 
-                        let tableList = data[1].data.data
-                        tableList.forEach((item, index) =>{
-
-                            this.computeStringLength(item.authentication, 'authentication', 'authentication')
-                            this.computeStringLength(item.working_status, 'working_status', 'working_status')
-                            this.computeStringLength(item.skill_ids, 'skill_ids', 'service_category')
-                            this.computeStringLength(item.service_type_ids, 'service_type_ids', 'service_type')
-                            this.computeStringLength(item.service_crowd_ids, 'service_crowd_ids', 'service_crowd')
-                            this.computeStringLength(item.working_age, 'working_age', 'working_age')
-                            this.computeStringLength(item.nation, 'nation', 'nation')
-                            this.computeStringLength(item.region_ids, 'region_ids', 'service_region')
-                            this.computeStringLength(item.course_ids, 'course_ids', 'course')
-                            this.computeStringLength(item.paper_ids, 'paper_ids', 'paper_category')
-                            this.computeStringLength(item.source, 'source', 'source')
-                        })
-
-                        this.staffTable = data[1].data.data
+                        this.orderApplyTable = data[0].data.data
                         //分页信息
-                        this.pagination.currentPage = data[1].data.current_page //当前页码
-                        this.pagination.total = data[1].data.total //列表总条数
+                        this.pagination.currentPage = data[0].data.current_page //当前页码
+                        this.pagination.total = data[0].data.total //列表总条数
                     }).catch(error =>{
                         this.$message({
                             type:'error',
@@ -253,7 +179,7 @@
                         store.commit('setLoading',true)
 
                         try{
-                            await hrService.addReturnStaffSingle(row.id)
+                            await operateService.addReturnStaffSingle(row.id)
                                 .then(data =>{
                                     if(data.code == "0"){
                                         this.$message({
@@ -290,9 +216,9 @@
              * 运营人员处理异常时编辑 3
              * 运营人员处理新建申请 4
              */
-            editStaff(type, row){
+            editOrderApply(type, row){
                 this.$router.push({
-                    path: "/worker/workerItem",
+                    path: "/operate/operateOrderApplyItem",
                     query: {
                         type: type, //编辑为1 创建为 0
                         id: type == 1? row.id : 0
@@ -302,19 +228,17 @@
             /**
              * 切换停用启用
              */
-            async changeStaffStatus(row){
+            async refuseOrderApply(row){
                 let _this= this;
 
-                let status = row.type == 'enable'? '停用' : '启用'
-
-                let response = await this.$confirm(`确定${status}该服务人员吗?`, '提示', {
+                let response = await this.$confirm(`确定拒绝该订单申请吗?`, '提示', {
                     confirmButtonText: '确定',
                     cancelButtonText: '取消',
                     type: 'warning'
                 }).catch(() => {
                     this.$message({
                         type: 'info',
-                        message: `已取消${status}`
+                        message: `已取消`
                     });
                 });
 
@@ -322,12 +246,12 @@
                     store.commit('setLoading',true)
 
                     try{
-                        await hrService.changeStaffType(row.id, row.version)
+                        await operateService.changeStaffType(row.id, row.version)
                             .then(data =>{
                                 if(data.code == "0"){
                                     this.$message({
                                         type:'success',
-                                        message: `${status}成功`
+                                        message: `拒绝成功`
                                     })
                                 }
                             }).catch(e =>{

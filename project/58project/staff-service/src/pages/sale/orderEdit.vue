@@ -81,8 +81,8 @@
     </div>
 </template>
 <script>
-import {hrService} from '../../../common'
-import {orderService} from '../../../common'
+import {operateService} from '../../../common'
+import {saleService} from '../../../common'
 export default {
     data(){
         const validator = {
@@ -197,7 +197,7 @@ export default {
             //校验并提交
             await this.$refs[formName].validate((valid) => {
                 if (valid) {
-                    orderService.createOrder(this.orderForm)
+                    saleService.createOrder(this.orderForm)
                     .then(data =>{
 
                         if(data.code == '0'){
@@ -314,8 +314,8 @@ export default {
         store.commit('setLoading',true)
         try{
             let data = await Promise.all([
-                hrService.getAreaTree(), //省市区数据获取
-                hrService.getSkillTree('enable'), //获取技能树
+                operateService.getAreaTree(), //省市区数据获取
+                operateService.getSkillTree('enable'), //获取技能树
             ])
             this.areaList = data[0].data
             this.skillList = data[1].data

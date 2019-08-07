@@ -46,7 +46,7 @@
 </template>
 <script>
 
-import {orderService, $utils} from '../../../../../common'
+import {saleService, $utils} from '../../../../../common'
 export default {
     props: {
         //是否打弹出框
@@ -136,7 +136,7 @@ export default {
                     this.assignOrderForm.version = this.$store.state.orderModule.order.version
                     try{
                         this.loading = true
-                        await orderService.assignOrder(this.assignOrderForm).then((data) =>{
+                        await saleService.assignOrder(this.assignOrderForm).then((data) =>{
                             if(data.code == "0"){
                                 this.$message({
                                     type:'success',
@@ -252,8 +252,8 @@ export default {
             this.loading = true
 
             await Promise.all([
-                orderService.getManagerSelection(),
-                orderService.getOrder(this.assignOrderId),
+                saleService.getManagerSelection(),
+                saleService.getOrder(this.assignOrderId),
             ]).then((data) =>{
                 if(data[0].code == "0"){
                     this.selectionList = data[0].data

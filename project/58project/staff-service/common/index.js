@@ -40,19 +40,19 @@ export {
  */
 import loginService from './service/loginService'
 import authService from './service/authService'
-import hrService from './service/hrService'
-import orderService from './service/orderService'
+import operateService from './service/operateService'
+import saleService from './service/saleService'
 import shopService from './service/shopService'
 
 
-import hrRequest from './service/request/hrRequest'
+import operateRequest from './service/request/operateRequest'
 
 export {
-    hrRequest,
+    operateRequest,
     loginService,
     authService,
-    hrService,
-    orderService,
+    operateService,
+    saleService,
     shopService
 }
 
