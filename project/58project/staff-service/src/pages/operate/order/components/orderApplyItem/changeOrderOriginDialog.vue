@@ -8,10 +8,23 @@
         :close-on-click-modal="false">
         <el-form :model="orderOriginForm" label-width="120px" ref="orderOriginForm">
             <el-form-item label="来源门店">
-                <el-input v-model="orderOriginForm.value"></el-input>
+                <el-select v-model="orderOriginForm.store_id" placeholder="请选择门店">
+                    <el-option
+                        v-for="item in storeList"
+                        :key="item.store_id"
+                        :label="item.store_name"
+                        :value="item.store_id"
+                        @change="changeStoreManager"></el-option>
+                </el-select>
             </el-form-item>
             <el-form-item label="来源人">
-                <el-input v-model="orderOriginForm.value"></el-input>
+                <el-select v-model="orderOriginForm.apply_manager_id" placeholder="请选择">
+                    <el-option
+                        v-for="item in apply_manager_list"
+                        :key="item.manager_id"
+                        :label="item.manager_name"
+                        :value="item.manager_id"></el-option>
+                </el-select>
             </el-form-item>
 
         </el-form>
@@ -65,6 +78,8 @@ export default {
                 id: this.$route.query.id,
                 ...this.changeOrderOriginField,
             },
+            storeList: [],//全部门店信息列表
+            apply_manager_list: [],//门店全部员工列表
         }
     },
     methods: {
@@ -72,6 +87,9 @@ export default {
             this.orderOriginForm.apply_manager_id = ''
             this.orderOriginForm.store_id = ''
             this.$emit('closeChangeOriginDialog')
+        },
+        changeStoreManager(id){
+            console.log(id)
         },
         async onSubmit(formName){
             //校验并提交
@@ -95,9 +113,10 @@ export default {
     async mounted(){
         await Promise.all([
             operateService.getStoreSelection(),
-            operateService.getStoreManagerSelection()
+            operateService.getStoreManagerSelection(this.orderOriginForm.store_id)
         ]).then((data) =>{
-            console.log(data)
+            this.storeList = data[0].data
+            this.apply_manager_list = data[1].data
         })
     }
 }

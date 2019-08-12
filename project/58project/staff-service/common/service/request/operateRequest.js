@@ -46,9 +46,10 @@ export default {
     },
     /**
      * 获取全部门店列表
+     * @param store_id 门店id
      */
-    getStoreManagerSelection(){
-        return axios.get(`./admin/common/getStoreManagerSelection`)
+    getStoreManagerSelection(store_id){
+        return axios.get(`./admin/common/getStoreManagerSelection?store_id=${store_id}`)
     },
     
 

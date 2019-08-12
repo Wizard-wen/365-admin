@@ -43,8 +43,8 @@ export default {
     /**
      * 获取全部门店列表
      */
-    getStoreManagerSelection(){
-        return operateRequest.getStoreManagerSelection()
+    getStoreManagerSelection(store_id){
+        return operateRequest.getStoreManagerSelection(store_id)
     },
 
 
