@@ -1,14 +1,14 @@
 <template>
     <!-- 订单申请 -->
     <el-dialog
-        title="更改订单申请来源"
-        :visible.sync="orderOriginVisible"
+        title="通过订单申请"
+        :visible.sync="orderApplyVisible"
         :show-close="false"
         :close-on-press-escape="false"
         :close-on-click-modal="false">
-        <el-form :model="orderOriginForm" label-width="120px" ref="orderOriginForm">
-            <el-form-item label="来源门店">
-                <el-select v-model="orderOriginForm.store_id" placeholder="请选择门店">
+        <el-form :model="orderApplyForm" label-width="120px" ref="orderApplyForm">
+            <el-form-item label="所属门店">
+                <el-select v-model="orderApplyForm.store_id" placeholder="请选择门店">
                     <el-option
                         v-for="item in storeList"
                         :key="item.store_id"
@@ -17,8 +17,8 @@
                         @change="changeStoreManager"></el-option>
                 </el-select>
             </el-form-item>
-            <el-form-item label="来源人">
-                <el-select v-model="orderOriginForm.apply_manager_id" placeholder="请选择">
+            <el-form-item label="所属人">
+                <el-select v-model="orderApplyForm.hold_manager_id" placeholder="请选择">
                     <el-option
                         v-for="item in apply_manager_list"
                         :key="item.manager_id"
@@ -28,7 +28,7 @@
             </el-form-item>
         </el-form>
         <div slot="footer" class="dialog-footer">
-            <el-button @click="cancelOriginChange">取 消</el-button>
+            <el-button @click="cancelApplyChange">取 消</el-button>
             <el-button type="primary" @click="onSubmit">确定</el-button>
         </div>
     </el-dialog>
@@ -46,7 +46,7 @@ export default {
         /**
          * 控制组件的显示隐藏
          */
-        orderOriginVisible:{
+        orderApplyVisible:{
             default:false,
             type: Boolean,
         },
@@ -57,48 +57,44 @@ export default {
             type: Number,
             default: 0
         },
-        /**
-         * 更改的字段
-         */
-        changeOrderOriginField: {
-            default: function(){
-                return {
-                    apply_manager_id: '',
-                    store_id: '',
-                }
-            },
-            type: Object,
-        },
+        systemVersion: {
+            type: Number | String,
+            default: ''
+        }
     },
     data() {
         return {
             //改变的字段内容
-            orderOriginForm: {
+            orderApplyForm: {
                 id: this.$route.query.id,
-                ...this.changeOrderOriginField,
+                type: 'pass',//状态设定为通过
+                hold_manager_id: 0,//所属人id
+                store_id: 1,//所属门店id
+                version: this.systemVersion,
             },
             storeList: [],//全部门店信息列表
             apply_manager_list: [],//门店全部员工列表
         }
     },
     methods: {
-        cancelOriginChange(){
-            this.orderOriginForm.apply_manager_id = ''
-            this.orderOriginForm.store_id = ''
-            this.$emit('closeChangeOriginDialog')
+        //取消分配订单
+        cancelApplyChange(){
+            this.orderApplyForm.hold_manager_id = ''
+            this.orderApplyForm.store_id = ''
+            this.$emit('closeOrderApplyDialog')
         },
         changeStoreManager(id){
             console.log(id)
         },
         async onSubmit(formName){
             //校验并提交
-            await operateService.editAppLySource(this.orderOriginForm).then(data =>{
+            await operateService.dealApplication(this.orderApplyForm).then(data =>{
                         if(data.code == '0'){
                             this.$message({
                                 type:"success",
                                 message: "更改成功"
                             })
-                            this.$emit('closeChangeOriginDialog')
+                            this.$emit('closeOrderApplyDialog')
                         }
                     }).catch(error =>{
                         this.$message({
@@ -112,7 +108,7 @@ export default {
     async mounted(){
         await Promise.all([
             operateService.getStoreSelection(),
-            operateService.getStoreManagerSelection(this.orderOriginForm.store_id)
+            operateService.getStoreManagerSelection(this.orderApplyForm.store_id)
         ]).then((data) =>{
             this.storeList = data[0].data
             this.apply_manager_list = data[1].data

@@ -13,8 +13,10 @@ export default {
     /**
      * 通过或拒绝订单申请
      */
-    dealApplication(type){
-        return axios.get(`./admin/order/dealApplication?type=${type}`)
+    dealApplication(sendObj){
+        return axios.post(`./admin/order/dealApplication?`,{
+            ...sendObj,
+        })
     },
     /**
      * 订单申请详情

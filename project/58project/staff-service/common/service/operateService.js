@@ -13,8 +13,8 @@ export default {
     /**
      * 通过或拒绝订单申请
      */
-    dealApplication(type){
-        return operateRequest.dealApplication(type)
+    dealApplication(sendObj){
+        return operateRequest.dealApplication(sendObj)
     },
     /**
      * 订单申请详情

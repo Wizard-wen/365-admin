@@ -7,8 +7,8 @@
             </div>
             <div class="btn-group">
                 <el-button size="mini" @click="goback">返回</el-button>
-                <el-button size="mini" type="success">通过</el-button>
-                <el-button size="mini" type="danger">拒绝</el-button>
+                <el-button size="mini" @click="passOrderApply" type="success">通过</el-button>
+                <el-button size="mini" @click="refuseOrderApply" type="danger">拒绝</el-button>
             </div>
             <div class="orderApply-detail">
                 <div class="detail-left">
@@ -95,7 +95,7 @@
                         日志列表
                     </div>
                     <div class="control">
-                        <el-button size="small" type="primary" @click="edit">添加日志</el-button>
+                        <el-button size="small" type="primary" @click="addLog">添加日志</el-button>
                     </div>
                 </div>
                 <div class="card-contains">
@@ -128,17 +128,44 @@
             :changeOrderOriginField="changeOrderOriginField"
             @closeChangeOriginDialog="closeChangeOriginDialog"
             :orderOriginVisible="orderOriginVisible"></change-order-origin-dialog>
+        <pass-order-apply-dialog
+            v-if="orderApplyVisible"
+            :orderApplyId="orderApplyDetail.id"
+            @closeOrderApplyDialog="orderApplyVisible = false"
+            :orderApplyVisible="orderApplyVisible"
+            :systemVersion="systemVersion"></pass-order-apply-dialog>
     </div>
 </template>
 
 <script>
 import { operateService, store, $utils } from "../../../../common";
-import {changeApplyDialog,changeOrderOriginDialog} from './components'
+import {
+    changeApplyDialog,
+    changeOrderOriginDialog,
+    passOrderApplyDialog} from './components'
 export default {
     data() {
         return {
             //订单申请详情
-            orderApplyDetail: {},
+            orderApplyDetail: {
+                work_type: '',
+                wage: '',
+                version: '',
+                user_phone: '',
+                user_name: '',
+                type: 'pass',
+                store_name: '',
+                store_id: '',
+                service_duration: '',
+                order_details: '',
+                id: '',
+                created_manager_name: '',
+                created_manager_id: '',
+                created_at: '',
+                code: '',
+                apply_manager_name: '',
+                apply_manager_id: ''
+            },
             //员工列表
             salesPersonTable: [],
             //订单申请日志列表
@@ -157,12 +184,22 @@ export default {
             changeOrderOriginField: {
                 apply_manager_id: '',
                 store_id: '',
-            }
+            },
+            //通过订单申请弹窗显示隐藏
+            orderApplyVisible: false,
+            //拒绝订单申请表单
+            refuseOrderApplyObject: {
+                id: this.$route.query.id,
+                type: 'refuse',
+                version: '',
+            },
+            systemVersion: '',//系统版本号
         };
     },
     components: {
         changeApplyDialog,
-        changeOrderOriginDialog
+        changeOrderOriginDialog,
+        passOrderApplyDialog
     },
     methods: {
         /**
@@ -193,7 +230,6 @@ export default {
             this.changeOrderOriginField.store_id = this.orderApplyDetail.store_id;
             this.changeOrderOriginField.apply_manager_id = this.orderApplyDetail.apply_manager_id;
             this.orderOriginVisible = true
-            debugger
         },  
         /**
          * 关闭更改字段弹窗
@@ -202,50 +238,48 @@ export default {
             this.orderOriginVisible = false
             await this.getApplication()
         },
+        //通过订单申请
+        passOrderApply(){
+            this.systemVersion = this.orderApplyDetail.version
+            this.orderApplyVisible = true
+        },
         /**
-         * 解绑账号
+         * 拒绝订单申请年轻
          */
-        async deleteStore(index, row) {
-            let response = await this.$confirm("确定解绑该账户吗", "提示", {
+        async refuseOrderApply(){
+            let response = await this.$confirm("确定拒绝该订单申请吗?此操作将会关闭订单申请", "提示", {
                 confirmButtonText: "确定",
                 cancelButtonText: "取消",
                 type: "warning"
             }).catch(() => {
                 this.$message({
                     type: "info",
-                    message: "已取消删除"
+                    message: "已放弃拒绝"
                 });
             });
             if (response == "confirm") {
                 store.commit("setLoading", 1);
                 try {
-                //   await shopService.deleteStore(row.id).then(data => {
-                //       if (data.code == 0) {
-                //         this.$message({
-                //           type: "success",
-                //           message: "删除成功"
-                //         });
-                //       }
-                //     })
-                //     .catch(data => {
-                //       this.$message({
-                //         type: "error",
-                //         message: e.message
-                //       });
-                //     });
+                    this.refuseOrderApplyObject.version = this.orderApplyDetail.version
+                    await operateService.dealApplication(this.refuseOrderApplyObject).then(data => {
+                        if (data.code == 0) {
+                            this.$message({
+                                type: "success",
+                                message: data.message
+                            });
+                        }
+                    }).catch(data => {
+                        this.$message({
+                            type: "error",
+                            message: e.message
+                        });
+                    }).finally(() =>{
+                        store.commit("setLoading", false);
+                    })
                 } catch (e) {
                     throw error;
                 }
-                this.getStore();
-                store.commit("setLoading", false);
             }
-            this.$router.push({
-                path: "/orderApply/shopItem",
-                query: {
-                    type: 1, //编辑为1
-                    id: row.id
-                }
-            });
         },
         /**
          * 获取订单申请信息
@@ -265,48 +299,23 @@ export default {
                     });
                 });
         },
-        //获取绑定的员工列表
-        async getSalePersonList() {
-            let tableOption = {
-                pageNumber: 10,
-                id: this.$route.query.id
-            };
-
-            try {
-                // await shopService
-                //   .getStoreManagerList(tableOption)
-                //   .then(data => {
-                //     if (data.code == "0") {
-                //       this.salesPersonTable = [...data.data.data];
-                //     }
-                //   })
-                //   .catch(error => {
-                //     this.$message({
-                //       type: "error",
-                //       message: error.message
-                //     });
-                //   })
-            } catch (error) {
-                this.$message({
-                    type: "error",
-                    message: error.message
-                });
-            }
+        /**
+         * 添加日志
+         */
+        addLog() {
+            // this.$router.push({
+            //     path: "/orderApply/shopEdit",
+            //     query: {
+            //         type: 1,
+            //         id: this.$route.query.id
+            //     }
+            // });
         },
         /**
-         * 编辑
+         * 返回上一级
          */
-        edit() {
-            this.$router.push({
-                path: "/orderApply/shopEdit",
-                query: {
-                    type: 1,
-                    id: this.$route.query.id
-                }
-            });
-        },
         goback(){
-        this.$router.push('/orderApply/shopList')
+            this.$router.push('/operate/operateOrderApplyList')
         }
     },
     filters: {
@@ -316,7 +325,6 @@ export default {
     },
     mounted() {
         this.getApplication();
-        this.getSalePersonList();
     }
 };
 </script>
