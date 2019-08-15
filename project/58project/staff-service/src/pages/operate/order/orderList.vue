@@ -88,7 +88,7 @@
              */
             workerConfigList(){
 
-                return this.$store.state.hrModule.configForm
+                return this.$store.state.operateModule.configForm
             }
         },
         methods: {

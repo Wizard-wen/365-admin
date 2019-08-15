@@ -72,7 +72,7 @@
         newMatchStaffBox,
         signStaffDetail,
         fileCard
-    } from './components/orderConfig'
+    } from './orderConfig'
 
 import {saleService} from '../../../common'
 export default {
@@ -182,13 +182,13 @@ export default {
          *  1 待匹配 2 已匹配 3 已签约 4 已取消 5 订单完成
          */
         isSigned(){
-            return store.state.orderModule.order.type
+            return store.state.saleModule.order.type
         },
         /**
          * 签约人id
          */
         signStaffId(){
-            return this.$store.state.orderModule.order_staff.find((item, index) =>{
+            return this.$store.state.saleModule.order_staff.find((item, index) =>{
                 return item.type == "sign"
             }).staff_id
         },

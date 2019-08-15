@@ -108,7 +108,7 @@
                         <div class="list-item">
                             <div class="item-contains">
                                 <div class="icon-box">
-                                    <img src="./images/icon.png" alt="">
+                                    <img src="./saleWorkStation/images/icon.png" alt="">
                                 </div>
                                 <div class="right">
                                     <div class="news">和平门店 宋希文 创建订单</div>
@@ -164,7 +164,7 @@
     </div>
 </template>
 <script>
-import applyOrderDialog from './components/applyOrder/applyOrderDialog.vue'
+import {applyOrderDialog} from './saleWorkStation/index.js'
 export default {
     data(){
         return {

@@ -164,7 +164,7 @@ export default {
     },
     computed:{
         configForm(){
-            return this.$store.state.hrModule.configForm
+            return this.$store.state.operateModule.configForm
         }
     },
     props: {

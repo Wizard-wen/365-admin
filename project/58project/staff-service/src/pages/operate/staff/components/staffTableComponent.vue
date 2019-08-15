@@ -304,7 +304,7 @@
         computed:{
             //服务人员配置字段对象
             workerConfigList(){
-                return this.$store.state.hrModule.configForm
+                return this.$store.state.operateModule.configForm
             }
         },
         methods: {
@@ -340,7 +340,7 @@
             },
             //教育背景字段转换
             educationFomatter(row, column){
-                let a =  this.$store.state.hrModule.educationList.filter(item => item.id == row.education)
+                let a =  this.$store.state.operateModule.educationList.filter(item => item.id == row.education)
                 return a.length? a[0].name : ''
             }
         },

@@ -8,8 +8,8 @@ import createPersistedState from 'vuex-persistedstate'
 
 import {loginModule} from './loginModule.js'
 import {loadingModule} from './loadingModule.js'
-import {orderModule} from './orderModule.js'
-import {hrModule} from './hrModule.js'
+import {saleModule} from './saleModule.js'
+import {operateModule} from './operateModule.js'
 import {shopModule} from './shopModule.js' //门店
 import {authModule} from './authModule.js' 
 
@@ -20,8 +20,8 @@ window.store = new vuex.Store({
     modules: {
         loginModule, //持久化
         loadingModule,
-        orderModule,
-        hrModule,
+        saleModule,
+        operateModule,
         shopModule,
         authModule
     },

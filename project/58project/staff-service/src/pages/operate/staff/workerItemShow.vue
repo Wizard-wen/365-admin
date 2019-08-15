@@ -243,7 +243,7 @@ export default {
     computed: {
         //服务人员表单配置项
         workerConfigList(){
-            return this.$store.state.hrModule.configForm
+            return this.$store.state.operateModule.configForm
         },
         //创建时间字段转换
         created_atFormatter(){
@@ -267,7 +267,7 @@ export default {
          * 返回
          */
         goback(){
-            this.$router.push("/sale/orderWorkList")
+            this.$router.push("/sale/saleWorkList")
         },
         /**
          * 生成图片

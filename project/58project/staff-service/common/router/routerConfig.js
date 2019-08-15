@@ -169,14 +169,20 @@ import operateOrderApplyItem from '@/pages/operate/order/orderApplyItem.vue'
 /**
  * 销售门店模块
  */
-import orderList from '@/pages/sale/orderList.vue'
+
+
+import saleWorkStation from '@/pages/sale/saleWorkStation.vue' //门店工作台
+import orderList from '@/pages/sale/orderList.vue'//订单列表
+import publicOrderList from '@/pages/sale/publicOrderList.vue'//公海订单列表
+import contractList from '@/pages/sale/contractList.vue'//我的合同列表
+import saleWorkList from '@/pages/sale/saleWorkList.vue'//门店全部服务人员信息
+import saleSignPage from '@/pages/sale/saleSignPage.vue'
+
+
 import orderConfig from '@/pages/sale/orderConfig.vue'
 import newOrderConfig from '@/pages/sale/newOrderConfig.vue'
 import orderEdit from '@/pages/sale/orderEdit.vue'
-import orderAssignList from '@/pages/sale/orderAssignList.vue'
-import orderWorkList from '@/pages/sale/orderWorkList.vue'
 
-import saleWorkStation from '@/pages/sale/saleWorkStation.vue' //门店工作台
 
 const saleModule = [
     {
@@ -195,6 +201,30 @@ const saleModule = [
         component: newOrderConfig,
     },
     {
+        path: '/sale/publicOrderList',
+        name: 'publicOrderList',
+        component: publicOrderList,
+    },
+    {
+        path: '/sale/contractList',
+        name: 'contractList',
+        component: contractList,
+    },
+    {
+        path: '/sale/saleWorkList',
+        name: 'saleWorkList',
+        component: saleWorkList,
+    },
+    {
+        path: '/sale/saleSignPage',
+        name: 'saleSignPage',
+        component: saleSignPage,
+    },
+
+
+
+
+    {
         path: '/sale/orderConfig',
         name: 'orderConfig',
         component: orderConfig,
@@ -204,16 +234,7 @@ const saleModule = [
         name: 'orderEdit',
         component: orderEdit,
     },
-    {
-        path: '/sale/orderAssignList',
-        name: 'orderAssignList',
-        component: orderAssignList,
-    },
-    {
-        path: '/sale/orderWorkList',
-        name: 'orderWorkList',
-        component: orderWorkList,
-    },
+
 ]
 
 /**

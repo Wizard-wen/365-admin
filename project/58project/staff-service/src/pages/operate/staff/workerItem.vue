@@ -451,11 +451,11 @@ export default {
     computed: {
         //受教育程度数组
         educationList(){
-            return this.$store.state.hrModule.educationList
+            return this.$store.state.operateModule.educationList
         },
         //服务人员表单配置项
         workerConfigList(){
-            return this.$store.state.hrModule.configForm
+            return this.$store.state.operateModule.configForm
         },
     },
     filters: {

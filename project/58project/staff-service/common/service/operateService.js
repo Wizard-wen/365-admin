@@ -143,7 +143,7 @@ export default {
      * 多个回访人员到回访列表
      */
     addReturnStaff(){
-        let obj = store.state.hrModule.queryedList
+        let obj = store.state.operateModule.queryedList
         return operateRequest.addReturnStaff(obj)
     },
     /**
@@ -155,7 +155,7 @@ export default {
             queryKey: 'count', 
             queryedList: 0
         })
-        let obj = store.state.hrModule.queryedList
+        let obj = store.state.operateModule.queryedList
         return operateRequest.getReturnStaff(obj)
     },
     /**

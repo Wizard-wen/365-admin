@@ -31,13 +31,13 @@ export default {
     },
     computed:{
         configForm(){
-            return this.$store.state.hrModule.configForm
+            return this.$store.state.operateModule.configForm
         },
         queryedList(){
-            if(this.$route.path == '/sale/orderWorkList'){
-                return this.$store.state.hrModule.sellerList
+            if(this.$route.path == '/sale/saleWorkList'){
+                return this.$store.state.operateModule.sellerList
             } else {
-                return this.$store.state.hrModule.queryedList
+                return this.$store.state.operateModule.queryedList
             }
         },
         queryListLength(){

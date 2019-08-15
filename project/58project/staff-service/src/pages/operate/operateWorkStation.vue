@@ -182,7 +182,7 @@ export default {
     },
     methods: {
         goWorkerList(){
-            this.$router.push('/sale/orderWorkList')
+            this.$router.push('/sale/saleWorkList')
         }
     }
 }

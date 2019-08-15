@@ -85,7 +85,7 @@
              * 服务人员配置数据
              */
             workerConfigList(){
-                return this.$store.state.hrModule.configForm
+                return this.$store.state.operateModule.configForm
             }
         },
         methods: {

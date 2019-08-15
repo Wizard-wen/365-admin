@@ -70,27 +70,27 @@ export default {
         if(type == 0){
             return axios.post(
                 baseUrl,
-                store.state.hrModule.queryedList
+                store.state.operateModule.queryedList
             )
         }else if(type == 1){
             return axios.post(
                 baseUrl,
-                store.state.hrModule.returnList
+                store.state.operateModule.returnList
             )
         } else if(type == 2){
             return axios.post(
                 baseUrl,
-                store.state.hrModule.errorList
+                store.state.operateModule.errorList
             )
         } else if(type == 3){
             return axios.post(
                 baseUrl,
-                store.state.hrModule.newList
+                store.state.operateModule.newList
             )
         } else if(type == 4){
             return axios.post(
                 baseUrl,
-                store.state.hrModule.sellerList
+                store.state.operateModule.sellerList
             )
         }
     },
