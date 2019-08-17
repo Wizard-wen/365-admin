@@ -20,8 +20,6 @@
 
                 <el-table-column  label="订单编号" prop="order_code" align="center" width="110"></el-table-column>
 
-                <el-table-column  label="订单状态" prop="order_status" align="center" width="110"></el-table-column>
-
                 <el-table-column  label="订单状态" prop="order_status" align="center" :width="maxLength.authentication">
                     <template slot-scope="scope">
                         <table-tag-component 
@@ -31,28 +29,6 @@
                     </template>
                 </el-table-column>
                 <el-table-column  label="下单时间" prop="order_time" align="center" width="110"></el-table-column>
-
-                <el-table-column  label="下单客户" prop="order_user" align="center" width="110"></el-table-column>
-
-                <el-table-column  label="下单客户电话" prop="order_user_phone" align="center" width="110"></el-table-column>
-
-                <el-table-column  label="来源门店" prop="order_source_store" align="center" width="110"></el-table-column>
-
-                <el-table-column  label="来源人" prop="order_source_manager" align="center" width="110"></el-table-column>
-
-                <el-table-column  label="签约客户" prop="sign_user" align="center" width="110"></el-table-column>
-
-                <el-table-column  label="签约客户电话" prop="sign_user_phone" align="center" width="110"></el-table-column>
-
-                <el-table-column  label="签约客户余额" prop="sign_user_figure" align="center" width="110"></el-table-column>
-    
-                <el-table-column  label="签约服务人员" prop="service_staff" align="center" width="110"></el-table-column>
-
-                <el-table-column  label="签约服务人员编号" prop="service_staff_code" align="center" width="120"></el-table-column>
-
-                <el-table-column  label="订单创建人" prop="created_staff" align="center" width="110"></el-table-column>
-
-                <el-table-column  label="订单创建时间" prop="created_at" align="center" width="110"></el-table-column>
 
                 <el-table-column  label="订单经纪人" prop="order_manager" align="center" width="110"></el-table-column>
 

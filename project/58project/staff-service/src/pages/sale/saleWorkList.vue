@@ -1,6 +1,6 @@
 <template>
     <div class="staff" v-loading="isLoaded">
-        <staff-table-component
+        <sale-staff-table-component
             :staffTable="staffTable"
             :maxLength="maxLength"
             :controlScopeLength="150">
@@ -32,7 +32,7 @@
                     layout="prev, pager, next, jumper"
                     :total="pagination.total"></el-pagination>
             </template>
-        </staff-table-component>
+        </sale-staff-table-component>
         <!-- 申请添加服务人员 -->
         <create-staff-dialog
             v-if="createStaffDialogVisible"
@@ -52,15 +52,14 @@
 
 
     import {
-        staffTableComponent,
         queryComponent,
-        queryTagComponent} from '@/pages/operate/staff/components'
+        queryTagComponent} from './saleWorkList/index.js'
 
-    import {createStaffDialog,errorStaffDialog} from './saleWorkList/index.js'
+    import {saleStaffTableComponent,createStaffDialog,errorStaffDialog} from './saleWorkList/index.js'
 
     export default {
         components: {
-            staffTableComponent,
+            saleStaffTableComponent,
             createStaffDialog,
             errorStaffDialog,
             queryComponent,

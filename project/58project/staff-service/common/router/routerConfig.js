@@ -177,12 +177,7 @@ import publicOrderList from '@/pages/sale/publicOrderList.vue'//公海订单列�
 import contractList from '@/pages/sale/contractList.vue'//我的合同列表
 import saleWorkList from '@/pages/sale/saleWorkList.vue'//门店全部服务人员信息
 import saleSignPage from '@/pages/sale/saleSignPage.vue'
-
-
 import orderConfig from '@/pages/sale/orderConfig.vue'
-import newOrderConfig from '@/pages/sale/newOrderConfig.vue'
-import orderEdit from '@/pages/sale/orderEdit.vue'
-
 
 const saleModule = [
     {
@@ -196,9 +191,9 @@ const saleModule = [
         component: orderList,
     },
     {
-        path: '/sale/newOrderConfig',
-        name: 'newOrderConfig',
-        component: newOrderConfig,
+        path: '/sale/orderConfig',
+        name: 'orderConfig',
+        component: orderConfig,
     },
     {
         path: '/sale/publicOrderList',
@@ -220,21 +215,6 @@ const saleModule = [
         name: 'saleSignPage',
         component: saleSignPage,
     },
-
-
-
-
-    {
-        path: '/sale/orderConfig',
-        name: 'orderConfig',
-        component: orderConfig,
-    },
-    {
-        path: '/sale/orderEdit',
-        name: 'orderEdit',
-        component: orderEdit,
-    },
-
 ]
 
 /**

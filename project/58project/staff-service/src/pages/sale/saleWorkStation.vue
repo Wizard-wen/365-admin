@@ -129,8 +129,8 @@
                     </div>
                     <div class="operation-list">
                         <div class="control" @click="openOrderApplyDialog">申请订单</div>
-                        <div class="control" @click="openWorkerList" :title="'服务人员信息库'">服务人员信息库</div>
-                        <div class="control">我的订单</div>
+                        <div class="control" @click="goSaleWorkList" :title="'服务人员信息库'">服务人员信息库</div>
+                        <div class="control" @click="goSaleOrderList">我的订单</div>
                         <div class="control">我的客户</div>
                         <div class="control">我的合同</div>
                         <div class="control">公海订单</div>
@@ -156,7 +156,7 @@
                 </div>
             </div>
         </div>
-        <!-- 申请添加服务人员 -->
+        <!-- 订单申请弹出框 -->
         <apply-order-dialog
             v-if="applyOrderDialogVisible"
             :applyOrderDialogVisible="applyOrderDialogVisible"
@@ -181,9 +181,13 @@ export default {
         openOrderApplyDialog(){
             this.applyOrderDialogVisible = true
         },
-        //打开服务人员列表
-        openWorkerList(){
-            this.$router.push('/worker/workerList')
+        //跳转至服务人员信息页
+        goSaleWorkList(){
+            this.$router.push('/sale/saleWorkList')
+        },
+        //跳转至订单页
+        goSaleOrderList(){
+            this.$router.push('/sale/orderList')
         }
 
     }

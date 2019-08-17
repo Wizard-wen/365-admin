@@ -36,9 +36,8 @@
                 <el-input v-model="applyOrderForm.user_name"></el-input>
             </el-form-item>
 
-            <el-form-item label="所属门店" prop="store_id" ref="store_id">
-                <!-- <el-input v-model="applyOrderForm.store_id" :disabled="true"></el-input> -->
-                <el-select v-model="applyOrderForm.store_id" disabled placeholder="请选择">
+            <el-form-item label="来源门店" prop="store_id" ref="store_id">
+                <el-select v-model="applyOrderForm.store_id" disabled placeholder="请选择来源门店">
                     <el-option
                     :key="'1'"
                     :label="'365总店'"
@@ -47,8 +46,8 @@
                 </el-select>
             </el-form-item>
 
-            <el-form-item label="申请人" prop="apply_manager_id" ref="apply_manager_id">
-                <el-select v-model="applyOrderForm.apply_manager_id" placeholder="请选择创建人">
+            <el-form-item label="来源人" prop="apply_manager_id" ref="apply_manager_id">
+                <el-select v-model="applyOrderForm.apply_manager_id" placeholder="请选择来源人">
                     <el-option
                     :key="'1'"
                     :label="'365总店'"

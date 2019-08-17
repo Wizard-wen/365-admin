@@ -9,10 +9,14 @@
                     <!-- <query-component @updateTable="updateTable"></query-component> -->
                 </div>
             </template>
+            <template slot="searchForm">
+                <!-- <query-tag-component :queryFrom="'order'" @updateTable="updateTable"></query-tag-component> -->
+                <el-button type="primary" @click="openOrderApplyDialog">订单申请</el-button>
+            </template>
+
             <template slot="control" slot-scope="controler">
-                <el-button size="mini" type="text" @click="editOrderApply(1, controler.scoper.row)">编辑</el-button>
-                <el-button size="mini" type="text" style="color:#f56c6c" @click="refuseOrderApply(controler.scoper.row)">拒绝</el-button>
-                <el-button size="mini" type="text" style="color:#67c23a" @click="exportReturnStaff(0, controler.scoper.row)">通过</el-button>
+                <el-button size="mini" type="text" @click="dealOrder(controler.scoper.row)">处理订单</el-button>
+                <el-button size="mini" type="text" @click="assignOrder(controler.scoper.row)">分派订单</el-button>
             </template>
 
             <template slot="pagination">
@@ -27,6 +31,17 @@
                     :total="pagination.total"></el-pagination>
             </template>
         </sale-order-table-component>
+        <!-- 订单分派弹出框 -->
+        <assign-dialog
+            v-if="assignDialogVisible"
+            :openAssignDialog="assignDialogVisible"
+            @closeAssignDialog="assignDialogVisible=false"
+            :assignOrderId="assignOrderId"></assign-dialog>
+        <!-- 订单申请弹出框 -->
+        <apply-order-dialog
+            v-if="applyOrderDialogVisible"
+            :applyOrderDialogVisible="applyOrderDialogVisible"
+            @closeCreateStaffDialog="applyOrderDialogVisible=false"></apply-order-dialog>
     </div>
 </template>
 <script>
@@ -35,19 +50,21 @@
     import {
         saleOrderTableComponent,
     } from './orderList/index.js'
+
+    import {assignDialog} from './orderConfig/index.js'
+
+    import {applyOrderDialog} from './saleWorkStation/index.js'
+
     export default {
         components: {
             saleOrderTableComponent,
+            assignDialog,
+            applyOrderDialog
         },
         data(){
             return {
                 //员工信息列表
                 orderApplyTable: [],
-                //表单搜索项
-                staffSearch: {
-                    name: '', //姓名
-                    phone:'',//手机号
-                },
                 isLoaded:false,
                 /**
                  * 分页信息
@@ -72,10 +89,12 @@
                     source: 80,//信息来源
                 },
                 returnStaffDialofVisible: false,//添加回访数据显示隐藏
+                //分配弹出框显示
+                assignDialogVisible:false,
+                //待分配订单id
+                assignOrderId: 0,
+                applyOrderDialogVisible: false,//订单申请弹窗显示隐藏
             }
-        },
-        computed:{
-
         },
         methods: {
              /**
@@ -127,119 +146,21 @@
                 await this.getTableList()
             },
             /**
-             * 导入回访服务人员
-             * @param type 是全部导出还是单个导出 全部导出 1 单个导出 0
+             * 处理订单
+             * @param paramObj 列表参数对象
              */
-            async exportReturnStaff(type, row){
-                if(type == 0){
-                    let _this= this;
-
-                    let response = await this.$confirm(`确定将该服务人员导入回访列表吗?`, '提示', {
-                        confirmButtonText: '确定',
-                        cancelButtonText: '取消',
-                        type: 'warning'
-                    }).catch(() => {
-                        this.$message({
-                            type: 'info',
-                            message: `已取消导入`
-                        });
-                    });
-
-                    if(response == "confirm"){
-                        store.commit('setLoading',true)
-
-                        try{
-                            await operateService.addReturnStaffSingle(row.id)
-                                .then(data =>{
-                                    if(data.code == "0"){
-                                        this.$message({
-                                            type:'success',
-                                            message: `导入成功`
-                                        })
-                                    }
-                                }).catch(e =>{
-                                    this.$message({
-                                        type:'error',
-                                        message: e.message
-                                    })
-                                })
-                        } catch(error){
-                            this.$message({
-                                type:'error',
-                                message: error.message
-                            })
-                        }
-
-                        await _this.getTableList()
-                        store.commit('setLoading',false)
-                    }
-                } else{
-                    this.returnStaffDialofVisible = true
-                }
+            dealOrder(paramObj){
+                this.$router.push(`/sale/orderConfig?id=${paramObj.id}`)
             },
             /**
-             * 创建、编辑服务人员信息
-             * des type字段在 创建，编辑，回访，处理异常，创建申请 都能用到
-             * 运营人员创建 0
-             * 运营人员编辑 1
-             * 运营人员回访时编辑 2
-             * 运营人员处理异常时编辑 3
-             * 运营人员处理新建申请 4
+             * 分派订单
              */
-            editOrderApply(type, row){
-                this.$router.push({
-                    path: "/operate/operateOrderApplyItem",
-                    query: {
-                        type: type, //编辑为1 创建为 0
-                        id: type == 1? row.id : 0
-                    }
-                })
+            assignOrder(){
+                this.assignDialogVisible = true
             },
-            /**
-             * 切换停用启用
-             */
-            async refuseOrderApply(row){
-                let _this= this;
-
-                let response = await this.$confirm(`确定拒绝该订单申请吗?`, '提示', {
-                    confirmButtonText: '确定',
-                    cancelButtonText: '取消',
-                    type: 'warning'
-                }).catch(() => {
-                    this.$message({
-                        type: 'info',
-                        message: `已取消`
-                    });
-                });
-
-                if(response == "confirm"){
-                    store.commit('setLoading',true)
-
-                    try{
-                        await operateService.changeStaffType(row.id, row.version)
-                            .then(data =>{
-                                if(data.code == "0"){
-                                    this.$message({
-                                        type:'success',
-                                        message: `拒绝成功`
-                                    })
-                                }
-                            }).catch(e =>{
-                                this.$message({
-                                    type:'error',
-                                    message: e.message
-                                })
-                            })
-                    } catch(error){
-                        this.$message({
-                            type:'error',
-                            message: error.message
-                        })
-                    }
-
-                    await _this.getTableList()
-                    store.commit('setLoading',false)
-                }
+            //打开订单申请弹窗
+            openOrderApplyDialog(){
+                this.applyOrderDialogVisible = true
             },
         },
         async mounted(){

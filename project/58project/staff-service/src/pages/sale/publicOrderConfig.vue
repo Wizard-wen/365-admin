@@ -5,11 +5,7 @@
                 <h4>订单号：{{20190714000001}}</h4>
             </div>
             <div class="btn-group">
-                <!-- 仅店长有此权限 -->
-                <el-button type="primary" @click="assignOrder" size="mini">分派</el-button>
-                <el-button size="mini">续约</el-button>
-                <el-button size="mini">终止订单</el-button>
-                <el-button size="mini">返回</el-button>
+                <el-button size="mini" @click="goback">返回</el-button>
             </div>
             <div class="order-detail">
                 <div class="detail-left">
@@ -24,18 +20,8 @@
 
                 </div>
                 <div class="detail-right">
-                    <div class="right-box">
-                        <div class="title">账户余额</div>
-                        <div class="value">{{ `2600` }}</div>
-                    </div>
                 </div>
             </div>
-                        <!-- 签约弹出框 -->
-        <assign-dialog
-            v-if="assignDialogVisible"
-            :openAssignDialog="assignDialogVisible"
-            @closeAssignDialog="assignDialogVisible=false"
-            :assignOrderId="assignOrderId"></assign-dialog>
         </div>
         <div class="order-down">
             <div class="order-message">
@@ -48,49 +34,49 @@
                     <div class="line-three-list">
                         客户姓名：<span>{{`唐朝`}}</span>
                         <p @click="changeOrderMessage('')" class="change">
-                            <img src="./newOrderConfig/images/change.svg" alt="">
+                            <img src="./orderConfig/images/change.svg" alt="">
                         </p>
                     </div>
                     <div class="line-three-list">
                         电话：<span>{{`唐朝`}}</span> 
                         <p @click="changeOrderMessage('')" class="change">
-                            <img src="./newOrderConfig/images/change.svg" alt="">
+                            <img src="./orderConfig/images/change.svg" alt="">
                         </p>
                     </div>
                     <div class="line-three-list">
                         工种：<span>{{`唐朝`}}</span>
                         <p @click="changeOrderMessage('')" class="change">
-                            <img src="./newOrderConfig/images/change.svg" alt="">
+                            <img src="./orderConfig/images/change.svg" alt="">
                         </p>
                     </div>
                     <div class="line-three-list">
                         工作时间：<span>{{`早八晚五`}}</span>
                         <p @click="changeOrderMessage('')" class="change">
-                            <img src="./newOrderConfig/images/change.svg" alt="">
+                            <img src="./orderConfig/images/change.svg" alt="">
                         </p>
                     </div>
                     <div class="line-three-list">
                         工资：<span>{{`3500`}}</span>
                         <p @click="changeOrderMessage('')" class="change">
-                            <img src="./newOrderConfig/images/change.svg" alt="">
+                            <img src="./orderConfig/images/change.svg" alt="">
                         </p>
                     </div>
                     <div class="line-three-list">
                         休息日：<span>{{`4`}}</span>
                         <p @click="changeOrderMessage('')" class="change">
-                            <img src="./newOrderConfig/images/change.svg" alt="">
+                            <img src="./orderConfig/images/change.svg" alt="">
                         </p>
                     </div>
                     <div class="line-list">
                         地址： <span>{{`辽宁省沈阳市大东区小北关街43-1 5-8-3`}}</span>
                         <p @click="changeOrderMessage('')" class="change">
-                            <img src="./newOrderConfig/images/change.svg" alt="">
+                            <img src="./orderConfig/images/change.svg" alt="">
                         </p>
                     </div>
                     <div class="line-list">
                         订单详情：<span>{{`辽宁省沈阳市大东区小北关街43-1 5-8-3`}}</span>
                         <p @click="changeOrderMessage('')" class="change">
-                            <img src="./newOrderConfig/images/change.svg" alt="">
+                            <img src="./orderConfig/images/change.svg" alt="">
                         </p>
                     </div>
                 </div>
@@ -163,10 +149,8 @@
 
                         <el-table-column label="操作" align="center" width="300">
                             <template slot-scope="scope">
-                                <el-button type="success" @click="goSignOrder" size="mini">签约</el-button>
-                                <el-button type="primary" @click="refuseService" size="mini">拒绝</el-button>
                                 <el-button type="primary" size="mini">详情</el-button>
-                                <el-button type="danger" size="mini">删除</el-button>
+                                <el-button type="danger" @click="deleteMatchSerivce(scope.row)" size="mini">删除</el-button>
                             </template>
                         </el-table-column>
                     </el-table>
@@ -186,7 +170,7 @@
                             :controlScopeLength="150">
 
                             <template slot="control" slot-scope="controler">
-                                <el-button size="mini" type="text" >分派合同</el-button>
+                                <el-button size="mini" type="text" @click="applyContract(controler.scope)">分派合同</el-button>
                             </template>
 
                             <template slot="pagination">
@@ -242,7 +226,7 @@
         matchServiceQueryComponent,
         contractTableComponent,
         refuseServiceDialog,
-        assignDialog} from './newOrderConfig/index.js'
+        } from './orderConfig/index.js'
 export default {
     data(){
         return {
@@ -294,27 +278,9 @@ export default {
             ],
             //订单日志列表
             orderLogTable: [],
-            //合同列表
-            contractTable: [{
-                contact_code:'string',//合同编号
-                created_at:'string',//印制时间
-                manageDepartment:'string',//责任部门
-                manager:'string',//责任人
-                contract_status:'string',// 合同状态
-                isSign:'Boolean',//是否签约
-                firstParty:'string',//甲方签约人
-                firstPartyId:'string',//甲方签约人id
-                secondParty:'string',//乙方签约人
-                secondPartyId:'string',//乙方签约人id
-                signManager:'string',// 签约管家
-                signManagerId:'string',// 签约管家id
-                signed_at:'string',// 签约时间               
-            }],
+
             refuseServiceDialogVisible: false,//拒绝服务人员显示隐藏
-            //分配弹出框显示
-            assignDialogVisible:false,
-            //待分配订单id
-            assignOrderId: 0,
+
         }
     },
     components: {
@@ -322,7 +288,7 @@ export default {
         matchServiceQueryComponent,
         contractTableComponent,
         refuseServiceDialog,
-        assignDialog
+        
     },
     computed:{
         /**
@@ -490,11 +456,14 @@ export default {
         goSignOrder(){
             this.$router.push('/sale/saleSignPage')
         },
+        deleteMatchSerivce(){
+
+        },
         /**
-         * 分派订单啊
+         * 
          */
-        assignOrder(){
-            this.assignDialogVisible = true
+        goback(){
+            this.$router.push('/sale/orderList')
         }
     },
     async mounted(){

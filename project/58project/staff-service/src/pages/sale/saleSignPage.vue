@@ -315,7 +315,7 @@ export default {
     },
     methods: {
         goback(){
-            this.$router.push('/sale/newOrderConfig')
+            this.$router.push('/sale/orderConfig')
         },
         /**
          * 上传成功后，接收图片数据，送入图片回显数组

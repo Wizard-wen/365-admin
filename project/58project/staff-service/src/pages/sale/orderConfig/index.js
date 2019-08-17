@@ -1,27 +1,24 @@
 
 
+//匹配服务人员列表组件
+import matchServiceTableComponent from './matchServiceTableComponent.vue'
 
-//基本信息组件
-import base from './base.vue'
-//合同详情组件
-import fileCard from './fileCard.vue'
-//日志组件
-import logComponent from './logComponent.vue'
-//服务人员搜索
-import matchStaffBox from './matchStaffBox.vue'
-//服务人员搜索
-import newMatchStaffBox from './newMatchStaffBox.vue'
-//备选服务人员
-import serviceList from './serviceList.vue'
-//签约服务人员详情
-import signStaffDetail from './signStaffDetail.vue'
+//匹配服务人员列表-筛选组件
+import matchServiceQueryComponent from './matchServiceQueryComponent.vue'
+
+//合同列表组件
+import contractTableComponent from './contractTableComponent.vue'
+
+//拒绝服务人员组件个弹窗
+import refuseServiceDialog from './refuseServiceDialog.vue'
+
+//分派订单弹出框
+import assignDialog from './assignDialog.vue'
 
 export {
-    base,
-    fileCard,
-    logComponent,
-    matchStaffBox,
-    newMatchStaffBox,
-    serviceList,
-    signStaffDetail
+    matchServiceTableComponent,
+    matchServiceQueryComponent,
+    contractTableComponent,
+    refuseServiceDialog,
+    assignDialog,
 }

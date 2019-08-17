@@ -9,30 +9,22 @@ import { Message } from 'element-ui';
 /**
  * 订单状态类型
  */
-var order_type = [
+var order_status = [
     {
-        label: '请选择',
-        value: 0
-    },
-    {
-        label: '待匹配',
+        label: '匹配中',
         value: 1
     },
     {
-        label: '已匹配',
+        label: '已签约',
         value: 2
     },
     {
-        label: '已签约',
+        label: '售后匹配中',
         value: 3
     },
     {
-        label: '已取消',
+        label: '已终止',
         value: 4
-    },
-    {
-        label: '订单完成',
-        value: 5
     },
 ]
 
@@ -66,7 +58,7 @@ export const saleModule = {
         order_files: [], //合同列表
         order_logs: [],//订单日志
 
-        order_type: order_type,//订单状态类型
+        order_status: order_status,//订单状态类型
         order_source: order_source,//订单来源
         /**
          *  服务人员信息库 查询字段 

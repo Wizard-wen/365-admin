@@ -1,6 +1,6 @@
 <template>
     <div class="staff" v-loading="isLoaded">
-        <sale-order-table-component
+        <sale-pub-order-table-component
             :staffTable="orderApplyTable"
             :maxLength="maxLength"
             :controlScopeLength="170">
@@ -10,9 +10,9 @@
                 </div>
             </template>
             <template slot="control" slot-scope="controler">
-                <el-button size="mini" type="text" @click="editOrderApply(1, controler.scoper.row)">编辑</el-button>
-                <el-button size="mini" type="text" style="color:#f56c6c" @click="refuseOrderApply(controler.scoper.row)">拒绝</el-button>
-                <el-button size="mini" type="text" style="color:#67c23a" @click="exportReturnStaff(0, controler.scoper.row)">通过</el-button>
+                <el-button size="mini" type="text" @click="dealPublicOrder(1, controler.scoper.row)">处理公海订单</el-button>
+                <!-- <el-button size="mini" type="text" style="color:#f56c6c" @click="refuseOrderApply(controler.scoper.row)">拒绝</el-button>
+                <el-button size="mini" type="text" style="color:#67c23a" @click="exportReturnStaff(0, controler.scoper.row)">通过</el-button> -->
             </template>
 
             <template slot="pagination">
@@ -26,18 +26,20 @@
                     layout="prev, pager, next, jumper"
                     :total="pagination.total"></el-pagination>
             </template>
-        </sale-order-table-component>
+        </sale-pub-order-table-component>
     </div>
 </template>
 <script>
-    import {operateService} from '../../../common'
+    import {saleService} from '../../../common'
 
     import {
-        saleOrderTableComponent,
-    } from './orderList/index.js'
+        salePubOrderTableComponent,
+    } from './publicOrderList/index.js'
+
+    
     export default {
         components: {
-            saleOrderTableComponent,
+            salePubOrderTableComponent,
         },
         data(){
             return {
@@ -127,120 +129,11 @@
                 await this.getTableList()
             },
             /**
-             * 导入回访服务人员
-             * @param type 是全部导出还是单个导出 全部导出 1 单个导出 0
+             * 
              */
-            async exportReturnStaff(type, row){
-                if(type == 0){
-                    let _this= this;
+            dealPublicOrder(){
 
-                    let response = await this.$confirm(`确定将该服务人员导入回访列表吗?`, '提示', {
-                        confirmButtonText: '确定',
-                        cancelButtonText: '取消',
-                        type: 'warning'
-                    }).catch(() => {
-                        this.$message({
-                            type: 'info',
-                            message: `已取消导入`
-                        });
-                    });
-
-                    if(response == "confirm"){
-                        store.commit('setLoading',true)
-
-                        try{
-                            await operateService.addReturnStaffSingle(row.id)
-                                .then(data =>{
-                                    if(data.code == "0"){
-                                        this.$message({
-                                            type:'success',
-                                            message: `导入成功`
-                                        })
-                                    }
-                                }).catch(e =>{
-                                    this.$message({
-                                        type:'error',
-                                        message: e.message
-                                    })
-                                })
-                        } catch(error){
-                            this.$message({
-                                type:'error',
-                                message: error.message
-                            })
-                        }
-
-                        await _this.getTableList()
-                        store.commit('setLoading',false)
-                    }
-                } else{
-                    this.returnStaffDialofVisible = true
-                }
-            },
-            /**
-             * 创建、编辑服务人员信息
-             * des type字段在 创建，编辑，回访，处理异常，创建申请 都能用到
-             * 运营人员创建 0
-             * 运营人员编辑 1
-             * 运营人员回访时编辑 2
-             * 运营人员处理异常时编辑 3
-             * 运营人员处理新建申请 4
-             */
-            editOrderApply(type, row){
-                this.$router.push({
-                    path: "/operate/operateOrderApplyItem",
-                    query: {
-                        type: type, //编辑为1 创建为 0
-                        id: type == 1? row.id : 0
-                    }
-                })
-            },
-            /**
-             * 切换停用启用
-             */
-            async refuseOrderApply(row){
-                let _this= this;
-
-                let response = await this.$confirm(`确定拒绝该订单申请吗?`, '提示', {
-                    confirmButtonText: '确定',
-                    cancelButtonText: '取消',
-                    type: 'warning'
-                }).catch(() => {
-                    this.$message({
-                        type: 'info',
-                        message: `已取消`
-                    });
-                });
-
-                if(response == "confirm"){
-                    store.commit('setLoading',true)
-
-                    try{
-                        await operateService.changeStaffType(row.id, row.version)
-                            .then(data =>{
-                                if(data.code == "0"){
-                                    this.$message({
-                                        type:'success',
-                                        message: `拒绝成功`
-                                    })
-                                }
-                            }).catch(e =>{
-                                this.$message({
-                                    type:'error',
-                                    message: e.message
-                                })
-                            })
-                    } catch(error){
-                        this.$message({
-                            type:'error',
-                            message: error.message
-                        })
-                    }
-
-                    await _this.getTableList()
-                    store.commit('setLoading',false)
-                }
-            },
+            }
         },
         async mounted(){
             await this.getTableList()
