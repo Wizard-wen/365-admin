@@ -45,7 +45,7 @@
     </div>
 </template>
 <script>
-    import {operateService} from '../../../common'
+    import {saleService} from '../../../common'
 
     import {
         saleOrderTableComponent,
@@ -106,7 +106,7 @@
                     this.isLoaded = true
 
                     await Promise.all([
-                        operateService.getApplicationList(), //
+                        saleService.getOrderList(), //
                     ]).then((data) =>{
 
                         this.orderApplyTable = data[0].data.data

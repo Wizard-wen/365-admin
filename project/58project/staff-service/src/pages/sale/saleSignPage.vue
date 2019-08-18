@@ -9,8 +9,8 @@
                         </div>
                     </div>
                     <div class="order-list">
-                        <el-form-item label="姓名" prop="sign_user">
-                            <el-input v-model="signForm.sign_user"></el-input>
+                        <el-form-item label="姓名" prop="sign_user_name">
+                            <el-input v-model="signForm.sign_user_name"></el-input>
                         </el-form-item>
                         <el-form-item label="联系电话" prop="sign_user_phone">
                             <el-input v-model="signForm.sign_user_phone"></el-input>
@@ -28,33 +28,24 @@
                         </div>
                     </div>
                     <div class="order-list">
-                        <el-form-item label="姓名" prop="sign_service">
-                            <el-input v-model="signForm.sign_service"></el-input>
+                        <el-form-item label="姓名" prop="sign_staff_name">
+                            <el-input v-model="signForm.sign_staff_name"></el-input>
                         </el-form-item>
-                        <el-form-item label="联系电话" prop="sign_service_phone">
-                            <el-input v-model="signForm.sign_service_phone"></el-input>
+                        <el-form-item label="联系电话" prop="sign_staff_phone">
+                            <el-input v-model="signForm.sign_staff_phone"></el-input>
                         </el-form-item>
-                        <el-form-item label="身份证号" prop="sign_service_identify">
-                            <el-input v-model="signForm.sign_service_identify"></el-input>
+                        <el-form-item label="身份证号" prop="sign_staff_identify">
+                            <el-input v-model="signForm.sign_staff_identify"></el-input>
                         </el-form-item>
-                        <el-form-item label="户籍地址" prop="sign_service_law_add">
-                            <el-input v-model="signForm.sign_service_law_add"></el-input>
+                        <el-form-item label="户籍地址" prop="sign_staff_law_address">
+                            <el-input v-model="signForm.sign_staff_law_address"></el-input>
                         </el-form-item>
-                        <el-form-item label="现住址" prop="sign_service_cur_add">
-                            <el-input v-model="signForm.sign_service_cur_add"></el-input>
+                        <el-form-item label="现住址" prop="sign_staff_cur_address">
+                            <el-input v-model="signForm.sign_staff_cur_address"></el-input>
                         </el-form-item>
-                        <el-form-item label="紧急联系人" prop="sign_service_urgent">
-                            <el-input v-model="signForm.sign_service_urgent"></el-input>
+                        <el-form-item label="紧急联系人" prop="sign_staff_urgent">
+                            <el-input v-model="signForm.sign_staff_urgent"></el-input>
                         </el-form-item>
-                        <!-- <el-form-item label="服务周期单位" prop="unit">
-                            <el-select v-model="signForm.unit" placeholder="请选择活动区域">
-                                <el-option label="请选择" :value="0"></el-option>
-                                <el-option label="按月" value="month"></el-option>
-                                <el-option label="按日" value="day"></el-option>
-                                <el-option label="按时" value="hour"></el-option>
-                                <el-option label="按次" value="time"></el-option>
-                            </el-select>
-                        </el-form-item> -->
                     </div>
                 </div>
 
@@ -66,19 +57,27 @@
                     </div>
                     <div class="order-list">
                         <el-form-item label="服务内容" prop="service_contains">
-                            <el-input v-model="signForm.service_contains"></el-input>
+                            <select-tag-component
+                                :propTagList="orderConfigList.order_service_contains"
+                                v-model="signForm.service_contains"
+                                :isSingle="true"></select-tag-component>
                         </el-form-item>
                         <el-form-item label="服务对象人数" prop="service_count">
                             <el-input v-model="signForm.service_count"></el-input>
                         </el-form-item>
                         <el-form-item label="护理依赖程度" prop="service_level">
-                            <el-input v-model="signForm.service_level"></el-input>
+                            <select-tag-component
+                                :propTagList="orderConfigList.order_service_level"
+                                v-model="signForm.service_level"
+                                :isSingle="true"></select-tag-component>
                         </el-form-item>
                         <el-form-item label="服务方式" prop="service_type">
-                            <el-input v-model="signForm.service_type"></el-input>
+                            <select-tag-component
+                                :propTagList="orderConfigList.order_service_type"
+                                v-model="signForm.service_type"
+                                :isSingle="true"></select-tag-component>
                         </el-form-item>
                         <el-form-item label="服务期限" prop="service_duration">
-                            <!-- <el-input v-model="signForm.service_duration"></el-input> -->
                             <el-date-picker
                                 v-model="signForm.service_duration"
                                 type="datetimerange"
@@ -89,15 +88,6 @@
                         <el-form-item label="工作时间" prop="service_time">
                             <el-input v-model="signForm.service_time"></el-input>
                         </el-form-item>
-                        <!-- <el-form-item label="服务周期单位" prop="unit">
-                            <el-select v-model="signForm.unit" placeholder="请选择活动区域">
-                                <el-option label="请选择" :value="0"></el-option>
-                                <el-option label="按月" value="month"></el-option>
-                                <el-option label="按日" value="day"></el-option>
-                                <el-option label="按时" value="hour"></el-option>
-                                <el-option label="按次" value="time"></el-option>
-                            </el-select>
-                        </el-form-item> -->
                     </div>
                 </div>
                 <div class="order-message">
@@ -107,17 +97,17 @@
                         </div>
                     </div>
                     <div class="order-list">
-                        <el-form-item label="劳务报酬" prop="service_staff_wage">
-                            <el-input v-model="signForm.service_staff_wage"></el-input>
+                        <el-form-item label="劳务报酬" prop="staff_wage">
+                            <el-input v-model="signForm.staff_wage"></el-input>
                         </el-form-item>
-                        <el-form-item label="客户服务费" prop="service_user_charge">
-                            <el-input v-model="signForm.service_user_charge"></el-input>
+                        <el-form-item label="客户服务费" prop="user_charge">
+                            <el-input v-model="signForm.user_charge"></el-input>
                         </el-form-item>
                         <el-form-item label="客户缴纳" prop="user_pay">
                             <el-input v-model="signForm.user_pay"></el-input>
                         </el-form-item>
-                        <el-form-item label="劳动者押金" prop="staff_cash_pledge">
-                            <el-input v-model="signForm.staff_cash_pledge"></el-input>
+                        <el-form-item label="劳动者押金" prop="staff_deposit">
+                            <el-input v-model="signForm.staff_deposit"></el-input>
                         </el-form-item>
                     </div>
                 </div>
@@ -128,8 +118,8 @@
                         </div>
                     </div>
                     <div class="order-list">
-                        <el-form-item label="保险受益人" prop="insurance_beneficiary">
-                            <el-input v-model="signForm.insurance_beneficiary"></el-input>
+                        <el-form-item label="保险受益人" prop="insurance_benefit">
+                            <el-input v-model="signForm.insurance_benefit"></el-input>
                         </el-form-item>
                         <el-form-item label="保险期限" prop="insurance_duration">
                             <el-date-picker
@@ -176,6 +166,8 @@
     </div>
 </template>
 <script>
+import {
+    selectTagComponent,} from '@/pages/components'
 export default {
     data(){
         var _this = this
@@ -268,33 +260,37 @@ export default {
             },
             //签约表单
             signForm: {
-                sign_user:'',// 雇主
+                sign_user_name:'',// 雇主
                 sign_user_phone:'',// 雇主联系电话
                 sign_user_identify:'',// 雇主身份证号
                 
-                sign_service:'',// 签约家政服务员
-                sign_service_phone:'',// 签约家政服务员电话
-                sign_service_identify:'',// 签约家政服务员身份证号
-                sign_service_law_add:'',// 签约家政服务员户籍地址
-                sign_service_cur_add:'',// 签约家政服务员现住址
-                sign_service_urgent:'',// 签约家政服务员紧急联系方式
+                sign_staff_name:'',// 签约家政服务员
+                sign_staff_phone:'',// 签约家政服务员电话
+                sign_staff_identify:'',// 签约家政服务员身份证号
+                sign_staff_law_address:'',// 签约家政服务员户籍地址
+                sign_staff_cur_address:'',// 签约家政服务员现住址
+                sign_staff_urgent:'',// 签约家政服务员紧急联系方式
                 
                 service_contains:'',// 服务内容
                 service_count:'',// 服务对象人数
                 service_level:'',// 护理依赖程度
                 service_type:'',// 服务方式
                 service_duration:[],// 服务期限
+                service_start: '',//服务期限起始
+                service_end: '',//服务期限截止
                 service_time:'',// 工作时间
 
 
-                service_staff_wage:'',// 劳务报酬
-                service_user_charge:'',// 客户服务费
+                staff_wage:'',// 劳务报酬
+                user_charge:'',// 客户服务费
                 user_pay:'',// 客户缴纳
-                staff_cash_pledge:'',// 劳动者押金
-                insurance_beneficiary:'',// 保险受益人
+                staff_deposit:'',// 劳动者押金
+                insurance_benefit:'',// 保险受益人
                 insurance_duration:[],// 保险期限
+                insurance_start: '',//保险起始日
+                insurance_end: '',//保险终止日
                 accessory:[],// 上传附件
-                remarks:'',
+                remarks:'',//备注
             },
             service_period:[],//服务起止时间段
             //图片上传header
@@ -303,9 +299,18 @@ export default {
             }
         }
     },
+    components: {
+        selectTagComponent,
+    },
     computed:{
         total_price(){
             return parseFloat((Number(this.signForm.service_count) * Number(this.signForm.unit_price)).toFixed(10))
+        },
+        /**
+         * 订单签约字段
+         */
+        orderConfigList(){
+            return this.$store.state.saleModule
         }
     },
     watch: {

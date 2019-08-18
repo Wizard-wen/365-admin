@@ -19,32 +19,33 @@ export default {
             ...applyObject
         })
     },
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     /**
      * 获取订单列表
      */
-    getOrderList(tableOption){
-        let baseUrl = `./admin/order/getOrderList?pageNumber=${tableOption.pageNumber}&page=${tableOption.currentPage}&purpose=${tableOption.purpose}`
-        if(tableOption.searchSelect.length){
-            tableOption.searchSelect.forEach((item, index) => {
-                baseUrl += `&${item.key}=${item[item.key]}`
-            });
-        }
-        return axios.get(baseUrl)
+    getOrderList(){
+        return axios.post(`./admin/order/getOrderList`,
+        store.state.saleModule.orderList)
     },
+    /**
+     * 获取订单信息
+     * @param order_id 订单id
+     */
+    getOrder(order_id){
+        return axios.get(`./admin/order/getOrder?id=${order_id}`)
+    },
+
+
+
+
+
+
+
+
+
+
+
+
+
     /**
      * 获取所有销售人员名单
      */
@@ -65,13 +66,7 @@ export default {
             }
         )
     },
-    /**
-     * 获取订单信息
-     * @param order_id 订单id
-     */
-    getOrder(order_id){
-        return axios.get(`./admin/order/getOrder?order_id=${order_id}`)
-    },
+
     /**
      * 编辑订单
      * @param obj 编辑表单字段

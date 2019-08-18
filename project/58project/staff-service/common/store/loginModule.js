@@ -16,7 +16,9 @@ export const loginModule = {
     state: {
         isLogin: false,//是否登录
         token: null,//存储token 
-        user: {},//用户信息
+        user: {
+            
+        },//用户信息
     },
     mutations: {
         login(state, token){

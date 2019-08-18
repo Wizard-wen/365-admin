@@ -6,60 +6,48 @@ Vue.use(Vuex)
 
 import saleRequest from '../service/request/saleRequest.js'
 import { Message } from 'element-ui';
-/**
- * 订单状态类型
- */
+
 var order_status = [
-    {
-        label: '匹配中',
-        value: 1
-    },
-    {
-        label: '已签约',
-        value: 2
-    },
-    {
-        label: '售后匹配中',
-        value: 3
-    },
-    {
-        label: '已终止',
-        value: 4
-    },
+    {name: '匹配中',id: 1},
+    {name: '已签约',id: 2},
+    {name: '售后匹配中',id: 3},
+    {name: '已终止',id: 4},
 ]
-
-/**
- * 订单来源
- */
-var order_source = [
-    {
-        label: "请选择",
-        value: 0
-    },
-    {
-        label: "线上",
-        value: 1
-    },
-    {
-        label: "线下",
-        value: 2
-    },
-    {
-        label: "渠道",
-        value: 3
-    },
+var order_service_level = [
+    {id: 1,name: '自理'},
+    {id: 2,name: '不自理'},
 ]
-
+var order_service_type = [
+    {id: 1,name: '全日住家型'},
+    {id: 2,name: '日间照料型'},
+    {id: 3,name: '计时服务型'},
+    {id: 4,name: '其他'},
+]
+var order_service_contains = [
+    {id: 1,name: '普通家务劳动'},
+    {id: 2,name: '婴幼儿照护'},
+    {id: 3,name: '婴幼儿教育'},
+    {id: 4,name: '产妇与新生儿护理'},
+    {id: 5,name: '老人照护'},
+    {id: 6,name: '病人陪护'},
+    {id: 7,name: '计时服务'},
+    {id: 8,name: '家庭餐制作'},
+    {id: 9,name: '其他'},
+]
 
 export const saleModule = {
     state: {
         order: [],//订单基本信息
         order_staff: [],//待匹配服务人员
-        order_files: [], //合同列表
+        order_contract: [], //合同列表
         order_logs: [],//订单日志
 
         order_status: order_status,//订单状态类型
-        order_source: order_source,//订单来源
+        order_service_contains:order_service_contains,//订单服务内容
+        order_service_level:order_service_level,//订单护理依赖程度
+        order_service_type:order_service_type,//订单服务方式
+
+        
         /**
          *  服务人员信息库 查询字段 
          */
@@ -105,6 +93,16 @@ export const saleModule = {
             manager_ids: [],//创建人
             updated_type_ids: [],//更新时间
         }, //全部查询参数
+        //订单查询参数
+        orderList: {
+            page: 1, //请求页码
+            pageNumber: 20,//单页信息数量
+            order_code: '',//订单编号
+            order_user_phone:'',//下单
+            agent_store_id: '',//经纪门店id
+            agent_manager_id: '', //经纪人id
+            type: '',          //订单状态 
+        },
         /**
          *  合同列表 查询字段 
          */
@@ -131,11 +129,11 @@ export const saleModule = {
         /**
          * 初始化shuju
          */
-        configData(state, data){
-            state.order = data.data.order
-            state.order_staff = data.data.order_staff //候选人员
-            state.order_files = data.data.order_files //合同信息
-            state.order_logs = data.data.order_logs //订单日志
+        configOrderData(state, data){
+            state.order = data.order
+            state.order_staff = data.order_staff //候选人员
+            state.order_files = data.order_contract //合同信息
+            state.order_logs = data.order_logs //订单日志
         },
         /** 
         * @param queryKey queryList 键名 
@@ -153,21 +151,22 @@ export const saleModule = {
         },
     },
     actions: {
-        async setData(context, order_id){
-            await saleRequest.getOrder(order_id)
-                .then(data =>{
-                    context.commit('configData',data)
-                })
-                .catch(e =>{
-                    Message({
-                        type:'error',
-                        message: e.message
-                    })
-                })
+        // async setData(context, order_id){
+        //     await saleRequest.getOrder(order_id)
+        //         .then(data =>{
+        //             context.commit('configData',data)
+        //         })
+        //         .catch(e =>{
+        //             Message({
+        //                 type:'error',
+        //                 message: e.message
+        //             })
+        //         })
 
-        }
+        // }
     }
 }
+
 
 
 

@@ -148,8 +148,8 @@
     </div>
 </template>
 <script>
-import searchList from './components/query/searchList.vue'
-import searchInput from './components/query/searchInput.vue'
+import searchList from './query/searchList.vue'
+import searchInput from './query/searchInput.vue'
 // import {queryUpdated_at} from '../interface/query.js'
 export default {
     data(){

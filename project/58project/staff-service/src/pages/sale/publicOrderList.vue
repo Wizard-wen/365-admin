@@ -36,7 +36,7 @@
         salePubOrderTableComponent,
     } from './publicOrderList/index.js'
 
-    
+
     export default {
         components: {
             salePubOrderTableComponent,
@@ -89,7 +89,7 @@
                     this.isLoaded = true
 
                     await Promise.all([
-                        operateService.getApplicationList(), //
+                        saleService.getApplicationList(), //
                     ]).then((data) =>{
 
                         this.orderApplyTable = data[0].data.data

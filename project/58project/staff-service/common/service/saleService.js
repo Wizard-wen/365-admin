@@ -19,28 +19,35 @@ export default {
     applyOrder(applyObject){
         return saleRequest.applyOrder(applyObject)
     },
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     /**
      * 获取订单列表
      */
-    getOrderList(tableOption){
-        return saleRequest.getOrderList(tableOption)
+    getOrderList(){
+        return saleRequest.getOrderList()
     },
+    /**
+     * 获取订单信息
+     * @param order_id 订单id
+     */
+    async getOrder(order_id){
+        return saleRequest.getOrder(order_id)
+    },
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     /**
      * 获取所有销售人员名单
      */
@@ -54,13 +61,7 @@ export default {
     createOrder(obj){
         return saleRequest.createOrder(obj) 
     },
-    /**
-     * 获取订单信息
-     * @param order_id 订单id
-     */
-    async getOrder(order_id){
-        await store.dispatch('setData', order_id)
-    },
+
     /**
      * 编辑订单
      * @param obj 编辑表单字段

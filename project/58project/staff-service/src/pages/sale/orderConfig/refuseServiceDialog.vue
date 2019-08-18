@@ -7,7 +7,7 @@
         :close-on-press-escape="false"
         :close-on-click-modal="false">
         <el-form :model="refuseServiceForm" label-width="120px" ref="refuseServiceForm">
-            <p>您将拒绝{{}}劳动者，请填写拒绝事由。</p>
+            <p>您将拒绝{{serviceObj.staff_name}}劳动者，请填写拒绝事由。</p>
             <el-form-item label="拒绝事由">
                 <el-input v-model="refuseServiceForm.reason"></el-input>
             </el-form-item>
@@ -38,14 +38,14 @@ export default {
         /**
          * 订单申请id
          */
-        orderApplyId: {
+        order_id: {
             type: Number,
             default: 0
         },
         /**
          * 服务人员字段
          */
-        serviceMessage: {
+        service_staff: {
             default: function(){
                 return {}
             },
@@ -59,6 +59,11 @@ export default {
                 id: this.$route.query.id,
                 reason: '',//事由
             },
+        }
+    },
+    computed: {
+        serviceObj(){
+            return this.service_staff
         }
     },
     methods: {

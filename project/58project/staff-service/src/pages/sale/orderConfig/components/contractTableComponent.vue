@@ -58,7 +58,7 @@
     </div>
 </template>
 <script>
-    import {operateService, $utils} from '../../../../common'
+    import {operateService, $utils} from '../../../../../common'
     import {
         tableTagComponent} from '@/pages/components'
     
