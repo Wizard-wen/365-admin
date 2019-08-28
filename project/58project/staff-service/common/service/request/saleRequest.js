@@ -2,14 +2,10 @@
  * 订单模块接口
  */
 import axios from 'axios'
-export default {
-    /**
-     * 获取门店员工信息
-     * @param id 门店id
-     */
-    getStoreManagerSelection(id){
-        return axios.get(`./admin/common/getStoreManagerSelection?store=${id}`)
-    },
+/**
+ * 订单申请相关接口
+ */
+export const sale_orderApplyRequest = {
     /**
      * 订单申请
      * @param applyObject 订单申请字段
@@ -19,6 +15,12 @@ export default {
             ...applyObject
         })
     },
+}
+
+/**
+ * 订单相关接口
+ */
+export const sale_orderRequest = {
     /**
      * 获取订单列表
      */
@@ -33,94 +35,13 @@ export default {
     getOrder(order_id){
         return axios.get(`./admin/order/getOrder?id=${order_id}`)
     },
-
-
-
-
-
-
-
-
-
-
-
-
-
     /**
-     * 获取所有销售人员名单
+     * 编辑订单详情字段
+     * @param editObj 编辑对象 
      */
-    getManagerSelection(){
-        let baseUrl = `./admin/common/getManagerSelection`
-
-        return axios.get(baseUrl)
-    },
-    /**
-     * 创建订单
-     * @param obj 新订单表单字段
-     */
-    createOrder(obj){
-        return axios.post(`./admin/order/createOrder`,
-            // Object.assign({}, obj)
-            {
-                ...obj
-            }
-        )
-    },
-
-    /**
-     * 编辑订单
-     * @param obj 编辑表单字段
-     */
-    editOrder(obj){
+    editOrder(editObj){
         return axios.post(`./admin/order/editOrder`,
-            Object.assign({}, obj)
-        )
-    },
-    /**
-     * 添加候选人
-     * @param obj 候选人字段信息
-     */
-    createOrderStaff(obj){
-        return axios.post(`./admin/order/createOrderStaff`,
-            Object.assign({}, obj)
-        )
-    },
-    /**
-     * 删除候选人
-     * @param order_staff_id 候选人员信息id
-     * @param order_id 订单id
-     */
-    deleteOrderStaff(order_staff_id, order_id){
-        return axios.post(`./admin/order/deleteOrderStaff`,
-            {
-                order_staff_id: order_staff_id,
-                order_id: order_id
-            }
-        )
-    },
-    /**
-     * 签约
-     */
-    sign(obj){
-        return axios.post(`./admin/order/sign`,
-            Object.assign({}, obj)
-        )
-    },
-    /**
-     * 拒签
-     */
-    refuse(obj){
-        return axios.post(`./admin/order/refuse`,
-            Object.assign({}, obj)
-        )
-    },
-    /**
-     * 签约前、售后日志
-     */
-    writeOrderLog(obj){
-        return axios.post(`./admin/order/writeOrderLog`,
-            Object.assign({}, obj)
-        )
+        ...editObj)
     },
     /**
      * 取消订单
@@ -146,8 +67,48 @@ export default {
             Object.assign({}, obj)
         )
     },
-
-    
+}
+/**
+ * 销售门店备选服务人员相关接口
+ */
+export const sale_matchServiceRequest = {
+    /**
+     * 添加订单候选人
+     * @param orderStaffObj
+     */
+    createOrderStaff(orderStaffObj){
+        return axios.post(`./admin/order/createOrderStaff`,
+        ...orderStaffObj)
+    },
+    /**
+     * 删除候选人
+     * @param orderStaffObj
+     */
+    deleteOrderStaff(orderStaffObj){
+        return axios.post(`./admin/order/deleteOrderStaff`,
+        ...orderStaffObj)
+    },
+    /**
+     * 签约
+     * @param signObject
+     */
+    sign(signObject){
+        return axios.post(`./admin/order/sign`,
+        ...signObject)
+    },
+    /**
+     * 拒签
+     * @param refuseObj
+     */
+    refuse(refuseObj){
+        return axios.post(`./admin/order/refuse`,
+        ...refuseObj)
+    }
+}
+/**
+ * 销售门店服务人员管理相关接口
+ */
+export const sale_staffRequest = {
     /**
      * 销售创建服务人员
      */
@@ -164,4 +125,38 @@ export default {
             Object.assign({}, obj)
         )
     }
+}
+export const sale_orderContractRequest = {
+    /**
+     * 终止合同
+     */
+    stopContract(){
+        return axios.post(``)
+    },
+    /**
+     * 结算工资
+     */
+    settleWage(){
+        return axios.post(``)
+    }
+}
+export default {
+    ...sale_orderApplyRequest,
+    ...sale_orderRequest,
+    ...sale_matchServiceRequest,
+    ...sale_staffRequest,
+
+
+    /**
+     * 签约前、售后日志
+     */
+    writeOrderLog(obj){
+        return axios.post(`./admin/order/writeOrderLog`,
+            Object.assign({}, obj)
+        )
+    },
+
+
+    
+
 }

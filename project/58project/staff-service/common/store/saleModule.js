@@ -132,7 +132,7 @@ export const saleModule = {
         configOrderData(state, data){
             state.order = data.order
             state.order_staff = data.order_staff //候选人员
-            state.order_files = data.order_contract //合同信息
+            state.order_contract = data.order_contract //合同信息
             state.order_logs = data.order_logs //订单日志
         },
         /** 

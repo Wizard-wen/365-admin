@@ -4,19 +4,19 @@
  * 个人中心
  */
 
-import homePage from '@/pages/home.vue'
-import dashboard from '@/pages/home/dashboard.vue'
+import homePage from '@/pages/myCenter/homePage.vue'
+import mySetting from '@/pages/myCenter/mySetting.vue'
 
 const homeModule = [
     {
-        path: '/homePage',
+        path: '/myCenter/homePage',
         name: 'homePage',
         component: homePage,
     },
     {
-        path: '/home/dashboard',
-        name: 'dashboard',
-        component: dashboard,
+        path: '/myCenter/mySetting',
+        name: 'mySetting',
+        component: mySetting,
     },
 ]
 
@@ -89,7 +89,10 @@ import operateWorkStation from '@/pages/operate/operateWorkStation.vue'
 import operateOrderList from '@/pages/operate/order/orderList.vue'
 import operateOrderApplyList from '@/pages/operate/order/orderApplyList.vue'
 import operateOrderApplyItem from '@/pages/operate/order/orderApplyItem.vue'
-
+/**
+ * 运营 --- 商品管理
+ */
+import productList from '@/pages/operate/product/productList.vue'
 /**
  * 运营---服务人员管理
  */
@@ -123,6 +126,11 @@ import operateOrderApplyItem from '@/pages/operate/order/orderApplyItem.vue'
         path: '/operate/operateOrderApplyItem',
         name: 'operateOrderApplyItem',
         component: operateOrderApplyItem,
+    },
+    {
+        path: '/operate/productList',
+        name: 'productList',
+        component: productList,
     },
     {
         path: '/worker/workerList',
@@ -258,7 +266,7 @@ let student = [
  * 重定向
  */
 export default [
-    {path: '/', redirect: '/homePage'},
+    {path: '/', redirect: '/myCenter/homePage'},
     ...homeModule, //我的模块
     ...authModule,//权限管理模块
     ...operateModule, //服务人员管理模块

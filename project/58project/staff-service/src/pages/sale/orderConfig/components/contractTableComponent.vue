@@ -20,29 +20,23 @@
 
                 <el-table-column  label="合同编号" prop="contact_code" align="center" width="110"></el-table-column>
 
-                <el-table-column  label="印制时间" prop="created_at" align="center" :formatter="created_atFormatter" width="110"></el-table-column>
+                <el-table-column  label="合同状态" prop="type" align="center"  width="110"></el-table-column>
 
-                <el-table-column  label="责任部门" prop="contractManageDepartment" align="center" width="110"></el-table-column>
+                <el-table-column  label="签约时间" prop="sign_at" align="center" width="110"></el-table-column>
 
-                <el-table-column  label="责任人" prop="contractManager" align="center" width="110"></el-table-column>
+                <el-table-column  label="终止时间" prop="stop_at" align="center" width="110"></el-table-column>
 
-                <el-table-column  label="合同状态" prop="contract_status" align="center" width="110"></el-table-column>
+                <el-table-column  label="签约经纪人" prop="sign_manager_name" align="center" width="110"></el-table-column>
 
-                <el-table-column  label="是否签约" prop="isSign" align="center" width="110"></el-table-column>
+                <el-table-column  label="签约经纪门店" prop="sign_store_name" align="center" width="110"></el-table-column>
 
-                <el-table-column  label="甲方签约人" prop="firstParty" align="center" width="110"></el-table-column>
+                <el-table-column  label="签约客户" prop="sign_user_name" align="center" width="110"></el-table-column>
 
-                <el-table-column  label="甲方签约人id" prop="firstPartyId" align="center" width="110"></el-table-column>
+                <el-table-column  label="签约客户电话电话" prop="sign_user_phone" align="center" width="110"></el-table-column>
 
-                <el-table-column  label="乙方签约人" prop="secondParty" align="center" width="110"></el-table-column>
+                <el-table-column  label="家政服务员" prop="sign_staff_name" align="center" width="110"></el-table-column>
 
-                <el-table-column  label="乙方签约人id" prop="secondPartyId" align="center" width="110"></el-table-column>
-
-                <el-table-column  label="签约管家" prop="signManager" align="center" width="110"></el-table-column>
-
-                <el-table-column  label="签约管家id" prop="signManagerId" align="center" width="110"></el-table-column>
-
-                <el-table-column  label="签约时间" prop="signed_at" align="center" width="110"></el-table-column>
+                <el-table-column  label="家政服务员编号" prop="sign_staff_code" align="center" width="110"></el-table-column>
 
                 <el-table-column label="操作" align="center" fixed="right" :width="controlScopeLength">
                     <template slot-scope="scope">

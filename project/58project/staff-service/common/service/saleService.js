@@ -1,17 +1,9 @@
 /**
- * 订单模块接口
+ * 销售门店模块接口
  */
 
 import saleRequest from './request/saleRequest.js'
-import { Message } from 'element-ui';
 export default {
-    /**
-     * 获取门店员工信息
-     * @param id 门店id
-     */
-    getStoreManagerSelection(id){
-        return saleRequest.getStoreManagerSelection(id)
-    },
     /**
      * 订单申请
      * @param applyObject 订单申请字段

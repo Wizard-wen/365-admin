@@ -127,6 +127,7 @@
                             </template>
                         </match-service-table-component>
                     </div> -->
+                    <!-- <match-service-list></match-service-list> -->
                     <match-service-list></match-service-list>
                 </div>
             </div>
@@ -176,7 +177,7 @@
                     </div>
                 </div>
                 <div class="order-list">
-
+                    <contract-list :staffTable="contractTable"></contract-list>
                     <refuse-service-dialog
                         v-if="refuseServiceDialogVisible"
                         :refuseServiceDialogVisible="refuseServiceDialogVisible"
@@ -214,12 +215,13 @@
 <script>
     import {operateService, $utils, saleService} from '../../../common'
     import {
-        matchServiceTableComponent,
-        matchServiceQueryComponent,
+        // matchServiceTableComponent,
+        // matchServiceQueryComponent,
         // contractTableComponent,
         refuseServiceDialog,
         assignDialog,
-        matchServiceList} from './orderConfig/index.js'
+        matchServiceList,
+        contractList} from './orderConfig/index.js'
 export default {
     data(){
         return {
@@ -244,18 +246,19 @@ export default {
             //合同列表
             contractTable: [{
                 contact_code:'string',//合同编号
-                created_at:'string',//印制时间
-                manageDepartment:'string',//责任部门
-                manager:'string',//责任人
-                contract_status:'string',// 合同状态
-                isSign:'Boolean',//是否签约
-                firstParty:'string',//甲方签约人
-                firstPartyId:'string',//甲方签约人id
-                secondParty:'string',//乙方签约人
-                secondPartyId:'string',//乙方签约人id
-                signManager:'string',// 签约管家
-                signManagerId:'string',// 签约管家id
-                signed_at:'string',// 签约时间               
+                type: '',//合同状态
+                // created_at:'string',//印制时间
+                // manageDepartment:'string',//责任部门
+                // manager:'string',//责任人
+                // contract_status:'string',// 合同状态
+                // isSign:'Boolean',//是否签约
+                // firstParty:'string',//甲方签约人
+                // firstPartyId:'string',//甲方签约人id
+                // secondParty:'string',//乙方签约人
+                // secondPartyId:'string',//乙方签约人id
+                // signManager:'string',// 签约管家
+                // signManagerId:'string',// 签约管家id
+                // signed_at:'string',// 签约时间               
             }],
             refuseServiceDialogVisible: false,//拒绝服务人员显示隐藏
             //分配弹出框显示
@@ -265,11 +268,12 @@ export default {
         }
     },
     components: {
-        matchServiceTableComponent,
-        matchServiceQueryComponent,
+        // matchServiceTableComponent,
+        // matchServiceQueryComponent,
         refuseServiceDialog,
         assignDialog,
-        matchServiceList
+        matchServiceList,
+        contractList
     },
     computed:{
         /**

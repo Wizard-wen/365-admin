@@ -1,9 +1,12 @@
 /**
- * 人力资源接口
+ * 运营接口
  */
-import axios from 'axios'
 
-export default {
+import axios from 'axios'
+/**
+ * 运营订单申请接口
+ */
+export const operate_orderApplyRequest = {
     /**
      * 订单申请列表 
      */
@@ -41,6 +44,19 @@ export default {
         })
     },
     /**
+     * 处理订单申请
+     */
+    dealApplication(changeObj){
+        return axios.post(`./admin/order/dealApplication`,{
+            ...changeObj
+        })
+    },
+} 
+/**
+ * 门店、门店经纪人信息接口
+ */
+export const operate_storeRequest = {
+    /**
      * 获取全部门店列表
      */
     getStoreSelection(){
@@ -53,20 +69,18 @@ export default {
     getStoreManagerSelection(store_id){
         return axios.get(`./admin/common/getStoreManagerSelection?store_id=${store_id}`)
     },
-    
-
-
-
-
-
-
-
+}
+/**
+ * 运营中心服务人员信息接口
+ */
+export const operate_staffRequest = {
     /**
      * 获取员工列表
      * @param type 列表类别
      */
     getStaffList(type){
         let baseUrl = `./admin/staff/getStaffList`;
+
         if(type == 0){
             return axios.post(
                 baseUrl,
@@ -123,6 +137,19 @@ export default {
             id: id
         })
     },
+}
+
+export default {
+    ...operate_orderApplyRequest,
+    ...operate_storeRequest,
+    ...operate_staffRequest,
+
+
+
+
+
+
+
 
 
 

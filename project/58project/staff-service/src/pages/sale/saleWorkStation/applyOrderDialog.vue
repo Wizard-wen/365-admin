@@ -68,7 +68,7 @@
 /**
  * type 0 新建  1 编辑
  */
-import {saleService} from '../../../../common'
+import {saleService,operateService} from '../../../../common'
 
 export default {
     props:{
@@ -159,7 +159,7 @@ export default {
     async mounted(){
         // if(this.store_id){
             try{
-                await saleService.getStoreManagerSelection(1).then((data) =>{
+                await operateService.getStoreManagerSelection(1).then((data) =>{
                     console.log(data)
                 })
             } catch(error){

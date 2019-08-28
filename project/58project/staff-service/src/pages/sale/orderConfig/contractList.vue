@@ -1,13 +1,14 @@
 <template>
     <div class="staff">
         <contract-table-component
-            :staffTable="contractTable"
+            :staffTable="order_contract"
             :maxLength="maxLength"
-            :controlScopeLength="150">
+            :controlScopeLength="200">
 
             <template slot="control" slot-scope="controler">
                 <el-button size="mini" type="text" @click="showStaff(controler.scoper.$index, controler.scoper.row)">查看</el-button>
-                <el-button size="mini" type="text" @click="sendErrorMessage(controler.scoper.row)">添加备选</el-button>
+                <el-button size="mini" type="text" @click="sendErrorMessage(controler.scoper.row)">结算工资</el-button>
+                <el-button size="mini" type="text" @click="sendErrorMessage(controler.scoper.row)">终止合同</el-button>
             </template>
 
             <template slot="pagination">
@@ -33,7 +34,7 @@ export default {
     data(){
         return {
             //订单中包含的合同列表
-            contractTable: [],
+            // contractTable: [],
 
             isLoaded:false,
             /**
@@ -70,6 +71,12 @@ export default {
         workerConfigList(){
             return this.$store.state.operateModule.configForm
         },
+        /**
+         * 合同数据
+         */
+        order_contract(){
+            return this.$store.state.saleModule.order_contract
+        }
     },
     methods: {
         computeStringLength(array, listKey, configKey){

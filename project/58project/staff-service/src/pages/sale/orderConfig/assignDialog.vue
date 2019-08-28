@@ -7,25 +7,6 @@
         :show-close="false"
         :close-on-press-escape="false"
         :close-on-click-modal="false">
-        <!-- <div class="base-form-box" :style="{height: `${(sizeLong / 2)*40}px`}">
-            <div
-                class="base-line"
-                :style="{
-                    width: item.size == 2? '100%' : '50%',
-                    marginBottom: index == baseList.length - 1? '20px': '0'}"
-                v-for="(item, index) in baseList"
-                :key="index">
-                <div class="base-word" v-if="item.key">
-                    <div class="base-key">{{item.key+'：'}}</div>
-                    <div class="base-value" v-if="item.value">{{item.value}}</div>
-                    <div class="base-value" style="color: #F56C6C" v-else>暂无数据</div>
-                </div>
-                <div class="base-word" v-else>
-                    <div class="base-key"></div>
-                    <div class="base-value"></div>
-                </div>
-            </div>
-        </div> -->
         <el-form ref="assignOrderForm" class="assign-form" :model="assignOrderForm" :rules="assignOrderRules" label-width="120px">
             <el-form-item label="选择销售人员" prop="manager_id">
                 <el-select v-model="assignOrderForm.manager_id" placeholder="销售人员">

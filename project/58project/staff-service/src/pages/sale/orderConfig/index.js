@@ -10,8 +10,17 @@ import assignDialog from './assignDialog.vue'
 
 import matchServiceList from  './matchServiceList.vue'
 
+import contractList from  './contractList.vue'
+
+// import matchServiceTableComponent from  './matchServiceTableComponent.vue'
+
+// import matchServiceQueryComponent from  './matchServiceQueryComponent.vue'
+
 export {
     refuseServiceDialog,
     assignDialog,
     matchServiceList,
+    contractList,
+    // matchServiceQueryComponent,
+    // matchServiceTableComponent,
 }

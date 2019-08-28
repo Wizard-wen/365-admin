@@ -21,7 +21,6 @@
 </template>
 
 <script>
-
 /**
  * type 0 新建  1 编辑
  */

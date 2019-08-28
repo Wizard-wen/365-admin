@@ -49,7 +49,7 @@
         </div>
         <div class="auth-tree-box">
             <div class="title">索引</div>
-            <el-tree :data="treelist" accordion :props="defaultProps"></el-tree>
+            <el-tree :data="treelist" accordion @node-click="nodeClick" :props="defaultProps"></el-tree>
         </div>
     </div>
 </template>
@@ -244,6 +244,14 @@ export default {
             } else if(row.is_display == 2){
                 return "不展示"
             }
+        },
+        /**
+         * 点击节点
+         * @param clickObject 点击的节点对象
+         * @param currentObject 树目前选中的对象
+         */
+        nodeClick(clickObject,currentObject){
+            console.log(clickObject,currentObject)
         }
     },
     async mounted(){
