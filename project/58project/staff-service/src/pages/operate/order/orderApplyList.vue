@@ -97,7 +97,7 @@
 
                     await Promise.all([
                         operateService.getApplicationList(), //订单申请列表
-                        operateService.getOrderFormConfig(), //订单相关配置标签
+                        operateService.getApplyFormConfig(), //订单申请相关配置标签
                     ]).then((data) =>{
 
                         this.orderApplyTable = data[0].data.data

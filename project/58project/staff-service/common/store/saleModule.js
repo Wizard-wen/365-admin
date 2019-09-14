@@ -145,11 +145,21 @@ export const saleModule = {
             page: 1, //请求页码
             pageNumber: 20,//单页信息数量
             order_code: '',//订单编号
+            type: [],//订单状态 
+            order_at: [],//客户下单时间
             order_user_phone:'',//下单客户电话
             order_user_name: '',//下单客户姓名
-            agent_store_id: '',//经纪门店id
-            agent_manager_id: '', //经纪人id
-            type: '',          //订单状态 
+            apply_store_id: [],//来源门店
+            apply_manager_id: [],//来源人
+            sign_user_name: '',//签约客户名
+            sign_user_phone: '',//签约客户电话
+            sign_staff_name: '',//签约服务人员姓名
+            sign_staff_code: '',//签约服务人员编号
+            sign_staff_phone: '',//签约服务人员电话
+            created_at: [],//订单创建时间
+            created_manager_id: [],//订单创建人
+            agent_store_id: [],//经纪门店id
+            agent_manager_id: [], //经纪人id
         },
         /**
          *  合同列表查询字段 
