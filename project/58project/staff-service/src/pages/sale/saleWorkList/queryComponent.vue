@@ -3,9 +3,9 @@
         <search-list
             :queryFrom="queryFrom"
             @updateTable="updateTable" 
-            :queryKey="'authentication_ids'" 
+            :queryKey="'authentication'" 
             :queryName="'认证状态'" 
-            :queryList="configForm.authentication"></search-list>
+            :queryList="workerConfigForm.authentication"></search-list>
         <search-input
             :queryFrom="queryFrom"
             @updateTable="updateTable"
@@ -24,9 +24,9 @@
         <search-list
             :queryFrom="queryFrom"
             @updateTable="updateTable" 
-            :queryKey="'working_status_ids'" 
+            :queryKey="'working_status'" 
             :queryName="'接单状态'" 
-            :queryList="configForm.working_status"></search-list>
+            :queryList="workerConfigForm.working_status"></search-list>
         <search-input
             :queryFrom="queryFrom"
             @updateTable="updateTable"
@@ -35,27 +35,27 @@
         <search-list
             :queryFrom="queryFrom"
             @updateTable="updateTable" 
-            :queryKey="'service_category_ids'" 
+            :queryKey="'service_category'" 
             :queryName="'职业类型'" 
-            :queryList="configForm.service_category"></search-list>
+            :queryList="workerConfigForm.service_category"></search-list>
         <search-list
             :queryFrom="queryFrom"
             @updateTable="updateTable" 
-            :queryKey="'service_type_ids'" 
+            :queryKey="'service_type'" 
             :queryName="'服务类型'" 
-            :queryList="configForm.service_type"></search-list>     
+            :queryList="workerConfigForm.service_type"></search-list>     
         <search-list
             :queryFrom="queryFrom"
             @updateTable="updateTable" 
-            :queryKey="'service_crowd_ids'" 
+            :queryKey="'service_crowd'" 
             :queryName="'可服务人群'" 
-            :queryList="configForm.service_crowd"></search-list>
+            :queryList="workerConfigForm.service_crowd"></search-list>
         <search-list
             :queryFrom="queryFrom"
             @updateTable="updateTable" 
-            :queryKey="'working_age_ids'" 
+            :queryKey="'working_age'" 
             :queryName="'工龄'" 
-            :queryList="configForm.working_age"></search-list>
+            :queryList="workerConfigForm.working_age"></search-list>
         <search-input
             :queryFrom="queryFrom"
             @updateTable="updateTable"
@@ -64,9 +64,9 @@
         <search-list
             :queryFrom="queryFrom"
             @updateTable="updateTable" 
-            :queryKey="'nation_ids'" 
+            :queryKey="'nation'" 
             :queryName="'民族'" 
-            :queryList="configForm.nation"></search-list>
+            :queryList="workerConfigForm.nation"></search-list>
         <search-input
             :queryFrom="queryFrom"
             @updateTable="updateTable"
@@ -85,15 +85,15 @@
         <search-list
             :queryFrom="queryFrom"
             @updateTable="updateTable" 
-            :queryKey="'service_region_ids'" 
+            :queryKey="'service_region'" 
             :queryName="'服务地区'" 
-            :queryList="configForm.service_region"></search-list>
+            :queryList="workerConfigForm.service_region"></search-list>
         <search-list
             :queryFrom="queryFrom"
             @updateTable="updateTable" 
-            :queryKey="'education_ids'" 
+            :queryKey="'education'" 
             :queryName="'教育程度'" 
-            :queryList="configForm.education"></search-list>
+            :queryList="workerConfigForm.education"></search-list>
         <search-input
             :queryFrom="queryFrom"
             @updateTable="updateTable"
@@ -107,9 +107,9 @@
         <search-list
             :queryFrom="queryFrom"
             @updateTable="updateTable" 
-            :queryKey="'course_ids'" 
+            :queryKey="'course'" 
             :queryName="'参加培训'" 
-            :queryList="configForm.course"></search-list>
+            :queryList="workerConfigForm.course"></search-list>
         <search-input
             :queryFrom="queryFrom"
             @updateTable="updateTable"
@@ -118,15 +118,15 @@
         <search-list
             :queryFrom="queryFrom"
             @updateTable="updateTable" 
-            :queryKey="'paper_category_ids'" 
+            :queryKey="'paper_category'" 
             :queryName="'技能证书标签'" 
-            :queryList="configForm.paper_category"></search-list>
+            :queryList="workerConfigForm.paper_category"></search-list>
         <search-list
             :queryFrom="queryFrom"
             @updateTable="updateTable" 
-            :queryKey="'source_ids'" 
+            :queryKey="'source'" 
             :queryName="'信息来源'" 
-            :queryList="configForm.source"></search-list>
+            :queryList="workerConfigForm.source"></search-list>
         <search-input
             :queryFrom="queryFrom"
             @updateTable="updateTable"
@@ -135,16 +135,16 @@
         <search-list
             :queryFrom="queryFrom"
             @updateTable="updateTable" 
-            :queryKey="'manager_ids'" 
+            :queryKey="'manager'" 
             :queryName="'创建人'" 
-            :queryList="configForm.manager"></search-list>
+            :queryList="workerConfigForm.manager"></search-list>
         <search-list
             :queryFrom="queryFrom"
             @updateTable="updateTable" 
             :isSingleQuery="true"
-            :queryKey="'updated_type_ids'" 
+            :queryKey="'updated_type'" 
             :queryName="'更新时间'" 
-            :queryList="configForm.updated_type"></search-list>
+            :queryList="workerConfigForm.updated_type"></search-list>
     </div>
 </template>
 <script>
@@ -154,7 +154,7 @@ import searchInput from './query/searchInput.vue'
 export default {
     data(){
         return {
-            setConfigForm: [],//本地接收的搜索config字段
+            setWorkerConfigForm: [],//本地接收的搜索config字段
             // queryUpdated_at,
         }
     },
@@ -163,8 +163,8 @@ export default {
         searchInput,
     },
     computed:{
-        configForm(){
-            return this.$store.state.operateModule.configForm
+        workerConfigForm(){
+            return this.$store.state.operateModule.workerConfigForm
         }
     },
     props: {

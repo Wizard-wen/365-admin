@@ -2,7 +2,7 @@
     <!-- 订单申请 -->
     <el-dialog
         title="通过订单申请"
-        :visible.sync="orderApplyVisible"
+        :visible.sync="orderApplyPassVisible"
         :show-close="false"
         :close-on-press-escape="false"
         :close-on-click-modal="false">
@@ -46,7 +46,7 @@ export default {
         /**
          * 控制组件的显示隐藏
          */
-        orderApplyVisible:{
+        orderApplyPassVisible:{
             default:false,
             type: Boolean,
         },
@@ -66,8 +66,8 @@ export default {
         return {
             //改变的字段内容
             orderApplyForm: {
-                id: this.$route.query.id,
-                type: 'pass',//状态设定为通过
+                id: this.orderApplyId,
+                type: 3,//状态设定为通过
                 agent_manager_id: 0,//经纪人id
                 agent_store_id: 1,//经纪门店id
                 version: this.systemVersion,
@@ -81,7 +81,7 @@ export default {
         cancelApplyChange(){
             this.orderApplyForm.agent_manager_id = ''
             this.orderApplyForm.agent_store_id = ''
-            this.$emit('closeOrderApplyDialog')
+            this.$emit('closeOrderApplyPassDialog')
         },
         async changeStoreManager(id){
             await operateService.getStoreManagerSelection(id).then(data =>{
@@ -102,7 +102,7 @@ export default {
                                 type:"success",
                                 message: data.message
                             })
-                            this.$emit('closeOrderApplyDialog')
+                            this.$emit('closeOrderApplyPassDialog')
                         }
                     }).catch(error =>{
                         this.$message({

@@ -18,13 +18,13 @@
                 :header-cell-style="{height: '30px',padding: '0px',fontSize:'12px'}"
                 :cell-style="{height: '30px',padding: 0,fontSize:'12px',}">
 
-                <el-table-column  label="申请编号" prop="apply_code" align="center" width="160"></el-table-column>
+                <el-table-column  label="申请编号" prop="apply_code" align="center" fixed="left" width="160"></el-table-column>
                 <el-table-column  label="申请状态" prop="type" align="center" width="120">
                     <template slot-scope="scope">
                         <table-tag-component 
-                        v-if="orderApplyStatusList" 
-                        :propList="orderApplyStatusList" 
-                        :tableOriginData="scope.row.type | formatType"></table-tag-component>
+                        v-if="orderApplyFormConfig.type" 
+                        :propList="orderApplyFormConfig.type" 
+                        :tableOriginData="scope.row.type"></table-tag-component>
                     </template>
                 </el-table-column>
                 <el-table-column  label="工种" prop="work_type" align="center" width="150">
@@ -157,8 +157,6 @@
     import {
         cascaderComponent,
         tableTagComponent} from '@/pages/components'
-
-    // import {queryComponent} from '../components'
     
     export default {
         components: {
@@ -192,12 +190,12 @@
                         authentication: 80, //认证状态
                         working_status: 80,//接单状态
                         skill_ids: 80,// 职业类型
-                        service_type_ids: 80,//服务类型
-                        service_crowd_ids: 80,//可服务人群
+                        service_type: 80,//服务类型
+                        service_crowd: 80,//可服务人群
                         working_age: 80,// 工龄
                         nation: 80,// 民族
                         region_ids: 80,//服务地区
-                        course_ids: 80,//参加培训
+                        course: 80,//参加培训
                         paper_ids: 80, //技能证书
                         source: 80,//信息来源
                     }
@@ -212,12 +210,9 @@
             }
         },
         computed:{
-            //服务人员配置字段对象
-            workerConfigList(){
-                return this.$store.state.operateModule.configForm
-            },
-            orderApplyStatusList(){
-                return this.$store.state.operateModule.order_apply_status
+            //订单相关字段配置
+            orderApplyFormConfig(){
+                return this.$store.state.operateModule.orderApplyFormConfig
             }
         },
         methods: {

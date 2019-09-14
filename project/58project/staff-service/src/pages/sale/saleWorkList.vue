@@ -88,12 +88,12 @@
                     authentication: 80, //认证状态
                     working_status: 80,//接单状态
                     skill_ids: 80,// 职业类型
-                    service_type_ids: 80,//服务类型
-                    service_crowd_ids: 100,//可服务人群
+                    service_type: 80,//服务类型
+                    service_crowd: 100,//可服务人群
                     working_age: 80,// 工龄
                     nation: 80,// 民族
                     region_ids:80,//服务地区
-                    course_ids: 80,//参加培训
+                    course: 80,//参加培训
                     paper_ids: 80, //技能证书
                     source: 80,//信息来源
                 },
@@ -112,7 +112,7 @@
              * 
              */
             workerConfigList(){
-                return this.$store.state.operateModule.configForm
+                return this.$store.state.operateModule.workerConfigForm
             }
         },
         methods: {
@@ -148,11 +148,11 @@
                     this.isLoaded = true
 
                     await Promise.all([
-                        operateService.getFormConfig('edit'), //获取表单配置字段
+                        operateService.getWorkerFormConfig('edit'), //获取表单配置字段
                         operateService.getStaffList(4) //获取列表数据
                     ]).then((data) =>{
                         // 将表单配置数据存入 vuex 
-                        this.$store.commit('setConfigForm',data[0].data)
+                        this.$store.commit('setWorkerConfigForm',data[0].data)
 
                         let tableList = data[1].data.data
                         //  debugger
@@ -161,12 +161,12 @@
                             this.computeStringLength(item.authentication, 'authentication', 'authentication')
                             this.computeStringLength(item.working_status, 'working_status', 'working_status')
                             this.computeStringLength(item.skill_ids, 'skill_ids', 'service_category')
-                            this.computeStringLength(item.service_type_ids, 'service_type_ids', 'service_type')
-                            this.computeStringLength(item.service_crowd_ids, 'service_crowd_ids', 'service_crowd')
+                            this.computeStringLength(item.service_type, 'service_type', 'service_type')
+                            this.computeStringLength(item.service_crowd, 'service_crowd', 'service_crowd')
                             this.computeStringLength(item.working_age, 'working_age', 'working_age')
                             this.computeStringLength(item.nation, 'nation', 'nation')
                             this.computeStringLength(item.region_ids, 'region_ids', 'service_region')
-                            this.computeStringLength(item.course_ids, 'course_ids', 'course')
+                            this.computeStringLength(item.course, 'course', 'course')
                             this.computeStringLength(item.paper_ids, 'paper_ids', 'paper_category')
                             this.computeStringLength(item.source, 'source', 'source')
                         })  

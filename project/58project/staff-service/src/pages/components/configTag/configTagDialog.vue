@@ -5,20 +5,20 @@
         :show-close="false"
         :close-on-press-escape="false"
         :close-on-click-modal="false">
-        <el-form :model="tagConfigForm" :label-width="'120px'" ref="tagConfigForm" :rules="tagConfigRules">
+        <el-form :model="tagworkerConfigForm" :label-width="'120px'" ref="tagworkerConfigForm" :rules="tagConfigRules">
             
             <el-form-item label="标签名" >
-                <el-input v-model="tagConfigForm.name"></el-input>
+                <el-input v-model="tagworkerConfigForm.name"></el-input>
             </el-form-item>
 
             <el-form-item label="是否启用" >
-                <el-switch v-model="tagConfigForm.type" active-color="#13ce66" inactive-color="#ff4949"></el-switch>
+                <el-switch v-model="tagworkerConfigForm.type" active-color="#13ce66" inactive-color="#ff4949"></el-switch>
             </el-form-item>
         
         </el-form>
         <div slot="footer" class="dialog-footer">
             <el-button @click="closeTagDialog">取 消</el-button>
-            <el-button type="primary" @click="commitLog('tagConfigForm')">提交</el-button>
+            <el-button type="primary" @click="commitLog('tagworkerConfigForm')">提交</el-button>
         </div>
     </el-dialog>
 </template>
@@ -39,7 +39,7 @@ export default {
             default: "标签配置"
         },
         //配置信息
-        configForm: {
+        workerConfigForm: {
             type: Object,
             default: function(){
                 return {}
@@ -52,13 +52,13 @@ export default {
     data(){
         return {
             //日志信息
-            tagConfigForm : {
-                id: this.configForm.id?this.configForm.id:'',
-                table: this.configForm.table,
-                type: this.configForm.type == 'enable' ? true : false,
-                name: this.configForm.name? this.configForm.name : '',
+            tagworkerConfigForm : {
+                id: this.workerConfigForm.id?this.workerConfigForm.id:'',
+                table: this.workerConfigForm.table,
+                type: this.workerConfigForm.type == 'enable' ? true : false,
+                name: this.workerConfigForm.name? this.workerConfigForm.name : '',
                 get_for: 'config',
-                version: this.configForm.version?this.configForm.version: '',
+                version: this.workerConfigForm.version?this.workerConfigForm.version: '',
             },
             //标签配置表单验证
             tagConfigRules: {
@@ -77,12 +77,12 @@ export default {
                 if (valid) {
                     
                     store.commit('setLoading',true)
-                    if(this.tagConfigForm.type){
-                        this.tagConfigForm.type = 'enable'
+                    if(this.tagworkerConfigForm.type){
+                        this.tagworkerConfigForm.type = 'enable'
                     } else {
-                        this.tagConfigForm.type = 'disable'  
+                        this.tagworkerConfigForm.type = 'disable'  
                     }
-                    await operateService.editFormConfig(this.tagConfigForm).then(data =>{
+                    await operateService.editWorkerFormConfig(this.tagworkerConfigForm).then(data =>{
                         if(data.code == "0"){
                             this.$message({
                                 type:'success',

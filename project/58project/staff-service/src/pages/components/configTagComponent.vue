@@ -11,7 +11,7 @@
             v-if="tagDialogVisible"
             :openTagDialog="tagDialogVisible"
             @closeTagDialog="reloadPage"
-            :configForm="configForm"></config-tag-dialog>
+            :workerConfigForm="workerConfigForm"></config-tag-dialog>
     </div>
 </template>
 
@@ -53,7 +53,7 @@ export default {
         return {
             tagDialogVisible:false,//弹出框隐藏
             //tag配置项
-            configForm: {},
+            workerConfigForm: {},
         }
     },
     methods: {
@@ -61,16 +61,16 @@ export default {
          * 新增或编辑标签
          */
         changeTag(item){
-            let configForm = {
+            let workerConfigForm = {
                 table: this.tableConfig
             }
             if(item){
-                configForm = {
-                    ...configForm,
+                workerConfigForm = {
+                    ...workerConfigForm,
                     ...item,
                 }
             } 
-            this.configForm = configForm
+            this.workerConfigForm = workerConfigForm
             this.tagDialogVisible = true
         },
         /**

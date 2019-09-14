@@ -7,8 +7,8 @@
             </div>
             <div class="btn-group">
                 <el-button size="mini" @click="goback">返回</el-button>
-                <el-button size="mini" @click="passOrderApply" type="success">通过</el-button>
-                <el-button size="mini" @click="refuseOrderApply" type="danger">拒绝</el-button>
+                <el-button v-if="orderApplyDetail.type == 1" size="mini" @click="openPassOrderApplyDialog" type="success">通过</el-button>
+                <el-button v-if="orderApplyDetail.type == 1" size="mini" @click="refuseOrderApply" type="danger">拒绝</el-button>
             </div>
             <div class="orderApply-detail">
                 <div class="detail-left">
@@ -20,14 +20,12 @@
                     </div>
                 </div>
                 <div class="detail-right">
-                    <!-- <div class="right-box">
+                    <div class="right-box" v-if="orderApplyDetail.type != 1">
                         <div class="title">状态</div>
-                        <div class="value">{{orderApplyDetail.type == 'enable'?'正常':'停业'}}</div>
+                        <div 
+                            class="value"
+                            :style="{color: orderApplyDetail.type == 2? '#f56c6c' : '#67c23a'}">{{orderApplyDetail.type == 2?'已拒绝':'已通过'}}</div>
                     </div>
-                    <div class="right-box">
-                        <div class="title">员工数量</div>
-                        <div class="value">{{ orderApplyDetail.staff_count }}</div>
-                    </div> -->
                 </div>
             </div>
         </div>
@@ -42,31 +40,59 @@
                     <div class="detail-left-box">
                         <div class="detail-left-line">
                             客户名：{{orderApplyDetail.user_name}}
-                            <el-button type="text" style="color: #409EFF" @click="changeOrderApplyField('user_name','客户名')">修改</el-button>
+                            <el-button 
+                                type="text" 
+                                style="color: #409EFF" 
+                                v-if="orderApplyDetail.type == 1"
+                                @click="openChangeOrderApplyFieldDialog('user_name','客户名')">修改</el-button>
                         </div>
                         <div class="detail-left-line">
                             联系电话：{{orderApplyDetail.user_phone}}
-                            <el-button type="text" style="color: #409EFF" @click="changeOrderApplyField('user_phone','联系电话')">修改</el-button>
+                            <el-button 
+                                type="text" 
+                                style="color: #409EFF" 
+                                v-if="orderApplyDetail.type == 1"
+                                @click="openChangeOrderApplyFieldDialog('user_phone','联系电话')">修改</el-button>
                         </div>
                         <div class="detail-all-line">
                             工种：{{orderApplyDetail.work_type}}
-                            <el-button type="text" style="color: #409EFF" @click="changeOrderApplyField('work_type','工种')">修改</el-button>
+                            <el-button 
+                                type="text" 
+                                style="color: #409EFF" 
+                                v-if="orderApplyDetail.type == 1"
+                                @click="openChangeOrderApplyFieldDialog('work_type','工种')">修改</el-button>
                         </div>
                         <div class="detail-all-line">
                             服务地址：{{orderApplyDetail.service_address}}
-                            <el-button type="text" style="color: #409EFF" @click="changeOrderApplyField('service_address','服务地址')">修改</el-button>
+                            <el-button 
+                                type="text" 
+                                style="color: #409EFF" 
+                                v-if="orderApplyDetail.type == 1"
+                                @click="openChangeOrderApplyFieldDialog('service_address','服务地址')">修改</el-button>
                         </div>
                         <div class="detail-all-line">
                             工作时间：{{orderApplyDetail.service_duration}}
-                            <el-button type="text" style="color: #409EFF" @click="changeOrderApplyField('service_duration','工作时间')">修改</el-button>
+                            <el-button 
+                                type="text" 
+                                style="color: #409EFF" 
+                                v-if="orderApplyDetail.type == 1"
+                                @click="openChangeOrderApplyFieldDialog('service_duration','工作时间')">修改</el-button>
                         </div>
                         <div class="detail-all-line">
                             工资：{{orderApplyDetail.wage}}
-                            <el-button type="text" style="color: #409EFF" @click="changeOrderApplyField('wage','工资')">修改</el-button>
+                            <el-button 
+                                type="text" 
+                                style="color: #409EFF" 
+                                v-if="orderApplyDetail.type == 1"
+                                @click="openChangeOrderApplyFieldDialog('wage','工资')">修改</el-button>
                         </div>
                         <div class="detail-all-line">
                             订单详情：{{orderApplyDetail.order_details}}
-                            <el-button type="text" style="color: #409EFF" @click="changeOrderApplyField('order_details','订单详情')">修改</el-button>
+                            <el-button 
+                                type="text" 
+                                style="color: #409EFF" 
+                                v-if="orderApplyDetail.type == 1"
+                                @click="openChangeOrderApplyFieldDialog('order_details','订单详情')">修改</el-button>
                         </div>
                     </div>
                 </div>
@@ -78,7 +104,11 @@
                         订单申请来源
                     </div>
                     <div class="control">
-                        <el-button size="small" type="primary" @click="changeOrderOrigin">修改</el-button>
+                        <el-button 
+                            size="small" 
+                            type="primary" 
+                            v-if="orderApplyDetail.type == 1"
+                            @click="openChangeOrderOriginDialog">修改</el-button>
                     </div>
                 </div>
                 <div class="card-contains">
@@ -129,10 +159,10 @@
             @closeChangeOriginDialog="closeChangeOriginDialog"
             :orderOriginVisible="orderOriginVisible"></change-order-origin-dialog>
         <pass-order-apply-dialog
-            v-if="orderApplyVisible"
+            v-if="orderApplyPassVisible"
             :orderApplyId="orderApplyDetail.id"
-            @closeOrderApplyDialog="orderApplyVisible = false"
-            :orderApplyVisible="orderApplyVisible"
+            @closeOrderApplyPassDialog="closeOrderApplyPassDialog"
+            :orderApplyPassVisible="orderApplyPassVisible"
             :systemVersion="systemVersion"></pass-order-apply-dialog>
     </div>
 </template>
@@ -186,11 +216,11 @@ export default {
                 apply_store_id: '',
             },
             //通过订单申请弹窗显示隐藏
-            orderApplyVisible: false,
+            orderApplyPassVisible: false,
             //拒绝订单申请表单
             refuseOrderApplyObject: {
                 id: this.$route.query.id,
-                type: 'refuse',
+                type: 2,
                 version: '',
             },
             systemVersion: '',//系统版本号
@@ -203,11 +233,11 @@ export default {
     },
     methods: {
         /**
-         * 更改订单申请字段
+         * 打开更改订单申请字段弹窗
          * @param filed 字段
          * @param filedName 字段名
          */
-        changeOrderApplyField(field,fileName){
+        openChangeOrderApplyFieldDialog(field,fileName){
             this.changeApplyField.field = field;
             this.changeApplyField.fieldName = fileName;
             this.changeApplyField.value = this.orderApplyDetail[field]
@@ -222,26 +252,33 @@ export default {
         },
         
         /**
-         * 更改订单申请来源
+         * 打开更改订单申请来源弹窗
          * @param apply_store_id 来源门店id
          * @param apply_manager_id 来源人id
          */
-        changeOrderOrigin(){
+        openChangeOrderOriginDialog(){
             this.changeOrderOriginField.apply_store_id = this.orderApplyDetail.apply_store_id;
             this.changeOrderOriginField.apply_manager_id = this.orderApplyDetail.apply_manager_id;
             this.orderOriginVisible = true
         },  
         /**
-         * 关闭更改字段弹窗
+         * 关闭更改订单申请来源弹窗
          */
         async closeChangeOriginDialog(){
             this.orderOriginVisible = false
             await this.getApplication()
         },
-        //通过订单申请
-        passOrderApply(){
+        //打开通过订单申请弹窗
+        openPassOrderApplyDialog(){
             this.systemVersion = this.orderApplyDetail.version
-            this.orderApplyVisible = true
+            this.orderApplyPassVisible = true
+        },
+        /**
+         * 关闭通过订单申请弹窗
+         */
+        async closeOrderApplyPassDialog(){
+            orderApplyPassVisible = false
+            await this.getApplication()
         },
         /**
          * 拒绝订单申请年轻
@@ -251,10 +288,10 @@ export default {
                 confirmButtonText: "确定",
                 cancelButtonText: "取消",
                 type: "warning"
-            }).catch(() => {
+            }).catch((error) => {
                 this.$message({
                     type: "info",
-                    message: "已放弃拒绝"
+                    message: error.message
                 });
             });
             if (response == "confirm") {
@@ -319,6 +356,9 @@ export default {
         }
     },
     filters: {
+        /**
+         * 更改时间戳格式
+         */
         formDate(timestamp){
             return $utils.formatDate(new Date(timestamp * 1000), 'yyyy-MM-dd')
         }

@@ -70,7 +70,7 @@ export default {
          *
          */
         workerConfigList(){
-            return this.$store.state.operateModule.configForm
+            return this.$store.state.operateModule.workerConfigForm
         }
     },
     data(){

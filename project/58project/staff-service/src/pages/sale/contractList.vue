@@ -62,12 +62,12 @@
                     authentication: 80, //认证状态
                     working_status: 80,//接单状态
                     skill_ids: 80,// 职业类型
-                    service_type_ids: 80,//服务类型
-                    service_crowd_ids: 100,//可服务人群
+                    service_type: 80,//服务类型
+                    service_crowd: 100,//可服务人群
                     working_age: 80,// 工龄
                     nation: 80,// 民族
                     region_ids:80,//服务地区
-                    course_ids: 80,//参加培训
+                    course: 80,//参加培训
                     paper_ids: 80, //技能证书
                     source: 80,//信息来源
                 },
