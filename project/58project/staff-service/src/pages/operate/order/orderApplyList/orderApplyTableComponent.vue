@@ -228,7 +228,7 @@
                 if(row.created_at == 0){
                     return '0000-00-00'
                 }
-                return $utils.formatDate(new Date(row.created_at*1000), 'yyyy-MM-dd')
+                return $utils.formatDate(new Date(row.created_at), 'yyyy-MM-dd')
             },
             //登记时间字段转换
             register_atFormatter(row, column){

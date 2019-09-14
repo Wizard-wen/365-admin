@@ -75,7 +75,7 @@ export default {
             })
         },
         selectedArr(){
-            return this.$store.state.operateModule.queryedList[this.queryKey]
+            return this.$store.state.saleModule.saleWorkerList[this.queryKey]
         }
     },
     methods: {

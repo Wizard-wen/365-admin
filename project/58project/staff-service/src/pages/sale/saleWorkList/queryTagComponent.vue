@@ -34,11 +34,8 @@ export default {
             return this.$store.state.operateModule.configForm
         },
         queryedList(){
-            if(this.$route.path == '/sale/saleWorkList'){
-                return this.$store.state.saleModule.sellerList
-            } else {
-                return this.$store.state.operateModule.queryedList
-            }
+            return this.$store.state.saleModule.saleWorkerList
+            
         },
         queryListLength(){
             return this.queryTag.reduce((allNumber, item, index) =>{
@@ -107,7 +104,7 @@ export default {
             }
             //将查询组件数据变化存入vuex
 
-            this.$store.commit('saleSetSellerList', {
+            this.$store.commit('saleSetWorkerList', {
                 queryKey: item.key,
                 queryedList: newValue
             })

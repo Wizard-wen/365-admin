@@ -170,15 +170,6 @@ export default {
             return this.$store.state.operateModule.configForm
         }
     },
-    props: {
-        /**
-         * 查询来源
-         */
-        queryFrom: {
-            default: 'staff',
-            type: String,
-        }
-    },
     methods: {
         // 更新表格数据
         updateTable(){

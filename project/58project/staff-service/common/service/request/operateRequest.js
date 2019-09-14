@@ -79,27 +79,27 @@ export const operate_staffRequest = {
         if(type == 0){
             return axios.post(
                 baseUrl,
-                store.state.operateModule.queryedList
+                store.state.operateModule.workerList
             )//全部服务人员列表
         }else if(type == 1){
             return axios.post(
                 baseUrl,
-                store.state.operateModule.returnList
+                store.state.operateModule.returnWorkerList
             )//回访服务人员列表
         } else if(type == 2){
             return axios.post(
                 baseUrl,
-                store.state.operateModule.errorList
+                store.state.operateModule.errorWorkerList
             )//异常服务人员列表
         } else if(type == 3){
             return axios.post(
                 baseUrl,
-                store.state.operateModule.newList
+                store.state.operateModule.newWorkerList
             )//新服务人员审核列表
         } else if(type == 4){
             return axios.post(
                 baseUrl,
-                store.state.operateModule.sellerList
+                store.state.operateModule.saleWorkerList
             )
         }
     },
