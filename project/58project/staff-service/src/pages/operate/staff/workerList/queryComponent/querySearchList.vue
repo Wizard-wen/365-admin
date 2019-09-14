@@ -49,14 +49,6 @@ export default {
             default:''
         },
         /**
-         * 查询来自于什么组件
-         * staff 运营 order 销售
-         */
-        queryFrom: {
-            type: String,
-            defeult: 'staff'
-        },
-        /**
          * 是否是单选
          */
         isSingleQuery: {

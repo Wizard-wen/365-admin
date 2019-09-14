@@ -10,8 +10,8 @@ export interface applyOrderObject {
      * refuse - 拒绝
      * null（空） - 待处理
      */
-    type:string;//订单申请类型
-    apply_code:string;//订单申请编号
+    type:string;//---订单申请类型 
+    apply_code:string;//---订单申请编号
 
     apply_store_name:string;// 来源门店
     apply_store_id:string;// 来源门店id

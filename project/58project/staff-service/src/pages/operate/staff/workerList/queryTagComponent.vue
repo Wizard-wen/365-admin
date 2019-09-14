@@ -34,11 +34,8 @@ export default {
             return this.$store.state.operateModule.configForm
         },
         queryedList(){
-            if(this.$route.path == '/sale/saleWorkList'){
-                return this.$store.state.operateModule.sellerList
-            } else {
-                return this.$store.state.operateModule.queryedList
-            }
+            return this.$store.state.operateModule.workerList
+
         },
         queryListLength(){
             return this.queryTag.reduce((allNumber, item, index) =>{
@@ -120,21 +117,15 @@ export default {
             } else {
                 this.leftPosition = this.leftPosition - 100
             }
-
         },
         rightChange(){
             if(this.leftPosition == 0){
-                // this.leftPosition = 0
                 return false
             } else {
                 this.leftPosition = this.leftPosition + 100
             }
-
         }
     },
-    mounted(){
-
-    }
 }
 </script>
 <style lang="scss" scoped>
