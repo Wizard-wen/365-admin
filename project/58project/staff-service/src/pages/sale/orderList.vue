@@ -6,11 +6,11 @@
             :controlScopeLength="170">
             <template slot="searchList">
                 <div class="search-list">
-                    <!-- <query-component @updateTable="updateTable"></query-component> -->
+                    <query-component @updateTable="updateTable"></query-component>
                 </div>
             </template>
             <template slot="searchForm">
-                <!-- <query-tag-component :queryFrom="'order'" @updateTable="updateTable"></query-tag-component> -->
+                <query-tag-component @updateTable="updateTable"></query-tag-component>
                 <el-button type="primary" @click="openOrderApplyDialog">订单申请</el-button>
             </template>
 
@@ -49,6 +49,8 @@
 
     import {
         saleOrderTableComponent,
+        queryTagComponent,
+        queryComponent
     } from './orderList/index.js'
 
     import {assignDialog} from './orderConfig/index.js'
@@ -58,6 +60,8 @@
     export default {
         components: {
             saleOrderTableComponent,
+            queryTagComponent,
+            queryComponent,
             assignDialog,
             applyOrderDialog
         },
@@ -137,9 +141,8 @@
              * 切换页码
              */
             async handleCurrentPage(val){
-                // this.pagination.currentPage = val
                 //设置page查询参数
-                this.$store.commit('setQueryList', {
+                this.$store.commit('saleSetOrderList', {
                     queryKey: 'page',
                     queryedList: val
                 })

@@ -49,14 +49,6 @@ export default {
             default:''
         },
         /**
-         * 查询来自于什么组件
-         * staff 运营 order 销售
-         */
-        queryFrom: {
-            type: String,
-            defeult: 'staff'
-        },
-        /**
          * 是否是单选
          */
         isSingleQuery: {
@@ -75,7 +67,7 @@ export default {
             })
         },
         selectedArr(){
-            return this.$store.state.operateModule.queryedList[this.queryKey]
+            return this.$store.state.saleModule.orderList[this.queryKey]
         }
     },
     methods: {
@@ -108,17 +100,10 @@ export default {
             }
 
             //将查询组件数据变化存入vuex
-            if(this.queryFrom == 'staff'){
-                this.$store.commit('setQueryList', {
-                    queryKey: this.queryKey, 
-                    queryedList: queryedList
-                })
-            } else {
-                this.$store.commit('setSellerList', {
-                    queryKey: this.queryKey, 
-                    queryedList: queryedList
-                })
-            }
+            this.$store.commit('saleSetOrderList', {
+                queryKey: this.queryKey, 
+                queryedList: queryedList
+            })
             
             //更新表格数据
             this.$emit('updateTable')

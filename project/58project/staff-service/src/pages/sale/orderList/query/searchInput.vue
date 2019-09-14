@@ -32,14 +32,6 @@ export default {
             type:String,
             default:''
         },
-        /**
-         * 查询来自于什么组件
-         * staff 运营 order 销售
-         */
-        queryFrom: {
-            type: String,
-            defeult: 'staff'
-        }
     },
     watch: {
         inputText: function(val, oldVal){
@@ -50,12 +42,7 @@ export default {
     },
     computed: {
         inputText(){
-            if(this.$route.path == '/sale/saleWorkList'){
-                return this.$store.state.saleModule.sellerList[this.queryKey]
-            } else {
-                return this.$store.state.operateModule.queryedList[this.queryKey]
-            }
-            
+            return this.$store.state.saleModule.orderList[this.queryKey]
         }
     },
     methods: {
@@ -69,18 +56,11 @@ export default {
          * 改变查询条件
          */
         addQuery(){
-            //将查询组件数据变化存入vuex
-            if(this.queryFrom == 'staff'){
-                this.$store.commit('setQueryList', {
-                    queryKey: this.queryKey, 
-                    queryedList: this.searchText
-                })
-            } else {
-                this.$store.commit('setSellerList', {
-                    queryKey: this.queryKey, 
-                    queryedList: this.searchText
-                })
-            }
+
+            this.$store.commit('saleSetOrderList', {
+                queryKey: this.queryKey, 
+                queryedList: this.searchText
+            })
             
             //更新表格数据
             this.$emit('updateTable')

@@ -1,6 +1,7 @@
 <template>
     <div class="staff">
         <match-service-table-component
+            v-loading="isLoaded"
             :staffTable="staffTable"
             :maxLength="maxLength"
             :controlScopeLength="150">
@@ -12,13 +13,13 @@
             </template>
 
             <template slot="searchForm">
-                <!-- <query-tag-component :queryFrom="'order'" @updateTable="updateTable"></query-tag-component>
-                <el-button type="primary" @click="createStaff">申请创建服务人员</el-button> -->
+                <query-tag-component :queryFrom="'order'" @updateTable="updateTable"></query-tag-component>
+                <!-- <el-button type="primary" @click="createStaff">申请创建服务人员</el-button> -->
             </template>
 
             <template slot="control" slot-scope="controler">
                 <el-button size="mini" type="text" @click="showStaff(controler.scoper.$index, controler.scoper.row)">查看</el-button>
-                <el-button size="mini" type="text" @click="sendErrorMessage(controler.scoper.row)">添加备选</el-button>
+                <el-button size="mini" type="text" @click="addMatchStaff(controler.scoper.row)">添加备选</el-button>
             </template>
 
             <template slot="pagination">
@@ -36,11 +37,12 @@
     </div>
 </template>
 <script>
-import {operateService, $utils} from '../../../../common'
+import {saleService, operateService, $utils} from '../../../../common'
 import {
     matchServiceTableComponent,
     matchServiceQueryComponent,
-} from './components/index.js'
+    queryTagComponent
+} from './matchServiceList/index.js'
 export default {
     data(){
         return {
@@ -79,7 +81,7 @@ export default {
     components: {
         matchServiceTableComponent,
         matchServiceQueryComponent,
-
+        queryTagComponent
     },
     computed:{
         /**
@@ -123,7 +125,7 @@ export default {
 
                 await Promise.all([
                     operateService.getFormConfig('edit'), //获取表单配置字段
-                    operateService.getStaffList(4) //获取列表数据
+                    saleService.getMatchStaffList() //获取列表数据
                 ]).then((data) =>{
                     // 将表单配置数据存入 vuex 
                     this.$store.commit('setConfigForm',data[0].data)
@@ -174,14 +176,57 @@ export default {
          * 切换页码
          */
         async handleCurrentPage(val){
-            // this.pagination.currentPage = val
             //设置page查询参数
             this.$store.commit('setSellerList', {
                 queryKey: 'page', 
                 queryedList: val
             })
             await this.getTableList()
-        },        
+        },   
+        /**  
+         * 添加备选
+         * @param staffObject 员工
+         */
+        async addMatchStaff(staffObject){
+            this.$confirm('确定将该服务人员添加至备选服务人员吗?', '提示', {
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                type: 'warning'
+            }).then(async() => {
+                try{
+                    let sendObj = {
+                        staff_id:staffObject.id ,
+                        order_id: this.$route.query.id,
+                    }
+                    await saleService.createOrderStaff(sendObj).then(data =>{
+                        if(data.code == "0"){
+                            this.$message({
+                                type:'success',
+                                message: data.message
+                            })
+                        }
+                    }).catch(e =>{
+                        this.$message({
+                            type:'error',
+                            message: e.message
+                        })
+                    }).finally(() =>{
+                        //刷新订单配置页面
+                        this.$emit('updateOrderConfig')
+                    })
+                } catch(error){
+                    this.$message({
+                        type:'error',
+                        message: error.message
+                    })
+                }
+            }).catch(() => {
+                this.$message({
+                    type: 'info',
+                    message: '已取消删除'
+                });          
+            });
+        }     
     },
     async mounted(){
         await this.getTableList()

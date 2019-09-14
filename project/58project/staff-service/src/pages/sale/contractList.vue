@@ -1,6 +1,6 @@
 <template>
     <div class="staff" v-loading="isLoaded">
-        <sale-order-table-component
+        <contract-table-component
             :staffTable="orderApplyTable"
             :maxLength="maxLength"
             :controlScopeLength="170">
@@ -26,18 +26,18 @@
                     layout="prev, pager, next, jumper"
                     :total="pagination.total"></el-pagination>
             </template>
-        </sale-order-table-component>
+        </contract-table-component>
     </div>
 </template>
 <script>
     import {operateService} from '../../../common'
 
     import {
-        saleOrderTableComponent,
-    } from './orderList/index.js'
+        contractTableComponent,
+    } from './contractList/index.js'
     export default {
         components: {
-            saleOrderTableComponent,
+            contractTableComponent,
         },
         data(){
             return {
@@ -120,7 +120,7 @@
             async handleCurrentPage(val){
                 // this.pagination.currentPage = val
                 //设置page查询参数
-                this.$store.commit('setQueryList', {
+                this.$store.commit('saleSetWorkerList', {
                     queryKey: 'page',
                     queryedList: val
                 })

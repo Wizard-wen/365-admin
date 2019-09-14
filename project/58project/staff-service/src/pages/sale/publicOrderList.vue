@@ -122,7 +122,7 @@
             async handleCurrentPage(val){
                 // this.pagination.currentPage = val
                 //设置page查询参数
-                this.$store.commit('setQueryList', {
+                this.$store.commit('saleSetWorkerList', {
                     queryKey: 'page',
                     queryedList: val
                 })

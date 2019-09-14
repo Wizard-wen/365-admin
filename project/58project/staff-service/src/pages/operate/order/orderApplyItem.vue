@@ -3,7 +3,7 @@
         <!-- 订单申请详情 -->
         <div class="orderApply-header">
             <div class="orderApply-name">
-                <h4>申请编号：{{orderApplyDetail.code}}</h4>
+                <h4>申请编号：{{orderApplyDetail.apply_code}}</h4>
             </div>
             <div class="btn-group">
                 <el-button size="mini" @click="goback">返回</el-button>
@@ -15,7 +15,7 @@
                     <div class="detail-left-box">
                         <div class="detail-left-line">申请创建人：{{ orderApplyDetail.created_manager_name }}</div>
                         <div class="detail-left-line">申请创建时间：{{ orderApplyDetail.created_at | formDate }}</div>
-                        <div class="detail-left-line">来源门店：{{orderApplyDetail.store_name }}</div>
+                        <div class="detail-left-line">来源门店：{{orderApplyDetail.apply_store_name }}</div>
                         <div class="detail-left-line">来源人：{{orderApplyDetail.apply_manager_name}}</div>
                     </div>
                 </div>
@@ -83,7 +83,7 @@
                 </div>
                 <div class="card-contains">
                     <div class="detail-left-box">
-                        <div class="detail-left-line">来源门店：{{orderApplyDetail.store_name }}</div>
+                        <div class="detail-left-line">来源门店：{{orderApplyDetail.apply_store_name }}</div>
                         <div class="detail-left-line">来源人：{{orderApplyDetail.apply_manager_name }}</div>
                     </div>
                 </div>
@@ -142,7 +142,7 @@ import { operateService, store, $utils } from "../../../../common";
 import {
     changeApplyDialog,
     changeOrderOriginDialog,
-    passOrderApplyDialog} from './components'
+    passOrderApplyDialog} from './orderApplyItem/index.js'
 export default {
     data() {
         return {
@@ -154,8 +154,8 @@ export default {
                 user_phone: '',
                 user_name: '',
                 type: 'pass',
-                store_name: '',
-                store_id: '',
+                apply_store_name: '',
+                apply_store_id: '',
                 service_duration: '',
                 order_details: '',
                 id: '',
@@ -183,7 +183,7 @@ export default {
             //订单申请来源
             changeOrderOriginField: {
                 apply_manager_id: '',
-                store_id: '',
+                apply_store_id: '',
             },
             //通过订单申请弹窗显示隐藏
             orderApplyVisible: false,
@@ -223,11 +223,11 @@ export default {
         
         /**
          * 更改订单申请来源
-         * @param store_id 来源门店id
+         * @param apply_store_id 来源门店id
          * @param apply_manager_id 来源人id
          */
         changeOrderOrigin(){
-            this.changeOrderOriginField.store_id = this.orderApplyDetail.store_id;
+            this.changeOrderOriginField.apply_store_id = this.orderApplyDetail.apply_store_id;
             this.changeOrderOriginField.apply_manager_id = this.orderApplyDetail.apply_manager_id;
             this.orderOriginVisible = true
         },  
@@ -268,15 +268,15 @@ export default {
                                 message: data.message
                             });
                         }
-                    }).catch(data => {
+                    }).catch(error => {
                         this.$message({
                             type: "error",
-                            message: e.message
+                            message: error.message
                         });
                     }).finally(() =>{
                         store.commit("setLoading", false);
                     })
-                } catch (e) {
+                } catch (error) {
                     throw error;
                 }
             }
@@ -320,7 +320,7 @@ export default {
     },
     filters: {
         formDate(timestamp){
-            return $utils.formatDate(new Date(timestamp), 'yyyy-MM-dd')
+            return $utils.formatDate(new Date(timestamp * 1000), 'yyyy-MM-dd')
         }
     },
     mounted() {

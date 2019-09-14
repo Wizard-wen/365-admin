@@ -108,17 +108,10 @@ export default {
             }
 
             //将查询组件数据变化存入vuex
-            if(this.queryFrom == 'staff'){
-                this.$store.commit('setQueryList', {
-                    queryKey: this.queryKey, 
-                    queryedList: queryedList
-                })
-            } else {
-                this.$store.commit('setSellerList', {
-                    queryKey: this.queryKey, 
-                    queryedList: queryedList
-                })
-            }
+            this.$store.commit('saleSetWorkerList', {
+                queryKey: this.queryKey, 
+                queryedList: queryedList
+            })
             
             //更新表格数据
             this.$emit('updateTable')

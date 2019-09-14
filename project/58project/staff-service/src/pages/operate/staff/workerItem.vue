@@ -274,7 +274,7 @@ import {operateService, $utils} from '../../../../common'
 import {
     paperComponent,
     photoComponent,
-    makeImageComponent} from './components'
+    makeImageComponent} from './workerItem/index.js'
 
 import {
     pictureDetailDialog,

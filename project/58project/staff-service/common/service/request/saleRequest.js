@@ -40,8 +40,9 @@ export const sale_orderRequest = {
      * @param editObj 编辑对象 
      */
     editOrder(editObj){
+        debugger
         return axios.post(`./admin/order/editOrder`,
-        ...editObj)
+        editObj)
     },
     /**
      * 取消订单
@@ -73,12 +74,20 @@ export const sale_orderRequest = {
  */
 export const sale_matchServiceRequest = {
     /**
+     * 获取备选服务人员列表
+     */
+    getMatchStaffList(){
+        return axios.post(`./admin/staff/getStaffList`,{
+            ...store.state.saleModule.matchServiceList
+        })
+    },
+    /**
      * 添加订单候选人
      * @param orderStaffObj
      */
     createOrderStaff(orderStaffObj){
         return axios.post(`./admin/order/createOrderStaff`,
-        ...orderStaffObj)
+        orderStaffObj)
     },
     /**
      * 删除候选人
@@ -86,7 +95,7 @@ export const sale_matchServiceRequest = {
      */
     deleteOrderStaff(orderStaffObj){
         return axios.post(`./admin/order/deleteOrderStaff`,
-        ...orderStaffObj)
+        orderStaffObj)
     },
     /**
      * 签约
@@ -94,7 +103,7 @@ export const sale_matchServiceRequest = {
      */
     sign(signObject){
         return axios.post(`./admin/order/sign`,
-        ...signObject)
+        signObject)
     },
     /**
      * 拒签
@@ -102,7 +111,7 @@ export const sale_matchServiceRequest = {
      */
     refuse(refuseObj){
         return axios.post(`./admin/order/refuse`,
-        ...refuseObj)
+        refuseObj)
     }
 }
 /**
@@ -126,6 +135,9 @@ export const sale_staffRequest = {
         )
     }
 }
+/**
+ * 订单中的合同处理接口
+ */
 export const sale_orderContractRequest = {
     /**
      * 终止合同
@@ -140,6 +152,7 @@ export const sale_orderContractRequest = {
         return axios.post(``)
     }
 }
+
 export default {
     ...sale_orderApplyRequest,
     ...sale_orderRequest,
@@ -155,8 +168,8 @@ export default {
             Object.assign({}, obj)
         )
     },
-
-
-    
-
 }
+
+
+
+

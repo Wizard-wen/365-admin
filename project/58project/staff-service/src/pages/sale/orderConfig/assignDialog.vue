@@ -27,7 +27,7 @@
 </template>
 <script>
 
-import {saleService, $utils} from '../../../../common'
+import {operateService, saleService, $utils} from '../../../../common'
 export default {
     props: {
         //是否打弹出框
@@ -37,7 +37,7 @@ export default {
         },
         //待分配订单id
         assignOrderId: {
-            type: Number,
+            type: Number | String,
             default: 0
         }
     },
@@ -50,21 +50,6 @@ export default {
             }
         }
         return {
-            orderKeyName: {
-                manager_name: "创建人", //创建人
-                user_name: '客户名',//客户名
-                phone: '客户手机号',//客户手机号
-                name: '服务名称',//服务名称
-                service_address: '服务地址',//服务地址
-                service_start_time: '服务开始时间',//服务开始时间
-                service_end_time: '服务终止时间',//服务终止时间
-                source: '订单来源',//订单来源
-                remark: '备注信息',//备注信息
-                create_manager_name: '创建人',
-                hold_manager_name: "拥有人",
-                // maintain_manager_name: "维护人",
-                sign_manager_name: "签约人",
-            },
             assignOrderForm: {
                 order_id: this.assignOrderId,
                 manager_name: '',
@@ -76,8 +61,6 @@ export default {
                     { validator: managerNameValidator, trigger: 'change'}
                 ]
             },
-            sizeLong: 0, //表单渲染的行数
-            baseList:[],
             loading: false
         }
     },
@@ -88,12 +71,9 @@ export default {
         order_source(){
             return this.$store.state.saleModule.order_source
         },
-        /**
-         * 订单表单字段
-         */
-        orderDetail(){
-            return this.$store.state.saleModule.order
-        },
+        user_message(){
+            return this.$store.state.loginModule.user
+        }
     },
     methods: {
         /**
@@ -145,96 +125,14 @@ export default {
                 }
             });
         },
-        setList(){
-            let _this = this,
-                formArray = [],//渲染的数组
-                sizeLong1 = 0;//所占行数
 
-            /**
-             * key 为渲染字段的属性名
-             * value 为某个属性名的值
-             * size 该条信息所占位数
-             */
-            Object.keys(_this.orderDetail).forEach((item, index) =>{
-                if(_this.orderKeyName.hasOwnProperty(item)){
-
-                    let itemObj = {
-                            key: _this.orderKeyName[item], //属性名
-                            value: _this.orderDetail[item],//属性值
-                            size: 1,//该条信息所占位数  1 代表只占半行 2 代表占一行
-                        }, //原始对象
-                        realValue = itemObj.value; //包装后的value值
-
-                    //转化订单来源字段格式
-                    if(item == "source"){
-
-                        realValue = this.order_source.find((item, index) =>{
-                            return realValue == item.value
-                        }).label
-                    }
-
-                    //转化时间格式
-                    if(item == "service_start_time" || item == "service_end_time"){
-
-                        realValue = $utils.formatDate(new Date(realValue * 1000), 'yyyy-MM-dd hh:mm:ss')
-
-                    }
-
-                    //判断处理后的值的长度，决定占半行还是一行
-                    if($utils.getByteLen(realValue) > 20){
-                        itemObj.size = 2 //长字段，独占一行
-                    } else {
-                        itemObj.size = 1//短字段，占半行
-                    }
-
-                    itemObj.value =  realValue //将处理后的value重新赋值
-
-                    formArray.push(itemObj)
-                }
-            })
-
-            this.sizeLong = 0;
-
-
-            let sizeNumber = 0;
-            for(let i = 0; i<formArray.length; i++){
-                sizeNumber += formArray[i].size
-                if(i < formArray.length -1){
-                    let j = i+1,
-                        nextObject = formArray[j]
-                    if(sizeNumber%2 == 1 && nextObject.size == 2){
-                        this.sizeLong += 2
-                        formArray[i].size = 2
-                        sizeNumber += 1
-                    }
-                    this.sizeLong += formArray[i].size
-                } else {
-                    this.sizeLong += formArray[i].size
-                }
-            }
-
-
-
-            //size总数若为奇数个，添加一个元素占行
-            if(this.sizeLong%2 == 1){
-                formArray.push({
-                    key:  "",
-                    value: "",
-                    size:1,
-                })
-                this.sizeLong++;
-            }
-
-            return formArray
-        }
     },
     async mounted(){
         try{
             this.loading = true
 
             await Promise.all([
-                saleService.getManagerSelection(),
-                // saleService.getOrder(this.assignOrderId),
+                operateService.getStoreManagerSelection(this.user_message.store_id),
             ]).then((data) =>{
                 if(data[0].code == "0"){
                     this.selectionList = data[0].data
@@ -243,7 +141,6 @@ export default {
                         manager_id: 0,
                     })
                 }
-                this.baseList = this.setList()
             }).catch(error =>{
                 this.$message({
                     type:'error',

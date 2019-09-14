@@ -20,25 +20,12 @@ export default {
             leftPosition: 0,
         }
     },
-    props: {
-        /**
-         * 查询来源
-         */
-        queryFrom: {
-            default: 'staff',
-            type: String,
-        }
-    },
     computed:{
         configForm(){
             return this.$store.state.operateModule.configForm
         },
         queryedList(){
-            if(this.$route.path == '/sale/saleWorkList'){
-                return this.$store.state.saleModule.sellerList
-            } else {
-                return this.$store.state.operateModule.queryedList
-            }
+            return this.$store.state.saleModule.orderList
         },
         queryListLength(){
             return this.queryTag.reduce((allNumber, item, index) =>{
@@ -49,7 +36,6 @@ export default {
             let arr = [],
                 arrList = [],
                 _this = this;
-            // debugger
             Object.keys(this.queryedList).forEach((item, index) =>{
                 if(Array.isArray(this.queryedList[item])){
                     if(this.queryedList[item].length){
@@ -105,19 +91,12 @@ export default {
             } else {
                 newValue = ''
             }
-            // debugger
             //将查询组件数据变化存入vuex
-            if(this.queryFrom == 'staff'){
-                this.$store.commit('setQueryList', {
-                    queryKey: item.key,
-                    queryedList: newValue
-                })
-            } else {
-                this.$store.commit('setSellerList', {
-                    queryKey: item.key,
-                    queryedList: newValue
-                })
-            }
+
+            this.$store.commit('saleSetOrderList', {
+                queryKey: item.key,
+                queryedList: newValue
+            })
 
             //更新表格数据
             this.$emit('updateTable')

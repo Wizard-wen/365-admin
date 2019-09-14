@@ -80,6 +80,8 @@
                         <el-form-item label="服务期限" prop="service_duration">
                             <el-date-picker
                                 v-model="signForm.service_duration"
+                                value-format="timestamp"
+                                @change="changeServiceDuration"
                                 type="datetimerange"
                                 range-separator="至"
                                 start-placeholder="服务开始日期"
@@ -124,11 +126,12 @@
                         <el-form-item label="保险期限" prop="insurance_duration">
                             <el-date-picker
                                 v-model="signForm.insurance_duration"
+                                value-format="timestamp"
+                                @change="changeInsuranceDuration"
                                 type="datetimerange"
                                 range-separator="至"
                                 start-placeholder="保险开始日期"
                                 end-placeholder="保险结束日期"></el-date-picker>
-                                    
                         </el-form-item>
                     </div>
                 </div>
@@ -157,7 +160,7 @@
                     </div>
                 </div>
                 <el-form-item>
-                    <el-button type="primary">立即签约</el-button>
+                    <el-button type="primary" @click="signOrder">立即签约</el-button>
                     <el-button @click="goback">取消</el-button>
                 </el-form-item>
             </el-form>
@@ -168,6 +171,7 @@
 <script>
 import {
     selectTagComponent,} from '@/pages/components'
+    import {saleService} from '../../../common'
 export default {
     data(){
         var _this = this
@@ -260,6 +264,8 @@ export default {
             },
             //签约表单
             signForm: {
+                order_id: this.$route.query.id,
+                sign_staff_id: this.$route.query.sign_staff_id,
                 sign_user_name:'',// 雇主
                 sign_user_phone:'',// 雇主联系电话
                 sign_user_identify:'',// 雇主身份证号
@@ -275,11 +281,12 @@ export default {
                 service_count:'',// 服务对象人数
                 service_level:'',// 护理依赖程度
                 service_type:'',// 服务方式
-                service_duration:[],// 服务期限
+                service_duration:[],// 服务期限展示字段
+                service_start:'',// 服务期限起始
+                service_end: '',//服务期限截止
                 service_start: '',//服务期限起始
                 service_end: '',//服务期限截止
                 service_time:'',// 工作时间
-
 
                 staff_wage:'',// 劳务报酬
                 user_charge:'',// 客户服务费
@@ -287,6 +294,8 @@ export default {
                 staff_deposit:'',// 劳动者押金
                 insurance_benefit:'',// 保险受益人
                 insurance_duration:[],// 保险期限
+                insurance_start:'',// 保险起始日
+                insurance_end:'',//保险终止日
                 insurance_start: '',//保险起始日
                 insurance_end: '',//保险终止日
                 accessory:[],// 上传附件
@@ -320,7 +329,7 @@ export default {
     },
     methods: {
         goback(){
-            this.$router.push('/sale/orderConfig')
+            this.$router.go(-1)
         },
         /**
          * 上传成功后，接收图片数据，送入图片回显数组
@@ -331,19 +340,19 @@ export default {
                 url: './resource/'+response.data.path,
                 name: response.data.name
             }
-            this.signForm.paper.push(picItem)
+            this.signForm.accessory.push(picItem)
             //消除表单验证
-            if(this.signForm.paper.length){
-                this.$refs.paper.clearValidate()
+            if(this.signForm.accessory.length){
+                this.$refs.accessory.clearValidate()
             }
         },
         /**
          * 移出图片
          */
         removePic(file, fileList){
-            this.signForm.paper.forEach((item, index) =>{
+            this.signForm.accessory.forEach((item, index) =>{
                 if(item.name == file.name){
-                    this.signForm.paper.splice(index,1)
+                    this.signForm.accessory.splice(index,1)
                 }
             })
         },
@@ -354,32 +363,44 @@ export default {
             this.$refs[formName].validate(async (valid) => {
                 if (valid) {
 
-                    // store.commit('setLoading',true)
+                    store.commit('setLoading',true)
 
-                    // await saleService.sign(this.signForm).then(data =>{
-                    //         if(data.code == "0"){
-                    //             this.$message({
-                    //                 type:'success',
-                    //                 message: `签约成功`
-                    //             })
-                    //         //关闭签约弹出框
-                    //         this.$emit('closeSignDialog')
-                    //         }
-                    //     }).catch(e =>{
-                    //         this.$message({
-                    //             type:'error',
-                    //             message: e.message
-                    //         })
-                    //     }).finally(async () =>{
-                    //         await saleService.getOrder(this.$route.query.order_id)
+                    await saleService.sign(this.signForm).then(data =>{
+                            if(data.code == "0"){
+                                this.$message({
+                                    type:'success',
+                                    message: `签约成功`
+                                })
+                            }
+                        }).catch(e =>{
+                            this.$message({
+                                type:'error',
+                                message: e.message
+                            })
+                        }).finally(async () =>{
+                            // await saleService.getOrder(this.$route.query.order_id)
 
-                    //         store.commit('setLoading',false)
-                    //     })
+                            store.commit('setLoading',false)
+                        })
                 } else {
                     return false;
                 }
             });
         },
+        /**
+         * 保险期限时间转化
+         */
+        changeInsuranceDuration(value){
+            this.signForm.insurance_start = value[0]
+            this.signForm.insurance_end = value[1]
+        },
+        /**
+         * 服务期限时间转换
+         */
+        changeServiceDuration(value){
+            this.signForm.service_start = value[0]
+            this.signForm.service_end = value[1]
+        }
     }
 }
 </script>

@@ -1,6 +1,6 @@
 <template>
     <div class="staff" v-loading="isLoaded">
-        <staff-table-component
+        <worker-table-component
             :staffTable="staffTable"
             :maxLength="maxLength"
             :controlScopeLength="140">
@@ -31,21 +31,19 @@
                     layout="prev, pager, next, jumper"
                     :total="pagination.total"></el-pagination>
             </template>
-        </staff-table-component>
+        </worker-table-component>
     </div>
 </template>
 <script>
     import {operateService} from '../../../../common'
 
     import {
-        queryComponent,
-        staffTableComponent,
-    } from './components'
+        workerTableComponent,
+    } from './workerList/index.js'
     
     export default {
         components: {
-            queryComponent,
-            staffTableComponent
+            workerTableComponent
         },
         data() {
             return {

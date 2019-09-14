@@ -99,7 +99,6 @@ import productList from '@/pages/operate/product/productList.vue'
  import workerList from '@/pages/operate/staff/workerList.vue'
  import workFormConfig from '@/pages/operate/staff/workFormConfig.vue'
  import workerItem from '@/pages/operate/staff/workerItem.vue'
- import workerItemNew from '@/pages/operate/staff/workerItemNew.vue'
  import workerItemShow from '@/pages/operate/staff/workerItemShow.vue'
  import newWorkerList from '@/pages/operate/staff/newWorkerList.vue'
  import errorWorkerList from '@/pages/operate/staff/errorWorkerList.vue'
@@ -151,11 +150,6 @@ import productList from '@/pages/operate/product/productList.vue'
         path: '/worker/workerItem',
         name: 'workerItem',
         component: workerItem,
-    },
-    {
-        path: '/worker/workerItemNew',
-        name: 'workerItemNew',
-        component: workerItemNew,
     },
     {
         path: '/worker/workerItemShow',

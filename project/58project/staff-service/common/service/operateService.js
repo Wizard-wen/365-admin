@@ -1,11 +1,15 @@
 /**
- * 人力资源及技能管理模块
+ * 运营模块
  */
 import operateRequest from './request/operateRequest.js'
 import {store} from '../../common'
-export default {
+
+/**
+ * 运营订单申请service
+ */
+export const operate_orderApplyRequest = {
     /**
-     * 获取订单申请列表
+     * 订单申请列表 
      */
     getApplicationList(){
         return operateRequest.getApplicationList()
@@ -34,6 +38,13 @@ export default {
     editAppLySource(changeObj){
         return operateRequest.editAppLySource(changeObj)
     },
+
+} 
+
+/**
+ * 门店、门店经纪人信息接口
+ */
+export const operate_storeRequest = {
     /**
      * 获取全部门店列表
      */
@@ -42,22 +53,17 @@ export default {
     },
     /**
      * 获取全部门店列表
+     * @param store_id 门店id
      */
     getStoreManagerSelection(store_id){
         return operateRequest.getStoreManagerSelection(store_id)
     },
+}
 
-
-
-
-
-
-
-
-
-
-
-
+/**
+ * 运营中心服务人员信息接口
+ */
+export const operate_staffRequest = {
     /**
      * 获取员工列表
      * @param type 列表类别
@@ -73,12 +79,13 @@ export default {
         return operateRequest.getStaff(id)
     },
     /**
-     * 创建、编辑员工信息
-     * @param obj
+     * 编辑员工
+     * @param obj 参考staffItem.ts
      */
     editStaff(obj){
         return operateRequest.editStaff(obj)
     },
+    
     /**
      * 姓名查重
      */
@@ -91,6 +98,52 @@ export default {
     changeStaffType(id, version){
         return operateRequest.changeStaffType(id, version)
     },
+}
+
+/**
+ * 获取商品信息
+ */
+export const operate_serviceGood = {
+    /**
+     * 获取所有商品信息树
+     */
+    getServiceTree(){
+        return operateRequest.getServiceTree()
+    },
+    /**
+     * 获取单个服务信息
+     * @param id 服务的id
+     */
+    getService(id){
+        return operateRequest.getService(id)
+    },
+    /**
+     * 获取服务下拉框
+     */
+    getServiceSelection(){
+        return operateRequest.getServiceSelection()
+    },
+    /**
+     * 编辑服务信息
+     * @param serviceObj 服务信息对象 
+     */
+    editService(serviceObj){
+        return operateRequest.editService(serviceObj)
+    }
+}
+
+export default {
+    ...operate_orderApplyRequest,
+    ...operate_storeRequest,
+    ...operate_staffRequest,
+    ...operate_serviceGood,
+
+
+
+
+
+
+
 
 
 
@@ -151,7 +204,7 @@ export default {
      */
     getReturnStaff(){
         //设置回访count查询参数
-        store.commit('setQueryList', {
+        store.commit('setWorkerList', {
             queryKey: 'count', 
             queryedList: 0
         })

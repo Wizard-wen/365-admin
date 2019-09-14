@@ -7,8 +7,8 @@
 
             <template slot="control" slot-scope="controler">
                 <el-button size="mini" type="text" @click="editOrderApply(1, controler.scoper.row)">编辑</el-button>
-                <el-button size="mini" type="text" style="color:#f56c6c" @click="refuseOrderApply(controler.scoper.row)">拒绝</el-button>
-                <el-button size="mini" type="text" style="color:#67c23a" @click="exportReturnStaff(0, controler.scoper.row)">通过</el-button>
+                <el-button size="mini" v-if="controler.scoper.row.type == ''" type="text" style="color:#f56c6c" @click="refuseOrderApply(controler.scoper.row)">拒绝</el-button>
+                <el-button size="mini" v-if="controler.scoper.row.type == ''" type="text" style="color:#67c23a" @click="passOrderApply(controler.scoper.row)">通过</el-button>
             </template>
 
             <template slot="pagination">
@@ -23,6 +23,12 @@
                     :total="pagination.total"></el-pagination>
             </template>
         </order-apply-table-component>
+        <pass-order-apply-dialog
+            v-if="orderApplyVisible"
+            :orderApplyId="orderApplyId"
+            @closeOrderApplyDialog="orderApplyVisible = false"
+            :orderApplyVisible="orderApplyVisible"
+            :systemVersion="systemVersion"></pass-order-apply-dialog>
     </div>
 </template>
 <script>
@@ -30,20 +36,18 @@
 
     import {
         orderApplyTableComponent,
-    } from './components'
+    } from './orderApplyList/index.js'
+
+    import {passOrderApplyDialog} from './orderApplyItem/index.js'
     export default {
         components: {
             orderApplyTableComponent,
+            passOrderApplyDialog,
         },
         data(){
             return {
                 //员工信息列表
                 orderApplyTable: [],
-                //表单搜索项
-                staffSearch: {
-                    name: '', //姓名
-                    phone:'',//手机号
-                },
                 isLoaded:false,
                 /**
                  * 分页信息
@@ -67,11 +71,10 @@
                     paper_ids: 80, //技能证书
                     source: 80,//信息来源
                 },
-                returnStaffDialofVisible: false,//添加回访数据显示隐藏
+                systemVersion: '',//系统版本号
+                orderApplyId:'',//当前订单id
+                orderApplyVisible: false,//控制订单通过弹窗显示隐藏
             }
-        },
-        computed:{
-
         },
         methods: {
              /**
@@ -79,13 +82,11 @@
              */
             async getTableList(){
                 try{
-
                     this.isLoaded = true
 
                     await Promise.all([
                         operateService.getApplicationList(), //
                     ]).then((data) =>{
-
                         this.orderApplyTable = data[0].data.data
                         //分页信息
                         this.pagination.currentPage = data[0].data.current_page //当前页码
@@ -116,71 +117,61 @@
             async handleCurrentPage(val){
                 // this.pagination.currentPage = val
                 //设置page查询参数
-                this.$store.commit('setQueryList', {
+                this.$store.commit('setWorkerList', {
                     queryKey: 'page',
                     queryedList: val
                 })
                 await this.getTableList()
             },
             /**
-             * 导入回访服务人员
-             * @param type 是全部导出还是单个导出 全部导出 1 单个导出 0
+             * 打开通过订单弹窗
+             * @param paramObj 订单字段对象
              */
-            async exportReturnStaff(type, row){
-                if(type == 0){
-                    let _this= this;
-
-                    let response = await this.$confirm(`确定将该服务人员导入回访列表吗?`, '提示', {
-                        confirmButtonText: '确定',
-                        cancelButtonText: '取消',
-                        type: 'warning'
-                    }).catch(() => {
-                        this.$message({
-                            type: 'info',
-                            message: `已取消导入`
-                        });
+            passOrderApply(paramObj){
+                this.orderApplyId = paramObj.id
+                this.systemVersion = paramObj.version //系统版本号
+                this.orderApplyVisible = true
+            },
+            /**
+             * 拒绝订单申请年轻
+             */
+            async refuseOrderApply(){
+                let response = await this.$confirm("确定拒绝该订单申请吗?此操作将会关闭订单申请", "提示", {
+                    confirmButtonText: "确定",
+                    cancelButtonText: "取消",
+                    type: "warning"
+                }).catch(() => {
+                    this.$message({
+                        type: "info",
+                        message: "已放弃拒绝"
                     });
-
-                    if(response == "confirm"){
-                        store.commit('setLoading',true)
-
-                        try{
-                            await operateService.addReturnStaffSingle(row.id)
-                                .then(data =>{
-                                    if(data.code == "0"){
-                                        this.$message({
-                                            type:'success',
-                                            message: `导入成功`
-                                        })
-                                    }
-                                }).catch(e =>{
-                                    this.$message({
-                                        type:'error',
-                                        message: e.message
-                                    })
-                                })
-                        } catch(error){
+                });
+                if (response == "confirm") {
+                    store.commit("setLoading", 1);
+                    try {
+                        this.refuseOrderApplyObject.version = this.orderApplyDetail.version
+                        await operateService.dealApplication(this.refuseOrderApplyObject).then(data => {
+                            if (data.code == 0) {
+                                this.$message({
+                                    type: "success",
+                                    message: data.message
+                                });
+                            }
+                        }).catch(error => {
                             this.$message({
-                                type:'error',
-                                message: error.message
-                            })
-                        }
-
-                        await _this.getTableList()
-                        store.commit('setLoading',false)
+                                type: "error",
+                                message: e.message
+                            });
+                        }).finally(() =>{
+                            store.commit("setLoading", false);
+                        })
+                    } catch (e) {
+                        throw error;
                     }
-                } else{
-                    this.returnStaffDialofVisible = true
                 }
             },
             /**
-             * 创建、编辑服务人员信息
-             * des type字段在 创建，编辑，回访，处理异常，创建申请 都能用到
-             * 运营人员创建 0
-             * 运营人员编辑 1
-             * 运营人员回访时编辑 2
-             * 运营人员处理异常时编辑 3
-             * 运营人员处理新建申请 4
+             * 编辑订单申请
              */
             editOrderApply(type, row){
                 this.$router.push({
@@ -190,52 +181,6 @@
                         id: type == 1? row.id : 0
                     }
                 })
-            },
-            /**
-             * 切换停用启用
-             */
-            async refuseOrderApply(row){
-                let _this= this;
-
-                let response = await this.$confirm(`确定拒绝该订单申请吗?`, '提示', {
-                    confirmButtonText: '确定',
-                    cancelButtonText: '取消',
-                    type: 'warning'
-                }).catch(() => {
-                    this.$message({
-                        type: 'info',
-                        message: `已取消`
-                    });
-                });
-
-                if(response == "confirm"){
-                    store.commit('setLoading',true)
-
-                    try{
-                        await operateService.changeStaffType(row.id, row.version)
-                            .then(data =>{
-                                if(data.code == "0"){
-                                    this.$message({
-                                        type:'success',
-                                        message: `拒绝成功`
-                                    })
-                                }
-                            }).catch(e =>{
-                                this.$message({
-                                    type:'error',
-                                    message: e.message
-                                })
-                            })
-                    } catch(error){
-                        this.$message({
-                            type:'error',
-                            message: error.message
-                        })
-                    }
-
-                    await _this.getTableList()
-                    store.commit('setLoading',false)
-                }
             },
         },
         async mounted(){

@@ -42,7 +42,7 @@
 
     import {
         orderTableComponent,
-    } from './components'
+    } from './orderApplyList/index.js'
     export default {
         components: {
             orderTableComponent,

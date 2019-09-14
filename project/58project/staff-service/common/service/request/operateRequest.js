@@ -1,8 +1,11 @@
+
+
 /**
  * 运营接口
  */
 
 import axios from 'axios'
+
 /**
  * 运营订单申请接口
  */
@@ -43,14 +46,6 @@ export const operate_orderApplyRequest = {
             ...changeObj
         })
     },
-    /**
-     * 处理订单申请
-     */
-    dealApplication(changeObj){
-        return axios.post(`./admin/order/dealApplication`,{
-            ...changeObj
-        })
-    },
 } 
 /**
  * 门店、门店经纪人信息接口
@@ -85,22 +80,22 @@ export const operate_staffRequest = {
             return axios.post(
                 baseUrl,
                 store.state.operateModule.queryedList
-            )
+            )//全部服务人员列表
         }else if(type == 1){
             return axios.post(
                 baseUrl,
                 store.state.operateModule.returnList
-            )
+            )//回访服务人员列表
         } else if(type == 2){
             return axios.post(
                 baseUrl,
                 store.state.operateModule.errorList
-            )
+            )//异常服务人员列表
         } else if(type == 3){
             return axios.post(
                 baseUrl,
                 store.state.operateModule.newList
-            )
+            )//新服务人员审核列表
         } else if(type == 4){
             return axios.post(
                 baseUrl,
@@ -113,21 +108,17 @@ export const operate_staffRequest = {
      * @param id 员工id
      */
     getStaff(id){
-        let baseUrl = `./admin/staff/getStaff`
-        if(id){
-            baseUrl += `?id=${id}`
-        }
-        return axios.get(baseUrl)
+        return axios.get(`./admin/staff/getStaff?id=${id}`)
     },
     /**
      * 编辑员工
      * @param obj 参考staffItem.ts
      */
     editStaff(obj){
-        obj = Object.assign({},obj)
-        return axios.post(`./admin/staff/editStaff`,obj)
+        return axios.post(`./admin/staff/editStaff`,{
+            ...obj
+        })
     },
-    
     /**
      * 姓名查重
      */
@@ -137,27 +128,8 @@ export const operate_staffRequest = {
             id: id
         })
     },
-}
-
-export default {
-    ...operate_orderApplyRequest,
-    ...operate_storeRequest,
-    ...operate_staffRequest,
-
-
-
-
-
-
-
-
-
-
-
-
-
     /**
-     *  改变订单状态
+     *  改变服务人员状态
      */
     changeStaffType(id, version){
         return axios.post(`./admin/staff/changeStaffType`, {
@@ -165,18 +137,71 @@ export default {
             id: id
         })
     },
+}
+/**
+ * 获取商品信息
+ */
+export const operate_serviceGood = {
+    /**
+     * 获取所有商品信息树
+     */
+    getServiceTree(){
+        return axios.get(`./admin/service/getServiceTree`)
+    },
+    /**
+     * 获取单个服务信息
+     * @param id 服务的id
+     */
+    getService(id){
+        return axios.get(`./admin/service/getService?id=${id}`)
+    },
+    /**
+     * 获取服务下拉框
+     */
+    getServiceSelection(){
+        return axios.get(`./admin/service/getServiceSelection`)
+    },
+    /**
+     * 编辑服务信息
+     * @param serviceObj 服务信息对象 
+     */
+    editService(serviceObj){
+        return axios.post(`./admin/service/editService`,{
+            ...serviceObj
+        })
+    }
+}
+export default {
+    ...operate_orderApplyRequest,
+    ...operate_storeRequest,
+    ...operate_staffRequest,
+    ...operate_serviceGood,
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     /********************************通用模块**************************************88 */
     /**
      * 获取能力标签树
      */
-    getAbilityTree(type){
-        if (type) {
-            return axios.get(`./admin/common/getLabelTree?type=${type}`)
-        } else {
-            return axios.get(`./admin/common/getLabelTree`)
-        }
-    },
+    // getAbilityTree(type){
+    //     if (type) {
+    //         return axios.get(`./admin/common/getLabelTree?type=${type}`)
+    //     } else {
+    //         return axios.get(`./admin/common/getLabelTree`)
+    //     }
+    // },
     /**
      * 获取证书列表
      */
@@ -190,13 +215,13 @@ export default {
     /**
      * 获取技能树
      */
-    getSkillTree(type){
-        if (type) {
-            return axios.get(`./admin/common/getServiceTree?type=${type}`)
-        } else {
-            return axios.get(`./admin/common/getServiceTree`)
-        }
-    },
+    // getSkillTree(type){
+    //     if (type) {
+    //         return axios.get(`./admin/common/getServiceTree?type=${type}`)
+    //     } else {
+    //         return axios.get(`./admin/common/getServiceTree`)
+    //     }
+    // },
     /**
      * 省市区数据
      */

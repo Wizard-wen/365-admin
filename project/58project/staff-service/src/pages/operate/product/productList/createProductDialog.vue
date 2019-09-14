@@ -8,18 +8,18 @@
         :close-on-click-modal="false">
         <el-form class="productTree-form" ref="form" :model="productTreeForm" label-width="120px" >
 
-            <el-form-item label="商品名字" prop="title">
-                <el-input v-model="productTreeForm.title" :maxlength="20"></el-input>
-            </el-form-item>
-
-            <el-form-item label="商品排序顺序" prop="sort_order">
-                <el-input-number v-model="productTreeForm.sort_order"></el-input-number>
+            <el-form-item label="商品名字" prop="name">
+                <el-input v-model="productTreeForm.name" :maxlength="20"></el-input>
             </el-form-item>
 
             <el-form-item label="商品父级id">
                 <el-select v-model="productTreeForm.parent_id" placeholder="商品父级id">
-                    <el-option v-for="(item, index) in selectionList" :key="index" :label="item.titles" :value="item.id"></el-option>
+                    <el-option v-for="item in selectionList" :key="item.id" :label="item.names" :value="item.id"></el-option>
                 </el-select>
+            </el-form-item>
+
+            <el-form-item label="是否展示">
+                <el-switch v-model="productTreeForm.type"></el-switch>
             </el-form-item>
 
             <el-form-item>
@@ -34,7 +34,8 @@
 /**
  * type 0 新建  1 编辑
  */
-import {authService} from '../../../../../common'
+import {authService, operateService} from '../../../../../common'
+import { operateModule } from '../../../../../common/store/operateModule';
 
 export default {
     props: {
@@ -50,10 +51,10 @@ export default {
         return {
             //商品树表单
             productTreeForm: {
-                id: 0,//id
-                title: '',//权限名字
-                sort_order: 0,//权限排序顺序
+                name: '',//商品名
+                type: true,// enable 允许 disable 禁止
                 parent_id: 0,//权限父级id
+                version: 0,//新建version
             },
             //商品父级id下拉列表
             selectionList: []
@@ -65,7 +66,20 @@ export default {
          * 区分新建和编辑
          */
         async onSubmit(formName) {
-
+            if(this.productTreeForm.type){
+                this.productTreeForm.type = 'enable'
+            } else {
+                this.productTreeForm.type = 'disable'
+            }
+            await operateService.editService(this.productTreeForm).then(data =>{
+                if(data.code == '0'){
+                    this.$message({
+                        type:"success",
+                        message: data.message
+                    })
+                    this.$emit('closeCreateProductDialog')
+                }
+            })
         },
         /**
          * 关闭弹窗
@@ -75,6 +89,12 @@ export default {
         }
     },
     async mounted(){
+        await operateService.getServiceSelection().then(data =>{
+            console.log(data)
+            this.selectionList = data.data
+        }).catch(error =>{
+
+        })
     }
 }
 </script>

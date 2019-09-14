@@ -29,7 +29,8 @@
 import {saleService, $utils} from '../../../../common'
 import {
     contractTableComponent,
-} from './components/index.js'
+} from './contractList/index.js'
+
 export default {
     data(){
         return {
