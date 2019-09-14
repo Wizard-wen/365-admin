@@ -1,150 +1,124 @@
 <template>
     <div class="">
         <query-search-list
-            :queryFrom="queryFrom"
             @updateTable="updateTable" 
-            :queryKey="'authentication_ids'" 
+            :queryKey="'authentication'" 
             :queryName="'认证状态'" 
-            :queryList="configForm.authentication"></query-search-list>
+            :queryList="workerConfigForm.authentication"></query-search-list>
         <query-search-input
-            :queryFrom="queryFrom"
             @updateTable="updateTable"
             :queryKey="'name'" 
             :queryName="'姓名'"></query-search-input>
         <query-search-input
-            :queryFrom="queryFrom"
             @updateTable="updateTable"
             :queryKey="'phone'" 
             :queryName="'电话'"></query-search-input>
         <query-search-input
-            :queryFrom="queryFrom"
             @updateTable="updateTable"
             :queryKey="'return_msg'" 
             :queryName="'回访信息'"></query-search-input>
         <query-search-list
-            :queryFrom="queryFrom"
             @updateTable="updateTable" 
-            :queryKey="'working_status_ids'" 
+            :queryKey="'working_status'" 
             :queryName="'接单状态'" 
-            :queryList="configForm.working_status"></query-search-list>
+            :queryList="workerConfigForm.working_status"></query-search-list>
         <query-search-input
-            :queryFrom="queryFrom"
             @updateTable="updateTable"
             :queryKey="'remarks'" 
             :queryName="'备注（商家情况）'"></query-search-input>
         <query-search-list
-            :queryFrom="queryFrom"
             @updateTable="updateTable" 
-            :queryKey="'service_category_ids'" 
+            :queryKey="'service_category'" 
             :queryName="'职业类型'" 
-            :queryList="configForm.service_category"></query-search-list>
+            :queryList="workerConfigForm.service_category"></query-search-list>
         <query-search-list
-            :queryFrom="queryFrom"
             @updateTable="updateTable" 
-            :queryKey="'service_type_ids'" 
+            :queryKey="'service_type'" 
             :queryName="'服务类型'" 
-            :queryList="configForm.service_type"></query-search-list>     
+            :queryList="workerConfigForm.service_type"></query-search-list>     
         <query-search-list
-            :queryFrom="queryFrom"
             @updateTable="updateTable" 
-            :queryKey="'service_crowd_ids'" 
+            :queryKey="'service_crowd'" 
             :queryName="'可服务人群'" 
-            :queryList="configForm.service_crowd"></query-search-list>
+            :queryList="workerConfigForm.service_crowd"></query-search-list>
         <query-search-list
-            :queryFrom="queryFrom"
             @updateTable="updateTable" 
-            :queryKey="'working_age_ids'" 
+            :queryKey="'working_age'" 
             :queryName="'工龄'" 
-            :queryList="configForm.working_age"></query-search-list>
+            :queryList="workerConfigForm.working_age"></query-search-list>
         <query-search-input
-            :queryFrom="queryFrom"
             @updateTable="updateTable"
             :queryKey="'working_experience'" 
             :queryName="'工作经验'"></query-search-input>
         <query-search-list
-            :queryFrom="queryFrom"
             @updateTable="updateTable" 
-            :queryKey="'nation_ids'" 
+            :queryKey="'nation'" 
             :queryName="'民族'" 
-            :queryList="configForm.nation"></query-search-list>
+            :queryList="workerConfigForm.nation"></query-search-list>
         <query-search-input
-            :queryFrom="queryFrom"
             @updateTable="updateTable"
             :queryKey="'birthplace'" 
             :queryName="'籍贯'"></query-search-input>
         <query-search-input
-            :queryFrom="queryFrom"
             @updateTable="updateTable"
             :queryKey="'identify'" 
             :queryName="'身份证号'"></query-search-input>
         <query-search-input
-            :queryFrom="queryFrom"
             @updateTable="updateTable"
             :queryKey="'address'" 
             :queryName="'地址'"></query-search-input>
         <query-search-list
-            :queryFrom="queryFrom"
             @updateTable="updateTable" 
-            :queryKey="'service_region_ids'" 
+            :queryKey="'service_region'" 
             :queryName="'服务地区'" 
-            :queryList="configForm.service_region"></query-search-list>
+            :queryList="workerConfigForm.service_region"></query-search-list>
         <query-search-list
-            :queryFrom="queryFrom"
             @updateTable="updateTable" 
-            :queryKey="'education_ids'" 
+            :queryKey="'education'" 
             :queryName="'教育程度'" 
-            :queryList="configForm.education"></query-search-list>
+            :queryList="workerConfigForm.education"></query-search-list>
         <query-search-input
-            :queryFrom="queryFrom"
             @updateTable="updateTable"
             :queryKey="'urgent_phone'" 
             :queryName="'紧急联系人电话'"></query-search-input>
         <query-search-input
-            :queryFrom="queryFrom"
             @updateTable="updateTable"
             :queryKey="'bank_card'" 
             :queryName="'银行卡号'"></query-search-input>
         <query-search-list
-            :queryFrom="queryFrom"
             @updateTable="updateTable" 
-            :queryKey="'course_ids'" 
+            :queryKey="'course'" 
             :queryName="'参加培训'" 
-            :queryList="configForm.course"></query-search-list>
+            :queryList="workerConfigForm.course"></query-search-list>
         <query-search-input
-            :queryFrom="queryFrom"
             @updateTable="updateTable"
             :queryKey="'teacher_comment'" 
             :queryName="'教师评语'"></query-search-input>
         <query-search-list
-            :queryFrom="queryFrom"
             @updateTable="updateTable" 
-            :queryKey="'paper_category_ids'" 
+            :queryKey="'paper_category'" 
             :queryName="'技能证书标签'" 
-            :queryList="configForm.paper_category"></query-search-list>
+            :queryList="workerConfigForm.paper_category"></query-search-list>
         <query-search-list
-            :queryFrom="queryFrom"
             @updateTable="updateTable" 
-            :queryKey="'source_ids'" 
+            :queryKey="'source'" 
             :queryName="'信息来源'" 
-            :queryList="configForm.source"></query-search-list>
+            :queryList="workerConfigForm.source"></query-search-list>
         <query-search-input
-            :queryFrom="queryFrom"
             @updateTable="updateTable"
             :queryKey="'source_name'" 
             :queryName="'来源名称'"></query-search-input>
         <query-search-list
-            :queryFrom="queryFrom"
             @updateTable="updateTable" 
-            :queryKey="'manager_ids'" 
+            :queryKey="'manager'" 
             :queryName="'创建人'" 
-            :queryList="configForm.manager"></query-search-list>
+            :queryList="workerConfigForm.manager"></query-search-list>
         <query-search-list
-            :queryFrom="queryFrom"
             @updateTable="updateTable" 
             :isSingleQuery="true"
-            :queryKey="'updated_type_ids'" 
+            :queryKey="'updated_type'" 
             :queryName="'更新时间'" 
-            :queryList="configForm.updated_type"></query-search-list>
+            :queryList="workerConfigForm.updated_type"></query-search-list>
     </div>
 </template>
 <script>
@@ -157,7 +131,7 @@ import {queryUpdated_at} from '../interface/query.js'
 export default {
     data(){
         return {
-            setConfigForm: [],//本地接收的搜索config字段
+            setWorkerConfigForm: [],//本地接收的搜索config字段
             queryUpdated_at,
         }
     },
@@ -166,8 +140,8 @@ export default {
         querySearchInput,
     },
     computed:{
-        configForm(){
-            return this.$store.state.operateModule.configForm
+        workerConfigForm(){
+            return this.$store.state.operateModule.workerConfigForm
         }
     },
     methods: {

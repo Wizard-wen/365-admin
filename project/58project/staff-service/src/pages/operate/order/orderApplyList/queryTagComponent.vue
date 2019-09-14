@@ -20,21 +20,13 @@ export default {
             leftPosition: 0,
         }
     },
-    props: {
-        /**
-         * 查询来源
-         */
-        queryFrom: {
-            default: 'staff',
-            type: String,
-        }
-    },
     computed:{
-        workerConfigForm(){
-            return this.$store.state.operateModule.workerConfigForm
+        orderApplyFormConfig(){
+            return this.$store.state.operateModule.orderApplyFormConfig
         },
         queryedList(){
-            return this.$store.state.saleModule.matchServiceList
+            return this.$store.state.operateModule.orderApplyList 
+
         },
         queryListLength(){
             return this.queryTag.reduce((allNumber, item, index) =>{
@@ -45,7 +37,6 @@ export default {
             let arr = [],
                 arrList = [],
                 _this = this;
-            // debugger
             Object.keys(this.queryedList).forEach((item, index) =>{
                 if(Array.isArray(this.queryedList[item])){
                     if(this.queryedList[item].length){
@@ -88,7 +79,7 @@ export default {
          * 名字
          */
         analysisValue(item, key){
-            return this.workerConfigForm[item].find(item => item.id == key).name
+            return this.orderApplyFormConfig[item].find(item => item.id == key).name
         },
         closeTag(item){
             let configValue = this.queryedList[item.key], //取出queryedList中字段的值
@@ -100,12 +91,12 @@ export default {
             } else {
                 newValue = ''
             }
-
-            this.$store.commit('saleSetMatchSerivceList', {
+            //将查询组件数据变化存入vuex
+            this.$store.commit('setOrderApplyList', {
                 queryKey: item.key,
                 queryedList: newValue
             })
-            
+
             //更新表格数据
             this.$emit('updateTable')
         },
@@ -115,21 +106,15 @@ export default {
             } else {
                 this.leftPosition = this.leftPosition - 100
             }
-
         },
         rightChange(){
             if(this.leftPosition == 0){
-                // this.leftPosition = 0
                 return false
             } else {
                 this.leftPosition = this.leftPosition + 100
             }
-
         }
     },
-    mounted(){
-
-    }
 }
 </script>
 <style lang="scss" scoped>

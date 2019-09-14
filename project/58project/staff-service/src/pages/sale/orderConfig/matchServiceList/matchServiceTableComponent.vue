@@ -93,21 +93,21 @@
                         :tableOriginData="scope.row.skill_ids"></table-tag-component>
                     </template>
                 </el-table-column>
-                <el-table-column  label="服务类型" prop="service_type_ids" align="center" :width="maxLength.service_type_ids">
+                <el-table-column  label="服务类型" prop="service_type" align="center" :width="maxLength.service_type">
                     <template slot-scope="scope">
                         <table-tag-component 
                         v-if="workerConfigList.service_type" 
                         :propList="workerConfigList.service_type" 
-                        :tableOriginData="scope.row.service_type_ids"></table-tag-component>
+                        :tableOriginData="scope.row.service_type"></table-tag-component>
                     </template>
                 </el-table-column>
-                <el-table-column  label="可服务人群" prop="service_crowd_ids" :width="maxLength.service_crowd_ids">
+                <el-table-column  label="可服务人群" prop="service_crowd" :width="maxLength.service_crowd">
                     <template slot-scope="scope">
                         <table-tag-component 
-                        :width="maxLength.service_crowd_ids" 
+                        :width="maxLength.service_crowd" 
                         v-if="workerConfigList.service_crowd" 
                         :propList="workerConfigList.service_crowd" 
-                        :tableOriginData="scope.row.service_crowd_ids"></table-tag-component>
+                        :tableOriginData="scope.row.service_crowd"></table-tag-component>
                     </template>
                 </el-table-column>
                 <el-table-column  label="工龄" prop="working_age" align="center" :width="maxLength.working_age">
@@ -202,9 +202,9 @@
                     </template>
                 </el-table-column>
 
-                <el-table-column  label="参加培训" prop="course_ids" :width="maxLength.course_ids" align="center">
+                <el-table-column  label="参加培训" prop="course" :width="maxLength.course" align="center">
                     <template slot-scope="scope">
-                        <table-tag-component v-if="workerConfigList.course" :propList="workerConfigList.course" :tableOriginData="scope.row.course_ids"></table-tag-component>
+                        <table-tag-component v-if="workerConfigList.course" :propList="workerConfigList.course" :tableOriginData="scope.row.course"></table-tag-component>
                     </template>
                 </el-table-column>
 
@@ -277,12 +277,12 @@
                         authentication: 80, //认证状态
                         working_status: 80,//接单状态
                         skill_ids: 80,// 职业类型
-                        service_type_ids: 80,//服务类型
-                        service_crowd_ids: 80,//可服务人群
+                        service_type: 80,//服务类型
+                        service_crowd: 80,//可服务人群
                         working_age: 80,// 工龄
                         nation: 80,// 民族
                         region_ids: 80,//服务地区
-                        course_ids: 80,//参加培训
+                        course: 80,//参加培训
                         paper_ids: 80, //技能证书
                         source: 80,//信息来源
                     }
@@ -299,7 +299,7 @@
         computed:{
             //服务人员配置字段对象
             workerConfigList(){
-                return this.$store.state.operateModule.configForm
+                return this.$store.state.operateModule.workerConfigForm
             }
         },
         methods: {

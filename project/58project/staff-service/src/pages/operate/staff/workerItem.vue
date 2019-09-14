@@ -455,7 +455,7 @@ export default {
         },
         //服务人员表单配置项
         workerConfigList(){
-            return this.$store.state.operateModule.configForm
+            return this.$store.state.operateModule.workerConfigForm
         },
     },
     filters: {
@@ -823,10 +823,10 @@ export default {
                     })
                 })
             }
-            await operateService.getFormConfig('edit').then((data) =>{
+            await operateService.getWorkerFormConfig('edit').then((data) =>{
                 if(data.code == '0'){
                     // 将表单配置数据存入 vuex
-                    this.$store.commit('setConfigForm',data.data)
+                    this.$store.commit('setWorkerConfigForm',data.data)
                 }
             })
 

@@ -4,11 +4,28 @@
             :staffTable="orderApplyTable"
             :maxLength="maxLength"
             :controlScopeLength="170">
+            
+            <template slot="searchList">
+                <div class="search-list">
+                    <query-component @updateTable="updateTable"></query-component>
+                </div>
+            </template>
+
+            <template slot="searchForm">
+                <div class="search-tag-list">
+                    <query-tag-component @updateTable="updateTable"></query-tag-component>
+                </div>
+            </template>
 
             <template slot="control" slot-scope="controler">
-                <el-button size="mini" type="text" @click="editOrderApply(1, controler.scoper.row)">编辑</el-button>
-                <el-button size="mini" v-if="controler.scoper.row.type == ''" type="text" style="color:#f56c6c" @click="refuseOrderApply(controler.scoper.row)">拒绝</el-button>
-                <el-button size="mini" v-if="controler.scoper.row.type == ''" type="text" style="color:#67c23a" @click="passOrderApply(controler.scoper.row)">通过</el-button>
+                <el-button v-if="controler.scoper.row.type == 1" size="mini" type="text" @click="editOrderApply(1, controler.scoper.row)">编辑</el-button>
+                <el-button v-if="controler.scoper.row.type != 1" size="mini" type="text" @click="editOrderApply(1, controler.scoper.row)">查看</el-button>
+                <el-button size="mini" type="text" style="color:#f56c6c" 
+                    v-if="controler.scoper.row.type == 1"
+                    @click="refuseOrderApply(controler.scoper.row)">拒绝</el-button>
+                <el-button size="mini" type="text" style="color:#67c23a"  
+                    v-if="controler.scoper.row.type == 1"
+                    @click="openPassOrderApply(controler.scoper.row)">通过</el-button>
             </template>
 
             <template slot="pagination">
@@ -24,10 +41,10 @@
             </template>
         </order-apply-table-component>
         <pass-order-apply-dialog
-            v-if="orderApplyVisible"
+            v-if="orderApplyPassVisible"
             :orderApplyId="orderApplyId"
-            @closeOrderApplyDialog="orderApplyVisible = false"
-            :orderApplyVisible="orderApplyVisible"
+            @closeOrderApplyPassDialog="closeOrderApplyPassDialog"
+            :orderApplyPassVisible="orderApplyPassVisible"
             :systemVersion="systemVersion"></pass-order-apply-dialog>
     </div>
 </template>
@@ -36,6 +53,8 @@
 
     import {
         orderApplyTableComponent,
+        queryTagComponent,
+        queryComponent,
     } from './orderApplyList/index.js'
 
     import {passOrderApplyDialog} from './orderApplyItem/index.js'
@@ -43,10 +62,12 @@
         components: {
             orderApplyTableComponent,
             passOrderApplyDialog,
+            queryTagComponent,
+            queryComponent,
         },
         data(){
             return {
-                //员工信息列表
+                //订单申请列表
                 orderApplyTable: [],
                 isLoaded:false,
                 /**
@@ -59,21 +80,11 @@
                 },
                 //计算列表每一列的最大宽度
                 maxLength: {
-                    authentication: 80, //认证状态
-                    working_status: 80,//接单状态
-                    skill_ids: 80,// 职业类型
-                    service_type_ids: 80,//服务类型
-                    service_crowd_ids: 100,//可服务人群
-                    working_age: 80,// 工龄
-                    nation: 80,// 民族
-                    region_ids:80,//服务地区
-                    course_ids: 80,//参加培训
-                    paper_ids: 80, //技能证书
-                    source: 80,//信息来源
+                    type: 100, //订单申请状态
                 },
                 systemVersion: '',//系统版本号
                 orderApplyId:'',//当前订单id
-                orderApplyVisible: false,//控制订单通过弹窗显示隐藏
+                orderApplyPassVisible: false,//控制订单通过弹窗显示隐藏
             }
         },
         methods: {
@@ -85,12 +96,18 @@
                     this.isLoaded = true
 
                     await Promise.all([
-                        operateService.getApplicationList(), //
+                        operateService.getApplicationList(), //订单申请列表
+                        operateService.getOrderFormConfig(), //订单相关配置标签
                     ]).then((data) =>{
+
                         this.orderApplyTable = data[0].data.data
+                        
                         //分页信息
                         this.pagination.currentPage = data[0].data.current_page //当前页码
                         this.pagination.total = data[0].data.total //列表总条数
+                        
+                        //配置订单相关标签
+                        this.$store.commit('setOrderApplyConfigForm',data[1].data)
                     }).catch(error =>{
                         this.$message({
                             type:'error',
@@ -115,9 +132,9 @@
              * 切换页码
              */
             async handleCurrentPage(val){
-                // this.pagination.currentPage = val
+
                 //设置page查询参数
-                this.$store.commit('setWorkerList', {
+                this.$store.commit('setOrderApplyList', {
                     queryKey: 'page',
                     queryedList: val
                 })
@@ -127,15 +144,23 @@
              * 打开通过订单弹窗
              * @param paramObj 订单字段对象
              */
-            passOrderApply(paramObj){
+            openPassOrderApply(paramObj){
                 this.orderApplyId = paramObj.id
                 this.systemVersion = paramObj.version //系统版本号
-                this.orderApplyVisible = true
+                this.orderApplyPassVisible = true
+            },
+            /**
+             * 关闭通过订单申请弹窗 
+             */
+            async closeOrderApplyPassDialog(){
+                await this.getTableList()
+                this.orderApplyPassVisible = false
             },
             /**
              * 拒绝订单申请年轻
+             * @paramObj
              */
-            async refuseOrderApply(){
+            async refuseOrderApply(paramObj){
                 let response = await this.$confirm("确定拒绝该订单申请吗?此操作将会关闭订单申请", "提示", {
                     confirmButtonText: "确定",
                     cancelButtonText: "取消",
@@ -147,25 +172,32 @@
                     });
                 });
                 if (response == "confirm") {
-                    store.commit("setLoading", 1);
+                    this.isLoaded = true
                     try {
-                        this.refuseOrderApplyObject.version = this.orderApplyDetail.version
-                        await operateService.dealApplication(this.refuseOrderApplyObject).then(data => {
+                        let refuseOrderApplyObject = {
+                            type: 2,
+                            version: paramObj.version,
+                            id: paramObj.id,
+                        }
+
+                        await operateService.dealApplication(refuseOrderApplyObject).then(async data => {
                             if (data.code == 0) {
                                 this.$message({
                                     type: "success",
                                     message: data.message
                                 });
                             }
+                            await this.getTableList()
+                            
                         }).catch(error => {
                             this.$message({
                                 type: "error",
-                                message: e.message
+                                message: error.message
                             });
                         }).finally(() =>{
-                            store.commit("setLoading", false);
+                            this.isLoaded = false
                         })
-                    } catch (e) {
+                    } catch (error) {
                         throw error;
                     }
                 }

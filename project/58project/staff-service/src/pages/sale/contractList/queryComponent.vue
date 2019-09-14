@@ -15,8 +15,8 @@ export default {
         querySearchInput,
     },
     computed:{
-        configForm(){
-            return this.$store.state.operateModule.configForm
+        workerConfigForm(){
+            return this.$store.state.operateModule.workerConfigForm
         }
     },
     methods: {

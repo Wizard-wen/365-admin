@@ -54,7 +54,7 @@ export default {
          * 服务人员配置数据
          */
         workerConfigList(){
-            return this.$store.state.operateModule.configForm
+            return this.$store.state.operateModule.workerConfigForm
         }
     },
     data(){

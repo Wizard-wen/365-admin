@@ -13,8 +13,8 @@
         <select-tag-component :propTagList="typeList" v-model="shopForm.is_third" :isSingle="true"></select-tag-component>
       </el-form-item>
 
-      <el-form-item label="绑定员工" prop="manager_ids" v-if="$route.query.type==1">
-        <select-tag-component :propTagList="roleList" v-model="shopForm.manager_ids" :isSingle="false"></select-tag-component>
+      <el-form-item label="绑定员工" prop="manager" v-if="$route.query.type==1">
+        <select-tag-component :propTagList="roleList" v-model="shopForm.manager" :isSingle="false"></select-tag-component>
       </el-form-item>
 
       <el-form-item label="备注" prop="remarks">
@@ -57,7 +57,7 @@ export default {
         is_third: 0,
         remarks: "",
         phone: "",
-        manager_ids: [],
+        manager: [],
         start_time: 0,
         end_time: 0,
         type: ""
@@ -92,7 +92,7 @@ export default {
             this.shopForm.start_time = data.data.store.start_time;
             this.shopForm.end_time = data.data.store.end_time;
             this.shopForm.type = data.data.store.type;
-            this.shopForm.manager_ids = data.data.manager_ids;
+            this.shopForm.manager = data.data.manager;
 
             this.roleList = data.data.store_manager;
           }
@@ -115,7 +115,7 @@ export default {
         is_third: this.shopForm.is_third,
         remarks: this.shopForm.remarks,
         phone: this.shopForm.phone,
-        manager_ids: this.shopForm.manager_ids,
+        manager: this.shopForm.manager,
         start_time: this.shopForm.start_time,
         end_time: this.shopForm.end_time,
         type: this.shopForm.type

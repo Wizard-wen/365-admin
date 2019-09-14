@@ -5,7 +5,8 @@
  */
 
 import axios from 'axios'
-
+// import {store} from '../../store/index.js'
+// console.log(store)
 /**
  * 运营订单申请接口
  */
@@ -14,7 +15,10 @@ export const operate_orderApplyRequest = {
      * 订单申请列表 
      */
     getApplicationList(){
-        return axios.get(`./admin/order/applicationList`)
+        return axios.post(
+            `./admin/order/applicationList`,
+            store.state.operateModule.orderApplyList
+        )
     },
     /**
      * 通过或拒绝订单申请
@@ -48,9 +52,9 @@ export const operate_orderApplyRequest = {
     },
 } 
 /**
- * 门店、门店经纪人信息接口
+ * 运营中心公共接口
  */
-export const operate_storeRequest = {
+export const operate_publicRequest = {
     /**
      * 获取全部门店列表
      */
@@ -58,11 +62,48 @@ export const operate_storeRequest = {
         return axios.get(`./admin/common/getStoreSelection`)
     },
     /**
-     * 获取全部门店列表
+     * 获取某个门店员工列表
      * @param store_id 门店id
      */
     getStoreManagerSelection(store_id){
         return axios.get(`./admin/common/getStoreManagerSelection?store_id=${store_id}`)
+    },
+    /**
+     * 获取所有员工列表
+     */
+    getManagerSelection(){
+        return axios.get(`./admin/common/getManagerSelection`)
+    },
+    /**
+     * 请求服务人员标签配置数据
+     * @param type config 
+     */
+    getWorkerFormConfig(type){
+        return axios.get(`./admin/formConfig/getWorkerFormConfig?get_for=${type}`)
+    },
+    /**
+     * 标签信息配置
+     */
+    editWorkerFormConfig(obj){
+        return axios.post('./admin/formConfig/editWorkerFormConfig',{
+            ...obj
+        })
+    },
+    /**
+     * 请求订单标签配置数据
+     */
+    getOrderFormConfig(){
+        return axios.get(`./admin/formConfig/getOrderFormConfig`)
+    },
+    /**
+     * 获取证书列表
+     */
+    getPaperSelection(type){
+        if (type) {
+            return axios.get(`./admin/common/getPaperSelection?type=${type}`)
+        } else {
+            return axios.get(`./admin/common/getPaperSelection`)
+        }
     },
 }
 /**
@@ -137,114 +178,6 @@ export const operate_staffRequest = {
             id: id
         })
     },
-}
-/**
- * 获取商品信息
- */
-export const operate_serviceGood = {
-    /**
-     * 获取所有商品信息树
-     */
-    getServiceTree(){
-        return axios.get(`./admin/service/getServiceTree`)
-    },
-    /**
-     * 获取单个服务信息
-     * @param id 服务的id
-     */
-    getService(id){
-        return axios.get(`./admin/service/getService?id=${id}`)
-    },
-    /**
-     * 获取服务下拉框
-     */
-    getServiceSelection(){
-        return axios.get(`./admin/service/getServiceSelection`)
-    },
-    /**
-     * 编辑服务信息
-     * @param serviceObj 服务信息对象 
-     */
-    editService(serviceObj){
-        return axios.post(`./admin/service/editService`,{
-            ...serviceObj
-        })
-    }
-}
-export default {
-    ...operate_orderApplyRequest,
-    ...operate_storeRequest,
-    ...operate_staffRequest,
-    ...operate_serviceGood,
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    /********************************通用模块**************************************88 */
-    /**
-     * 获取能力标签树
-     */
-    // getAbilityTree(type){
-    //     if (type) {
-    //         return axios.get(`./admin/common/getLabelTree?type=${type}`)
-    //     } else {
-    //         return axios.get(`./admin/common/getLabelTree`)
-    //     }
-    // },
-    /**
-     * 获取证书列表
-     */
-    getPaperSelection(type){
-        if (type) {
-            return axios.get(`./admin/common/getPaperSelection?type=${type}`)
-        } else {
-            return axios.get(`./admin/common/getPaperSelection`)
-        }
-    },
-    /**
-     * 获取技能树
-     */
-    // getSkillTree(type){
-    //     if (type) {
-    //         return axios.get(`./admin/common/getServiceTree?type=${type}`)
-    //     } else {
-    //         return axios.get(`./admin/common/getServiceTree`)
-    //     }
-    // },
-    /**
-     * 省市区数据
-     */
-    getAreaTree(){
-        return axios.get(`./admin/common/getAreaTree`)
-    },
-    /**
-     * 请求标签配置数据
-     * @param type config 
-     */
-    getFormConfig(type){
-        return axios.get(`./admin/formConfig/getFormConfig?get_for=${type}`)
-    },
-    /**
-     * 标签信息配置
-     */
-    editFormConfig(obj){
-        return axios.post('./admin/formConfig/editFormConfig',{
-            ...obj
-        })
-    },
-
-
     /**
      * 单个服务人员添加回访
      */
@@ -301,5 +234,43 @@ export default {
         }
 
     },
-
+}
+/**
+ * 获取商品信息
+ */
+export const operate_serviceGood = {
+    /**
+     * 获取所有商品信息树
+     */
+    getServiceTree(){
+        return axios.get(`./admin/service/getServiceTree`)
+    },
+    /**
+     * 获取单个服务信息
+     * @param id 服务的id
+     */
+    getService(id){
+        return axios.get(`./admin/service/getService?id=${id}`)
+    },
+    /**
+     * 获取服务下拉框
+     */
+    getServiceSelection(){
+        return axios.get(`./admin/service/getServiceSelection`)
+    },
+    /**
+     * 编辑服务信息
+     * @param serviceObj 服务信息对象 
+     */
+    editService(serviceObj){
+        return axios.post(`./admin/service/editService`,{
+            ...serviceObj
+        })
+    }
+}
+export default {
+    ...operate_orderApplyRequest,
+    ...operate_publicRequest,
+    ...operate_staffRequest,
+    ...operate_serviceGood,
 }

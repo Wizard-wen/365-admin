@@ -30,8 +30,8 @@ export default {
         }
     },
     computed:{
-        configForm(){
-            return this.$store.state.operateModule.configForm
+        workerConfigForm(){
+            return this.$store.state.operateModule.workerConfigForm
         },
         queryedList(){
             return this.$store.state.operateModule.workerList
@@ -51,12 +51,11 @@ export default {
                 if(Array.isArray(this.queryedList[item])){
                     if(this.queryedList[item].length){
                         this.queryedList[item].forEach((it, ind) =>{
-                            let itemKey = item.substring(0,item.length-4)
                             arr.push({
                                 type: 'array',
                                 key: item,
                                 value: it,
-                                name: _this.analysisValue(itemKey, it)
+                                name: _this.analysisValue(item, it)
                             })
                         })
                     }
@@ -90,7 +89,7 @@ export default {
          * 名字
          */
         analysisValue(item, key){
-            return this.configForm[item].find(item => item.id == key).name
+            return this.workerConfigForm[item].find(item => item.id == key).name
         },
         closeTag(item){
             let configValue = this.queryedList[item.key], //取出queryedList中字段的值

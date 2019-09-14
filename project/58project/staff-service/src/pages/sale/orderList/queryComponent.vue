@@ -19,7 +19,7 @@ import searchInput from './query/searchInput.vue'
 export default {
     data(){
         return {
-            setConfigForm: [],//本地接收的搜索config字段
+            setWorkerConfigForm: [],//本地接收的搜索config字段
             // queryUpdated_at,
         }
     },
@@ -34,8 +34,8 @@ export default {
         saleModule(){
             return this.$store.state.saleModule
         },
-        configForm(){
-            return this.$store.state.operateModule.configForm
+        workerConfigForm(){
+            return this.$store.state.operateModule.workerConfigForm
         }
     },
     props: {

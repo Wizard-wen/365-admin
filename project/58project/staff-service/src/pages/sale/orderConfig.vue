@@ -316,7 +316,7 @@ export default {
          * 
          */
         workerConfigList(){
-            return this.$store.state.operateModule.configForm
+            return this.$store.state.operateModule.workerConfigForm
         },
         /**
          * 当前用户信息

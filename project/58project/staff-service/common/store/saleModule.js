@@ -4,8 +4,6 @@ import Vuex from 'vuex'
 
 Vue.use(Vuex)
 
-import saleRequest from '../service/request/saleRequest.js'
-import { Message } from 'element-ui';
 
 var order_status = [
     {name: '匹配中',id: 1},
@@ -47,11 +45,11 @@ export const saleModule = {
         order_service_level:order_service_level,//订单护理依赖程度
         order_service_type:order_service_type,//订单服务方式
         
-        orderConfigForm: {
+        orderworkerConfigForm: {
             ...order_status,
         },
         /**
-         *  服务人员信息库 查询字段 
+         *  服务人员信息库查询字段 
          */
         saleWorkerList: {
             /*********************表格字段查询******************************/
@@ -68,35 +66,35 @@ export const saleModule = {
             
             // register_at:'',//登记时间
             // updated_at:'',更新时间
-            authentication_ids: [],//认证状态
+            authentication: [],//认证状态
             name: '', //姓名
             // age: null,//年龄--按年龄段搜索
             phone: '',//电话
             return_msg: '',//回访信息
-            working_status_ids: [],//接单状态 ------
+            working_status: [],//接单状态 ------
             remarks: '',//备注（商家情况）
-            service_category_ids: [],//职业类型
-            service_type_ids: [],//服务类型
-            service_crowd_ids: [],//可服务人群
-            working_age_ids: [],//工龄
+            service_category: [],//职业类型
+            service_type: [],//服务类型
+            service_crowd: [],//可服务人群
+            working_age: [],//工龄
             working_experience: '',//工作经验
-            nation_ids: [],//民族
+            nation: [],//民族
             birthplace: '',//籍贯
             identify: '',//身份证号
             address: '',//地址
-            service_region_ids: [],//服务地区
+            service_region: [],//服务地区
             education: '',//教育程度
             urgent_phone: '',//紧急联系人电话
             bank_card: '',//银行卡号
-            course_ids: [],//参加培训
+            course: [],//参加培训
             teacher_comment:'',//教师评语
-            paper_category_ids: [],//证书标签
-            source_ids: [],//信息来源
-            manager_ids: [],//创建人
-            updated_type_ids: [],//更新时间
-        }, //全部查询参数
+            paper_category: [],//证书标签
+            source: [],//信息来源
+            manager: [],//创建人
+            updated_type: [],//更新时间
+        },
         /**
-         * 备选服务人员列表 查询字段
+         * 备选服务人员列表查询字段
          */
         matchServiceList: {
             /*********************表格字段查询******************************/
@@ -113,34 +111,33 @@ export const saleModule = {
             
             // register_at:'',//登记时间
             // updated_at:'',更新时间
-            authentication_ids: [],//认证状态
+            authentication: [],//认证状态
             name: '', //姓名
             // age: null,//年龄--按年龄段搜索
             phone: '',//电话
             return_msg: '',//回访信息
-            working_status_ids: [],//接单状态 ------
+            working_status: [],//接单状态 ------
             remarks: '',//备注（商家情况）
-            service_category_ids: [],//职业类型
-            service_type_ids: [],//服务类型
-            service_crowd_ids: [],//可服务人群
-            working_age_ids: [],//工龄
+            service_category: [],//职业类型
+            service_type: [],//服务类型
+            service_crowd: [],//可服务人群
+            working_age: [],//工龄
             working_experience: '',//工作经验
-            nation_ids: [],//民族
+            nation: [],//民族
             birthplace: '',//籍贯
             identify: '',//身份证号
             address: '',//地址
-            service_region_ids: [],//服务地区
+            service_region: [],//服务地区
             education: '',//教育程度
             urgent_phone: '',//紧急联系人电话
             bank_card: '',//银行卡号
-            course_ids: [],//参加培训
+            course: [],//参加培训
             teacher_comment:'',//教师评语
-            paper_category_ids: [],//证书标签
-            source_ids: [],//信息来源
-            manager_ids: [],//创建人
-            updated_type_ids: [],//更新时间
-        }, //全部查询参数
-
+            paper_category: [],//证书标签
+            source: [],//信息来源
+            manager: [],//创建人
+            updated_type: [],//更新时间
+        }, 
         /**
          * 订单列表查询参数
          */
@@ -155,7 +152,7 @@ export const saleModule = {
             type: '',          //订单状态 
         },
         /**
-         *  合同列表 查询字段 
+         *  合同列表查询字段 
          */
         contractList: {
             /*********************表格字段查询******************************/
@@ -178,7 +175,7 @@ export const saleModule = {
     },
     mutations: {
         /**
-         * 初始化shuju
+         * 初始化订单数据
          */
         configOrderData(state, data){
             state.order = data.order
@@ -187,31 +184,23 @@ export const saleModule = {
             state.order_logs = data.order_logs //订单日志
         },
         /** 
-        * @param queryKey queryList 键名 
-        * @param queryedList 键值，可能是数组，也可能是字符串
-        */
+         * 列表查询函数公共键值说明
+         * @param queryKey queryList 键名 
+         * @param queryedList 键值，可能是数组，也可能是字符串
+         */
+        //设置全部服务人员查询字段
         saleSetWorkerList(state,payload){
             state.saleWorkerList[payload.queryKey] = payload.queryedList
         },
-        /** 
-        * @param queryKey queryList 键名 
-        * @param queryedList 键值，可能是数组，也可能是字符串
-        */
+        //设置备选服务人员查询字段
         saleSetMatchSerivceList(state,payload){
             state.matchServiceList[payload.queryKey] = payload.queryedList
         },
-        /** 
-        * @param queryKey queryList 键名 
-        * @param queryedList 键值，可能是数组，也可能是字符串
-        */
-       saleSetOrderList(state,payload){
+        //设置订单列表查询字段
+        saleSetOrderList(state,payload){
             state.orderList[payload.queryKey] = payload.queryedList
         },
-        /** */
-        /** 
-        * @param queryKey queryList 键名 
-        * @param queryedList 键值，可能是数组，也可能是字符串
-        */
+        //设置合同列表查询字段
         saleSetContractList(state,payload){
             state.contractList[payload.queryKey] = payload.queryedList
         },
