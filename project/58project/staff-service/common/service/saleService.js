@@ -68,12 +68,6 @@ export const sale_orderRequest = {
  */
 export const sale_matchServiceRequest = {
     /**
-     * 获取备选服务人员列表
-     */
-    getMatchStaffList(){
-        return saleRequest.getMatchStaffList()
-    },
-    /**
      * 添加候选人
      * @param obj 候选人字段信息
      * @param obj.order_id 订单id

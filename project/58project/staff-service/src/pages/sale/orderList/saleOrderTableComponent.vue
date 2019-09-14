@@ -18,7 +18,7 @@
                 :header-cell-style="{height: '30px',padding: '0px',fontSize:'12px'}"
                 :cell-style="{height: '30px',padding: 0,fontSize:'12px',}">
 
-                <el-table-column  label="订单编号" prop="order_code" align="center" width="150"></el-table-column>
+                <el-table-column  label="订单编号" prop="order_code" align="center" fixed="left" width="150"></el-table-column>
 
                 <el-table-column  label="订单状态" prop="type" align="center" width="150">
                     <template slot-scope="scope">
@@ -94,15 +94,11 @@
                     </template>
                 </el-table-column>
 
-                <el-table-column  label="来源门店" prop="order_source_store" align="center" width="150"></el-table-column>
-
-                <el-table-column  label="来源人" prop="order_source_manager" align="center" width="150"></el-table-column>
-
                 <el-table-column  label="签约客户" prop="sign_user_name" align="center" width="150">
                     <template slot-scope="scope">
                         <el-popover trigger="click" placement="top">
-                            <p>{{ scope.row.sign_user_name }}</p>
-                            <p slot="reference" class="overCellText">{{ scope.row.sign_user_name }}</p>
+                            <p>{{ scope.row.type == 1? '-' : scope.row.sign_user_name }}</p>
+                            <p slot="reference" class="overCellText">{{ scope.row.type == 1? '-' : scope.row.sign_user_name }}</p>
                         </el-popover>
                     </template>
                 </el-table-column>
@@ -110,40 +106,52 @@
                 <el-table-column  label="签约客户电话" prop="sign_user_phone" align="center" width="150">
                     <template slot-scope="scope">
                         <el-popover trigger="click" placement="top">
-                            <p>{{ scope.row.sign_user_phone }}</p>
-                            <p slot="reference" class="overCellText">{{ scope.row.sign_user_phone }}</p>
+                            <p>{{ scope.row.type == 1? '-' :scope.row.sign_user_phone }}</p>
+                            <p slot="reference" class="overCellText">{{ scope.row.type == 1? '-' :scope.row.sign_user_phone }}</p>
                         </el-popover>
                     </template>
                 </el-table-column>
-
-                <el-table-column  label="签约客户余额" prop="sign_user_figure" align="center" width="150">
+                <el-table-column  label="签约服务开始时间" prop="sign_service_start" align="center" width="150" :formatter="sign_service_startFormatter"></el-table-column>
+                <el-table-column  label="签约服务截止时间" prop="sign_service_end" align="center" width="150" :formatter="sign_service_endFormatter"></el-table-column>
+                <el-table-column  label="签约客户余额" prop="sign_user_account" align="center" width="150">
                     <template slot-scope="scope">
                         <el-popover trigger="click" placement="top">
-                            <p>{{ scope.row.sign_user_figure }}</p>
-                            <p slot="reference" class="overCellText">{{ scope.row.sign_user_figure }}</p>
+                            <p>{{ scope.row.type == 1? '-' : scope.row.sign_user_account }}</p>
+                            <p slot="reference" class="overCellText">{{ scope.row.type == 1? '-' : scope.row.sign_user_account }}</p>
                         </el-popover>
                     </template>
                 </el-table-column>
     
-                <el-table-column  label="签约服务人员" prop="service_staff" align="center" width="150"></el-table-column>
-
-                <el-table-column  label="签约服务人员编号" prop="service_staff_code" align="center" width="150">
+                <el-table-column  label="签约服务人员" prop="sign_staff_name" align="center" width="150">
                     <template slot-scope="scope">
                         <el-popover trigger="click" placement="top">
-                            <p>{{ scope.row.service_staff_code }}</p>
-                            <p slot="reference" class="overCellText">{{ scope.row.service_staff_code }}</p>
+                            <p>{{ scope.row.type == 1? '-' : scope.row.sign_staff_name }}</p>
+                            <p slot="reference" class="overCellText">{{ scope.row.type == 1? '-' : scope.row.sign_staff_name }}</p>
                         </el-popover>
                     </template>
                 </el-table-column>
 
-                <el-table-column  label="订单创建人" prop="created_staff" align="center" width="150"></el-table-column>
+                <el-table-column  label="签约服务人员编号" prop="sign_staff_code" align="center" width="150">
+                    <template slot-scope="scope">
+                        <el-popover trigger="click" placement="top">
+                            <p>{{ scope.row.type == 1? '-' : scope.row.sign_staff_code }}</p>
+                            <p slot="reference" class="overCellText">{{ scope.row.type == 1? '-' : scope.row.sign_staff_code }}</p>
+                        </el-popover>
+                    </template>
+                </el-table-column>
+
+                <el-table-column  label="订单创建人" prop="created_manager_name" align="center" width="150"></el-table-column>
 
                 <el-table-column  label="订单创建时间" prop="created_at" align="center" width="150" :formatter="createdAtFormatter"></el-table-column>
 
-                <el-table-column  label="订单经纪人" prop="order_manager" align="center" width="150"></el-table-column>
+                <el-table-column  label="订单经纪人" prop="agent_manager_name" align="center" width="150"></el-table-column>
 
-                <el-table-column  label="订单经纪门店" prop="order_manage_store" align="center" width="150"></el-table-column>
+                <el-table-column  label="订单经纪门店" prop="agent_store_name" align="center" width="150"></el-table-column>
 
+                <el-table-column  label="来源门店" prop="apply_store_name" align="center" width="150"></el-table-column>
+
+                <el-table-column  label="来源人" prop="apply_manager_name" align="center" width="150"></el-table-column>
+                
                 <el-table-column label="操作" align="center" fixed="right" :width="controlScopeLength">
                     <template slot-scope="scope">
                         <slot name="control" v-bind:scoper="scope"></slot>
@@ -202,7 +210,7 @@
                 if(row.order_at == 0){
                     return '-'
                 }
-                return $utils.formatDate(new Date(row.created_at), 'yyyy-MM-dd')
+                return $utils.formatDate(new Date(row.order_at), 'yyyy-MM-dd')
             },
             /**
              * 订单创建时间字段转换
@@ -213,6 +221,24 @@
                 }
                 return $utils.formatDate(new Date(row.created_at), 'yyyy-MM-dd')
             },
+            /**
+             * 签约服务起始时间
+             */
+            sign_service_startFormatter(row, column){
+                if(row.sign_service_start == 0){
+                    return '-'
+                }
+                return $utils.formatDate(new Date(row.sign_service_start), 'yyyy-MM-dd')
+            },
+            /**
+             * 签约服务截止时间
+             */
+            sign_service_endFormatter(row, column){
+                if(row.sign_service_end == 0){
+                    return '-'
+                }
+                return $utils.formatDate(new Date(row.sign_service_end), 'yyyy-MM-dd')
+            }
             
         },
     }

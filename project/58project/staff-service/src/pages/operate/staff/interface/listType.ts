@@ -53,5 +53,9 @@ export const get_forList = [
         id: 4,
         key: 'seller'
     },//服务人员信息库
+    {
+        id: 5,
+        key: 'match'
+    },//订单配置服务人员匹配列表
 ]
 

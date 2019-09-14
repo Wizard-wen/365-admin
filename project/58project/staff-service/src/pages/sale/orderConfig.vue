@@ -17,15 +17,15 @@
                         <div class="detail-left-line">订单经纪人：{{ orderBase.agent_manager_name }}</div>
                         <div class="detail-left-line">订单经纪门店：{{ orderBase.agent_store_name }}</div>
                         <div class="detail-left-line">创建人：{{ orderBase.created_manager_name }}</div>
-                        <div class="detail-left-line">创建时间：{{orderBase.created_at}}</div>
+                        <div class="detail-left-line">创建时间：{{orderBase.created_at | timeFomatter}}</div>
                         <div class="detail-left-line">来源门店：{{orderBase.apply_store_name}}</div>
                         <div class="detail-left-line">来源人：{{orderBase.apply_manager_name}}</div>
                         <div
                             v-if="orderBase.type != 1" 
-                            class="detail-left-line">签约时间：{{orderBase.sign_service_start}}</div>
+                            class="detail-left-line">签约时间：{{orderBase.sign_service_start | timeFomatter}}</div>
                         <div
                             v-if="orderBase.type != 1" 
-                            class="detail-left-line">服务周期：{{orderBase.sign_service_start}}</div>
+                            class="detail-left-line">服务周期：{{orderBase.sign_service_start | timeFomatter}}</div>
                     </div>
                 </div>
                 <div class="detail-right">
@@ -142,9 +142,13 @@
 
                         <el-table-column label="电话" prop="staff_phone" align="center"></el-table-column>
 
-                        <el-table-column label="签约状态" prop="type" align="center"></el-table-column>
+                        <el-table-column label="签约状态" prop="type" align="center">
+                            <template slot-scope="scope">
+                                <table-tag-component :propList="matchStaffSignList" :tableOriginData="scope.row.type"></table-tag-component>
+                            </template>
+                        </el-table-column>
 
-                        <el-table-column label="添加人" prop="create_manager_name" align="center"></el-table-column>
+                        <el-table-column label="添加人" prop="created_manager_name" align="center"></el-table-column>
 
                         <el-table-column label="操作" align="center" width="300">
                             <template slot-scope="scope">
@@ -188,10 +192,13 @@
                 </div>
                 <div class="order-list">
                     <div class="line-two-list">
-                        签约客户姓名：<span>{{orderBase.sign_user}}</span>
+                        姓名：<span>{{orderBase.sign_user_name}}</span>
                     </div>
                     <div class="line-two-list">
-                        签约客户电话：<span>{{orderBase.sign_user_phone}}</span> 
+                        电话：<span>{{orderBase.sign_user_phone}}</span> 
+                    </div>
+                    <div class="line-two-list">
+                        身份证号：<span>{{orderBase.sign_user_identify}}</span> 
                     </div>
                 </div>
             </div>
@@ -203,14 +210,27 @@
                     </div>
                 </div>
                 <div class="order-list">
+                    
                     <div class="line-two-list">
-                        签约服务人员姓名：<span>{{orderBase.sign_staff_name}}</span>
+                        编号：<span>{{orderBase.sign_staff_code}}</span> 
                     </div>
                     <div class="line-two-list">
-                        签约服务人员编号：<span>{{orderBase.sign_staff_code}}</span> 
+                        身份证号：<span>{{orderBase.sign_staff_identify}}</span> 
                     </div>
                     <div class="line-two-list">
-                        签约服务人员电话：<span>{{orderBase.sign_staff_phone}}</span> 
+                        姓名：<span>{{orderBase.sign_staff_name}}</span>
+                    </div>
+                    <div class="line-two-list">
+                        电话：<span>{{orderBase.sign_staff_phone}}</span> 
+                    </div>
+                    <div class="line-list">
+                        户籍地址：<span>{{orderBase.sign_staff_law_address}}</span> 
+                    </div>
+                    <div class="line-list">
+                        现住址：<span>{{orderBase.sign_staff_cur_address}}</span> 
+                    </div>
+                    <div class="line-list">
+                        紧急联系人：<span>{{orderBase.sign_staff_urgent}}</span> 
                     </div>
                 </div>
             </div>
@@ -231,9 +251,7 @@
                         <el-table-column label="日志内容" prop="message" align="center"></el-table-column>
 
                         <el-table-column label="操作" align="center">
-                            <!-- <template slot-scope="scope"> -->
-                                <el-button size="mini">查看</el-button>
-                            <!-- </template> -->
+                            <el-button size="mini">查看</el-button>
                         </el-table-column>
                     </el-table>
                 </div>
@@ -250,11 +268,18 @@
         matchServiceList,
         contractList,
         changeOrderDialog} from './orderConfig/index.js'
+    import {
+        tableTagComponent} from '@/pages/components'
 export default {
     data(){
         return {
             isLoaded: false,//
             order_id: '',//订单id
+            matchStaffSignList: [
+                {id: 1, name: '未签约'},
+                {id: 2, name: '已签约'},
+                {id: 3, name: '已拒绝'},
+            ],
             //订单字段更改弹窗显示隐藏
             orderFieldVisible: false,
             //订单字段更改
@@ -268,16 +293,6 @@ export default {
                 currentPage: 1,
                 pageNumber: 10,
             },
-            //匹配劳动者列表
-            matchServiceTable: [
-                {
-                    staff_code: '111',
-                    staff_name: '宋希文',
-                    staff_phone: '15011111111',
-                    type: '可接单',
-                    create_manager_name: '唐朝',
-                }
-            ],
             //订单日志列表
             orderLogTable: [],
             //合同列表
@@ -304,12 +319,21 @@ export default {
             matched_staff: null,//备选服务人员信息对象
         }
     },
+    filters: {
+        timeFomatter(value){
+            if(value == 0){
+                return '-'
+            }
+            return $utils.formatDate(new Date(value), 'yyyy-MM-dd')
+        }
+    },
     components: {
         refuseServiceDialog,
         assignDialog,
         matchServiceList,
         contractList,
-        changeOrderDialog
+        changeOrderDialog,
+        tableTagComponent
     },
     computed:{
         /**
@@ -423,7 +447,14 @@ export default {
          * @param paramObj 匹配服务人员信息对象
          */
         goStaffDetail(paramObj){
-            this.$router.push(``)
+            this.$router.push({
+                path: "/sale/saleWorkShow",
+                query: {
+                    id: paramObj.id,
+                    from: 2,
+                    orderId: this.$route.query.id
+                }
+            })
         },
         /**
          * 删除备选服务人员

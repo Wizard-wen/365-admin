@@ -1,4 +1,4 @@
-interface formConfig{
+interface getWorkerFormConfig{
     authentication:Array<object>; //认证状态
     course:Array<object>;//参加培训
     nation:Array<object>;//民族

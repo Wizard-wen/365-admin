@@ -20,15 +20,6 @@ export default {
             leftPosition: 0,
         }
     },
-    props: {
-        /**
-         * 查询来源
-         */
-        queryFrom: {
-            default: 'staff',
-            type: String,
-        }
-    },
     computed:{
         workerConfigForm(){
             return this.$store.state.operateModule.workerConfigForm

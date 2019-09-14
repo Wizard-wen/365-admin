@@ -160,7 +160,7 @@
                     </div>
                 </div>
                 <el-form-item>
-                    <el-button type="primary" @click="signOrder">立即签约</el-button>
+                    <el-button type="primary" @click="signOrder('signForm')">立即签约</el-button>
                     <el-button @click="goback">取消</el-button>
                 </el-form-item>
             </el-form>
@@ -176,91 +176,87 @@ export default {
     data(){
         var _this = this
         const validator = {
-            //服务周期单位
-            unit(rule, value, callback){
-                if (value == '0') {
-                    callback(new Error('请选择活动区域'));
+            //手机号
+            phoneValidate(rule, value, callback){
+                if (value === '') {
+                    callback(new Error('请输入手机号'));
                 } else {
-                    callback()
-                }
-            },
-            //服务次数
-            service_count(rule, value, callback){
-                if (value == 0) {
-                    callback(new Error('请输入服务周期'));
-                } else {
-                    callback()
-                }
-            },
-            //单价
-            unit_price(rule, value, callback){
-                if (!value) {
-                    callback(new Error('请输入单价'));
-                } else if(!/^\d+(\.\d+)?$/.test(value) && value != 0){
-                    callback(new Error('请输入数字'));
-                } else {
-                    callback()
-                }
-            },
-            //代发工资周期
-            wage_count(rule, value, callback){
-                if(_this.signForm.pay_wage == 2){
-                    if (value == 0) {
-                        callback(new Error('请输入代发工资周期'));
-                    } else {
-                        callback()
+                    if (!(/^1[345678]\d{9}$/.test(value))) {
+                        callback(new Error('请输入正确格式的手机号'));
                     }
-                } else {
-                    callback()
+                    callback();
                 }
             },
-            //每期代发金额
-            wage_price(rule, value, callback){
-                if(_this.signForm.pay_wage == 2){
-                    if (value == 0) {
-                        callback(new Error('请输入每期代发金额'));
-                    } else {
-                        callback()
+            //身份证号
+            identifyValidate(rule, value, callback){
+                if (value != '') {
+                    if (!(value.length == 18) || !(/(^\d{18}$)|(^\d{17}(\d|X|x)$)/.test(value))) {
+                        callback(new Error('请输入18位有效身份证号'));
                     }
+                    callback();
                 } else {
                     callback()
                 }
             },
-            //合同图片
-            paper(rule, value, callback){
-                if (value.length == 0) {
-                    callback(new Error('请上传合同照片'));
-                } else {
-                    callback()
-                }
-            }
         }
         return {
             signRules: {
-                //服务周期单位
-                unit: [
-                    { validator: validator.unit, trigger: 'change' }
+                //雇主姓名
+                sign_user_name: [
+                    { required:true,message:'请输入雇主姓名',trigger: 'blur'},
                 ],
-                //服务次数
-                service_count: [
-                    { validator: validator.service_count, trigger: ['blur', 'change'] }
+                //雇主手机号
+                sign_user_phone: [
+                    { required:true,message:'请输入雇主手机号',trigger: 'blur'},
+                    // {validator: validator.phoneValidate, trigger: 'blur'}
                 ],
-                //单价
-                unit_price: [
-                    { validator: validator.unit_price, trigger: 'blur' }
+                //雇主身份证号
+                sign_user_identify: [
+                    { required:true,message:'请输入雇主身份证号',trigger: 'blur'},
+                    // {validator: validator.identifyValidate, trigger: 'blur'}
                 ],
-                //代发工资周期
-                wage_count: [
-                    { validator: validator.wage_count, trigger: 'blur' }
+                //签约服务人员姓名
+                sign_staff_name: [
+                    { required:true,message:'请输入签约服务人员姓名',trigger: 'blur'},
                 ],
-                //每期代发金额
-                wage_price: [
-                    { validator: validator.wage_price, trigger: 'blur' }
+                //签约服务人员手机号
+                sign_staff_phone: [
+                    { required:true,message:'请输入签约服务人员手机号',trigger: 'blur'},
+                    // {validator: validator.phoneValidate, trigger: 'blur'}
                 ],
-                //合同照片
-                paper: [
-                    { validator: validator.paper, trigger: 'change' }
+                //签约服务人员身份证号
+                sign_staff_identify: [
+                    { required:true,message:'请输入签约身份证号',trigger: 'blur'},
+                    // {validator: validator.identifyValidate, trigger: 'blur'}
                 ],
+                //签约服务人员户籍地址
+                sign_staff_law_address: [
+                    { required:true,message:'请输入签约服务人员户籍地址',trigger: 'blur'},
+                ],
+                //签约服务人员现住址
+                sign_staff_cur_address: [
+                    { required:true,message:'请输入签约服务人员现住址',trigger: 'blur'},
+                ],
+                //签约服务人员紧急联系人
+                sign_staff_urgent: [
+                    { required:true,message:'请输入签约服务人员紧急联系人',trigger: 'blur'},
+                ],
+                //劳务报酬
+                staff_wage: [
+                    { required:true,message:'请输入劳务报酬',trigger: 'blur'},
+                ],
+                //客户服务费
+                user_charge: [
+                    { required:true,message:'请输入客户服务费',trigger: 'blur'},
+                ],
+                //客户缴纳
+                user_pay: [
+                    { required:true,message:'请输入客户缴纳',trigger: 'blur'},
+                ],
+                //劳动者押金
+                staff_deposit: [
+                    { required:true,message:'请输入劳动者押金',trigger: 'blur'},
+                ]
             },
             //签约表单
             signForm: {
@@ -372,6 +368,7 @@ export default {
                                     message: `签约成功`
                                 })
                             }
+                            this.$router.push(`/sale/orderConfig?id=${this.$route.query.id}`)
                         }).catch(e =>{
                             this.$message({
                                 type:'error',

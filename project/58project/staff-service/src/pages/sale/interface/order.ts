@@ -105,6 +105,7 @@ export interface orderTableObject{
     
     sign_user_name:string;// 签约客户
     sign_user_phone:string;// 签约客户联系方式
+    sign_user_identify:string;//签约客户身份证号
     sign_user_account:string;// 签约客户余额
     sign_service_start:string;//签约服务开始时间
     sign_service_end:string;//签约服务结束时间
@@ -113,6 +114,10 @@ export interface orderTableObject{
     sign_staff_id:string;// 签约服务人员id
     sign_staff_code:string// 签约服务人员编号
     sign_staff_phone:string;//签约服务人员电话
+    sign_staff_identify:string;//签约服务人员身份证号
+    sign_staff_law_address:string;//签约服务人员户籍地址
+    sign_staff_cur_address:string;//签约服务人员现住址
+    sign_staff_urgent:string;//签约服务人员紧急联系人
     
     created_at:string;// 订单创建时间
     created_manager_name:string;// 订单创建人
@@ -239,7 +244,7 @@ export interface contractItem{
     type:string;//合同状态
 
     sign_at:string;//签约时间
-    stop_at:string;//终止时间
+    stop_at:string;//服务终止时间
 
     sign_manager_id:string;//签约人id
     sign_manager_name:string;//签约人

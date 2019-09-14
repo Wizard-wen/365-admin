@@ -8,13 +8,12 @@
             
             <template slot="searchList">
                 <div class="search-list">
-                    <match-service-query-component  :queryFrom="'order'" @updateTable="updateTable"></match-service-query-component>
+                    <query-component @updateTable="updateTable"></query-component>
                 </div>
             </template>
 
             <template slot="searchForm">
-                <query-tag-component :queryFrom="'order'" @updateTable="updateTable"></query-tag-component>
-                <!-- <el-button type="primary" @click="createStaff">申请创建服务人员</el-button> -->
+                <query-tag-component @updateTable="updateTable"></query-tag-component>
             </template>
 
             <template slot="control" slot-scope="controler">
@@ -38,21 +37,19 @@
 </template>
 <script>
 import {saleService, operateService, $utils} from '../../../../common'
+
 import {
     matchServiceTableComponent,
-    matchServiceQueryComponent,
+    queryComponent,
     queryTagComponent
 } from './matchServiceList/index.js'
+
 export default {
     data(){
         return {
             //员工信息列表
             staffTable: [],
-            //表单搜索项
-            staffSearch: {
-                name: '', //姓名
-                phone:'',//手机号
-            },
+            //loading变量
             isLoaded:false,
             /**
              * 分页信息
@@ -80,7 +77,7 @@ export default {
     },
     components: {
         matchServiceTableComponent,
-        matchServiceQueryComponent,
+        queryComponent,
         queryTagComponent
     },
     computed:{
@@ -125,7 +122,7 @@ export default {
 
                 await Promise.all([
                     operateService.getWorkerFormConfig('edit'), //获取表单配置字段
-                    saleService.getMatchStaffList() //获取列表数据
+                    operateService.getStaffList(5) //获取列表数据
                 ]).then((data) =>{
                     // 将表单配置数据存入 vuex 
                     this.$store.commit('setWorkerConfigForm',data[0].data)
@@ -152,11 +149,13 @@ export default {
                     //分页信息
                     this.pagination.currentPage = data[1].data.current_page //当前页码
                     this.pagination.total = data[1].data.total //列表总条数
+                    this.isLoaded = false
                 }).catch(error =>{
                     this.$message({
                         type:'error',
                         message: error.message
                     })
+                    this.isLoaded = false
                 }).finally(() =>{
                     this.isLoaded = false
                 })
@@ -177,12 +176,25 @@ export default {
          */
         async handleCurrentPage(val){
             //设置page查询参数
-            this.$store.commit('setSellerList', {
+            this.$store.commit('saleSetMatchSerivceList', {
                 queryKey: 'page', 
                 queryedList: val
             })
             await this.getTableList()
         },   
+        /**
+         * 查看服务人员详情
+         */
+        showStaff(index, row){
+            this.$router.push({
+                    path: "/sale/saleWorkShow",
+                    query: {
+                        id: row.id,
+                        from: 2,//
+                        orderId: this.$route.query.id
+                    }
+                })
+        },
         /**  
          * 添加备选
          * @param staffObject 员工

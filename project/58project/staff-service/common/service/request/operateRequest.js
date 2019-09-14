@@ -146,7 +146,12 @@ export const operate_staffRequest = {
         } else if(type == 4){
             return axios.post(
                 baseUrl,
-                store.state.operateModule.saleWorkerList
+                store.state.saleModule.saleWorkerList
+            )
+        } else if(type == 5){
+            return axios.post(
+                baseUrl,
+                store.state.saleModule.matchServiceList
             )
         }
     },

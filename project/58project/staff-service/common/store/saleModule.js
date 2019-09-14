@@ -98,7 +98,7 @@ export const saleModule = {
          */
         matchServiceList: {
             /*********************表格字段查询******************************/
-            get_for: 'seller',
+            get_for: 'match',
             page: 1, //请求页码
             pageNumber: 20,//单页信息数量
             /*********************逻辑字段查询*****************************/

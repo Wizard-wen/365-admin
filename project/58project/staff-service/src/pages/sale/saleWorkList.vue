@@ -202,7 +202,7 @@
             async handleCurrentPage(val){
                 // this.pagination.currentPage = val
                 //设置page查询参数
-                this.$store.commit('setSellerList', {
+                this.$store.commit('saleSetWorkerList', {
                     queryKey: 'page', 
                     queryedList: val
                 })
@@ -213,12 +213,12 @@
              */
             async searchStaff(){
                 //设置name查询参数
-                this.$store.commit('setSellerList', {
+                this.$store.commit('saleSetWorkerList', {
                     queryKey: 'name', 
                     queryedList: this.staffSearch.name
                 })
                 //设置手机号查询参数
-                this.$store.commit('setSellerList', {
+                this.$store.commit('saleSetWorkerList', {
                     queryKey: 'phone', 
                     queryedList: this.staffSearch.phone
                 })
@@ -231,12 +231,12 @@
                 this.staffSearch.name = ''
                 this.staffSearch.phone = ''
                 //重置name查询参数
-                this.$store.commit('setSellerList', {
+                this.$store.commit('saleSetWorkerList', {
                     queryKey: 'name', 
                     queryedList: null
                 })
                 //重置手机号查询参数
-                this.$store.commit('setSellerList', {
+                this.$store.commit('saleSetWorkerList', {
                     queryKey: 'phone', 
                     queryedList: null
                 })
@@ -262,9 +262,11 @@
              */
             showStaff(index, row){
                 this.$router.push({
-                    path: "/worker/workerItemShow",
+                    path: "/sale/saleWorkShow",
                     query: {
-                        id: row.id
+                        id: row.id,
+                        from: 1,//
+
                     }
                 })
             },

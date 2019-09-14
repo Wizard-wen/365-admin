@@ -180,7 +180,7 @@ import contractList from '@/pages/sale/contractList.vue'//我的合同列表
 import saleWorkList from '@/pages/sale/saleWorkList.vue'//门店全部服务人员信息
 import saleSignPage from '@/pages/sale/saleSignPage.vue'
 import orderConfig from '@/pages/sale/orderConfig.vue'
-
+import saleWorkShow from '@/pages/sale/saleWorkShow.vue'
 const saleModule = [
     {
         path: '/sale/saleWorkStation',
@@ -211,6 +211,11 @@ const saleModule = [
         path: '/sale/saleWorkList',
         name: 'saleWorkList',
         component: saleWorkList,
+    },
+    {
+        path: '/sale/saleWorkShow',
+        name: 'saleWorkShow',
+        component: saleWorkShow,
     },
     {
         path: '/sale/saleSignPage',

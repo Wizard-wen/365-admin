@@ -174,7 +174,7 @@ import {operateService, $utils} from '../../../common'
 
 import {
     paperComponent,
-    makeImageComponent} from '@pages/operate/staff/components'
+    makeImageComponent} from '../operate/staff/workerItem/index.js'
 
 import {
     pictureDetailDialog,
@@ -267,7 +267,14 @@ export default {
          * 返回
          */
         goback(){
-            this.$router.push("/sale/saleWorkList")
+            console.log(this.$route.query)
+            if(this.$route.query.from == 1){
+                debugger
+                this.$router.push("/sale/saleWorkList")
+            } else {
+                this.$router.push(`/sale/orderConfig?id=${this.$route.query.orderId}`)
+            }
+            
         },
         /**
          * 生成图片

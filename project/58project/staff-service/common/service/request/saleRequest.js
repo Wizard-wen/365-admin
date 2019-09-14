@@ -74,14 +74,6 @@ export const sale_orderRequest = {
  */
 export const sale_matchServiceRequest = {
     /**
-     * 获取备选服务人员列表
-     */
-    getMatchStaffList(){
-        return axios.post(`./admin/staff/getStaffList`,{
-            ...store.state.saleModule.matchServiceList
-        })
-    },
-    /**
      * 添加订单候选人
      * @param orderStaffObj
      */
