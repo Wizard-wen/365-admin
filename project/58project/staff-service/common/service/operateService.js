@@ -83,6 +83,12 @@ export const operate_publicRequest = {
         return operateRequest.getOrderFormConfig()
     },
     /**
+     * 请求订单申请标签配置数据
+     */
+    getApplyFormConfig(){
+        return operateRequest.getApplyFormConfig()
+    },
+    /**
      * 获取证书列表
      */
     getPaperSelection(type = ''){

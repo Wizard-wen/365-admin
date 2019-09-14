@@ -96,6 +96,12 @@ export const operate_publicRequest = {
         return axios.get(`./admin/formConfig/getOrderFormConfig`)
     },
     /**
+     * 请求订单申请标签配置数据
+     */
+    getApplyFormConfig(){
+        return axios.get(`./admin/formConfig/getApplyFormConfig`)
+    },
+    /**
      * 获取证书列表
      */
     getPaperSelection(type){

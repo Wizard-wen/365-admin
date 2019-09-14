@@ -103,7 +103,7 @@ export interface orderTableObject{
     apply_manager_name:string;// 来源人
     apply_manager_id:string;// 来源人id
     
-    sign_user:string;// 签约客户
+    sign_user_name:string;// 签约客户
     sign_user_phone:string;// 签约客户联系方式
     sign_user_account:string;// 签约客户余额
     sign_service_start:string;//签约服务开始时间

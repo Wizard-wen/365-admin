@@ -45,7 +45,7 @@
     </div>
 </template>
 <script>
-    import {saleService} from '../../../common'
+    import {saleService, operateService} from '../../../common'
 
     import {
         saleOrderTableComponent,
@@ -111,12 +111,16 @@
 
                     await Promise.all([
                         saleService.getOrderList(), //
+                        operateService.getOrderFormConfig()
                     ]).then((data) =>{
 
                         this.orderApplyTable = data[0].data.data
                         //分页信息
                         this.pagination.currentPage = data[0].data.current_page //当前页码
                         this.pagination.total = data[0].data.total //列表总条数
+
+                        //配置订单相关标签
+                        this.$store.commit('setOrderConfigForm',data[1].data)
                     }).catch(error =>{
                         this.$message({
                             type:'error',

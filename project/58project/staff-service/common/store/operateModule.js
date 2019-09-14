@@ -51,7 +51,11 @@ export const operateModule = {
         },
         //设置订单相关搜索接口
         setOrderConfigForm(state,orderFormConfig){
-            state.orderFormConfig = orderFormConfig
+            state.orderFormConfig.apply_manager_id = orderFormConfig.apply_manager_id
+            state.orderFormConfig.apply_store_id = orderFormConfig.apply_store_id
+            state.orderFormConfig.agent_manager_id = orderFormConfig.apply_manager_id
+            state.orderFormConfig.agent_store_id = orderFormConfig.apply_store_id
+            state.orderFormConfig.created_manager_id = orderFormConfig.apply_manager_id
         },
         /** 
          * 列表查询函数公共键值说明
@@ -91,11 +95,17 @@ export const operateModule = {
             apply_manager_id: [],//订单来源人
             created_manager_id: [],//订单申请创建人
             apply_store_id: [],//订单来源门店
-            
         },
         //订单相关列表筛选
         orderFormConfig: {
-            order_status,//订单状态
+            type: order_status,//订单状态
+            order_at: created_at,//客户下单时间
+            apply_manager_id: [],//来源人
+            apply_store_id: [],//来源门店
+            created_at: created_at,//订单创建时间
+            created_manager_id: [],//订单创建人
+            agent_store_id: [],//订单经纪门店
+            agent_manager_id: [],//订单经纪人
         },
         // 回访服务人员查询
         returnWorkerList: {
@@ -178,7 +188,7 @@ export const operateModule = {
             user_phone: '',//客户电话
             user_name: '',//客户姓名
             created_at: [],//创建时间
-        }
+        },
     },
 }
 

@@ -21,8 +21,8 @@ export default {
         }
     },
     computed:{
-        workerConfigForm(){
-            return this.$store.state.operateModule.workerConfigForm
+        orderFormConfig(){
+            return this.$store.state.operateModule.orderFormConfig
         },
         queryedList(){
             return this.$store.state.saleModule.orderList
@@ -78,7 +78,7 @@ export default {
          * 名字
          */
         analysisValue(item, key){
-            return this.workerConfigForm[item].find(item => item.id == key).name
+            return this.orderFormConfig[item].find(item => item.id == key).name
         },
         closeTag(item){
             let configValue = this.queryedList[item.key], //取出queryedList中字段的值

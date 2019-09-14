@@ -32,7 +32,7 @@
                         <el-popover trigger="click" placement="top">
                             <p>{{ scope.row.work_type }}</p>
                             <div slot="reference" >
-                                <p style=" overflow:hidden;text-overflow:ellipsis;white-space:nowrap;width: 129px;">{{ scope.row.work_type }}</p>
+                                <p class="overCellText">{{ scope.row.work_type }}</p>
                             </div>
                         </el-popover>
                     </template>
@@ -43,7 +43,7 @@
                         <el-popover trigger="click" placement="top">
                             <p>{{ scope.row.service_address }}</p>
                             <div slot="reference" >
-                                <p style=" overflow:hidden;text-overflow:ellipsis;white-space:nowrap;width: 129px;">{{ scope.row.service_address }}</p>
+                                <p class="overCellText">{{ scope.row.service_address }}</p>
                             </div>
                         </el-popover>
                     </template>
@@ -54,7 +54,7 @@
                         <el-popover trigger="click" placement="top">
                             <p>{{ scope.row.service_duration }}</p>
                             <div slot="reference" >
-                                <p style=" overflow:hidden;text-overflow:ellipsis;white-space:nowrap;width: 129px;">{{ scope.row.service_duration }}</p>
+                                <p class="overCellText">{{ scope.row.service_duration }}</p>
                             </div>
                         </el-popover>
                     </template>
@@ -65,7 +65,7 @@
                         <el-popover trigger="click" placement="top">
                             <p>{{ scope.row.wage }}</p>
                             <div slot="reference" >
-                                <p style=" overflow:hidden;text-overflow:ellipsis;white-space:nowrap;width: 129px;">{{ scope.row.wage }}</p>
+                                <p class="overCellText">{{ scope.row.wage }}</p>
                             </div>
                         </el-popover>
                     </template>
@@ -76,7 +76,7 @@
                         <el-popover trigger="click" placement="top">
                             <p>{{ scope.row.order_details }}</p>
                             <div slot="reference" >
-                                <p style=" overflow:hidden;text-overflow:ellipsis;white-space:nowrap;width: 129px;">{{ scope.row.order_details }}</p>
+                                <p class="overCellText">{{ scope.row.order_details }}</p>
                             </div>
                         </el-popover>
                     </template>
@@ -87,7 +87,7 @@
                         <el-popover trigger="click" placement="top">
                             <p>{{ scope.row.user_phone }}</p>
                             <div slot="reference" >
-                                <p style=" overflow:hidden;text-overflow:ellipsis;white-space:nowrap;width: 129px;">{{ scope.row.user_phone }}</p>
+                                <p class="overCellText">{{ scope.row.user_phone }}</p>
                             </div>
                         </el-popover>
                     </template>
@@ -98,7 +98,7 @@
                         <el-popover trigger="click" placement="top">
                             <p>{{ scope.row.user_name }}</p>
                             <div slot="reference" >
-                                <p style=" overflow:hidden;text-overflow:ellipsis;white-space:nowrap;width: 129px;">{{ scope.row.user_name }}</p>
+                                <p class="overCellText">{{ scope.row.user_name }}</p>
                             </div>
                         </el-popover>
                     </template>
@@ -109,7 +109,7 @@
                         <el-popover trigger="click" placement="top">
                             <p>{{ scope.row.created_manager_name }}</p>
                             <div slot="reference" >
-                                <p style=" overflow:hidden;text-overflow:ellipsis;white-space:nowrap;width: 129px;">{{ scope.row.created_manager_name }}</p>
+                                <p class="overCellText">{{ scope.row.created_manager_name }}</p>
                             </div>
                         </el-popover>
                     </template>
@@ -122,7 +122,7 @@
                         <el-popover trigger="click" placement="top">
                             <p>{{ scope.row.apply_store_name }}</p>
                             <div slot="reference" >
-                                <p style=" overflow:hidden;text-overflow:ellipsis;white-space:nowrap;width: 129px;">{{ scope.row.apply_store_name }}</p>
+                                <p class="overCellText">{{ scope.row.apply_store_name }}</p>
                             </div>
                         </el-popover>
                     </template>
@@ -133,7 +133,7 @@
                         <el-popover trigger="click" placement="top">
                             <p>{{ scope.row.apply_manager_name }}</p>
                             <div slot="reference" >
-                                <p style=" overflow:hidden;text-overflow:ellipsis;white-space:nowrap;width: 129px;">{{ scope.row.apply_manager_name }}</p>
+                                <p class="overCellText">{{ scope.row.apply_manager_name }}</p>
                             </div>
                         </el-popover>
                     </template>
@@ -187,17 +187,7 @@
                 type:Object,
                 default:function(){
                     return {
-                        authentication: 80, //认证状态
-                        working_status: 80,//接单状态
-                        skill_ids: 80,// 职业类型
-                        service_type: 80,//服务类型
-                        service_crowd: 80,//可服务人群
-                        working_age: 80,// 工龄
-                        nation: 80,// 民族
-                        region_ids: 80,//服务地区
-                        course: 80,//参加培训
-                        paper_ids: 80, //技能证书
-                        source: 80,//信息来源
+                        type: 100, //订单申请状态
                     }
                 }
             },
@@ -225,32 +215,6 @@
                 }
                 return $utils.formatDate(new Date(row.created_at), 'yyyy-MM-dd')
             },
-            //登记时间字段转换
-            register_atFormatter(row, column){
-                if(row.register_at == 0){
-                    return '0000-00-00'
-                }
-                return $utils.formatDate(new Date(row.register_at), 'yyyy-MM-dd')
-            },
-            //更新时间字段转换
-            updated_atFormatter(row, column){
-                if(row.updated_at == 0){
-                    return '0000-00-00'
-                }
-                return $utils.formatDate(new Date(row.updated_at), 'yyyy-MM-dd')
-            },
-            //出生日期字段转换
-            birthdayFormatter(row, column){
-                if(row.birthday == 0){
-                    return ''
-                }
-                return $utils.formatDate(new Date(row.birthday), 'yyyy-MM-dd')
-            },
-            //教育背景字段转换
-            educationFomatter(row, column){
-                let a =  this.$store.state.operateModule.educationList.filter(item => item.id == row.education)
-                return a.length? a[0].name : ''
-            }
         },
     }
 </script>
@@ -258,6 +222,12 @@
     .tag-style{
         height:24px;
         line-height: 24px;
+    }
+    .overCellText{
+        overflow:hidden;
+        text-overflow:ellipsis;
+        white-space:nowrap;
+        width: 129px;
     }
     .staff{
         .list-table{
