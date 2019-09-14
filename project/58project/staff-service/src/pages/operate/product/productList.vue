@@ -2,18 +2,18 @@
     <div class="product">
         <div class="product-tree-box">
             <div class="title">商品索引</div>
-            <el-tree 
+            <el-tree
                 :default-expanded-keys="defaultExpandKeys"
-                :highlight-current="true" 
-                :data="productTreeList" 
+                :highlight-current="true"
+                :data="productTreeList"
                 :node-key="'id'"
-                accordion 
-                @node-click="nodeClick" 
+                accordion
+                @node-click="nodeClick"
                 :props="defaultProps"></el-tree>
         </div>
         <div class="product-form-box">
             <div class="control">
-                <el-button type="primary">编辑</el-button>
+                <el-button type="primary" @click="saveProduct">保存</el-button>
                 <el-button type="primary" @click="createProduct">创建商品</el-button>
             </div>
             <el-form class="productForm" ref="productForm" :model="productForm" label-width="120px">
@@ -78,6 +78,12 @@ export default {
         createProductDialog,
     },
     methods: {
+        /**
+         * 保存商品
+         */
+        saveProduct(){
+
+        },
         /**
          * 创建商品
          */
