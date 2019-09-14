@@ -89,6 +89,12 @@ import operateWorkStation from '@/pages/operate/operateWorkStation.vue'
 import operateOrderList from '@/pages/operate/order/orderList.vue'
 import operateOrderApplyList from '@/pages/operate/order/orderApplyList.vue'
 import operateOrderApplyItem from '@/pages/operate/order/orderApplyItem.vue'
+
+/**
+ * 运营—--客户端订单
+ */
+import clientList from '@/pages/operate/client/clientList.vue'
+
 /**
  * 运营 --- 商品管理
  */
@@ -130,6 +136,11 @@ import productList from '@/pages/operate/product/productList.vue'
         path: '/operate/productList',
         name: 'productList',
         component: productList,
+    },
+    {
+      path: '/operate/clientList',
+      name: 'clientList',
+      component: clientList,
     },
     {
         path: '/worker/workerList',
