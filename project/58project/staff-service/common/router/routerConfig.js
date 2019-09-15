@@ -93,7 +93,8 @@ import operateOrderApplyItem from '@/pages/operate/order/orderApplyItem.vue'
 /**
  * 运营—--客户端订单
  */
-import clientList from '@/pages/operate/client/clientList.vue'
+import clientRequireList from '@/pages/operate/order/clientRequireList.vue'
+import clientRequireItem from '@/pages/operate/order/clientRequireItem.vue'
 
 /**
  * 运营 --- 商品管理
@@ -138,9 +139,14 @@ import productList from '@/pages/operate/product/productList.vue'
         component: productList,
     },
     {
-      path: '/operate/clientList',
-      name: 'clientList',
-      component: clientList,
+      path: '/operate/clientRequireList',
+      name: 'clientRequireList',
+      component: clientRequireList,
+    },
+    {
+      path: '/operate/clientRequireItem',
+      name: 'clientRequireItem',
+      component: clientRequireItem,
     },
     {
         path: '/worker/workerList',

@@ -18,7 +18,7 @@
                 :header-cell-style="{height: '30px',padding: '0px',fontSize:'12px'}"
                 :cell-style="{height: '30px',padding: 0,fontSize:'12px',}">
 
-                <el-table-column  label="申请编号" prop="apply_code" align="center" fixed="left" width="160"></el-table-column>
+                <el-table-column  label="申请编号" prop="require_code" align="center" fixed="left" width="160"></el-table-column>
                 <el-table-column  label="申请状态" prop="type" align="center" width="120">
                     <template slot-scope="scope">
                         <table-tag-component

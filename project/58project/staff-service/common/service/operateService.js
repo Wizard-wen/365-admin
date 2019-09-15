@@ -9,7 +9,7 @@ import {store} from '../../common'
  */
 export const operate_orderApplyRequest = {
     /**
-     * 订单申请列表 
+     * 订单申请列表
      */
     getApplicationList(){
         return operateRequest.getApplicationList()
@@ -39,7 +39,7 @@ export const operate_orderApplyRequest = {
         return operateRequest.editAppLySource(changeObj)
     },
 
-} 
+}
 
 /**
  * 运营中心公共接口
@@ -152,7 +152,7 @@ export const operate_staffRequest = {
     getReturnStaff(){
         //设置回访count查询参数
         store.commit('setWorkerList', {
-            queryKey: 'count', 
+            queryKey: 'count',
             queryedList: 0
         })
         let obj = store.state.operateModule.queryedList
@@ -172,14 +172,40 @@ export const operate_staffRequest = {
         return operateRequest.deleteApplyStaff(id)
     },
     /**
-     * 提交新申请服务人员 / 恢复异常服务人员 / 导出回访人员 
-     * @param module  apply warning return 
+     * 提交新申请服务人员 / 恢复异常服务人员 / 导出回访人员
+     * @param module  apply warning return
      * @param from list 从列表提交 还是从编辑详情提交
      * @param id 服务人员id
      */
     agreeStaffSingle(module_type, from, id){
         return operateRequest.agreeStaffSingle(module_type, from,id)
     },
+}
+
+/**
+ * 运营中心客户端订单接口
+ */
+export const operate_clientRequest = {
+    /**
+     * 客户端订单列表
+     */
+    getClientRequireList(){
+      return operateRequest.getClientRequireList()
+    },
+    /**
+     * 客户端订单详情
+     * @param id 订单id
+    */
+   getClientRequire(id){
+    return operateRequest.getClientRequire(id)
+    },
+    /**
+     * 客户端订单编辑
+     * @param obj 编辑对象
+    */
+    editClientContract(obj){
+      return operateRequest.editClientContract(obj)
+    }
 }
 
 /**
@@ -207,7 +233,7 @@ export const operate_serviceGood = {
     },
     /**
      * 编辑服务信息
-     * @param serviceObj 服务信息对象 
+     * @param serviceObj 服务信息对象
      */
     editService(serviceObj){
         return operateRequest.editService(serviceObj)
@@ -219,4 +245,5 @@ export default {
     ...operate_publicRequest,
     ...operate_staffRequest,
     ...operate_serviceGood,
+    ...operate_clientRequest,
 }
