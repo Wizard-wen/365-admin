@@ -53,9 +53,10 @@
 
     import {
         queryComponent,
-        queryTagComponent} from './saleWorkList/index.js'
-
-    import {saleStaffTableComponent,createStaffDialog,errorStaffDialog} from './saleWorkList/index.js'
+        queryTagComponent,
+        saleStaffTableComponent,
+        createStaffDialog,
+        errorStaffDialog} from './saleWorkerList/index.js'
 
     export default {
         components: {
@@ -262,7 +263,7 @@
              */
             showStaff(index, row){
                 this.$router.push({
-                    path: "/sale/saleWorkShow",
+                    path: "/sale/saleWorkerShow",
                     query: {
                         id: row.id,
                         from: 1,//

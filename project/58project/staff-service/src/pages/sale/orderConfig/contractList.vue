@@ -6,7 +6,7 @@
             :controlScopeLength="200">
 
             <template slot="control" slot-scope="controler">
-                <el-button size="mini" type="text" @click="showStaff(controler.scoper.$index, controler.scoper.row)">查看</el-button>
+                <el-button size="mini" type="text" @click="goContractPage(controler.scoper.$index, controler.scoper.row)">查看</el-button>
                 <el-button size="mini" type="text" @click="sendErrorMessage(controler.scoper.row)">结算工资</el-button>
                 <el-button size="mini" type="text" @click="sendErrorMessage(controler.scoper.row)">终止合同</el-button>
             </template>
@@ -101,7 +101,19 @@ export default {
             if(string > this.maxLength[listKey]){
                 this.maxLength[listKey] = (string + 20) > 80 ? (string + 20) : 80
             }
-            
+        },
+        /**
+         * 进入合同详情页
+         */
+        goContractPage(index, param){
+            this.$router.push({
+                path: `/sale/contractItem`,
+                query: {
+                    id: param.id,
+                    from: 1,
+                    fromId: this.$route.query.id
+                }
+            })
         },
         /**
          * 请求表格数据

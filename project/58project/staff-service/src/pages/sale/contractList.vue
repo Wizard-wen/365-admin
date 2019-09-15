@@ -1,18 +1,22 @@
 <template>
     <div class="staff" v-loading="isLoaded">
         <contract-table-component
-            :staffTable="orderApplyTable"
+            :staffTable="contractList"
             :maxLength="maxLength"
-            :controlScopeLength="170">
+            :controlScopeLength="100">
+            
             <template slot="searchList">
                 <div class="search-list">
-                    <!-- <query-component @updateTable="updateTable"></query-component> -->
+                    <query-component @updateTable="updateTable"></query-component>
                 </div>
             </template>
+
+            <template slot="searchForm">
+                <query-tag-component @updateTable="updateTable"></query-tag-component>
+            </template>
+            
             <template slot="control" slot-scope="controler">
-                <el-button size="mini" type="text" @click="editOrderApply(1, controler.scoper.row)">编辑</el-button>
-                <el-button size="mini" type="text" style="color:#f56c6c" @click="refuseOrderApply(controler.scoper.row)">拒绝</el-button>
-                <el-button size="mini" type="text" style="color:#67c23a" @click="exportReturnStaff(0, controler.scoper.row)">通过</el-button>
+                <el-button size="mini" type="text" @click="goContractPage( controler.scoper.row)">查看</el-button>
             </template>
 
             <template slot="pagination">
@@ -30,24 +34,23 @@
     </div>
 </template>
 <script>
-    import {operateService} from '../../../common'
+    import {operateService, saleService} from '../../../common'
 
     import {
         contractTableComponent,
+        queryComponent,
+        queryTagComponent,
     } from './contractList/index.js'
     export default {
         components: {
             contractTableComponent,
+            queryComponent,
+            queryTagComponent,
         },
         data(){
             return {
-                //员工信息列表
-                orderApplyTable: [],
-                //表单搜索项
-                staffSearch: {
-                    name: '', //姓名
-                    phone:'',//手机号
-                },
+                //合同列表
+                contractList: [],
                 isLoaded:false,
                 /**
                  * 分页信息
@@ -71,7 +74,6 @@
                     paper_ids: 80, //技能证书
                     source: 80,//信息来源
                 },
-                returnStaffDialofVisible: false,//添加回访数据显示隐藏
             }
         },
         computed:{
@@ -86,14 +88,13 @@
 
                     this.isLoaded = true
 
-                    await Promise.all([
-                        operateService.getApplicationList(), //
-                    ]).then((data) =>{
+                    
+                    await saleService.getContractList().then((data) =>{
 
-                        this.orderApplyTable = data[0].data.data
+                        this.contractList = data.data.data
                         //分页信息
-                        this.pagination.currentPage = data[0].data.current_page //当前页码
-                        this.pagination.total = data[0].data.total //列表总条数
+                        this.pagination.currentPage = data.data.current_page //当前页码
+                        this.pagination.total = data.data.total //列表总条数
                     }).catch(error =>{
                         this.$message({
                             type:'error',
@@ -118,128 +119,24 @@
              * 切换页码
              */
             async handleCurrentPage(val){
-                // this.pagination.currentPage = val
                 //设置page查询参数
-                this.$store.commit('saleSetWorkerList', {
+                this.$store.commit('saleSetContractList', {
                     queryKey: 'page',
                     queryedList: val
                 })
                 await this.getTableList()
             },
             /**
-             * 导入回访服务人员
-             * @param type 是全部导出还是单个导出 全部导出 1 单个导出 0
+             * 前往合同详情页
              */
-            async exportReturnStaff(type, row){
-                if(type == 0){
-                    let _this= this;
-
-                    let response = await this.$confirm(`确定将该服务人员导入回访列表吗?`, '提示', {
-                        confirmButtonText: '确定',
-                        cancelButtonText: '取消',
-                        type: 'warning'
-                    }).catch(() => {
-                        this.$message({
-                            type: 'info',
-                            message: `已取消导入`
-                        });
-                    });
-
-                    if(response == "confirm"){
-                        store.commit('setLoading',true)
-
-                        try{
-                            await operateService.addReturnStaffSingle(row.id)
-                                .then(data =>{
-                                    if(data.code == "0"){
-                                        this.$message({
-                                            type:'success',
-                                            message: `导入成功`
-                                        })
-                                    }
-                                }).catch(e =>{
-                                    this.$message({
-                                        type:'error',
-                                        message: e.message
-                                    })
-                                })
-                        } catch(error){
-                            this.$message({
-                                type:'error',
-                                message: error.message
-                            })
-                        }
-
-                        await _this.getTableList()
-                        store.commit('setLoading',false)
-                    }
-                } else{
-                    this.returnStaffDialofVisible = true
-                }
-            },
-            /**
-             * 创建、编辑服务人员信息
-             * des type字段在 创建，编辑，回访，处理异常，创建申请 都能用到
-             * 运营人员创建 0
-             * 运营人员编辑 1
-             * 运营人员回访时编辑 2
-             * 运营人员处理异常时编辑 3
-             * 运营人员处理新建申请 4
-             */
-            editOrderApply(type, row){
+            goContractPage(row){
                 this.$router.push({
-                    path: "/operate/operateOrderApplyItem",
+                    path: "/sale/contractItem",
                     query: {
-                        type: type, //编辑为1 创建为 0
-                        id: type == 1? row.id : 0
+                        id: row.id,
+                        from: 2,
                     }
                 })
-            },
-            /**
-             * 切换停用启用
-             */
-            async refuseOrderApply(row){
-                let _this= this;
-
-                let response = await this.$confirm(`确定拒绝该订单申请吗?`, '提示', {
-                    confirmButtonText: '确定',
-                    cancelButtonText: '取消',
-                    type: 'warning'
-                }).catch(() => {
-                    this.$message({
-                        type: 'info',
-                        message: `已取消`
-                    });
-                });
-
-                if(response == "confirm"){
-                    store.commit('setLoading',true)
-
-                    try{
-                        await operateService.changeStaffType(row.id, row.version)
-                            .then(data =>{
-                                if(data.code == "0"){
-                                    this.$message({
-                                        type:'success',
-                                        message: `拒绝成功`
-                                    })
-                                }
-                            }).catch(e =>{
-                                this.$message({
-                                    type:'error',
-                                    message: e.message
-                                })
-                            })
-                    } catch(error){
-                        this.$message({
-                            type:'error',
-                            message: error.message
-                        })
-                    }
-
-                    await _this.getTableList()
-                    store.commit('setLoading',false)
-                }
             },
         },
         async mounted(){

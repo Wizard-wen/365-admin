@@ -18,7 +18,7 @@
                 :header-cell-style="{height: '30px',padding: '0px',fontSize:'12px'}"
                 :cell-style="{height: '30px',padding: 0,fontSize:'12px',}">
 
-                <el-table-column  label="合同编号" prop="contract_code" align="center" width="160"></el-table-column>
+                <el-table-column fixed="left"  label="合同编号" prop="contract_code" align="center" width="160"></el-table-column>
 
                 <el-table-column  label="合同状态" prop="type" align="center"  width="150">
                     <template slot-scope="scope">
@@ -153,7 +153,7 @@
     }
     .staff{
         .list-table{
-            height: 750px;
+            height: 450px;
             width:100%;
             display: flex;
             .search-list{
@@ -168,7 +168,7 @@
                 overflow: auto;
                 flex:1;
                 width: calc(100% - 180px);
-                height: 750px;
+                height: 450px;
                 .search-form{
                     height: 40px;
                     width: 100%;

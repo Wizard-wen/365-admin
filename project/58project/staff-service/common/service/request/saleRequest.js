@@ -23,10 +23,19 @@ export const sale_orderApplyRequest = {
 export const sale_orderRequest = {
     /**
      * 获取订单列表
+     * @param type 
      */
-    getOrderList(){
-        return axios.post(`./admin/order/getOrderList`,
-        store.state.saleModule.orderList)
+    getOrderList(type){
+        if(type == 2){
+            return axios.post(
+                `./admin/order/getOrderList`,
+                store.state.saleModule.publicOrderList
+            )
+        }
+        return axios.post(
+            `./admin/order/getOrderList`,
+            store.state.saleModule.orderList
+        )
     },
     /**
      * 获取订单信息
@@ -40,7 +49,6 @@ export const sale_orderRequest = {
      * @param editObj 编辑对象 
      */
     editOrder(editObj){
-        debugger
         return axios.post(`./admin/order/editOrder`,
         editObj)
     },
@@ -132,16 +140,36 @@ export const sale_staffRequest = {
  */
 export const sale_orderContractRequest = {
     /**
+     * 获取合同详情
+     * @param id 合同id
+     */
+    getContract(id){
+        return axios.get(`./admin/order/getContract?id=${id}`)
+    },
+    /**
+     * 获取合同列表
+     */
+    getContractList(){
+        return axios.post(
+            `./admin/order/getContractList`,
+            store.state.saleModule.contractList
+        )
+    },
+    /**
      * 终止合同
      */
-    stopContract(){
-        return axios.post(``)
+    stopContract(paramObj){
+        return axios.post(`./admin/order/stopContract`,{
+            ...paramObj,
+        })
     },
     /**
      * 结算工资
      */
-    settleWage(){
-        return axios.post(``)
+    settleWage(paramObj){
+        return axios.post(`./admin/order/settleWage`,{
+            ...paramObj,
+        })
     }
 }
 
@@ -150,6 +178,7 @@ export default {
     ...sale_orderRequest,
     ...sale_matchServiceRequest,
     ...sale_staffRequest,
+    ...sale_orderContractRequest,
 
 
     /**

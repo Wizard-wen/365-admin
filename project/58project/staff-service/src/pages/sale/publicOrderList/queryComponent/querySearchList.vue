@@ -49,14 +49,6 @@ export default {
             default:''
         },
         /**
-         * 查询来自于什么组件
-         * staff 运营 order 销售
-         */
-        queryFrom: {
-            type: String,
-            defeult: 'staff'
-        },
-        /**
          * 是否是单选
          */
         isSingleQuery: {
@@ -75,7 +67,7 @@ export default {
             })
         },
         selectedArr(){
-            return this.$store.state.operateModule.queryedList[this.queryKey]
+            return this.$store.state.saleModule.publicOrderList[this.queryKey]
         }
     },
     methods: {
@@ -108,7 +100,7 @@ export default {
             }
 
             //将查询组件数据变化存入vuex
-            this.$store.commit('saleSetWorkerList', {
+            this.$store.commit('saleSetPublicOrderList', {
                 queryKey: this.queryKey, 
                 queryedList: queryedList
             })

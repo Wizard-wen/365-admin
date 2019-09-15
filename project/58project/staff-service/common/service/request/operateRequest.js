@@ -1,5 +1,6 @@
 
 
+
 /**
  * 运营接口
  */
@@ -7,6 +8,31 @@
 import axios from 'axios'
 // import {store} from '../../store/index.js'
 // console.log(store)
+/**
+ * 运营中心客户端订单接口
+ */
+export const operate_clientRequest = {
+  /**
+   * 客户端订单列表
+   */
+  getClientRequireList(){
+    return axios.post(`./admin/order/getRequireList`)
+  },
+  /**
+   * 客户端订单详情
+   * @param id 订单id
+  */
+  getClientRequire(id){
+    return axios.get(`./admin/order/getRequire?id=${id}`)
+  },
+  /**
+   * 客户端订单编辑
+   * @param obj 编辑对象
+  */
+ editClientContract(obj){
+    return axios.post(`./admin/order/editContract`,{...obj})
+  }
+}
 /**
  * 运营订单申请接口
  */
@@ -153,6 +179,11 @@ export const operate_staffRequest = {
                 baseUrl,
                 store.state.saleModule.matchServiceList
             )
+        } else if(type == 6){
+            return axios.post(
+                baseUrl,
+                store.state.saleModule.saleOwnWorkerList
+            )
         }
     },
     /**
@@ -246,33 +277,6 @@ export const operate_staffRequest = {
 
     },
 }
-
-/**
- * 运营中心客户端订单接口
- */
-export const operate_clientRequest = {
-    /**
-     * 客户端订单列表
-     */
-    getClientRequireList(){
-      return axios.post(`./admin/order/getRequireList`)
-    },
-    /**
-     * 客户端订单详情
-     * @param id 订单id
-    */
-    getClientRequire(id){
-      return axios.get(`./admin/order/getRequire?id=${id}`)
-    },
-    /**
-     * 客户端订单编辑
-     * @param obj 编辑对象
-    */
-   editClientContract(obj){
-      return axios.post(`./admin/order/editContract`,{...obj})
-    }
-}
-
 /**
  * 获取商品信息
  */

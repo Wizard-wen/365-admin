@@ -129,13 +129,13 @@
                     </div>
                     <div class="operation-list">
                         <div class="control" @click="openOrderApplyDialog">申请订单</div>
-                        <div class="control" @click="goSaleWorkList" :title="'服务人员信息库'">服务人员信息库</div>
+                        <div class="control" @click="goSaleWorkerList" :title="'服务人员信息库'">服务人员信息库</div>
                         <div class="control" @click="goSaleOrderList">我的订单</div>
-                        <div class="control">我的客户</div>
-                        <div class="control">我的合同</div>
-                        <div class="control">公海订单</div>
-                        <div class="control">我的劳动者</div>
-                        <div class="control">待签约订单</div>
+                        <div class="control" >我的客户</div>
+                        <div class="control" @click="goContractList">我的合同</div>
+                        <div class="control" @click="goPublicOrderList">公海订单</div>
+                        <div class="control" @click="goSaleOwnWorkerList">我的服务人员</div>
+                        <div class="control" >待签约订单</div>
                     </div>
                 </div>
                 <div class="rank-box">
@@ -182,12 +182,24 @@ export default {
             this.applyOrderDialogVisible = true
         },
         //跳转至服务人员信息页
-        goSaleWorkList(){
-            this.$router.push('/sale/saleWorkList')
+        goSaleWorkerList(){
+            this.$router.push('/sale/saleWorkerList')
         },
         //跳转至订单页
         goSaleOrderList(){
             this.$router.push('/sale/orderList')
+        },
+        //跳转至我的合同
+        goContractList(){
+            this.$router.push('/sale/contractList')
+        },
+        //跳转至公海订单列表
+        goPublicOrderList(){
+            this.$router.push('/sale/publicOrderList')
+        },
+        //跳转至由我创建的服务人员
+        goSaleOwnWorkerList(){
+            this.$router.push('/sale/saleOwnWorkerList')
         }
 
     }
