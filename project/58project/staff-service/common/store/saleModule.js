@@ -1,7 +1,5 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-
-
 Vue.use(Vuex)
 
 
@@ -94,6 +92,14 @@ export const saleModule = {
             updated_type: [],//更新时间
         },
         /**
+         * 我创建的服务人员列表
+         */
+        saleOwnWorkerList: {
+            page: 1, //请求页码
+            pageNumber: 20,//单页信息数量
+            manager: [],
+        },
+        /**
          * 备选服务人员列表查询字段
          */
         matchServiceList: {
@@ -162,25 +168,32 @@ export const saleModule = {
             agent_manager_id: [], //经纪人id
         },
         /**
+         * 订单列表查询参数
+         */
+        publicOrderList: {
+            get_for: 'public',
+            page: 1, //请求页码
+            pageNumber: 20,//单页信息数量
+            order_code: '',//订单编号
+            order_at: [],//客户下单时间
+            agent_store_id: [],//经纪门店id
+            agent_manager_id: [], //经纪人id
+        },
+        /**
          *  合同列表查询字段 
          */
         contractList: {
             /*********************表格字段查询******************************/
             page: 1, //请求页码
             pageNumber: 10,//单页信息数量
-            contact_code:'',//合同编号
+            contract_code:'',//合同编号
+            
             created_at:'',//印制时间
             manageDepartment:'',//责任部门
             manager:'',//责任人
-            contract_status:'',// 合同状态
-            isSign:'',//是否签约
-            firstParty:'',//甲方签约人
-            firstPartyId:'',//甲方签约人id
-            secondParty:'',//乙方签约人
-            secondPartyId:'',//乙方签约人id
-            signManager:'',// 签约管家
-            signManagerId:'',// 签约管家id
-            signed_at:'',// 签约时间  
+
+            contract_status:[],// 合同状态
+            isSign:[],//是否签约
         }, //全部查询参数
     },
     mutations: {
@@ -202,6 +215,10 @@ export const saleModule = {
         saleSetWorkerList(state,payload){
             state.saleWorkerList[payload.queryKey] = payload.queryedList
         },
+        //设置我创建的服务人员查询字段
+        saleSetOwnWorkerList(state,payload){
+            state.saleOwnWorkerList.manager = payload
+        },
         //设置备选服务人员查询字段
         saleSetMatchSerivceList(state,payload){
             state.matchServiceList[payload.queryKey] = payload.queryedList
@@ -209,6 +226,10 @@ export const saleModule = {
         //设置订单列表查询字段
         saleSetOrderList(state,payload){
             state.orderList[payload.queryKey] = payload.queryedList
+        },
+        //设置公共订单列表查询字段
+        saleSetPublicOrderList(state,payload){
+            state.publicOrderList[payload.queryKey] = payload.queryedList
         },
         //设置合同列表查询字段
         saleSetContractList(state,payload){

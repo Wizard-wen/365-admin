@@ -153,6 +153,11 @@ export const operate_staffRequest = {
                 baseUrl,
                 store.state.saleModule.matchServiceList
             )
+        } else if(type == 6){
+            return axios.post(
+                baseUrl,
+                store.state.saleModule.saleOwnWorkerList
+            )
         }
     },
     /**

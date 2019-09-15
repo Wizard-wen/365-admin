@@ -270,7 +270,7 @@ export default {
             console.log(this.$route.query)
             if(this.$route.query.from == 1){
                 debugger
-                this.$router.push("/sale/saleWorkList")
+                this.$router.push("/sale/saleWorkerList")
             } else {
                 this.$router.push(`/sale/orderConfig?id=${this.$route.query.orderId}`)
             }

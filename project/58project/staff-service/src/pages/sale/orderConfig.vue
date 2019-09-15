@@ -448,7 +448,7 @@ export default {
          */
         goStaffDetail(paramObj){
             this.$router.push({
-                path: "/sale/saleWorkShow",
+                path: "/sale/saleWorkerShow",
                 query: {
                     id: paramObj.id,
                     from: 2,

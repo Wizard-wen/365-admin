@@ -267,7 +267,7 @@ export default {
          * 返回
          */
         goback(){
-            this.$router.push("/sale/saleWorkList")
+            this.$router.push("/sale/saleWorkerList")
         },
         /**
          * 生成图片

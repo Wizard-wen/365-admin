@@ -18,25 +18,31 @@
                 :header-cell-style="{height: '30px',padding: '0px',fontSize:'12px'}"
                 :cell-style="{height: '30px',padding: 0,fontSize:'12px',}">
 
-                <el-table-column  label="合同编号" prop="contact_code" align="center" width="110"></el-table-column>
+                <el-table-column fixed="left"  label="合同编号" prop="contract_code" align="center" width="160"></el-table-column>
 
-                <el-table-column  label="合同状态" prop="type" align="center"  width="110"></el-table-column>
+                <el-table-column  label="合同状态" prop="type" align="center"  width="150">
+                    <template slot-scope="scope">
+                        <table-tag-component  :propList="contractTypeList" :tableOriginData="scope.row.type"></table-tag-component>
+                    </template>
+                </el-table-column>
 
-                <el-table-column  label="签约时间" prop="sign_at" align="center" width="110"></el-table-column>
+                <el-table-column  label="签约时间" prop="sign_at" align="center" width="150" :formatter="sign_atFormatter"></el-table-column>
+                
+                <el-table-column  label="服务开始时间" prop="service_start" align="center" width="150" :formatter="service_startFormatter"></el-table-column>
 
-                <el-table-column  label="终止时间" prop="stop_at" align="center" width="110"></el-table-column>
+                <el-table-column  label="服务终止时间" prop="service_end" align="center" width="150" :formatter="service_endFormatter"></el-table-column>
 
-                <el-table-column  label="签约经纪人" prop="sign_manager_name" align="center" width="110"></el-table-column>
+                <el-table-column  label="签约经纪人" prop="sign_manager_name" align="center" width="150"></el-table-column>
 
-                <el-table-column  label="签约经纪门店" prop="sign_store_name" align="center" width="110"></el-table-column>
+                <el-table-column  label="签约经纪门店" prop="sign_store_name" align="center" width="150"></el-table-column>
 
-                <el-table-column  label="签约客户" prop="sign_user_name" align="center" width="110"></el-table-column>
+                <el-table-column  label="签约客户" prop="sign_user_name" align="center" width="150"></el-table-column>
 
-                <el-table-column  label="签约客户电话" prop="sign_user_phone" align="center" width="110"></el-table-column>
+                <el-table-column  label="签约客户电话" prop="sign_user_phone" align="center" width="150"></el-table-column>
 
-                <el-table-column  label="家政服务员" prop="sign_staff_name" align="center" width="110"></el-table-column>
+                <el-table-column  label="家政服务员" prop="sign_staff_name" align="center" width="150"></el-table-column>
 
-                <el-table-column  label="家政服务员编号" prop="sign_staff_code" align="center" width="110"></el-table-column>
+                <el-table-column  label="家政服务员编号" prop="sign_staff_code" align="center" width="150"></el-table-column>
 
                 <el-table-column label="操作" align="center" fixed="right" :width="controlScopeLength">
                     <template slot-scope="scope">
@@ -53,9 +59,6 @@
 </template>
 <script>
     import {operateService, $utils} from '../../../../common'
-
-
-    
     import {
         tableTagComponent} from '@/pages/components'
     
@@ -95,6 +98,16 @@
                 type: Number
             }
         },
+        data(){
+            return {
+                //合同状态列表
+                contractTypeList: [
+                    {id: 1, name: '待执行'},
+                    {id: 2, name: '执行中'},
+                    {id: 3, name: '已终止'}
+                ]
+            }
+        },
         computed:{
             //服务人员配置字段对象
             workerConfigList(){
@@ -103,14 +116,33 @@
         },
         methods: {
             /**
-             * 创建时间字段转换
+             * 签约时间
              */
-            created_atFormatter(row, column){
-                if(row.created_at == 0){
-                    return '0000-00-00'
+            sign_atFormatter(row, column){
+                if(row.sign_at == 0){
+                    return '-'
                 }
-                return $utils.formatDate(new Date(row.created_at), 'yyyy-MM-dd')
+                return $utils.formatDate(new Date(row.sign_at), 'yyyy-MM-dd')
             },
+            /**
+             * 服务开始时间字段转换
+             */
+            service_startFormatter(row, column){
+                if(row.service_start == 0){
+                    return '-'
+                }
+                return $utils.formatDate(new Date(row.service_start), 'yyyy-MM-dd')
+            },
+            /**
+             * 服务终止时间字段转换
+             */
+            service_endFormatter(row, column){
+                if(row.service_end == 0){
+                    return '-'
+                }
+                return $utils.formatDate(new Date(row.service_end), 'yyyy-MM-dd')
+            },
+
         },
     }
 </script>
@@ -121,7 +153,7 @@
     }
     .staff{
         .list-table{
-            height: 750px;
+            height: calc(100vh - 50px);
             width:100%;
             display: flex;
             .search-list{
@@ -136,7 +168,7 @@
                 overflow: auto;
                 flex:1;
                 width: calc(100% - 180px);
-                height: 750px;
+                height: calc(100vh - 50px);
                 .search-form{
                     height: 40px;
                     width: 100%;
@@ -156,10 +188,5 @@
                 }
             }
         }
-            
-            
-        
-
-
     }
 </style>

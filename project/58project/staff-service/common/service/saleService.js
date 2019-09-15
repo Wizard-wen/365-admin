@@ -25,8 +25,8 @@ export const sale_orderRequest = {
     /**
      * 获取订单列表
      */
-    getOrderList(){
-        return saleRequest.getOrderList()
+    getOrderList(type){
+        return saleRequest.getOrderList(type)
     },
     /**
      * 获取订单信息
@@ -122,7 +122,33 @@ export const sale_staffRequest = {
  * 订单中的合同处理接口
  */
 export const sale_orderContractRequest = {
-
+    /**
+     * 获取合同详情
+     * @param id 合同id
+     */
+    getContract(id){
+        return saleRequest.getContract(id)
+    },
+    /**
+     * 获取合同列表
+     */
+    getContractList(){
+        return saleRequest.getContractList()
+    },
+    /**
+     * 终止合同
+     * @param paramObj
+     */
+    stopContract(paramObj){
+        return saleRequest.stopContract(paramObj)
+    },
+    /**
+     * 结算工资
+     * @param paramObj
+     */
+    settleWage(paramObj){
+        return saleRequest.settleWage(paramObj)
+    }
 }
 
 
@@ -130,6 +156,8 @@ export default {
     ...sale_orderApplyRequest,
     ...sale_orderRequest,
     ...sale_matchServiceRequest,
+    ...sale_staffRequest,
+    ...sale_orderContractRequest,
     /**
      * 日志信息提交
      * @param obj 

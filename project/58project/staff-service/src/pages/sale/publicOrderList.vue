@@ -1,18 +1,20 @@
 <template>
     <div class="staff" v-loading="isLoaded">
-        <sale-pub-order-table-component
+        <sale-public-order-table-component
             :staffTable="orderApplyTable"
             :maxLength="maxLength"
-            :controlScopeLength="170">
+            :controlScopeLength="100">
             <template slot="searchList">
                 <div class="search-list">
-                    <!-- <query-component @updateTable="updateTable"></query-component> -->
+                    <query-component @updateTable="updateTable"></query-component>
                 </div>
             </template>
+            <template slot="searchForm">
+                <query-tag-component @updateTable="updateTable"></query-tag-component>
+            </template>
+
             <template slot="control" slot-scope="controler">
-                <el-button size="mini" type="text" @click="dealPublicOrder(1, controler.scoper.row)">处理公海订单</el-button>
-                <!-- <el-button size="mini" type="text" style="color:#f56c6c" @click="refuseOrderApply(controler.scoper.row)">拒绝</el-button>
-                <el-button size="mini" type="text" style="color:#67c23a" @click="exportReturnStaff(0, controler.scoper.row)">通过</el-button> -->
+                <el-button size="mini" type="text" @click="dealOrder(controler.scoper.row)">处理订单</el-button>
             </template>
 
             <template slot="pagination">
@@ -26,30 +28,28 @@
                     layout="prev, pager, next, jumper"
                     :total="pagination.total"></el-pagination>
             </template>
-        </sale-pub-order-table-component>
+        </sale-public-order-table-component>
     </div>
 </template>
 <script>
-    import {saleService} from '../../../common'
+    import {saleService, operateService} from '../../../common'
 
     import {
-        salePubOrderTableComponent,
+        salePublicOrderTableComponent,
+        queryTagComponent,
+        queryComponent
     } from './publicOrderList/index.js'
-
 
     export default {
         components: {
-            salePubOrderTableComponent,
+            salePublicOrderTableComponent,
+            queryTagComponent,
+            queryComponent,
         },
         data(){
             return {
                 //员工信息列表
                 orderApplyTable: [],
-                //表单搜索项
-                staffSearch: {
-                    name: '', //姓名
-                    phone:'',//手机号
-                },
                 isLoaded:false,
                 /**
                  * 分页信息
@@ -73,11 +73,7 @@
                     paper_ids: 80, //技能证书
                     source: 80,//信息来源
                 },
-                returnStaffDialofVisible: false,//添加回访数据显示隐藏
             }
-        },
-        computed:{
-
         },
         methods: {
              /**
@@ -89,13 +85,17 @@
                     this.isLoaded = true
 
                     await Promise.all([
-                        saleService.getApplicationList(), //
+                        saleService.getOrderList(2), //
+                        operateService.getOrderFormConfig()
                     ]).then((data) =>{
 
                         this.orderApplyTable = data[0].data.data
                         //分页信息
                         this.pagination.currentPage = data[0].data.current_page //当前页码
                         this.pagination.total = data[0].data.total //列表总条数
+
+                        //配置订单相关标签
+                        this.$store.commit('setOrderConfigForm',data[1].data)
                     }).catch(error =>{
                         this.$message({
                             type:'error',
@@ -120,20 +120,20 @@
              * 切换页码
              */
             async handleCurrentPage(val){
-                // this.pagination.currentPage = val
                 //设置page查询参数
-                this.$store.commit('saleSetWorkerList', {
+                this.$store.commit('saleSetOrderList', {
                     queryKey: 'page',
                     queryedList: val
                 })
                 await this.getTableList()
             },
             /**
-             * 
+             * 处理订单
+             * @param paramObj 列表参数对象
              */
-            dealPublicOrder(){
-
-            }
+            dealOrder(paramObj){
+                this.$router.push(`/sale/publicOrderConfig?id=${paramObj.id}`)
+            },
         },
         async mounted(){
             await this.getTableList()

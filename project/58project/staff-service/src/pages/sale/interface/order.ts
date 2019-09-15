@@ -75,7 +75,7 @@ export interface orderTableObject{
      * 1 - 否
      * 2 - 是
      */
-    isWaged:string;//是否发放工资
+    is_wage:string;//是否发放工资
 
     order_code:string;//订单编号
 
@@ -343,7 +343,7 @@ export interface contractItem{
      * 1 - 否
      * 2 - 是
      */
-    isWaged:string;//是否发放工资
+    is_wage:string;//是否发放工资
     service_start:string;//服务起始日
     service_end:string;//服务终止日
     service_days:string;//工作天数
