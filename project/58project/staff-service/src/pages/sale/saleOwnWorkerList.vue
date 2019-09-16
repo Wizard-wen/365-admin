@@ -39,7 +39,7 @@
         saleOwnWorkerTableComponent} from './saleOwnWorkerList/index.js'
     import {
         errorStaffDialog
-    } from './saleOwnWorkerList/index.js'
+    } from './saleWorkerList/index.js'
 
     export default {
         components: {
@@ -90,7 +90,7 @@
         },
         computed:{
             /**
-             * 
+             *
              */
             workerConfigList(){
                 return this.$store.state.operateModule.workerConfigForm
@@ -112,19 +112,19 @@
                     } else {
                         string = 0
                     }
-                    
+
                 }
-                
+
                 if(string > this.maxLength[listKey]){
                     this.maxLength[listKey] = (string + 20) > 80 ? (string + 20) : 80
                 }
-                
+
             },
              /**
              * 请求表格数据
              * des 表格查询参数存储在vuex中，刷新，参数重置
              */
-            async getTableList(){                
+            async getTableList(){
                 try{
                     this.isLoaded = true
                     let manager_id = this.$store.state.loginModule.user.id
@@ -135,13 +135,13 @@
                         operateService.getWorkerFormConfig('edit'), //获取表单配置字段
                         operateService.getStaffList(6) //获取列表数据
                     ]).then((data) =>{
-                        // 将表单配置数据存入 vuex 
+                        // 将表单配置数据存入 vuex
                         this.$store.commit('setWorkerConfigForm',data[0].data)
 
                         let tableList = data[1].data.data
                         //  debugger
                         tableList.forEach((item, index) =>{
-                           
+
                             this.computeStringLength(item.authentication, 'authentication', 'authentication')
                             this.computeStringLength(item.working_status, 'working_status', 'working_status')
                             this.computeStringLength(item.skill_ids, 'skill_ids', 'service_category')
@@ -153,10 +153,10 @@
                             this.computeStringLength(item.course, 'course', 'course')
                             this.computeStringLength(item.paper_ids, 'paper_ids', 'paper_category')
                             this.computeStringLength(item.source, 'source', 'source')
-                        })  
+                        })
 
                         this.staffTable = data[1].data.data
-                        
+
                         //分页信息
                         this.pagination.currentPage = data[1].data.current_page //当前页码
                         this.pagination.total = data[1].data.total //列表总条数
@@ -186,7 +186,7 @@
             async handleCurrentPage(val){
                 //设置page查询参数
                 this.$store.commit('saleSetWorkerList', {
-                    queryKey: 'page', 
+                    queryKey: 'page',
                     queryedList: val
                 })
                 await this.getTableList()
@@ -197,12 +197,12 @@
             async searchStaff(){
                 //设置name查询参数
                 this.$store.commit('saleSetWorkerList', {
-                    queryKey: 'name', 
+                    queryKey: 'name',
                     queryedList: this.staffSearch.name
                 })
                 //设置手机号查询参数
                 this.$store.commit('saleSetWorkerList', {
-                    queryKey: 'phone', 
+                    queryKey: 'phone',
                     queryedList: this.staffSearch.phone
                 })
                 await this.getTableList()
@@ -215,12 +215,12 @@
                 this.staffSearch.phone = ''
                 //重置name查询参数
                 this.$store.commit('saleSetWorkerList', {
-                    queryKey: 'name', 
+                    queryKey: 'name',
                     queryedList: null
                 })
                 //重置手机号查询参数
                 this.$store.commit('saleSetWorkerList', {
-                    queryKey: 'phone', 
+                    queryKey: 'phone',
                     queryedList: null
                 })
                 await this.getTableList()
