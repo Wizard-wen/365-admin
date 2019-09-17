@@ -187,13 +187,18 @@ export const saleModule = {
             page: 1, //请求页码
             pageNumber: 10,//单页信息数量
             contract_code:'',//合同编号
-            
-            created_at:'',//印制时间
-            manageDepartment:'',//责任部门
-            manager:'',//责任人
 
-            contract_status:[],// 合同状态
-            isSign:[],//是否签约
+
+            // type: [],//合同状态
+            // sign_at: [],//签约时间 
+            // sign_manager_id: [],//签约经纪人
+            // sign_store_id: [],//签约经纪门店
+
+            // sign_user_name: '',//雇主
+            // sign_user_phone:'',//雇主电话
+
+            // sign_staff_name:'',//签约家政服务员
+            // sign_staff_code: '',//签约家政服务员员工号
         }, //全部查询参数
     },
     mutations: {

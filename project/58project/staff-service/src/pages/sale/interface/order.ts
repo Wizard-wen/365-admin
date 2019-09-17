@@ -244,7 +244,8 @@ export interface contractItem{
     type:string;//合同状态
 
     sign_at:string;//签约时间
-    stop_at:string;//服务终止时间
+    // service_start:string;//服务开始时间
+    // service_at:string;//服务终止时间
 
     sign_manager_id:string;//签约人id
     sign_manager_name:string;//签约人

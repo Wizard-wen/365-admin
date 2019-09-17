@@ -39,7 +39,7 @@
         saleOwnWorkerTableComponent} from './saleOwnWorkerList/index.js'
     import {
         errorStaffDialog
-    } from './saleOwnWorkerList/index.js'
+    } from './saleWorkerList/index.js'
 
     export default {
         components: {
