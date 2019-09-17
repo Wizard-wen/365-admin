@@ -1,5 +1,6 @@
 
 
+
 /**
  * 运营接口
  */
@@ -8,11 +9,36 @@ import axios from 'axios'
 // import {store} from '../../store/index.js'
 // console.log(store)
 /**
+ * 运营中心客户端订单接口
+ */
+export const operate_clientRequest = {
+  /**
+   * 客户端订单列表
+   */
+  getClientRequireList(){
+    return axios.post(`./admin/order/getRequireList`)
+  },
+  /**
+   * 客户端订单详情
+   * @param id 订单id
+  */
+  getClientRequire(id){
+    return axios.get(`./admin/order/getRequire?id=${id}`)
+  },
+  /**
+   * 客户端订单编辑
+   * @param obj 编辑对象
+  */
+ editClientContract(obj){
+    return axios.post(`./admin/order/editContract`,{...obj})
+  }
+}
+/**
  * 运营订单申请接口
  */
 export const operate_orderApplyRequest = {
     /**
-     * 订单申请列表 
+     * 订单申请列表
      */
     getApplicationList(){
         return axios.post(
@@ -50,7 +76,7 @@ export const operate_orderApplyRequest = {
             ...changeObj
         })
     },
-} 
+}
 /**
  * 运营中心公共接口
  */
@@ -76,7 +102,7 @@ export const operate_publicRequest = {
     },
     /**
      * 请求服务人员标签配置数据
-     * @param type config 
+     * @param type config
      */
     getWorkerFormConfig(type){
         return axios.get(`./admin/formConfig/getWorkerFormConfig?get_for=${type}`)
@@ -226,8 +252,8 @@ export const operate_staffRequest = {
     },
 
     /**
-     * 提交新申请服务人员 / 恢复异常服务人员 / 导出回访人员 
-     * @param module  apply warning return 
+     * 提交新申请服务人员 / 恢复异常服务人员 / 导出回访人员
+     * @param module  apply warning return
      * @param from list 从列表提交 还是从编辑详情提交
      * @param id 若是from=list id为人员id  若是from=edit id是服务人员信息object
      */
@@ -276,7 +302,7 @@ export const operate_serviceGood = {
     },
     /**
      * 编辑服务信息
-     * @param serviceObj 服务信息对象 
+     * @param serviceObj 服务信息对象
      */
     editService(serviceObj){
         return axios.post(`./admin/service/editService`,{
@@ -289,4 +315,5 @@ export default {
     ...operate_publicRequest,
     ...operate_staffRequest,
     ...operate_serviceGood,
+    ...operate_clientRequest,
 }
