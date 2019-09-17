@@ -86,6 +86,14 @@ export const operateModule = {
         setOrderList(state,payload){
             state.orderList[payload.queryKey] = payload.queryedList
         },
+        //设置合同列表查询字段
+        setContractList(state,payload){
+            state.contractList[payload.queryKey] = payload.queryedList
+        },
+        //设置空合同列表查询字段
+        setVoidContractList(state,payload){
+            state.voidContractList[payload.queryKey] = payload.queryedList
+        },
     },
     state: {
         //服务人员相关列表配置
@@ -216,6 +224,38 @@ export const operateModule = {
             agent_store_id: [],//经纪门店id
             agent_manager_id: [], //经纪人id
         },
+        /**
+         *  合同列表查询字段 
+         */
+        contractList: {
+            /*********************表格字段查询******************************/
+            page: 1, //请求页码
+            pageNumber: 10,//单页信息数量
+            contract_code:'',//合同编号
+
+
+            // type: [],//合同状态
+            // sign_at: [],//签约时间 
+            // sign_manager_id: [],//签约经纪人
+            // sign_store_id: [],//签约经纪门店
+
+            // sign_user_name: '',//雇主
+            // sign_user_phone:'',//雇主电话
+
+            // sign_staff_name:'',//签约家政服务员
+            // sign_staff_code: '',//签约家政服务员员工号
+        }, //全部查询参数
+        /**
+         * 空合同查询字段
+         */
+        voidContractList: {
+            contract_nmuber:'string',//空合同编号（筛选）
+            created_at: [],//空合同创建时间（筛选）
+            assign_at:[],//分派时间（筛选）
+            is_assigned:[],//是否已经分派（筛选）
+            type:[],//是否已经签约（筛选）
+            manager_id:[],//经纪人id
+        }
     },
 }
 

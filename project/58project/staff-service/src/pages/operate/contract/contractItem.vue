@@ -1,0 +1,411 @@
+<template>
+    <div class="orderConfig" v-loading="isLoaded">
+        <div class="order-header">
+            <div class="order-name">
+                <h4>合同号：{{contractBase.contract_code}}</h4>
+            </div>
+            <div class="btn-group">
+                <el-button size="mini" @click="goback">返回</el-button>
+            </div>
+            <div class="order-detail">
+                <div class="detail-left">
+                    <div class="detail-left-box">
+                        <div class="detail-left-line">签约经纪人：{{ contractBase.sign_manager_name }}</div>
+                        <div class="detail-left-line">签约经纪门店：{{ contractBase.sign_store_name }}</div>
+                        <div class="detail-left-line">签约时间：{{contractBase.sign_at | timeFomatter}}</div>
+                    </div>
+                </div>
+                <div class="detail-right">
+                    <div class="right-box">
+                        <div class="title">合同状态</div>
+                        <div class="value">{{ contractBase.type | contractTypeFormatter}}</div>
+                    </div>
+                    <div class="right-box" v-if="contractBase.type != 3">
+                        <div class="title">是否发放工资</div>
+                        <div class="value">{{ contractBase.is_wage | isWagedFormatter}}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="order-down">
+            <div class="order-message">
+                <div class="title">
+                    <div class="title-contains">
+                        <div class="left">合同详情</div>
+                    </div>
+                </div>
+                <div class="order-list">
+                    <div class="line-list">
+                        服务内容：
+                        <select-tag-component 
+                            :isEdit="false" 
+                            :propTagList="order_service_contains" 
+                            v-model="contractBase.service_contains" 
+                            :isSingle="true"></select-tag-component>
+                    </div>
+                    <div class="line-list">
+                        服务人数：<span>{{contractBase.service_count}}</span> 
+                    </div>
+                    <div class="line-list">
+                        护理依赖程度： 
+                        <select-tag-component 
+                            :isEdit="false" 
+                            :propTagList="order_service_level" 
+                            v-model="contractBase.service_level" 
+                            :isSingle="true"></select-tag-component>
+                    </div>
+                    <div class="line-list">
+                        服务方式： 
+                        <select-tag-component 
+                            :isEdit="false" 
+                            :propTagList="order_service_type" 
+                            v-model="contractBase.service_level" 
+                            :isSingle="true"></select-tag-component>
+                    </div>
+                    <div class="line-list">
+                        服务期限：<span>{{contractBase.service_start | timeFomatter}} - {{contractBase.service_end | timeFomatter}}</span> 
+                    </div>
+                    <div class="line-list">
+                        工作时间：<span>{{contractBase.service_time}}</span> 
+                    </div>
+                    <div class="line-list">
+                        劳务报酬：<span>{{contractBase.staff_wage}}</span> 
+                    </div>
+                    <div class="line-list">
+                        客户服务费：<span>{{contractBase.user_charge}}</span> 
+                    </div>
+                    <div class="line-list">
+                        客户缴纳：<span>{{contractBase.user_pay}}</span> 
+                    </div>
+                    <div class="line-list">
+                        劳动者押金：<span>{{contractBase.staff_deposit}}</span> 
+                    </div>
+                    <div class="line-list">
+                        保险受益人：<span>{{contractBase.insurance_benefit}}</span> 
+                    </div>
+                    <div class="line-list">
+                        保险期限：<span>{{contractBase.insurance_start | timeFomatter}} - {{contractBase.insurance_end | timeFomatter}}</span> 
+                    </div>
+                    <div class="line-list">
+                        合同备注：<span>{{contractBase.remarks}}</span> 
+                    </div>
+                    <div class="line-list">
+                        合同照片：<span>{{contractBase.accessory}}</span> 
+                    </div>
+                </div>
+            </div>
+            <div class="order-message">
+                <div class="title">
+                    <div class="title-contains">
+                        <div class="left">签约服务人员信息</div>
+                    </div>
+                </div>
+                <div class="order-list">
+                    
+                    <div class="line-two-list">
+                        编号：<span>{{contractBase.sign_staff_code}}</span> 
+                    </div>
+                    <div class="line-two-list">
+                        身份证号：<span>{{contractBase.sign_staff_identify}}</span> 
+                    </div>
+                    <div class="line-two-list">
+                        姓名：<span>{{contractBase.sign_staff_name}}</span>
+                    </div>
+                    <div class="line-two-list">
+                        电话：<span>{{contractBase.sign_staff_phone}}</span> 
+                    </div>
+                    <div class="line-list">
+                        户籍地址：<span>{{contractBase.sign_staff_law_address}}</span> 
+                    </div>
+                    <div class="line-list">
+                        现住址：<span>{{contractBase.sign_staff_cur_address}}</span> 
+                    </div>
+                    <div class="line-list">
+                        紧急联系人：<span>{{contractBase.sign_staff_urgent}}</span> 
+                    </div>
+                </div>
+            </div>
+            <div class="order-message">
+                <div class="title">
+                    <div class="title-contains">
+                        <div class="left">签约客户信息</div>
+                    </div>
+                </div>
+                <div class="order-list">
+                    <div class="line-two-list">
+                        姓名：<span>{{contractBase.sign_user_name}}</span>
+                    </div>
+                    <div class="line-two-list">
+                        电话：<span>{{contractBase.sign_user_phone}}</span> 
+                    </div>
+                    <div class="line-two-list">
+                        身份证号：<span>{{contractBase.sign_user_identify}}</span> 
+                    </div>
+                </div>
+            </div>
+            <div class="order-message">
+                <div class="title">
+                    <div class="title-contains">
+                        <div class="left">结算信息</div>
+                    </div>
+                </div>
+                <div class="order-list">
+                   
+                </div>
+            </div>
+            <div class="order-message">
+                <div class="title">
+                    <div class="title-contains">
+                        <div class="left">订单终止信息</div>
+                    </div>
+                </div>
+                <div class="order-list">
+                   
+                </div>
+            </div>
+            
+                     
+        </div>
+    </div>
+</template>
+<script>
+    import {operateService, $utils, saleService} from '../../../../common'
+    import {
+    selectTagComponent} from '@/pages/components'
+
+export default {
+    data(){
+        return {
+            isLoaded: false,//
+            contractBase: {},//合同信息
+        }
+    },
+    filters: {
+        timeFomatter(value){
+            if(value == 0){
+                return '-'
+            }
+            return $utils.formatDate(new Date(value), 'yyyy-MM-dd')
+        },
+        contractTypeFormatter(value){
+            if(value == 1){
+                return '待执行'
+            } else if (value == 2){
+                return '执行中'
+            } else {
+                return '已终止'
+            }
+        },
+        isWagedFormatter(value){
+            if(value == 1){
+                return '否'
+            } else {
+                return '是'
+            }
+        }
+    },
+    components: {
+        selectTagComponent,
+    },
+    computed:{
+        /**
+         * 当前用户信息
+         */
+        presentUser(){
+            return this.$store.state.loginModule.user
+        },
+        //订单服务内容
+        order_service_contains(){
+            return this.$store.state.saleModule.order_service_contains
+        },
+        //订单护理依赖程度
+        order_service_level(){
+            return this.$store.state.saleModule.order_service_level
+        },
+        //订单服务方式
+        order_service_type(){
+            return this.$store.state.saleModule.order_service_type
+        },
+    },
+    methods: {
+        /**
+         * 获取订单信息
+         */
+        async getContract(){
+            try{
+                this.isLoaded = true
+                await saleService.getContract(this.$route.query.id).then((data) =>{
+                    this.contractBase = data.data
+                }).catch(e =>{
+                    this.$message({
+                        type:'error',
+                        message: e.message
+                    })
+                    this.isLoaded = false
+                }).finally(() =>{
+                    this.isLoaded = false
+                })
+            } catch(error){
+                this.$message({
+                    type:'error',
+                    message: error.message
+                })
+                store.commit('setLoading',false)
+            }
+        },
+        /**
+         * 返回
+         */
+        goback(){
+            if(this.$route.query.from == 1){
+                this.$router.push({
+                    path: '/operate/operateOrderConfig',
+                    query: {
+                        id: this.$route.query.fromId
+                    }
+                })
+            } else {
+                this.$router.push('/operate/operateContractList')
+            }
+        },
+    },
+    async mounted(){
+        await this.getContract()
+    }    
+}
+</script>
+<style lang="scss" scoped>
+    .orderConfig{
+        width: 100%;
+        min-height: calc(100vh - 50px);
+        background:#f0f2f5;
+        .order-header{
+            background: #fff;
+            padding: 30px 24px 24px 24px;
+            position: relative;
+            .order-name{
+                line-height: 28px;
+                font-size: 20px;
+                font-weight: 700;
+            }
+            .btn-group{
+                & /deep/ .el-button{
+                    margin-left: 0px;
+                }
+                position: absolute;
+                right: 24px;
+                top: 20px;
+            }
+            .order-detail{
+                padding-top: 12px;
+                display: flex;
+                .detail-left{
+                    flex:1;
+                    .detail-left-box{
+                        display: flex;
+                        flex-wrap: wrap;
+                        .detail-left-line{
+                            width: 50%;
+                            color: rgba(0,0,0,.65);
+                            line-height: 20px;
+                            padding-bottom: 8px;
+                        }
+                    }
+                }
+                .detail-right{
+                    min-width: 400px;
+                    display: flex;
+                    .right-box{
+                        height: 80px;
+                        width: 50%;
+                        .title{
+                            color: rgba(0,0,0,.45);
+                            font-size: 14px;
+                            line-height: 1.5;
+                        }
+                        .value{
+                            font-size: 20px;
+                            color: rgba(0,0,0,.85);
+                            line-height: 1.5;
+                        }
+                    }
+                }
+            }
+        }
+        .order-down{
+            margin: 24px;
+            .order-message{
+
+                width: 100%;
+                // height: 285px;
+                background: #fff;
+                margin-bottom: 24px; 
+                .title{
+                    min-height: 48px;
+                    margin-bottom: -1px;
+                    padding: 0 24px;
+                    color: rgba(0,0,0,.85);
+                    font-weight: 500;
+                    font-size: 16px;
+                    background: transparent;
+                    border-bottom: 1px solid #e8e8e8;
+                    border-radius: 2px 2px 0 0;
+                    zoom: 1;
+                    .title-contains{
+                        display: flex;
+                        align-items: center;
+                        .left{
+                            display: inline-block;
+                            flex: 1 1;
+                            padding: 16px 0;
+                            overflow: hidden;
+                            white-space: nowrap;
+                            text-overflow: ellipsis;
+                        }
+                    }
+
+                }
+                .order-list{
+                    box-sizing: border-box;
+                    padding: 24px;
+                    &:after{
+                        content: '';
+                        display: block;
+                        clear: both;
+                    }
+                    .line-three-list{
+                        float: left;
+                        width: 33%;
+                        line-height: 30px;
+                    }
+                    .line-two-list{
+                        float: left;
+                        width: 50%;
+                        line-height: 30px;
+                    }
+                    .line-list{
+                        float: left;
+                        width: 100%;
+                        line-height: 30px;
+                    }
+                    .change{
+                        margin-left: 15px;
+                        display: inline-block;
+                        color: #1890ff;
+                        line-height: 30px;
+                        height: 30px;
+                        font-size: 12px;
+                        cursor: pointer;
+                        & img{
+                            height: 30px;
+                            width: 30px;
+                            vertical-align: middle;
+                        }
+                    }
+                }
+            }
+        }
+    }
+</style>
+
+

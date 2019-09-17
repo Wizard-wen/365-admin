@@ -11,7 +11,6 @@
             </template>
             <template slot="searchForm">
                 <query-tag-component @updateTable="updateTable"></query-tag-component>
-                <el-button type="primary" @click="openOrderApplyDialog">订单申请</el-button>
             </template>
 
             <template slot="control" slot-scope="controler">
@@ -84,7 +83,6 @@
                     paper_ids: 80, //技能证书
                     source: 80,//信息来源
                 },
-                returnStaffDialofVisible: false,//添加回访数据显示隐藏
                 //分配弹出框显示
                 assignDialogVisible:false,
                 //待分配订单id
@@ -149,17 +147,13 @@
              * @param paramObj 列表参数对象
              */
             dealOrder(paramObj){
-                this.$router.push(`/sale/orderConfig?id=${paramObj.id}`)
+                this.$router.push(`/operate/operateOrderConfig?id=${paramObj.id}`)
             },
             /**
              * 分派订单
              */
             assignOrder(){
                 this.assignDialogVisible = true
-            },
-            //打开订单申请弹窗
-            openOrderApplyDialog(){
-                this.applyOrderDialogVisible = true
             },
         },
         async mounted(){

@@ -87,9 +87,16 @@ import operateWorkStation from '@/pages/operate/operateWorkStation.vue'
  * 运营---订单管理
  */
 import operateOrderList from '@/pages/operate/order/orderList.vue'
+import operateOrderConfig from '@/pages/operate/order/orderConfig.vue'
 import operateOrderApplyList from '@/pages/operate/order/orderApplyList.vue'
 import operateOrderApplyItem from '@/pages/operate/order/orderApplyItem.vue'
 
+/**
+ * 运营---合同管理
+ */
+import operateVoidContractList from '@/pages/operate/contract/voidContractList.vue'
+import operateContractList from '@/pages/operate/contract/contractList.vue'
+import operateContractItem from '@/pages/operate/contract/contractItem.vue'
 /**
  * 运营—--客户端订单
  */
@@ -124,6 +131,11 @@ import productList from '@/pages/operate/product/productList.vue'
         component: operateOrderList,
     },
     {
+        path: '/operate/operateOrderConfig',
+        name: 'operateOrderConfig',
+        component: operateOrderConfig,
+    },
+    {
         path: '/operate/operateOrderApplyList',
         name: 'operateOrderApplyList',
         component: operateOrderApplyList,
@@ -133,6 +145,22 @@ import productList from '@/pages/operate/product/productList.vue'
         name: 'operateOrderApplyItem',
         component: operateOrderApplyItem,
     },
+    {
+        path: '/operate/contract/operateVoidContractList',
+        name: 'operateVoidContractList',
+        component: operateVoidContractList,
+    },
+    {
+        path: '/operate/contract/operateContractList',
+        name: 'operateContractList',
+        component: operateContractList,
+    },
+    {
+        path: '/operate/contract/operateContractItem',
+        name: 'operateContractItem',
+        component: operateContractItem,
+    },
+
     {
         path: '/operate/productList',
         name: 'productList',

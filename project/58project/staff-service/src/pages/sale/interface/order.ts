@@ -357,3 +357,23 @@ export interface contractItem{
     return_wage:string;//返还客户金额
  }
 
+/**
+ * 空合同信息
+ */
+export interface voidContractItem {
+    contract_nmuber:string;//空合同编号（筛选）
+    created_at: string;//空合同创建时间（筛选）
+    assign_at:string;//分派时间（筛选）
+    /**
+     * 1 - 已分派
+     * 2 - 已签约
+     */
+    is_assigned:string;//是否已经分派（筛选）
+    /**
+     * 1 - 未签约
+     * 2 - 已签约
+     */
+    type:string;//是否已经签约（筛选）
+    manager_id:string;//经纪人id
+    manager_name:string;//经纪人名字（筛选）
+}

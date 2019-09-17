@@ -1,6 +1,6 @@
 <template>
     <div class="staff" v-loading="isLoaded">
-        <contract-table-component
+        <void-contract-table-component
             :staffTable="contractList"
             :maxLength="maxLength"
             :controlScopeLength="100">
@@ -11,12 +11,13 @@
                 </div>
             </template>
 
-            <template slot="searchForm">
+            <template slot="searchForm" >
                 <query-tag-component @updateTable="updateTable"></query-tag-component>
+                <el-button type="primary" size="mini" @click="openCreateVoidContractDialog">创建空合同</el-button>
             </template>
             
             <template slot="control" slot-scope="controler">
-                <el-button size="mini" type="text" @click="goContractPage( controler.scoper.row)">查看</el-button>
+                <el-button type="text" size="mini" @click="openAssignVoidContractDialog( controler.scoper.row)">分派</el-button>
             </template>
 
             <template slot="pagination">
@@ -30,22 +31,35 @@
                     layout="prev, pager, next, jumper"
                     :total="pagination.total"></el-pagination>
             </template>
-        </contract-table-component>
+        </void-contract-table-component>
+        <assign-void-contract-dialog
+            v-if="assignVoidContractDialogVisible"
+            :assignVoidContractDialogVisible="assignVoidContractDialogVisible"
+            @closeVoidContractAssignDialog="closeVoidContractAssignDialog"
+            :voidContractId="voidContractId"></assign-void-contract-dialog>
+        <create-void-contract-dialog
+            v-if="createVoidContractDialogVisible"
+            :createVoidContractDialogVisible="createVoidContractDialogVisible"
+            @closeVoidContractCreateDialog="closeVoidContractCreateDialog"></create-void-contract-dialog>
     </div>
 </template>
 <script>
     import {operateService, saleService} from '../../../../common'
 
     import {
-        contractTableComponent,
+        voidContractTableComponent,
         queryComponent,
         queryTagComponent,
-    } from './contractList/index.js'
+        assignVoidContractDialog,
+        createVoidContractDialog,
+    } from './voidContractList/index.js'
     export default {
         components: {
-            contractTableComponent,
+            voidContractTableComponent,
             queryComponent,
             queryTagComponent,
+            assignVoidContractDialog,
+            createVoidContractDialog,
         },
         data(){
             return {
@@ -74,6 +88,9 @@
                     paper_ids: 80, //技能证书
                     source: 80,//信息来源
                 },
+                voidContractId: '',//空合同id
+                assignVoidContractDialogVisible: false,//分派空合同弹窗显示隐藏
+                createVoidContractDialogVisible: false,//创建合同弹窗显示隐藏
             }
         },
         computed:{
@@ -89,7 +106,7 @@
                     this.isLoaded = true
 
                     
-                    await saleService.getContractList().then((data) =>{
+                    await operateService.getVoidContractList().then((data) =>{
 
                         this.contractList = data.data.data
                         //分页信息
@@ -127,17 +144,34 @@
                 await this.getTableList()
             },
             /**
-             * 前往合同详情页
+             * 打开分派合同弹窗
              */
-            goContractPage(row){
-                this.$router.push({
-                    path: "/operate/operateContractItem",
-                    query: {
-                        id: row.id,
-                        from: 2,
-                    }
-                })
+            openAssignVoidContractDialog(row){
+                this.voidContractId = row.id
+                this.assignVoidContractDialogVisible = true
             },
+            /**
+             * 
+             */
+            async closeVoidContractAssignDialog(){
+                this.assignVoidContractDialogVisible = false
+                await this.getTableList()
+            },
+            /**
+             * 打开创建空合同弹窗
+             */
+            openCreateVoidContractDialog(){
+                this.createVoidContractDialogVisible = true
+            },
+            /**
+             * 关闭创建空合同弹窗
+             */
+            async closeVoidContractCreateDialog(){
+                this.createVoidContractDialogVisible = false
+                await this.getTableList()
+            }
+
+
         },
         async mounted(){
             await this.getTableList()

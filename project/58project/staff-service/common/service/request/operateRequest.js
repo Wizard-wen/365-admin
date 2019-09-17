@@ -310,10 +310,36 @@ export const operate_serviceGood = {
         })
     }
 }
+/**
+ * 运营中心空合同、合同接口
+ */
+export const operate_contract = {
+    /**
+     * 获取空合同列表
+     */
+    getVoidContractList(){
+        return axios.post(`./admin/order/getVoidContractList`)
+    },
+    /**
+     * 创建空合同列表
+     * @param paramObj
+     */
+    createVoidContract(paramObj){
+        return axios.post(`./admin/order/createVoidContract`,paramObj)
+    },
+    /**
+     * 分派空合同列表
+     * @param paramObj
+     */
+    assignVoidContract(paramObj){
+        return axios.post(`./admin/order/assignVoidContract`,paramObj)
+    }
+}
 export default {
     ...operate_orderApplyRequest,
     ...operate_publicRequest,
     ...operate_staffRequest,
     ...operate_serviceGood,
     ...operate_clientRequest,
+    ...operate_contract
 }
