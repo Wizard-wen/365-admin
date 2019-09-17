@@ -2,8 +2,8 @@
     <div class="queryBox">
         <query-search-input
             @updateTable="updateTable"
-            :queryKey="'contract_code'"
-            :queryName="'合同编号'"></query-search-input>
+            :queryKey="'contract_number'"
+            :queryName="'空合同编号'"></query-search-input>
     </div>
 </template>
 <script>

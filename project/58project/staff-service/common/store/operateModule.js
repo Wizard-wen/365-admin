@@ -13,6 +13,7 @@ export const order_apply_type = [
     {name: '已拒绝',id: 2},
     {name: '已通过',id: 3},
 ]
+
 /**
  * 订单状态
  */
@@ -37,6 +38,14 @@ export const created_at = [
     {id: 9, name: "今年"}, 
     {id: 10, name: "去年"}, 
 ]
+/**
+ * 合同状态
+ */
+export const contract_type = [
+    {name: '待执行',id: 1},
+    {name: '执行中',id: 2},
+    {name: '已终止',id: 3},
+]
 export const operateModule = {
     mutations:{
         //设置服务人员搜索配置字段
@@ -57,6 +66,7 @@ export const operateModule = {
             state.orderFormConfig.agent_store_id = orderFormConfig.apply_store_id
             state.orderFormConfig.created_manager_id = orderFormConfig.apply_manager_id
         },
+
         /** 
          * 列表查询函数公共键值说明
          * @param queryKey queryList 键名 
@@ -94,6 +104,11 @@ export const operateModule = {
         setVoidContractList(state,payload){
             state.voidContractList[payload.queryKey] = payload.queryedList
         },
+        //设置合同相关搜索接口
+        setContractConfigForm(state,contractConfigForm){
+            state.contractConfigForm.sign_manager_id = contractConfigForm.apply_manager_id
+            state.contractConfigForm.sign_store_id = contractConfigForm.apply_store_id
+        },
     },
     state: {
         //服务人员相关列表配置
@@ -118,6 +133,13 @@ export const operateModule = {
             created_manager_id: [],//订单创建人
             agent_store_id: [],//订单经纪门店
             agent_manager_id: [],//订单经纪人
+        },
+        //合同搜索列表筛选
+        contractConfigForm: {
+            type: contract_type,
+            sign_at: created_at,//签约时间 
+            sign_manager_id: [],//签约经纪人
+            sign_store_id: [],//签约经纪门店
         },
         // 回访服务人员查询
         returnWorkerList: {
@@ -231,19 +253,20 @@ export const operateModule = {
             /*********************表格字段查询******************************/
             page: 1, //请求页码
             pageNumber: 10,//单页信息数量
-            contract_code:'',//合同编号
+            contract_code:'',//合同流水号
+            contract_number:'',//合同编号
 
 
-            // type: [],//合同状态
-            // sign_at: [],//签约时间 
-            // sign_manager_id: [],//签约经纪人
-            // sign_store_id: [],//签约经纪门店
+            type: [],//合同状态
+            sign_at: [],//签约时间 
+            sign_manager_id: [],//签约经纪人
+            sign_store_id: [],//签约经纪门店
 
-            // sign_user_name: '',//雇主
-            // sign_user_phone:'',//雇主电话
+            sign_user_name: '',//雇主
+            sign_user_phone:'',//雇主电话
 
-            // sign_staff_name:'',//签约家政服务员
-            // sign_staff_code: '',//签约家政服务员员工号
+            sign_staff_name:'',//签约家政服务员
+            sign_staff_code: '',//签约家政服务员员工号
         }, //全部查询参数
         /**
          * 空合同查询字段
@@ -252,7 +275,6 @@ export const operateModule = {
             contract_nmuber:'string',//空合同编号（筛选）
             created_at: [],//空合同创建时间（筛选）
             assign_at:[],//分派时间（筛选）
-            is_assigned:[],//是否已经分派（筛选）
             type:[],//是否已经签约（筛选）
             manager_id:[],//经纪人id
         }

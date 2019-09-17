@@ -160,7 +160,7 @@
                                     type="danger" 
                                     size="mini"
                                     @click="deleteMatchStaff(scope.row)" 
-                                    v-if="presentUser.id == scope.row.create_manager_id">删除</el-button>
+                                    v-if="presentUser.id == scope.row.created_manager_id">删除</el-button>
                             </template>
                         </el-table-column>
                         

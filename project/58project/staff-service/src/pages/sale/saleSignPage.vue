@@ -5,6 +5,24 @@
                 <div class="order-message">
                     <div class="title">
                         <div class="title-contains">
+                            <div class="left">合同编号</div>
+                        </div>
+                    </div>
+                    <div class="order-list">
+                        <el-form-item label="合同编号" prop="contract_number">
+                            <el-select v-model="signForm.contract_number" placeholder="合同编号">
+                                <el-option
+                                    v-for="(item, index) in contract_numberList"
+                                    :key="index"
+                                    :label="item.contract_number"
+                                    :value="item.contract_number"></el-option>
+                            </el-select>
+                        </el-form-item>
+                    </div>
+                </div>
+                <div class="order-message">
+                    <div class="title">
+                        <div class="title-contains">
                             <div class="left">雇主信息</div>
                         </div>
                     </div>
@@ -171,7 +189,7 @@
 <script>
 import {
     selectTagComponent,} from '@/pages/components'
-    import {saleService} from '../../../common'
+    import {saleService, operateService} from '../../../common'
 export default {
     data(){
         var _this = this
@@ -200,6 +218,10 @@ export default {
             },
         }
         return {
+            contract_numberList: [{
+                id: 0,
+                contract_number: '请选择'
+            }],//可签约空合同列表
             signRules: {
                 //雇主姓名
                 sign_user_name: [
@@ -262,6 +284,7 @@ export default {
             signForm: {
                 order_id: this.$route.query.id,
                 sign_staff_id: this.$route.query.sign_staff_id,
+                contract_number: '',//合同编号
                 sign_user_name:'',// 雇主
                 sign_user_phone:'',// 雇主联系电话
                 sign_user_identify:'',// 雇主身份证号
@@ -308,19 +331,11 @@ export default {
         selectTagComponent,
     },
     computed:{
-        total_price(){
-            return parseFloat((Number(this.signForm.service_count) * Number(this.signForm.unit_price)).toFixed(10))
-        },
         /**
          * 订单签约字段
          */
         orderConfigList(){
             return this.$store.state.saleModule
-        }
-    },
-    watch: {
-        total_price:function(val){
-            this.signForm.total_price = val
         }
     },
     methods: {
@@ -398,6 +413,19 @@ export default {
             this.signForm.service_start = value[0]
             this.signForm.service_end = value[1]
         }
+    },
+    async mounted(){
+        /**
+         * 获取可签约合同列表
+         */
+        await operateService.getManagerVoidContractSelection().then(data =>{
+            this.contract_numberList = data.data
+        }).catch(error => {
+           this.$message({
+                type:'error',
+                message: error.message
+            }) 
+        })
     }
 }
 </script>

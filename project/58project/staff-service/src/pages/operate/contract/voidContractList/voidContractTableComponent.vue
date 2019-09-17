@@ -88,8 +88,9 @@
             return {
                 //合同状态列表
                 voidContractTypeList: [
-                    {id: 1, name: '未签约'},
-                    {id: 2, name: '已签约'},
+                    {id: 1, name: '空合同'},
+                    {id: 2, name: '未签约'},
+                    {id: 3, name: '已签约'},
                 ]
             }
         },

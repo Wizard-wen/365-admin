@@ -262,6 +262,12 @@ export const operate_contract = {
      */
     assignVoidContract(paramObj){
         return operateRequest.assignVoidContract(paramObj)
+    },
+    /**
+     * 签约时，销售的空合同
+     */
+    getManagerVoidContractSelection(){
+        return operateRequest.getManagerVoidContractSelection()
     }
 }
 export default {

@@ -5,10 +5,6 @@
                 <h4>订单号：{{orderBase.order_code}}</h4>
             </div>
             <div class="btn-group">
-                <!-- 仅店长有此权限 -->
-                <el-button type="primary" @click="assignOrder" size="mini">分派</el-button>
-                <el-button type="primary" size="mini" @click="goSignOrder">续约</el-button>
-                <el-button type="danger" size="mini" @click="determinateOrder">终止订单</el-button>
                 <el-button size="mini" @click="goback">返回</el-button>
             </div>
             <div class="order-detail">
@@ -20,27 +16,9 @@
                         <div class="detail-left-line">创建时间：{{orderBase.created_at | timeFomatter}}</div>
                         <div class="detail-left-line">来源门店：{{orderBase.apply_store_name}}</div>
                         <div class="detail-left-line">来源人：{{orderBase.apply_manager_name}}</div>
-                        <div
-                            v-if="orderBase.type != 1" 
-                            class="detail-left-line">签约时间：{{orderBase.sign_service_start | timeFomatter}}</div>
-                        <div
-                            v-if="orderBase.type != 1" 
-                            class="detail-left-line">服务周期：{{orderBase.sign_service_start | timeFomatter}}</div>
-                    </div>
-                </div>
-                <div class="detail-right">
-                    <div class="right-box" v-if="orderBase.type!= 1">
-                        <div class="title">账户余额</div>
-                        <div class="value">{{ orderBase.sign_user_account }}</div>
                     </div>
                 </div>
             </div>
-            <!-- 订单分派弹出框 -->
-            <assign-dialog
-                v-if="assignDialogVisible"
-                :openAssignDialog="assignDialogVisible"
-                @closeAssignDialog="assignDialogVisible=false"
-                :assignOrderId="order_id"></assign-dialog>
         </div>
         <div class="order-down">
             <div class="order-message">
@@ -50,70 +28,23 @@
                     </div>
                 </div>
                 <div class="order-list">
-                    <div class="line-three-list">
-                        客户姓名：<span>{{orderBase.order_user_name}}</span>
-                        <p  
-                            v-if="orderBase.type == 1 || orderBase.type == 3"
-                            @click="openChangeOrderDialog('order_user_name','客户姓名')" class="change">
-                            <img src="./orderConfig/images/change.svg" alt="">
-                        </p>
-                    </div>
-                    <div class="line-three-list">
-                        电话：<span>{{orderBase.order_user_phone}}</span> 
-                        <p  
-                            v-if="orderBase.type == 1 || orderBase.type == 3"
-                            @click="openChangeOrderDialog('order_user_phone','电话')" class="change">
-                            <img src="./orderConfig/images/change.svg" alt="">
-                        </p>
-                    </div>
                     <div class="line-list">
                         工种：<span>{{orderBase.work_type}}</span>
-                        <p  
-                            v-if="orderBase.type == 1 || orderBase.type == 3"
-                            @click="openChangeOrderDialog('work_type','工种')" class="change">
-                            <img src="./orderConfig/images/change.svg" alt="">
-                        </p>
                     </div>
                     <div class="line-list">
                         工作时间：<span>{{orderBase.service_duration}}</span>
-                        <p  
-                            v-if="orderBase.type == 1 || orderBase.type == 3"
-                            @click="openChangeOrderDialog('service_duration','工作时间')" class="change">
-                            <img src="./orderConfig/images/change.svg" alt="">
-                        </p>
                     </div>
                     <div class="line-list">
                         工资：<span>{{orderBase.wage}}</span>
-                        <p  
-                            v-if="orderBase.type == 1 || orderBase.type == 3"
-                            @click="openChangeOrderDialog('wage','工资')" class="change">
-                            <img src="./orderConfig/images/change.svg" alt="">
-                        </p>
                     </div>
                     <div class="line-list">
                         服务地址： <span>{{orderBase.service_address}}</span>
-                        <p  
-                            v-if="orderBase.type == 1 || orderBase.type == 3"
-                            @click="openChangeOrderDialog('service_address','服务地址')" class="change">
-                            <img src="./orderConfig/images/change.svg" alt="">
-                        </p>
                     </div>
                     <div class="line-list">
                         订单详情：<span>{{orderBase.order_details}}</span>
-                        <p  
-                            v-if="orderBase.type == 1 || orderBase.type == 3"
-                            @click="openChangeOrderDialog('order_details','订单详情')" class="change">
-                            <img src="./orderConfig/images/change.svg" alt="">
-                        </p>
                     </div>
                 </div>
             </div>
-            <change-order-dialog
-                v-if="orderFieldVisible"
-                :orderId="orderBase.id"
-                :changeOrderField="changeOrderField"
-                @closeChangeDialog="closeChangeDialog"
-                :orderFieldVisible="orderFieldVisible"></change-order-dialog>
             <div class="order-message" v-if="orderBase.type == 1 || orderBase.type == 3">
                 <div class="title">
                     <div class="title-contains">
@@ -138,7 +69,16 @@
 
                         <el-table-column label="姓名" prop="staff_name" align="center"></el-table-column>
 
-                        <el-table-column label="头像" prop="staff_icon" align="center"></el-table-column>
+                        <el-table-column label="头像" prop="staff_icon" align="center">
+                            <template slot-scope="scope">
+                                <el-popover trigger="click" placement="top">
+                                    <img :src="scope.row.icon?'./resource/'+scope.row.icon:''" alt="" style="height: 200px; width: 200px;">
+                                    <div slot="reference" style="height: 30px;width: 30px;margin: 0 auto;">
+                                        <img :src="scope.row.icon?'./resource/'+scope.row.icon:''" alt="" style="height: 30px;width: 30px;">
+                                    </div>
+                                </el-popover>
+                            </template>
+                        </el-table-column>
 
                         <el-table-column label="电话" prop="staff_phone" align="center"></el-table-column>
 
@@ -152,110 +92,19 @@
 
                         <el-table-column label="操作" align="center" width="300">
                             <template slot-scope="scope">
-                                <el-button type="success" @click="goSignOrder(scope.row)" size="mini">签约</el-button>
-                                <el-button type="danger" @click="refuseService(scope.row)" size="mini">拒绝</el-button>
                                 <el-button type="primary" @click="goStaffDetail(scope.row)" size="mini">详情</el-button>
                                 <!-- 只有添加人才能删除 -->
                                 <el-button 
                                     type="danger" 
                                     size="mini"
                                     @click="deleteMatchStaff(scope.row)" 
-                                    v-if="presentUser.id == scope.row.create_manager_id">删除</el-button>
+                                    v-if="presentUser.id == scope.row.created_manager_id">删除</el-button>
                             </template>
                         </el-table-column>
                         
                     </el-table>
                 </div>
-            </div>
-
-            <div class="order-message" v-if="orderBase.type != 1">
-                <div class="title">
-                    <div class="title-contains">
-                        <div class="left">合同列表</div>
-                    </div>
-                </div>
-                <div class="order-list">
-                    <contract-list :staffTable="contractTable"></contract-list>
-                    <refuse-service-dialog
-                        v-if="refuseServiceDialogVisible"
-                        :refuseServiceDialogVisible="refuseServiceDialogVisible"
-                        @claseRefuseDialog="refuseServiceDialogVisible=false"
-                        :matched_staff="matched_staff"></refuse-service-dialog>
-                </div>
-            </div>
-            
-            <div class="order-message" v-if="orderBase.type != 1">
-                <div class="title">
-                    <div class="title-contains">
-                        <div class="left">签约客户信息</div>
-                    </div>
-                </div>
-                <div class="order-list">
-                    <div class="line-two-list">
-                        姓名：<span>{{orderBase.sign_user_name}}</span>
-                    </div>
-                    <div class="line-two-list">
-                        电话：<span>{{orderBase.sign_user_phone}}</span> 
-                    </div>
-                    <div class="line-two-list">
-                        身份证号：<span>{{orderBase.sign_user_identify}}</span> 
-                    </div>
-                </div>
-            </div>
-
-            <div class="order-message" v-if="orderBase.type != 1">
-                <div class="title">
-                    <div class="title-contains">
-                        <div class="left">签约服务人员信息</div>
-                    </div>
-                </div>
-                <div class="order-list">
-                    
-                    <div class="line-two-list">
-                        编号：<span>{{orderBase.sign_staff_code}}</span> 
-                    </div>
-                    <div class="line-two-list">
-                        身份证号：<span>{{orderBase.sign_staff_identify}}</span> 
-                    </div>
-                    <div class="line-two-list">
-                        姓名：<span>{{orderBase.sign_staff_name}}</span>
-                    </div>
-                    <div class="line-two-list">
-                        电话：<span>{{orderBase.sign_staff_phone}}</span> 
-                    </div>
-                    <div class="line-list">
-                        户籍地址：<span>{{orderBase.sign_staff_law_address}}</span> 
-                    </div>
-                    <div class="line-list">
-                        现住址：<span>{{orderBase.sign_staff_cur_address}}</span> 
-                    </div>
-                    <div class="line-list">
-                        紧急联系人：<span>{{orderBase.sign_staff_urgent}}</span> 
-                    </div>
-                </div>
-            </div>
-            
-            <div class="order-message">
-                <div class="title">
-                    <div class="title-contains">
-                        <div class="left">日志列表</div>
-                    </div>
-                </div>
-                <div class="order-list">
-                    <!-- 日志列表 -->
-                    <el-table :data="orderLogTable" class="person-table" :header-cell-style="{height: '48px',background: '#fafafa'}">
-                        <el-table-column label="创建时间" prop="created_at" align="center"></el-table-column>
-
-                        <el-table-column label="管理员姓名" prop="manager_name" align="center"></el-table-column>
-
-                        <el-table-column label="日志内容" prop="message" align="center"></el-table-column>
-
-                        <el-table-column label="操作" align="center">
-                            <el-button size="mini">查看</el-button>
-                        </el-table-column>
-                    </el-table>
-                </div>
-            </div>   
+            </div>  
                      
         </div>
     </div>
@@ -263,11 +112,7 @@
 <script>
     import {operateService, $utils, saleService} from '../../../common'
     import {
-        refuseServiceDialog,
-        assignDialog,
-        matchServiceList,
-        contractList,
-        changeOrderDialog} from './orderConfig/index.js'
+        matchServiceList,} from './orderConfig/index.js'
     import {
         tableTagComponent} from '@/pages/components'
 export default {
@@ -280,42 +125,6 @@ export default {
                 {id: 2, name: '已签约'},
                 {id: 3, name: '已拒绝'},
             ],
-            //订单字段更改弹窗显示隐藏
-            orderFieldVisible: false,
-            //订单字段更改
-            changeOrderField: {
-                field: '',
-                fieldName: '',
-                value: '',
-            },
-            contratcPagination: {
-                total: 0,
-                currentPage: 1,
-                pageNumber: 10,
-            },
-            //订单日志列表
-            orderLogTable: [],
-            //合同列表
-            contractTable: [{
-                contact_code:'string',//合同编号
-                type: '',//合同状态
-                // created_at:'string',//印制时间
-                // manageDepartment:'string',//责任部门
-                // manager:'string',//责任人
-                // contract_status:'string',// 合同状态
-                // isSign:'Boolean',//是否签约
-                // firstParty:'string',//甲方签约人
-                // firstPartyId:'string',//甲方签约人id
-                // secondParty:'string',//乙方签约人
-                // secondPartyId:'string',//乙方签约人id
-                // signManager:'string',// 签约管家
-                // signManagerId:'string',// 签约管家id
-                // signed_at:'string',// 签约时间               
-            }],
-            refuseServiceDialogVisible: false,//拒绝服务人员显示隐藏
-            //分配弹出框显示
-            assignDialogVisible:false,
-
             matched_staff: null,//备选服务人员信息对象
         }
     },
@@ -328,20 +137,10 @@ export default {
         }
     },
     components: {
-        refuseServiceDialog,
-        assignDialog,
         matchServiceList,
-        contractList,
-        changeOrderDialog,
         tableTagComponent
     },
     computed:{
-        /**
-         * 
-         */
-        workerConfigList(){
-            return this.$store.state.operateModule.workerConfigForm
-        },
         /**
          * 当前用户信息
          */
@@ -362,23 +161,6 @@ export default {
         }
     },
     methods: {
-        /**
-         * 更改订单字段弹窗
-         * @param filed 字段
-         * @param filedName 字段名
-         */
-        openChangeOrderDialog(field,fileName){
-            this.changeOrderField.field = field;
-            this.changeOrderField.fieldName = fileName;
-            this.changeOrderField.value = this.orderBase[field]
-            this.orderFieldVisible = true
-        },
-        /**
-         *  */ 
-        async closeChangeDialog(){
-            this.orderFieldVisible = false
-            await this.getOrder()
-        },
         /**
          * 获取订单信息
          */
@@ -418,29 +200,6 @@ export default {
                 queryedList: val
             })
             await this.getTableList()
-        },
-
-/*********************备选服务人员列表****************************************************/
-        /**
-         * 跳转至签约页面
-         * @param paramObj 匹配服务人员信息对象
-         */
-        goSignOrder(paramObj){
-            this.$router.push({
-                path: `/sale/saleSignPage`,
-                query: {
-                    id: this.order_id,
-                    sign_staff_id: paramObj.id
-                }
-            })
-        },
-        /**
-         * 拒绝劳动者
-         * @param paramObj 匹配服务人员信息对象
-         */
-        refuseService(paramObj){
-            this.matched_staff = paramObj
-            this.refuseServiceDialogVisible = true
         },
         /**
          * 跳转至服务人员详情
@@ -502,26 +261,12 @@ export default {
                 store.commit('setLoading',false)
             }
         },
-        /********************订单操作栏***************************************/
-        /**
-         * 分派订单
-         */
-        assignOrder(){
-            this.assignDialogVisible = true
-        },
         /**
          * 返回
          */
         goback(){
             this.$router.push('/sale/orderList')
         },
-        /**
-         * 终止订单
-         */
-        determinateOrder(){
-            
-        },
-        /******* */
  
     },
     async mounted(){

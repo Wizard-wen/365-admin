@@ -149,11 +149,19 @@ export const sale_orderContractRequest = {
     /**
      * 获取合同列表
      */
-    getContractList(){
-        return axios.post(
-            `./admin/order/getContractList`,
-            store.state.saleModule.contractList
-        )
+    getContractList(type){
+        if(type == 1){
+            return axios.post(
+                `./admin/order/getContractList`,
+                store.state.saleModule.contractList
+            )
+        } else if (type == 2){
+            return axios.post(
+                `./admin/order/getContractList`,
+                store.state.operateModule.contractList
+            )
+        }
+
     },
     /**
      * 终止合同

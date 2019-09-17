@@ -333,6 +333,12 @@ export const operate_contract = {
      */
     assignVoidContract(paramObj){
         return axios.post(`./admin/order/assignVoidContract`,paramObj)
+    },
+    /**
+     * 签约时，销售的空合同
+     */
+    getManagerVoidContractSelection(){
+        return axios.get(`./admin/order/getManagerVoidContractSelection`)
     }
 }
 export default {

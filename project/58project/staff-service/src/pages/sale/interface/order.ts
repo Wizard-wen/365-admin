@@ -19,7 +19,7 @@ export interface applyOrderObject {
     apply_manager_id:string;// 来源人id
 
     //申请
-    create_manager_id:string;//申请创建人id
+    created_manager_id:string;//申请创建人id
     create_manager_name:string;//申请创建人
     create_at:string;//申请创建时间
     
@@ -152,7 +152,7 @@ export interface matchServiceItem {
     staff_icon:string;//头像
     staff_phone:string;//电话
     type:number;// 签约状态
-    create_manager_id:string;// 添加人id
+    created_manager_id:string;// 添加人id
     create_manager_name:string;// 添加人
 }
 
@@ -163,7 +163,7 @@ export interface matchServiceItem {
 
 export interface signItem{
 
-
+    contract_number: 'string';//合同编号
     sign_user_name:string;// 雇主
     sign_user_id:string;//雇主id
     sign_user_phone:string;// 雇主联系电话
@@ -233,8 +233,8 @@ export interface signItem{
 export interface contractItem{
     id:string;
     order_id:string;//后端关联订单表
-
-    contract_code:string;//合同编号
+    contract_number: string;//合同编号
+    contract_code:string;//合同流水号
     
     /**
      * 1 - 待执行
@@ -365,13 +365,9 @@ export interface voidContractItem {
     created_at: string;//空合同创建时间（筛选）
     assign_at:string;//分派时间（筛选）
     /**
-     * 1 - 已分派
-     * 2 - 已签约
-     */
-    is_assigned:string;//是否已经分派（筛选）
-    /**
-     * 1 - 未签约
-     * 2 - 已签约
+     * 1 - 空合同
+     * 2 - 已分派
+     * 3 - 已签约
      */
     type:string;//是否已经签约（筛选）
     manager_id:string;//经纪人id

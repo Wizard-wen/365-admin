@@ -22,7 +22,7 @@ export default {
     },
     computed:{
         orderFormConfig(){
-            return this.$store.state.operateModule.orderFormConfig
+            return this.$store.state.saleModule.saleContractConfigForm
         },
         queryedList(){
             return this.$store.state.saleModule.contractList

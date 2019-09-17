@@ -49,8 +49,7 @@ export default {
         }
         return {
             assignVoidContractForm: {
-                order_id: this.voidContractId,
-                manager_name: '',
+                id: this.voidContractId,
                 manager_id: 0,
             },
             selectionList: [],
@@ -77,14 +76,9 @@ export default {
             let _this = this
             this.$refs[formName].validate(async (valid) => {
                 if (valid) {
-                    let selectedObject = _this.selectionList.find((item, index) =>{
-                        return item.manager_id == _this.assignVoidContractForm.manager_id
-                    })
-                    this.assignVoidContractForm.manager_name = selectedObject.manager_name
-                    this.assignVoidContractForm.version = this.$store.state.saleModule.order.version
                     try{
                         this.loading = true
-                        await saleService.assignVoidContract(this.assignVoidContractForm).then((data) =>{
+                        await operateService.assignVoidContract(this.assignVoidContractForm).then((data) =>{
                             if(data.code == "0"){
                                 this.$message({
                                     type:'success',

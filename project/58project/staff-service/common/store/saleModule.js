@@ -30,7 +30,29 @@ var order_service_contains = [
     {id: 8,name: '家庭餐制作'},
     {id: 9,name: '其他'},
 ]
-
+/**
+ * 合同状态
+ */
+export const contract_type = [
+    {name: '待执行',id: 1},
+    {name: '执行中',id: 2},
+    {name: '已终止',id: 3},
+]
+/**
+ * 创建于
+ */
+export const created_at = [
+    {id: 1, name: "今天"}, 
+    {id: 2, name: "昨天"}, 
+    {id: 3, name: "过去7天"}, 
+    {id: 4, name: "过去30天"}, 
+    {id: 5, name: "本周"}, 
+    {id: 6, name: "上周"}, 
+    {id: 7, name: "上个月"}, 
+    {id: 8, name: "本季度"}, 
+    {id: 9, name: "今年"}, 
+    {id: 10, name: "去年"}, 
+]
 export const saleModule = {
     state: {
         order: [],//订单基本信息
@@ -45,6 +67,12 @@ export const saleModule = {
         
         orderworkerConfigForm: {
             ...order_status,
+        },
+        saleContractConfigForm: {
+            type: contract_type,
+            sign_at: created_at,//签约时间 
+            sign_manager_id: [],//签约经纪人
+            sign_store_id: [],//签约经纪门店
         },
         /**
          *  服务人员信息库查询字段 
@@ -186,19 +214,20 @@ export const saleModule = {
             /*********************表格字段查询******************************/
             page: 1, //请求页码
             pageNumber: 10,//单页信息数量
-            contract_code:'',//合同编号
+            contract_code:'',//合同流水号
+            contract_number:'',//合同编号
 
 
-            // type: [],//合同状态
-            // sign_at: [],//签约时间 
-            // sign_manager_id: [],//签约经纪人
-            // sign_store_id: [],//签约经纪门店
+            type: [],//合同状态
+            sign_at: [],//签约时间 
+            sign_manager_id: [],//签约经纪人
+            sign_store_id: [],//签约经纪门店
 
-            // sign_user_name: '',//雇主
-            // sign_user_phone:'',//雇主电话
+            sign_user_name: '',//雇主
+            sign_user_phone:'',//雇主电话
 
-            // sign_staff_name:'',//签约家政服务员
-            // sign_staff_code: '',//签约家政服务员员工号
+            sign_staff_name:'',//签约家政服务员
+            sign_staff_code: '',//签约家政服务员员工号
         }, //全部查询参数
     },
     mutations: {
@@ -239,6 +268,11 @@ export const saleModule = {
         //设置合同列表查询字段
         saleSetContractList(state,payload){
             state.contractList[payload.queryKey] = payload.queryedList
+        },
+        //设置合同相关搜索接口
+        setSaleContractConfigForm(state,saleContractConfigForm){
+            state.saleContractConfigForm.sign_manager_id = saleContractConfigForm.apply_manager_id
+            state.saleContractConfigForm.sign_store_id = saleContractConfigForm.apply_store_id
         },
     },
 }

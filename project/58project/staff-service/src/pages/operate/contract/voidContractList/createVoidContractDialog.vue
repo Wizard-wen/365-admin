@@ -9,12 +9,12 @@
         :close-on-click-modal="false">
         <el-form ref="voidContractForm" class="assign-form" :model="voidContractForm" :rules="voidContractRules" label-width="120px">
             <el-form-item label="合同编号" prop="contract_number">
-                <el-input :v-model="voidContractForm.contract_number"></el-input>
+                <el-input v-model="voidContractForm.contract_number"></el-input>
             </el-form-item>
         </el-form>
         <div slot="footer" class="dialog-footer">
             <el-button @click="closeVoidContractCreateDialog">取 消</el-button>
-            <el-button type="primary" @click="createVoidContract('voidContractForm')">分 配</el-button>
+            <el-button type="primary" @click="createVoidContract('voidContractForm')">创 建</el-button>
         </div>
     </el-dialog>
 

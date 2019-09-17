@@ -131,9 +131,10 @@ export const sale_orderContractRequest = {
     },
     /**
      * 获取合同列表
+     * @param type 运营请求还是门店请求
      */
-    getContractList(){
-        return saleRequest.getContractList()
+    getContractList(type){
+        return saleRequest.getContractList(type)
     },
     /**
      * 终止合同
