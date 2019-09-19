@@ -22,10 +22,10 @@ export default {
     },
     computed:{
         orderFormConfig(){
-            return this.$store.state.operateModule.orderFormConfig
+            return this.$store.state.operateModule.voidContractConfigForm
         },
         queryedList(){
-            return this.$store.state.operateModule.contractList
+            return this.$store.state.operateModule.voidContractList
         },
         queryListLength(){
             return this.queryTag.reduce((allNumber, item, index) =>{

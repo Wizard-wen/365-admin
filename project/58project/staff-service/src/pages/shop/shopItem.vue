@@ -7,7 +7,7 @@
 		</div>
 		<div class="btn-group">
 			<el-button size="mini" @click="goback">返回</el-button>
-			<el-button size="mini">修改</el-button>
+			<el-button size="mini" @click="editStore">修改</el-button>
 		</div>
 		<div class="shop-detail">
 			<div class="detail-left">
@@ -15,8 +15,7 @@
 					<div class="detail-left-line">创建人：{{ shopDetail.manager_name }}</div>
 					<div class="detail-left-line">创建时间：{{ shopDetail.created_at | formDate }}</div>
 					<div class="detail-left-line">门店类型：{{shopDetail.is_third == 1 ? '直营店': shopDetail.is_third == 2 ?'加盟店': ''}}</div>
-					<!-- <div class="detail-left-line">门店负责人：</div> -->
-					<!-- <div class="detail-left-line">门店状态：{{shopDetail.type == 'enable'?'正常':'停业'}}</div> -->
+					<div class="detail-left-line">门店负责人：</div>
 					<div class="detail-left-line">门店地址：{{shopDetail.address}}</div>
 				</div>
 			</div>
@@ -39,7 +38,7 @@
 					员工列表
 				</div>
 				<div class="control">
-					<el-button size="small" type="primary" @click="edit">编辑</el-button>
+					<el-button size="small" type="primary" @click="editStore">编辑</el-button>
 				</div>
 			</div>
 			<div class="card-contains">
@@ -49,13 +48,16 @@
 
 					<el-table-column label="姓名" prop="name" align="center"></el-table-column>
 
+					<el-table-column label="职位" prop="name" align="center"></el-table-column>
+
 					<el-table-column label="电话" prop="phone" align="center"></el-table-column>
 
-					<!-- <el-table-column label="操作" align="center"> -->
-						<!-- <template slot-scope="scope">
-						<el-button size="mini" @click="deleteStore(scope.$index, scope.row)">解绑</el-button>
-						</template> -->
-					<!-- </el-table-column> -->
+					<el-table-column label="操作" align="center">
+						<template slot-scope="scope">
+							<el-button size="mini" type="primary" @click="showStaffDetail(scope.row)">查看</el-button>
+							<el-button size="mini" type="danger" @click="deleteManager(scope.row)">解绑</el-button>
+						</template>
+					</el-table-column>
 				</el-table>
 			</div>
 		</div>
@@ -77,124 +79,82 @@ export default {
     };
   },
   methods: {
-    //改变表单的显示隐藏状态
-    changeFormState() {
-      this.isShow = !this.isShow;
-    },
-    /**
-     * 解绑账号
-     */
-    async deleteStore(index, row) {
-      let response = await this.$confirm("确定解绑该账户吗", "提示", {
-        confirmButtonText: "确定",
-        cancelButtonText: "取消",
-        type: "warning"
-      }).catch(() => {
-        this.$message({
-          type: "info",
-          message: "已取消删除"
-        });
-      });
-      if (response == "confirm") {
-        store.commit("setLoading", 1);
-        try {
-          await shopService
-            .deleteStore(row.id)
-            .then(data => {
-              if (data.code == 0) {
-                this.$message({
-                  type: "success",
-                  message: "删除成功"
-                });
-              }
-            })
-            .catch(data => {
-              this.$message({
-                type: "error",
-                message: e.message
-              });
-            });
-        } catch (e) {
-          throw error;
-        }
-        this.getStore();
-        store.commit("setLoading", false);
-      }
-      this.$router.push({
-        path: "/shop/shopItem",
-        query: {
-          type: 1, //编辑为1
-          id: row.id
-        }
-      });
-    },
     /**
      * 获取门店列表
      */
-    async getStore() {
-      await shopService
-        .getStore(this.$route.query.id)
-        .then(data => {
-          if (data.code == "0") {
-            this.shopDetail = {...data.data.store};
-          }
-        })
-        .catch(error => {
-          this.$message({
-            type: "error",
-            message: error.message
-          });
+    async getStore(){
+      	await shopService.getStore(this.$route.query.id).then(data => {
+			if (data.code == "0") {
+				this.shopDetail = {...data.data.store};
+			}
+		}).catch(error => {
+			this.$message({
+				type: "error",
+				message: error.message
+			});
         });
-    },
-    //获取绑定的员工列表
-    async getSalePersonList() {
-      let tableOption = {
-        pageNumber: 10,
-        id: this.$route.query.id
-      };
-
-      try {
-        await shopService
-          .getStoreManagerList(tableOption)
-          .then(data => {
-            if (data.code == "0") {
-              this.salesPersonTable = [...data.data.data];
-            }
-          })
-          .catch(error => {
-            this.$message({
-              type: "error",
-              message: error.message
-            });
-          })
-      } catch (error) {
-        this.$message({
-          type: "error",
-          message: error.message
-        });
-      }
     },
     /**
-     * 编辑
+	 * 获取当前门店已绑定员工列表
+	 */
+    async getSalePersonList() {
+		let tableOption = {
+			pageNumber: 10,
+			id: this.$route.query.id
+		};
+
+		try {
+			await shopService.getStoreManagerList(tableOption).then(data => {
+				if (data.code == "0") {
+					this.salesPersonTable = [...data.data.data];
+				}
+			}).catch(error => {
+				this.$message({
+					type: "error",
+					message: error.message
+				});
+			})
+		} catch (error) {
+			this.$message({
+				type: "error",
+				message: error.message
+			});
+		}
+	},
+	/**
+	 * 查看员工详情
+	 */
+	showStaffDetail(paramObj){
+
+	},
+	/**
+	 * 解绑员工
+	 */
+	deleteManager(paramObj){
+
+	},
+    /**
+     * 编辑门店信息
      */
-    edit() {
-      this.$router.push({
-        path: "/shop/shopEdit",
-        query: {
-          type: 1,
-          id: this.$route.query.id
-        }
-      });
-    },
+    editStore() {
+		this.$router.push({
+			path: "/shop/shopEdit",
+			query: {
+				type: 1,
+				id: this.$route.query.id
+			}
+		});
+	},
+	//返回
     goback(){
-      this.$router.push('/shop/shopList')
+      	this.$router.push('/shop/shopList')
     }
   },
-  filters: {
-      formDate(timestamp){
-          return $utils.formatDate(new Date(timestamp), 'yyyy-MM-dd')
-      }
-  },
+	filters: {
+		formDate(timestamp){
+			return $utils.formatDate(new Date(timestamp), 'yyyy-MM-dd')
+		}
+	},
   mounted() {
     this.getStore();
     this.getSalePersonList();

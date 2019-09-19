@@ -30,6 +30,8 @@
                 
                 <el-table-column  label="所属经纪人" prop="manager_name" align="center" width="" ></el-table-column>
 
+                <el-table-column  label="分派时间" prop="assign_at" align="center" width="" :formatter="assign_atFormatter"></el-table-column>
+
                 <el-table-column label="操作" align="center" fixed="right" width="">
                     <template slot-scope="scope">
                         <slot name="control" v-bind:scoper="scope"></slot>
@@ -110,6 +112,15 @@
                 }
                 return $utils.formatDate(new Date(row.created_at), 'yyyy-MM-dd')
             },
+            /**
+             * 空合同分派时间
+             */
+            assign_atFormatter(row, column){
+                if(row.assign_at == 0){
+                    return '-'
+                }
+                return $utils.formatDate(new Date(row.assign_at), 'yyyy-MM-dd')
+            }
 
         },
     }

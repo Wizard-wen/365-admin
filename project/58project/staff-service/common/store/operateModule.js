@@ -46,6 +46,14 @@ export const contract_type = [
     {name: '执行中',id: 2},
     {name: '已终止',id: 3},
 ]
+/**
+ * 空合同状态
+ */
+export const voidContractType = [
+    {id: 1, name: '空合同'},
+    {id: 2, name: '未签约'},
+    {id: 3, name: '已签约'},
+]
 export const operateModule = {
     mutations:{
         //设置服务人员搜索配置字段
@@ -66,7 +74,10 @@ export const operateModule = {
             state.orderFormConfig.agent_store_id = orderFormConfig.apply_store_id
             state.orderFormConfig.created_manager_id = orderFormConfig.apply_manager_id
         },
-
+        //设置空合同搜索相关标签
+        setVoidContractConfigForm(state, voidContractConfigForm){
+            state.voidContractConfigForm.manager_id = voidContractConfigForm.apply_manager_id
+        },
         /** 
          * 列表查询函数公共键值说明
          * @param queryKey queryList 键名 
@@ -140,6 +151,13 @@ export const operateModule = {
             sign_at: created_at,//签约时间 
             sign_manager_id: [],//签约经纪人
             sign_store_id: [],//签约经纪门店
+        },
+        //空合同搜索列表筛选
+        voidContractConfigForm: {
+            type: voidContractType,
+            created_at: created_at,
+            assign_at: created_at,
+            manager_id: [],
         },
         // 回访服务人员查询
         returnWorkerList: {
@@ -272,7 +290,7 @@ export const operateModule = {
          * 空合同查询字段
          */
         voidContractList: {
-            contract_nmuber:'string',//空合同编号（筛选）
+            contract_number:'',//空合同编号（筛选）
             created_at: [],//空合同创建时间（筛选）
             assign_at:[],//分派时间（筛选）
             type:[],//是否已经签约（筛选）

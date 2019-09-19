@@ -42,7 +42,7 @@ export default {
     },
     computed: {
         inputText(){
-            return this.$store.state.operateModule.contractList[this.queryKey]
+            return this.$store.state.operateModule.voidContractList[this.queryKey]
         }
     },
     methods: {
@@ -57,7 +57,7 @@ export default {
          */
         addQuery(){
             //将查询组件数据变化存入vuex
-                this.$store.commit('setContractList', {
+                this.$store.commit('setVoidContractList', {
                     queryKey: this.queryKey, 
                     queryedList: this.searchText
                 })

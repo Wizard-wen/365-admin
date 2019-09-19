@@ -300,7 +300,9 @@ export default {
                 /**
                  * is_wage 1 未发放工资 2 已发放工资
                  */
+                console.log(this.contractBase.is_wage )
                 if(this.contractBase.is_wage == 1){
+                    debugger
                     this.determinateContractDialogVisible = true
                 } else {
                     await this.determinateContract()

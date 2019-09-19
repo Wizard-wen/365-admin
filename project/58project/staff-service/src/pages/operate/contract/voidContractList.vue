@@ -17,7 +17,7 @@
             </template>
             
             <template slot="control" slot-scope="controler">
-                <el-button type="text" size="mini" @click="openAssignVoidContractDialog( controler.scoper.row)">分派</el-button>
+                <el-button type="text" size="mini" v-if="controler.scoper.row.type == 1" @click="openAssignVoidContractDialog( controler.scoper.row)">分派</el-button>
             </template>
 
             <template slot="pagination">
@@ -106,12 +106,17 @@
                     this.isLoaded = true
 
                     
-                    await operateService.getVoidContractList().then((data) =>{
+                    await Promise.all([
+                        operateService.getVoidContractList(),
+                        operateService.getOrderFormConfig()
+                    ]).then((data) =>{
 
-                        this.contractList = data.data.data
+                        this.contractList = data[0].data.data
                         //分页信息
-                        this.pagination.currentPage = data.data.current_page //当前页码
-                        this.pagination.total = data.data.total //列表总条数
+                        this.pagination.currentPage = data[0].data.current_page //当前页码
+                        this.pagination.total = data[0].data.total //列表总条数
+                        //配置订单相关标签
+                        this.$store.commit('setVoidContractConfigForm',data[1].data)
                     }).catch(error =>{
                         this.$message({
                             type:'error',

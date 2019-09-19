@@ -2,38 +2,37 @@
 <div>
 
   <el-tabs :tab-position="tabPosition" >
-    <el-tab-pane label="基本信息">
+    <el-tab-pane label="员工基本信息">
         <el-form label-width="120px" ref="baseForm" :model="baseForm" class="baseForm">
             <el-form-item label="账号"  prop="account">
                 <el-input v-model="baseForm.account" :maxlength="20" :disabled="true" ></el-input>
             </el-form-item>
 
-            <el-form-item label="用户名" prop="name">
-                <el-input autocomplete="off" v-model="baseForm.name" :disabled="true" :maxlength="20"></el-input>
-            </el-form-item>
-
-            <el-form-item label="手机号" prop="phone">
-                <el-input autocomplete="off" v-model="baseForm.phone" :disabled="true" :maxlength="11"></el-input>
+            <el-form-item label="工号" prop="staff_code">
+                <el-input autocomplete="off" v-model="baseForm.staff_code"  :disable="true" :maxlength="20"></el-input>
             </el-form-item>
 
             <el-form-item label="真实姓名" prop="real_name">
                 <el-input autocomplete="off" :disabled="true" v-model="baseForm.real_name" ></el-input>
             </el-form-item>
 
-            <el-form-item label="微信号" prop="wechat">
-                <el-input autocomplete="off" :disabled="true" v-model="baseForm.wechat"></el-input>
-            </el-form-item>
-
             <el-form-item label="所属部门" prop="department_id">
                 <el-input v-model="baseForm.department_id" :disabled="true"></el-input>
             </el-form-item>
+            <el-form-item>
+                <el-button type="primary">确认更改</el-button>
+            </el-form-item>
         </el-form>
     </el-tab-pane>
-    <el-tab-pane label="个人信息">
+    <el-tab-pane label="员工个人信息">
         <el-form label-width="120px" ref="personalInfoForm" :model="personalInfoForm" class="personalInfoForm">
 
-            <el-form-item label="昵称" prop="nickname">
-                <el-input autocomplete="off" v-model="personalInfoForm.nickname" ></el-input>
+            <el-form-item label="用户名" prop="user_name">
+                <el-input autocomplete="off" v-model="personalInfoForm.user_name" ></el-input>
+            </el-form-item>
+
+            <el-form-item label="手机号" prop="phone">
+                <el-input autocomplete="off" v-model="personalInfoForm.phone" ></el-input>
             </el-form-item>
 
             <el-form-item label="生日" prop="birthday">
@@ -59,6 +58,9 @@
             <el-form-item label="现住址" prop="current_adderss">
                 <el-input v-model="personalInfoForm.current_adderss"></el-input>
             </el-form-item>
+            <el-form-item>
+                <el-button type="primary">确认更改</el-button>
+            </el-form-item>
         </el-form>
     </el-tab-pane>
     <el-tab-pane label="更改密码">
@@ -77,7 +79,7 @@
             </el-form-item>
         </el-form>
     </el-tab-pane>
-    <el-tab-pane label="更改手机号">
+    <!-- <el-tab-pane label="更改手机号">
         <el-form label-width="120px" ref="changePhoneForm" :model="changePhoneForm" class="changePhoneForm">
             <el-form-item label="原手机号">
                 <el-input type="password" v-model="changePhoneForm.originPhone"></el-input>
@@ -92,7 +94,7 @@
                 <el-button type="primary">确认更改</el-button>
             </el-form-item>
         </el-form>
-    </el-tab-pane>
+    </el-tab-pane> -->
   </el-tabs>
 </div>
 
@@ -107,15 +109,17 @@
                 newPassword: '',//新密码
                 reNewPassword: '',//确认新密码
             },
+            //账号基本信息
             baseForm: {
-                account: '',
-                name: '',
-                phone: '',
-                real_name: '',
-                wechat: '',
+                account: '',//账号
+                staff_code: '',//员工号
+                real_name: '',//真实姓名
+                departmeng_id: '',//所属部门
             },
+            //用户个人信息
             personalInfoForm: {
-                nickname: '',//昵称
+                user_name: '',//用户名
+                phone: '',//手机号
                 birthday: '',//生日
                 email: '',//邮箱
                 wechat: '',//微信
@@ -123,6 +127,7 @@
                 urgent: '',//紧急联系人
                 current_adderss: '',//现住址
             },
+            //更改密码
             changePhoneForm: {
                 originPhone: '',//原手机号
                 newPhone: '',//新手机号

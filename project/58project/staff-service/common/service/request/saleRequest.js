@@ -161,7 +161,6 @@ export const sale_orderContractRequest = {
                 store.state.operateModule.contractList
             )
         }
-
     },
     /**
      * 终止合同

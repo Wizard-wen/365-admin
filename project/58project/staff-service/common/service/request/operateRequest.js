@@ -318,7 +318,9 @@ export const operate_contract = {
      * 获取空合同列表
      */
     getVoidContractList(){
-        return axios.post(`./admin/order/getVoidContractList`)
+        return axios.post(`./admin/order/getVoidContractList`,{
+            ...store.state.operateModule.voidContractList
+        })
     },
     /**
      * 创建空合同列表

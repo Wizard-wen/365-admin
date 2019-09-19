@@ -176,9 +176,24 @@ export default {
     components: {
         applyOrderDialog,
     },
+    computed: {
+        /**
+         * 当前用户信息
+         */
+        presentUser(){
+            return this.$store.state.loginModule.user
+        }
+    },
     methods: {
         //打开订单申请弹窗
         openOrderApplyDialog(){
+            if(this.presentUser.store_id == 0){
+                this.$message({
+                    message: '您不能创建订单申请',
+                    type: 'error'
+                })
+                return;
+            }
             this.applyOrderDialogVisible = true
         },
         //跳转至服务人员信息页

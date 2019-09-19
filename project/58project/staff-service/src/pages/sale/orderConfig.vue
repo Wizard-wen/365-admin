@@ -19,7 +19,7 @@
                         <div class="detail-left-line">创建人：{{ orderBase.created_manager_name }}</div>
                         <div class="detail-left-line">创建时间：{{orderBase.created_at | timeFomatter}}</div>
                         <div class="detail-left-line">来源门店：{{orderBase.apply_store_name}}</div>
-                        <div class="detail-left-line">来源人：{{orderBase.apply_manager_name}}</div>
+                        <div class="detail-left-line">来源人：{{orderBase.apply_manager_id == 0 ? '门店' : orderBase.apply_manager_name}}</div>
                         <div
                             v-if="orderBase.type != 1" 
                             class="detail-left-line">签约时间：{{orderBase.sign_service_start | timeFomatter}}</div>
