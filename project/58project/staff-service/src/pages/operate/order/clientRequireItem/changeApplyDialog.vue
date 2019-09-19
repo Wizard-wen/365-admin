@@ -79,7 +79,7 @@ export default {
         },
         async onSubmit(formName){
             //校验并提交
-            await operateService.editClientContract(this.orderApplyField).then(data =>{
+            await operateService.editClientRequire(this.orderApplyField).then(data =>{
                         if(data.code == '0'){
                             this.$message({
                                 type:"success",
