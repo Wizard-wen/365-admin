@@ -203,8 +203,16 @@ export const operate_clientRequest = {
      * 客户端订单编辑
      * @param obj 编辑对象
     */
-    editClientContract(obj){
-      return operateRequest.editClientContract(obj)
+   editClientRequire(obj){
+      return operateRequest.editClientRequire(obj)
+    },
+    /**
+     * 客户端改变客户意向动态
+     * @param id
+     * @param type 状态 （待处理：1，拒绝：2，通过：3）
+    */
+    changeRequireType(id,type){
+      return operateRequest.changeRequireType(id,type)
     }
 }
 
