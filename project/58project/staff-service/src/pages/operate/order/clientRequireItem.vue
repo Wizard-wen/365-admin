@@ -300,7 +300,7 @@ export default {
          */
         addLog() {
             // this.$router.push({
-            //     path: "/orderApply/shopEdit",
+            //     path: "/orderApply/storeEdit",
             //     query: {
             //         type: 1,
             //         id: this.$route.query.id

@@ -36,7 +36,7 @@
                 <div class="detail-right">
                     <div class="right-box">
                         <div class="title">合同状态</div>
-                        <div class="value">{{ contractBase.type | contractTypeFormatter}}</div>
+                        <div class="value" :style="{color: contractType.color}">{{ contractType.name}}</div>
                     </div>
                     <div class="right-box" v-if="contractBase.type != 3">
                         <div class="title">是否发放工资</div>
@@ -167,7 +167,43 @@
                         <div class="left">结算信息</div>
                     </div>
                 </div>
-                <div class="order-list">
+                <div class="order-list" >
+                    <div v-if="is_settle == 1">
+                        <div class="line-list">
+                            结算时间：<span>{{contractBase.account.created_at | timeFomatter}}</span>
+                        </div>
+                        <div class="line-list">
+                            服务期限：
+                            <span>
+                                {{contractBase.account.service_start | timeFomatter}}- 
+                                {{contractBase.account.service_end | timeFomatter}}
+                            </span> 
+                        </div>
+                        <div class="line-list">
+                            工作天数：<span>{{contractBase.account.service_days}}</span>
+                        </div>
+                        <div class="line-list">
+                            日工资：<span>{{contractBase.account.daily_wage}}</span>
+                        </div>
+                        <div class="line-list">
+                            首月工资合计：<span>{{contractBase.account.total_wage}}</span>
+                        </div>
+                        <div class="line-list">
+                            服务费扣除：<span>{{contractBase.account.service_cost}}</span>
+                        </div>
+                        <div class="line-list">
+                            其他扣除：<span>{{contractBase.account.other_cost}}</span>
+                        </div>
+                        <div class="line-list">
+                            扣除事由：<span>{{contractBase.account.cost_reason}}</span>
+                        </div>
+                        <div class="line-list">
+                            服务人员实发工资：<span>{{contractBase.account.real_wage}}</span>
+                        </div>
+                        <div class="line-list">
+                            返还客户金额：<span>{{contractBase.account.return_wage}}</span>
+                        </div>
+                    </div>
                    
                 </div>
             </div>
@@ -178,7 +214,39 @@
                     </div>
                 </div>
                 <div class="order-list">
-                   
+                    <div v-if="is_settle == 2">
+                        <div class="line-list">
+                            服务期限：
+                            <span>
+                                {{contractBase.account.service_start | timeFomatter}} - 
+                                {{contractBase.account.service_end | timeFomatter}}
+                            </span> 
+                        </div>
+                        <div class="line-list">
+                            工作天数：<span>{{contractBase.account.service_days}}</span>
+                        </div>
+                        <div class="line-list">
+                            日工资：<span>{{contractBase.account.daily_wage}}</span>
+                        </div>
+                        <div class="line-list">
+                            首月工资合计：<span>{{contractBase.account.total_wage}}</span>
+                        </div>
+                        <div class="line-list">
+                            服务费扣除：<span>{{contractBase.account.service_cost}}</span>
+                        </div>
+                        <div class="line-list">
+                            其他扣除：<span>{{contractBase.account.other_cost}}</span>
+                        </div>
+                        <div class="line-list">
+                            扣除事由：<span>{{contractBase.account.cost_reason}}</span>
+                        </div>
+                        <div class="line-list">
+                            服务人员实发工资：<span>{{contractBase.account.real_wage}}</span>
+                        </div>
+                        <div class="line-list">
+                            返还客户金额：<span>{{contractBase.account.return_wage}}</span>
+                        </div>
+                    </div>
                 </div>
             </div>
             
@@ -196,7 +264,49 @@ export default {
     data(){
         return {
             isLoaded: false,//
-            contractBase: {},//合同信息
+            contractBase: {
+                account: null,
+                contract_code: "",
+                contract_number: "",
+                files: [],
+                id: 0,
+                insurance_benfit: "",
+                insurance_end: '',
+                insurance_start: '',
+                is_wage: 0,
+                order_id: 0,
+                remarks: '',
+                service_contains: '',
+                service_count: "",
+                service_end: '',
+                service_level: 0,
+                service_start: '',
+                service_time: "",
+                service_type: 0,
+                sign_at: '',
+                sign_manager_id: 0,
+                sign_manager_name: "",
+                sign_staff_code: "",
+                sign_staff_cur_address: "",
+                sign_staff_id: 0,
+                sign_staff_identify: "",
+                sign_staff_law_address: "",
+                sign_staff_name: "",
+                sign_staff_phone: "",
+                sign_staff_urgent: "",
+                sign_store_id: 0,
+                sign_store_name: "",
+                sign_user_id: 0,
+                sign_user_identify: "",
+                sign_user_name: "",
+                sign_user_phone: "",
+                staff_deposit: 0,
+                staff_wage: 0,
+                stop_at: 0,
+                type: 0,
+                user_charge: 0,
+                user_pay: 0,
+            },//合同信息
             settleWageDialogVisible: false,//结算工资弹窗显示隐藏
             determinateContractDialogVisible: false, //终止合同弹窗显示隐藏
         }
@@ -207,15 +317,6 @@ export default {
                 return '-'
             }
             return $utils.formatDate(new Date(value), 'yyyy-MM-dd')
-        },
-        contractTypeFormatter(value){
-            if(value == 1){
-                return '待执行'
-            } else if (value == 2){
-                return '执行中'
-            } else {
-                return '已终止'
-            }
         },
         isWagedFormatter(value){
             if(value == 1){
@@ -249,6 +350,33 @@ export default {
         order_service_type(){
             return this.$store.state.saleModule.order_service_type
         },
+        //
+        is_settle(){
+            if(!this.contractBase.account){
+                return 3
+            } else {
+                return this.contractBase.account.type
+            }
+        },
+        //合同状态
+        contractType(value){
+            if(this.contractBase.type == 1){
+                return {
+                    name: '待执行',
+                    color: '#E6A23C'
+                }
+            } else if (this.contractBase.type == 2){
+                return {
+                    name: '执行中',
+                    color: '#67C23A'
+                }
+            } else {
+                return {
+                    name: '已终止',
+                    color: '#F56C6C'
+                }
+            }
+        },
     },
     methods: {
         /**
@@ -259,6 +387,7 @@ export default {
                 this.isLoaded = true
                 await saleService.getContract(this.$route.query.id).then((data) =>{
                     this.contractBase = data.data
+                    this.$set(this.contractBase, 'account', data.data.account) 
                 }).catch(e =>{
                     this.$message({
                         type:'error',
@@ -300,9 +429,7 @@ export default {
                 /**
                  * is_wage 1 未发放工资 2 已发放工资
                  */
-                console.log(this.contractBase.is_wage )
                 if(this.contractBase.is_wage == 1){
-                    debugger
                     this.determinateContractDialogVisible = true
                 } else {
                     await this.determinateContract()

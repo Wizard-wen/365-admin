@@ -1,4 +1,4 @@
-import shopRequest from './request/shopRequest.js'
+import storeRequest from './request/storeRequest.js'
 
 export default {
     /**
@@ -6,20 +6,20 @@ export default {
      * @param obj 搜索字段
      */
     getStoreList(obj){
-        return shopRequest.getStoreList(obj)
+        return storeRequest.getStoreList(obj)
     },
     /**
      * 获取某门店信息信息
      */
     getStore(id){
-        return shopRequest.getStore(id)
+        return storeRequest.getStore(id)
     },
       /**
      * 编辑门店信息
      * @param editObj
      */
     editStore(editObj){
-      return shopRequest.editStore(editObj)
+      return storeRequest.editStore(editObj)
     },
     /**
      * 根据门店id获取门店绑定的账号分页列表
@@ -27,6 +27,6 @@ export default {
      * @param pageNumber 分页
      */
     getStoreManagerList(obj){
-      return shopRequest.getStoreManagerList(obj)
+      return storeRequest.getStoreManagerList(obj)
     }
 }

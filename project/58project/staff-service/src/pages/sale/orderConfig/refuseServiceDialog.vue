@@ -7,9 +7,13 @@
         :close-on-press-escape="false"
         :close-on-click-modal="false">
         <el-form :model="refuseServiceForm" label-width="120px" ref="refuseServiceForm">
-            <p>您将拒绝{{serviceObj.staff_name}}劳动者，请填写拒绝事由。</p>
+            <p>
+                您将拒绝服务人员-
+                <strong>{{serviceObj.staff_name}}(工号{{serviceObj.staff_code}})</strong>
+                ，请填写拒绝事由。
+            </p>
             <el-form-item label="拒绝事由">
-                <el-input v-model="refuseServiceForm.reason"></el-input>
+                <el-input v-model="refuseServiceForm.reason" type="textarea"></el-input>
             </el-form-item>
         </el-form>
         <div slot="footer" class="dialog-footer">
@@ -21,10 +25,7 @@
 
 <script>
 
-/**
- * type 0 新建  1 编辑
- */
-import {operateService} from '../../../../common'
+import {saleService} from '../../../../common'
 
 export default {
     props:{
@@ -36,7 +37,7 @@ export default {
             type: Boolean,
         },
         /**
-         * 订单申请id
+         * 订单id
          */
         order_id: {
             type: Number,
@@ -45,7 +46,7 @@ export default {
         /**
          * 服务人员字段
          */
-        service_staff: {
+        matched_staff: {
             default: function(){
                 return {}
             },
@@ -56,14 +57,18 @@ export default {
         return {
             //改变的字段内容
             refuseServiceForm: {
-                id: this.$route.query.id,
+                order_id: this.order_id,
+                order_staff_id: this.matched_staff.staff_id,
                 reason: '',//事由
             },
         }
     },
     computed: {
+        /**
+         * 服务人员信息对象
+         */
         serviceObj(){
-            return this.service_staff
+            return this.matched_staff
         }
     },
     methods: {
@@ -73,20 +78,20 @@ export default {
         },
         async onSubmit(formName){
             //校验并提交
-            // await operateService.editApplication(this.refuseServiceForm).then(data =>{
-            //             if(data.code == '0'){
-            //                 this.$message({
-            //                     type:"success",
-            //                     message: "更改成功"
-            //                 })
-            //                 this.$emit('claseRefuseDialog')
-            //             }
-            //         }).catch(error =>{
-            //             this.$message({
-            //                 type:'error',
-            //                 message: error.message
-            //             })
-            //         })
+            await saleService.refuse(this.refuseServiceForm).then(data =>{
+                    if(data.code == '0'){
+                        this.$message({
+                            type:"success",
+                            message: data.message,
+                        })
+                        this.$emit('claseRefuseDialog')
+                    }
+                }).catch(error =>{
+                    this.$message({
+                        type:'error',
+                        message: error.message
+                    })
+                })
 
         }
     },

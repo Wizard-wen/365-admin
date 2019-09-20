@@ -42,7 +42,7 @@ import loginService from './service/loginService'
 import authService from './service/authService'
 import operateService from './service/operateService'
 import saleService from './service/saleService'
-import shopService from './service/shopService'
+import storeService from './service/storeService'
 
 
 import operateRequest from './service/request/operateRequest'
@@ -53,7 +53,7 @@ export {
     authService,
     operateService,
     saleService,
-    shopService
+    storeService
 }
 
 /**

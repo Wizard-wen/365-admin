@@ -295,25 +295,25 @@ const saleModule = [
 /**
  * 门店管理
  */
-import shopList from '@/pages/shop/shopList.vue'
-import shopItem from '@/pages/shop/shopItem.vue'
-import shopEdit from '@/pages/shop/shopEdit.vue'
+import storeList from '@/pages/store/storeList.vue'
+import storeItem from '@/pages/store/storeItem.vue'
+import storeEdit from '@/pages/store/storeEdit.vue'
 
-const shop = [
+const store = [
     {
-        path: '/shop/shopList',
-        name: 'shopList',
-        component: shopList,
+        path: '/store/storeList',
+        name: 'storeList',
+        component: storeList,
     },
     {
-        path: '/shop/shopItem',
-        name: 'shopItem',
-        component: shopItem,
+        path: '/store/storeItem',
+        name: 'storeItem',
+        component: storeItem,
     },
     {
-        path: '/shop/shopEdit',
-        name: 'shopEdit',
-        component: shopEdit,
+        path: '/store/storeEdit',
+        name: 'storeEdit',
+        component: storeEdit,
     },
 ]
 
@@ -338,6 +338,6 @@ export default [
     ...authModule,//权限管理模块
     ...operateModule, //服务人员管理模块
     ...saleModule,//销售人员模块
-    ...shop,//门店管理
+    ...store,//门店管理
     ...student,//学员管理
 ]

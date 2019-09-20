@@ -6,9 +6,14 @@
             :controlScopeLength="200">
 
             <template slot="control" slot-scope="controler">
-                <el-button size="mini" type="text" @click="goContractPage(controler.scoper.$index, controler.scoper.row)">查看</el-button>
-                <el-button size="mini" type="text" @click="sendErrorMessage(controler.scoper.row)">结算工资</el-button>
-                <el-button size="mini" type="text" @click="sendErrorMessage(controler.scoper.row)">终止合同</el-button>
+                <el-button size="mini" type="text" 
+                    @click="goContractPage(controler.scoper.row)">查看</el-button>
+                <el-button size="mini" type="text" 
+                    v-if="controler.scoper.row.type == 2 && controler.scoper.row.is_wage == 1" 
+                    @click="sendErrorMessage(controler.scoper.row)">结算工资</el-button>
+                <el-button size="mini" type="text" 
+                    v-if="controler.scoper.row.type != 3" 
+                    @click="sendErrorMessage(controler.scoper.row)">终止合同</el-button>
             </template>
 
             <template slot="pagination">
@@ -105,7 +110,7 @@ export default {
         /**
          * 进入合同详情页
          */
-        goContractPage(index, param){
+        goContractPage(param){
             this.$router.push({
                 path: `/sale/contractItem`,
                 query: {

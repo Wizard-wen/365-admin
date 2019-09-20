@@ -8,7 +8,7 @@ import Vuex from 'vuex'
 
 Vue.use(Vuex)
 
-export const shopModule = {
+export const storeModule = {
     state: {
     },
     mutations: {

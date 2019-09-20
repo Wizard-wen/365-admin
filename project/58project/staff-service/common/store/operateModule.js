@@ -290,6 +290,8 @@ export const operateModule = {
          * 空合同查询字段
          */
         voidContractList: {
+            page: 1, //请求页码
+            pageNumber: 20,//单页信息数量
             contract_number:'',//空合同编号（筛选）
             created_at: [],//空合同创建时间（筛选）
             assign_at:[],//分派时间（筛选）

@@ -1,32 +1,32 @@
 <template>
-  <div class="shop">
+  <div class="store" v-loading="isLoading">
     <!-- 门店详情 -->
-	<div class="shop-header">
-		<div class="shop-name">
-			<h4>{{shopDetail.name}}</h4>
+	<div class="store-header">
+		<div class="store-name">
+			<h4>{{storeDetail.name}}</h4>
 		</div>
 		<div class="btn-group">
 			<el-button size="mini" @click="goback">返回</el-button>
 			<el-button size="mini" @click="editStore">修改</el-button>
 		</div>
-		<div class="shop-detail">
+		<div class="store-detail">
 			<div class="detail-left">
 				<div class="detail-left-box">
-					<div class="detail-left-line">创建人：{{ shopDetail.manager_name }}</div>
-					<div class="detail-left-line">创建时间：{{ shopDetail.created_at | formDate }}</div>
-					<div class="detail-left-line">门店类型：{{shopDetail.is_third == 1 ? '直营店': shopDetail.is_third == 2 ?'加盟店': ''}}</div>
+					<div class="detail-left-line">创建人：{{ storeDetail.manager_name }}</div>
+					<div class="detail-left-line">创建时间：{{ storeDetail.created_at | formDate }}</div>
+					<div class="detail-left-line">门店类型：{{storeDetail.is_third == 1 ? '直营店': storeDetail.is_third == 2 ?'加盟店': ''}}</div>
 					<div class="detail-left-line">门店负责人：</div>
-					<div class="detail-left-line">门店地址：{{shopDetail.address}}</div>
+					<div class="detail-left-line">门店地址：{{storeDetail.address}}</div>
 				</div>
 			</div>
 			<div class="detail-right">
 				<div class="right-box">
-					<div class="title">状态</div>
-					<div class="value">{{shopDetail.type == 'enable'?'正常':'停业'}}</div>
+					<div class="title">经营状态</div>
+					<div class="value" :style="{color: storeDetail.type == 'enable'? '#67C23A' : '#F56C6C'}">{{storeDetail.type == 'enable'?'正常':'停业'}}</div>
 				</div>
 				<div class="right-box">
 					<div class="title">员工数量</div>
-					<div class="value">{{ shopDetail.staff_count }}</div>
+					<div class="value">{{ storeDetail.staff_count }}</div>
 				</div>
 			</div>
 		</div>
@@ -38,7 +38,7 @@
 					员工列表
 				</div>
 				<div class="control">
-					<el-button size="small" type="primary" @click="editStore">编辑</el-button>
+					<el-button size="small" type="primary" @click="openAddStroeStaffDialog">添加新店员</el-button>
 				</div>
 			</div>
 			<div class="card-contains">
@@ -55,101 +55,174 @@
 					<el-table-column label="操作" align="center">
 						<template slot-scope="scope">
 							<el-button size="mini" type="primary" @click="showStaffDetail(scope.row)">查看</el-button>
-							<el-button size="mini" type="danger" @click="deleteManager(scope.row)">解绑</el-button>
+							<el-button size="mini" type="danger" @click="deleteStoreStaff(scope.row)">解绑</el-button>
 						</template>
 					</el-table-column>
 				</el-table>
 			</div>
+			<add-store-staff-dialog
+				:addStoreStaffDialogVisible="addStoreStaffDialogVisible"
+				v-if="addStoreStaffDialogVisible"
+				@closeAddStoreStaffDialog="closeAddStoreStaffDialog"></add-store-staff-dialog>
 		</div>
 	</div>
   </div>
 </template>
 
 <script>
-import { shopService, store, $utils } from "../../../common";
+import { storeService, store, $utils } from "../../../common";
+import {addStoreStaffDialog} from './storeItem/index.js'
 export default {
-  data() {
-    return {
-      //是否展示表单
-      isShow: true,
-      //门店详情
-      shopDetail: {},
-      //员工列表
-      salesPersonTable: [],
-    };
-  },
-  methods: {
-    /**
-     * 获取门店列表
-     */
-    async getStore(){
-      	await shopService.getStore(this.$route.query.id).then(data => {
-			if (data.code == "0") {
-				this.shopDetail = {...data.data.store};
-			}
-		}).catch(error => {
-			this.$message({
-				type: "error",
-				message: error.message
-			});
-        });
-    },
-    /**
-	 * 获取当前门店已绑定员工列表
-	 */
-    async getSalePersonList() {
-		let tableOption = {
-			pageNumber: 10,
-			id: this.$route.query.id
-		};
+	components: {
+		addStoreStaffDialog,
+	},
+	data() {
+		return {
+			isLoading: false,
+			//是否展示表单
+			isShow: true,
+			//门店详情
+			storeDetail: {},
+			//员工列表
+			salesPersonTable: [],
+			//添加新店员弹窗显示隐藏
+			addStoreStaffDialogVisible: false,
 
-		try {
-			await shopService.getStoreManagerList(tableOption).then(data => {
+		};
+	},
+	methods: {
+		/**
+		 * 获取门店列表
+		 */
+		async getStore(){
+			await storeService.getStore(this.$route.query.id).then(data => {
 				if (data.code == "0") {
-					this.salesPersonTable = [...data.data.data];
+					this.storeDetail = {...data.data.store};
 				}
 			}).catch(error => {
 				this.$message({
 					type: "error",
 					message: error.message
 				});
-			})
-		} catch (error) {
-			this.$message({
-				type: "error",
-				message: error.message
 			});
-		}
-	},
-	/**
-	 * 查看员工详情
-	 */
-	showStaffDetail(paramObj){
-
-	},
-	/**
-	 * 解绑员工
-	 */
-	deleteManager(paramObj){
-
-	},
-    /**
-     * 编辑门店信息
-     */
-    editStore() {
-		this.$router.push({
-			path: "/shop/shopEdit",
-			query: {
-				type: 1,
+		},
+		/**
+		 * 获取当前门店已绑定员工列表
+		 */
+		async getSalePersonList() {
+			let tableOption = {
+				pageNumber: 10,
 				id: this.$route.query.id
+			};
+
+			try {
+				await storeService.getStoreManagerList(tableOption).then(data => {
+					if (data.code == "0") {
+						this.salesPersonTable = [...data.data.data];
+					}
+				}).catch(error => {
+					this.$message({
+						type: "error",
+						message: error.message
+					});
+				})
+			} catch (error) {
+				this.$message({
+					type: "error",
+					message: error.message
+				});
 			}
-		});
+		},
+		/**
+		 * 打开创建新店员弹窗
+		 */
+		openAddStroeStaffDialog(){
+			this.addStoreStaffDialogVisible = true
+		},	
+		/**
+		 * 编辑门店信息
+		 */
+		editStore() {
+			this.$router.push({
+				path: "/store/storeEdit",
+				query: {
+					type: 1,
+					id: this.$route.query.id
+				}
+			});
+		},
+		//返回
+		goback(){
+			this.$router.push('/store/storeList')
+		},
+		/**
+		 * 关闭添加新店员弹窗
+		 */
+		async closeAddStoreStaffDialog(){
+			this.addStoreStaffDialogVisible = false;
+			this.getStore()
+		},
+		/**
+		 * 查看员工详情
+		 */
+		showStaffDetail(paramObj){
+			// this.$router.push({
+			// 	path: '/operate/',
+			// 	query: {
+			// 		id: paramObj.id,
+			// 	}
+			// })
+		},
+		/**
+		 * 解绑员工
+		 */
+		async deleteStoreStaff(paramObj){
+			let _this= this;
+
+			let response = await this.$confirm(`确定要解绑该员工吗?`, '提示', {
+				confirmButtonText: '确定',
+				cancelButtonText: '取消',
+				type: 'warning'
+			}).catch(() => {
+				this.$message({
+					type: 'info',
+					message: `已取消解绑`
+				});
+			});
+
+			if(response == "confirm"){
+				try{
+					this.isLoading = true
+					// await operateService.agreeStaffSingle('warning', 'list', row.id).then(data =>{
+					// 	if(data.code == "0"){
+					// 		this.$message({
+					// 			type:'success',
+					// 			message: data.message
+					// 		})
+					// 		this.isLoading = false
+					// 	}
+					// }).catch(error =>{
+					// 	this.$message({
+					// 		type:'error',
+					// 		message: error.message
+					// 	})
+					// 	this.isLoading = false
+					// }).finally(() =>{
+					// 	this.isLoading = false
+					// })
+				} catch(error){
+					this.$message({
+						type:'error',
+						message: error.message
+					})
+					this.isLoading = false
+				}
+				await _this.getStore()
+				
+			}
+		},
+
 	},
-	//返回
-    goback(){
-      	this.$router.push('/shop/shopList')
-    }
-  },
 	filters: {
 		formDate(timestamp){
 			return $utils.formatDate(new Date(timestamp), 'yyyy-MM-dd')
@@ -198,15 +271,15 @@ export default {
   }
 }
 
-.shop {
+.store {
 	background: #f0f2f5;
 	min-height: calc(100vh - 50px);
 	width: 100%;
-	.shop-header{
+	.store-header{
 		background: #fff;
 		padding: 30px 24px 24px 24px;
 		position: relative;
-		.shop-name{
+		.store-name{
 			line-height: 28px;
 			font-size: 20px;
 			font-weight: 700;
@@ -219,7 +292,7 @@ export default {
 			right: 24px;
 			top: 20px;
 		}
-		.shop-detail{
+		.store-detail{
 			padding-top: 12px;
 			display: flex;
 			.detail-left{
@@ -292,7 +365,7 @@ export default {
 			}
 		}
 	}
-	.shop-form {
+	.store-form {
 		width: 80%;
 		min-width: 1100px;
 		margin: 0 auto;

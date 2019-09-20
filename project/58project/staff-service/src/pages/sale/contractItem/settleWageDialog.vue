@@ -135,7 +135,7 @@ export default {
                         if(data.code == '0'){
                             this.$message({
                                 type:"success",
-                                message: "申请成功"
+                                message: data.message
                             })
                             this.$emit('closeSettleWageDialog')
                         }

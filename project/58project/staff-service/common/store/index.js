@@ -10,7 +10,7 @@ import {loginModule} from './loginModule.js'
 import {loadingModule} from './loadingModule.js'
 import {saleModule} from './saleModule.js'
 import {operateModule} from './operateModule.js'
-import {shopModule} from './shopModule.js' //门店
+import {storeModule} from './storeModule.js' //门店
 import {authModule} from './authModule.js' 
 
 Vue.use(vuex);
@@ -22,7 +22,7 @@ window.store = new vuex.Store({
         loadingModule,
         saleModule,
         operateModule,
-        shopModule,
+        storeModule,
         authModule
     },
     plugins: [createPersistedState({

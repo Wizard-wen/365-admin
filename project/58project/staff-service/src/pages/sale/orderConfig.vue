@@ -7,8 +7,8 @@
             <div class="btn-group">
                 <!-- 仅店长有此权限 -->
                 <el-button type="primary" @click="assignOrder" size="mini">分派</el-button>
-                <el-button type="primary" size="mini" @click="goSignOrder">续约</el-button>
-                <el-button type="danger" size="mini" @click="determinateOrder">终止订单</el-button>
+                <el-button type="primary" size="mini" v-if="orderBase.type == 2" @click="goSignOrder">续约</el-button>
+                <el-button type="danger" size="mini" v-if="orderBase.type == 3" @click="determinateOrder">终止订单</el-button>
                 <el-button size="mini" @click="goback">返回</el-button>
             </div>
             <div class="order-detail">
@@ -165,6 +165,12 @@
                         </el-table-column>
                         
                     </el-table>
+                    <refuse-service-dialog
+                        v-if="refuseServiceDialogVisible"
+                        :refuseServiceDialogVisible="refuseServiceDialogVisible"
+                        @claseRefuseDialog="refuseServiceDialogVisible=false"
+                        :matched_staff="matched_staff"
+                        :order_id="order_id"></refuse-service-dialog>
                 </div>
             </div>
 
@@ -175,12 +181,7 @@
                     </div>
                 </div>
                 <div class="order-list">
-                    <contract-list :staffTable="contractTable"></contract-list>
-                    <refuse-service-dialog
-                        v-if="refuseServiceDialogVisible"
-                        :refuseServiceDialogVisible="refuseServiceDialogVisible"
-                        @claseRefuseDialog="refuseServiceDialogVisible=false"
-                        :matched_staff="matched_staff"></refuse-service-dialog>
+                    <contract-list></contract-list>
                 </div>
             </div>
             
@@ -203,7 +204,7 @@
                 </div>
             </div>
 
-            <div class="order-message" v-if="orderBase.type != 1">
+            <div class="order-message" v-if="orderBase.type == 2">
                 <div class="title">
                     <div class="title-contains">
                         <div class="left">签约服务人员信息</div>
@@ -243,16 +244,13 @@
                 </div>
                 <div class="order-list">
                     <!-- 日志列表 -->
-                    <el-table :data="orderLogTable" class="person-table" :header-cell-style="{height: '48px',background: '#fafafa'}">
+                    <el-table :data="order_logs" class="person-table" :header-cell-style="{height: '48px',background: '#fafafa'}">
                         <el-table-column label="创建时间" prop="created_at" align="center"></el-table-column>
 
                         <el-table-column label="管理员姓名" prop="manager_name" align="center"></el-table-column>
 
                         <el-table-column label="日志内容" prop="message" align="center"></el-table-column>
 
-                        <el-table-column label="操作" align="center">
-                            <el-button size="mini">查看</el-button>
-                        </el-table-column>
                     </el-table>
                 </div>
             </div>   
@@ -288,30 +286,6 @@ export default {
                 fieldName: '',
                 value: '',
             },
-            contratcPagination: {
-                total: 0,
-                currentPage: 1,
-                pageNumber: 10,
-            },
-            //订单日志列表
-            orderLogTable: [],
-            //合同列表
-            contractTable: [{
-                contact_code:'string',//合同编号
-                type: '',//合同状态
-                // created_at:'string',//印制时间
-                // manageDepartment:'string',//责任部门
-                // manager:'string',//责任人
-                // contract_status:'string',// 合同状态
-                // isSign:'Boolean',//是否签约
-                // firstParty:'string',//甲方签约人
-                // firstPartyId:'string',//甲方签约人id
-                // secondParty:'string',//乙方签约人
-                // secondPartyId:'string',//乙方签约人id
-                // signManager:'string',// 签约管家
-                // signManagerId:'string',// 签约管家id
-                // signed_at:'string',// 签约时间               
-            }],
             refuseServiceDialogVisible: false,//拒绝服务人员显示隐藏
             //分配弹出框显示
             assignDialogVisible:false,
@@ -359,6 +333,12 @@ export default {
          */
         order_staff(){
             return this.$store.state.saleModule.order_staff
+        },
+        /**
+         * 订单日志
+         */
+        order_logs(){
+            return this.$store.state.saleModule.order_logs
         }
     },
     methods: {
