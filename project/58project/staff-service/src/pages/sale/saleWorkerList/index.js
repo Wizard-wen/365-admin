@@ -2,7 +2,7 @@
 
 import createStaffDialog from './createStaffDialog.vue'
 import errorStaffDialog from './errorStaffDialog.vue'
-import saleStaffTableComponent from './saleStaffTableComponent.vue'
+import saleWorkerTableComponent from './saleWorkerTableComponent.vue'
 import queryComponent from './queryComponent.vue'
 import queryTagComponent from './queryTagComponent.vue'
 
@@ -10,7 +10,7 @@ import queryTagComponent from './queryTagComponent.vue'
 export {
     createStaffDialog,
     errorStaffDialog,
-    saleStaffTableComponent,
+    saleWorkerTableComponent,
     queryComponent,
     queryTagComponent
 }

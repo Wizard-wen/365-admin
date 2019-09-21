@@ -39,8 +39,8 @@
                         <div class="value" :style="{color: contractType.color}">{{ contractType.name}}</div>
                     </div>
                     <div class="right-box" v-if="contractBase.type != 3">
-                        <div class="title">是否发放工资</div>
-                        <div class="value">{{ contractBase.is_wage | isWagedFormatter}}</div>
+                        <div class="title">是否发放首月工资</div>
+                        <div class="value" :style="{color: contractBase.is_wage == 1? '#F56C6C' : '#67C23A'}">{{ contractBase.is_wage | isWagedFormatter}}</div>
                     </div>
                 </div>
             </div>
@@ -53,7 +53,7 @@
                     </div>
                 </div>
                 <div class="order-list">
-                    <div class="line-list">
+                    <div class="line-three-list">
                         服务内容：
                         <select-tag-component 
                             :isEdit="false" 
@@ -61,10 +61,8 @@
                             v-model="contractBase.service_contains" 
                             :isSingle="true"></select-tag-component>
                     </div>
-                    <div class="line-list">
-                        服务人数：<span>{{contractBase.service_count}}</span> 
-                    </div>
-                    <div class="line-list">
+                    
+                    <div class="line-three-list">
                         护理依赖程度： 
                         <select-tag-component 
                             :isEdit="false" 
@@ -72,7 +70,7 @@
                             v-model="contractBase.service_level" 
                             :isSingle="true"></select-tag-component>
                     </div>
-                    <div class="line-list">
+                    <div class="line-three-list">
                         服务方式： 
                         <select-tag-component 
                             :isEdit="false" 
@@ -80,7 +78,10 @@
                             v-model="contractBase.service_level" 
                             :isSingle="true"></select-tag-component>
                     </div>
-                    <div class="line-list">
+                    <div class="line-three-list">
+                        服务人数：<span>{{contractBase.service_count}}</span> 
+                    </div>
+                    <div class="line-three-list">
                         服务期限：<span>{{contractBase.service_start | timeFomatter}} - {{contractBase.service_end | timeFomatter}}</span> 
                     </div>
                     <div class="line-list">
@@ -496,7 +497,7 @@ export default {
                 this.$router.push({
                     path: '/sale/orderConfig',
                     query: {
-                        id: this.$route.query.fromId
+                        order_id: this.$route.query.fromId
                     }
                 })
             } else {

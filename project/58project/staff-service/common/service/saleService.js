@@ -40,7 +40,6 @@ export const sale_orderRequest = {
      * @param obj 编辑表单字段
      */
     editOrder(obj){
-        debugger
         return saleRequest.editOrder(obj)
     },
     /**
