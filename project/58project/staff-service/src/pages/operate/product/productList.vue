@@ -23,6 +23,15 @@
                 <el-form-item label="商品副标题">
                     <el-input v-model="productForm.subTitle"></el-input>
                 </el-form-item>
+                <el-form-item label="商品父级id">
+                    <el-select v-model="productForm.parent_id" placeholder="商品父级id">
+                        <el-option v-for="item in selectionList" :key="item.id" :label="item.names" :value="item.id"></el-option>
+                    </el-select>
+                </el-form-item>
+
+                <el-form-item label="是否展示">
+                    <el-switch v-model="productForm.type"></el-switch>
+                </el-form-item>
                 <el-form-item label="商品详情" prop="files" ref="files">
                     <el-upload
                         accept=".jpg,.jpeg,.png,.gif,.bmp,.pdf,.JPG,.JPEG,.PBG,.GIF,.BMP,.PDF"
@@ -63,8 +72,11 @@ export default {
             productForm: {
                 name: '',//商品标题
                 subTitle: '',//商品副标题
+                parent_id: '',//商品父级id
+                type: '',//是否展示
                 files: [],//商品详情
             },
+            selectionList: [],
             //控制创建商品弹窗显示隐藏
             createProductDialogVisible:false,
             //图片上传header
@@ -168,6 +180,12 @@ export default {
         //     })
         // })
         await this.getServiceTree()
+        await operateService.getServiceSelection().then(data =>{
+            console.log(data)
+            this.selectionList = data.data
+        }).catch(error =>{
+
+        })
     }
 }
 </script>

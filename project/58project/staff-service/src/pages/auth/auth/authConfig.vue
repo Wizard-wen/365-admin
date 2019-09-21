@@ -25,12 +25,16 @@
             </el-form-item>
 
             <el-form-item label="是否展示">
-                <el-switch v-model="authForm.is_display"></el-switch>
+                <!-- <el-switch v-model="authForm.is_display"></el-switch> -->
+                <select-tag-component
+                    :propTagList="is_displayList"
+                    v-model="authForm.is_display"
+                    :isSingle="true"></select-tag-component>
             </el-form-item>
 
             <el-form-item>
                 <el-button type="primary" @click="onSubmit('form')">{{$route.query.id? '确认编辑' : '立即创建'}}</el-button>
-                <el-button @click="goback">取消</el-button>
+                <el-button @click="goback">返回</el-button>
             </el-form-item>
         </el-form>
     </div>
@@ -41,30 +45,9 @@
  * type 0 新建  1 编辑
  */
 import {authService} from '../../../../common'
-
+import {selectTagComponent} from '@/pages/components/index.js'
 export default {
     data() {
-        const validateRouter = (rule, value, callback) => {
-            if (value === '') {
-                callback(new Error('请输入路由地址'));
-            } else {
-                callback();
-            }
-        };
-        const validateTitle = (rule, value, callback) => {
-            if (value === '') {
-                callback(new Error('请输入权限名'));
-            } else {
-                callback();
-            }
-        };
-        const validateDescription = (rule, value, callback) => {
-            if (value === '') {
-                callback(new Error('请输入权限描述'));
-            } else {
-                callback();
-            }
-        };
         return {
             //权限表单
             authForm: {
@@ -74,22 +57,30 @@ export default {
                 description: '',//权限描述
                 sort_order: 0,//权限排序顺序
                 parent_id: 0,//权限父级id
-                is_display: false,//是否展示，是否在列表中展示 1 显示 2 不显示
+                is_display: 1,//是否展示，是否在列表中展示 1 显示 2 不显示
             },
             authRules: {
                 router: [
-                    { validator: validateRouter, trigger: 'blur' }
+                    { required: true, message: '请输入路由地址', trigger: 'blur' },
                 ],
                 title: [
-                    { validator: validateTitle, trigger: 'blur' }
+                    { required: true, message: '请输入权限名', trigger: 'blur' },
                 ],
                 description: [
-                    { validator: validateDescription, trigger: 'blur' }
+                    { required: true, message: '请输入权限描述', trigger: 'blur' },
                 ],
             },
             //权限父级id下拉列表
-            selectionList: []
+            selectionList: [],
+            //是否展示
+            is_displayList: [
+                {name: '展示', id: 1},
+                {name: '不展示', id: 2},
+            ]
         }
+    },
+    components: {
+        selectTagComponent,
     },
     methods: {
         /**
@@ -98,22 +89,13 @@ export default {
          */
         async onSubmit(formName) {
 
-            let is_show = this.authForm.is_display;
-
-            if(is_show){
-                this.authForm.is_display = 1
-            } else {
-                this.authForm.is_display = 2
-            }
-
             await this.$refs[formName].validate((valid) => {
                 if (valid) {
-                    authService.editPermission(this.authForm)
-                    .then(data =>{
+                    authService.editPermission(this.authForm).then(data =>{
                         if(data.code == '0'){
                             this.$message({
                                 type:"success",
-                                message: "修改成功"
+                                message: data.message
                             })
                             this.$router.push('/auth/authList')
                         }
@@ -129,7 +111,13 @@ export default {
             });
         },
         goback(){
-            this.$router.push("/auth/authList")
+            console.log(this.$route.query.fromPage)
+            this.$router.push({
+                path: "/auth/authList",
+                query: {
+                    page: this.$route.query.fromPage
+                }
+            })
         }
     },
     async mounted(){
@@ -142,13 +130,6 @@ export default {
                     } else {
                         //权限表单字段
                         this.authForm = data.data.permission
-
-                        //是否展示的数据格式转换
-                        if(data.data.permission.is_display == 1){
-                            this.authForm.is_display = true
-                        } else {
-                            this.authForm.is_display = false
-                        }
                     }
 
                     //下拉菜单列表

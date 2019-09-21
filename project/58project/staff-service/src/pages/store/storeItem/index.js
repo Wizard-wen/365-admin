@@ -1,6 +1,6 @@
 //添加新店员弹窗
-import addStoreStaffDialog from './addStoreStaffDialog.vue'
+import addStoreWorkerDialog from './addStoreWorkerDialog.vue'
 
 export {
-    addStoreStaffDialog
+    addStoreWorkerDialog
 }

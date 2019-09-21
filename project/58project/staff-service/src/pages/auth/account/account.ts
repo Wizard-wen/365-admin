@@ -3,10 +3,10 @@
  */
 export interface accountItem {
     readonly account:string;//账号
-    readonly staff_code:string;//工号
+    readonly staff_code:string;//工号----自动生成
     readonly real_name:string;//真实姓名
     readonly department_id:string;//所属部门
-    name:string;//姓名
+    name:string;//用户名
     phone:string;//电话
     birthday?:string;//
     email?:string;

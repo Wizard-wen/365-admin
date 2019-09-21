@@ -110,13 +110,13 @@ import productList from '@/pages/operate/product/productList.vue'
 /**
  * 运营---服务人员管理
  */
- import workerList from '@/pages/operate/staff/workerList.vue'
- import workFormConfig from '@/pages/operate/staff/workFormConfig.vue'
- import workerItem from '@/pages/operate/staff/workerItem.vue'
- import workerItemShow from '@/pages/operate/staff/workerItemShow.vue'
- import newWorkerList from '@/pages/operate/staff/newWorkerList.vue'
- import errorWorkerList from '@/pages/operate/staff/errorWorkerList.vue'
- import returnList from '@/pages/operate/staff/returnList.vue'
+ import workerList from '@/pages/operate/worker/workerList.vue'
+ import workerFormConfig from '@/pages/operate/worker/workerFormConfig.vue'
+ import workerItem from '@/pages/operate/worker/workerItem.vue'
+ import workerItemShow from '@/pages/operate/worker/workerItemShow.vue'
+ import newWorkerList from '@/pages/operate/worker/newWorkerList.vue'
+ import errorWorkerList from '@/pages/operate/worker/errorWorkerList.vue'
+ import returnWorkerList from '@/pages/operate/worker/returnWorkerList.vue'
 
 
  const operateModule = [
@@ -202,14 +202,14 @@ import productList from '@/pages/operate/product/productList.vue'
         component: workerItemShow,
     },
     {
-        path: '/worker/workFormConfig',
-        name: 'workFormConfig',
-        component: workFormConfig,
+        path: '/worker/workerFormConfig',
+        name: 'workerFormConfig',
+        component: workerFormConfig,
     },
     {
-        path: '/worker/returnList',
-        name: 'returnList',
-        component: returnList,
+        path: '/worker/returnWorkerList',
+        name: 'returnWorkerList',
+        component: returnWorkerList,
     },
  ]
 

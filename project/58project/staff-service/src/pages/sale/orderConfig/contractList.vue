@@ -1,5 +1,5 @@
 <template>
-    <div class="staff">
+    <div class="worker">
         <contract-table-component
             :staffTable="order_contract"
             :maxLength="maxLength"

@@ -68,7 +68,7 @@
                     authentication: 80, //认证状态
                     working_status: 80,//接单状态
                     skill_ids: 80,// 职业类型
-                    service_type: 80,//服务类型
+                    service_type_ids: 80,//服务类型
                     service_crowd: 100,//可服务人群
                     working_age: 80,// 工龄
                     nation: 80,// 民族
@@ -141,7 +141,7 @@
                             this.computeStringLength(item.authentication, 'authentication', 'authentication')
                             this.computeStringLength(item.working_status, 'working_status', 'working_status')
                             this.computeStringLength(item.skill_ids, 'skill_ids', 'service_category')
-                            this.computeStringLength(item.service_type, 'service_type', 'service_type')
+                            this.computeStringLength(item.service_type_ids, 'service_type_ids', 'service_type')
                             this.computeStringLength(item.service_crowd, 'service_crowd', 'service_crowd')
                             this.computeStringLength(item.working_age, 'working_age', 'working_age')
                             this.computeStringLength(item.nation, 'nation', 'nation')

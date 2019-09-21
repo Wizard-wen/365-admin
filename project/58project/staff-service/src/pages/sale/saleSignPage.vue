@@ -1,5 +1,5 @@
 <template>
-    <div class="signPage">
+    <div class="signPage" v-loading="is_loading">
         <div class="sign-contains">
             <el-form :model="signForm" :rules="signRules" ref="signForm" :label-width="'120px'">
                 <div class="order-message">
@@ -100,6 +100,7 @@
                                 v-model="signForm.service_duration"
                                 value-format="timestamp"
                                 @change="changeServiceDuration"
+                                :picker-options="pickerOptions"
                                 type="datetimerange"
                                 range-separator="至"
                                 start-placeholder="服务开始日期"
@@ -146,6 +147,7 @@
                                 v-model="signForm.insurance_duration"
                                 value-format="timestamp"
                                 @change="changeInsuranceDuration"
+                                :picker-options="pickerOptions"
                                 type="datetimerange"
                                 range-separator="至"
                                 start-placeholder="保险开始日期"
@@ -218,10 +220,12 @@ export default {
             },
         }
         return {
+            is_loading: false,
+            //可签约空合同列表
             contract_numberList: [{
                 id: 0,
                 contract_number: '请选择'
-            }],//可签约空合同列表
+            }],
             signRules: {
                 //雇主姓名
                 sign_user_name: [
@@ -282,7 +286,7 @@ export default {
             },
             //签约表单
             signForm: {
-                order_id: this.$route.query.id,
+                order_id: this.$route.query.order_id,
                 sign_staff_id: this.$route.query.sign_staff_id,
                 contract_number: '',//合同编号
                 sign_user_name:'',// 雇主
@@ -319,6 +323,11 @@ export default {
                 insurance_end: '',//保险终止日
                 accessory:[],// 上传附件
                 remarks:'',//备注
+            },
+            pickerOptions: {
+                disabledDate(time) {
+                    return time.getTime() < Date.now() - 8.64e7;
+                },
             },
             service_period:[],//服务起止时间段
             //图片上传header
@@ -374,25 +383,27 @@ export default {
             this.$refs[formName].validate(async (valid) => {
                 if (valid) {
 
-                    store.commit('setLoading',true)
+                    this.is_loading = true;
 
                     await saleService.sign(this.signForm).then(data =>{
                             if(data.code == "0"){
                                 this.$message({
                                     type:'success',
-                                    message: `签约成功`
+                                    message: data.message
                                 })
+                                this.is_loading = false;
+                                //跳转回订单配置页
+                                this.$router.push(`/sale/orderConfig?order_id=${this.$route.query.order_id}`)
                             }
-                            this.$router.push(`/sale/orderConfig?id=${this.$route.query.id}`)
-                        }).catch(e =>{
+                            
+                        }).catch(error =>{
                             this.$message({
                                 type:'error',
-                                message: e.message
+                                message: error.message
                             })
-                        }).finally(async () =>{
-                            // await saleService.getOrder(this.$route.query.order_id)
-
-                            store.commit('setLoading',false)
+                            this.is_loading = false;
+                        }).finally(() =>{
+                            this.is_loading = false;
                         })
                 } else {
                     return false;
@@ -418,14 +429,25 @@ export default {
         /**
          * 获取可签约合同列表
          */
-        await operateService.getManagerVoidContractSelection().then(data =>{
-            this.contract_numberList = data.data
-        }).catch(error => {
-           this.$message({
+        try{
+            await operateService.getManagerVoidContractSelection().then(data =>{
+                if(data.code == '0'){
+                    this.contract_numberList = data.data
+                }
+                
+            }).catch(error => {
+                this.$message({
+                    type:'error',
+                    message: error.message
+                }) 
+            })
+        } catch(error){
+            this.$message({
                 type:'error',
                 message: error.message
             }) 
-        })
+        }
+        
     }
 }
 </script>

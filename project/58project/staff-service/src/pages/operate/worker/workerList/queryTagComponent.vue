@@ -25,7 +25,7 @@ export default {
          * 查询来源
          */
         queryFrom: {
-            default: 'staff',
+            default: 'worker',
             type: String,
         }
     },

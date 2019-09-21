@@ -1,7 +1,7 @@
 window.config = Object.assign(
     {
         //系统名称，是系统的命名空间
-        namespace: 'staff',
+        namespace: 'worker',
 
         // apiPath: typeof location != 'undefined' ? location.origin + '/' : 'http://localhost:8080/',
         apiPath: 'http://www.magicheart.win/'

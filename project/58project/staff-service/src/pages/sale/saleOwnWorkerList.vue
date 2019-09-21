@@ -1,5 +1,5 @@
 <template>
-    <div class="staff" v-loading="isLoaded">
+    <div class="worker" v-loading="isLoaded">
         <sale-own-worker-table-component
             :staffTable="staffTable"
             :maxLength="maxLength"
@@ -23,12 +23,12 @@
             </template>
         </sale-own-worker-table-component>
         <!-- 提交服务人员异常信息 -->
-        <error-staff-dialog
+        <error-worker-dialog
             v-if="errorStaffDialogVisible"
             :openErrorStaffDialog="errorStaffDialogVisible"
             @closeErrorStaffDialog="closeErrorStaffDialog"
             :errorStaffWorkingStatus="errorStaffRow.working_status"
-            :staffId="errorStaffId"></error-staff-dialog>
+            :staffId="errorStaffId"></error-worker-dialog>
     </div>
 </template>
 <script>

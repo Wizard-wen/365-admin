@@ -88,7 +88,7 @@ export const operateModule = {
             state.workerList[payload.queryKey] = payload.queryedList
         },
         //设置回访服务人员查询字段
-        setReturnList(state,payload){
+        setReturnWorkerList(state,payload){
             state.returnWorkerList[payload.queryKey] = payload.queryedList
         },
         //设置申请新服务人员查询字段

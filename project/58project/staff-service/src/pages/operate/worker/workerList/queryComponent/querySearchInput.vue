@@ -34,11 +34,11 @@ export default {
         },
         /**
          * 查询来自于什么组件
-         * staff 运营 order 销售
+         * worker 运营 order 销售
          */
         queryFrom: {
             type: String,
-            defeult: 'staff'
+            defeult: 'worker'
         }
     },
     watch: {
@@ -65,7 +65,7 @@ export default {
          */
         addQuery(){
             //将查询组件数据变化存入vuex
-            if(this.queryFrom == 'staff'){
+            if(this.queryFrom == 'worker'){
                 this.$store.commit('setWorkerList', {
                     queryKey: this.queryKey, 
                     queryedList: this.searchText

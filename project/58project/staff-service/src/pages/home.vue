@@ -6,9 +6,9 @@
                     <div class="home-icon">
                         <img src="./home/image/icon.png" alt="">
                     </div>
-                    <div class="home-staff">
-                        <div class="staff-hello">你好！{{users.name}}，祝你开心每一天！</div>
-                        <div class="staff-department">
+                    <div class="home-worker">
+                        <div class="worker-hello">你好！{{users.name}}，祝你开心每一天！</div>
+                        <div class="worker-department">
                             <span v-for="(item, index) in users.role_name" :key="index">{{item}} |</span>
                             中彤实业 - 365生活服务平台 - {{department_name}}</div>
                     </div>
@@ -73,16 +73,16 @@ export default {
                             width: 80px;
                         }
                     }
-                    .home-staff{
+                    .home-worker{
                         margin-left: 24px;
-                        .staff-hello{
+                        .worker-hello{
                             margin-bottom: 12px;
                             color: rgba(0,0,0,.85);
                             font-weight: 500;
                             font-size: 20px;
                             line-height: 28px;
                         }
-                        .staff-department{
+                        .worker-department{
                             color: rgba(0,0,0,.45);
                             line-height: 22px;
                             font-size: 14px;

@@ -20,7 +20,13 @@
             <el-table :data="authTable" class="authTable-table">
 
                 <el-table-column label="编号" prop="id" align="center"></el-table-column>
-                <el-table-column label="菜单展示" prop="is_display" align="center" :formatter="formatterDisplay"></el-table-column>
+                <el-table-column label="菜单展示" prop="is_display" align="center" >
+                    <template slot-scope="scope">
+                        <table-tag-component 
+                            :propList="is_displayList" 
+                            :tableOriginData="scope.row.is_display"></table-tag-component>
+                    </template>
+                </el-table-column>
                 <el-table-column label="权限名" prop="title" align="center"></el-table-column>
                 <el-table-column label="请求路由" prop="router" align="center"></el-table-column>
 
@@ -54,8 +60,12 @@
     </div>
 </template>
 <script>
-import {authService} from '../../../../common'
-import {saleService} from '../../../../common'
+import {
+    authService,
+    saleService
+} from '../../../../common'
+import {tableTagComponent} from '@/pages/components/index.js'
+
 export default {
     data(){
         return {
@@ -78,8 +88,15 @@ export default {
             defaultProps: {
                 children: 'children',
                 label: 'title'
-            }
+            },
+            is_displayList: [
+                {name: '展示', id: 1},
+                {name: '不展示', id: 2},
+            ]
         }
+    },
+    components: {
+        tableTagComponent,
     },
     computed:{
         /**
@@ -184,6 +201,23 @@ export default {
             })
         },
         /**
+         * 点击节点
+         */
+        async nodeClick(clickObject,currentObject){
+            if(clickObject.hasOwnProperty('children')){
+                return;
+            } else {
+                this.$router.push({
+                    path: "/auth/authConfig",
+                    query: {
+                        id: clickObject.id,
+                        type: 1,
+                        fromPage: this.pagination.currentPage
+                    }
+                })
+            }
+        },
+        /**
          * 配置权限
          */
         editAuth(row){
@@ -191,7 +225,8 @@ export default {
                 path: "/auth/authConfig",
                 query: {
                     id: row.id,
-                    type: 1
+                    type: 1,
+                    fromPage: this.pagination.currentPage
                 }
             })
         },
@@ -238,23 +273,11 @@ export default {
                 store.commit('setLoading',false)
             }
         },
-        formatterDisplay(row, column){
-            if(row.is_display == 1){
-                return "展示"
-            } else if(row.is_display == 2){
-                return "不展示"
-            }
-        },
-        /**
-         * 点击节点
-         * @param clickObject 点击的节点对象
-         * @param currentObject 树目前选中的对象
-         */
-        nodeClick(clickObject,currentObject){
-            console.log(clickObject,currentObject)
-        }
     },
     async mounted(){
+        if(this.$route.query.page){
+            this.pagination.currentPage = this.$route.query.page
+        }
         await this.getTableList()
     }
 }

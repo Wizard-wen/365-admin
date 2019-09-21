@@ -7,7 +7,7 @@
             <div class="btn-group">
                 <!-- 仅店长有此权限 -->
                 <el-button type="primary" @click="assignOrder" size="mini">分派</el-button>
-                <el-button type="primary" size="mini" v-if="orderBase.type == 2" @click="goSignOrder">续约</el-button>
+                <el-button type="primary" size="mini" v-if="orderBase.type == 2" @click="goSignOrder(1)">续约</el-button>
                 <el-button type="danger" size="mini" v-if="orderBase.type == 3" @click="determinateOrder">终止订单</el-button>
                 <el-button size="mini" @click="goback">返回</el-button>
             </div>
@@ -152,7 +152,7 @@
 
                         <el-table-column label="操作" align="center" width="300">
                             <template slot-scope="scope">
-                                <el-button type="success" @click="goSignOrder(scope.row)" size="mini">签约</el-button>
+                                <el-button type="success" @click="goSignOrder(2,scope.row)" size="mini">签约</el-button>
                                 <el-button type="danger" @click="refuseService(scope.row)" size="mini">拒绝</el-button>
                                 <el-button type="primary" @click="goStaffDetail(scope.row)" size="mini">详情</el-button>
                                 <!-- 只有添加人才能删除 -->
@@ -403,14 +403,17 @@ export default {
 /*********************备选服务人员列表****************************************************/
         /**
          * 跳转至签约页面
+         * @param type 是签约还是续约
          * @param paramObj 匹配服务人员信息对象
          */
-        goSignOrder(paramObj){
+        goSignOrder(type, paramObj){
             this.$router.push({
                 path: `/sale/saleSignPage`,
                 query: {
-                    id: this.order_id,
-                    sign_staff_id: paramObj.id
+                    order_id: this.order_id,
+                    sign_staff_id: type == 1 ? this.orderBase.sign_staff_id : paramObj.id,
+                    sign_staff_name: type == 1 ? this.orderBase.sign_staff_name : paramObj.staff_name,
+                    sign_staff_code: type == 1 ? this.orderBase.sign_staff_code : paramObj.staff_code
                 }
             })
         },
@@ -432,7 +435,7 @@ export default {
                 query: {
                     id: paramObj.id,
                     from: 2,
-                    orderId: this.$route.query.id
+                    orderId: this.$route.query.order_id
                 }
             })
         },
@@ -505,7 +508,7 @@ export default {
  
     },
     async mounted(){
-        this.order_id = this.$route.query.id;//订单id
+        this.order_id = this.$route.query.order_id;//订单id
         await this.getOrder()
         
     }    

@@ -1,6 +1,6 @@
 <template>
-    <div class="staff-box">
-        <el-form class="staff-form"  ref="form" :model="workerForm" label-width="140px">
+    <div class="worker-box">
+        <el-form class="worker-form"  ref="form" :model="workerForm" label-width="140px">
             <!-- 等同于更新时间 -->
             <el-form-item label="登记日期" prop="register_at" class="form-item-size" size="small">
                 {{created_atFormatter}}
@@ -419,10 +419,10 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-    .staff-box{
+    .worker-box{
         width: 100%;
         padding-top: 30px;
-        .staff-form{
+        .worker-form{
             width: 100%;
             margin-bottom: 30px;
             & /deep/ .el-form-item{

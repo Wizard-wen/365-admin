@@ -1,6 +1,6 @@
 <template>
-    <div class="staff" v-loading="isLoaded">
-        <sale-staff-table-component
+    <div class="worker" v-loading="isLoaded">
+        <sale-worker-table-component
             :staffTable="staffTable"
             :maxLength="maxLength"
             :controlScopeLength="150">
@@ -32,19 +32,19 @@
                     layout="prev, pager, next, jumper"
                     :total="pagination.total"></el-pagination>
             </template>
-        </sale-staff-table-component>
+        </sale-worker-table-component>
         <!-- 申请添加服务人员 -->
-        <create-staff-dialog
+        <create-worker-dialog
             v-if="createStaffDialogVisible"
             :openCreateStaffDialog="createStaffDialogVisible"
-            @closeCreateStaffDialog="createStaffDialogVisible=false"></create-staff-dialog>
+            @closeCreateStaffDialog="createStaffDialogVisible=false"></create-worker-dialog>
         <!-- 提交服务人员异常信息 -->
-        <error-staff-dialog
+        <error-worker-dialog
             v-if="errorStaffDialogVisible"
             :openErrorStaffDialog="errorStaffDialogVisible"
             @closeErrorStaffDialog="closeErrorStaffDialog"
             :errorStaffWorkingStatus="errorStaffRow.working_status"
-            :staffId="errorStaffId"></error-staff-dialog>
+            :staffId="errorStaffId"></error-worker-dialog>
     </div>
 </template>
 <script>

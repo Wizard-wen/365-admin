@@ -34,11 +34,11 @@ export default {
         },
         /**
          * 查询来自于什么组件
-         * staff 运营 order 销售
+         * worker 运营 order 销售
          */
         queryFrom: {
             type: String,
-            defeult: 'staff'
+            defeult: 'worker'
         }
     },
     watch: {

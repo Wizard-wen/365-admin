@@ -26,7 +26,7 @@ window.store = new vuex.Store({
         authModule
     },
     plugins: [createPersistedState({
-        key: 'staff',
+        key: 'worker',
         storage: window.sessionStorage,
         reducer(val) {
             return {

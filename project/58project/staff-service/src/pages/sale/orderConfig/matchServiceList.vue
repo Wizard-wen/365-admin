@@ -1,5 +1,5 @@
 <template>
-    <div class="staff">
+    <div class="worker">
         <match-service-table-component
             v-loading="isLoaded"
             :staffTable="staffTable"

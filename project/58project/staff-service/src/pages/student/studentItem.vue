@@ -1,6 +1,6 @@
 <template>
-    <div class="staff-box">
-        <el-form class="staff-form" ref="form" :model="originRequireForm" :rules="originRequireRules" label-width="100px">
+    <div class="worker-box">
+        <el-form class="worker-form" ref="form" :model="originRequireForm" :rules="originRequireRules" label-width="100px">
             
             <el-form-item label="创建人" prop="initiatorName" class="form-item-size">
                 <el-input v-model="originRequireForm.initiatorName" disabled></el-input>
@@ -215,10 +215,10 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-    .staff-box{
+    .worker-box{
         width: 100%;
         padding-top: 30px;
-        .staff-form{
+        .worker-form{
             width: 100%;
             .form-item-size{
                 width: 30%;

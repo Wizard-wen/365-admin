@@ -9,7 +9,7 @@
             </div>  
             <el-table 
                 :data="staffTable" 
-                class="staff-table" 
+                class="worker-table" 
                 :stripe="true" 
                 border 
                 :fit="true"
@@ -346,7 +346,7 @@
         height:24px;
         line-height: 24px;
     }
-    .staff{
+    .worker{
         .list-table{
             height: 750px;
             width:100%;
@@ -373,7 +373,7 @@
                         flex: 1;
                     }
                 }
-                .staff-table{
+                .worker-table{
                     height: calc(100% - 72px);
                     width: 100%;
                     margin: 0 auto;

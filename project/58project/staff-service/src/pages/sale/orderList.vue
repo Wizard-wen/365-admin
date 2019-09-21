@@ -1,5 +1,5 @@
 <template>
-    <div class="staff" v-loading="isLoaded">
+    <div class="worker" v-loading="isLoaded">
         <sale-order-table-component
             :staffTable="orderApplyTable"
             :maxLength="maxLength"
@@ -165,7 +165,7 @@
              * @param paramObj 列表参数对象
              */
             dealOrder(paramObj){
-                this.$router.push(`/sale/orderConfig?id=${paramObj.id}`)
+                this.$router.push(`/sale/orderConfig?order_id=${paramObj.id}`)
             },
             /**
              * 分派订单

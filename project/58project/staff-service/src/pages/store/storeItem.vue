@@ -60,10 +60,10 @@
 					</el-table-column>
 				</el-table>
 			</div>
-			<add-store-staff-dialog
+			<add-store-worker-dialog
 				:addStoreStaffDialogVisible="addStoreStaffDialogVisible"
 				v-if="addStoreStaffDialogVisible"
-				@closeAddStoreStaffDialog="closeAddStoreStaffDialog"></add-store-staff-dialog>
+				@closeAddStoreStaffDialog="closeAddStoreStaffDialog"></add-store-worker-dialog>
 		</div>
 	</div>
   </div>
@@ -71,10 +71,10 @@
 
 <script>
 import { storeService, store, $utils } from "../../../common";
-import {addStoreStaffDialog} from './storeItem/index.js'
+import {addStoreWorkerDialog} from './storeItem/index.js'
 export default {
 	components: {
-		addStoreStaffDialog,
+		addStoreWorkerDialog,
 	},
 	data() {
 		return {

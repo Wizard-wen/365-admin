@@ -40,7 +40,7 @@
         </template>
 
 
-        <el-form class="staff-form" slot="form"  ref="form" :model="workerForm" :rules="staffRules" label-width="140px">
+        <el-form class="worker-form" slot="form"  ref="form" :model="workerForm" :rules="staffRules" label-width="140px">
             <!-- 等同于更新时间 -->
             <!-- <el-form-item label="登记日期" prop="register_at" class="form-item-size" size="small">
                 <el-date-picker v-model="workerForm.register_at" value-format="timestamp" type="date" placeholder="请选择登记日期"></el-date-picker>
@@ -641,7 +641,7 @@ export default {
             if(fromPage == 0 || fromPage == 1){
                 this.$router.push("/worker/workerList")
             } else if (fromPage == 2){
-                this.$router.push("/worker/returnList")
+                this.$router.push("/worker/returnWorkerList")
             } else if (fromPage == 3){
                 this.$router.push("/worker/errorWorkerList")
             } else if (fromPage == 4){
@@ -841,7 +841,7 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-.staff-form{
+.worker-form{
     width: 100%;
     margin-bottom: 60px;
     & /deep/ .el-form-item{

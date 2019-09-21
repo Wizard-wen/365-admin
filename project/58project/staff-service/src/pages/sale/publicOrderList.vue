@@ -1,5 +1,5 @@
 <template>
-    <div class="staff" v-loading="isLoaded">
+    <div class="worker" v-loading="isLoaded">
         <sale-public-order-table-component
             :staffTable="orderApplyTable"
             :maxLength="maxLength"
