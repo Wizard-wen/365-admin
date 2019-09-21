@@ -150,7 +150,7 @@
 
                 <el-table-column  label="来源门店" prop="apply_store_name" align="center" width="150"></el-table-column>
 
-                <el-table-column  label="来源人" prop="apply_manager_name" align="center" width="150"></el-table-column>
+                <el-table-column  label="来源人" prop="apply_manager_name" align="center" width="150" :formatter="apply_manager_nameFomatter"></el-table-column>
                 
                 <el-table-column label="操作" align="center" fixed="right" :width="controlScopeLength">
                     <template slot-scope="scope">
@@ -238,7 +238,17 @@
                     return '-'
                 }
                 return $utils.formatDate(new Date(row.sign_service_end), 'yyyy-MM-dd')
-            }
+            },
+            /**
+             * 来源人转换
+             */
+            apply_manager_nameFomatter(row, column){
+                if(row.apply_manager_name == ''){
+                    return '门店'
+                }else{
+                    return  row.apply_manager_name
+                }
+            },
             
         },
     }

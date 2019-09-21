@@ -47,7 +47,7 @@
                     </div>
                     <div class="order-list">
                         <el-form-item label="姓名" prop="sign_staff_name">
-                            <el-input v-model="signForm.sign_staff_name"></el-input>
+                            <el-input v-model="signForm.sign_staff_name" :disabled="true"></el-input>
                         </el-form-item>
                         <el-form-item label="联系电话" prop="sign_staff_phone">
                             <el-input v-model="signForm.sign_staff_phone"></el-input>
@@ -227,6 +227,10 @@ export default {
                 contract_number: '请选择'
             }],
             signRules: {
+                //合同编号
+                contract_number: [
+                    { required:true,message:'请选择合同编号',trigger: 'change'},
+                ],
                 //雇主姓名
                 sign_user_name: [
                     { required:true,message:'请输入雇主姓名',trigger: 'blur'},
@@ -239,7 +243,6 @@ export default {
                 //雇主身份证号
                 sign_user_identify: [
                     { required:true,message:'请输入雇主身份证号',trigger: 'blur'},
-                    // {validator: validator.identifyValidate, trigger: 'blur'}
                 ],
                 //签约服务人员姓名
                 sign_staff_name: [
@@ -287,13 +290,14 @@ export default {
             //签约表单
             signForm: {
                 order_id: this.$route.query.order_id,
-                sign_staff_id: this.$route.query.sign_staff_id,
+                
                 contract_number: '',//合同编号
                 sign_user_name:'',// 雇主
                 sign_user_phone:'',// 雇主联系电话
                 sign_user_identify:'',// 雇主身份证号
                 
-                sign_staff_name:'',// 签约家政服务员
+                sign_staff_name:this.$route.query.sign_staff_name,// 签约家政服务员
+                sign_staff_id: this.$route.query.sign_staff_id,//签约家政服务员id
                 sign_staff_phone:'',// 签约家政服务员电话
                 sign_staff_identify:'',// 签约家政服务员身份证号
                 sign_staff_law_address:'',// 签约家政服务员户籍地址
@@ -433,6 +437,12 @@ export default {
             await operateService.getManagerVoidContractSelection().then(data =>{
                 if(data.code == '0'){
                     this.contract_numberList = data.data
+                    if(this.contract_numberList.length == 0){
+                        this.$message({
+                            type: 'error',
+                            message: '您目前没有可签约的合同，请及时联系运营申请！'
+                        })
+                    }
                 }
                 
             }).catch(error => {

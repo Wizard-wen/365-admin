@@ -4,9 +4,6 @@
         <slot name="searchList"></slot>
 
         <div class="table-list">
-            <!-- <div class="search-form">
-                <slot name="searchForm"></slot>
-            </div>   -->
             <el-table 
                 :data="staffTable" 
                 class="worker-table" 

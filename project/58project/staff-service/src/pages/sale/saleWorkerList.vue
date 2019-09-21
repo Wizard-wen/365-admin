@@ -54,13 +54,13 @@
     import {
         queryComponent,
         queryTagComponent,
-        saleStaffTableComponent,
+        saleWorkerTableComponent,
         createStaffDialog,
         errorStaffDialog} from './saleWorkerList/index.js'
 
     export default {
         components: {
-            saleStaffTableComponent,
+            saleWorkerTableComponent,
             createStaffDialog,
             errorStaffDialog,
             queryComponent,

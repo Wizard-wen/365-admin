@@ -191,7 +191,7 @@ export default {
                     query: {
                         id: row.id,
                         from: 2,//
-                        orderId: this.$route.query.id
+                        orderId: this.$route.query.order_id
                     }
                 })
         },
@@ -208,7 +208,7 @@ export default {
                 try{
                     let sendObj = {
                         staff_id:staffObject.id ,
-                        order_id: this.$route.query.id,
+                        order_id: this.$route.query.order_id,
                     }
                     await saleService.createOrderStaff(sendObj).then(data =>{
                         if(data.code == "0"){

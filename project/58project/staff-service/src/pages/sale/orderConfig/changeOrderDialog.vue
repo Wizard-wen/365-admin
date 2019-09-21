@@ -60,7 +60,7 @@ export default {
         return {
             //改变的字段内容
             orderApplyField: {
-                id: this.$route.query.id,
+                order_id: this.orderId,
                 ...this.changeOrderField,
             },
         }
