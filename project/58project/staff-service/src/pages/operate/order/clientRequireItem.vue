@@ -329,7 +329,7 @@ export default {
          * 返回上一级
          */
         goback(){
-            this.$router.push('/operate/operateOrderApplyList')
+            this.$router.push('/operate/clientRequireList')
         }
     },
     filters: {

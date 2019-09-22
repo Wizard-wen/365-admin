@@ -25,7 +25,7 @@ export default {
             return this.$store.state.operateModule.clientRequireConfig
         },
         queryedList(){
-            return this.$store.state.operateModule.orderApplyList
+            return this.$store.state.operateModule.clientRequire
 
         },
         queryListLength(){
@@ -92,7 +92,7 @@ export default {
                 newValue = ''
             }
             //将查询组件数据变化存入vuex
-            this.$store.commit('setOrderApplyList', {
+            this.$store.commit('setClientRequire', {
                 queryKey: item.key,
                 queryedList: newValue
             })

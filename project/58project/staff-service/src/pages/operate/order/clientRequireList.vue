@@ -129,7 +129,7 @@ export default {
      */
     async handleCurrentPage(val) {
       //设置page查询参数
-      this.$store.commit("setOrderApplyList", {
+      this.$store.commit("setClientRequire", {
         queryKey: "page",
         queryedList: val
       });

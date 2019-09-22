@@ -125,6 +125,10 @@ export const operateModule = {
             state.clientRequireConfig.order_apply_type = clientRequireConfig.order_apply_type
             state.clientRequireConfig.created_at = clientRequireConfig.created_at
         },
+        //设置客户端订单申请列表查询字段
+        setClientRequire(state,payload){
+            state.clientRequire[payload.queryKey] = payload.queryedList
+        },
     },
     state: {
         //服务人员相关列表配置
@@ -307,6 +311,16 @@ export const operateModule = {
         clientRequireConfig: {
             type: order_apply_type,//订单申请状态
             created_at,//创建时间
+        },
+        //订单申请查询字段
+        clientRequire: {
+          page: 1, //请求页码
+          pageNumber: 20,//单页信息数量
+          type: [],//订单申请类型
+          apply_code: '',//订单申请编号
+          user_phone: '',//客户电话
+          user_name: '',//客户姓名
+          created_at: [],//创建时间
         },
     },
 }

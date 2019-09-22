@@ -42,7 +42,7 @@ export default {
     },
     computed: {
         inputText(){
-            return this.$store.state.operateModule.orderApplyList[this.queryKey]
+            return this.$store.state.operateModule.clientRequire[this.queryKey]
         }
     },
     methods: {
@@ -57,11 +57,11 @@ export default {
          */
         addQuery(){
             //将查询组件数据变化存入vuex
-            this.$store.commit('setOrderApplyList', {
-                queryKey: this.queryKey, 
+            this.$store.commit('setClientRequire', {
+                queryKey: this.queryKey,
                 queryedList: this.searchText
             })
-            
+
             //更新表格数据
             this.$emit('updateTable')
         }
@@ -112,7 +112,7 @@ export default {
                 padding-left: 23px;
                 border: 1px solid #d5d5d5;
                 background: url(./images/mirror.svg) 6px 6px no-repeat;
-                background-size: 15px 15px; 
+                background-size: 15px 15px;
             }
         }
     }

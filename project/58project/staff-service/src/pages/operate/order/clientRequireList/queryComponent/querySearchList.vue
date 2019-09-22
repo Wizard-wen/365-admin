@@ -66,7 +66,7 @@ export default {
             })
         },
         selectedArr(){
-            return this.$store.state.operateModule.orderApplyList[this.queryKey]
+            return this.$store.state.operateModule.clientRequire[this.queryKey]
         }
     },
     methods: {
@@ -80,7 +80,6 @@ export default {
          * 改变查询条件
          */
         addQuery(item){
-          console.log(item)
             let queryedList = []
             if(this.isSingleQuery){
                 // 清空id数组
@@ -100,7 +99,7 @@ export default {
             }
 
             //将查询组件数据变化存入vuex
-            this.$store.commit('setOrderApplyList', {
+            this.$store.commit('setClientRequire', {
                 queryKey: this.queryKey,
                 queryedList: queryedList
             })
