@@ -44,12 +44,6 @@
       </template>
 
     </client-list-table-component>
-    <pass-order-apply-dialog
-      v-if="orderApplyPassVisible"
-      :orderApplyId="orderApplyId"
-      @closeOrderApplyPassDialog="closeOrderApplyPassDialog"
-      :orderApplyPassVisible="orderApplyPassVisible"
-      :systemVersion="systemVersion"></pass-order-apply-dialog>
   </div>
 </template>
 
@@ -60,14 +54,12 @@ import {
   queryTagComponent,
   queryComponent
 } from "./clientRequireList/index.js";
- import {passOrderApplyDialog} from './orderApplyItem/index.js'
 
 export default {
   components: {
     clientListTableComponent,
     queryTagComponent,
     queryComponent,
-    passOrderApplyDialog,
   },
   data() {
     return {
@@ -88,7 +80,6 @@ export default {
       },
       systemVersion: "", //系统版本号
       orderApplyId: "", //当前订单id
-      orderApplyPassVisible: false //控制订单通过弹窗显示隐藏
     };
   },
   methods: {
@@ -138,7 +129,7 @@ export default {
      */
     async handleCurrentPage(val) {
       //设置page查询参数
-      this.$store.commit("setOrderApplyList", {
+      this.$store.commit("setClientRequire", {
         queryKey: "page",
         queryedList: val
       });
@@ -148,18 +139,85 @@ export default {
      * 打开通过订单弹窗
      * @param paramObj 订单字段对象
      */
-    openPassOrderApply(paramObj) {
+    async openPassOrderApply(paramObj) {
       this.orderApplyId = paramObj.id;
       this.systemVersion = paramObj.version; //系统版本号
-      this.orderApplyPassVisible = true;
+      let reault = await this.$confirm("确定通过该订单申请吗？此操作将会关闭订单拒绝","提示",{
+          confirmButtonText: "确定",
+          cancelButtonText: "取消",
+          type: "warning"
+      }).catch(() => {
+          this.$message({
+              type: "info",
+              message: "已放弃"
+          });
+      });
+      if (reault == "confirm") {
+          this.isLoaded = true
+          try {
+              await operateService.changeRequireType(paramObj.id,3).then(async data => {
+                  if (data.code == 0) {
+                      this.$message({
+                          type: "success",
+                          message: data.message
+                      });
+                  }
+                  await this.getTableList()
+
+              }).catch(error => {
+                  this.$message({
+                      type: "error",
+                      message: error.message
+                  });
+              }).finally(() =>{
+                  this.isLoaded = false
+              })
+          } catch (error) {
+              throw error;
+          }
+      }
     },
-    /**
-     * 关闭通过订单申请弹窗
-     */
-    async closeOrderApplyPassDialog() {
-      await this.getTableList();
-      this.orderApplyPassVisible = false;
-    },
+      /**
+       * 拒绝订单申请年轻
+       * @paramObj
+       */
+      async refuseOrderApply(paramObj){
+      let response = await this.$confirm("确定拒绝该订单申请吗?此操作将会关闭订单申请", "提示", {
+          confirmButtonText: "确定",
+          cancelButtonText: "取消",
+          type: "warning"
+      }).catch(() => {
+          this.$message({
+              type: "info",
+              message: "已放弃拒绝"
+          });
+      });
+      if (response == "confirm") {
+          this.isLoaded = true
+          try {
+
+              await operateService.changeRequireType(paramObj.id,2).then(async data => {
+                  if (data.code == 0) {
+                      this.$message({
+                          type: "success",
+                          message: data.message
+                      });
+                  }
+                  await this.getTableList()
+
+              }).catch(error => {
+                  this.$message({
+                      type: "error",
+                      message: error.message
+                  });
+              }).finally(() =>{
+                  this.isLoaded = false
+              })
+          } catch (error) {
+              throw error;
+          }
+      }
+      },
     /**
      * 编辑订单申请
      */

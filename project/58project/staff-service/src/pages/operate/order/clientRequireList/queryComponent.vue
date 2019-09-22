@@ -4,7 +4,7 @@
             @updateTable="updateTable"
             :queryKey="'type'"
             :queryName="'订单申请状态'"
-            :queryList="orderApplyFormConfig.type"
+            :queryList="clientRequireConfig.type"
             :isSingleQuery="true"></query-search-list>
         <query-search-input
             @updateTable="updateTable"
@@ -22,7 +22,7 @@
             @updateTable="updateTable"
             :queryKey="'created_at'"
             :queryName="'下单时间'"
-            :queryList="orderApplyFormConfig.created_at"
+            :queryList="clientRequireConfig.created_at"
             :isSingleQuery="true"></query-search-list>
     </div>
 </template>
@@ -43,8 +43,8 @@ export default {
         querySearchInput,
     },
     computed:{
-        orderApplyFormConfig(){
-            return this.$store.state.operateModule.orderApplyFormConfig
+        clientRequireConfig(){
+            return this.$store.state.operateModule.clientRequireConfig
         }
     },
     methods: {

@@ -21,11 +21,11 @@ export default {
         }
     },
     computed:{
-        orderApplyFormConfig(){
-            return this.$store.state.operateModule.orderApplyFormConfig
+        clientRequireConfig(){
+            return this.$store.state.operateModule.clientRequireConfig
         },
         queryedList(){
-            return this.$store.state.operateModule.orderApplyList 
+            return this.$store.state.operateModule.clientRequire
 
         },
         queryListLength(){
@@ -79,7 +79,7 @@ export default {
          * 名字
          */
         analysisValue(item, key){
-            return this.orderApplyFormConfig[item].find(item => item.id == key).name
+            return this.clientRequireConfig[item].find(item => item.id == key).name
         },
         closeTag(item){
             let configValue = this.queryedList[item.key], //取出queryedList中字段的值
@@ -92,7 +92,7 @@ export default {
                 newValue = ''
             }
             //将查询组件数据变化存入vuex
-            this.$store.commit('setOrderApplyList', {
+            this.$store.commit('setClientRequire', {
                 queryKey: item.key,
                 queryedList: newValue
             })

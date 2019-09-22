@@ -16,7 +16,7 @@ export const operate_clientRequest = {
    * 客户端订单列表
    */
   getClientRequireList(){
-    return axios.post(`./admin/order/getRequireList`)
+    return axios.post(`./admin/order/getRequireList`,store.state.operateModule.clientRequire)
   },
   /**
    * 客户端订单详情
@@ -39,7 +39,7 @@ export const operate_clientRequest = {
   */
  changeRequireType(id,type){
     return axios.post(`./admin/order/changeRequireType`,{id:id,type:type})
-  }
+  },
 }
 /**
  * 运营订单申请接口

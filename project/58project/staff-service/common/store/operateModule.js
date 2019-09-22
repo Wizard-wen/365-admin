@@ -27,16 +27,16 @@ export const order_status = [
  * 创建于
  */
 export const created_at = [
-    {id: 1, name: "今天"}, 
-    {id: 2, name: "昨天"}, 
-    {id: 3, name: "过去7天"}, 
-    {id: 4, name: "过去30天"}, 
-    {id: 5, name: "本周"}, 
-    {id: 6, name: "上周"}, 
-    {id: 7, name: "上个月"}, 
-    {id: 8, name: "本季度"}, 
-    {id: 9, name: "今年"}, 
-    {id: 10, name: "去年"}, 
+    {id: 1, name: "今天"},
+    {id: 2, name: "昨天"},
+    {id: 3, name: "过去7天"},
+    {id: 4, name: "过去30天"},
+    {id: 5, name: "本周"},
+    {id: 6, name: "上周"},
+    {id: 7, name: "上个月"},
+    {id: 8, name: "本季度"},
+    {id: 9, name: "今年"},
+    {id: 10, name: "去年"},
 ]
 /**
  * 合同状态
@@ -78,9 +78,9 @@ export const operateModule = {
         setVoidContractConfigForm(state, voidContractConfigForm){
             state.voidContractConfigForm.manager_id = voidContractConfigForm.apply_manager_id
         },
-        /** 
+        /**
          * 列表查询函数公共键值说明
-         * @param queryKey queryList 键名 
+         * @param queryKey queryList 键名
          * @param queryedList 键值，可能是数组，也可能是字符串
          */
         //设置全部服务人员查询字段
@@ -120,6 +120,15 @@ export const operateModule = {
             state.contractConfigForm.sign_manager_id = contractConfigForm.apply_manager_id
             state.contractConfigForm.sign_store_id = contractConfigForm.apply_store_id
         },
+        //设置客户端订单申请相关搜索配置字段
+        setClientRequireConfigForm(state, clientRequireConfig){
+            state.clientRequireConfig.order_apply_type = clientRequireConfig.order_apply_type
+            state.clientRequireConfig.created_at = clientRequireConfig.created_at
+        },
+        //设置客户端订单申请列表查询字段
+        setClientRequire(state,payload){
+            state.clientRequire[payload.queryKey] = payload.queryedList
+        },
     },
     state: {
         //服务人员相关列表配置
@@ -148,7 +157,7 @@ export const operateModule = {
         //合同搜索列表筛选
         contractConfigForm: {
             type: contract_type,
-            sign_at: created_at,//签约时间 
+            sign_at: created_at,//签约时间
             sign_manager_id: [],//签约经纪人
             sign_store_id: [],//签约经纪门店
         },
@@ -183,7 +192,7 @@ export const operateModule = {
             name: '',
             phone: '',
         },
-        //全部服务人员查询字段 
+        //全部服务人员查询字段
         workerList: {
             /*********************表格字段查询******************************/
             get_for: 'total',//查询原因
@@ -191,14 +200,14 @@ export const operateModule = {
             pageNumber: 20,//单页信息数量
 
             /*********************逻辑字段查询*****************************/
-            
+
             // staff_code: '',//员工号
             // sex: '',//性别
             // created_at: '', //创建时间
             count: 0,//添加回访人员数量
 
             /*********************业务字段查询*****************************/
-            
+
             // register_at:'',//登记时间
             // updated_at:'',更新时间
             authentication: [],//认证状态
@@ -248,7 +257,7 @@ export const operateModule = {
             page: 1, //请求页码
             pageNumber: 20,//单页信息数量
             order_code: '',//订单编号
-            type: [],//订单状态 
+            type: [],//订单状态
             order_at: [],//客户下单时间
             order_user_phone:'',//下单客户电话
             order_user_name: '',//下单客户姓名
@@ -265,7 +274,7 @@ export const operateModule = {
             agent_manager_id: [], //经纪人id
         },
         /**
-         *  合同列表查询字段 
+         *  合同列表查询字段
          */
         contractList: {
             /*********************表格字段查询******************************/
@@ -276,7 +285,7 @@ export const operateModule = {
 
 
             type: [],//合同状态
-            sign_at: [],//签约时间 
+            sign_at: [],//签约时间
             sign_manager_id: [],//签约经纪人
             sign_store_id: [],//签约经纪门店
 
@@ -297,7 +306,22 @@ export const operateModule = {
             assign_at:[],//分派时间（筛选）
             type:[],//是否已经签约（筛选）
             manager_id:[],//经纪人id
-        }
+        },
+        //客户端订单申请相关列表筛选配置项
+        clientRequireConfig: {
+            type: order_apply_type,//订单申请状态
+            created_at,//创建时间
+        },
+        //订单申请查询字段
+        clientRequire: {
+          page: 1, //请求页码
+          pageNumber: 20,//单页信息数量
+          type: [],//订单申请类型
+          require_code: '',//订单申请编号
+          user_phone: '',//客户电话
+          user_name: '',//客户姓名
+          created_at: [],//创建时间
+        },
     },
 }
 

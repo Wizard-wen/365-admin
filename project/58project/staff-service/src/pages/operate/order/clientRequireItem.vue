@@ -134,12 +134,6 @@
             :changeOrderOriginField="changeOrderOriginField"
             @closeChangeOriginDialog="closeChangeOriginDialog"
             :orderOriginVisible="orderOriginVisible"></change-order-origin-dialog>
-        <pass-order-apply-dialog
-            v-if="orderApplyPassVisible"
-            :orderApplyId="orderApplyDetail.id"
-            @closeOrderApplyPassDialog="closeOrderApplyPassDialog"
-            :orderApplyPassVisible="orderApplyPassVisible"
-            :systemVersion="systemVersion"></pass-order-apply-dialog>
     </div>
 </template>
 
@@ -148,7 +142,7 @@ import { operateService, store, $utils } from "../../../../common";
 import {
     changeApplyDialog,
     changeOrderOriginDialog,
-    passOrderApplyDialog} from './clientRequireItem/index.js'
+    } from './clientRequireItem/index.js'
 export default {
     data() {
         return {
@@ -191,8 +185,6 @@ export default {
                 apply_manager_id: '',
                 apply_store_id: '',
             },
-            //通过订单申请弹窗显示隐藏
-            orderApplyPassVisible: false,
             //拒绝订单申请表单
             refuseOrderApplyObject: {
                 id: this.$route.query.id,
@@ -205,7 +197,6 @@ export default {
     components: {
         changeApplyDialog,
         changeOrderOriginDialog,
-        passOrderApplyDialog
     },
     methods: {
         /**
@@ -228,16 +219,42 @@ export default {
         },
 
         //打开通过订单申请弹窗
-        openPassOrderApplyDialog(){
+        async openPassOrderApplyDialog(){
             this.systemVersion = this.orderApplyDetail.version
-            this.orderApplyPassVisible = true
-        },
-        /**
-         * 关闭通过订单申请弹窗
-         */
-        async closeOrderApplyPassDialog(){
-            orderApplyPassVisible = false
-            await this.getApplication()
+            let reault = await this.$confirm("确定通过该订单申请吗？此操作将会关闭订单拒绝","提示",{
+                confirmButtonText: "确定",
+                cancelButtonText: "取消",
+                type: "warning"
+            }).catch(() => {
+                this.$message({
+                    type: "info",
+                    message: "已放弃"
+                });
+            });
+            if (reault == "confirm") {
+                store.commit("setLoading", 1);
+                try {
+                    await operateService.changeRequireType(this.orderApplyDetail.id,3).then(async data => {
+                        if (data.code == 0) {
+                            this.$message({
+                                type: "success",
+                                message: data.message
+                            });
+                        }
+                        await this.getApplication()
+
+                    }).catch(error => {
+                        this.$message({
+                            type: "error",
+                            message: error.message
+                        });
+                    }).finally(() =>{
+                        store.commit("setLoading", false);
+                    })
+                } catch (error) {
+                    throw error;
+                }
+            }
         },
         /**
          * 拒绝订单申请年轻
@@ -250,20 +267,21 @@ export default {
             }).catch((error) => {
                 this.$message({
                     type: "info",
-                    message: error.message
+                    message: '已放弃拒绝'
                 });
             });
             if (response == "confirm") {
                 store.commit("setLoading", 1);
                 try {
                     this.refuseOrderApplyObject.version = this.orderApplyDetail.version
-                    await operateService.dealApplication(this.refuseOrderApplyObject).then(data => {
+                    await operateService.changeRequireType(this.orderApplyDetail.id,2).then(async data => {
                         if (data.code == 0) {
                             this.$message({
                                 type: "success",
                                 message: data.message
                             });
                         }
+                         await this.getApplication()
                     }).catch(error => {
                         this.$message({
                             type: "error",
@@ -311,7 +329,7 @@ export default {
          * 返回上一级
          */
         goback(){
-            this.$router.push('/operate/operateOrderApplyList')
+            this.$router.push('/operate/clientRequireList')
         }
     },
     filters: {
