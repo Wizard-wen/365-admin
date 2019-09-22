@@ -21,11 +21,11 @@ export default {
         }
     },
     computed:{
-        orderApplyFormConfig(){
-            return this.$store.state.operateModule.orderApplyFormConfig
+        clientRequireConfig(){
+            return this.$store.state.operateModule.clientRequireConfig
         },
         queryedList(){
-            return this.$store.state.operateModule.orderApplyList 
+            return this.$store.state.operateModule.orderApplyList
 
         },
         queryListLength(){
@@ -79,7 +79,7 @@ export default {
          * 名字
          */
         analysisValue(item, key){
-            return this.orderApplyFormConfig[item].find(item => item.id == key).name
+            return this.clientRequireConfig[item].find(item => item.id == key).name
         },
         closeTag(item){
             let configValue = this.queryedList[item.key], //取出queryedList中字段的值

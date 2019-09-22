@@ -5,11 +5,11 @@
             <i class="arrow-position" :class="isShow?'el-icon-arrow-up':'el-icon-arrow-down'"></i>
         </div>
         <div class="search-list" v-if="isShow">
-            <div 
-                class="list-item" 
-                :class="item.isSelected? 'list-item-active' : ''" 
-                v-for="(item, index) in showQueryList" 
-                :key="index" 
+            <div
+                class="list-item"
+                :class="item.isSelected? 'list-item-active' : ''"
+                v-for="(item, index) in showQueryList"
+                :key="index"
                 @click="addQuery(item)">
                 <span class="list-item-block" :class="'list-item-color'+ ((index+1)%5+1)"></span>
                 {{item.name}}
@@ -61,7 +61,7 @@ export default {
             return this.queryList.map((item, index) =>{
                 return {
                     ...item,
-                    isSelected: _this.selectedArr.includes(item.id)? true : false 
+                    isSelected: _this.selectedArr.includes(item.id)? true : false
                 }
             })
         },
@@ -80,6 +80,7 @@ export default {
          * 改变查询条件
          */
         addQuery(item){
+          console.log(item)
             let queryedList = []
             if(this.isSingleQuery){
                 // 清空id数组
@@ -90,7 +91,7 @@ export default {
                 queryedList = this.selectedArr;
 
                 let indexNumber = this.selectedArr.indexOf(item.id)
-               
+
                if(indexNumber!=-1){
                    queryedList.splice(indexNumber, 1)
                } else {
@@ -100,10 +101,10 @@ export default {
 
             //将查询组件数据变化存入vuex
             this.$store.commit('setOrderApplyList', {
-                queryKey: this.queryKey, 
+                queryKey: this.queryKey,
                 queryedList: queryedList
             })
-            
+
             //更新表格数据
             this.$emit('updateTable')
         }
@@ -146,7 +147,7 @@ export default {
                 height:30px;
                 line-height: 30px;
                 width:100%;
-                text-indent:30px;   
+                text-indent:30px;
                 color: #333;
                 font-size: 12px;
                 cursor: pointer;
@@ -182,7 +183,7 @@ export default {
     .list-item-color1{
         background: #409eff;
         // border: 1px solid rgba(64,158,255,.2);
-        // background-color: rgba(64,158,255,.1);           
+        // background-color: rgba(64,158,255,.1);
     }
     .list-item-color2{
         // background-color: rgba(103,194,58,.1);
@@ -202,7 +203,7 @@ export default {
     .list-item-color5{
         // background-color: rgba(245,108,108,.1);
         // border-color: rgba(245,108,108,.2);
-        background: #f56c6c;       
+        background: #f56c6c;
     }
 
 </style>
