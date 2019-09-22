@@ -1,19 +1,19 @@
 <template>
-    <div class="product">
+    <div class="product" v-loading="is_tree_loading">
         <div class="product-tree-box">
             <div class="title">商品索引</div>
             <el-tree
+                ref="tree"
                 :default-expanded-keys="defaultExpandKeys"
-                :highlight-current="true"
+                highlight-current
                 :data="productTreeList"
                 :node-key="'id'"
                 accordion
                 @node-click="nodeClick"
                 :props="defaultProps"></el-tree>
         </div>
-        <div class="product-form-box">
+        <div class="product-form-box" v-loading="is_contains_loading">
             <div class="control">
-                <el-button type="primary" @click="saveProduct">保存</el-button>
                 <el-button type="primary" @click="createProduct">创建商品</el-button>
             </div>
             <el-form class="productForm" ref="productForm" :model="productForm" label-width="120px">
@@ -43,6 +43,9 @@
                         :headers="uploadHeader">
                         <i class="el-icon-plus"></i>
                     </el-upload>
+                </el-form-item>
+                <el-form-item >
+                    <el-button type="primary" @click="saveProduct">修改</el-button>
                 </el-form-item>
             </el-form>
         </div>
@@ -83,7 +86,9 @@ export default {
             uploadHeader:{
                 accessToken: this.$store.state.loginModule.token.access_token
             },
-            defaultExpandKeys: [2],
+            defaultExpandKeys: [],
+            is_tree_loading: false,//商品树形结构loading
+            is_contains_loading: false, //商品详情loading
         }
     },
     components:{
@@ -106,21 +111,47 @@ export default {
          * 点击节点
          */
         async nodeClick(clickObject,currentObject){
+            
             if(clickObject.hasOwnProperty('children')){
 
             } else {
-                await operateService.getService(clickObject.id).then(data =>{
-                    this.productForm = data.data
-                    this.productForm.files.forEach((item, index) =>{
-                            item.url = './resource/'+item.url
+                try{
+                    this.is_contains_loading = true
+                    await operateService.getService(clickObject.id).then(data =>{
+                        this.productForm = data.data
+                        this.productForm.files.forEach((item, index) =>{
+                                item.url = './resource/'+item.url
+                        })
+                    }).catch(error =>{
+                        this.$message({
+                            type:'error',
+                            message: error.message
+                        })
+                        this.is_contains_loading = false
+                    }).finally(() =>{
+                        this.is_contains_loading = false
                     })
-                }).catch(error =>{
+                } catch(error){
                     this.$message({
                         type:'error',
                         message: error.message
                     })
-                })
+                    this.is_contains_loading = false
+                }
+                
             }
+        },
+        /**
+         * 设置高亮节点
+         */
+        setCurrentKey(key){
+            const store = this.$refs.tree.store;
+            const node = store.getNode(key);
+            store.setCurrentNode(node);
+            this.$refs.tree.currentNode = node;
+            store.setCurrentNodeKey(key);
+            store.currentNodeKey = key;
+            this.$refs.tree.$emit("node-click", node.data, node, this.$refs.tree);
         },
         /**
          * 上传成功后，接收图片数据，送入图片回显数组
@@ -158,34 +189,58 @@ export default {
          * 获取服务商品树
          */
         async getServiceTree(){
-            await operateService.getServiceTree().then(data =>{
-                console.log(data)
-                this.productTreeList = data.data
+            try{
+                this.is_tree_loading = true
+                await operateService.getServiceTree().then(data =>{
+
+                    this.productTreeList = data.data
+                    
+                    this.defaultExpandKeys = [this.productTreeList[0].id]
+                    
+                    this.is_tree_loading = false
+                
+                }).catch(error =>{
+                    this.$message({
+                        type:'error',
+                        message: error.message
+                    })
+                    this.is_tree_loading = false
+                }).finally(() =>{
+                    this.is_tree_loading = false
+                })
+            } catch(error){
+                this.$message({
+                    type:'error',
+                    message: error.message
+                })
+                this.is_tree_loading = false
+            }
+            await this.nodeClick(this.productTreeList[0].children[0])
+        }
+    },
+    async mounted(){
+        //获取商品树形结构
+        await this.getServiceTree()
+
+        await this.setCurrentKey(this.productTreeList[0].children[0].id)
+
+        //获取服务商品下拉菜单
+        try{
+            await operateService.getServiceSelection().then(data =>{
+                this.selectionList = data.data
             }).catch(error =>{
                 this.$message({
                     type:'error',
                     message: error.message
                 })
             })
+        } catch(error){
+            this.$message({
+                type:'error',
+                message: error.message
+            })
         }
-    },
-    async mounted(){
-        // await operateService.getServiceTree().then(data =>{
-        //     console.log(data)
-        //     this.productTreeList = data.data
-        // }).catch(error =>{
-        //     this.$message({
-        //         type:'error',
-        //         message: error.message
-        //     })
-        // })
-        await this.getServiceTree()
-        await operateService.getServiceSelection().then(data =>{
-            console.log(data)
-            this.selectionList = data.data
-        }).catch(error =>{
 
-        })
     }
 }
 </script>

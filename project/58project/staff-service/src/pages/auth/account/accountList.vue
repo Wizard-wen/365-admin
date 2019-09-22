@@ -44,7 +44,7 @@
                         :tableOriginData="scope.row.department_id"></table-tag-component>
                     </template>
                 </el-table-column>
-                <el-table-column label="门店名" prop="store_name" align="center"></el-table-column>
+                <el-table-column label="所属门店" prop="store_name" align="center"></el-table-column>
 
                 <el-table-column label="操作" align="center">
                     <template slot-scope="scope">

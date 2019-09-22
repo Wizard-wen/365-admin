@@ -33,6 +33,10 @@
                         <div class="title">账户余额</div>
                         <div class="value">{{ orderBase.sign_user_account }}</div>
                     </div>
+                    <div class="right-box" >
+                        <div class="title">订单状态</div>
+                        <div class="value" :style="{color: orderType.color}">{{ orderType.name}}</div>
+                    </div>
                 </div>
             </div>
             <!-- 订单分派弹出框 -->
@@ -339,6 +343,37 @@ export default {
          */
         order_logs(){
             return this.$store.state.saleModule.order_logs
+        },
+        /**
+         * 订单状态
+         */
+        orderType(){
+            if(this.orderBase.type == 1){
+                return {
+                    name: '匹配中',
+                    color: '#E6A23C'
+                }
+            } else if(this.orderBase.type == 2){
+                return {
+                    name: '已签约',
+                    color: '#67C23A'
+                }
+            } else if(this.orderBase.type == 3){
+                return {
+                    name: '售后匹配中',
+                    color: '#E6A23C'
+                }
+            } else if(this.orderBase.type == 4){
+                return {
+                    name: '已终止',
+                    color: '#F56C6C'
+                }
+            } else {
+                return {
+                    name: '',
+                    color: ''
+                }
+            }
         }
     },
     methods: {
@@ -403,7 +438,7 @@ export default {
 /*********************备选服务人员列表****************************************************/
         /**
          * 跳转至签约页面
-         * @param type 是签约还是续约
+         * @param type 是签约还是续约 1 续约 2 首次签约
          * @param paramObj 匹配服务人员信息对象
          */
         goSignOrder(type, paramObj){
@@ -411,9 +446,12 @@ export default {
                 path: `/sale/saleSignPage`,
                 query: {
                     order_id: this.order_id,
-                    sign_staff_id: type == 1 ? this.orderBase.sign_staff_id : paramObj.id,
+                    type: this.orderBase.type,//订单状态
+                    sign_staff_id: type == 1 ? this.orderBase.sign_staff_id : paramObj.staff_id,
                     sign_staff_name: type == 1 ? this.orderBase.sign_staff_name : paramObj.staff_name,
-                    sign_staff_code: type == 1 ? this.orderBase.sign_staff_code : paramObj.staff_code
+                    sign_user_name: this.orderBase.type == 3 ? this.orderBase.sign_user_name : '',
+                    sign_user_id: this.orderBase.type == 3 ? this.orderBase.sign_user_id : '',
+                    sign_user_identify: this.orderBase.type == 3 ? this.orderBase.sign_user_identify : '',
                 }
             })
         },

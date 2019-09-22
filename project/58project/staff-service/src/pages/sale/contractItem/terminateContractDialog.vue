@@ -1,7 +1,7 @@
 <template>
     <!-- 结算工资 -->
     <el-dialog
-        title="结算工资"
+        title="终止合同"
         :visible.sync="determinateContractDialogVisible"
         :show-close="false"
         :close-on-press-escape="false"
@@ -16,6 +16,7 @@
                     value-format="timestamp"
                     @change="changeServiceDuration"
                     type="daterange"
+                    :picker-options="pickerOptions"
                     range-separator="至"
                     start-placeholder="服务开始日期"
                     end-placeholder="服务结束日期"></el-date-picker>
@@ -109,7 +110,12 @@ export default {
             },
             determinateContractRules: {
                 
-            }
+            },
+            pickerOptions: {
+                disabledDate(time) {
+                    return time.getTime() < Date.now() - 8.64e7;
+                },
+            },
         }
     },
     watch: {

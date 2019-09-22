@@ -134,7 +134,6 @@ export default {
                 url: './resource/'+response.data.path,
                 name: response.data.name
             }
-            // debugger
             this.paperForm.images.push(picItem)
             
             //消除表单验证

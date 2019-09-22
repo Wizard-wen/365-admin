@@ -10,14 +10,10 @@ export default {
      * @param obj 搜索字段
      */
 
-    getStoreList(tableOption){
-        let baseUrl = `./admin/store/getStoreList?pageNumber=${tableOption.pageNumber}&page=${tableOption.currentPage}`
-        if(tableOption.searchSelect.length){
-            tableOption.searchSelect.forEach((item, index) => {
-                baseUrl += `&${item.key}=${item[item.key]}`
-            });
-        }
-        return axios.get(baseUrl)
+    getStoreList(){
+        return axios.post(`./admin/store/getStoreList`,{
+            // ...store.state.storeModule.storeList
+        })
     },
     /**
      * 请求某一门店数据
@@ -35,11 +31,32 @@ export default {
         return axios.post(`./admin/store/editStore`,Object.assign({},editObj))
     },
     /**
-     * 根据门店id获取门店绑定的账号分页列表
-     * @param id 门店的id
-     * @param pageNumber 分页
+     * 获取当前未绑定门店员工
      */
-    getStoreManagerList(obj){
-      return axios.post(`./admin/store/getStoreManagerList?pageNumber=${obj.pageNumber}&id=${obj.id}`)
-  },
+    getNotInStoreManagerSelection(){
+        return axios.get(`./admin/common/getNotInStoreManagerSelection`)
+    },
+    /**
+     * 添加新店员
+     */
+    addStoreManager(paramObj){
+        return axios.post(`./admin/store/addStoreManager`,{
+            ...paramObj
+        })
+    },
+    /**
+     * 获取当前门店员工
+     */
+    
+    getStoreManagerSelection(store_id){
+        return axios.get(`./admin/common/getStoreManagerSelection?store_id=${store_id}`)
+    }, 
+    /**
+     * 解绑门店员工
+     */
+    unbind(paramObj){
+        return axios.post(`./admin/store/unbind`,{
+            ...paramObj
+        })
+    }
 }

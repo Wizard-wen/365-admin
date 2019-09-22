@@ -14,19 +14,36 @@ export default {
     getStore(id){
         return storeRequest.getStore(id)
     },
-      /**
+	/**
      * 编辑门店信息
      * @param editObj
      */
     editStore(editObj){
-      return storeRequest.editStore(editObj)
+      	return storeRequest.editStore(editObj)
+	},
+    /**
+     * 获取当前未绑定门店员工
+     */
+    getNotInStoreManagerSelection(){
+        return storeRequest.getNotInStoreManagerSelection()
     },
     /**
-     * 根据门店id获取门店绑定的账号分页列表
-     * @param id 门店的id
-     * @param pageNumber 分页
+     * 添加新店员
      */
-    getStoreManagerList(obj){
-      return storeRequest.getStoreManagerList(obj)
+    addStoreManager(paramObj){
+        return storeRequest.addStoreManager(paramObj)
+    },
+    /**
+     * 获取当前门店员工
+     */
+    
+    getStoreManagerSelection(store_id){
+        return storeRequest.getStoreManagerSelection(store_id)
+    },
+    /**
+     * 解绑门店员工
+     */
+    unbind(paramObj){
+        return storeRequest.unbind(paramObj)
     }
 }

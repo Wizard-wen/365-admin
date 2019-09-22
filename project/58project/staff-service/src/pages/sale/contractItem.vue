@@ -2,7 +2,7 @@
     <div class="orderConfig" v-loading="isLoaded">
         <div class="order-header">
             <div class="order-name">
-                <h4>合同号：{{contractBase.contract_code}}</h4>
+                <h4>合同编号：{{contractBase.contract_number}}</h4>
             </div>
             <div class="btn-group">
                 <!-- 仅店长有此权限 -->
@@ -28,9 +28,10 @@
             <div class="order-detail">
                 <div class="detail-left">
                     <div class="detail-left-box">
+                        <div class="detail-left-line">合同流水号：{{contractBase.contract_code}}</div>
+                        <div class="detail-left-line">签约时间：{{contractBase.sign_at | timeFomatter}}</div>
                         <div class="detail-left-line">签约经纪人：{{ contractBase.sign_manager_name }}</div>
                         <div class="detail-left-line">签约经纪门店：{{ contractBase.sign_store_name }}</div>
-                        <div class="detail-left-line">签约时间：{{contractBase.sign_at | timeFomatter}}</div>
                     </div>
                 </div>
                 <div class="detail-right">
@@ -216,6 +217,9 @@
                 </div>
                 <div class="order-list">
                     <div v-if="is_settle == 2">
+                        <div class="line-list">
+                            终止事由：<span>{{contractBase.account.terminate_reason}}</span>
+                        </div>
                         <div class="line-list">
                             服务期限：
                             <span>

@@ -10,16 +10,20 @@
 			</el-form-item>
 
 			<el-form-item label="门店类型" prop="is_third">
-				<select-tag-component :propTagList="typeList" v-model="storeForm.is_third" :isSingle="true"></select-tag-component>
+				<select-tag-component :propTagList="is_thirdList" v-model="storeForm.is_third" :isSingle="true"></select-tag-component>
 			</el-form-item>
 
-			<el-form-item label="店长" prop="manager">
-				<el-select v-model="storeForm.manager" placeholder="请选择店长">
+			<el-form-item label="经营状态" prop="type">
+				<select-tag-component :propTagList="typeList" v-model="storeForm.type" :isSingle="true"></select-tag-component>
+			</el-form-item>
+
+			<el-form-item label="店长" prop="store_manager_id">
+				<el-select v-model="storeForm.store_manager_id" placeholder="请选择店长">
                     <el-option
                         v-for="item in storeStaffList"
-                        :key="item.store_id"
-                        :label="item.store_name"
-                        :value="item.store_id"
+                        :key="item.manager_id"
+                        :label="item.manager_name"
+                        :value="item.manager_id"
                         ></el-option>
                 </el-select>
 			</el-form-item>
@@ -49,10 +53,7 @@ export default {
 				address: "",
 				is_third: 0,
 				remarks: "",
-				phone: "",
-				manager: [],
-				start_time: 0,
-				end_time: 0,
+				store_manager_id: 0,
 				type: ""
 			},
 			storeStaffList: [],//门店内所有员工列表
@@ -62,9 +63,9 @@ export default {
 				address: [{ required: true, message: '请填写门店地址', trigger: "blur" }],
 			},
 			//店铺类型列表
-			typeList: [{ id: 1, name: "直营店" }, { id: 2, name: "加盟店" }],
-			//绑定的员工列表
-			roleList: []
+			is_thirdList: [{ id: 1, name: "直营店" }, { id: 2, name: "加盟店" }],
+			//经营状态
+			typeList: [{ id: 1, name: "正常" }, { id: 2, name: "关闭" }],
 		};
 	},
 	components: {
@@ -75,18 +76,8 @@ export default {
 		async getStore() {
 			await storeService.getStore(this.$route.query.id).then(data => {
 				if (data.code == "0") {
-					this.storeForm.id = data.data.store.id;
-					this.storeForm.name = data.data.store.name;
-					this.storeForm.address = data.data.store.address;
-					this.storeForm.is_third = data.data.store.is_third;
-					this.storeForm.remarks = data.data.store.remarks;
-					this.storeForm.phone = data.data.store.phone;
-					this.storeForm.start_time = data.data.store.start_time;
-					this.storeForm.end_time = data.data.store.end_time;
-					this.storeForm.type = data.data.store.type;
-					this.storeForm.manager = data.data.manager;
-
-					this.roleList = data.data.store_manager;
+					this.storeForm = data.data.store
+					this.storeForm.type = this.storeForm.type == 'enable' ? 1 : 2
 				}
 			}).catch(error => {
 				this.$message({
@@ -100,16 +91,8 @@ export default {
 		 */
 		async onSubmit(formName) {
 		let storeObj = {
-			id: this.storeForm.id,
-			name: this.storeForm.name,
-			address: this.storeForm.address,
-			is_third: this.storeForm.is_third,
-			remarks: this.storeForm.remarks,
-			phone: this.storeForm.phone,
-			manager: this.storeForm.manager,
-			start_time: this.storeForm.start_time,
-			end_time: this.storeForm.end_time,
-			type: this.storeForm.type
+			...this.storeForm,
+			type: this.storeForm.type == 1 ? 'enable' : 'disable' 
 		};
 		await this.$refs[formName].validate( async valid => {
 			if (valid) {
@@ -142,8 +125,16 @@ export default {
 		});
 		}
 	},
-	mounted() {
-		this.getStore();
+	async mounted() {
+		await this.getStore();
+		await storeService.getStoreManagerSelection(this.storeForm.id).then(data =>{
+			this.storeStaffList = data.data
+		}).catch(error =>{
+			this.$message({
+				type: "error",
+				message: error.message
+			});
+		})
 	}
 };
 </script>

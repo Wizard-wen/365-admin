@@ -56,7 +56,6 @@ export default {
             }
             this.showList = []
             setTableOriginData.forEach((item, index) =>{
-                // debugger
                 let a = this.propList.filter(it => it.id == item)
 
                 if(typeof this.propList.find(it => it.id == item) != 'undefined'){

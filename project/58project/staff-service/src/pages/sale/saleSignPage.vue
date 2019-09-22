@@ -28,13 +28,13 @@
                     </div>
                     <div class="order-list">
                         <el-form-item label="姓名" prop="sign_user_name">
-                            <el-input v-model="signForm.sign_user_name"></el-input>
+                            <el-input v-model="signForm.sign_user_name" :disabled="this.$route.query.type == 3"></el-input>
                         </el-form-item>
                         <el-form-item label="联系电话" prop="sign_user_phone">
                             <el-input v-model="signForm.sign_user_phone"></el-input>
                         </el-form-item>
                         <el-form-item label="身份证号" prop="sign_user_identify">
-                            <el-input v-model="signForm.sign_user_identify"></el-input>
+                            <el-input v-model="signForm.sign_user_identify" :disabled="this.$route.query.type == 3"></el-input>
                         </el-form-item>
                     </div>
                 </div>
@@ -81,7 +81,7 @@
                                 :isSingle="true"></select-tag-component>
                         </el-form-item>
                         <el-form-item label="服务对象人数" prop="service_count">
-                            <el-input v-model="signForm.service_count"></el-input>
+                            <el-input-number v-model="signForm.service_count" :min="1" :max="20"></el-input-number>
                         </el-form-item>
                         <el-form-item label="护理依赖程度" prop="service_level">
                             <select-tag-component
@@ -140,7 +140,7 @@
                     </div>
                     <div class="order-list">
                         <el-form-item label="保险受益人" prop="insurance_benefit">
-                            <el-input v-model="signForm.insurance_benefit"></el-input>
+                            <el-input v-model="signForm.insurance_benefit" :disabled="true"></el-input>
                         </el-form-item>
                         <el-form-item label="保险期限" prop="insurance_duration">
                             <el-date-picker
@@ -292,9 +292,10 @@ export default {
                 order_id: this.$route.query.order_id,
                 
                 contract_number: '',//合同编号
-                sign_user_name:'',// 雇主
+                sign_user_name:this.$route.query.type == 3?this.$route.query.sign_user_name : '' ,// 雇主
+                sign_user_id:this.$route.query.type == 3?this.$route.query.sign_user_id : '' ,// 雇主
                 sign_user_phone:'',// 雇主联系电话
-                sign_user_identify:'',// 雇主身份证号
+                sign_user_identify:this.$route.query.type == 3?this.$route.query.sign_user_identify : '',// 雇主身份证号
                 
                 sign_staff_name:this.$route.query.sign_staff_name,// 签约家政服务员
                 sign_staff_id: this.$route.query.sign_staff_id,//签约家政服务员id
@@ -319,7 +320,7 @@ export default {
                 user_charge:'',// 客户服务费
                 user_pay:'',// 客户缴纳
                 staff_deposit:'',// 劳动者押金
-                insurance_benefit:'',// 保险受益人
+                insurance_benefit:this.$route.query.sign_staff_name,// 保险受益人
                 insurance_duration:[],// 保险期限
                 insurance_start:'',// 保险起始日
                 insurance_end:'',//保险终止日

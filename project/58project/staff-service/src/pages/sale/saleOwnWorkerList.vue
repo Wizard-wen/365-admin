@@ -139,7 +139,7 @@
                         this.$store.commit('setWorkerConfigForm',data[0].data)
 
                         let tableList = data[1].data.data
-                        //  debugger
+                        
                         tableList.forEach((item, index) =>{
 
                             this.computeStringLength(item.authentication, 'authentication', 'authentication')

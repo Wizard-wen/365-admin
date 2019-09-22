@@ -21,11 +21,11 @@ export default {
         }
     },
     computed:{
-        workerConfigForm(){
-            return this.$store.state.operateModule.workerConfigForm
+        orderFormConfig(){
+            return this.$store.state.storeModule.storeFormConfig
         },
         queryedList(){
-            return this.$store.state.saleModule.matchServiceList
+            return this.$store.state.storeModule.storeList
         },
         queryListLength(){
             return this.queryTag.reduce((allNumber, item, index) =>{
@@ -78,7 +78,7 @@ export default {
          * 名字
          */
         analysisValue(item, key){
-            return this.workerConfigForm[item].find(item => item.id == key).name
+            return this.orderFormConfig[item].find(item => item.id == key).name
         },
         closeTag(item){
             let configValue = this.queryedList[item.key], //取出queryedList中字段的值
@@ -90,12 +90,13 @@ export default {
             } else {
                 newValue = ''
             }
+            //将查询组件数据变化存入vuex
 
-            this.$store.commit('saleSetMatchSerivceList', {
+            this.$store.commit('setStoreList', {
                 queryKey: item.key,
                 queryedList: newValue
             })
-            
+
             //更新表格数据
             this.$emit('updateTable')
         },
