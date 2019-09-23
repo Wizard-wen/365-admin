@@ -9,17 +9,16 @@ export const departmentList = [
     {id:6,name:'开发部'}
 ]
 /**
- * 账号基本信息
+ * 账号基本信息---只读，不可编辑
  */
 export interface base_accountItem {
     readonly account:string;//账号
     readonly staff_code:string;//工号
     readonly real_name:string;//真实姓名
     readonly department_id:string;//所属部门
-
 }
 /**
- * 个人信息
+ * 个人信息---用户可以变更（独立接口）
  */
 export interface personal_info {
     icon:string;//头像
@@ -34,10 +33,21 @@ export interface personal_info {
 }
 
 /**
- * 
+ * 修改密码---独立接口
  */
 export interface passwordChange {
     originPassword:string;//原始密码
     newPassword:string;//新密码
     reNewPassword:string;//确认新密码
+}
+
+
+/**
+ * 逻辑字段
+ */
+export interface systemConfig {
+    store_id:string;//
+    store_name:string;//门店名
+    is_administrator:string;//是否超级管理员
+    is_store_manager:string;//是否是店长
 }

@@ -493,7 +493,7 @@ export default {
                     .control{
                         box-sizing: border-box;
                         display: inline-block;
-                        width: 25%;
+                        margin-right: 10px;
                         margin-bottom: 13px;
                         color: rgba(0,0,0,.65);
                         font-size: 14px;

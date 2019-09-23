@@ -50,14 +50,14 @@
                 <el-date-picker v-model="workerForm.updated_at" value-format="timestamp" type="date" placeholder="请选择更新日期" disabled></el-date-picker>
             </el-form-item>      -->
 
-            <el-form-item label="认证状态" prop="authentication" class="form-item-size" size="small">
+            <el-form-item label="认证状态" ref="authentication" prop="authentication" class="form-item-size" size="small">
                 <select-tag-component
                     :propTagList="workerConfigList.authentication"
                     v-model="workerForm.authentication"
                     :isSingle="true"></select-tag-component>
             </el-form-item>
 
-            <el-form-item label="姓名" prop="name" class="form-item-size" size="small">
+            <el-form-item label="姓名" prop="name" ref="name" class="form-item-size" size="small">
                 <el-input v-model="workerForm.name" :maxlength="20" placeholder="请输入服务人员姓名"></el-input>
             </el-form-item>
             <!-- 判断是否重名 -->
@@ -465,6 +465,7 @@ export default {
     },
     methods: {
         setFormItem(){
+            
             //提交前，拷贝出一份数据做字段转换
             let workerFormSend = {
                 ...this.workerForm
@@ -513,6 +514,7 @@ export default {
          * 提交表单
          */
         async editStaff(formName) {
+            let _this = this;
             await this.$refs[formName].validate(async (valid, fileds) => {
                 if (valid) {
                     let workerFormSend = this.setFormItem()
@@ -543,6 +545,15 @@ export default {
                         })
                     }
                 } else {
+                    let firstErrorFiled = Object.keys(fileds)[0]
+
+                    let top = _this.$refs[firstErrorFiled].$el.getBoundingClientRect().top;　　//获取当前节点的偏移值
+                    let scrollTop = _this.$refs.form.$el.scrollTop;　　//获取视图滚动值
+                    console.log(_this.$refs.contains)
+                    console.log(top,scrollTop)
+                    let diff = top + scrollTop;
+        　　
+                    document.documentElement.scrollTop = diff - 276;　　//276是第一个输入框节点距离顶部的偏移值，也可以在初始化提前保存
                     return false;
                 }
             });

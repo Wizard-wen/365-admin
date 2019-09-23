@@ -38,13 +38,13 @@
     import {
         saleOwnWorkerTableComponent} from './saleOwnWorkerList/index.js'
     import {
-        errorStaffDialog
+        errorWorkerDialog
     } from './saleWorkerList/index.js'
 
     export default {
         components: {
             saleOwnWorkerTableComponent,
-            errorStaffDialog
+            errorWorkerDialog
         },
         data() {
             return {

@@ -31,7 +31,7 @@
                             <el-input v-model="signForm.sign_user_name" :disabled="this.$route.query.type == 3"></el-input>
                         </el-form-item>
                         <el-form-item label="联系电话" prop="sign_user_phone">
-                            <el-input v-model="signForm.sign_user_phone"></el-input>
+                            <el-input v-model.number="signForm.sign_user_phone"></el-input>
                         </el-form-item>
                         <el-form-item label="身份证号" prop="sign_user_identify">
                             <el-input v-model="signForm.sign_user_identify" :disabled="this.$route.query.type == 3"></el-input>
@@ -119,16 +119,16 @@
                     </div>
                     <div class="order-list">
                         <el-form-item label="劳务报酬" prop="staff_wage">
-                            <el-input v-model="signForm.staff_wage"></el-input>
+                            <el-input v-model.number="signForm.staff_wage"></el-input>
                         </el-form-item>
                         <el-form-item label="客户服务费" prop="user_charge">
-                            <el-input v-model="signForm.user_charge"></el-input>
+                            <el-input v-model.number="signForm.user_charge"></el-input>
                         </el-form-item>
-                        <el-form-item label="客户缴纳" prop="user_pay">
-                            <el-input v-model="signForm.user_pay"></el-input>
+                        <el-form-item label="客户缴纳金额" prop="user_pay">
+                            <el-input v-model.number="signForm.user_pay"></el-input>
                         </el-form-item>
                         <el-form-item label="劳动者押金" prop="staff_deposit">
-                            <el-input v-model="signForm.staff_deposit"></el-input>
+                            <el-input v-model.number="signForm.staff_deposit"></el-input>
                         </el-form-item>
                     </div>
                 </div>
@@ -201,7 +201,7 @@ export default {
                 if (value === '') {
                     callback(new Error('请输入手机号'));
                 } else {
-                    if (!(/^1[345678]\d{9}$/.test(value))) {
+                    if (!(/^1[0-9]{10}$/.test(value))) {
                         callback(new Error('请输入正确格式的手机号'));
                     }
                     callback();
@@ -238,11 +238,12 @@ export default {
                 //雇主手机号
                 sign_user_phone: [
                     { required:true,message:'请输入雇主手机号',trigger: 'blur'},
-                    // {validator: validator.phoneValidate, trigger: 'blur'}
+                    { validator:validator.phoneValidate,trigger: 'blur'},
                 ],
                 //雇主身份证号
                 sign_user_identify: [
                     { required:true,message:'请输入雇主身份证号',trigger: 'blur'},
+                    { validator:validator.identifyValidate,trigger: 'blur'},
                 ],
                 //签约服务人员姓名
                 sign_staff_name: [
@@ -251,12 +252,12 @@ export default {
                 //签约服务人员手机号
                 sign_staff_phone: [
                     { required:true,message:'请输入签约服务人员手机号',trigger: 'blur'},
-                    // {validator: validator.phoneValidate, trigger: 'blur'}
+                    {validator: validator.phoneValidate, trigger: 'blur'}
                 ],
                 //签约服务人员身份证号
                 sign_staff_identify: [
                     { required:true,message:'请输入签约身份证号',trigger: 'blur'},
-                    // {validator: validator.identifyValidate, trigger: 'blur'}
+                    {validator: validator.identifyValidate, trigger: 'blur'}
                 ],
                 //签约服务人员户籍地址
                 sign_staff_law_address: [
@@ -270,22 +271,69 @@ export default {
                 sign_staff_urgent: [
                     { required:true,message:'请输入签约服务人员紧急联系人',trigger: 'blur'},
                 ],
+
+                //服务内容
+                service_contains: [
+                    { required:true,message:'请输入劳务报酬',trigger: 'change'},
+                ],
+                //服务对象人数
+                service_count: [
+                    { required:true,message:'请输入服务对象人数',trigger: 'change'},
+                ],
+                //护理依赖程度
+                service_level: [
+                    { required:true,message:'请输入护理依赖程度',trigger: 'change'},
+                ],
+                //服务方式
+                service_type: [
+                    { required:true,message:'请输入服务方式',trigger: 'change'},
+                ],
+                //服务期限
+                service_duration: [
+                    { required:true,message:'请输入服务期限',trigger: 'change'},
+                ],
+                //工作时间
+                service_time: [
+                    { required:true,message:'请输入工作时间',trigger: 'change'},
+                ],
+
+
+
+
+
+
                 //劳务报酬
                 staff_wage: [
                     { required:true,message:'请输入劳务报酬',trigger: 'blur'},
+                    { type: 'number',message:'劳务报酬只能是数字',trigger: 'blur'},
                 ],
                 //客户服务费
                 user_charge: [
                     { required:true,message:'请输入客户服务费',trigger: 'blur'},
+                    { type: 'number',message:'客户服务费只能是数字',trigger: 'blur'},
                 ],
-                //客户缴纳
+                //客户缴纳金额
                 user_pay: [
-                    { required:true,message:'请输入客户缴纳',trigger: 'blur'},
+                    { required:true,message:'请输入客户缴纳金额',trigger: 'blur'},
+                    { type: 'number',message:'客户缴纳金额只能是数字',trigger: 'blur'},
                 ],
                 //劳动者押金
                 staff_deposit: [
                     { required:true,message:'请输入劳动者押金',trigger: 'blur'},
-                ]
+                    { type: 'number',message:'劳动者押金只能是数字',trigger: 'blur'},
+                ],
+                //保险受益人
+                insurance_benefit: [
+                    { required:true,message:'请输入保险受益人',trigger: 'blur'},
+                ],
+                //保险期限
+                insurance_duration: [
+                    { required:true,message:'请输入保险期限',trigger: 'change'},
+                ],
+                //合同附件
+                accessory: [
+                    { required:true,message:'请上传合同图片',trigger: 'change'},
+                ],
             },
             //签约表单
             signForm: {

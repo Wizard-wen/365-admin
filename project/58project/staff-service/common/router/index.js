@@ -8,9 +8,16 @@ import Router from 'vue-router'
 
 Vue.use(Router)
 
-
-//路由列表
-import routerConfig from './routerConfig.js'
+// 权限模块
+import {authConfigModule} from './authConfig.js'
+// 个人中心
+import {myCenterConfigModule} from './myCenterConfig.js'
+// 运营中心
+import {operateConfigModule} from './operateConfig.js'
+// 销售门店
+import {saleConfigModule} from './saleConfig.js'
+// 门店管理
+import {storeManageConfigModule} from './storeManageConfig'
 
 //登录页
 import loginPage from '@/pages/Login.vue'
@@ -34,7 +41,14 @@ window.router = new Router({
         {
             path: '/',
             component: mainPage,
-            children:[...routerConfig],
+            children:[
+                {path: '/', redirect: '/myCenter/homePage'},
+                ...myCenterConfigModule, //个人中心模块
+                ...authConfigModule,//权限管理模块
+                ...operateConfigModule, //服务人员管理模块
+                ...saleConfigModule,//销售人员模块
+                ...storeManageConfigModule,//门店管理
+            ],
         },
         {
             path: '/login',

@@ -57,7 +57,7 @@
                     class="contentshow"
                     :style="{height: `calc(100vh - ${headerHeight}px)`,width : `calc(100% - ${siderWidth}px`}"
                     ref="content">
-                    <div class="router-contains" v-loading="isLoaded">
+                    <div class="router-contains abc" ref="contains" v-loading="isLoaded">
                         <router-view></router-view>
                     </div>
                 </div>

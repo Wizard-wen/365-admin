@@ -1,6 +1,7 @@
 <template>
     <!-- 订单申请 -->
     <el-dialog
+        v-loading="is_loading"
         title="订单申请"
         :visible.sync="applyOrderDialogVisible"
         :show-close="false"
@@ -12,7 +13,7 @@
                 <el-input v-model="applyOrderForm.work_type"></el-input>
             </el-form-item>
 
-            <el-form-item label="地址" prop="service_address" ref="service_address">
+            <el-form-item label="服务地址" prop="service_address" ref="service_address">
                 <el-input v-model="applyOrderForm.service_address"></el-input>
             </el-form-item>
 
@@ -93,6 +94,7 @@ export default {
             },
         }
         return {
+            is_loading: false,
             storeList: [],//门店列表
             storeManagerList: [],//门店员工列表
             applyOrderForm: {
@@ -107,12 +109,30 @@ export default {
                 apply_manager_id: 0,//来源人id
             },
             applyOrderRules: {
-                
+                work_type: [
+                    { required: true, message: '请填写工种', trigger: 'blur' }
+                ],
+                service_address: [
+                    { required: true, message: '请填写服务地址', trigger: 'blur' }
+                ],
+                service_duration: [
+                    { required: true, message: '请填写工作时间', trigger: 'blur' }
+                ],
+                wage: [
+                    { required: true, message: '请填写工资', trigger: 'blur' }
+                ],
+                order_details: [
+                    { required: true, message: '请填写订单详情', trigger: 'blur' }
+                ],
+                user_phone: [
+                    { required: true, message: '请填写客户联系电话', trigger: 'blur' }
+                ],
+                user_name: [
+                    { required: true, message: '请填写客户姓名', trigger: 'blur' }
+                ],
+ 
             }
         }
-    },
-    watch: {
-
     },
     computed: {
         /**
@@ -123,6 +143,9 @@ export default {
         }
     },
     methods: {
+        /**
+         * 关闭申请弹窗
+         */
         cancelApplyOrder(){
             this.$emit('closeCreateStaffDialog')
         },
@@ -136,22 +159,36 @@ export default {
         },
         async onSubmit(formName){
             //校验并提交
-            await this.$refs[formName].validate((valid) => {
+            await this.$refs[formName].validate(async(valid) => {
                 if (valid) {
-                    saleService.applyOrder(this.applyOrderForm).then(data =>{
-                        if(data.code == '0'){
+                    try{
+                        this.is_loading = true
+                        await saleService.applyOrder(this.applyOrderForm).then(data =>{
+                            if(data.code == '0'){
+                                this.$message({
+                                    type:"success",
+                                    message: "申请成功"
+                                })
+                                this.is_loading = false
+                                this.$emit('closeCreateStaffDialog')
+                            }
+                        }).catch(error =>{
                             this.$message({
-                                type:"success",
-                                message: "申请成功"
+                                type:'error',
+                                message: error.message
                             })
-                            this.$emit('closeCreateStaffDialog')
-                        }
-                    }).catch(error =>{
+                            this.is_loading = false
+                        }).finally(() =>{
+                            this.is_loading = false
+                        })
+                    } catch(error){
                         this.$message({
                             type:'error',
                             message: error.message
                         })
-                    })
+                        this.is_loading = false
+                    }
+                    
                 } else {
                     return false;
                 }
@@ -160,15 +197,27 @@ export default {
     },
     async mounted(){
             try{
+                this.is_loading = true
                 await Promise.all([
                     operateService.getStoreSelection(),
                     operateService.getStoreManagerSelection(1)
                 ]).then((data) =>{
                     this.storeList = data[0].data
                     this.storeManagerList = data[1].data
+                    this.is_loading = false
+                }).catch((error) =>{
+                    this.$message({
+                        type:'error',
+                        message: error.message
+                    })
+                    this.is_loading = false
                 })
             } catch(error){
-
+                this.$message({
+                    type:'error',
+                    message: error.message
+                })
+                this.is_loading = false
             }
     }
 }

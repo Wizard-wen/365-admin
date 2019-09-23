@@ -1,28 +1,28 @@
 <template>
     <el-dialog
-        :title="createStaffDialogTitle"
-        :visible.sync="openCreateStaffDialog"
+        :title="createWorkerDialogTitle"
+        :visible.sync="openCreateWorkerDialog"
         :show-close="false"
         :close-on-press-escape="false"
         :close-on-click-modal="false">
-        <el-form :model="createStaffForm" :label-width="'120px'" ref="createStaffForm" :rules="createStaffRules">
+        <el-form :model="createWorkerForm" :label-width="'120px'" ref="createWorkerForm" :rules="createWorkerRules">
             <el-form-item label="服务人员姓名" prop="name">
-                <el-input v-model="createStaffForm.name" :maxlength="10" placeholder="请输入姓名"></el-input>
+                <el-input v-model="createWorkerForm.name" :maxlength="10" placeholder="请输入姓名"></el-input>
             </el-form-item>
 
             <el-form-item label="年龄" prop="age">
-                <el-input v-model="createStaffForm.age" :maxlength="2" placeholder="请输入年龄"></el-input>
+                <el-input v-model="createWorkerForm.age" :maxlength="2" placeholder="请输入年龄"></el-input>
             </el-form-item>
 
             <el-form-item label="手机号" prop="phone">
-                <el-input v-model="createStaffForm.phone" :maxlength="11" placeholder="请输入手机号"></el-input>
+                <el-input v-model="createWorkerForm.phone" :maxlength="11" placeholder="请输入手机号"></el-input>
             </el-form-item>
 
             <el-form-item label="职业类型">
                 <select-tag-component
                   class="select-tag"
                   :propTagList="workerConfigList.service_category"
-                  v-model="createStaffForm.skill"
+                  v-model="createWorkerForm.skill"
                   :isSingle="false">
                 </select-tag-component>
             </el-form-item>
@@ -31,18 +31,18 @@
                 <select-tag-component
                   class="select-tag"
                   :propTagList="workerConfigList.service_type"
-                  v-model="createStaffForm.service_type"
+                  v-model="createWorkerForm.service_type"
                   :isSingle="false">
                 </select-tag-component>
             </el-form-item>
 
             <el-form-item label="备注" prop="seller_remarks">
-                <el-input placeholder="请最多输入200字符" :maxlength="100" autosize v-model="createStaffForm.seller_remarks" type="textarea"></el-input>
+                <el-input placeholder="请最多输入200字符" :maxlength="100" autosize v-model="createWorkerForm.seller_remarks" type="textarea"></el-input>
             </el-form-item>
         </el-form>
         <div slot="footer" class="dialog-footer">
-            <el-button @click="closeCreateStaffDialog">取 消</el-button>
-            <el-button type="primary" @click="commitLog('createStaffForm')">提交</el-button>
+            <el-button @click="closeCreateWorkerDialog">取 消</el-button>
+            <el-button type="primary" @click="commitLog('createWorkerForm')">提交</el-button>
         </div>
     </el-dialog>
 </template>
@@ -55,12 +55,12 @@ export default {
     },
     props: {
         //是否打弹出框
-        openCreateStaffDialog: {
+        openCreateWorkerDialog: {
             type: Boolean,
             default: false,
         },
         //弹窗title
-        createStaffDialogTitle: {
+        createWorkerDialogTitle: {
             type: String,
             default: "申请添加服务人员"
         },
@@ -104,7 +104,7 @@ export default {
         };
         return {
             //申请创建劳动者信息
-            createStaffForm : {
+            createWorkerForm : {
                 name: '',//服务人员姓名
                 age: 0,
                 phone: '',//服务人员电话
@@ -113,7 +113,7 @@ export default {
                 seller_remarks: '',//备注信息
             },
             //申请创建劳动者表单验证
-            createStaffRules: {
+            createWorkerRules: {
                 name: [
                     { required:true,message:'请输入姓名',trigger: 'blur' },
                 ],
@@ -153,7 +153,7 @@ export default {
         setFormItem(){
             //提交前，拷贝出一份数据做字段转换
             let staffFormSend = {
-                ...this.createStaffForm
+                ...this.createWorkerForm
             }
             staffFormSend.skill = this.setCommitAttr(
                 staffFormSend.skill,
@@ -179,7 +179,7 @@ export default {
                     store.commit('setLoading',true)
                     let staffFormSend = this.setFormItem()
 
-                    await saleService.createStaffBySeller(staffFormSend)
+                    await saleService.createWorkerBySeller(staffFormSend)
                         .then(data =>{
                             if(data.code == "0"){
                                 this.$message({
@@ -198,7 +198,7 @@ export default {
                     store.commit('setLoading',false)
 
                     //关闭日志弹出框
-                    this.$emit('closeCreateStaffDialog')
+                    this.$emit('closeCreateWorkerDialog')
                 } else {
                     return false;
                 }
@@ -206,9 +206,9 @@ export default {
 
         },
         //关闭日志弹框
-        closeCreateStaffDialog(){
+        closeCreateWorkerDialog(){
             //关闭日志弹出框
-            this.$emit('closeCreateStaffDialog')
+            this.$emit('closeCreateWorkerDialog')
         }
     }
 }

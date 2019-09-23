@@ -13,11 +13,11 @@
 
             <template slot="searchForm">
                 <query-tag-component :queryFrom="'order'" @updateTable="updateTable"></query-tag-component>
-                <el-button type="primary" @click="createStaff">申请创建服务人员</el-button>
+                <el-button type="primary" @click="createWorker">申请创建服务人员</el-button>
             </template>
 
             <template slot="control" slot-scope="controler">
-                <el-button size="mini" type="text" @click="showStaff(controler.scoper.$index, controler.scoper.row)">查看</el-button>
+                <el-button size="mini" type="text" @click="showWorker(controler.scoper.$index, controler.scoper.row)">查看</el-button>
                 <el-button size="mini" style="color:#f56c6c" type="text" @click="sendErrorMessage(controler.scoper.row)">提交异常信息</el-button>
             </template>
 
@@ -35,16 +35,16 @@
         </sale-worker-table-component>
         <!-- 申请添加服务人员 -->
         <create-worker-dialog
-            v-if="createStaffDialogVisible"
-            :openCreateStaffDialog="createStaffDialogVisible"
-            @closeCreateStaffDialog="createStaffDialogVisible=false"></create-worker-dialog>
+            v-if="createWorkerDialogVisible"
+            :openCreateWorkerDialog="createWorkerDialogVisible"
+            @closeCreateWorkerDialog="createWorkerDialogVisible=false"></create-worker-dialog>
         <!-- 提交服务人员异常信息 -->
         <error-worker-dialog
-            v-if="errorStaffDialogVisible"
-            :openErrorStaffDialog="errorStaffDialogVisible"
-            @closeErrorStaffDialog="closeErrorStaffDialog"
-            :errorStaffWorkingStatus="errorStaffRow.working_status"
-            :staffId="errorStaffId"></error-worker-dialog>
+            v-if="errorWorkerDialogVisible"
+            :openErrorWorkerDialog="errorWorkerDialogVisible"
+            @closeErrorWorkerDialog="closeErrorWorkerDialog"
+            :errorWorkerWorkingStatus="errorWorkerRow.working_status"
+            :staffId="errorWorkerId"></error-worker-dialog>
     </div>
 </template>
 <script>
@@ -55,14 +55,14 @@
         queryComponent,
         queryTagComponent,
         saleWorkerTableComponent,
-        createStaffDialog,
-        errorStaffDialog} from './saleWorkerList/index.js'
+        createWorkerDialog,
+        errorWorkerDialog} from './saleWorkerList/index.js'
 
     export default {
         components: {
             saleWorkerTableComponent,
-            createStaffDialog,
-            errorStaffDialog,
+            createWorkerDialog,
+            errorWorkerDialog,
             queryComponent,
             queryTagComponent
         },
@@ -99,13 +99,13 @@
                     source: 80,//信息来源
                 },
                 //控制申请创建服务人员弹出框显示异常
-                createStaffDialogVisible: false,
+                createWorkerDialogVisible: false,
                 //控制异常信息弹出框显示隐藏
-                errorStaffDialogVisible: false,
+                errorWorkerDialogVisible: false,
                 //异常服务人员id
-                errorStaffId: 0,
+                errorWorkerId: 0,
                 //异常服务人员信息
-                errorStaffRow: null,
+                errorWorkerRow: null,
             }
         },
         computed:{
@@ -212,7 +212,7 @@
             /**
              * 查找用户
              */
-            async searchStaff(){
+            async searchWorker(){
                 //设置name查询参数
                 this.$store.commit('saleSetWorkerList', {
                     queryKey: 'name', 
@@ -228,7 +228,7 @@
             /**
              * 重置
              */
-            async resetStaff(){
+            async resetWorker(){
                 this.staffSearch.name = ''
                 this.staffSearch.phone = ''
                 //重置name查询参数
@@ -247,21 +247,21 @@
              * 申请创建服务人员
              * des 先创建服务人员，然后才能添加服务人员技能。
              */
-            createStaff(){
-                this.createStaffDialogVisible = true;
+            createWorker(){
+                this.errorWorkerDialog = true;
             },
             /**
              * 异常服务人员申请
              */
             sendErrorMessage(row){
-                this.errorStaffRow = row
-                this.errorStaffId = row.id
-                this.errorStaffDialogVisible = true;
+                this.errorWorkerRow = row
+                this.errorWorkerId = row.id
+                this.errorWorkerDialogVisible = true;
             },
             /**
              * 查看服务人员详情
              */
-            showStaff(index, row){
+            showWorker(index, row){
                 this.$router.push({
                     path: "/sale/saleWorkerShow",
                     query: {
@@ -274,8 +274,8 @@
             /**
              * 关闭异常弹窗
              */
-            async closeErrorStaffDialog(){
-                this.errorStaffDialogVisible = false;
+            async closeErrorWorkerDialog(){
+                this.errorWorkerDialogVisible = false;
                 await this.getTableList()
             },
             /**

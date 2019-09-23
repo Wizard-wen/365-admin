@@ -1,6 +1,7 @@
 <template>
     <!-- 订单申请 -->
     <el-dialog
+        v-loading="is_loading"
         title="通过订单申请"
         :visible.sync="orderApplyPassVisible"
         :show-close="false"
@@ -64,6 +65,7 @@ export default {
     },
     data() {
         return {
+            is_loading: false,
             //改变的字段内容
             orderApplyForm: {
                 id: this.orderApplyId,
@@ -83,6 +85,9 @@ export default {
             this.orderApplyForm.agent_store_id = ''
             this.$emit('closeOrderApplyPassDialog')
         },
+        /**
+         * 门店变动触发店员数据重新请求
+         */
         async changeStoreManager(id){
             await operateService.getStoreManagerSelection(id).then(data =>{
                 this.apply_manager_list = data.data
@@ -96,31 +101,63 @@ export default {
         },
         async onSubmit(formName){
             //校验并提交
-            await operateService.dealApplication(this.orderApplyForm).then(data =>{
-                        if(data.code == '0'){
-                            this.$message({
-                                type:"success",
-                                message: data.message
-                            })
-                            this.$emit('closeOrderApplyPassDialog')
-                        }
-                    }).catch(error =>{
+            try{
+                this.is_loading = true
+                await operateService.dealApplication(this.orderApplyForm).then(data =>{
+                    if(data.code == '0'){
                         this.$message({
-                            type:'error',
-                            message: error.message
+                            type:"success",
+                            message: data.message
                         })
+                        this.is_loading = false
+                        this.$emit('closeOrderApplyPassDialog')
+                    }
+                }).catch(error =>{
+                    this.$message({
+                        type:'error',
+                        message: error.message
                     })
-
+                    this.is_loading = false
+                }).finally(() =>{
+                    this.is_loading = false
+                })
+            } catch(error){
+                this.$message({
+                    type:'error',
+                    message: error.message
+                })
+                this.is_loading = false
+            }
         }
     },
     async mounted(){
-        await Promise.all([
-            operateService.getStoreSelection(),
-            operateService.getStoreManagerSelection(this.orderApplyForm.agent_store_id)
-        ]).then((data) =>{
-            this.storeList = data[0].data
-            this.apply_manager_list = data[1].data
-        })
+        /**
+         * 页面初始化，请求门店，员工数据
+         */
+        try{
+            this.is_loading = true
+            await Promise.all([
+                operateService.getStoreSelection(),
+                operateService.getStoreManagerSelection(this.orderApplyForm.agent_store_id)
+            ]).then((data) =>{
+                this.storeList = data[0].data
+                this.apply_manager_list = data[1].data
+                this.is_loading = false
+            }).catch(error => {
+                this.$message({
+                    type:'error',
+                    message: error.message
+                })
+                this.is_loading = false
+            }) 
+        } catch(error){
+            this.$message({
+                type:'error',
+                message: error.message
+            })
+            this.is_loading = false
+        }
+        
     }
 }
 </script>

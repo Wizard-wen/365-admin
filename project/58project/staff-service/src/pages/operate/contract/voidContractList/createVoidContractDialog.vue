@@ -31,13 +31,14 @@ export default {
         },
     },
     data(){
-
         return {
             voidContractForm: {
                 contract_number: '',//空合同编号
             },
             voidContractRules: {
-
+                contract_number: [
+                    { required: true, message: '请选填写合同编号', trigger: 'blur'}
+                ]
             },
             loading: false
         }

@@ -9,7 +9,7 @@
             </el-form-item>
 
             <el-form-item label="工号" prop="staff_code">
-                <el-input autocomplete="off" v-model="baseForm.staff_code"  :disable="true" :maxlength="20"></el-input>
+                <el-input autocomplete="off" v-model="baseForm.staff_code"  :disabled="true" :maxlength="20"></el-input>
             </el-form-item>
 
             <el-form-item label="真实姓名" prop="real_name">

@@ -1,6 +1,7 @@
 <template>
     <!-- 订单申请 -->
     <el-dialog
+        v-loading="is_loading"
         title="更改订单申请来源"
         :visible.sync="orderOriginVisible"
         :show-close="false"
@@ -72,6 +73,7 @@ export default {
     },
     data() {
         return {
+            is_loading :false,
             //改变的字段内容
             orderOriginForm: {
                 id: this.$route.query.id,
@@ -104,31 +106,62 @@ export default {
         },
         async onSubmit(formName){
             //校验并提交
-            await operateService.editAppLySource(this.orderOriginForm).then(data =>{
-                if(data.code == '0'){
+            try{
+                this.is_loading = true
+                await operateService.editAppLySource(this.orderOriginForm).then(data =>{
+                    if(data.code == '0'){
+                        this.$message({
+                            type:"success",
+                            message: "更改成功"
+                        })
+                        this.is_loading = false
+                        this.$emit('closeChangeOriginDialog')
+                    }
+                }).catch(error =>{
                     this.$message({
-                        type:"success",
-                        message: "更改成功"
+                        type:'error',
+                        message: error.message
                     })
-                    this.$emit('closeChangeOriginDialog')
-                }
-            }).catch(error =>{
+                    this.is_loading = false
+                })
+            } catch(error){
                 this.$message({
                     type:'error',
                     message: error.message
                 })
-            })
+                this.is_loading = false
+            }
+            
 
         }
     },
     async mounted(){
-        await Promise.all([
-            operateService.getStoreSelection(),
-            operateService.getStoreManagerSelection(this.orderOriginForm.apply_store_id)
-        ]).then((data) =>{
-            this.storeList = data[0].data
-            this.apply_manager_list = data[1].data
-        })
+        /**
+         * 页面初始化，请求门店，员工数据
+         */
+        try{
+            this.is_loading = true
+            await Promise.all([
+                operateService.getStoreSelection(),
+                operateService.getStoreManagerSelection(this.orderOriginForm.apply_store_id)
+            ]).then((data) =>{
+                this.storeList = data[0].data
+                this.apply_manager_list = data[1].data
+                this.is_loading = false
+            }).catch(error => {
+                this.$message({
+                    type:'error',
+                    message: error.message
+                })
+                this.is_loading = false
+            }) 
+        } catch(error){
+            this.$message({
+                type:'error',
+                message: error.message
+            })
+            this.is_loading = false
+        }
     }
 }
 </script>

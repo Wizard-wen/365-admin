@@ -1,5 +1,5 @@
 <template>
-    <div class="orderApply">
+    <div class="orderApply" v-loading="is_loading">
         <!-- 订单申请详情 -->
         <div class="orderApply-header">
             <div class="orderApply-name">
@@ -176,6 +176,7 @@ import {
 export default {
     data() {
         return {
+            is_loading: false,
             //订单申请详情
             orderApplyDetail: {
                 work_type: '',
@@ -322,11 +323,15 @@ export default {
          * 获取订单申请信息
          */
         async getApplication() {
-            await operateService.getApplication(this.$route.query.id).then(data => {
+            try{
+                this.is_loading = true
+                await operateService.getApplication(this.$route.query.id).then(data => {
                     if (data.code == "0") {
                         this.orderApplyDetail = data.data.application;
                         //订单申请日志列表
                         this.applyLogTable = data.data.applyLog;
+
+                        this.is_loading = false
                     }
                 })
                 .catch(error => {
@@ -334,19 +339,22 @@ export default {
                         type: "error",
                         message: error.message
                     });
+                    this.is_loading = false
                 });
+            } catch(error){
+                this.$message({
+                    type: "error",
+                    message: error.message
+                });
+                this.is_loading = false
+            }
+            
         },
         /**
          * 添加日志
          */
         addLog() {
-            // this.$router.push({
-            //     path: "/orderApply/storeEdit",
-            //     query: {
-            //         type: 1,
-            //         id: this.$route.query.id
-            //     }
-            // });
+           
         },
         /**
          * 返回上一级
