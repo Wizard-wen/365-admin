@@ -1,15 +1,21 @@
 <template>
     <div class="pageEdit">
         <div class="edit-header">
-            <div class="edit-name">
-                <h4>{{title}}</h4>
+            <div class="icon-left-box">
+                <slot name="icon"></slot>
             </div>
-            <div class="btn-group">
-                <slot name="control"></slot>
+            <div class="other-right-box">
+                <div class="edit-name">
+                    <h4>{{title}}</h4>
+                </div>
+                <div class="btn-group">
+                    <slot name="control"></slot>
+                </div>
+                <div class="edit-detail">
+                    <slot name="detail"></slot>
+                </div>
             </div>
-            <div class="edit-detail">
-                <slot name="detail"></slot>
-            </div>
+            
         </div>
         <div class="page-edit-contains">
             <div class="form-box">
@@ -50,25 +56,36 @@ export default {
         background: #f0f2f5; 
         .edit-header{
             background: #fff;
-            padding: 30px 24px 10px 24px;
-            position: relative;
-            .edit-name{
-                line-height: 28px;
-                font-size: 20px;
-                font-weight: 700;
+            
+            display: flex;
+            .icon-left-box{
+                height: 160px;
+                width: 156px;
+                padding: 30px 12px 10px 24px;
             }
-            .btn-group{
-                & /deep/ .el-button{
-                    margin-left: 0px; 
+            .other-right-box{
+                flex: 1;
+                padding: 30px 24px 10px 12px;
+                position: relative;
+                .edit-name{
+                    line-height: 28px;
+                    font-size: 20px;
+                    font-weight: 700;
                 }
-                position: absolute;
-                right: 24px;
-                top: 20px;
+                .btn-group{
+                    & /deep/ .el-button{
+                        margin-left: 0px; 
+                    }
+                    position: absolute;
+                    right: 24px;
+                    top: 20px;
+                }
+                .edit-detail{
+                    padding-top: 12px;
+                    display: flex;
+                }
             }
-            .edit-detail{
-                padding-top: 12px;
-                display: flex;
-            }
+            
         }
         .page-edit-contains{
             margin: 24px 24px 0;

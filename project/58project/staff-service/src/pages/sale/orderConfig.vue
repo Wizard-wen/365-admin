@@ -16,8 +16,8 @@
                     <div class="detail-left-box">
                         <div class="detail-left-line">订单经纪人：{{ orderBase.agent_manager_name }}</div>
                         <div class="detail-left-line">订单经纪门店：{{ orderBase.agent_store_name }}</div>
-                        <div class="detail-left-line">创建人：{{ orderBase.created_manager_name }}</div>
-                        <div class="detail-left-line">创建时间：{{orderBase.created_at | timeFomatter}}</div>
+                        <div class="detail-left-line">订单创建人（运营）：{{ orderBase.created_manager_name }}</div>
+                        <div class="detail-left-line">订单创建时间：{{orderBase.created_at | timeFomatter}}</div>
                         <div class="detail-left-line">来源门店：{{orderBase.apply_store_name}}</div>
                         <div class="detail-left-line">来源人：{{orderBase.apply_manager_id == 0 ? '门店' : orderBase.apply_manager_name}}</div>
                         <div
@@ -25,7 +25,7 @@
                             class="detail-left-line">签约时间：{{orderBase.sign_service_start | timeFomatter}}</div>
                         <div
                             v-if="orderBase.type != 1" 
-                            class="detail-left-line">服务周期：{{orderBase.sign_service_start | timeFomatter}}</div>
+                            class="detail-left-line">服务周期：{{orderBase.sign_service_start | timeFomatter}} - {{orderBase.sign_service_end | timeFomatter}}</div>
                     </div>
                 </div>
                 <div class="detail-right">
@@ -51,6 +51,7 @@
                 <div class="title">
                     <div class="title-contains">
                         <div class="left">订单基本信息</div>
+                        <el-button type="primary" size="mini" @click="makeOrderImage">生成订单图片</el-button>
                     </div>
                 </div>
                 <div class="order-list">
@@ -389,10 +390,17 @@ export default {
             this.orderFieldVisible = true
         },
         /**
-         *  */ 
+         * 关闭更改订单字段弹窗
+         */
         async closeChangeDialog(){
             this.orderFieldVisible = false
             await this.getOrder()
+        },
+        /**
+         * 生成订单图片
+         */
+        makeOrderImage(){
+            
         },
         /**
          * 获取订单信息

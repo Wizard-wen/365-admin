@@ -27,6 +27,7 @@ export const loginModule = {
             refresh_token: '',
             expire: '',//过期时间
             is_administrator: '',//是否为超级管理员
+            is_store_manager:'',//是否为店长
             type: '',//状态
             real_name: '',//真实姓名
             phone: '',//电话

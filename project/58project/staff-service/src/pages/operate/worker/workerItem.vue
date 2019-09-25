@@ -1,15 +1,23 @@
 <template>
     <page-edit-component
         :title="'服务人员信息配置'">
-        <template slot="log">
+        
+        <template slot="log" v-if="$route.query.type != 0">
             <div class="log">
                 <el-steps :space="50" direction="vertical" :active="workerForm.log.length">
                     <el-step :title="item.message" :key="index" v-for="(item, index) in workerForm.log"></el-step>
                 </el-steps>
             </div>
-
         </template>
-        <template slot="detail">
+
+        <template slot="icon" >
+            <div class="icon">
+                <img style="height: 120px;width: 120px;" :src="`./resource/${workerForm.icon}`" alt="" v-if="workerForm.icon">
+                <div class="no-icon-style" v-else>暂无头像</div>
+            </div>
+        </template>
+        
+        <template slot="detail" >
             <div class="detail-left">
                 <div class="detail-left-box">
                     <div class="detail-left-line">创建人：{{workerForm.manager_name}}</div>
@@ -32,23 +40,14 @@
         <!-- 生成服务人员名片组件 -->
         <template>
             <make-image-component
-                :openMakeImageDialog="openMakeImageDialog"
-                v-if="openMakeImageDialog"
-                @closeMakeImageDialog="openMakeImageDialog = false"
-                :openMakeImage="openMakeImage">
+                :makeImageDialogVisible="makeImageDialogVisible"
+                v-if="makeImageDialogVisible"
+                @closeMakeImageDialog="makeImageDialogVisible = false">
             </make-image-component>
         </template>
 
 
         <el-form class="worker-form" slot="form"  ref="form" :model="workerForm" :rules="staffRules" label-width="140px">
-            <!-- 等同于更新时间 -->
-            <!-- <el-form-item label="登记日期" prop="register_at" class="form-item-size" size="small">
-                <el-date-picker v-model="workerForm.register_at" value-format="timestamp" type="date" placeholder="请选择登记日期"></el-date-picker>
-            </el-form-item>
-
-            <el-form-item label="更新日期" prop="updated_at" class="form-item-size" size="small">
-                <el-date-picker v-model="workerForm.updated_at" value-format="timestamp" type="date" placeholder="请选择更新日期" disabled></el-date-picker>
-            </el-form-item>      -->
 
             <el-form-item label="认证状态" ref="authentication" prop="authentication" class="form-item-size" size="small">
                 <select-tag-component
@@ -239,10 +238,6 @@
                 <el-input v-model="workerForm.source_name" :maxlength="50" placeholder="请输入来源名城"></el-input>
             </el-form-item>
 
-            <!-- <el-form-item label="创建人姓名" prop="manager_name" class="form-item-size" size="small">
-                <el-input v-model="workerForm.manager_name" :maxlength="50" disabled></el-input>
-            </el-form-item> -->
-
             <el-form-item label="性别" prop="sex" class="form-item-size">
                 <el-radio-group v-model="workerForm.sex">
                     <el-radio :label="1">男</el-radio>
@@ -352,8 +347,7 @@ export default {
             },
         }
         return {
-            openMakeImageDialog:false,//是否打开创建图片弹窗
-            openMakeImage: {},//创建图片传入的渲染字段
+            makeImageDialogVisible:false,//是否打开创建图片弹窗
             editText: '',//编辑按钮文案
             submitText: '',//提交按钮文案
             isShowImageButton: false,//是否显示生成名片按钮
@@ -449,10 +443,6 @@ export default {
         }
     },
     computed: {
-        //受教育程度数组
-        educationList(){
-            return this.$store.state.operateModule.educationList
-        },
         //服务人员表单配置项
         workerConfigList(){
             return this.$store.state.operateModule.workerConfigForm
@@ -545,15 +535,6 @@ export default {
                         })
                     }
                 } else {
-                    let firstErrorFiled = Object.keys(fileds)[0]
-
-                    let top = _this.$refs[firstErrorFiled].$el.getBoundingClientRect().top;　　//获取当前节点的偏移值
-                    let scrollTop = _this.$refs.form.$el.scrollTop;　　//获取视图滚动值
-                    console.log(_this.$refs.contains)
-                    console.log(top,scrollTop)
-                    let diff = top + scrollTop;
-        　　
-                    document.documentElement.scrollTop = diff - 276;　　//276是第一个输入框节点距离顶部的偏移值，也可以在初始化提前保存
                     return false;
                 }
             });
@@ -663,57 +644,7 @@ export default {
          * 生成图片
          */
         makeImage(){
-            this.openMakeImageDialog = true
-            this.openMakeImage = this.workerForm
-            var _workerConfigList = this.workerConfigList;
-            var _type = _workerConfigList.service_type.map(val=>{
-              let _item = [];
-              if(val.isSelected){
-                _item.push(val.name)
-              }
-              return _item
-            })
-            var _service_category = _workerConfigList.service_category.map(val=>{
-            let _item = [];
-            if(val.isSelected){
-              _item.push(val.name)
-            }
-            return _item
-          })
-            var _service_region = _workerConfigList.service_region.map(val=>{
-            let _item = [];
-            if(val.isSelected){
-              _item.push(val.name)
-            }
-            return _item
-          })
-            var _paper_category = _workerConfigList.paper_category.map(val=>{
-            let _item = [];
-            if(val.isSelected){
-              _item.push(val.name)
-            }
-            return _item
-          })
-           var _working_age_val = _workerConfigList.working_age.map(val=>{
-            let _item = [];
-            if(val.isSelected){
-              _item.push(val.name)
-            }
-            return _item
-          })
-           var _education_val = _workerConfigList.education.map(val=>{
-            let _item = [];
-            if(val.isSelected){
-              _item.push(val.name)
-            }
-            return _item
-          })
-            this.openMakeImage.type = _type.length?_type.join(' '):'';
-            this.openMakeImage.service_category = _service_category.length?_service_category.join(' '):'';
-            this.openMakeImage.service_region =_service_region.length? _service_region.join(' '):'';
-            this.openMakeImage.paper_category = _paper_category.length?_paper_category.join(' '):'';
-            this.openMakeImage.working_age_val = _working_age_val.length?_working_age_val.join(' '):'';
-            this.openMakeImage.education_val = _education_val.length?_education_val.join(' '):'';
+            this.makeImageDialogVisible = true
         },
         /**
          * 控制编辑按钮文案
@@ -942,14 +873,41 @@ export default {
         display: flex;
         flex-wrap: wrap;
         .detail-left-line{
-            width: 30%;
+            width: 50%;
             color: rgba(0,0,0,.65);
             line-height: 20px;
             padding-bottom: 8px;
         }
     }
 }
-
+.detail-right{
+    min-width: 400px;
+    display: flex;
+    .right-box{
+        height: 80px;
+        width: 50%;
+        .title{
+            color: rgba(0,0,0,.45);
+            font-size: 14px;
+            line-height: 1.5;
+        }
+        .value{
+            font-size: 20px;
+            color: rgba(0,0,0,.85);
+            line-height: 1.5;
+        }
+    }
+}
+// 没有头像
+.no-icon-style{
+    height: 120px;
+    width: 120px;
+    line-height: 120px;
+    text-align: center;
+    color: #fff;
+    background: rgba(0,0,0,0.3)
+}
+// 日志
 .log{
     padding: 24px;
     width: 300px;

@@ -2,7 +2,7 @@
 
     <el-dialog 
         :title="title" 
-        :visible.sync="openPictureDetailDialog"
+        :visible.sync="pictureDetailDialogVisible"
         :show-close="false"
         :close-on-press-escape="false"
         :close-on-click-modal="false">
@@ -19,7 +19,7 @@ import {saleService, $utils} from '../../../common'
 export default {
     props: {
         //是否打弹出框
-        openPictureDetailDialog: {
+        pictureDetailDialogVisible: {
             type: Boolean,
             default: false,
         },

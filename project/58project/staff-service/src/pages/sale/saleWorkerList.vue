@@ -201,6 +201,7 @@
              * 切换页码
              */
             async handleCurrentPage(val){
+                console.log(val)
                 // this.pagination.currentPage = val
                 //设置page查询参数
                 this.$store.commit('saleSetWorkerList', {
@@ -263,7 +264,7 @@
              */
             showWorker(index, row){
                 this.$router.push({
-                    path: "/sale/saleWorkerShow",
+                    path: "/sale/saleNewWorkerShow",
                     query: {
                         id: row.id,
                         from: 1,//

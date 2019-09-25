@@ -157,9 +157,9 @@
         </div>
         <!-- 生成服务人员名片组件 -->
         <make-image-component
-            :openMakeImageDialog="openMakeImageDialog"
-            v-if="openMakeImageDialog"
-            @closeMakeImageDialog="openMakeImageDialog = false"
+            :makeImageDialogVisible="makeImageDialogVisible"
+            v-if="makeImageDialogVisible"
+            @closeMakeImageDialog="makeImageDialogVisible = false"
             :openMakeImage="openMakeImage">
         </make-image-component>
     </div>
@@ -188,7 +188,7 @@ export default {
     },
     data() {
         return {
-            openMakeImageDialog:false,//是否打开创建图片弹窗
+            makeImageDialogVisible:false,//是否打开创建图片弹窗
             openMakeImage: {},//创建图片传入的渲染字段
             icon_fileList: [],//头像数组
             photo_fileList: [],//照片数组
@@ -273,7 +273,7 @@ export default {
          * 生成图片
          */
         makeImage(){
-            this.openMakeImageDialog = true
+            this.makeImageDialogVisible = true
             this.openMakeImage = this.workerForm
             var _workerConfigList = this.workerConfigList;
             var _type = _workerConfigList.service_type.map(val=>{

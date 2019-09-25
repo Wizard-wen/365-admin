@@ -43,6 +43,7 @@ import authService from './service/authService'
 import operateService from './service/operateService'
 import saleService from './service/saleService'
 import storeService from './service/storeService'
+import myCenterService from './service/myCenterService'
 
 
 import operateRequest from './service/request/operateRequest'
@@ -53,7 +54,8 @@ export {
     authService,
     operateService,
     saleService,
-    storeService
+    storeService,
+    myCenterService,
 }
 
 /**

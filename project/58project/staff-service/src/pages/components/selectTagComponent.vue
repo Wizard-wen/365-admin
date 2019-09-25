@@ -1,22 +1,14 @@
 <template>
-    <div>
-        <div class="tag-edit-box" :style="{width: maxWidth}" v-if="isEdit">
-            <div 
-                class="tag-element" 
-                v-for="(item, index) in editTagList" 
-                :key="index"
-                @click="changeStatus(item)"
-                :class="[item.isSelected? 'tag-color'+`${(index%5)}` : '']">{{item[setLabel.label]}}</div>
-        </div>
-        <div class="tag-show-box" v-else>
-            <div
-                class="tag-element" 
-                v-for="(item, index) in showTagList" 
-                :key="index"
-                :class="'tag-color'+`${(index%5)}`">{{item[setLabel.label]}}</div>
-        </div>
+    <div 
+        :class="[ isEdit? 'tag-edit-box': 'tag-show-box']" 
+        :style="{width: maxWidth}" >
+        <div 
+            class="tag-element" 
+            v-for="(item, index) in editTagList" 
+            :key="index"
+            @click="changeStatus(item)"
+            :class="[item.isSelected? 'tag-color'+`${(index%5)}` : '']">{{item[setLabel.label]}}</div>
     </div>
-
 </template>
 <script>
 export default {
@@ -87,24 +79,15 @@ export default {
                 return this.value
             }
         },
-        /**
-         * 非编辑状态下的纯展示
-         */
-        showTagList(){
-            return this.editTagList.reduce((arr,item,index) =>{
-                return item.isSelected? arr.concat(item) : arr
-            },[])
-        }
-
     },
     watch: {
         /**
-         * v-model数据
+         * 监听v-model数据
          */
         value:{
             handler(newName, oldName){
                 if(newName!= oldName){
-                    this.changeValue(newName)
+                    this.getEditTagList(newName)
                 }
             },
             immediate: true,
@@ -112,7 +95,7 @@ export default {
         },
         propTagList(val){
             if(val.length){
-                this.changeValue(val)
+                this.getEditTagList(val)
             }
         }
     },
@@ -143,27 +126,38 @@ export default {
                         return arr
                     }
                 },[])
-
+                //触发v-model
                 this.$emit('input',inputArr)
             }
         },
         /**
          * 渲染数据
          */
-        changeValue(val){
-            this.editTagList = this.propTagList.map((item,index) =>{
-                if(this.valueData.some((it, index) =>{return it == item.id})){
-                    item.isSelected = true
-                } else {
-                    item.isSelected = false
-                }
-                return item
-            })
+        getEditTagList(val){
+            if(this.isEdit){
+
+                this.editTagList = this.propTagList.map((item,index) =>{
+                    if(this.valueData.some(it => it == item.id)){
+                        item.isSelected = true
+                    } else {
+                        item.isSelected = false
+                    }
+                    return item
+                })
+            } else {
+                this.editTagList = this.propTagList.reduce((arr,item,index) =>{
+                    return this.valueData.some(it => it == item.id)? 
+                        arr.concat({
+                            ...item,
+                            isSelected : true
+                        }) : arr
+                },[])
+            }
         },
     },
     mounted(){
         //加载渲染数组
-        this.changeValue(this.value)
+        this.getEditTagList(this.value)
     }
 }
 </script>
@@ -188,7 +182,7 @@ export default {
         }
     }
     .tag-show-box{
-        width: 760px;
+        // width: 760px;
         display: flex;
         flex-wrap: wrap;
         .tag-element{
@@ -203,39 +197,6 @@ export default {
             white-space: nowrap;
         }
     }
-    // .tag-color0{  
-    //     color: #fff;
-    //     background:#409eff;    
-    // }
-    // .tag-color1{
-    //     color: #fff;
-    //     background:#67c23a;
-    // }
-    // .tag-color2{
-    //     color: #fff;
-    //     background:#909399;
-    // }
-    // .tag-color3{
-    //     color: #fff;
-    //     background:#e6a23c;
-    // }
-    // .tag-color4{
-    //     color: #fff;
-    //     background:#f56c6c;  
-    // }
-
-    // .tag-color5{
-    //     color: #fff;
-    //     background:#086751;     
-    // }
-    // .tag-color6{
-    //     color: #fff;
-    //     background:#08658B;      
-    // }
-    // .tag-color7{  
-    //     color: #fff;
-    //     background:#b91d55;   
-    // }
     .tag-color0{
         color: #409eff;
         border: 1px solid rgba(64,158,255,.2);

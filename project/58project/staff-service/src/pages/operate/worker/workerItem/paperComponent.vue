@@ -1,7 +1,7 @@
 <template>
     <div class="paper-box">
         <el-button 
-            v-if="isEdit" 
+            v-if="!isShow" 
             style="margin-bottom:15px;" 
             icon="el-icon-plus"  
             @click="openPaperDialog('new', {})">添加证书</el-button>
@@ -17,7 +17,7 @@
             </div>
             <div class="image-messsage">
                 <p>{{item.paper_category_name}}</p>
-                <div v-if="isEdit">
+                <div v-if="!isShow">
                     <el-button @click="deleteFormPaper(item)" class="el-icon-delete" type="text" size="small">删除</el-button>
                     <el-button @click="openPaperDialog('edit', item)" class="el-icon-edit" type="text" size="small">编辑</el-button>
                 </div>
@@ -34,9 +34,9 @@
         <picture-detail-dialog
             :imageUrl="imageUrl"
             :title="'证书详情'"
-            v-if="openPictureDetailDialog"
-            :openPictureDetailDialog="openPictureDetailDialog"
-            @closePictureDetailDialog="openPictureDetailDialog=false"></picture-detail-dialog>
+            v-if="pictureDetailDialogVisible"
+            :pictureDetailDialogVisible="pictureDetailDialogVisible"
+            @closePictureDetailDialog="pictureDetailDialogVisible=false"></picture-detail-dialog>
     </div>
 </template>
 <script>
@@ -55,17 +55,25 @@ export default {
             default: function(){return []}
         },
         /**
-         * 是否可以编辑
+         * 
+         * 是展示还是编辑操作
          */
-        isEdit: {
+        isShow: {
             type: Boolean,
-            default: true,
+            default: false,
         }
     },
     watch:{
         //v-model字段
-        value: function(val){
-            this.paperList = val
+        value: {
+            handler(newVal, oldVal){
+                // console.log(11)
+                if(newVal!= oldVal){
+                    this.paperList = newVal
+                }
+            },
+            immediate: true,
+            deep: true,
         }
     },
     components: {
@@ -87,7 +95,7 @@ export default {
                     images: [],//这个证书绑定的图片
                 }
             },
-            openPictureDetailDialog: false, //控制证书详情的显示隐藏
+            pictureDetailDialogVisible: false, //控制证书详情的显示隐藏
             imageUrl: '',//展示证书详情的url
         }
     },
@@ -188,8 +196,8 @@ export default {
          */
         showDetialPic(pathParam){
             this.imageUrl = pathParam
-            this.openPictureDetailDialog = true
-        }
+            this.pictureDetailDialogVisible = true
+        },
     },
     mounted(){
 
@@ -213,8 +221,8 @@ export default {
             flex-wrap: wrap;
             .paper-item-img{
                 display: block;
-                height:100px;
-                width: 100px;
+                height:150px;
+                // width: 100px;
                 margin-left : 10px;
                 margin-top: 10px;
                 cursor: pointer;

@@ -12,6 +12,7 @@ import contractList from '@/pages/sale/contractList.vue'//我的合同列表
 import contractItem from '@/pages/sale/contractItem.vue'//我的合同详情
 import saleWorkerList from '@/pages/sale/saleWorkerList.vue'//门店全部服务人员信息
 import saleWorkerShow from '@/pages/sale/saleWorkerShow.vue'//服务人员详情
+import saleNewWorkerShow from '@/pages/sale/saleNewWorkerShow.vue'//服务人员详情
 import saleOwnWorkerList from '@/pages/sale/saleOwnWorkerList.vue'//由我创建的服务人员
 import saleOwnClientList from '@/pages/sale/saleOwnClientList.vue'//我维护的客户
 
@@ -65,6 +66,11 @@ export const saleConfigModule = [
         path: '/sale/saleWorkerShow',
         name: 'saleWorkerShow',
         component: saleWorkerShow,
+    },//服务人员详情
+    {
+        path: '/sale/saleNewWorkerShow',
+        name: 'saleNewWorkerShow',
+        component: saleNewWorkerShow,
     },//服务人员详情
     {
         path: '/sale/saleOwnWorkerList',
