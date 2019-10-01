@@ -1,5 +1,5 @@
 <template>
-  <div class="worker" v-loading="isLoaded">
+  <div class="worker" v-loading="is_loading">
     <client-list-table-component
       :staffTable="orderApplyTable"
       :maxLength="maxLength"
@@ -65,7 +65,7 @@ export default {
     return {
       //订单申请列表
       orderApplyTable: [],
-      isLoaded: false,
+      is_loading: false,
       /**
        * 分页信息
        */
@@ -88,7 +88,7 @@ export default {
      */
     async getTableList() {
       try {
-        this.isLoaded = true;
+        this.is_loading = true;
 
         await Promise.all([
           operateService.getClientRequireList(), //订单申请列表
@@ -111,7 +111,7 @@ export default {
             });
           })
           .finally(() => {
-            this.isLoaded = false;
+            this.is_loading = false;
           });
       } catch (error) {
         this.$message({
@@ -160,7 +160,7 @@ export default {
           });
       });
       if (reault == "confirm") {
-          this.isLoaded = true
+          this.is_loading = true
           try {
               await operateService.changeRequireType(paramObj.id,3).then(async data => {
                   if (data.code == 0) {
@@ -177,7 +177,7 @@ export default {
                       message: error.message
                   });
               }).finally(() =>{
-                  this.isLoaded = false
+                  this.is_loading = false
               })
           } catch (error) {
               throw error;
@@ -200,7 +200,7 @@ export default {
           });
       });
       if (response == "confirm") {
-          this.isLoaded = true
+          this.is_loading = true
           try {
 
               await operateService.changeRequireType(paramObj.id,2).then(async data => {
@@ -218,7 +218,7 @@ export default {
                       message: error.message
                   });
               }).finally(() =>{
-                  this.isLoaded = false
+                  this.is_loading = false
               })
           } catch (error) {
               throw error;

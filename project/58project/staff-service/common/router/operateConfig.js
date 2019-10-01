@@ -73,17 +73,17 @@ export const operateConfigModule = [
         component: operateOrderApplyItem,
     },
     {
-        path: '/operate/contract/operateVoidContractList',
+        path: '/operate/operateVoidContractList',
         name: 'operateVoidContractList',
         component: operateVoidContractList,
     },
     {
-        path: '/operate/contract/operateContractList',
+        path: '/operate/operateContractList',
         name: 'operateContractList',
         component: operateContractList,
     },
     {
-        path: '/operate/contract/operateContractItem',
+        path: '/operate/operateContractItem',
         name: 'operateContractItem',
         component: operateContractItem,
     },
@@ -94,14 +94,14 @@ export const operateConfigModule = [
         component: productList,
     },
     {
-    path: '/operate/clientRequireList',
-    name: 'clientRequireList',
-    component: clientRequireList,
+        path: '/operate/clientRequireList',
+        name: 'clientRequireList',
+        component: clientRequireList,
     },
     {
-    path: '/operate/clientRequireItem',
-    name: 'clientRequireItem',
-    component: clientRequireItem,
+        path: '/operate/clientRequireItem',
+        name: 'clientRequireItem',
+        component: clientRequireItem,
     },
     {
         path: '/worker/workerList',

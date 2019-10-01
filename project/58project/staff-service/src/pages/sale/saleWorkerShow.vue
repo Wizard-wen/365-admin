@@ -271,7 +271,12 @@ export default {
             if(this.$route.query.from == 1){
                 this.$router.push("/sale/saleWorkerList")
             } else {
-                this.$router.push(`/sale/orderConfig?order_id=${this.$route.query.orderId}`)
+                this.$router.push({
+                    path: `/sale/orderConfig`,
+                    query: {
+                        order_id: this.$route.query.order_id
+                    }
+                })
             }
             
         },

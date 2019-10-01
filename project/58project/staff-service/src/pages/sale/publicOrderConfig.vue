@@ -1,5 +1,5 @@
 <template>
-    <div class="orderConfig" v-loading="isLoaded">
+    <div class="orderConfig" v-loading="is_loading">
         <div class="order-header">
             <div class="order-name">
                 <h4>订单号：{{orderBase.order_code}}</h4>
@@ -15,7 +15,7 @@
                         <div class="detail-left-line">创建人：{{ orderBase.created_manager_name }}</div>
                         <div class="detail-left-line">创建时间：{{orderBase.created_at | timeFomatter}}</div>
                         <div class="detail-left-line">来源门店：{{orderBase.apply_store_name}}</div>
-                        <div class="detail-left-line">来源人：{{orderBase.apply_manager_name}}</div>
+                        <div class="detail-left-line">来源人：{{orderBase.apply_manager_name? orderBase.apply_manager_name : '门店'}}</div>
                     </div>
                 </div>
             </div>
@@ -25,9 +25,16 @@
                 <div class="title">
                     <div class="title-contains">
                         <div class="left">订单基本信息</div>
+                        <el-button type="primary" size="mini" @click="makeOrderImage">生成订单图片</el-button>
                     </div>
                 </div>
                 <div class="order-list">
+                    <div class="line-two-list">
+                        经纪人：<span>{{orderBase.agent_manager_name}}</span>
+                    </div>
+                    <div class="line-two-list">
+                        经纪人电话：<span>{{orderBase.agent_manager_phone}}</span>
+                    </div>
                     <div class="line-list">
                         工种：<span>{{orderBase.work_type}}</span>
                     </div>
@@ -118,7 +125,7 @@
 export default {
     data(){
         return {
-            isLoaded: false,//
+            is_loading: false,//
             order_id: '',//订单id
             matchStaffSignList: [
                 {id: 1, name: '未签约'},
@@ -166,20 +173,20 @@ export default {
          */
         async getOrder(){
             try{
-                this.isLoaded = true
+                this.is_loading = true
                 await saleService.getOrder(this.order_id).then((data) =>{
                     if(data.code == "0"){
                         store.commit('configOrderData',data.data)
                     }
-                    this.isLoaded = false
+                    this.is_loading = false
                 }).catch(e =>{
                     this.$message({
                         type:'error',
                         message: e.message
                     })
-                    this.isLoaded = false
+                    this.is_loading = false
                 }).finally(() =>{
-                    this.isLoaded = false
+                    this.is_loading = false
                 })
             } catch(error){
                 this.$message({
@@ -207,11 +214,11 @@ export default {
          */
         goStaffDetail(paramObj){
             this.$router.push({
-                path: "/sale/saleWorkerShow",
+                path: "/sale/saleNewWorkerShow",
                 query: {
                     id: paramObj.id,
-                    from: 2,
-                    orderId: this.$route.query.id
+                    from: 3,
+                    order_id: this.$route.query.id
                 }
             })
         },
@@ -267,7 +274,12 @@ export default {
         goback(){
             this.$router.push('/sale/orderList')
         },
- 
+        /**
+         * 生成订单图片
+         */
+        makeOrderImage(){
+            
+        },
     },
     async mounted(){
         this.order_id = this.$route.query.id;//订单id

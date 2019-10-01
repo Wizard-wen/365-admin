@@ -1,37 +1,36 @@
 <template>
-    <div class="staff" v-loading="isLoaded">
-        <worker-table-component
-            :staffTable="staffTable"
-            :maxLength="maxLength"
-            :controlScopeLength="110">
+    <worker-table-component
+        v-loading="is_loading"
+        :tableData="staffTable"
+        :maxLength="maxLength"
+        :controlScopeLength="110">
 
-            <template slot="searchForm">
-                <div class="search-left">
-                    <el-input v-model="staffSearch.name" placeholder="请输入员工姓名" :maxlength="20"></el-input>
-                    <el-input v-model="staffSearch.phone" placeholder="请输入电话" :maxlength="20"></el-input>
-                    <el-button type="primary" @click="searchStaff">查询</el-button>
-                    <el-button type="primary" @click="resetStaff">重置</el-button>
-                </div>
-            </template>
+        <template slot="searchedForm">
+            <div class="search-left">
+                <el-input v-model="staffSearch.name" placeholder="请输入员工姓名" :maxlength="20"></el-input>
+                <el-input v-model="staffSearch.phone" placeholder="请输入电话" :maxlength="20"></el-input>
+                <el-button type="primary" @click="searchStaff">查询</el-button>
+                <el-button type="primary" @click="resetStaff">重置</el-button>
+            </div>
+        </template>
 
-            <template slot="control" slot-scope="controler">
-                <el-button size="mini" type="text" @click="editStaff(3, controler.scoper.row)">编辑</el-button>
-                <el-button size="mini" type="text" style="color:#67c23a" @click="agreeStaffSingle(controler.scoper.row)">恢复</el-button>
-            </template>
+        <template slot="control" slot-scope="controler">
+            <el-button size="mini" type="text" @click="editStaff(3, controler.scoper.row)">编辑</el-button>
+            <el-button size="mini" type="text" style="color:#67c23a" @click="agreeStaffSingle(controler.scoper.row)">恢复</el-button>
+        </template>
 
-            <template slot="pagination">
-                <el-pagination
-                    class="pagination"
-                    @current-change="handleCurrentPage"
-                    @prev-click="prevAndNextClick"
-                    @next-click="prevAndNextClick"
-                    :current-page.sync="pagination.currentPage"
-                    :page-size="pagination.pageNumber"
-                    layout="prev, pager, next, jumper"
-                    :total="pagination.total"></el-pagination>
-            </template>
-        </worker-table-component>
-    </div>
+        <template slot="pagination">
+            <el-pagination
+                class="pagination"
+                @current-change="handleCurrentPage"
+                @prev-click="prevAndNextClick"
+                @next-click="prevAndNextClick"
+                :current-page.sync="pagination.currentPage"
+                :page-size="pagination.pageNumber"
+                layout="prev, pager, next, jumper"
+                :total="pagination.total"></el-pagination>
+        </template>
+    </worker-table-component>
 </template>
 <script>
     import {operateService} from '../../../../common'
@@ -53,7 +52,7 @@
                     name: '', //姓名
                     phone:'',//手机号
                 },
-                isLoaded:false,
+                is_loading:false,
                 /**
                  * 分页信息
                  */
@@ -116,7 +115,7 @@
             async getTableList(){
                 try{
 
-                    this.isLoaded = true
+                    this.is_loading = true
 
                     await Promise.all([
                         operateService.getWorkerFormConfig('edit'), //获取表单配置字段
@@ -151,7 +150,7 @@
                             message: error.message
                         })
                     }).finally(() =>{
-                        this.isLoaded = false
+                        this.is_loading = false
                     })
 
                 } catch(error){
@@ -292,17 +291,13 @@
 </script>
 <style lang="scss" scoped>
 
-.search-form{
-    height: 40px;
-    width: 100%;
-    display: flex;
-    justify-content: space-between;
+
     .search-left{
         display: flex;
     }
-}
-.pagination{
-    margin: 0 auto;
-    width: 600px;
-}
+
+    .pagination{
+        margin: 0 auto;
+        width: 600px;
+    }
 </style>

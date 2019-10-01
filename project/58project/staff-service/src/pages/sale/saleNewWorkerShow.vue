@@ -477,6 +477,7 @@ export default {
         },
     },
     filters: {
+        //时间格式转换
         formDate(timestamp){
            return $utils.formatDate(new Date(timestamp), 'yyyy-MM-dd')
         }
@@ -550,7 +551,19 @@ export default {
          * 返回
          */
         goback(){
-            this.$router.push("sale/saleWorkerList")
+            if(this.$route.query.from == 1){
+                //从服务人员信息库
+                this.$router.push(`/sale/saleWorkerList`)
+            } else if(this.$route.query.from == 2){
+                //从订单配置备选服务人员列表
+                this.$router.push(`/sale/orderConfig?id=${this.$route.query.order_id}`)
+            } else if(this.$route.query.from == 3){
+                //从公海订单备选服务人员列表
+                this.$router.push(`/sale/publicOrderConfig?id=${this.$route.query.order_id}`)
+            } else if(this.$route.query.from == 4){
+                //从我创建的服务人员列表啊
+                this.$router.push(`/sale/saleOwnWorkerList`)
+            }
         },
         /**
          * 生成图片

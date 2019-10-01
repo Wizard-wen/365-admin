@@ -1,28 +1,26 @@
 <template>
-    <div class="worker" v-loading="isLoaded">
+    <div class="worker" v-loading="is_loading">
         <worker-table-component
-            :staffTable="staffTable"
+            :tableData="workerTable"
             :maxLength="maxLength"
             :controlScopeLength="170">
 
             <template slot="searchList">
-                <div class="search-list">
+                <div class="left-search-module">
                     <query-component @updateTable="updateTable"></query-component>
                 </div>
             </template>
 
-            <template slot="searchForm">
-                <div class="search-tag-list">
-                    <query-tag-component @updateTable="updateTable"></query-tag-component>
-                </div>
+            <template slot="searchedForm">
+                <query-tag-component @updateTable="updateTable"></query-tag-component>
                 <el-button type="primary" @click="exportReturnStaff(1)">导入回访</el-button>
                 <el-button type="primary" @click="editStaff(0)">创建服务人员</el-button>
             </template>
 
             <template slot="control" slot-scope="controler">
                 <el-button size="mini" type="text" @click="editStaff(1, controler.scoper.row)">编辑</el-button>
-                <el-button size="mini" type="text" style="color:#f56c6c" v-if="controler.scoper.row.type == 'enable'" @click="changeStaffStatus(controler.scoper.row)">停用</el-button>
-                <el-button size="mini" type="text" style="color:#67c23a" @click="changeStaffStatus(controler.scoper.row)" v-else>启用</el-button>
+                <el-button size="mini" type="text" style="color:#f56c6c" v-if="controler.scoper.row.type == 'enable'" @click="openChangeStaffStatus(controler.scoper.row)">停用</el-button>
+                <el-button size="mini" type="text" style="color:#67c23a" @click="openChangeStaffStatus(controler.scoper.row)" v-else>启用</el-button>
                 <el-button size="mini" type="text" @click="exportReturnStaff(0, controler.scoper.row)">导入回访</el-button>
             </template>
 
@@ -64,14 +62,9 @@
         },
         data(){
             return {
+                is_loading:false,
                 //员工信息列表
-                staffTable: [],
-                //表单搜索项
-                staffSearch: {
-                    name: '', //姓名
-                    phone:'',//手机号
-                },
-                isLoaded:false,
+                workerTable: [],
                 /**
                  * 分页信息
                  */
@@ -94,12 +87,13 @@
                     paper_ids: 80, //技能证书
                     source: 80,//信息来源
                 },
-                returnStaffDialofVisible: false,//添加回访数据显示隐藏
+                //添加回访数据显示隐藏
+                returnStaffDialofVisible: false,
             }
         },
         computed:{
             /**
-             *
+             * 服务人员信息
              */
             workerConfigList(){
                 return this.$store.state.operateModule.workerConfigForm
@@ -121,9 +115,7 @@
                     } else {
                         string = 0
                     }
-
                 }
-
                 if(string > this.maxLength[listKey]){
                     this.maxLength[listKey] = (string + 20) > 80 ? (string + 20) : 80
                 }
@@ -135,7 +127,7 @@
             async getTableList(){
                 try{
 
-                    this.isLoaded = true
+                    this.is_loading = true
 
                     await Promise.all([
                         operateService.getWorkerFormConfig('edit'), //获取表单配置字段
@@ -160,17 +152,20 @@
                             this.computeStringLength(item.source, 'source', 'source')
                         })
 
-                        this.staffTable = data[1].data.data
+                        this.workerTable = data[1].data.data
                         //分页信息
                         this.pagination.currentPage = data[1].data.current_page //当前页码
                         this.pagination.total = data[1].data.total //列表总条数
+
+                        this.is_loading = false
                     }).catch(error =>{
                         this.$message({
                             type:'error',
                             message: error.message
                         })
+                        this.is_loading = false
                     }).finally(() =>{
-                        this.isLoaded = false
+                        this.is_loading = false
                     })
 
                 } catch(error){
@@ -178,6 +173,7 @@
                         type:'error',
                         message: error.message
                     })
+                    this.is_loading = false
                 }
             },
             // 由查询组件触发的更新表格事件
@@ -195,7 +191,6 @@
              * 切换页码
              */
             async handleCurrentPage(val){
-                // this.pagination.currentPage = val
                 //设置page查询参数
                 this.$store.commit('setWorkerList', {
                     queryKey: 'page',
@@ -204,88 +199,63 @@
                 await this.getTableList()
             },
             /**
-             * 查找用户
-             */
-            async searchStaff(){
-                //设置name查询参数
-                this.$store.commit('setWorkerList', {
-                    queryKey: 'name',
-                    queryedList: this.staffSearch.name
-                })
-                //设置手机号查询参数
-                this.$store.commit('setWorkerList', {
-                    queryKey: 'phone',
-                    queryedList: this.staffSearch.phone
-                })
-                await this.getTableList()
-            },
-            /**
-             * 重置
-             */
-            async resetStaff(){
-                this.staffSearch.name = ''
-                this.staffSearch.phone = ''
-                //重置name查询参数
-                this.$store.commit('setWorkerList', {
-                    queryKey: 'name',
-                    queryedList: null
-                })
-                //重置手机号查询参数
-                this.$store.commit('setWorkerList', {
-                    queryKey: 'phone',
-                    queryedList: null
-                })
-                await this.getTableList()
-            },
-            /**
-             * 导入回访服务人员
+             * 打开导入回访服务人员对话框
              * @param type 是全部导出还是单个导出 全部导出 1 单个导出 0
              */
             async exportReturnStaff(type, row){
+                //如果导出单个
                 if(type == 0){
-                    let _this= this;
-
-                    let response = await this.$confirm(`确定将该服务人员导入回访列表吗?`, '提示', {
+                    await this.$confirm(`确定将该服务人员导入回访列表吗?`, '提示', {
                         confirmButtonText: '确定',
                         cancelButtonText: '取消',
                         type: 'warning'
+                    }).then(async () =>{
+
+                        //添加单个服务人员至回访列表
+                        await this.addReturnStaffSingle(row)
+                        //请求列表数据
+                        await this.getTableList()
                     }).catch(() => {
                         this.$message({
                             type: 'info',
                             message: `已取消导入`
                         });
                     });
-
-                    if(response == "confirm"){
-                        store.commit('setLoading',true)
-
-                        try{
-                            await operateService.addReturnStaffSingle(row.id)
-                                .then(data =>{
-                                    if(data.code == "0"){
-                                        this.$message({
-                                            type:'success',
-                                            message: `导入成功`
-                                        })
-                                    }
-                                }).catch(e =>{
-                                    this.$message({
-                                        type:'error',
-                                        message: e.message
-                                    })
-                                })
-                        } catch(error){
-                            this.$message({
-                                type:'error',
-                                message: error.message
-                            })
-                        }
-
-                        await _this.getTableList()
-                        store.commit('setLoading',false)
-                    }
                 } else{
+                    //打开导入回访弹窗
                     this.returnStaffDialofVisible = true
+                }
+            },
+            /**
+             * 添加单个人员至回访
+             */
+            async addReturnStaffSingle(row){
+                this.is_loading = true
+
+                try{
+                    await operateService.addReturnStaffSingle(row.id).then(data =>{
+                        if(data.code == "0"){
+                            this.$message({
+                                type:'success',
+                                message: data.message
+                            })
+                            this.is_loading = false
+                        }
+                    }).catch(error =>{
+                        this.$message({
+                            type:'error',
+                            message: error.message
+                        })
+                        this.is_loading = false
+                    }).finally(() =>{
+                        this.is_loading = false
+                    })
+                } catch(error){
+                    this.$message({
+                        type:'error',
+                        message: error.message
+                    })
+                    this.is_loading = false
                 }
             },
             /**
@@ -309,8 +279,7 @@
             /**
              * 切换停用启用
              */
-            async changeStaffStatus(row){
-                let _this= this;
+            async openChangeStaffStatus(row){
 
                 let status = row.type == 'enable'? '停用' : '启用'
 
@@ -318,43 +287,53 @@
                     confirmButtonText: '确定',
                     cancelButtonText: '取消',
                     type: 'warning'
+                }).then(async () =>{
+                    //请求改变服务人员状态接口
+                    await this.changeWorkerType(row)
+                    //请求列表数据
+                    await this.getTableList()
                 }).catch(() => {
                     this.$message({
                         type: 'info',
                         message: `已取消${status}`
                     });
                 });
+            },
+            /**
+             * 改变服务人员停用启用状态
+             * @param row
+             */
+            async changeWorkerType(row){
+                this.is_loading = true
 
-                if(response == "confirm"){
-                    store.commit('setLoading',true)
-
-                    try{
-                        await operateService.changeStaffType(row.id, row.version)
-                            .then(data =>{
-                                if(data.code == "0"){
-                                    this.$message({
-                                        type:'success',
-                                        message: `${status}成功`
-                                    })
-                                }
-                            }).catch(e =>{
-                                this.$message({
-                                    type:'error',
-                                    message: e.message
-                                })
+                try{
+                    await operateService.changeStaffType(row.id, row.version).then(data =>{
+                        if(data.code == "0"){
+                            this.$message({
+                                type:'success',
+                                message: data.message
                             })
-                    } catch(error){
+                            this.is_loading = false
+                        }
+                    }).catch(error =>{
                         this.$message({
                             type:'error',
                             message: error.message
                         })
-                    }
-
-                    await _this.getTableList()
-                    store.commit('setLoading',false)
+                        this.is_loading = false
+                    }).finally(() =>{
+                        this.is_loading = false
+                    })
+                } catch(error){
+                    this.$message({
+                        type:'error',
+                        message: error.message
+                    })
+                    this.is_loading = false
                 }
-            },
+            }
         },
+        
         async mounted(){
             await this.getTableList()
         }

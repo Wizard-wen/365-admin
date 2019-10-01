@@ -1,5 +1,5 @@
 <template>
-    <div class="orderConfig" v-loading="isLoaded">
+    <div class="orderConfig" v-loading="is_loading">
         <div class="order-header">
             <div class="order-name">
                 <h4>合同编号：{{contractBase.contract_number}}</h4>
@@ -268,7 +268,7 @@
 export default {
     data(){
         return {
-            isLoaded: false,//
+            is_loading: false,//
             contractBase: {
                 account: null,
                 contract_code: "",
@@ -389,7 +389,7 @@ export default {
          */
         async getContract(){
             try{
-                this.isLoaded = true
+                this.is_loading = true
                 await saleService.getContract(this.$route.query.id).then((data) =>{
                     this.contractBase = data.data
                     this.$set(this.contractBase, 'account', data.data.account) 
@@ -398,9 +398,9 @@ export default {
                         type:'error',
                         message: e.message
                     })
-                    this.isLoaded = false
+                    this.is_loading = false
                 }).finally(() =>{
-                    this.isLoaded = false
+                    this.is_loading = false
                 })
             } catch(error){
                 this.$message({
@@ -457,7 +457,7 @@ export default {
                 });
             });
             if (response == "confirm") {
-                this.isLoaded = true
+                this.is_loading = true
                 try {
                     let determinateContractObj = {
                         is_wage: this.contractBase.is_wage,
@@ -479,7 +479,7 @@ export default {
                             message: error.message
                         });
                     }).finally(() =>{
-                        this.isLoaded = false
+                        this.is_loading = false
                     })
                 } catch (error) {
                     throw error;
@@ -501,7 +501,7 @@ export default {
                 this.$router.push({
                     path: '/sale/orderConfig',
                     query: {
-                        order_id: this.$route.query.fromId
+                        order_id: this.$route.query.from_id
                     }
                 })
             } else {

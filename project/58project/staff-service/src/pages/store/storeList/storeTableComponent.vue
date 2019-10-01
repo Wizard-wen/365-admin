@@ -40,7 +40,7 @@
                         <table-tag-component 
                             v-if="storeFormConfig.type" 
                             :propList="storeFormConfig.type" 
-                            :tableOriginData="typeFormatter(scope.row)"></table-tag-component>
+                            :tableOriginData="scope.row.type"></table-tag-component>
                     </template>
                 </el-table-column>
 

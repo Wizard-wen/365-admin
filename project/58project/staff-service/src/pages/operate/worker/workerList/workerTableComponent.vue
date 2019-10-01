@@ -1,40 +1,29 @@
 <template>
-    <div class="list-table">
+    <div class="table-box">
         <!-- 模糊搜索插槽 -->
         <slot name="searchList"></slot>
 
-        <div class="table-list">
-            <div class="search-form">
-                <slot name="searchForm"></slot>
-            </div>  
+        <div class="right-contains">
+
+            <!-- 快速操作栏 -->
+            <div class="searched-form">
+                <slot name="searchedForm"></slot>
+            </div>
+            
+            
             <el-table 
-                :data="staffTable" 
+                :data="tableData" 
                 class="worker-table" 
                 :stripe="true" 
                 border 
                 :fit="true"
-                height="calc(100vh-90px)"
                 row-key="1233444"
                 :header-cell-style="{height: '30px',padding: '0px',fontSize:'12px'}"
                 :cell-style="{height: '30px',padding: 0,fontSize:'12px',}">
 
                 <el-table-column  label="员工号" prop="staff_code" align="center" width="110"></el-table-column>
 
-                <!-- <el-table-column  label="性别" prop="sex" align="center" width="70">
-                    <template slot-scope="scope">
-                        <el-tag class="tag-style" size="medium">{{ scope.row.sex == 1?'男':'女' }}</el-tag>
-                    </template>
-                </el-table-column> -->
-
-                <!-- <el-table-column  label="是否启用" prop="type" align="center" width="100">
-                    <template slot-scope="scope">
-                        <el-tag class="tag-style" size="medium">{{ scope.row.sex == 'enable'?'停用':'启用' }}</el-tag>
-                    </template>
-                </el-table-column> -->
-
                 <el-table-column  label="创建时间" prop="created_at" align="center" :formatter="created_atFormatter" width="110"></el-table-column>
-
-                <!-- <el-table-column  label="登记时间" prop="register_at" :formatter="register_atFormatter" align="center" width="110"></el-table-column> -->
 
                 <el-table-column  label="更新时间" prop="updated_at" :formatter="updated_atFormatter" align="center" width="110"></el-table-column>
                 
@@ -258,40 +247,23 @@
 </template>
 <script>
     import {operateService, $utils} from '../../../../../common'
-    import {
-        cascaderComponent,
-        tableTagComponent} from '@/pages/components'
-
-    // import {queryComponent} from '../components'
+    import {tableTagComponent} from '@/pages/components'
     
     export default {
         components: {
-            // cascaderComponent,
             tableTagComponent,
-            // queryComponent
         },
         props: {
-            //员工信息列表
-            staffTable: {
+            //列表数据
+            tableData: {
                 type: Array,
                 default:function(){return []}
             },
+            //表格最大宽度
             maxLength: {
                 type:Object,
                 default:function(){
-                    return {
-                        authentication: 80, //认证状态
-                        working_status: 80,//接单状态
-                        skill_ids: 80,// 职业类型
-                        service_type: 80,//服务类型
-                        service_crowd: 80,//可服务人群
-                        working_age: 80,// 工龄
-                        nation: 80,// 民族
-                        region_ids: 80,//服务地区
-                        course: 80,//参加培训
-                        paper_ids: 80, //技能证书
-                        source: 80,//信息来源
-                    }
+                    return {}
                 }
             },
             /**
@@ -343,56 +315,74 @@
             educationFomatter(row, column){
                 let a =  this.$store.state.operateModule.educationList.filter(item => item.id == row.education)
                 return a.length? a[0].name : ''
-            }
+            },
+            //计算单元格宽度
+            computeStringLength(array, listKey, configKey){
+                let string = 0
+                if(Array.isArray(array)){
+                    array.forEach((it, inds) =>{
+                        if(this.workerConfigList[configKey].find(i => i.id == it)){
+                            let baseLength = parseInt(this.workerConfigList[configKey].filter(i => i.id == it)[0].name.length *12 )
+                            string += (baseLength + 27)
+                        }
+                    })
+                } else {
+                    if(this.workerConfigList[configKey].find(i => i.id == array)){
+                        string = parseInt(this.workerConfigList[configKey].filter(i => i.id == array)[0].name.length * 12) + 27
+                    } else {
+                        string = 0
+                    }
+
+                }
+
+                if(string > this.maxLength[listKey]){
+                    this.maxLength[listKey] = (string + 20) > 80 ? (string + 20) : 80
+                }
+            },
         },
     }
 </script>
 <style lang="scss" scoped>
-    .tag-style{
-        height:24px;
-        line-height: 24px;
+//表格
+.table-box{
+    height: calc(100vh - 50px);
+    width:100%;
+    display: flex;
+    //左侧搜索模块
+    .left-search-module{
+        width: 200px;
+        height: 100%;
+        overflow-y: auto;
+        background: #fff;
+        margin-right: 5px;
+        margin-left: 5px;
     }
-    .worker{
-        .list-table{
-            height: calc(100vh - 50px);
-            width:100%;
+    .right-contains{
+        overflow: auto;
+        flex:1;
+        width: calc(100% - 180px);
+        height: calc(100vh - 50px);
+        .searched-form{
+            width: 100%;
             display: flex;
-            .search-list{
-                width: 200px;
-                height: 100%;
-                overflow-y: auto;
-                background: #fff;
-                margin-right: 5px;
-                margin-left: 5px;
-            }
-            .table-list{
-                overflow: auto;
-                flex:1;
-                width: calc(100% - 180px);
-                height: calc(100vh - 50px);
-                .search-form{
-                    height: 40px;
-                    width: 100%;
-                    display: flex;
-                    justify-content: space-between;
-                    .search-tag-list{
-                        flex: 1;
-                    }
-                }
-                .worker-table{
-                    height: calc(100% - 72px);
-                    width: 100%;
-                    margin: 0 auto;
-                }
-                .pagination-box{
-                    height:32px;
-                }
+            justify-content: space-between;
+            .search-tag-list{
+                flex: 1;
             }
         }
+        .worker-table{
+            height: calc(100% - 72px);
+            width: 100%;
+            margin: 0 auto;
+        }
+        .pagination-box{
+            height:32px;
+        }
+    }
+}
             
             
         
 
 
-    }
 </style>

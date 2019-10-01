@@ -7,5 +7,4 @@ import querySearchList from './querySearchList.vue'
 export {
     querySearchInput,
     querySearchList,
-
 }

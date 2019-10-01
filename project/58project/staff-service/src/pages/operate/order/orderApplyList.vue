@@ -1,5 +1,5 @@
 <template>
-    <div class="worker" v-loading="isLoaded">
+    <div class="worker" v-loading="is_loading">
         <order-apply-table-component
             :staffTable="orderApplyTable"
             :maxLength="maxLength"
@@ -69,7 +69,7 @@
             return {
                 //订单申请列表
                 orderApplyTable: [],
-                isLoaded:false,
+                is_loading:false,
                 /**
                  * 分页信息
                  */
@@ -93,7 +93,7 @@
              */
             async getTableList(){
                 try{
-                    this.isLoaded = true
+                    this.is_loading = true
 
                     await Promise.all([
                         operateService.getApplicationList(), //订单申请列表
@@ -114,7 +114,7 @@
                             message: error.message
                         })
                     }).finally(() =>{
-                        this.isLoaded = false
+                        this.is_loading = false
                     })
 
                 } catch(error){
@@ -178,7 +178,7 @@
                     });
                 });
                 if (response == "confirm") {
-                    this.isLoaded = true
+                    this.is_loading = true
                     try {
                         let refuseOrderApplyObject = {
                             type: 2,
@@ -201,7 +201,7 @@
                                 message: error.message
                             });
                         }).finally(() =>{
-                            this.isLoaded = false
+                            this.is_loading = false
                         })
                     } catch (error) {
                         throw error;

@@ -1,5 +1,5 @@
 <template>
-    <div class="login" v-loading="isLoaded">
+    <div class="login" v-loading="is_loading">
         <div class="login-box">
             <el-form ref="form" :rules="rules" :model="form" label-width="80px">
                 <el-form-item label="用户名" prop="username">
@@ -22,7 +22,7 @@ import {loginService} from '../../common'
 export default {
     data() {
         return {
-            isLoaded: false,
+            is_loading: false,
             form: {
                 username: '',
                 password: '',
@@ -45,7 +45,7 @@ export default {
             let _this = this;
             this.$refs[formName].validate(async (valid) => {
                 if (valid) {
-                    this.isLoaded = true
+                    this.is_loading = true
                     try{
                         await loginService.getToken(this.form.username, this.form.password).then((data) =>{
                                 this.$message({
@@ -59,7 +59,7 @@ export default {
                                     message: error.message
                                 });
                             }).finally(() =>{
-                                this.isLoaded  = false
+                                this.is_loading  = false
                             })
                     }catch(e){
                         this.$message({

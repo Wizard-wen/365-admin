@@ -1,5 +1,5 @@
 <template>
-    <div class="worker" v-loading="isLoaded">
+    <div class="worker" v-loading="is_loading">
         <sale-worker-table-component
             :staffTable="staffTable"
             :maxLength="maxLength"
@@ -75,7 +75,7 @@
                     name: '', //姓名
                     phone:'',//手机号
                 },
-                isLoaded:false,
+                is_loading:false,
                 /**
                  * 分页信息
                  */
@@ -134,7 +134,6 @@
                     }
 
                 }
-
                 if(string > this.maxLength[listKey]){
                     this.maxLength[listKey] = (string + 20) > 80 ? (string + 20) : 80
                 }
@@ -146,7 +145,7 @@
              */
             async getTableList(){
                 try{
-                    this.isLoaded = true
+                    this.is_loading = true
 
                     await Promise.all([
                         operateService.getWorkerFormConfig('edit'), //获取表单配置字段
@@ -183,7 +182,7 @@
                             message: error.message
                         })
                     }).finally(() =>{
-                        this.isLoaded = false
+                        this.is_loading = false
                     })
 
                 } catch(error){
@@ -198,18 +197,16 @@
                 await this.getTableList()
             },
             prevAndNextClick(val){
-              //设置page查询参数
-              this.$store.commit('saleSetWorkerList', {
-                  queryKey: 'page',
-                  queryedList: val
-              })
+                //设置page查询参数
+                this.$store.commit('saleSetWorkerList', {
+                    queryKey: 'page',
+                    queryedList: val
+                })
             },
             /**
              * 切换页码
              */
             async handleCurrentPage(val){
-                console.log(val)
-                // this.pagination.currentPage = val
                 //设置page查询参数
                 this.$store.commit('saleSetWorkerList', {
                     queryKey: 'page',
@@ -218,45 +215,11 @@
                 await this.getTableList()
             },
             /**
-             * 查找用户
-             */
-            async searchWorker(){
-                //设置name查询参数
-                this.$store.commit('saleSetWorkerList', {
-                    queryKey: 'name',
-                    queryedList: this.staffSearch.name
-                })
-                //设置手机号查询参数
-                this.$store.commit('saleSetWorkerList', {
-                    queryKey: 'phone',
-                    queryedList: this.staffSearch.phone
-                })
-                await this.getTableList()
-            },
-            /**
-             * 重置
-             */
-            async resetWorker(){
-                this.staffSearch.name = ''
-                this.staffSearch.phone = ''
-                //重置name查询参数
-                this.$store.commit('saleSetWorkerList', {
-                    queryKey: 'name',
-                    queryedList: null
-                })
-                //重置手机号查询参数
-                this.$store.commit('saleSetWorkerList', {
-                    queryKey: 'phone',
-                    queryedList: null
-                })
-                await this.getTableList()
-            },
-            /**
              * 申请创建服务人员
              * des 先创建服务人员，然后才能添加服务人员技能。
              */
             createWorker(){
-                this.errorWorkerDialog = true;
+                this.createWorkerDialogVisible = true;
             },
             /**
              * 异常服务人员申请
@@ -286,20 +249,6 @@
                 this.errorWorkerDialogVisible = false;
                 await this.getTableList()
             },
-            /**
-             * 创建时间字段转换
-             */
-            // created_atFormatter(row, column){
-            //     return $utils.formatDate(new Date(row.created_at), 'yyyy-MM-dd')
-            // },
-            // //登记时间
-            // register_atFormatter(row, column){
-            //     return $utils.formatDate(new Date(row.register_at), 'yyyy-MM-dd')
-            // },
-            // educationFomatter(row, column){
-            //     let a =  this.$store.state.operateModule.educationList.filter(item => item.id == row.education)
-            //     return a.length? a[0].name : ''
-            // }
         },
         async mounted(){
             await this.getTableList()

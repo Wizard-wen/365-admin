@@ -1,5 +1,5 @@
 <template>
-    <div class="worker" v-loading="isLoaded">
+    <div class="worker" v-loading="is_loading">
         <contract-table-component
             :staffTable="contractList"
             :maxLength="maxLength"
@@ -51,7 +51,7 @@
             return {
                 //合同列表
                 contractList: [],
-                isLoaded:false,
+                is_loading:false,
                 /**
                  * 分页信息
                  */
@@ -86,7 +86,7 @@
             async getTableList(){
                 try{
 
-                    this.isLoaded = true
+                    this.is_loading = true
 
 
                     await Promise.all([
@@ -106,7 +106,7 @@
                             message: error.message
                         })
                     }).finally(() =>{
-                        this.isLoaded = false
+                        this.is_loading = false
                     })
 
                 } catch(error){
@@ -121,11 +121,11 @@
                 await this.getTableList()
             },
             prevAndNextClick(val){
-              //设置page查询参数
-              this.$store.commit('saleSetContractList', {
-                  queryKey: 'page',
-                  queryedList: val
-              })
+                //设置page查询参数
+                this.$store.commit('saleSetContractList', {
+                    queryKey: 'page',
+                    queryedList: val
+                })
             },
             /**
              * 切换页码

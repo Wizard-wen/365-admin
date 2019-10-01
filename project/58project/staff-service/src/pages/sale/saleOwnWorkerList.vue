@@ -1,5 +1,5 @@
 <template>
-    <div class="worker" v-loading="isLoaded">
+    <div class="worker" v-loading="is_loading">
         <sale-own-worker-table-component
             :staffTable="staffTable"
             :maxLength="maxLength"
@@ -55,7 +55,7 @@
                     name: '', //姓名
                     phone:'',//手机号
                 },
-                isLoaded:false,
+                is_loading:false,
                 /**
                  * 分页信息
                  */
@@ -112,7 +112,6 @@
                     } else {
                         string = 0
                     }
-
                 }
 
                 if(string > this.maxLength[listKey]){
@@ -126,7 +125,7 @@
              */
             async getTableList(){
                 try{
-                    this.isLoaded = true
+                    this.is_loading = true
                     let manager_id = this.$store.state.loginModule.user.id
 
                     this.$store.commit('saleSetOwnWorkerList', [manager_id])
@@ -166,7 +165,7 @@
                             message: error.message
                         })
                     }).finally(() =>{
-                        this.isLoaded = false
+                        this.is_loading = false
                     })
 
                 } catch(error){
@@ -252,11 +251,10 @@
              */
             showStaff(index, row){
                 this.$router.push({
-                    path: "/sale/saleWorkerShow",
+                    path: "/sale/saleNewWorkerShow",
                     query: {
                         id: row.id,
-                        from: 1,//
-
+                        from: 4,
                     }
                 })
             },

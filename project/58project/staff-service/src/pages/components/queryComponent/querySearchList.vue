@@ -22,7 +22,6 @@ export default {
     data(){
         return {
             isShow:false, //是否展示列表
-            // showQueryList:[], //展示的列表
             queryedList: [], //当前筛选的字段
         }
     },
@@ -54,6 +53,13 @@ export default {
         isSingleQuery: {
             type: Boolean,
             default: false
+        },
+        /**
+         * 当前已选中数组
+         */
+        selectedList: {
+            type: Array,
+            default: function(){return []}
         }
     },
     computed: {
@@ -62,13 +68,10 @@ export default {
             return this.queryList.map((item, index) =>{
                 return {
                     ...item,
-                    isSelected: _this.selectedArr.includes(item.id)? true : false 
+                    isSelected: _this.selectedList.includes(item.id)? true : false 
                 }
             })
         },
-        selectedArr(){
-            return this.$store.state.storeModule.storeList[this.queryKey]
-        }
     },
     methods: {
         /**
@@ -81,32 +84,25 @@ export default {
          * 改变查询条件
          */
         addQuery(item){
-            let queryedList = []
+            //若是单选
             if(this.isSingleQuery){
                 // 清空id数组
-                queryedList = [];
-                queryedList.push(item.id);
+                this.queryedList = [];
+                this.queryedList.push(item.id);
             } else {
                 // 清空id数组
-                queryedList = this.selectedArr;
+                this.queryedList = this.selectedList;
 
-                let indexNumber = this.selectedArr.indexOf(item.id)
+                let indexNumber = this.selectedList.indexOf(item.id)
                
                if(indexNumber!=-1){
-                   queryedList.splice(indexNumber, 1)
+                   this.queryedList.splice(indexNumber, 1)
                } else {
-                   queryedList.push(item.id)
+                   this.queryedList.push(item.id)
                }
             }
-
-            //将查询组件数据变化存入vuex
-            this.$store.commit('setStoreList', {
-                queryKey: this.queryKey, 
-                queryedList: queryedList
-            })
-            
             //更新表格数据
-            this.$emit('updateTable')
+            this.$emit('updateSearchList', [this.queryKey, this.queryedList])
         }
     }
 }
@@ -137,7 +133,6 @@ export default {
             line-height: 39px;
             color: #333;
             text-indent: 25px;
-            // background: #D9DEE4;
             background: #fff;
             cursor: pointer;
 
@@ -181,28 +176,18 @@ export default {
         }
     }
     .list-item-color1{
-        background: #409eff;
-        // border: 1px solid rgba(64,158,255,.2);
-        // background-color: rgba(64,158,255,.1);           
+        background: #409eff;         
     }
     .list-item-color2{
-        // background-color: rgba(103,194,58,.1);
-        // border-color: rgba(103,194,58,.2);
         background: #67c23a;
     }
     .list-item-color3{
-        // background-color: rgba(144,147,153,.1);
-        // border-color: rgba(144,147,153,.2);
         background: #909399;
     }
     .list-item-color4{
-        // background-color: rgba(230,162,60,.1);
-        // border-color: rgba(230,162,60,.2);
         background: #e6a23c;
     }
     .list-item-color5{
-        // background-color: rgba(245,108,108,.1);
-        // border-color: rgba(245,108,108,.2);
         background: #f56c6c;       
     }
 

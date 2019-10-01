@@ -24,11 +24,6 @@ import {
 } from './contractList/index.js'
 
 export default {
-    data(){
-        return {
-            isLoaded:false,
-        }
-    },
     components: {
         contractTableComponent
     },
@@ -50,7 +45,7 @@ export default {
                 query: {
                     id: param.id,
                     from: 1,
-                    fromId: this.$route.query.order_id
+                    from_id: this.$route.query.order_id
                 }
             })
         },      

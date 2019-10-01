@@ -1,5 +1,5 @@
 <template>
-    <div class="worker" v-loading="isLoaded">
+    <div class="worker" v-loading="is_loading">
         <void-contract-table-component
             :staffTable="contractList"
             :maxLength="maxLength"
@@ -65,7 +65,7 @@
             return {
                 //合同列表
                 contractList: [],
-                isLoaded:false,
+                is_loading:false,
                 /**
                  * 分页信息
                  */
@@ -103,7 +103,7 @@
             async getTableList(){
                 try{
 
-                    this.isLoaded = true
+                    this.is_loading = true
 
 
                     await Promise.all([
@@ -123,7 +123,7 @@
                             message: error.message
                         })
                     }).finally(() =>{
-                        this.isLoaded = false
+                        this.is_loading = false
                     })
 
                 } catch(error){

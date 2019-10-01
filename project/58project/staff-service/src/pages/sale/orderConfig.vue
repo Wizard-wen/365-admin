@@ -1,5 +1,5 @@
 <template>
-    <div class="orderConfig" v-loading="isLoaded">
+    <div class="orderConfig" v-loading="is_loading">
         <div class="order-header">
             <div class="order-name">
                 <h4>订单号：{{orderBase.order_code}}</h4>
@@ -276,7 +276,7 @@
 export default {
     data(){
         return {
-            isLoaded: false,//
+            is_loading: false,//
             order_id: '',//订单id
             matchStaffSignList: [
                 {id: 1, name: '未签约'},
@@ -407,20 +407,20 @@ export default {
          */
         async getOrder(){
             try{
-                this.isLoaded = true
+                this.is_loading = true
                 await saleService.getOrder(this.order_id).then((data) =>{
                     if(data.code == "0"){
                         store.commit('configOrderData',data.data)
                     }
-                    this.isLoaded = false
+                    this.is_loading = false
                 }).catch(e =>{
                     this.$message({
                         type:'error',
                         message: e.message
                     })
-                    this.isLoaded = false
+                    this.is_loading = false
                 }).finally(() =>{
-                    this.isLoaded = false
+                    this.is_loading = false
                 })
             } catch(error){
                 this.$message({
@@ -477,11 +477,11 @@ export default {
          */
         goStaffDetail(paramObj){
             this.$router.push({
-                path: "/sale/saleWorkerShow",
+                path: "/sale/saleNewWorkerShow",
                 query: {
                     id: paramObj.id,
                     from: 2,
-                    orderId: this.$route.query.order_id
+                    order_id: this.$route.query.id
                 }
             })
         },

@@ -1,5 +1,5 @@
 <template>
-    <div class="orderConfig" v-loading="isLoaded">
+    <div class="orderConfig" v-loading="is_loading">
         <div class="order-header">
             <div class="order-name">
                 <h4>合同号：{{contractBase.contract_code}}</h4>
@@ -18,11 +18,11 @@
                 <div class="detail-right">
                     <div class="right-box">
                         <div class="title">合同状态</div>
-                        <div class="value">{{ contractBase.type | contractTypeFormatter}}</div>
+                        <div class="value" :style="{color: contractType.color}">{{ contractType.name}}</div>
                     </div>
                     <div class="right-box" v-if="contractBase.type != 3">
                         <div class="title">是否发放工资</div>
-                        <div class="value">{{ contractBase.is_wage | isWagedFormatter}}</div>
+                        <div class="value" :style="{color: contractBase.is_wage == 1? '#F56C6C' : '#67C23A'}">{{ contractBase.is_wage | isWagedFormatter}}</div>
                     </div>
                 </div>
             </div>
@@ -176,7 +176,7 @@
 export default {
     data(){
         return {
-            isLoaded: false,//
+            is_loading: false,//
             contractBase: {},//合同信息
         }
     },
@@ -226,6 +226,25 @@ export default {
         order_service_type(){
             return this.$store.state.saleModule.order_service_type
         },
+        //合同状态
+        contractType(value){
+            if(this.contractBase.type == 1){
+                return {
+                    name: '待执行',
+                    color: '#E6A23C'
+                }
+            } else if (this.contractBase.type == 2){
+                return {
+                    name: '执行中',
+                    color: '#67C23A'
+                }
+            } else {
+                return {
+                    name: '已终止',
+                    color: '#F56C6C'
+                }
+            }
+        },
     },
     methods: {
         /**
@@ -233,7 +252,7 @@ export default {
          */
         async getContract(){
             try{
-                this.isLoaded = true
+                this.is_loading = true
                 await saleService.getContract(this.$route.query.id).then((data) =>{
                     this.contractBase = data.data
                 }).catch(e =>{
@@ -241,9 +260,9 @@ export default {
                         type:'error',
                         message: e.message
                     })
-                    this.isLoaded = false
+                    this.is_loading = false
                 }).finally(() =>{
-                    this.isLoaded = false
+                    this.is_loading = false
                 })
             } catch(error){
                 this.$message({
@@ -261,7 +280,7 @@ export default {
                 this.$router.push({
                     path: '/operate/operateOrderConfig',
                     query: {
-                        id: this.$route.query.fromId
+                        order_id: this.$route.query.from_id
                     }
                 })
             } else {

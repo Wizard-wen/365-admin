@@ -1,8 +1,7 @@
 <template>
-    <div class="worker" v-loading="isLoaded">
+    <div class="worker" v-loading="is_loading">
         <order-table-component
-            :staffTable="orderApplyTable"
-            :maxLength="maxLength"
+            :staffTable="orderTable"
             :controlScopeLength="170">
             <template slot="searchList">
                 <div class="search-list">
@@ -14,8 +13,8 @@
             </template>
 
             <template slot="control" slot-scope="controler">
-                <el-button size="mini" type="text" @click="dealOrder(controler.scoper.row)">处理订单</el-button>
-                <el-button size="mini" type="text" @click="assignOrder(controler.scoper.row)">分派订单</el-button>
+                <el-button size="mini" type="text" @click="goDealOrderPage(controler.scoper.row)">处理订单</el-button>
+                <el-button size="mini" type="text" @click="openAssignOrderDialog(controler.scoper.row)">分派订单</el-button>
             </template>
 
             <template slot="pagination">
@@ -31,11 +30,11 @@
             </template>
         </order-table-component>
         <!-- 订单分派弹出框 -->
-        <assign-dialog
-            v-if="assignDialogVisible"
-            :openAssignDialog="assignDialogVisible"
-            @closeAssignDialog="assignDialogVisible=false"
-            :assignOrderId="assignOrderId"></assign-dialog>
+        <assign-order-dialog
+            v-if="assignOrderDialogVisible"
+            :assignOrderDialogVisible="assignOrderDialogVisible"
+            @closeAssignOrderDialog="closeAssignOrderDialog"
+            :order_id="assignOrderId"></assign-order-dialog>
     </div>
 </template>
 <script>
@@ -44,23 +43,22 @@
     import {
         orderTableComponent,
         queryTagComponent,
-        queryComponent
+        queryComponent,
+        assignOrderDialog
     } from './orderList/index.js'
-
-    import {assignDialog} from '@/pages/sale/orderConfig/index.js'
 
     export default {
         components: {
             orderTableComponent,
             queryTagComponent,
             queryComponent,
-            assignDialog,
+            assignOrderDialog,
         },
         data(){
             return {
                 //员工信息列表
-                orderApplyTable: [],
-                isLoaded:false,
+                orderTable: [],
+                is_loading:false,
                 /**
                  * 分页信息
                  */
@@ -69,55 +67,43 @@
                     currentPage: 1,
                     pageNumber: 20,
                 },
-                //计算列表每一列的最大宽度
-                maxLength: {
-                    authentication: 80, //认证状态
-                    working_status: 80,//接单状态
-                    skill_ids: 80,// 职业类型
-                    service_type: 80,//服务类型
-                    service_crowd: 100,//可服务人群
-                    working_age: 80,// 工龄
-                    nation: 80,// 民族
-                    region_ids:80,//服务地区
-                    course: 80,//参加培训
-                    paper_ids: 80, //技能证书
-                    source: 80,//信息来源
-                },
-                //分配弹出框显示
-                assignDialogVisible:false,
                 //待分配订单id
                 assignOrderId: 0,
-                applyOrderDialogVisible: false,//订单申请弹窗显示隐藏
+                //订单分派弹窗显示隐藏
+                assignOrderDialogVisible: false,
             }
         },
         methods: {
              /**
              * 请求表格数据
              */
-            async getTableList(){
+            async getOrderList(){
                 try{
 
-                    this.isLoaded = true
+                    this.is_loading = true
 
                     await Promise.all([
                         saleService.getOrderList(), //
                         operateService.getOrderFormConfig()
                     ]).then((data) =>{
 
-                        this.orderApplyTable = data[0].data.data
+                        this.orderTable = data[0].data.data
                         //分页信息
                         this.pagination.currentPage = data[0].data.current_page //当前页码
                         this.pagination.total = data[0].data.total //列表总条数
 
                         //配置订单相关标签
                         this.$store.commit('setOrderConfigForm',data[1].data)
+
+                        this.is_loading = false
                     }).catch(error =>{
                         this.$message({
                             type:'error',
                             message: error.message
                         })
+                        this.is_loading = false
                     }).finally(() =>{
-                        this.isLoaded = false
+                        this.is_loading = false
                     })
 
                 } catch(error){
@@ -125,11 +111,12 @@
                         type:'error',
                         message: error.message
                     })
+                    this.is_loading = false
                 }
             },
             // 由查询组件触发的更新表格事件
             async updateTable(){
-                await this.getTableList()
+                await this.getOrderList()
             },
             prevAndNextClick(val){
                 //设置page查询参数
@@ -147,24 +134,37 @@
                     queryKey: 'page',
                     queryedList: val
                 })
-                await this.getTableList()
+                await this.getOrderList()
             },
             /**
-             * 处理订单
+             * 前往订单处理页
              * @param paramObj 列表参数对象
              */
-            dealOrder(paramObj){
-                this.$router.push(`/operate/operateOrderConfig?id=${paramObj.id}`)
+            goDealOrderPage(paramObj){
+                this.$router.push({
+                    path: `/operate/operateOrderConfig`,
+                    query: {
+                        order_id: paramObj.id
+                    }
+                })
             },
             /**
-             * 分派订单
+             * 打开分派订单弹窗
              */
-            assignOrder(){
-                this.assignDialogVisible = true
+            openAssignOrderDialog(paramObj){
+                this.assignOrderId = paramObj.id
+                this.assignOrderDialogVisible = true
             },
+            /**
+             * 关闭分派订单弹窗
+             */
+            async closeAssignOrderDialog(){
+                this.assignOrderDialogVisible = false
+                await this.getOrderList()
+            }
         },
         async mounted(){
-            await this.getTableList()
+            await this.getOrderList()
         }
     }
 </script>

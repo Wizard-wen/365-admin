@@ -1,19 +1,12 @@
 <template>
     <div class="list-table">
-        <!-- 模糊搜索插槽 -->
-        <slot name="searchList"></slot>
-
         <div class="table-list">
-            <!-- <div class="search-form">
-                <slot name="searchForm"></slot>
-            </div>   -->
             <el-table 
                 :data="staffTable" 
-                class="worker-table" 
+                class="contract-table" 
                 :stripe="true" 
                 border 
                 :fit="true"
-                height="calc(100vh-90px)"
                 row-key="1233444"
                 :header-cell-style="{height: '30px',padding: '0px',fontSize:'12px'}"
                 :cell-style="{height: '30px',padding: 0,fontSize:'12px',}">
@@ -151,40 +144,15 @@
         height:24px;
         line-height: 24px;
     }
-    .worker{
+    .contract{
         .list-table{
-            height: 450px;
             width:100%;
-            display: flex;
-            .search-list{
-                width: 200px;
-                height: 100%;
-                overflow-y: auto;
-                background: #fff;
-                margin-right: 5px;
-                margin-left: 5px;
-            }
             .table-list{
-                overflow: auto;
-                flex:1;
-                width: calc(100% - 180px);
-                height: 450px;
-                .search-form{
-                    height: 40px;
-                    width: 100%;
-                    display: flex;
-                    justify-content: space-between;
-                    .search-tag-list{
-                        flex: 1;
-                    }
-                }
-                .worker-table{
+                width: 100%;
+                .contract-table{
                     height: calc(100% - 72px);
                     width: 100%;
                     margin: 0 auto;
-                }
-                .pagination-box{
-                    height:32px;
                 }
             }
         }

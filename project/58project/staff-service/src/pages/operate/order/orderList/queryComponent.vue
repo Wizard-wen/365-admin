@@ -109,7 +109,7 @@ export default {
         // 更新表格数据
         updateTable(){
             this.$emit('updateTable')
-        }
+        },
     },
 }
 </script>

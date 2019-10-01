@@ -5,7 +5,7 @@
             <i class="arrow-position" :class="isShow?'el-icon-arrow-up':'el-icon-arrow-down'"></i>
         </div>
         <div class="search-list" v-if="isShow">
-            <input type="text" v-model="searchText" class="input" :placeholder="'搜索关键字'" v-on:keyup.13="addQuery">
+            <input type="text" v-model="queryText" class="input" :placeholder="'搜索关键字'" v-on:keyup.13="addQuery">
         </div>
     </div>
 </template>
@@ -14,7 +14,7 @@ export default {
     data(){
         return {
             isShow:false, //是否展示列表
-            searchText: '',//搜索字段
+            queryText: '',//搜索字段
         }
     },
     props: {
@@ -32,17 +32,16 @@ export default {
             type:String,
             default:''
         },
-    },
-    watch: {
-        inputText: function(val, oldVal){
-            if(val == ''){
-                this.searchText = ''
-            }
+        selectedText: {
+            type: String,
+            default: ''
         }
     },
-    computed: {
-        inputText(){
-            return this.$store.state.storeModule.storeList[this.queryKey]
+    watch: {
+        selectedText: function(val, oldVal){
+            if(val == ''){
+                this.queryText = ''
+            }
         }
     },
     methods: {
@@ -56,14 +55,8 @@ export default {
          * 改变查询条件
          */
         addQuery(){
-            //将查询组件数据变化存入vuex
-                this.$store.commit('setStoreList', {
-                    queryKey: this.queryKey, 
-                    queryedList: this.searchText
-                })
-            
             //更新表格数据
-            this.$emit('updateTable')
+            this.$emit('updateSearchInput', [this.queryKey, this.queryText])
         }
     }
 }

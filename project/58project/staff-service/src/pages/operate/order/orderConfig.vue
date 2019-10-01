@@ -1,12 +1,12 @@
 <template>
-    <div class="orderConfig" v-loading="isLoaded">
+    <div class="orderConfig" v-loading="is_loading">
         <div class="order-header">
             <div class="order-name">
                 <h4>订单号：{{orderBase.order_code}}</h4>
             </div>
             <div class="btn-group">
                 <!-- 仅店长有此权限 -->
-                <el-button type="primary" @click="assignOrder" size="mini">分派</el-button>
+                <el-button type="primary" @click="openAssignOrderDialog" size="mini">分派</el-button>
                 <el-button size="mini" @click="goback">返回</el-button>
             </div>
             <div class="order-detail">
@@ -14,16 +14,19 @@
                     <div class="detail-left-box">
                         <div class="detail-left-line">订单经纪人：{{ orderBase.agent_manager_name }}</div>
                         <div class="detail-left-line">订单经纪门店：{{ orderBase.agent_store_name }}</div>
-                        <div class="detail-left-line">创建人：{{ orderBase.created_manager_name }}</div>
-                        <div class="detail-left-line">创建时间：{{orderBase.created_at | timeFomatter}}</div>
+                        <div class="detail-left-line">订单创建人（运营）：{{ orderBase.created_manager_name }}</div>
+                        <div class="detail-left-line">订单创建时间：{{orderBase.created_at | timeFomatter}}</div>
                         <div class="detail-left-line">来源门店：{{orderBase.apply_store_name}}</div>
-                        <div class="detail-left-line">来源人：{{orderBase.apply_manager_name}}</div>
+                        <div class="detail-left-line">来源人：{{orderBase.apply_manager_name? orderBase.apply_manager_name: '门店'}}</div>
                         <div
                             v-if="orderBase.type != 1" 
-                            class="detail-left-line">签约时间：{{orderBase.sign_service_start | timeFomatter}}</div>
+                            class="detail-left-line">签约时间：{{orderBase.sign_at | timeFomatter}}</div>
                         <div
                             v-if="orderBase.type != 1" 
-                            class="detail-left-line">服务周期：{{orderBase.sign_service_start | timeFomatter}}</div>
+                            class="detail-left-line">服务周期：
+                            {{orderBase.sign_service_start | timeFomatter}} -
+                            {{orderBase.sign_service_end | timeFomatter}} 
+                            </div>
                     </div>
                 </div>
                 <div class="detail-right">
@@ -31,14 +34,18 @@
                         <div class="title">账户余额</div>
                         <div class="value">{{ orderBase.sign_user_account }}</div>
                     </div>
+                    <div class="right-box" >
+                        <div class="title">订单状态</div>
+                        <div class="value" :style="{color: orderType.color}">{{ orderType.name}}</div>
+                    </div>
                 </div>
             </div>
             <!-- 订单分派弹出框 -->
-            <assign-dialog
-                v-if="assignDialogVisible"
-                :openAssignDialog="assignDialogVisible"
-                @closeAssignDialog="assignDialogVisible=false"
-                :assignOrderId="order_id"></assign-dialog>
+            <assign-order-dialog
+                v-if="assignOrderDialogVisible"
+                :assignOrderDialogVisible="assignOrderDialogVisible"
+                @closeAssignOrderDialog="closeAssignOrderDialog"
+                :order_id="assignOrderId"></assign-order-dialog>
         </div>
         <div class="order-down">
             <div class="order-message">
@@ -177,7 +184,7 @@
                 </div>
                 <div class="order-list">
                     <!-- 日志列表 -->
-                    <el-table :data="orderLogTable" class="person-table" :header-cell-style="{height: '48px',background: '#fafafa'}">
+                    <el-table :data="order_logs" class="person-table" :header-cell-style="{height: '48px',background: '#fafafa'}">
                         <el-table-column label="创建时间" prop="created_at" align="center"></el-table-column>
 
                         <el-table-column label="管理员姓名" prop="manager_name" align="center"></el-table-column>
@@ -197,29 +204,29 @@
 <script>
     import {operateService, $utils, saleService} from '../../../../common'
     import {
-        assignDialog,
         matchServiceList,
         contractList,} from './orderConfig/index.js'
+    import {assignOrderDialog} from './orderList/index.js'
     import {
         tableTagComponent} from '@/pages/components'
 export default {
     data(){
         return {
-            isLoaded: false,//
-            order_id: '',//订单id
+            is_loading: false,//
+            order_id: 0,//订单id
             matchStaffSignList: [
                 {id: 1, name: '未签约'},
                 {id: 2, name: '已签约'},
                 {id: 3, name: '已拒绝'},
             ],
-            //订单日志列表
-            orderLogTable: [],
-
-            refuseServiceDialogVisible: false,//拒绝服务人员显示隐藏
-            //分配弹出框显示
-            assignDialogVisible:false,
-
-            matched_staff: null,//备选服务人员信息对象
+            //拒绝服务人员显示隐藏
+            refuseServiceDialogVisible: false,
+            //备选服务人员信息对象
+            matched_staff: null,
+            //待分配订单id
+            assignOrderId: 0,
+            //订单分派弹窗显示隐藏
+            assignOrderDialogVisible: false,
         }
     },
     filters: {
@@ -231,18 +238,12 @@ export default {
         }
     },
     components: {
-        assignDialog,
+        assignOrderDialog,
         matchServiceList,
         contractList,
         tableTagComponent
     },
     computed:{
-        /**
-         * 
-         */
-        workerConfigList(){
-            return this.$store.state.operateModule.workerConfigForm
-        },
         /**
          * 当前用户信息
          */
@@ -260,6 +261,43 @@ export default {
          */
         order_staff(){
             return this.$store.state.saleModule.order_staff
+        },
+        /**
+         * 订单日志
+         */
+        order_logs(){
+            return this.$store.state.saleModule.order_logs
+        },
+        /**
+         * 订单状态
+         */
+        orderType(){
+            if(this.orderBase.type == 1){
+                return {
+                    name: '匹配中',
+                    color: '#E6A23C'
+                }
+            } else if(this.orderBase.type == 2){
+                return {
+                    name: '已签约',
+                    color: '#67C23A'
+                }
+            } else if(this.orderBase.type == 3){
+                return {
+                    name: '售后匹配中',
+                    color: '#E6A23C'
+                }
+            } else if(this.orderBase.type == 4){
+                return {
+                    name: '已终止',
+                    color: '#F56C6C'
+                }
+            } else {
+                return {
+                    name: '',
+                    color: ''
+                }
+            }
         }
     },
     methods: {
@@ -268,20 +306,20 @@ export default {
          */
         async getOrder(){
             try{
-                this.isLoaded = true
-                await saleService.getOrder(this.order_id).then((data) =>{
+                this.is_loading = true
+                await saleService.getOrder(this.$route.query.order_id).then((data) =>{
                     if(data.code == "0"){
                         store.commit('configOrderData',data.data)
                     }
-                    this.isLoaded = false
+                    this.is_loading = false
                 }).catch(e =>{
                     this.$message({
                         type:'error',
                         message: e.message
                     })
-                    this.isLoaded = false
+                    this.is_loading = false
                 }).finally(() =>{
-                    this.isLoaded = false
+                    this.is_loading = false
                 })
             } catch(error){
                 this.$message({
@@ -291,21 +329,7 @@ export default {
                 store.commit('setLoading',false)
             }
         },
-        /**
-         * 切换页码
-         */
-        async handleContractCurrentPage(val){
-            // this.pagination.currentPage = val
-            //设置page查询参数
-            this.$store.commit('setContractList', {
-                queryKey: 'page', 
-                queryedList: val
-            })
-            await this.getTableList()
-        },
-
 /*********************备选服务人员列表****************************************************/
-
         /**
          * 跳转至服务人员详情
          * @param paramObj 匹配服务人员信息对象
@@ -316,16 +340,24 @@ export default {
                 query: {
                     id: paramObj.id,
                     from: 2,
-                    orderId: this.$route.query.id
+                    order_id: this.$route.query.order_id
                 }
             })
         },
-        /********************订单操作栏***************************************/
+/********************订单操作栏***************************************/
         /**
-         * 分派订单
+         * 打开分派订单弹窗
          */
-        assignOrder(){
-            this.assignDialogVisible = true
+        openAssignOrderDialog(){
+            this.assignOrderId = this.orderBase.id
+            this.assignOrderDialogVisible = true
+        },
+        /**
+         * 关闭订单分派弹窗
+         */
+        async closeAssignOrderDialog(){
+            this.assignOrderDialogVisible = false
+            await this.getOrder()
         },
         /**
          * 返回
@@ -335,7 +367,6 @@ export default {
         },
     },
     async mounted(){
-        this.order_id = this.$route.query.id;//订单id
         await this.getOrder()
         
     }    

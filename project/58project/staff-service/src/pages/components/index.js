@@ -1,12 +1,13 @@
+
 //级联选择器组件
 import cascaderComponent from './cascaderComponent.vue'
 //照片详情组件
 import pictureDetailDialog from './pictureDetailDialog.vue'
 
+
 /**
  * 和tag标签相关的组件
  */
-
 //tag标签信息配置
 import configTagComponent from './configTagComponent.vue'
 
@@ -18,13 +19,18 @@ import cascaderTagComponent from './cascaderTagComponent.vue'
 
 //列表项内的标签组件
 import tableTagComponent from './tableTagComponent.vue'
+/****************** tag相关组件结束***************************************************/
+
+//列表搜索组件
+import {
+    querySearchInput,
+    querySearchList,
+} from './queryComponent/index.js'
+
+
 
 //表单页面组件
 import pageEditComponent from './pageEditComponent.vue'
-
-/****************** tag相关组件结束***************************************************/
-
-
 
 export {
     cascaderComponent,
@@ -33,5 +39,7 @@ export {
     selectTagComponent,
     cascaderTagComponent,
     tableTagComponent,
-    pageEditComponent
+    pageEditComponent,
+    querySearchInput,
+    querySearchList,
 }

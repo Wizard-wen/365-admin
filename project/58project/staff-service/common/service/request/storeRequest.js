@@ -12,7 +12,7 @@ export default {
 
     getStoreList(){
         return axios.post(`./admin/store/getStoreList`,{
-            // ...store.state.storeModule.storeList
+            ...store.state.storeModule.storeList
         })
     },
     /**

@@ -1,7 +1,7 @@
 <template>
     <div class="worker">
         <match-service-table-component
-            v-loading="isLoaded"
+            v-loading="is_loading"
             :staffTable="staffTable"
             :maxLength="maxLength"
             :controlScopeLength="150">
@@ -50,7 +50,7 @@ export default {
             //员工信息列表
             staffTable: [],
             //loading变量
-            isLoaded:false,
+            is_loading:false,
             /**
              * 分页信息
              */
@@ -118,7 +118,7 @@ export default {
          */
         async getTableList(){
             try{
-                this.isLoaded = true
+                this.is_loading = true
 
                 await Promise.all([
                     operateService.getWorkerFormConfig('edit'), //获取表单配置字段
@@ -149,15 +149,15 @@ export default {
                     //分页信息
                     this.pagination.currentPage = data[1].data.current_page //当前页码
                     this.pagination.total = data[1].data.total //列表总条数
-                    this.isLoaded = false
+                    this.is_loading = false
                 }).catch(error =>{
                     this.$message({
                         type:'error',
                         message: error.message
                     })
-                    this.isLoaded = false
+                    this.is_loading = false
                 }).finally(() =>{
-                    this.isLoaded = false
+                    this.is_loading = false
                 })
 
             } catch(error){
@@ -198,7 +198,7 @@ export default {
                     query: {
                         id: row.id,
                         from: 2,//
-                        orderId: this.$route.query.id
+                        order_id: this.$route.query.id
                     }
                 })
         },

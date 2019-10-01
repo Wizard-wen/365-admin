@@ -207,18 +207,14 @@ export default {
          * 点击节点
          */
         async nodeClick(clickObject,currentObject){
-            if(clickObject.hasOwnProperty('children')){
-                return;
-            } else {
-                this.$router.push({
-                    path: "/auth/authConfig",
-                    query: {
-                        id: clickObject.id,
-                        type: 1,
-                        fromPage: this.pagination.currentPage
-                    }
-                })
-            }
+            this.$router.push({
+                path: "/auth/authConfig",
+                query: {                                                                   
+                    id: clickObject.id,
+                    type: 1,
+                    fromPage: this.pagination.currentPage
+                }
+            })
         },
         /**
          * 配置权限
