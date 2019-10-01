@@ -22,8 +22,8 @@
                 <el-table-column label="编号" prop="id" align="center"></el-table-column>
                 <el-table-column label="菜单展示" prop="is_display" align="center" >
                     <template slot-scope="scope">
-                        <table-tag-component 
-                            :propList="is_displayList" 
+                        <table-tag-component
+                            :propList="is_displayList"
                             :tableOriginData="scope.row.is_display"></table-tag-component>
                     </template>
                 </el-table-column>
@@ -46,8 +46,8 @@
             <el-pagination
                 class="pagination"
                 @current-change="handleCurrentPage"
-                @prev-click="handleCurrentPage"
-                @next-click="handleCurrentPage"
+                @prev-click="prevAndNextClick"
+                @next-click="prevAndNextClick"
                 :current-page.sync="pagination.currentPage"
                 :page-size="10"
                 layout="prev, pager, next, jumper"
@@ -168,6 +168,9 @@ export default {
                     message: error.message
                 })
             }
+        },
+        prevAndNextClick(val){
+            this.pagination.currentPage = val
         },
         /**
          * 切换页码

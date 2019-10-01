@@ -13,8 +13,8 @@
                 <el-pagination
                     class="pagination"
                     @current-change="handleCurrentPage"
-                    @prev-click="handleCurrentPage"
-                    @next-click="handleCurrentPage"
+                    @prev-click="prevAndNextClick"
+                    @next-click="prevAndNextClick"
                     :current-page.sync="pagination.currentPage"
                     :page-size="pagination.pageNumber"
                     layout="prev, pager, next, jumper"
@@ -65,7 +65,7 @@ export default {
     },
     computed:{
         /**
-         * 
+         *
          */
         workerConfigList(){
             return this.$store.state.operateModule.workerConfigForm
@@ -93,9 +93,9 @@ export default {
                 } else {
                     string = 0
                 }
-                
+
             }
-            
+
             if(string > this.maxLength[listKey]){
                 this.maxLength[listKey] = (string + 20) > 80 ? (string + 20) : 80
             }
@@ -113,17 +113,23 @@ export default {
                 }
             })
         },
- 
+        prevAndNextClick(val){
+            //设置page查询参数
+            this.$store.commit('setSellerList', {
+                queryKey: 'page',
+                queryedList: val
+            })
+        },
         /**
          * 切换页码
          */
         async handleCurrentPage(val){
             //设置page查询参数
             this.$store.commit('setSellerList', {
-                queryKey: 'page', 
+                queryKey: 'page',
                 queryedList: val
             })
-        },        
+        },
     },
     async mounted(){
 

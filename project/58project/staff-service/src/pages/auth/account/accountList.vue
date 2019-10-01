@@ -38,9 +38,9 @@
                 <el-table-column label="用户名" prop="name" align="center"></el-table-column>
                 <el-table-column label="部门" prop="department_id"  align="center">
                     <template slot-scope="scope">
-                        <table-tag-component 
-                        v-if="departmentList" 
-                        :propList="departmentList" 
+                        <table-tag-component
+                        v-if="departmentList"
+                        :propList="departmentList"
                         :tableOriginData="scope.row.department_id"></table-tag-component>
                     </template>
                 </el-table-column>
@@ -68,8 +68,8 @@
             <el-pagination
                 class="pagination"
                 @current-change="handleCurrentPage"
-                @prev-click="handleCurrentPage"
-                @next-click="handleCurrentPage"
+                @prev-click="prevAndNextClick"
+                @next-click="prevAndNextClick"
                 :current-page.sync="pagination.currentPage"
                 :page-size="10"
                 layout="prev, pager, next, jumper"
@@ -182,6 +182,9 @@
                     })
                 }
             },
+            prevAndNextClick(val){
+                this.pagination.currentPage = val
+            },
             /**
              * 切换页码
              */
@@ -278,7 +281,7 @@
                     }
 
                     await _this.getTableList()
-                    
+
                 }
             },
             /**

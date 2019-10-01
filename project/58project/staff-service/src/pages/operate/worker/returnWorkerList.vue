@@ -4,7 +4,7 @@
             :staffTable="staffTable"
             :maxLength="maxLength"
             :controlScopeLength="110">
-            
+
             <template slot="searchForm">
                 <div class="search-left">
                     <el-input v-model="staffSearch.name" placeholder="请输入员工姓名" :maxlength="20"></el-input>
@@ -24,8 +24,8 @@
                 <el-pagination
                     class="pagination"
                     @current-change="handleCurrentPage"
-                    @prev-click="handleCurrentPage"
-                    @next-click="handleCurrentPage"
+                    @prev-click="prevAndNextClick"
+                    @next-click="prevAndNextClick"
                     :current-page.sync="pagination.currentPage"
                     :page-size="pagination.pageNumber"
                     layout="prev, pager, next, jumper"
@@ -40,7 +40,7 @@
     import {
         workerTableComponent,
     } from './workerList/index.js'
-    
+
     export default {
         components: {
             workerTableComponent
@@ -89,7 +89,7 @@
         },
         methods: {
             /**
-             * 
+             *
              */
             computeStringLength(array, listKey, configKey){
                 let string = 0
@@ -106,9 +106,9 @@
                     } else {
                         string = 0
                     }
-                    
+
                 }
-                
+
                 if(string > this.maxLength[listKey]){
                     this.maxLength[listKey] = (string + 20) > 80 ? (string + 20) : 80
                 }
@@ -117,16 +117,16 @@
              * 请求表格数据
              * des 表格查询参数存储在vuex中，刷新，参数重置
              */
-            async getTableList(){                
+            async getTableList(){
                 try{
                     //设置name查询参数
                     this.$store.commit('setReturnWorkerList', {
-                        queryKey: 'name', 
+                        queryKey: 'name',
                         queryedList: this.staffSearch.name
                     })
                     //设置手机号查询参数
                     this.$store.commit('setReturnWorkerList', {
-                        queryKey: 'phone', 
+                        queryKey: 'phone',
                         queryedList: this.staffSearch.phone
                     })
                     this.isLoaded = true
@@ -135,12 +135,12 @@
                         operateService.getWorkerFormConfig('edit'), //获取表单配置字段
                         operateService.getStaffList(1) //获取列表数据
                     ]).then((data) =>{
-                        // 将表单配置数据存入 vuex 
+                        // 将表单配置数据存入 vuex
                         this.$store.commit('setWorkerConfigForm',data[0].data)
 
                         let tableList = data[1].data.data
                         tableList.forEach((item, index) =>{
-                           
+
                             this.computeStringLength(item.authentication, 'authentication', 'authentication')
                             this.computeStringLength(item.working_status, 'working_status', 'working_status')
                             this.computeStringLength(item.skill_ids, 'skill_ids', 'service_category')
@@ -152,7 +152,7 @@
                             this.computeStringLength(item.course, 'course', 'course')
                             this.computeStringLength(item.paper_ids, 'paper_ids', 'paper_category')
                             this.computeStringLength(item.source, 'source', 'source')
-                        })  
+                        })
 
                         this.staffTable = data[1].data.data
                         //分页信息
@@ -174,6 +174,13 @@
                     })
                 }
             },
+            prevAndNextClick(val){
+              //设置page查询参数
+              this.$store.commit('setReturnWorkerList', {
+                  queryKey: 'page',
+                  queryedList: val
+              })
+            },
             /**
              * 切换页码
              */
@@ -181,7 +188,7 @@
                 // this.pagination.currentPage = val
                 //设置page查询参数
                 this.$store.commit('setReturnWorkerList', {
-                    queryKey: 'page', 
+                    queryKey: 'page',
                     queryedList: val
                 })
                 await this.getTableList()
@@ -192,12 +199,12 @@
             async searchStaff(){
                 //设置name查询参数
                 this.$store.commit('setReturnWorkerList', {
-                    queryKey: 'name', 
+                    queryKey: 'name',
                     queryedList: this.staffSearch.name
                 })
                 //设置手机号查询参数
                 this.$store.commit('setReturnWorkerList', {
-                    queryKey: 'phone', 
+                    queryKey: 'phone',
                     queryedList: this.staffSearch.phone
                 })
                 await this.getTableList()
@@ -210,12 +217,12 @@
                 this.staffSearch.phone = ''
                 //重置name查询参数
                 this.$store.commit('setReturnWorkerList', {
-                    queryKey: 'name', 
+                    queryKey: 'name',
                     queryedList: null
                 })
                 //重置手机号查询参数
                 this.$store.commit('setReturnWorkerList', {
-                    queryKey: 'phone', 
+                    queryKey: 'phone',
                     queryedList: null
                 })
                 await this.getTableList()

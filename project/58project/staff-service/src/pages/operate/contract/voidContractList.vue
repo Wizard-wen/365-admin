@@ -4,7 +4,7 @@
             :staffTable="contractList"
             :maxLength="maxLength"
             :controlScopeLength="100">
-            
+
             <template slot="searchList">
                 <div class="search-list">
                     <query-component @updateTable="updateTable"></query-component>
@@ -15,7 +15,7 @@
                 <query-tag-component @updateTable="updateTable"></query-tag-component>
                 <el-button type="primary" size="mini" @click="openCreateVoidContractDialog">创建空合同</el-button>
             </template>
-            
+
             <template slot="control" slot-scope="controler">
                 <el-button type="text" size="mini" v-if="controler.scoper.row.type == 1" @click="openAssignVoidContractDialog( controler.scoper.row)">分派</el-button>
             </template>
@@ -24,8 +24,8 @@
                 <el-pagination
                     class="pagination"
                     @current-change="handleCurrentPage"
-                    @prev-click="handleCurrentPage"
-                    @next-click="handleCurrentPage"
+                    @prev-click="prevAndNextClick"
+                    @next-click="prevAndNextClick"
                     :current-page.sync="pagination.currentPage"
                     :page-size="pagination.pageNumber"
                     layout="prev, pager, next, jumper"
@@ -105,7 +105,7 @@
 
                     this.isLoaded = true
 
-                    
+
                     await Promise.all([
                         operateService.getVoidContractList(),
                         operateService.getOrderFormConfig()
@@ -137,6 +137,13 @@
             async updateTable(){
                 await this.getTableList()
             },
+            prevAndNextClick(val){
+                //设置page查询参数
+                this.$store.commit('setContractList', {
+                    queryKey: 'page',
+                    queryedList: val
+                })
+            },
             /**
              * 切换页码
              */
@@ -156,7 +163,7 @@
                 this.assignVoidContractDialogVisible = true
             },
             /**
-             * 
+             *
              */
             async closeVoidContractAssignDialog(){
                 this.assignVoidContractDialogVisible = false

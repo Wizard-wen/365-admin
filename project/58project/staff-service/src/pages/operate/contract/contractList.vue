@@ -4,7 +4,7 @@
             :staffTable="contractList"
             :maxLength="maxLength"
             :controlScopeLength="100">
-            
+
             <template slot="searchList">
                 <div class="search-list">
                     <query-component @updateTable="updateTable"></query-component>
@@ -14,7 +14,7 @@
             <template slot="searchForm">
                 <query-tag-component @updateTable="updateTable"></query-tag-component>
             </template>
-            
+
             <template slot="control" slot-scope="controler">
                 <el-button size="mini" type="text" @click="goContractPage( controler.scoper.row)">查看</el-button>
             </template>
@@ -23,8 +23,8 @@
                 <el-pagination
                     class="pagination"
                     @current-change="handleCurrentPage"
-                    @prev-click="handleCurrentPage"
-                    @next-click="handleCurrentPage"
+                    @prev-click="prevAndNextClick"
+                    @next-click="prevAndNextClick"
                     :current-page.sync="pagination.currentPage"
                     :page-size="pagination.pageNumber"
                     layout="prev, pager, next, jumper"
@@ -88,7 +88,7 @@
 
                     this.isLoaded = true
 
-                    
+
                     await Promise.all([
                         saleService.getContractList(2),
                         operateService.getOrderFormConfig()
@@ -119,6 +119,13 @@
             // 由查询组件触发的更新表格事件
             async updateTable(){
                 await this.getTableList()
+            },
+            prevAndNextClick(val){
+                //设置page查询参数
+                this.$store.commit('setContractList', {
+                    queryKey: 'page',
+                    queryedList: val
+                })
             },
             /**
              * 切换页码

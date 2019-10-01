@@ -4,7 +4,7 @@
             :staffTable="orderApplyTable"
             :maxLength="maxLength"
             :controlScopeLength="170">
-            
+
             <template slot="searchList">
                 <div class="search-list">
                     <query-component @updateTable="updateTable"></query-component>
@@ -20,10 +20,10 @@
             <template slot="control" slot-scope="controler">
                 <el-button v-if="controler.scoper.row.type == 1" size="mini" type="text" @click="editOrderApply(1, controler.scoper.row)">编辑</el-button>
                 <el-button v-if="controler.scoper.row.type != 1" size="mini" type="text" @click="editOrderApply(1, controler.scoper.row)">查看</el-button>
-                <el-button size="mini" type="text" style="color:#f56c6c" 
+                <el-button size="mini" type="text" style="color:#f56c6c"
                     v-if="controler.scoper.row.type == 1"
                     @click="refuseOrderApply(controler.scoper.row)">拒绝</el-button>
-                <el-button size="mini" type="text" style="color:#67c23a"  
+                <el-button size="mini" type="text" style="color:#67c23a"
                     v-if="controler.scoper.row.type == 1"
                     @click="openPassOrderApply(controler.scoper.row)">通过</el-button>
             </template>
@@ -32,8 +32,8 @@
                 <el-pagination
                     class="pagination"
                     @current-change="handleCurrentPage"
-                    @prev-click="handleCurrentPage"
-                    @next-click="handleCurrentPage"
+                    @prev-click="prevAndNextClick"
+                    @next-click="prevAndNextClick"
                     :current-page.sync="pagination.currentPage"
                     :page-size="pagination.pageNumber"
                     layout="prev, pager, next, jumper"
@@ -101,11 +101,11 @@
                     ]).then((data) =>{
 
                         this.orderApplyTable = data[0].data.data
-                        
+
                         //分页信息
                         this.pagination.currentPage = data[0].data.current_page //当前页码
                         this.pagination.total = data[0].data.total //列表总条数
-                        
+
                         //配置订单相关标签
                         this.$store.commit('setOrderApplyConfigForm',data[1].data)
                     }).catch(error =>{
@@ -128,11 +128,17 @@
             async updateTable(){
                 await this.getTableList()
             },
+            prevAndNextClick(val){
+                //设置page查询参数
+                this.$store.commit('setOrderApplyList', {
+                    queryKey: 'page',
+                    queryedList: val
+                })
+            },
             /**
              * 切换页码
              */
             async handleCurrentPage(val){
-
                 //设置page查询参数
                 this.$store.commit('setOrderApplyList', {
                     queryKey: 'page',
@@ -150,7 +156,7 @@
                 this.orderApplyPassVisible = true
             },
             /**
-             * 关闭通过订单申请弹窗 
+             * 关闭通过订单申请弹窗
              */
             async closeOrderApplyPassDialog(){
                 await this.getTableList()
@@ -188,7 +194,7 @@
                                 });
                             }
                             await this.getTableList()
-                            
+
                         }).catch(error => {
                             this.$message({
                                 type: "error",

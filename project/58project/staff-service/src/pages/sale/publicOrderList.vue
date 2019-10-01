@@ -21,8 +21,8 @@
                 <el-pagination
                     class="pagination"
                     @current-change="handleCurrentPage"
-                    @prev-click="handleCurrentPage"
-                    @next-click="handleCurrentPage"
+                    @prev-click="prevAndNextClick"
+                    @next-click="prevAndNextClick"
                     :current-page.sync="pagination.currentPage"
                     :page-size="pagination.pageNumber"
                     layout="prev, pager, next, jumper"
@@ -115,6 +115,13 @@
             // 由查询组件触发的更新表格事件
             async updateTable(){
                 await this.getTableList()
+            },
+            prevAndNextClick(val){
+              //设置page查询参数
+              this.$store.commit('saleSetOrderList', {
+                  queryKey: 'page',
+                  queryedList: val
+              })
             },
             /**
              * 切换页码

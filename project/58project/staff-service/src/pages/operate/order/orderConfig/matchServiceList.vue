@@ -5,7 +5,7 @@
             :staffTable="staffTable"
             :maxLength="maxLength"
             :controlScopeLength="150">
-            
+
             <template slot="searchList">
                 <div class="search-list">
                     <query-component @updateTable="updateTable"></query-component>
@@ -25,8 +25,8 @@
                 <el-pagination
                     class="pagination"
                     @current-change="handleCurrentPage"
-                    @prev-click="handleCurrentPage"
-                    @next-click="handleCurrentPage"
+                    @prev-click="prevAndNextClick"
+                    @next-click="prevAndNextClick"
                     :current-page.sync="pagination.currentPage"
                     :page-size="pagination.pageNumber"
                     layout="prev, pager, next, jumper"
@@ -82,7 +82,7 @@ export default {
     },
     computed:{
         /**
-         * 
+         *
          */
         workerConfigList(){
             return this.$store.state.operateModule.workerConfigForm
@@ -104,19 +104,19 @@ export default {
                 } else {
                     string = 0
                 }
-                
+
             }
-            
+
             if(string > this.maxLength[listKey]){
                 this.maxLength[listKey] = (string + 20) > 80 ? (string + 20) : 80
             }
-            
+
         },
         /**
          * 请求表格数据
          * des 表格查询参数存储在vuex中，刷新，参数重置
          */
-        async getTableList(){                
+        async getTableList(){
             try{
                 this.isLoaded = true
 
@@ -124,13 +124,13 @@ export default {
                     operateService.getWorkerFormConfig('edit'), //获取表单配置字段
                     operateService.getStaffList(5) //获取列表数据
                 ]).then((data) =>{
-                    // 将表单配置数据存入 vuex 
+                    // 将表单配置数据存入 vuex
                     this.$store.commit('setWorkerConfigForm',data[0].data)
 
                     let tableList = data[1].data.data
-                    
+
                     tableList.forEach((item, index) =>{
-                        
+
                         this.computeStringLength(item.authentication, 'authentication', 'authentication')
                         this.computeStringLength(item.working_status, 'working_status', 'working_status')
                         this.computeStringLength(item.skill_ids, 'skill_ids', 'service_category')
@@ -142,10 +142,10 @@ export default {
                         this.computeStringLength(item.course, 'course', 'course')
                         this.computeStringLength(item.paper_ids, 'paper_ids', 'paper_category')
                         this.computeStringLength(item.source, 'source', 'source')
-                    })  
+                    })
 
                     this.staffTable = data[1].data.data
-                    
+
                     //分页信息
                     this.pagination.currentPage = data[1].data.current_page //当前页码
                     this.pagination.total = data[1].data.total //列表总条数
@@ -171,17 +171,24 @@ export default {
         async updateTable(){
             await this.getTableList()
         },
+        prevAndNextClick(val){
+            //设置page查询参数
+            this.$store.commit('saleSetMatchSerivceList', {
+                queryKey: 'page',
+                queryedList: val
+            })
+        },
         /**
          * 切换页码
          */
         async handleCurrentPage(val){
             //设置page查询参数
             this.$store.commit('saleSetMatchSerivceList', {
-                queryKey: 'page', 
+                queryKey: 'page',
                 queryedList: val
             })
             await this.getTableList()
-        },   
+        },
         /**
          * 查看服务人员详情
          */
@@ -195,7 +202,7 @@ export default {
                     }
                 })
         },
-        /**  
+        /**
          * 添加备选
          * @param staffObject 员工
          */
@@ -236,9 +243,9 @@ export default {
                 this.$message({
                     type: 'info',
                     message: '已取消删除'
-                });          
+                });
             });
-        }     
+        }
     },
     async mounted(){
         await this.getTableList()

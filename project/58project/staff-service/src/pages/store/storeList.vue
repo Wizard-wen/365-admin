@@ -3,7 +3,7 @@
         <store-table-component
             :staffTable="storeList"
             :controlScopeLength="100">
-            
+
             <template slot="searchList">
                 <div class="search-list">
                     <query-component @updateTable="updateTable"></query-component>
@@ -13,7 +13,7 @@
             <template slot="searchForm">
                 <query-tag-component @updateTable="updateTable"></query-tag-component>
             </template>
-            
+
             <template slot="control" slot-scope="controler">
                 <el-button size="mini" type="text" @click="editstore(controler.scoper.row)">详情</el-button>
             </template>
@@ -22,8 +22,8 @@
                 <el-pagination
                     class="pagination"
                     @current-change="handleCurrentPage"
-                    @prev-click="handleCurrentPage"
-                    @next-click="handleCurrentPage"
+                    @prev-click="prevAndNextClick"
+                    @next-click="prevAndNextClick"
                     :current-page.sync="pagination.currentPage"
                     :page-size="pagination.pageNumber"
                     layout="prev, pager, next, jumper"
@@ -72,13 +72,13 @@
              * 请求表格数据
              */
             async getTableList(){
-                
+
                 try{
                     this.isLoading = true
                     await storeService.getStoreList().then(data =>{
 						if(data.code == "0"){
 							this.storeList = data.data.data
-					
+
 							//分页信息
 							this.pagination.currentPage = data.data.current_page //当前页码
                             this.pagination.total = data.data.total //列表总条数
@@ -103,6 +103,14 @@
             // 由查询组件触发的更新表格事件
             async updateTable(){
                 await this.getTableList()
+            },
+            // 上一页和下一页钩子
+            prevAndNextClick(val){
+                //设置page查询参数
+                this.$store.commit('setStoreList', {
+                    queryKey: 'page',
+                    queryedList: val
+                })
             },
             /**
              * 切换页码
