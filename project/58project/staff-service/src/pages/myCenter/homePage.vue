@@ -22,19 +22,31 @@
           <span>辽宁省沈阳市</span>
         </div>
       </div>
-      <div class="home-three">dddd</div>
-      <div class="home-four">eeee</div>
+      <div class="home-three">
+        <div class="mark-title">标签</div>
+        <div class="mark" v-for="(item,index) in 10" :key="item.id">标签{{index}}</div>
+      </div>
     </div>
-    <div class="home-right"></div>
+    <div class="home-right">
+      <div class="title">文章（8）</div>
+      <div class="item" v-for="item in list" :key="item.id">
+        <div class="item-title">kkk</div>
+        <div class="item-content">lll</div>
+        <div class="item-sale">
+          <span class="item-name">宋先生</span>
+          <span>发布 2019-10-03 12:34:23</span>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
+// import pdf from 'vue-pdf'
 export default {
   data() {
     return {
-      data1: "运营专员",
-      data2: "运营中心"
+      list: 2
     };
   },
   computed: {
@@ -48,7 +60,9 @@ export default {
     }
   },
   methods: {},
-  components: {}
+  components: {
+    // pdf
+  }
 };
 </script>
 
@@ -69,8 +83,8 @@ export default {
       display: flex;
       flex-direction: column;
       text-align: center;
-         align-items:center;
-                justify-content:center;
+      align-items: center;
+      justify-content: center;
     }
     .home-icon {
       height: 100px;
@@ -97,14 +111,60 @@ export default {
       color: rgba(0, 0, 0, 0.65);
       font-size: 14px;
     }
+    .home-three {
+      margin-top: 20px;
+      padding: 20px 10px;
+      border-top: 1px dotted #ccc;
+      border-bottom: 1px dotted #ccc;
+      overflow: hidden;
+    }
+    .mark-title {
+      margin-bottom: 10px;
+    }
+    .mark {
+      padding: 2px 5px;
+      border: 1px solid rgba(0, 0, 0, 0.65);
+      color: rgba(0, 0, 0, 0.65);
+      border-radius: 5px;
+      font-size: 12px;
+      display: inline-block;
+      margin: 5px 3px;
+    }
   }
   .home-right {
-    height: 400px;
     width: 68.5%;
     background: #fff;
     border-bottom: 1px solid #e8e8e8;
+    overflow: auto;
+    .title {
+      line-height: 50px;
+      font-size: 16px;
+      padding: 0 30px;
+      color: rgba(0, 0, 0, 0.85);
+      border-bottom: 1px solid #ccc;
+    }
+    .item {
+      margin: 0 20px;
+      padding: 10px;
+      border-bottom: 1px dotted #ccc;
+    }
+    .item-title {
+      color: rgba(0, 0, 0, 0.85);
+      font-size: 16px;
+    }
+    .item-content {
+      color: rgba(0, 0, 0, 0.65);
+      font-size: 14px;
+      margin-top: 15px;
+    }
+    .item-sale {
+      color: rgba(0, 0, 0, 0.65);
+      font-size: 14px;
+      margin-top: 15px;
+    }
+    .item-name {
+      color: #1890ff;
+    }
   }
 }
-
-
 </style>
