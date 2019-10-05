@@ -1,7 +1,7 @@
 <template>
     <div class="product" v-loading="is_tree_loading">
         <div class="product-tree-box">
-            <div class="title">商品索引</div>
+            <div class="title">服务索引</div>
             <el-tree
                 ref="tree"
                 :default-expanded-keys="defaultExpandKeys"
@@ -17,22 +17,22 @@
                 <el-button type="primary" @click="createProduct">创建商品</el-button>
             </div>
             <el-form class="productForm" ref="productForm" :model="productForm" label-width="120px">
-                <el-form-item label="商品标题">
+                <el-form-item label="服务标题">
                     <el-input v-model="productForm.name"></el-input>
                 </el-form-item>
-                <el-form-item label="商品副标题">
-                    <el-input v-model="productForm.subTitle"></el-input>
-                </el-form-item>
                 <el-form-item label="商品父级id">
-                    <el-select v-model="productForm.parent_id" placeholder="商品父级id">
+                    <el-select v-model="productForm.parent_id" placeholder="商品父级id" :disabled="!hasParentNode">
                         <el-option v-for="item in selectionList" :key="item.id" :label="item.names" :value="item.id"></el-option>
                     </el-select>
                 </el-form-item>
 
                 <el-form-item label="是否展示">
-                    <el-switch v-model="productForm.type"></el-switch>
+                    <select-tag-component
+                        :propTagList="typeList"
+                        v-model="productForm.type"
+                        :isSingle="true"></select-tag-component>
                 </el-form-item>
-                <el-form-item label="商品详情" prop="files" ref="files">
+                <el-form-item label="商品详情" prop="files" ref="files" v-if="hasParentNode">
                     <el-upload
                         accept=".jpg,.jpeg,.png,.gif,.bmp,.pdf,.JPG,.JPEG,.PBG,.GIF,.BMP,.PDF"
                         action="/admin/common/uploadImage"
@@ -46,6 +46,7 @@
                 </el-form-item>
                 <el-form-item >
                     <el-button type="primary" @click="saveProduct">修改</el-button>
+                    <el-button type="danger" @click="stopProduct">停用</el-button>
                 </el-form-item>
             </el-form>
         </div>
@@ -60,6 +61,8 @@ import {productListData,createProductDialog} from './productList/index.js'
 import { operateService } from '../../../../common';
 import { operateModule } from '../../../../common/store/operateModule';
 
+import {selectTagComponent} from '@/pages/components/index.js'
+
 export default {
     data(){
         return {
@@ -73,12 +76,16 @@ export default {
              * 商品表单
              */
             productForm: {
+                id: 0,
+                version: 0,
                 name: '',//商品标题
-                subTitle: '',//商品副标题
                 parent_id: '',//商品父级id
                 type: '',//是否展示
                 files: [],//商品详情
             },
+            //当前点击节点是否是分类节点
+            hasParentNode: false,
+            typeList: [{id: 1, name: '展示'}, {id: 2, name: '不展示'}],
             selectionList: [],
             //控制创建商品弹窗显示隐藏
             createProductDialogVisible:false,
@@ -93,12 +100,48 @@ export default {
     },
     components:{
         createProductDialog,
+        selectTagComponent,
     },
     methods: {
         /**
          * 保存商品
          */
-        saveProduct(){
+        async saveProduct(){
+            try{
+                this.is_contains_loading = true
+                await operateService.editService(this.productForm).then(data =>{
+                    if(data.code == '0'){
+                        this.$message({
+                            type:'success',
+                            message: data.message
+                        })
+                        this.is_contains_loading = false
+                        
+                    }
+                }).catch(error =>{
+                    this.$message({
+                        type:'error',
+                        message: error.message
+                    })
+                    this.is_contains_loading = false
+                }).finally(() =>{
+                    this.is_contains_loading = false
+                })
+                await //获取商品树形结构
+        await this.getServiceTree()
+                await this.setCurrentKey(this.productTreeList[0].children[0].id)
+            } catch(error){
+                this.$message({
+                    type:'error',
+                    message: error.message
+                })
+                this.is_contains_loading = false
+            }
+        },
+        /**
+         * 停用商品
+         */
+        stopProduct(){
 
         },
         /**
@@ -111,34 +154,30 @@ export default {
          * 点击节点
          */
         async nodeClick(clickObject,currentObject){
-            
-            if(clickObject.hasOwnProperty('children')){
-
-            } else {
-                try{
-                    this.is_contains_loading = true
-                    await operateService.getService(clickObject.id).then(data =>{
-                        this.productForm = data.data
-                        this.productForm.files.forEach((item, index) =>{
-                                item.url = './resource/'+item.url
-                        })
-                    }).catch(error =>{
-                        this.$message({
-                            type:'error',
-                            message: error.message
-                        })
-                        this.is_contains_loading = false
-                    }).finally(() =>{
-                        this.is_contains_loading = false
+            this.hasParentNode = clickObject.parent_id == 0 ? false : true;
+            try{
+                this.is_contains_loading = true
+                await operateService.getService(clickObject.id).then(data =>{
+                    this.productForm = data.data
+                    this.productForm.type = this.productForm.type == 'enable' ? 1 : 2
+                    this.productForm.files.forEach((item, index) =>{
+                            item.url = './resource/'+item.url
                     })
-                } catch(error){
+                }).catch(error =>{
                     this.$message({
                         type:'error',
                         message: error.message
                     })
                     this.is_contains_loading = false
-                }
-                
+                }).finally(() =>{
+                    this.is_contains_loading = false
+                })
+            } catch(error){
+                this.$message({
+                    type:'error',
+                    message: error.message
+                })
+                this.is_contains_loading = false
             }
         },
         /**
@@ -151,7 +190,7 @@ export default {
             this.$refs.tree.currentNode = node;
             store.setCurrentNodeKey(key);
             store.currentNodeKey = key;
-            this.$refs.tree.$emit("node-click", node.data, node, this.$refs.tree);
+            // this.$refs.tree.$emit("node-click", node.data, node, this.$refs.tree);
         },
         /**
          * 上传成功后，接收图片数据，送入图片回显数组

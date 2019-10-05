@@ -12,9 +12,10 @@
 		<div class="store-detail">
 			<div class="detail-left">
 				<div class="detail-left-box">
+					<div class="detail-left-line">编号：{{ storeDetail.store_code }}</div>
 					<div class="detail-left-line">创建人：{{ storeDetail.created_manager_name }}</div>
 					<div class="detail-left-line">创建时间：{{ storeDetail.created_at | formDate }}</div>
-					<div class="detail-left-line">门店类型：{{storeDetail.is_third == 1 ? '直营店': storeDetail.is_third == 2 ?'加盟店': ''}}</div>
+					<div class="detail-left-line">门店类型：{{storeDetail.is_third == 1 ? '直营店': '加盟店'}}</div>
 					<div class="detail-left-line">门店负责人：{{ storeDetail.store_manager_name }}</div>
 					<div class="detail-left-line">门店地址：{{storeDetail.address}}</div>
 				</div>
