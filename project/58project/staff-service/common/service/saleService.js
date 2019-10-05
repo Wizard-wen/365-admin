@@ -4,6 +4,19 @@
 
 import saleRequest from './request/saleRequest.js'
 
+/**
+ * 门店工作台
+ */
+export const saleWorkstation = {
+    /**
+     * 门店工作台
+     * @param id 用户id
+     */
+    saleWorkBench(id){
+        return saleRequest.saleWorkBench(id)
+    }
+}
+
 
 /**
  * 订单申请相关接口
@@ -158,6 +171,7 @@ export default {
     ...sale_matchServiceRequest,
     ...sale_staffRequest,
     ...sale_orderContractRequest,
+    ...saleWorkstation,
     /**
      * 日志信息提交
      * @param obj 

@@ -8,7 +8,7 @@
         <query-search-input
             @updateSearchInput="updateSearchInput"
             :queryKey="'store_manager_name'"
-            :queryName="'店员名'"
+            :queryName="'店长'"
             :selectedText="queryStoreList.store_manager_name"></query-search-input>
         <query-search-input
             @updateSearchInput="updateSearchInput"

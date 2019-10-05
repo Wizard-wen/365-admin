@@ -165,6 +165,7 @@
 </template>
 <script>
 import {applyOrderDialog} from './saleWorkStation/index.js'
+import {saleService} from '../../../common/index.js'
 export default {
     data(){
         return {
@@ -217,6 +218,32 @@ export default {
             this.$router.push('/sale/saleOwnWorkerList')
         }
 
+    },
+    async mounted(){
+        try{
+            this.is_loading = true
+            await saleService.saleWorkBench(this.presentUser.id).then(data =>{
+                if(data.code == '0'){
+                    console.log(data)
+                    this.is_loading = false
+                }
+            }).catch(error =>{
+                this.$message({
+                    message: error.message,
+                    type: 'error'
+                })
+                this.is_loading = false
+            }).finally(() =>{
+                this.is_loading = false
+            })
+        } catch(error){
+            this.$message({
+                message: error.message,
+                type: 'error'
+            })
+            this.is_loading = false
+        }
+        
     }
 }
 </script>

@@ -1,5 +1,5 @@
 <template>
-	<div class="store-edit">
+	<div class="store-edit" v-loading="is_loading">
 		<el-form class="form-style" ref="form" :rules="storeRules" :model="storeForm" label-width="120px">
 			<el-form-item label="门店名" prop="name">
 				<el-input v-model="storeForm.name" :maxlength="20"></el-input>
@@ -46,6 +46,7 @@ import { selectTagComponent,cascaderTagComponent } from "@/pages/components";
 export default {
 	data() {
 		return {
+			is_loading: false,
 			//账户信息
 			storeForm: {
 				id: 0,
@@ -73,56 +74,73 @@ export default {
 		cascaderTagComponent
 	},
 	methods: {
-		async getStore() {
-			await storeService.getStore(this.$route.query.id).then(data => {
-				if (data.code == "0") {
-					this.storeForm = data.data.store
-					this.storeForm.type = this.storeForm.type == 'enable' ? 1 : 2
-				}
-			}).catch(error => {
-				this.$message({
-					type: "error",
-					message: error.message
-				});
-			});
-		},
 		/**
-		 * 提交数据
+		 * 获取门店信息
 		 */
-		async onSubmit(formName) {
-		let storeObj = {
-			...this.storeForm,
-			type: this.storeForm.type == 1 ? 'enable' : 'disable' 
-		};
-		await this.$refs[formName].validate( async valid => {
-			if (valid) {
-				await storeService.editStore(storeObj).then(data => {
+		async getStore() {
+			try{
+				this.is_loading = true
+				await storeService.getStore(this.$route.query.id).then(data => {
 					if (data.code == "0") {
-						this.$message({
-							type: "success",
-							message: data.message
-						});
-						if(this.$route.query.type == 1){
-							this.$router.push({
-								path: "/store/storeItem",
-								query: {
-									id: this.$route.query.id
-								}
-							});
-						}else{
-							this.$router.push("/store/storeList");
-						}
+						this.storeForm = data.data.store
+						this.storeForm.type = this.storeForm.type == 'enable' ? 1 : 2
+						this.is_loading = false
 					}
 				}).catch(error => {
 					this.$message({
 						type: "error",
 						message: error.message
 					});
+					this.is_loading = false
+				}).finally(() => {
+					this.is_loading = false
+				})
+			} catch(error){
+				this.$message({
+					type: "error",
+					message: error.message
 				});
-			} else {
-				return false;
+				this.is_loading = false
 			}
-		});
+		},
+		/**
+		 * 提交数据
+		 */
+		async onSubmit(formName) {
+			
+			await this.$refs[formName].validate( async valid => {
+				if (valid) {
+					let storeObj = {
+						...this.storeForm,
+						type: this.storeForm.type == 1 ? 'enable' : 'disable' 
+					};
+					await storeService.editStore(storeObj).then(data => {
+						if (data.code == "0") {
+							this.$message({
+								type: "success",
+								message: data.message
+							});
+							if(this.$route.query.type == 1){
+								this.$router.push({
+									path: "/store/storeItem",
+									query: {
+										id: this.$route.query.id
+									}
+								});
+							}else{
+								this.$router.push("/store/storeList");
+							}
+						}
+					}).catch(error => {
+						this.$message({
+							type: "error",
+							message: error.message
+						});
+					});
+				} else {
+					return false;
+				}
+			});
 		}
 	},
 	async mounted() {

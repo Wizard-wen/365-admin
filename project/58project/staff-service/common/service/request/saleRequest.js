@@ -2,6 +2,20 @@
  * 订单模块接口
  */
 import axios from 'axios'
+
+/**
+ * 门店工作台
+ */
+export const saleWorkstation = {
+    /**
+     * 门店工作台
+     */
+    saleWorkBench(id){
+        return axios.get(`./admin/store/workBench?id=${id}`)
+    }
+}
+
+
 /**
  * 订单申请相关接口
  */
@@ -186,7 +200,7 @@ export default {
     ...sale_matchServiceRequest,
     ...sale_staffRequest,
     ...sale_orderContractRequest,
-
+    ...saleWorkstation,
 
     /**
      * 签约前、售后日志

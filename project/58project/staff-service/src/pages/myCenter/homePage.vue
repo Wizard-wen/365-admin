@@ -10,7 +10,7 @@
                         <div class="worker-hello">你好！{{users.name}}，祝你开心每一天！</div>
                         <div class="worker-department">
                             <span v-for="(item, index) in users.role_name" :key="index">{{item}} |</span>
-                            中彤实业 - 365生活服务平台 - {{department_name}}</div>
+                            中彤实业 - 365生活服务平台 - {{department_name}}</div>            
                     </div>
                 </div>
                 <div class="home-right">

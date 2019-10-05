@@ -450,7 +450,12 @@ export default {
     },
     filters: {
         formDate(timestamp){
-           return $utils.formatDate(new Date(timestamp), 'yyyy-MM-dd')
+            if(timestamp){
+                return $utils.formatDate(new Date(timestamp), 'yyyy-MM-dd')
+            } else {
+                '-'
+            }
+           
         }
     },
     methods: {
