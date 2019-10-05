@@ -42,7 +42,6 @@
 </template>
 
 <script>
-// import pdf from 'vue-pdf'
 export default {
   data() {
     return {
@@ -61,14 +60,13 @@ export default {
   },
   methods: {},
   components: {
-    // pdf
   }
 };
 </script>
 
 <style scoped lang="scss">
 .home {
-  height: 2000px;
+  height: 100%;
   width: 100%;
   background: #f0f2f5;
   display: flex;
@@ -76,6 +74,7 @@ export default {
   padding: 20px;
   .home-left {
     width: 30%;
+    height: 500px;
     background: #fff;
     border-bottom: 1px solid #e8e8e8;
     padding: 30px 20px;
@@ -132,6 +131,7 @@ export default {
     }
   }
   .home-right {
+    height: 100%;
     width: 68.5%;
     background: #fff;
     border-bottom: 1px solid #e8e8e8;
