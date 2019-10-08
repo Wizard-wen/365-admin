@@ -72,6 +72,15 @@ module.exports = {
           limit: 10000,
           name: utils.assetsPath('fonts/[name].[hash:7].[ext]')
         }
+      },
+      {
+        test: /\.pdf$/,
+        use: {
+          loader: 'file-loader',
+          options: {
+            name: 'doc/[name].[ext]'
+          }
+        }
       }
     ]
   },
