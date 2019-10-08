@@ -30,10 +30,13 @@ import clientRequireList from '@/pages/operate/order/clientRequireList.vue'
 import clientRequireItem from '@/pages/operate/order/clientRequireItem.vue'
  
 /**
- * 运营 --- 商品管理
+ * 运营 --- 小程序运营
  */
-import productList from '@/pages/operate/product/productList.vue'
-
+import productList from '@/pages/operate/custom/productList.vue'
+import resourceList from '@/pages/operate/custom/resourceList.vue'
+import videoList from '@/pages/operate/custom/videoList.vue'
+import workerAdList from '@/pages/operate/custom/workerAdList.vue'
+import customAdList from '@/pages/operate/custom/customAdList.vue'
 /**
  * 运营---服务人员管理
  */
@@ -87,12 +90,34 @@ export const operateConfigModule = [
         name: 'operateContractItem',
         component: operateContractItem,
     },
-
     {
         path: '/operate/productList',
         name: 'productList',
         component: productList,
     },
+    {
+        path: '/operate/resourceList',
+        name: 'resourceList',
+        component: resourceList,
+    },
+
+    {
+        path: '/operate/videoList',
+        name: 'videoList',
+        component: videoList,
+    },
+    {
+        path: '/operate/workerAdList',
+        name: 'workerAdList',
+        component: workerAdList,
+    },
+    {
+        path: '/operate/customAdList',
+        name: 'customAdList',
+        component: customAdList,
+    },
+
+
     {
         path: '/operate/clientRequireList',
         name: 'clientRequireList',
