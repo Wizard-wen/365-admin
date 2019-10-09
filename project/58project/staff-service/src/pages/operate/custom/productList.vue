@@ -17,6 +17,29 @@
                 <el-button type="primary" @click="createProduct">创建商品</el-button>
             </div>
             <el-form class="productForm" ref="productForm" :model="productForm" label-width="120px">
+                <el-form-item v-if="productForm.parent_id == 0" label="分类banner图" prop="banner_url" class="form-item-size">
+                    <el-upload
+                        accept=".jpg,.jpeg,.png,.gif,.bmp,.pdf,.JPG,.JPEG,.PBG,.GIF,.BMP,.PDF"
+                        class="icon-uploader"
+                        action="/admin/common/uploadImage"
+                        :show-file-list="false"
+                        :on-success="iconUploadSuccess"
+                        :headers="uploadHeader">
+
+                        <div
+                            v-if="productForm.banner_url!=''"
+                            class="icon-box"
+                            @mouseover="showblack('0')"
+                            @mouseout="showblack('1')">
+                            <img class="icon-item" :src="productForm.banner_url == '' ? '' : `./resource/${productForm.banner_url}`" >
+                            <div class="icon-item-back" v-if="isShowBlack">
+                                <i class="el-icon-edit icon-uploader-edit-icon" style="color: #fff;font-size: 20px;"></i>
+                            </div>
+                        </div>
+
+                        <i v-else class="el-icon-plus icon-uploader-icon"></i>
+                    </el-upload>
+                </el-form-item>
                 <el-form-item label="服务标题">
                     <el-input v-model="productForm.name"></el-input>
                 </el-form-item>
@@ -29,7 +52,7 @@
                 <el-form-item label="是否展示">
                     <select-tag-component
                         :propTagList="typeList"
-                        v-model="productForm.type"
+                        v-model="productForm.status"
                         :isSingle="true"></select-tag-component>
                 </el-form-item>
                 <el-form-item label="商品详情" prop="files" ref="files" v-if="hasParentNode">
@@ -46,7 +69,7 @@
                 </el-form-item>
                 <el-form-item >
                     <el-button type="primary" @click="saveProduct">修改</el-button>
-                    <el-button type="danger" @click="stopProduct">停用</el-button>
+                    <el-button type="danger" @click="deleteProduct">删除</el-button>
                 </el-form-item>
             </el-form>
         </div>
@@ -78,9 +101,10 @@ export default {
             productForm: {
                 id: 0,
                 version: 0,
+                banner_url: '',
                 name: '',//商品标题
                 parent_id: '',//商品父级id
-                type: '',//是否展示
+                status: 1,//是否展示
                 files: [],//商品详情
             },
             //当前点击节点是否是分类节点
@@ -96,6 +120,11 @@ export default {
             defaultExpandKeys: [],
             is_tree_loading: false,//商品树形结构loading
             is_contains_loading: false, //商品详情loading
+            isShowBlack: false,//头像阴影
+            //图片上传header
+            uploadHeader:{
+                accessToken: this.$store.state.loginModule.token.access_token
+            }
         }
     },
     components:{
@@ -127,9 +156,11 @@ export default {
                 }).finally(() =>{
                     this.is_contains_loading = false
                 })
-                await //获取商品树形结构
-        await this.getServiceTree()
-                await this.setCurrentKey(this.productTreeList[0].children[0].id)
+                //获取商品树形结构
+                await this.getServiceTree()
+                if(this.productTreeList.length){
+                    await this.setCurrentKey(this.productTreeList[0].id)
+                }
             } catch(error){
                 this.$message({
                     type:'error',
@@ -141,8 +172,38 @@ export default {
         /**
          * 停用商品
          */
-        stopProduct(){
-
+        async deleteProduct(){
+            try{
+                this.is_contains_loading = true
+                await operateService.deleteService(this.productForm.id).then(data =>{
+                    if(data.code == '0'){
+                        this.$message({
+                            type:'success',
+                            message: data.message
+                        })
+                        this.is_contains_loading = false
+                    }
+                }).catch(error =>{
+                    this.$message({
+                        type:'error',
+                        message: error.message
+                    })
+                    this.is_contains_loading = false
+                }).finally(() =>{
+                    this.is_contains_loading = false
+                })
+                //获取商品树形结构
+                await this.getServiceTree()
+                if(this.productTreeList.length){
+                    await this.setCurrentKey(this.productTreeList[0].id)
+                }
+            } catch(error){
+                this.$message({
+                    type:'error',
+                    message: error.message
+                })
+                this.is_contains_loading = false
+            }
         },
         /**
          * 创建商品
@@ -159,7 +220,6 @@ export default {
                 this.is_contains_loading = true
                 await operateService.getService(clickObject.id).then(data =>{
                     this.productForm = data.data
-                    this.productForm.type = this.productForm.type == 'enable' ? 1 : 2
                     this.productForm.files.forEach((item, index) =>{
                             item.url = './resource/'+item.url
                     })
@@ -254,14 +314,30 @@ export default {
                 })
                 this.is_tree_loading = false
             }
-            await this.nodeClick(this.productTreeList[0].children[0])
-        }
+            await this.nodeClick(this.productTreeList[0])
+        },
+        //头像上传成功
+        iconUploadSuccess(res, file) {
+            this.productForm.banner_url = res.data.path;
+        },
+        /**
+         * 上传头像，显示阴影
+         */
+        showblack(type){
+            if(type == '0'){
+                this.isShowBlack = true
+            } else {
+                this.isShowBlack = false
+            }
+        },
     },
     async mounted(){
         //获取商品树形结构
         await this.getServiceTree()
-
-        await this.setCurrentKey(this.productTreeList[0].children[0].id)
+        if(this.productTreeList.length){
+            await this.setCurrentKey(this.productTreeList[0].id)
+        }
+        
 
         //获取服务商品下拉菜单
         try{
@@ -310,6 +386,40 @@ export default {
                 width: 100%;
                 text-align:center;
                 font-size: 16px;
+            }
+        }
+    }
+        //头像上传
+    .icon-uploader{
+        & /deep/ .el-upload {
+            height: 178px;
+            width: 350px;
+            line-height: 178px;
+            border: 1px dashed #d9d9d9;
+            border-radius: 6px;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+        & /deep/ .el-upload:hover {
+            border-color: #409EFF;
+        }
+        .icon-box{
+            width:350px;
+            height: 178px;
+            position: relative;
+            .icon-item {
+                width:350px;
+                height: 178px;
+                display: block;
+            }
+            .icon-item-back{
+                position: absolute;
+                height: 178px;
+                width: 350px;
+                top: 0;
+                z-index: 4;
+                background: rgba(0,0,0,.5)
             }
         }
     }

@@ -11,9 +11,10 @@ export default {
     },
     /**
      * 获取全部资源列表
+     * @param paramObj
      */
-    getAdResourceList(){
-        return customRequest.getAdResourceList()
+    getAdResourceList(paramObj){
+        return customRequest.getAdResourceList(paramObj)
     },
     /**
      * 编辑资源
@@ -26,6 +27,13 @@ export default {
      */
     getAdResource(){
         return customRequest.getAdResource()
+    },
+    /**
+     * 删除资源
+     * @param id
+     */
+    deleteAdResource(id){
+        return customRequest.deleteAdResource(id)
     },
     /**
      * 获取广告位信息

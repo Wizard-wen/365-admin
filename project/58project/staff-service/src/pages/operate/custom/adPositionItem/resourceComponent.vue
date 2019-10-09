@@ -4,7 +4,7 @@
             v-if="!isShow" 
             style="margin-bottom:15px;" 
             icon="el-icon-plus"  
-            @click="openAdResourceDialog('new', {})">添加图片</el-button>
+            @click="goAdPictureItemPage('new', {})">添加图片</el-button>
         
         <div class="ad-imgs-box" v-for="(item, index) in adPositionList" :key="index">
             <div class="ad-imgs">
@@ -16,23 +16,13 @@
             <div class="image-messsage">
                 <p>{{item.name}}</p>
                 <div v-if="!isShow">
-                    <el-button @click="deleteFormPaper(item)" class="el-icon-delete" type="text" size="small">删除</el-button>
-                    <el-button @click="openAdResourceDialog('edit', item)" class="el-icon-edit" type="text" size="small">编辑</el-button>
+                    <el-button @click="deleteAdPictureItem(item)" class="el-icon-delete" type="text" size="small">删除</el-button>
+                    <el-button @click="goAdPictureItemPage('edit', item)" class="el-icon-edit" type="text" size="small">编辑</el-button>
                 </div>
             </div>
         </div>
-
-
-        <ad-resource-dialog 
-            :isEditAdItem="adResourceDialogForm.isEditAdItem"
-            :adItemDialogVisible="adResourceDialogForm.adItemDialogVisible"
-            v-if="adResourceDialogForm.adItemDialogVisible"
-            :paperProps="adResourceDialogForm.adItemForm"
-            :selectedPapers="adPositionList"
-            @changePaper="changePaper"
-            @closePaper="cancelPaperFn"></ad-resource-dialog>
         <picture-detail-dialog
-            :imageUrl="imageUrl"
+            :imageUrl="detailImageUrl"
             :title="'证书详情'"
             v-if="pictureDetailDialogVisible"
             :pictureDetailDialogVisible="pictureDetailDialogVisible"
@@ -41,11 +31,13 @@
 </template>
 <script>
 
-import {adResourceDialog} from './resourceComponent/index.js'
 import {pictureDetailDialog} from '@/pages/components'
 
 
 export default {
+    components: {
+        pictureDetailDialog
+    },
     props: {
         /**
          * v-model字段---证书数组
@@ -74,31 +66,15 @@ export default {
             deep: true,
         }
     },
-    components: {
-        adResourceDialog,
-        pictureDetailDialog
-    },
+    
     data(){
         return {
-            adPositionList: [],//证书显示列表
+            //广告位图片显示列表
+            adPositionList: [],
+            //控制图片详情的显示隐藏
+            pictureDetailDialogVisible: false,
 
-            //证书弹出框
-            adResourceDialogForm: {
-                isEditAdItem: false,//是编辑广告位还是新建广告位
-                adItemDialogVisible: false,//控制广告位编辑的显示隐藏
-                //给广告位单个图片弹出框传入的字段
-                adItemForm:{
-                    id:0,//
-                    name: null,//图片的名字
-                    type:1,//图片类型
-                    url: '',//图片url
-                    jump_type: 1,//跳转至什么页面
-                    activity_url: '',//活动页长图url
-                    client_category_id: 0,//详情页id
-                }
-            },
-            pictureDetailDialogVisible: false, //控制图片详情的显示隐藏
-            imageUrl: '',//展示证书详情的url
+            detailImageUrl: '',//展示证书详情的url
         }
     },
     methods: {
@@ -106,7 +82,11 @@ export default {
         /**
          * 新建 或 编辑 证书信息----打开弹窗
          */
-        openAdResourceDialog(state, paperItem){
+        goAdPictureItemPage(state, paperItem){
+            this.$router.push({
+                path: '/operate/adPictureItem',
+            })
+            return 
             if(state == 'edit'){
                 //现在在编辑证书
                 this.adResourceDialogForm.isEditAdItem = true
@@ -133,7 +113,7 @@ export default {
          * 删除一条图片数据
          * @param param 图片信息
          */
-        deleteFormPaper(param){
+        deleteAdPictureItem(param){
             this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
                 confirmButtonText: '确定',
                 cancelButtonText: '取消',
@@ -159,43 +139,11 @@ export default {
 
         },
         /**
-         * 证书编辑弹窗回调事件
-         * @param addParam 被添加/编辑的证书信息
-         * @param isEdit 刚刚执行的是编辑还是新建操作 true 编辑 false 新建
-         */
-        changePaper(addParam, isEdit){
-            //若是编辑，替换证书
-            if(isEdit){
-                this.adPositionList.forEach((item, index) =>{
-                    //判断证书分类字段
-                    if(addParam.id == item.id){
-                        //替换原有证书
-                        this.adPositionList.splice(index, 1, addParam)
-                    }
-                })
-            } else {
-                //新建证书，直接插入
-                this.adPositionList.push(addParam)
-            }
-
-            //v-model
-            this.$emit('input',this.adPositionList)
-            
-            //关闭弹窗
-            this.adResourceDialogForm.adItemDialogVisible = false
-        },
-        /**
-         * 关闭证书编辑弹窗
-         */
-        cancelPaperFn(){
-            this.adResourceDialogForm.adItemDialogVisible = false
-        },
-        /**
          * 查看大图
          * @param pathParam 展示图片的url
          */
         showDetialPic(pathParam){
-            this.imageUrl = pathParam
+            this.detailImageUrl = pathParam
             this.pictureDetailDialogVisible = true
         },
     },
@@ -206,35 +154,35 @@ export default {
 </script>
 <style lang="scss" scoped>
     .ad-box{
-        width: 760px;
-    }
-    .ad-imgs-box{
-        margin-bottom: 15px;
-        border: 1px solid #ebeef5;
-        background-color: #fff;
-        box-shadow: 0 2px 12px 0 rgba(0,0,0,.1);
-        &:last-child{
-            margin-bottom: 0;
-        }
-        .ad-imgs{
-            display: flex;
-            flex-wrap: wrap;
-            .ad-item-img{
-                display: block;
-                height:150px;
-                // width: 100px;
-                margin-left : 10px;
-                margin-top: 10px;
-                cursor: pointer;
+        width: 530px;
+        .ad-imgs-box{
+            margin-bottom: 15px;
+            border: 1px solid #ebeef5;
+            background-color: #fff;
+            box-shadow: 0 2px 12px 0 rgba(0,0,0,.1);
+            &:last-child{
+                margin-bottom: 0;
+            }
+            .ad-imgs{
+                width: 530px;
+                padding: 15px;
+                display: flex;
+                flex-wrap: wrap;
+                .ad-item-img{
+                    display: block;
+                    width: 500px;
+                    cursor: pointer;
+                }
+            }
+            .image-messsage{
+                line-height: 30px;
+                display: flex;
+                justify-content: space-between;
+                padding: 0 20px;
             }
         }
-        .image-messsage{
-            line-height: 30px;
-            display: flex;
-            justify-content: space-between;
-            padding: 0 20px;
-        }
     }
+    
 
 
 </style>

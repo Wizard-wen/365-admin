@@ -82,7 +82,7 @@ export default {
             pagination: {
                 total: 0,
                 currentPage: 1,
-                pageNumber: 20,
+                pageNumber: 8,
             },
             getResourceForm: {
                 page: 1, 
@@ -99,28 +99,21 @@ export default {
     },
     watch: {
         async resourceType(val){
-            console.log(val)
+            this.getResourceForm.type = val
             await this.getResourcePictureList(val)
         }
     },
     methods: {
-        prevAndNextClick(val){
-            //设置page查询参数
-            this.$store.commit('setContractList', {
-                queryKey: 'page',
-                queryedList: val
-            })
+        async prevAndNextClick(val){
+            this.getResourceForm.page = val
+            await this.getResourcePictureList()
         },
         /**
          * 切换页码
          */
         async handleCurrentPage(val){
-            //设置page查询参数
-            this.$store.commit('setContractList', {
-                queryKey: 'page',
-                queryedList: val
-            })
-            await this.getTableList()
+            this.getResourceForm.page = val
+            await this.getResourcePictureList()
         },
         /**
          * 删除广告资源
@@ -130,18 +123,45 @@ export default {
             await this.$confirm('确定要删除该资源图片吗, 是否继续?', '提示', {
                 confirmButtonText: '确定',
                 cancelButtonText: '取消',
-                type: 'warning'
-            }).then(() => {
-                this.$message({
-                    type: 'success',
-                    message: '删除成功!'
-                });
+                type: 'warning',
+            }).then(async () => {
+                await this.deleteAdResource(item.id)
             }).catch(() => {
                 this.$message({
                     type: 'info',
-                    message: '已取消删除'
+                    message: '已取消删除',
                 });          
             });
+        },
+        async deleteAdResource(id){
+            try{
+                this.is_loading = true
+                await customService.deleteAdResource(id).then( async data =>{
+                    if(data.code == '0'){
+                        this.$message({
+                            type: 'success',
+                            message: data.message
+                        });
+                        this.getResourcePictureList()
+                        this.is_loading = false
+                    }
+                }).catch(error =>{
+                    this.$message({
+                        type: 'error',
+                        message: error.message
+                    });
+                    this.is_loading = false
+                }).finally(() =>{
+                    this.is_loading = false
+                })
+            } catch(error){
+                this.$message({
+                    type: 'error',
+                    message: error.message
+                });
+                this.is_loading = false
+            }
+            
         },
         /**
          * 打开创建新资源图片弹窗
@@ -165,7 +185,8 @@ export default {
         async getResourcePictureList(type){
             try{
                 this.is_loading = true
-                await customService.getAdResourceList().then(data =>{
+
+                await customService.getAdResourceList(this.getResourceForm).then(data =>{
                     this.adResourceList = data.data.data
                     //分页信息
                     this.pagination.currentPage = data.data.current_page //当前页码

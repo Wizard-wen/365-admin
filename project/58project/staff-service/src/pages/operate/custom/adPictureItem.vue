@@ -4,19 +4,24 @@
         <el-form-item label="图片名称" prop="name">
             <el-input type="primary" v-model="adPictureForm.name"></el-input>
         </el-form-item>
-        <el-form-item label="图片名称" prop="name">
-            <el-input type="primary" v-model="adPictureForm.name"></el-input>
+        
+        <el-form-item label="图片类别" prop="type">
+            <select-tag-component
+                :propTagList="resourceTypeList"
+                v-model="adPictureForm.type"
+                :isSingle="true"></select-tag-component>
         </el-form-item>
 
         <el-form-item label="图片地址" prop="url">
-            <img :src="adPictureForm.url" alt="" v-if="adPictureForm.url">
-            <i class="el-icon-plus" v-else ></i>
-            <el-input type="primary" v-model="adPictureForm.url" disable></el-input>
+            <img :src="adPictureForm.url" alt="" @click="openResourceDialog" v-if="adPictureForm.url">
+            <i class="el-icon-plus" v-else @click="openResourceDialog"></i>
+
+            <el-input type="primary" v-model="adPictureForm.url" disabled></el-input>
         </el-form-item>
 
         <el-form-item label="跳转类别" prop="jump_type">
             <select-tag-component
-                :propList="jump_typeList"
+                :propTagList="jump_typeList"
                 v-model="adPictureForm.jump_type"
                 :isSingle="true"></select-tag-component>
         </el-form-item>
@@ -33,7 +38,7 @@
 /**
  * type 0 新建  1 编辑
  */
-import {operateService} from '../../../../../../common'
+import {operateService} from '../../../../common'
 import {selectTagComponent} from '@/pages/components/index.js'
 export default {
     components: {
@@ -42,6 +47,12 @@ export default {
     data() {
         return {
             is_loading: false,
+            //资源图片类型
+            resourceTypeList: [
+                {id: 1, name: '长图'},
+                {id: 2, name: '全屏'},
+                {id: 3, name: '半屏'},
+            ],
             jump_typeList: [{id: 1, name: '活动页'}, {id: 2, name: '详情页'}],
             //表单校验
             adPictureRules: {
@@ -51,7 +62,7 @@ export default {
             adPictureForm: {
                 id: 0,
                 name: '',
-                type: '',//图片类型
+                type: 1,//图片类型
                 url: '',//广告图片url
                 jump_type: 1,//跳转页面类别
                 activity_url: '',//活动页长图url
@@ -92,6 +103,9 @@ export default {
                     return false;
                 }
             });
+        },
+        openResourceDialog(){
+
         },
         /**
          * 关闭弹出框---单向数据

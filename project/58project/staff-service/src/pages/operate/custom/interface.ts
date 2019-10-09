@@ -3,14 +3,17 @@
  */
 export interface productItem{
     name:string;
+    //父级id 若为0 代表是分类
     parent_id:string;
-    bannerUrl:string;
-    type:string;
+    //如果是分类的话，有这个图片
+    banner_url:string;
+    //是否展示
+    status:string;
     files: Array<productPictureItem>;
 }
 
 export interface productPictureItem{
-    
+
 }
 
 

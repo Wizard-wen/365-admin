@@ -316,6 +316,14 @@ export const operate_serviceGood = {
         return axios.post(`./admin/service/editService`,{
             ...serviceObj
         })
+    },
+    /**
+     * 删除服务信息
+     */
+    deleteService(id){
+        return axios.post(`./admin/service/deleteService`, {
+            id: id,
+        })
     }
 }
 /**

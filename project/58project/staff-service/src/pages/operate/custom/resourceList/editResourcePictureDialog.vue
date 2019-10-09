@@ -17,7 +17,7 @@
                     v-model="editResourcePictureForm.type"
                     :isSingle="true"></select-tag-component>
             </el-form-item>
-            <el-form-item label="头像" prop="url" class="form-item-size">
+            <el-form-item label="图片" prop="url" class="form-item-size">
                 <el-upload
                     accept=".jpg,.jpeg,.png,.gif,.bmp,.pdf,.JPG,.JPEG,.PBG,.GIF,.BMP,.PDF"
                     class="icon-uploader"
@@ -121,11 +121,6 @@ export default {
         //头像上传成功
         iconUploadSuccess(res, file) {
             this.editResourcePictureForm.url = res.data.path;
-
-            // this.icon_fileList =  [{
-            //     url: `./resource/${this.editResourcePictureForm.icon}`,
-            //     name: 'head'
-            // }]
         },
         /**
          * 上传头像，显示阴影
@@ -156,7 +151,7 @@ export default {
                                     message: "更改成功"
                                 })
                                 this.is_loading = false
-                                this.$emit('closeCreateResourcePictureDialog')
+                                this.$emit('closeEditResourcePictureDialog')
                             }
                         }).catch(error =>{
                             this.$message({

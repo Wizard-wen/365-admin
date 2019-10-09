@@ -10,9 +10,12 @@ export default {
     },
     /**
      * 获取全部资源列表
+     * @param paramObj
      */
-    getAdResourceList(){
-        return axios.post(`./admin/ad/getAdResourceList`)
+    getAdResourceList(paramObj){
+        return axios.post(`./admin/ad/getAdResourceList`,{
+            ...paramObj
+        })
     },
     /**
      * 编辑资源
@@ -27,6 +30,15 @@ export default {
      */
     getAdResource(){
         return axios.get(`./admin/ad/getAdResource`)
+    },
+    /**
+     * 删除资源
+     * @param id
+     */
+    deleteAdResource(id){
+        return axios.post(`./admin/ad/deleteAdResource`,{
+            id: id
+        })
     },
     /**
      * 获取广告位信息

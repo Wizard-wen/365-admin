@@ -213,6 +213,12 @@ export const operate_clientRequest = {
     */
     changeRequireType(id,type){
       return operateRequest.changeRequireType(id,type)
+    },
+    /**
+     * 删除服务信息
+     */
+    deleteService(id){
+        return operateRequest.deleteService(id)
     }
 }
 
