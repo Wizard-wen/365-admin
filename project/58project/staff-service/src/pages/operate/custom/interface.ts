@@ -1,3 +1,18 @@
+/**
+ * 
+ */
+export interface productItem{
+    name:string;
+    parent_id:string;
+    bannerUrl:string;
+    type:string;
+    files: Array<productPictureItem>;
+}
+
+export interface productPictureItem{
+    
+}
+
 
 /**
  * 图片素材
