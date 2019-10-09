@@ -1,7 +1,8 @@
 <template>
     <div 
         :class="[ isEdit? 'tag-edit-box': 'tag-show-box']" 
-        :style="{width: maxWidth}" >
+
+        :style="{width: maxWidth, border: isEditHasBorder? '1px dashed #ccc;' : ''}" >
         <div 
             class="tag-element" 
             v-for="(item, index) in editTagList" 
@@ -59,6 +60,13 @@ export default {
         isEdit: {
             default: true,
             type: Boolean,
+        },
+        /**
+         * 是否有边框
+         */
+        hasBorder: {
+            default: true,
+            type: Boolean,
         }
     },
     data(){
@@ -79,6 +87,9 @@ export default {
                 return this.value
             }
         },
+        isEditHasBorder(){
+            return (this.hasBorder && this.isEdit) ? true : false
+        }
     },
     watch: {
         /**
@@ -165,7 +176,7 @@ export default {
     .tag-edit-box{
         width: 760px;
         padding: 0 0px 8px 10px;
-        border: 1px dashed #ccc;
+        // border: 1px dashed #ccc;
         border-radius: 4px;
         display: flex;
         flex-wrap: wrap;

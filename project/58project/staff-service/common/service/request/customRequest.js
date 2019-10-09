@@ -15,10 +15,24 @@ export default {
         return axios.post(`./admin/ad/getAdResourceList`)
     },
     /**
+     * 编辑资源
+     */
+    editResource(resourceObject){
+        return axios.post(`./admin/ad/editResource`,{
+            ...resourceObject
+        })
+    },
+    /**
+     * 获取资源
+     */
+    getAdResource(){
+        return axios.get(`./admin/ad/getAdResource`)
+    },
+    /**
      * 获取广告位信息
      */
-    getAdPosition(){
-        return axios.post(`./admin/ad/getAdPosition`)
+    getAdPosition(type, id){
+        return axios.get(`./admin/ad/getAdPosition?client=${type}&id=${id}`)
     },
     /**
      * 编辑广告位

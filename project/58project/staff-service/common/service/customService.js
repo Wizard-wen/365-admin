@@ -16,10 +16,22 @@ export default {
         return customRequest.getAdResourceList()
     },
     /**
+     * 编辑资源
+     */
+    editResource(resourceObject){
+        return customRequest.editResource(resourceObject)
+    },
+    /**
+     * 获取资源
+     */
+    getAdResource(){
+        return customRequest.getAdResource()
+    },
+    /**
      * 获取广告位信息
      */
-    getAdPosition(){
-        return customRequest.getAdPosition()
+    getAdPosition(type, id){
+        return customRequest.getAdPosition(type, id)
     },
     /**
      * 编辑广告位

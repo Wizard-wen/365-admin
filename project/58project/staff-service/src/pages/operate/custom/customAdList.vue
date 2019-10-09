@@ -3,7 +3,7 @@
         v-loading="is_loading"
         :staffTable="customAdList">
 
-        <template slot="searchList">
+        <!-- <template slot="searchList">
             <div class="search-list">
                 <query-component @updateTable="updateTable"></query-component>
             </div>
@@ -11,8 +11,8 @@
 
         <template slot="searchForm">
             <query-tag-component @updateTable="updateTable"></query-tag-component>
-        </template>
-        
+        </template> -->
+
         <template slot="control" slot-scope="controler">
             <el-button size="mini" type="text" @click="goAdDetailPage(controler.scoper.row)">查看</el-button>
         </template>
@@ -107,9 +107,10 @@ export default {
          */
         goAdDetailPage(row){
             this.$router.push({
-                path: '',
+                path: '/operate/adPositionItem',
                 query: {
-
+                    from: 1,
+                    id: row.id
                 }
             })
         }

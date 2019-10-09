@@ -12,6 +12,7 @@
 
             <template slot="searchForm">
                 <query-tag-component @updateTable="updateTable"></query-tag-component>
+                <el-button type="primary" @click="openCreateStoreDialog">创建门店</el-button>
             </template>
 
             <template slot="control" slot-scope="controler">

@@ -316,8 +316,6 @@ export interface contractItem{
 
     contractAccount:contractAccountObject;//合同结算信息
     contractTerminate:contractTerminateObject;//合同终止信息
-
-
  }
 
 /**

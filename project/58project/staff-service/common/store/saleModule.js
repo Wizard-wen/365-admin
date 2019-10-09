@@ -68,11 +68,18 @@ export const saleModule = {
         orderworkerConfigForm: {
             ...order_status,
         },
+
         saleContractConfigForm: {
             type: contract_type,
             sign_at: created_at,//签约时间 
             sign_manager_id: [],//签约经纪人
             sign_store_id: [],//签约经纪门店
+        },
+
+        //门店工作台
+        saleWorkstation: {
+            dynamic_information: [],//动态信息
+            processing_order: [],//待处理订单
         },
         /**
          *  服务人员信息库查询字段 
@@ -239,6 +246,13 @@ export const saleModule = {
             state.order_staff = data.order_staff //候选人员
             state.order_contract = data.order_contract //合同信息
             state.order_logs = data.order_logs //订单日志
+        },
+        /**
+         * 初始化门店工作台数据
+         */
+        configSaleWorkstation(state, data){
+            state.saleWorkstation.dynamic_information = data.dynamic_information
+            state.saleWorkstation.processing_order = data.processing_order
         },
         /** 
          * 列表查询函数公共键值说明

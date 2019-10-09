@@ -105,7 +105,10 @@
                         </div>
                     </div>
                     <div class="message-list">
-                        <div class="list-item">
+                        <div 
+                            class="list-item"
+                            :key="index"
+                            v-for="(item, index) in saleWorkstation.dynamic_information">
                             <div class="item-contains">
                                 <div class="icon-box">
                                     <img src="./saleWorkStation/images/icon.png" alt="">
@@ -114,7 +117,7 @@
                                     <div class="news">和平门店 宋希文 创建订单</div>
                                     <div class="time">2019-07-14</div>
                                 </div>
-                                <div class="btn">进入订单</div>
+                                <div class="btn" @click="goPublicOrderPage(item)">进入订单</div>
                             </div>
                         </div>
                     </div>
@@ -183,6 +186,12 @@ export default {
          */
         presentUser(){
             return this.$store.state.loginModule.user
+        },
+        /**
+         * 工作台数据
+         */
+        saleWorkstation(){
+            return this.$store.state.saleModule.saleWorkstation
         }
     },
     methods: {
@@ -216,6 +225,12 @@ export default {
         //跳转至由我创建的服务人员
         goSaleOwnWorkerList(){
             this.$router.push('/sale/saleOwnWorkerList')
+        },
+        /**
+         * 跳转至公海订单详情
+         */
+        goPublicOrderPage(item){
+            // this.$router
         }
 
     },
@@ -224,7 +239,8 @@ export default {
             this.is_loading = true
             await saleService.saleWorkBench(this.presentUser.id).then(data =>{
                 if(data.code == '0'){
-                    console.log(data)
+                    //设置工作台数据
+                    this.$store.commit('configSaleWorkstation', data.data)
                     this.is_loading = false
                 }
             }).catch(error =>{
@@ -410,7 +426,7 @@ export default {
             .message-box{
                 margin: 0 10px;
                 margin-top:24px;
-                height: 549px;
+                height: 649px;
                 background: #fff;
                 .title{
                     min-height: 48px;
@@ -439,6 +455,8 @@ export default {
                 }    
                 .message-list{
                     padding: 0 24px 8px;
+                    height: 600px;
+                    overflow: auto;
                     .list-item{
                         padding: 16px 0;
                         border-bottom: 1px solid #e8e8e8;

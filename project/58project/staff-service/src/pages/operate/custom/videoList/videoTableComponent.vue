@@ -18,13 +18,11 @@
                 :header-cell-style="{height: '30px',padding: '0px',fontSize:'12px'}"
                 :cell-style="{height: '30px',padding: 0,fontSize:'12px',}">
 
-                <el-table-column  label="广告位编号" prop="key" align="center" ></el-table-column>
+                <el-table-column  label="视频名称" prop="name" align="center" ></el-table-column>
 
-                <el-table-column  label="广告位名" prop="name" align="center"  ></el-table-column>
+                <el-table-column  label="主讲人" prop="teacher" align="center"  ></el-table-column>
                 
-                <el-table-column  label="展现形式" prop="display" align="center"  >
-                    
-                </el-table-column>
+                <el-table-column  label="上传时间" prop="created_at" align="center"  ></el-table-column>
 
                 <el-table-column label="操作" align="center">
                     <template slot-scope="scope">
