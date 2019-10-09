@@ -17,8 +17,8 @@ export default {
     /**
      * 编辑资源
      */
-    editResource(resourceObject){
-        return axios.post(`./admin/ad/editResource`,{
+    editAdResource(resourceObject){
+        return axios.post(`./admin/ad/editAdResource`,{
             ...resourceObject
         })
     },
