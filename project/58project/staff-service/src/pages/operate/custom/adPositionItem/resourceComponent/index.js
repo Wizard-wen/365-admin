@@ -1,5 +1,5 @@
-import resourceDialog from './resourceDialog.vue'
+import adResourceDialog from './adResourceDialog.vue'
 
 export {
-    resourceDialog,
+    adResourceDialog,
 }
