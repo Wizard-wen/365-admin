@@ -18,8 +18,8 @@ export default {
     /**
      * 编辑资源
      */
-    editResource(resourceObject){
-        return customRequest.editResource(resourceObject)
+    editAdResource(resourceObject){
+        return customRequest.editAdResource(resourceObject)
     },
     /**
      * 获取资源
@@ -36,7 +36,7 @@ export default {
     /**
      * 编辑广告位
      * @param adObject
-     */ 
+     */
     editAdPosition(){
         return customRequest.editAdPosition()
     }
