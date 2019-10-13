@@ -47,18 +47,32 @@ export interface adPositionItem{
 
 export interface adItem{
     id:string;//
-    name:string;//
-    /**
-     * 1 长图 2 全屏 3 半屏
-     */
-    type:string;//图片类型
-    url:string;//广告图片url
+
+    adPictureObject: {
+        id:string;//
+        name:string;//
+        /**
+         * 1 长图 2 全屏 3 半屏
+         */
+        type:string;//图片类型
+        url:string;//广告图片url
+    }
+
     /**
      * 1 活动页 2 详情页
      */
     jump_type:string;//跳转至什么页面
-    activity_url:string;//活动页的长图url
+    
     client_category_id:string;//详情页id
+
+    // activity_url:string;//活动页的长图url
+    
+    activity_url_object: {
+        id:string;
+        type: string;
+        url: string;
+        name: string;
+    }
 }  
 
 /**

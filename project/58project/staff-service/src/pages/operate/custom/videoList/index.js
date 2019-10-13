@@ -1,5 +1,5 @@
-import videoTableComponent from './videoTableComponent.vue'
+import editResourceVideoDialog from './editResourceVideoDialog.vue'
 
 export {
-    videoTableComponent,
+    editResourceVideoDialog,
 }

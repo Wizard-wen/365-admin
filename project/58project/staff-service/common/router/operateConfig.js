@@ -39,6 +39,7 @@ import workerAdList from '@/pages/operate/custom/workerAdList.vue'
 import customAdList from '@/pages/operate/custom/customAdList.vue'
 import adPositionItem from '@/pages/operate/custom/adPositionItem.vue'
 import adPictureItem from '@/pages/operate/custom/adPictureItem.vue'
+import resourceVideoItem from '@/pages/operate/custom/resourceVideoItem.vue'
 /**
  * 运营---服务人员管理
  */
@@ -128,8 +129,11 @@ export const operateConfigModule = [
         name: 'adPictureItem',
         component: adPictureItem,
     },
-
-
+    {
+        path: '/operate/resourceVideoItem',
+        name: 'resourceVideoItem',
+        component: resourceVideoItem,
+    },
     {
         path: '/operate/clientRequireList',
         name: 'clientRequireList',

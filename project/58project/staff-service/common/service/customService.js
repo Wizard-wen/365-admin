@@ -47,5 +47,30 @@ export default {
      */
     editAdPosition(){
         return customRequest.editAdPosition()
+    },
+    /**
+     * 获取视频列表
+     * @param videoParam
+     */
+    getVideoList(videoParam){
+        return customRequest.getVideoList(videoParam)
+    },
+    /**
+     * 获取视频
+     */
+    getVideo(id){
+        return customRequest.getVideo(id)
+    },
+    /**
+     * 编辑视频
+     */
+    editVideo(videoObject){
+        return customRequest.editVideo(videoObject)
+    },
+    /**
+     * 删除视频
+     */
+    deleteVideo(id){
+        return customRequest.deleteVideo(id)
     }
 }
