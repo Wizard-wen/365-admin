@@ -17,7 +17,7 @@
             </el-form-item>
 
             <el-form-item label="视频url" prop="video_url">
-                <el-input type="primary" v-model="editResourceVideoForm.video_url"></el-input>
+                <el-input type="textarea" v-model="editResourceVideoForm.video_url"></el-input>
             </el-form-item>
         </el-form>
         <div slot="footer" class="dialog-footer">

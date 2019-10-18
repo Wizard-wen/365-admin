@@ -339,6 +339,7 @@
                         <p class="detail-title">证件照: </p>
                         <div class="detail-photo-list">
                             <photo-component
+                                :pictureUrlArrtibute="'path'"
                                 :isEdit="false"
                                 v-model="id_photo_fileList"
                                 :title="'证件照'"></photo-component>
@@ -350,6 +351,7 @@
                         <p class="detail-title">照片: </p>
                         <div class="detail-photo-list">
                             <photo-component
+                                :pictureUrlArrtibute="'path'"
                                 :isEdit="false"
                                 v-model="photo_fileList"
                                 :title="'照片'"></photo-component>
@@ -361,6 +363,7 @@
                         <p class="detail-title">技能证书: </p>
                         <div class="detail-photo-list">
                             <paper-component 
+                                :pictureUrlArrtibute="'path'"
                                 :isShow="true"
                                 v-model="workerForm.certificate" ></paper-component>
                         </div>
@@ -556,10 +559,22 @@ export default {
                 this.$router.push(`/sale/saleWorkerList`)
             } else if(this.$route.query.from == 2){
                 //从订单配置备选服务人员列表
-                this.$router.push(`/sale/orderConfig?id=${this.$route.query.order_id}`)
+                this.$router.push({
+                    path: `/sale/orderConfig`,
+                    query: {
+                        order_id: this.$route.query.order_id,
+                        order_type:this.$route.query.from,
+                    }
+                })
             } else if(this.$route.query.from == 3){
                 //从公海订单备选服务人员列表
-                this.$router.push(`/sale/publicOrderConfig?id=${this.$route.query.order_id}`)
+                this.$router.push({
+                    path: `/sale/publicOrderConfig`,
+                    query: {
+                        order_id: this.$route.query.order_id,
+                        order_type:this.$route.query.from,
+                    }
+                })
             } else if(this.$route.query.from == 4){
                 //从我创建的服务人员列表啊
                 this.$router.push(`/sale/saleOwnWorkerList`)

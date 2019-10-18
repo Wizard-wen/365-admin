@@ -39,17 +39,28 @@ export const sale_orderRequest = {
      * 获取订单列表
      * @param type 
      */
-    getOrderList(type){
-        if(type == 2){
+    getOrderList(type, orderDeafultQueryObject){
+
+        if(type == 1){
+            return axios.post(
+                `./admin/order/getOrderList`,{
+                    ...store.state.operateModule.orderList,
+                }
+            )
+        }else if(type == 2){
             return axios.post(
                 `./admin/order/getOrderList`,
                 store.state.saleModule.publicOrderList
             )
+        } else if(type == 3){
+            return axios.post(
+                `./admin/order/getOrderList`,{
+                    ...store.state.saleModule.saleOrderList,
+                    ...orderDeafultQueryObject,
+                }
+            )
         }
-        return axios.post(
-            `./admin/order/getOrderList`,
-            store.state.saleModule.orderList
-        )
+        
     },
     /**
      * 获取订单信息
@@ -100,32 +111,36 @@ export const sale_matchServiceRequest = {
      * @param orderStaffObj
      */
     createOrderStaff(orderStaffObj){
-        return axios.post(`./admin/order/createOrderStaff`,
-        orderStaffObj)
+        return axios.post(`./admin/order/createOrderStaff`,{
+            ...orderStaffObj,
+        })
     },
     /**
      * 删除候选人
      * @param orderStaffObj
      */
     deleteOrderStaff(orderStaffObj){
-        return axios.post(`./admin/order/deleteOrderStaff`,
-        orderStaffObj)
+        return axios.post(`./admin/order/deleteOrderStaff`,{
+            ...orderStaffObj,
+        })
     },
     /**
      * 签约
      * @param signObject
      */
     sign(signObject){
-        return axios.post(`./admin/order/sign`,
-        signObject)
+        return axios.post(`./admin/order/sign`,{
+                ...signObject,
+        })
     },
     /**
      * 拒签
      * @param refuseObj
      */
     refuse(refuseObj){
-        return axios.post(`./admin/order/refuse`,
-        refuseObj)
+        return axios.post(`./admin/order/refuse`,{
+            ...refuseObj,
+        })
     }
 }
 /**
@@ -135,10 +150,10 @@ export const sale_staffRequest = {
     /**
      * 销售创建服务人员
      */
-    createStaffBySeller(obj){
-        return axios.post(`./admin/staff/createStaffBySeller`,
-            Object.assign({}, obj)
-        )
+    createWorkerBySeller(obj){
+        return axios.post(`./admin/staff/createStaffBySeller`,{
+            ...obj
+        })
     },
     /**
      * 修改服务人员接单状态
@@ -167,7 +182,7 @@ export const sale_orderContractRequest = {
         if(type == 1){
             return axios.post(
                 `./admin/order/getContractList`,
-                store.state.saleModule.contractList
+                store.state.saleModule.saleContractList
             )
         } else if (type == 2){
             return axios.post(

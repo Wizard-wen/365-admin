@@ -118,34 +118,38 @@
 </template>
 <script>
     import {operateService, $utils, saleService} from '../../../common'
+
     import {
-        matchServiceList,} from './orderConfig/index.js'
+        matchServiceList,
+    } from './orderConfig/index.js'
     import {
-        tableTagComponent} from '@/pages/components'
+        tableTagComponent
+    } from '@/pages/components'
 export default {
+    components: {
+        matchServiceList,
+        tableTagComponent
+    },
     data(){
         return {
-            is_loading: false,//
-            order_id: '',//订单id
+            is_loading: false,
             matchStaffSignList: [
                 {id: 1, name: '未签约'},
                 {id: 2, name: '已签约'},
                 {id: 3, name: '已拒绝'},
             ],
-            matched_staff: null,//备选服务人员信息对象
         }
     },
     filters: {
+        /**
+         * 时间过滤器
+         */
         timeFomatter(value){
             if(value == 0){
                 return '-'
             }
             return $utils.formatDate(new Date(value), 'yyyy-MM-dd')
         }
-    },
-    components: {
-        matchServiceList,
-        tableTagComponent
     },
     computed:{
         /**
@@ -174,7 +178,7 @@ export default {
         async getOrder(){
             try{
                 this.is_loading = true
-                await saleService.getOrder(this.order_id).then((data) =>{
+                await saleService.getOrder(this.$route.query.order_id).then((data) =>{
                     if(data.code == "0"){
                         store.commit('configOrderData',data.data)
                     }
@@ -193,20 +197,8 @@ export default {
                     type:'error',
                     message: error.message
                 })
-                store.commit('setLoading',false)
+                this.is_loading = false
             }
-        },
-        /**
-         * 切换页码
-         */
-        async handleContractCurrentPage(val){
-            // this.pagination.currentPage = val
-            //设置page查询参数
-            this.$store.commit('setContractList', {
-                queryKey: 'page', 
-                queryedList: val
-            })
-            await this.getTableList()
         },
         /**
          * 跳转至服务人员详情
@@ -217,55 +209,65 @@ export default {
                 path: "/sale/saleNewWorkerShow",
                 query: {
                     id: paramObj.id,
-                    from: 3,
-                    order_id: this.$route.query.id
+                    from: this.$route.query.order_type,
+                    order_id: this.$route.query.order_id
                 }
             })
         },
         /**
          * 删除备选服务人员
          */
-        async deleteMatchStaff(){
-            let _this= this;
+        async deleteMatchStaff(item){
+            //要删除的备选劳动者
+            let deleteStaffObj = {
+                order_id: this.$route.query.order_id,
+                order_staff_id: item.id
+            }
 
-            let response = await this.$confirm(`确定删除该备选服务人员吗?`, '提示', {
+            await this.$confirm(`确定删除该备选服务人员吗?`, '提示', {
                 confirmButtonText: '确定',
                 cancelButtonText: '取消',
                 type: 'warning'
+            }).then(async () =>{
+                await this.deleteOrderStaff(deleteStaffObj)
             }).catch(() => {
                 this.$message({
                     type: 'info',
                     message: `已取消删除`
                 });
             });
-
-            if(response == "confirm"){
-                store.commit('setLoading',true)
-
-                try{
-                    // await operateService.addReturnStaffSingle(row.id)
-                    //     .then(data =>{
-                    //         if(data.code == "0"){
-                    //             this.$message({
-                    //                 type:'success',
-                    //                 message: `导入成功`
-                    //             })
-                    //         }
-                    //     }).catch(e =>{
-                    //         this.$message({
-                    //             type:'error',
-                    //             message: e.message
-                    //         })
-                    //     })
-                } catch(error){
-                    this.$message({
-                        type:'error',
-                        message: error.message
+        },
+        /**
+         * 删除备选劳动者接口
+         * @param order_staff_id 候选人员信息id
+         * @param order_id 订单id
+         */
+        async deleteOrderStaff(deleteStaffObj){
+            try{
+                this.is_loading = true
+                await saleService.deleteOrderStaff(deleteStaffObj)
+                    .then(async data =>{
+                        if(data.code == "0"){
+                            this.$message({
+                                type:'success',
+                                message: data.message
+                            })
+                            this.is_loading = false
+                            await this.getTableList()
+                        }
+                    }).catch(error =>{
+                        this.$message({
+                            type:'error',
+                            message: error.message
+                        })
+                        this.is_loading = false
                     })
-                }
-
-                await _this.getTableList()
-                store.commit('setLoading',false)
+            } catch(error){
+                this.$message({
+                    type:'error',
+                    message: error.message
+                })
+                this.is_loading = false
             }
         },
         /**
@@ -282,9 +284,7 @@ export default {
         },
     },
     async mounted(){
-        this.order_id = this.$route.query.id;//订单id
         await this.getOrder()
-        
     }    
 }
 </script>

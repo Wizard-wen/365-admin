@@ -21,6 +21,7 @@ import cascaderTagComponent from './cascaderTagComponent.vue'
 import tableTagComponent from './tableTagComponent.vue'
 /****************** tag相关组件结束***************************************************/
 
+import queryTagComponent from './queryTagComponent.vue'
 //列表搜索组件
 import {
     querySearchInput,
@@ -42,4 +43,5 @@ export {
     pageEditComponent,
     querySearchInput,
     querySearchList,
+    queryTagComponent,
 }

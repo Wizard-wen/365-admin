@@ -68,33 +68,21 @@
                     <div class="title">
                         <div class="title-contains">
                             <div class="left">待处理订单</div>
-                            <div class="control">全部订单</div>
+                            <div class="control" @click="goSaleOrderList">全部订单</div>
                         </div>
                     </div>
                     <div class="order-list">
-                        <div class="order-card">
+                        <div 
+                            class="order-card" 
+                            v-for="(item, index) in saleWorkstation.processing_order"
+                            :key="index">
                             <div class="tag-list">
 
                             </div>
                             <div class="control">
                                 <div class="time">创建于2019-07-14</div>
-                                <div class="btn">进入订单</div>
+                                <div class="btn" @click="goOrderDetailPage(item)">进入订单</div>
                             </div>
-                        </div>
-                        <div class="order-card">
-
-                        </div>
-                        <div class="order-card">
-
-                        </div>
-                        <div class="order-card">
-
-                        </div>
-                        <div class="order-card">
-
-                        </div>
-                        <div class="order-card">
-
                         </div>
                     </div>
                 </div>
@@ -117,7 +105,7 @@
                                     <div class="news">和平门店 宋希文 创建订单</div>
                                     <div class="time">2019-07-14</div>
                                 </div>
-                                <div class="btn" @click="goPublicOrderPage(item)">进入订单</div>
+                                <div class="btn" @click="goPublicOrderPage(item)">进入公海订单</div>
                             </div>
                         </div>
                     </div>
@@ -230,7 +218,23 @@ export default {
          * 跳转至公海订单详情
          */
         goPublicOrderPage(item){
-            // this.$router
+            this.$router.push({
+                path: `/sale/publicOrderConfig`,
+                query: {
+                    order_id: item.id
+                }
+            })
+        },
+        /**
+         * 进入订单页面
+         */
+        goOrderDetailPage(item){
+            this.$router.push({
+                path: `/sale/orderConfig`,
+                query: {
+                    order_id: item.id
+                }
+            })
         }
 
     },

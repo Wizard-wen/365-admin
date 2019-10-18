@@ -82,7 +82,7 @@ export default {
     },
     computed:{
         /**
-         *
+         * 服务人员配置
          */
         workerConfigList(){
             return this.$store.state.operateModule.workerConfigForm
@@ -165,6 +165,7 @@ export default {
                     type:'error',
                     message: error.message
                 })
+                this.is_loading = false
             }
         },
         // 由查询组件触发的更新表格事件
@@ -196,55 +197,68 @@ export default {
             this.$router.push({
                 path: "/sale/saleNewWorkerShow",
                 query: {
-                    id: paramObj.id,
-                    from: 2,
-                    order_id: this.$route.query.id
+                    id: row.id,
+                    from: this.$route.query.order_type,
+                    order_id: this.$route.query.order_id
                 }
             })
         },
         /**
-         * 添加备选
+         * 添加备选服务人员
          * @param staffObject 员工
          */
         async addMatchStaff(staffObject){
+            let sendObj = {
+                staff_id:staffObject.id ,
+                order_id: this.$route.query.order_id,
+            }
             this.$confirm('确定将该服务人员添加至备选服务人员吗?', '提示', {
                 confirmButtonText: '确定',
                 cancelButtonText: '取消',
                 type: 'warning'
             }).then(async() => {
-                try{
-                    let sendObj = {
-                        staff_id:staffObject.id ,
-                        order_id: this.$route.query.order_id,
-                    }
-                    await saleService.createOrderStaff(sendObj).then(data =>{
-                        if(data.code == "0"){
-                            this.$message({
-                                type:'success',
-                                message: data.message
-                            })
-                        }
-                    }).catch(e =>{
-                        this.$message({
-                            type:'error',
-                            message: e.message
-                        })
-                    }).finally(() =>{
-                        //刷新订单配置页面
-                        this.$emit('updateOrderConfig')
-                    })
-                } catch(error){
-                    this.$message({
-                        type:'error',
-                        message: error.message
-                    })
-                }
+                //调用备选服务人员接口
+                await this.createOrderStaff(sendObj)
             }).catch(() => {
                 this.$message({
                     type: 'info',
                     message: '已取消删除'
                 });
             });
+        },
+        /**
+         * 调用添加备选服务人员接口
+         */
+        async createOrderStaff(sendObj){
+            try{
+                this.is_loading = true
+                await saleService.createOrderStaff(sendObj).then(data =>{
+                    if(data.code == "0"){
+                        this.$message({
+                            type:'success',
+                            message: data.message
+                        })
+                        this.is_loading = false
+                    }
+                }).catch(error =>{
+                    this.$message({
+                        type:'error',
+                        message: error.message
+                    })
+                    this.is_loading = false
+                }).finally(() =>{
+                    this.is_loading = false
+
+                    //刷新订单配置页面
+                    this.$emit('updateOrderConfig')
+                })
+            } catch(error){
+                this.$message({
+                    type:'error',
+                    message: error.message
+                })
+                this.is_loading = false
+            }
         }
     },
     async mounted(){

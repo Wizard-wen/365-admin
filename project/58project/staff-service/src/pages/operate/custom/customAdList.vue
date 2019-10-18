@@ -110,7 +110,7 @@ export default {
                 path: '/operate/adPositionItem',
                 query: {
                     from: 1,
-                    id: row.id
+                    position_id: row.id
                 }
             })
         }

@@ -12,7 +12,10 @@
             </template>
 
             <template slot="searchForm">
-                <query-tag-component @updateTable="updateTable"></query-tag-component>
+                <query-tag-component 
+                    :queryFormConfig="saleContractConfigForm"
+                    :queryedList="queryedSaleContractList"
+                    @updateTable="updateTagTable"></query-tag-component>
             </template>
 
             <template slot="control" slot-scope="controler">
@@ -35,11 +38,10 @@
 </template>
 <script>
     import {operateService, saleService} from '../../../common'
-
+    import {queryTagComponent} from '@/pages/components/index.js'
     import {
         contractTableComponent,
         queryComponent,
-        queryTagComponent,
     } from './contractList/index.js'
     export default {
         components: {
@@ -77,7 +79,15 @@
             }
         },
         computed:{
-
+            /**
+             * 合同筛选字段
+             */
+            saleContractConfigForm(){
+                return this.$store.state.saleModule.saleContractConfigForm
+            },
+            queryedSaleContractList(){
+                return this.$store.state.saleModule.saleContractList
+            }
         },
         methods: {
              /**
@@ -119,6 +129,14 @@
             // 由查询组件触发的更新表格事件
             async updateTable(){
                 await this.getTableList()
+            },
+            async updateTagTable(param){
+                //将查询组件数据变化存入vuex
+                await this.$store.commit('saleSetContractList', {
+                    queryKey: param[0],
+                    queryedList: param[1]
+                })
+                await this.updateTable()
             },
             prevAndNextClick(val){
                 //设置page查询参数

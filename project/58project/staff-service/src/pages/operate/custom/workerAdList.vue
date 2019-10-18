@@ -3,15 +3,23 @@
         v-loading="is_loading"
         :staffTable="customAdList">
 
-        <!-- <template slot="searchList">
-            <div class="search-list">
+        <template slot="searchList">
+            <!-- <div class="search-list">
                 <query-component @updateTable="updateTable"></query-component>
-            </div>
+            </div> -->
         </template>
 
         <template slot="searchForm">
-            <query-tag-component @updateTable="updateTable"></query-tag-component>
-        </template> -->
+            <div class="search-left">
+                <el-input placeholder="请输入员工姓名" :maxlength="20"></el-input>
+                <el-input placeholder="请输入电话" :maxlength="20"></el-input>
+                <el-button type="primary" >查询</el-button>
+                <el-button type="primary" >重置</el-button>
+            </div>
+            <div class="search-right">
+
+            </div>
+        </template>
 
         <template slot="control" slot-scope="controler">
             <el-button size="mini" type="text" @click="goAdDetailPage(controler.scoper.row)">查看</el-button>

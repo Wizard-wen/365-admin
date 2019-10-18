@@ -74,7 +74,7 @@ export default {
      * 编辑视频
      */
     editVideo(videoObject){
-        return axios.post(`./admin/video/editVideo?`,{
+        return axios.post(`./admin/video/editVideo`,{
             ...videoObject,
         })
     },
@@ -82,9 +82,30 @@ export default {
      * 删除视频
      */
     deleteVideo(id){
-        return axios.post(`./admin/video/deleteVideo?`,{
+        return axios.post(`./admin/video/deleteVideo`,{
+            id: id,
+        })
+    },
+    /**
+     * 获取广告位图片
+     */
+    getAdPositionResource(position_id, resource_id){
+        return axios.get(`./admin/ad/getAdPositionResource?position_id=${position_id}&resource_id=${resource_id}`)
+    },
+    /**
+     * 编辑广告位图片
+     */
+    editAdPositionResource(paramObj){
+        return axios.post(`./admin/ad/editAdPositionResource`,{
+            ...paramObj,
+        })
+    },
+    /**
+     * 删除广告位图片
+     */
+    deleteAdPositionResource(id){
+        return axios.post(`./admin/ad/deleteAdPositionResource`,{
             id: id,
         })
     }
-
 }

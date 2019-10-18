@@ -10,7 +10,10 @@
                 </div>
             </template>
             <template slot="searchForm">
-                <query-tag-component @updateTable="updateTable"></query-tag-component>
+                <query-tag-component 
+                    :queryFormConfig="orderFormConfig"
+                    :queryedList="queryOrderList"
+                    @updateTable="updateTagTable"></query-tag-component>
             </template>
 
             <template slot="control" slot-scope="controler">
@@ -33,10 +36,9 @@
 </template>
 <script>
     import {saleService, operateService} from '../../../common'
-
+    import {queryTagComponent} from '@/pages/components/index.js'
     import {
         salePublicOrderTableComponent,
-        queryTagComponent,
         queryComponent
     } from './publicOrderList/index.js'
 
@@ -73,6 +75,17 @@
                     paper_ids: 80, //技能证书
                     source: 80,//信息来源
                 },
+            }
+        },
+        computed:{
+            /**
+             * 订单筛选字段
+             */
+            orderFormConfig(){
+                return this.$store.state.operateModule.orderFormConfig
+            },
+            queryOrderList(){
+                return this.$store.state.saleModule.publicOrderList
             }
         },
         methods: {
@@ -116,9 +129,17 @@
             async updateTable(){
                 await this.getTableList()
             },
+            async updateTagTable(param){
+                //将查询组件数据变化存入vuex
+                await this.$store.commit('saleSetPublicOrderList', {
+                    queryKey: param[0],
+                    queryedList: param[1]
+                })
+                await this.updateTable()
+            },
             prevAndNextClick(val){
               //设置page查询参数
-              this.$store.commit('saleSetOrderList', {
+              this.$store.commit('saleSetPublicOrderList', {
                   queryKey: 'page',
                   queryedList: val
               })
@@ -128,7 +149,7 @@
              */
             async handleCurrentPage(val){
                 //设置page查询参数
-                this.$store.commit('saleSetOrderList', {
+                this.$store.commit('saleSetPublicOrderList', {
                     queryKey: 'page',
                     queryedList: val
                 })
@@ -139,7 +160,13 @@
              * @param paramObj 列表参数对象
              */
             dealOrder(paramObj){
-                this.$router.push(`/sale/publicOrderConfig?id=${paramObj.id}`)
+                this.$router.push({
+                    path: `/sale/publicOrderConfig`,
+                    query: {
+                        order_id: paramObj.id,
+                        order_type: 3,//3代表来源于公海订单
+                    }
+                })
             },
         },
         async mounted(){

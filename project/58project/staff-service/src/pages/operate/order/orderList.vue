@@ -9,7 +9,10 @@
                 </div>
             </template>
             <template slot="searchForm">
-                <query-tag-component @updateTable="updateTable"></query-tag-component>
+                <query-tag-component 
+                    :queryFormConfig="orderFormConfig"
+                    :queryedList="queryOrderList"
+                    @updateTable="updateTagTable"></query-tag-component>
             </template>
 
             <template slot="control" slot-scope="controler">
@@ -39,10 +42,9 @@
 </template>
 <script>
     import {saleService, operateService} from '../../../../common'
-
+    import {queryTagComponent} from '@/pages/components/index.js'
     import {
         orderTableComponent,
-        queryTagComponent,
         queryComponent,
         assignOrderDialog
     } from './orderList/index.js'
@@ -73,6 +75,17 @@
                 assignOrderDialogVisible: false,
             }
         },
+        computed:{
+            /**
+             * 订单筛选字段
+             */
+            orderFormConfig(){
+                return this.$store.state.operateModule.orderFormConfig
+            },
+            queryOrderList(){
+                return this.$store.state.operateModule.orderList
+            }
+        },
         methods: {
              /**
              * 请求表格数据
@@ -83,7 +96,7 @@
                     this.is_loading = true
 
                     await Promise.all([
-                        saleService.getOrderList(), //
+                        saleService.getOrderList(1), //
                         operateService.getOrderFormConfig()
                     ]).then((data) =>{
 
@@ -117,6 +130,14 @@
             // 由查询组件触发的更新表格事件
             async updateTable(){
                 await this.getOrderList()
+            },
+            async updateTagTable(param){
+                //将查询组件数据变化存入vuex
+                await this.$store.commit('setOrderList', {
+                    queryKey: param[0],
+                    queryedList: param[1]
+                })
+                await this.updateTable()
             },
             prevAndNextClick(val){
                 //设置page查询参数

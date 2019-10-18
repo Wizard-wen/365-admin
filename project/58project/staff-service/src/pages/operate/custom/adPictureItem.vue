@@ -1,35 +1,7 @@
 <template>
     <el-form :model="adPictureForm" class="form-style" label-width="120px" :rules="adPictureRules" ref="adPictureForm">
 
-        
-
-        <el-form-item label="广告图片展示" prop="url">
-            <div 
-                class="icon-box" 
-                v-if="adPictureForm.url" 
-                @mouseover="showblack('0')"
-                @mouseout="showblack('1')"
-                @click="openResourceListDialog('1')">
-                <img class="icon-item" :src="'./resource/'+adPictureForm.url" alt=""  >
-                <div class="icon-item-back" v-if="isShowBlack">
-                    <i class="el-icon-edit icon-uploader-edit-icon" style="color: #fff;font-size: 20px;"></i>
-                </div>
-            </div>
-            
-            <i class="el-icon-plus adPicture-plus" v-else @click="openResourceListDialog('0')"></i>
-            <div class="picture-message">
-                <select-tag-component
-                    :propTagList="resourceTypeList"
-                    v-model="adPictureForm.type"
-                    :isSingle="true"
-                    :isEdit="false"></select-tag-component>
-                <el-tag v-if="adPictureForm.name" style="margin-left: 20px;">{{adPictureForm.name}}</el-tag>
-            </div>
-        </el-form-item>
-
-        <el-form-item label="广告图片地址" prop="url">
-            <el-input type="primary" v-model="adPictureForm.url" disabled></el-input>
-        </el-form-item>
+        <upload-single-picture v-model="adPictureForm.resource_object" :label="'跳转页详情图片'"></upload-single-picture>
 
         <el-form-item label="跳转类别" prop="jump_type">
             <select-tag-component
@@ -40,21 +12,22 @@
 
         <el-form-item label="服务详情" prop="client_category_id" v-if="adPictureForm.jump_type == 2">
             <el-cascader
-                :props="prop"
+                :props="propAttribute"
                 v-model="clientCategoryIds"
                 :options="serviceList"
-                @change="clientCategoryChange"></el-cascader>
+                @change="clientCategoryChange"
+                :show-all-levels="false"></el-cascader>
         </el-form-item>
 
-        <upload-single-picture v-else v-model="activityPictureObject" :label="'跳转页详情图片'"></upload-single-picture>
+        <upload-single-picture v-else v-model="adPictureForm.activity_url_object" :label="'跳转页详情图片'"></upload-single-picture>
         
         <el-form-item>
-            <el-button type="primary" @click="commitAdPicture('adPictureForm')">提交</el-button>
+            <el-button type="primary" @click="editAdPositionResource('adPictureForm')">提交</el-button>
             <el-button @click="goback">返回</el-button>
         </el-form-item>
         <resource-list-dialog
             :selectedAdPicture="adPictureForm"
-            :isEdit="isEdit"
+            :isEdit="isResourceDialogEdit"
             :resourceListDialogVisible="resourceListDialogVisible"
             v-if="resourceListDialogVisible"
             @closeResourceListDialog="closeResourceListDialog"></resource-list-dialog>
@@ -66,7 +39,7 @@
 /**
  * type 0 新建  1 编辑
  */
-import {operateService} from '../../../../common'
+import {operateService, customService} from '../../../../common'
 import {selectTagComponent} from '@/pages/components/index.js'
 import {resourceListDialog} from './adPictureItem/index.js'
 
@@ -98,33 +71,20 @@ export default {
             //广告位图片表单
             adPictureForm: {
                 id: 0,
-                name: '',
-                type: 0,//图片类型
-                url: '',//广告图片url
+                position_id: this.$route.query.position_id,
+                resource_id: this.$route.query.type == 2? this.$route.query.resource_id : 0,
+                resource_object: {},//广告图片对象
                 jump_type: 1,//跳转页面类别
-                activity_url: '',//活动页长图url
                 client_category_id: 0,//详情页id
+                activity_url_object: {},//活动图片对象
             },
-            
-            
-            activityPictureObject: {},
-
-
-
-
-            isShowBlack: false,//头像阴影
-            isShowActivityBlack: false,//
-
-
-            //图片上传header
-            uploadHeader:{
-                accessToken: this.$store.state.loginModule.token.access_token
-            },
-            isEdit: false,
+            //图片资源是否是编辑
+            isResourceDialogEdit: false,
+            //服务商品列表
             serviceList: [],
             //级联选择器选中的
             clientCategoryIds: [],         
-            prop: {
+            propAttribute: {
                 label: 'name',
                 value: 'id'
             }            
@@ -132,47 +92,97 @@ export default {
     },
     methods: {
         /**
-         * 上传成功后，接收图片数据，送入图片回显数组
+         * 请求广告位资源
          */
-        uploadSuccess(response, file, fileList) {
-            this.adPictureForm.url = './resource/'+response.data.path
-        },
-        /**
-         * 移出图片
-         */
-        removePic(file, fileList){
-            this.adPictureForm.url = ''
+        async getResourceItem(){
+            try{
+                this.is_loading = true
+                await customService.getAdPositionResource(this.$route.query.position_id,this.$route.query.resource_id).then(data =>{
+                    if(data.code == '0'){
+                        this.adPictureForm = data.data
+                        this.is_loading = false
+                    }
+                }).catch(error =>{
+                    this.$message({
+                        type:'error',
+                        message: error.message
+                    })
+                    this.is_loading = false
+                }).finally(() =>{
+                    this.is_loading = false
+                })
+            } catch(error){
+                this.$message({
+                    type:'error',
+                    message: error.message
+                })
+                this.is_loading = false
+            }
         },
         /**
          * 提交修改
          */
-        commitAdPicture(formName){
+        async editAdPositionResource(formName){
 
             let _this = this;
 
-            this.$refs[formName].validate((valid) => {
+            await this.$refs[formName].validate(async (valid) => {
                 if (valid) {
-
+                    try{
+                        this.is_loading = true
+                        await customService.editAdPositionResource(this.adPictureForm).then(data =>{
+                            if(data.code == '0'){
+                                this.$message({
+                                    type:'success',
+                                    message: data.message
+                                })
+                                this.is_loading = false
+                                this.$router.push({
+                                    path: `/operate/adPositionItem`,
+                                    query: {
+                                        from : this.$route.query.from,
+                                        position_id: this.$route.query.position_id
+                                    }
+                                })
+                            }
+                        }).catch(error =>{
+                            this.$message({
+                                type:'error',
+                                message: error.message
+                            })
+                            this.is_loading = false
+                        }).finally(() =>{
+                            this.is_loading = false
+                        })
+                    } catch(error){
+                        this.$message({
+                            type:'error',
+                            message: error.message
+                        })
+                        this.is_loading = false
+                    }
+                    
                 } else {
                     return false;
                 }
             });
         },
         /**
-         * 打开资源
+         * 打开图片资源弹窗
          */
         openResourceListDialog(type){
             if(type == '1'){
-                this.isEdit = true
+                this.isResourceDialogEdit = true
             }
             this.resourceListDialogVisible = true
+        },
+        
+        goback(){
+            this.$router.go(-1)
         },
         /**
          * 关闭弹出框---单向数据
          */
-        goback(){
-            this.$route.go(-1)
-        },
         closeResourceListDialog(pictureObj){
             if(pictureObj){
 
@@ -183,27 +193,6 @@ export default {
             }
             this.resourceListDialogVisible = false
         },
-        /**
-         * 上传头像，显示阴影
-         */
-        showblack(type){
-            if(type == '0'){
-                this.isShowBlack = true
-            } else {
-                this.isShowBlack = false
-            }
-        },
-        
-        /**
-         * 上传头像，显示阴影
-         */
-        showActivityblack(type){
-            if(type == '0'){
-                this.isShowActivityBlack = true
-            } else {
-                this.isShowActivityBlack = false
-            }
-        },
         clientCategoryChange(item){
             this.adPictureForm.client_category_id = item[1]
         },
@@ -213,18 +202,29 @@ export default {
         try{
             await operateService.getServiceTree().then(data =>{
                 this.serviceList = data.data
+
+                this.serviceList = this.serviceList.reduce((arr, item, index) =>{
+                    return item.hasOwnProperty('children')? [
+                        ...arr,
+                        item,
+                    ] : arr
+                },[])
             }).catch(error =>{
                 this.$message({
                     type:'error',
                     message: error.message
                 })
             })
+            if(this.$route.query.type == 2){
+                await this.getResourceItem()
+            }
         } catch(error){
             this.$message({
                 type:'error',
                 message: error.message
             })
         }
+        
     }
 }
 </script>

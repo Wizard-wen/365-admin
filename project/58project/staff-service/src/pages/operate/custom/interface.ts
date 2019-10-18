@@ -48,7 +48,8 @@ export interface adPositionItem{
 export interface adItem{
     id:string;//
 
-    adPictureObject: {
+    //光改为图片对象
+    resource_object: {
         id:string;//
         name:string;//
         /**
@@ -65,8 +66,6 @@ export interface adItem{
     
     client_category_id:string;//详情页id
 
-    // activity_url:string;//活动页的长图url
-    
     activity_url_object: {
         id:string;
         type: string;
@@ -83,20 +82,25 @@ export interface videoItem{
     name: string;//视频名称
     teacher:string;//主讲人
     created_at:string;//上传时间
-    pictureUrl:string;//缩略图
-    videoUrl:string;//视频的腾讯视频url
-    resource:Array<videoPicItem>;
+    picture_url:string;//缩略图
+    picture_object: {
+        id:string;//
+        name:string;//图片名称
+        /**
+         * 1 长图 2 全屏 3 半屏
+         */
+        type:string;//图片类型
+        url:string;//广告图片url
+    }
+    video_url:string;//视频的腾讯视频url
+    video_detail_object:{
+        id:string;//
+        name:string;//图片名称
+        /**
+         * 1 长图 2 全屏 3 半屏
+         */
+        type:string;//图片类型
+        url:string;//广告图片url
+    }
 }
-
-export interface videoPicItem{
-    id:string;//
-    name:string;//图片名称
-    /**
-     * 1 长图 2 全屏 3 半屏
-     */
-    type:string;//图片类型
-    url:string;//广告图片url
-}
-
-
 

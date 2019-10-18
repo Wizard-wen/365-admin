@@ -1,7 +1,7 @@
 <template>
     <div class="ad-box">
         <el-button 
-            v-if="!isShow" 
+            v-if="!isShow && isAddAdPictureButtonShow" 
             style="margin-bottom:15px;" 
             icon="el-icon-plus"  
             @click="goAdPictureItemPage('new', {})">添加图片</el-button>
@@ -52,6 +52,23 @@ export default {
         isShow: {
             type: Boolean,
             default: false,
+        },
+        adType: {
+            type: Number | String,
+            default: 0,
+        }
+    },
+    computed: {
+        isAddAdPictureButtonShow(){
+            if(this.adType == 1){
+                return true
+            } else {
+                if(this.adPositionList.length){
+                    return false
+                } else {
+                    return true
+                }
+            }
         }
     },
     watch:{
@@ -85,6 +102,12 @@ export default {
         goAdPictureItemPage(state, paperItem){
             this.$router.push({
                 path: '/operate/adPictureItem',
+                query: {
+                    from: this.$route.query.from,
+                    type: state == 'edit' ? 2 : 1,
+                    position_id: this.$route.query.position_id,
+                    resource_id: paperItem.id
+                }
             })
             return 
             if(state == 'edit'){

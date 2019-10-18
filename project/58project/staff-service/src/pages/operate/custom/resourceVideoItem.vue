@@ -15,16 +15,16 @@
         </el-form-item>
 
         <el-form-item label="视频url" prop="video_url">
-            <el-input type="primary" v-model="editResourceVideoForm.video_url"></el-input>
+            <el-input type="textarea" v-model="editResourceVideoForm.video_url"></el-input>
         </el-form-item>
 
-        <upload-single-picture  v-model="videoIntroObject" :label="'视频缩略图片'"></upload-single-picture>
+        <upload-single-picture  v-model="editResourceVideoForm.picture_object" :label="'视频缩略图片'"></upload-single-picture>
 
-        <upload-single-picture  v-model="videoDetailPictureObject" :label="'视频详情图片'"></upload-single-picture>
+        <upload-single-picture  v-model="editResourceVideoForm.video_detail_object" :label="'视频详情图片'"></upload-single-picture>
 
         <el-form-item>
-            <el-button @click="goback">返 回</el-button>
             <el-button type="primary" @click="onSubmit('editResourceVideoForm')">修改</el-button>
+            <el-button @click="goback">返 回</el-button>
         </el-form-item>
     </el-form>
 </template>
@@ -49,9 +49,9 @@ export default {
                 id: '',
                 name: '',//图片名称
                 teacher: '',//主讲人
-                picture_url: '', //视频缩略图
+                picture_object: {}, //视频缩略图
                 video_url: '', //视频链接
-                resource: [], //资源列表
+                video_detail_object: {}, //资源列表
             },
             editResourceVideoRules: {
                 name: [

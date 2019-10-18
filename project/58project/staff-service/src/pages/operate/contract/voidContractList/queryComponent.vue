@@ -1,29 +1,34 @@
 <template>
     <div class="queryBox">
         <query-search-input
-            @updateTable="updateTable"
+            @updateSearchInput="updateSearchInput"
+            :selectedText="queryedVoidContractList.contract_number"
             :queryKey="'contract_number'"
             :queryName="'空合同编号'"></query-search-input>
         <query-search-list
-            @updateTable="updateTable"
+            @updateSearchList="updateSearchList"
+            :selectedList="queryedVoidContractList.created_at"
             :queryKey="'created_at'"
             :queryName="'创建时间'"
             :queryList="voidContractConfigForm.created_at"
             :isSingleQuery="true"></query-search-list>
         <query-search-list
-            @updateTable="updateTable"
+            @updateSearchList="updateSearchList"
+            :selectedList="queryedVoidContractList.assign_at"
             :queryKey="'assign_at'"
             :queryName="'分派时间'"
             :queryList="voidContractConfigForm.assign_at"
             :isSingleQuery="true"></query-search-list>
         <query-search-list
-            @updateTable="updateTable"
+            @updateSearchList="updateSearchList"
+            :selectedList="queryedVoidContractList.type"
             :queryKey="'type'"
             :queryName="'空合同状态'"
             :queryList="voidContractConfigForm.type"
             :isSingleQuery="true"></query-search-list>
         <query-search-list
-            @updateTable="updateTable"
+            @updateSearchList="updateSearchList"
+            :selectedList="queryedVoidContractList.manager_id"
             :queryKey="'manager_id'"
             :queryName="'经纪人'"
             :queryList="voidContractConfigForm.manager_id"
@@ -34,7 +39,7 @@
 import {
     querySearchList,
     querySearchInput,
-} from './queryComponent/index.js'
+} from '@/pages/components/index.js'
 export default {
     data(){
         return {
@@ -52,10 +57,23 @@ export default {
         voidContractConfigForm(){
             return this.$store.state.operateModule.voidContractConfigForm
         },
+        queryedVoidContractList(){
+            return this.$store.state.operateModule.voidContractList
+        }
     },
     methods: {
-        // 更新表格数据
-        updateTable(){
+        updateSearchInput(queryObject){
+            this.$store.commit('setVoidContractList', {
+                queryKey: queryObject[0], 
+                queryedList: queryObject[1]
+            })
+            this.$emit('updateTable')
+        },
+        updateSearchList(queryObject){
+            this.$store.commit('setVoidContractList', {
+                queryKey: queryObject[0], 
+                queryedList: queryObject[1]
+            })
             this.$emit('updateTable')
         }
     },

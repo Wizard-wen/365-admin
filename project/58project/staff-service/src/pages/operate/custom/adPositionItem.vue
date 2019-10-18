@@ -1,5 +1,11 @@
 <template>
-    <el-form :model="adPositionForm" :rules="adPositionRules" ref="adPositionForm" label-width="100px" class="adPositionForm">
+    <el-form  
+        v-loading="is_loading"
+        :model="adPositionForm" 
+        :rules="adPositionRules" 
+        ref="adPositionForm" 
+        label-width="100px" 
+        class="adPositionForm">
         <el-form-item label="广告位名称" prop="name">
             <el-input type="text" v-model="adPositionForm.name" disabled></el-input>
         </el-form-item>
@@ -16,7 +22,13 @@
         </el-form-item>
         
         <el-form-item label="图片列表" prop="resource">
-            <resource-component v-model="adPositionForm.resource"></resource-component>
+            <resource-component 
+                :adType="adPositionForm.display"
+                v-model="adPositionForm.resource"></resource-component>
+        </el-form-item>
+        <el-form-item>
+            <el-button type="primary" @click="commitAdPosition('adPositionForm')">提交</el-button>
+            <el-button @click="goback">返回</el-button>
         </el-form-item>
     </el-form>
 </template>
@@ -35,6 +47,7 @@ export default {
     },
     data(){
         return {
+            is_loading: false,
             adPositionForm: {
                 id: 0,
                 display: 1,//展现形式
@@ -48,19 +61,88 @@ export default {
             displayList: [{id:1, name: '轮播图'}, {id: 2, name: '图片'}]
         }
     },
-    async mounted(){
-        try{
-            let adId = this.$route.query.id
-            await customService.getAdPosition(1, adId).then(data =>{
-                this.adPositionForm = data.data
-            }).catch(error =>{
+    methods: {
+        /**
+         * 获取广告位信息
+         */
+        async getAdPosition(){
+            try{
+                let adId = this.$route.query.position_id
+                this.is_loading = true
+                await customService.getAdPosition(1, adId).then(data =>{
+                    if(data.code == '0'){
+                        this.adPositionForm = data.data
+                        this.is_loading = false
+                    }
+                }).catch(error =>{
+                    this.$message({
+                        type: 'error',
+                        message: error.message
+                    })
+                    this.is_loading = false
+                }).finally(() =>{
+                    this.is_loading = false
+                })
+            } catch(error){
+                this.$message({
+                    type: 'error',
+                    message: error.message
+                })
+                this.is_loading = false
+            }
+        },
+        /**
+         * 提交广告位
+         */
+        async commitAdPosition(formName){
+            let _this = this;
 
-            }).finally(() =>{
-
+            await this.$refs[formName].validate(async (valid) => {
+                if (valid) {
+                    try{
+                        this.is_loading = true
+                        await customService.editAdPosition(this.adPositionForm).then(data =>{
+                            if(data.code == '0'){
+                                this.$message({
+                                    type:'success',
+                                    message: data.message
+                                })
+                                this.is_loading = false
+                                //返回列表
+                                this.goback()
+                            }
+                        }).catch(error =>{
+                            this.$message({
+                                type:'error',
+                                message: error.message
+                            })
+                            this.is_loading = false
+                        }).finally(() =>{
+                            this.is_loading = false
+                        })
+                    } catch(error){
+                        this.$message({
+                            type:'error',
+                            message: error.message
+                        })
+                        this.is_loading = false
+                    }
+                } else {
+                    return false;
+                }
+            });
+        },
+        /**
+         * 返回
+         */
+        goback(){
+            this.$router.push({
+                path: this.$route.query.from == 1?`/operate/customAdList` : `/operate/workerAdList`,
             })
-        } catch(error){
-            
         }
+    },
+    async mounted(){
+        await this.getAdPosition()
     }
 }
 </script>

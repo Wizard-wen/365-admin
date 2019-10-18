@@ -10,7 +10,6 @@
         </div>
         <edit-resource-video-dialog
             :resourceVideoItem="resourceVideoItem"
-            :isEdit="isEdit"
             v-if="editResourceVideoVisible"
             :editResourceVideoVisible="editResourceVideoVisible"
             @closeEditResourcePictureDialog="closeEditResourcePictureDialog"></edit-resource-video-dialog>
@@ -19,19 +18,25 @@
                 <el-col :span="6" v-for="(item, index) in videoResourceList" :key="index" style="margin-bottom:20px;">
                     <div style="padding: 0 10px;">
                         <el-card :body-style="{ padding: '0px' }">
-                            <img :src="`./resource/${item.picture_url}`" class="image">
-                            <div style="padding: 14px;">
-                                <span >{{item.name}}</span>
-                                <div class="bottom">
-                                    <div class="bottom-left">
-                                        <el-tag size="small">{{item.teacher}}</el-tag>
+                            <div class="resource-box">
+                                <img :src="`./resource/${item.picture_url}`" class="general-image">
+                                <div class="resource-message">
+                                    <div class="header">
+                                        <p class="title">{{item.name}}</p>
+                                        <div class="created_at">上传于{{item.created_at | timeFomatter}}</div>
                                     </div>
-                                    <div class="bottom-right">
-                                        <el-button type="text" class="button" @click="goVideoResourceItemPage(item)">编辑</el-button>
-                                        <el-button type="text" class="button" @click="deleteResource(item)">删除</el-button>
+                                    <div class="bottom">
+                                        <div class="bottom-left">
+                                            <el-tag size="small">{{item.teacher}}</el-tag>
+                                        </div>
+                                        <div class="bottom-right">
+                                            <el-button type="text" class="button" @click="goVideoResourceItemPage(item)">编辑</el-button>
+                                            <el-button type="text" class="button" @click="deleteResource(item)">删除</el-button>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
+                            
                         </el-card>
                     </div>
                 </el-col>
@@ -50,7 +55,7 @@
 </template>
 
 <script>
-import {customService} from '../../../../common'
+import {customService, $utils} from '../../../../common'
 import {selectTagComponent} from '@/pages/components/index.js'
 import {editResourceVideoDialog} from './videoList/index.js'
 export default {
@@ -83,6 +88,14 @@ export default {
             resourceVideoItem:{},
         }
     },
+    filters: {
+        timeFomatter(value){
+            if(value == 0){
+                return '-'
+            }
+            return $utils.formatDate(new Date(value), 'yyyy-MM-dd')
+        },
+     },
     methods: {
         async prevAndNextClick(val){
             this.getResourceForm.page = val
@@ -251,28 +264,46 @@ export default {
     }
 }
 
-    .image {
-        height: 210px;
-        width: 100%;
-        display: block;
-    }
-    .bottom {
-        width: 100%;
-        margin-top: 7px;
-        height: 24px;
-        line-height: 24px;
-        display: flex;
-        justify-content: space-between;
-        .bottom-left{
-            width: 90px;
+    .resource-box{
+        .general-image{
+            height: 210px;
+            width: 100%;
+            display: block;
         }
-        .bottom-right{
-            width: 90px;
-            .button{
-                padding: 0;
+        .resource-message{
+            padding: 14px;
+            .header{
+                height: 20px;
+                width: 100%;
+                display: flex;
+                .title{
+                    flex: 1;
+                }
+                .created_at{
+                    width: 120px;
+                    color: #ccc;
+                }
+            }
+            .bottom {
+                width: 100%;
+                margin-top: 7px;
+                height: 24px;
+                line-height: 24px;
+                display: flex;
+                justify-content: space-between;
+                .bottom-left{
+                    width: 90px;
+                }
+                .bottom-right{
+                    width: 90px;
+                    .button{
+                        padding: 0;
+                    }
+                }
             }
         }
     }
+
 
 
 

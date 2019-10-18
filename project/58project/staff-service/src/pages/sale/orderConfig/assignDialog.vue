@@ -36,7 +36,7 @@ export default {
             default: false,
         },
         //待分配订单id
-        assignOrderId: {
+        order_id: {
             type: Number | String,
             default: 0
         }
@@ -51,7 +51,7 @@ export default {
         }
         return {
             assignOrderForm: {
-                order_id: this.assignOrderId,
+                order_id: this.order_id,
                 manager_name: '',
                 manager_id: 0,
             },

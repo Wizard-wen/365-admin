@@ -34,63 +34,124 @@
                         <div class="left">合同详情</div>
                     </div>
                 </div>
-                <div class="order-list">
-                    <div class="line-list">
-                        服务内容：
-                        <select-tag-component 
-                            :isEdit="false" 
-                            :propTagList="order_service_contains" 
-                            v-model="contractBase.service_contains" 
-                            :isSingle="true"></select-tag-component>
+                <div class="detail-show-module">
+                    <div class="detail-item-box line-three-list">
+                        <div class="detail-item">
+                            <p class="detail-title">护理依赖程度： </p>
+                             <select-tag-component 
+                                v-if="contractBase.service_level"
+                                :isEdit="false" 
+                                :propTagList="order_service_level" 
+                                v-model="contractBase.service_level" 
+                                :isSingle="true"></select-tag-component>
+                            <p class="detail-type-text" v-else>-</p>
+                        </div>
                     </div>
-                    <div class="line-list">
-                        服务人数：<span>{{contractBase.service_count}}</span> 
+                    <div class="detail-item-box line-three-list">
+                        <div class="detail-item">
+                            <p class="detail-title">服务内容： </p>
+                            <select-tag-component 
+                                v-if="contractBase.service_contains"
+                                :isEdit="false" 
+                                :propTagList="order_service_contains" 
+                                v-model="contractBase.service_contains" 
+                                :isSingle="true"></select-tag-component>
+                            <p class="detail-type-text" v-else>-</p>
+                        </div>
                     </div>
-                    <div class="line-list">
-                        护理依赖程度： 
-                        <select-tag-component 
-                            :isEdit="false" 
-                            :propTagList="order_service_level" 
-                            v-model="contractBase.service_level" 
-                            :isSingle="true"></select-tag-component>
+                    <div class="detail-item-box line-three-list">
+                        <div class="detail-item">
+                            <p class="detail-title">服务方式： </p>
+                            <select-tag-component 
+                                v-if="contractBase.service_level"
+                                :isEdit="false" 
+                                :propTagList="order_service_type" 
+                                v-model="contractBase.service_level" 
+                                :isSingle="true"></select-tag-component>
+                            <p class="detail-type-text" v-else>-</p>
+                        </div>
                     </div>
-                    <div class="line-list">
-                        服务方式： 
-                        <select-tag-component 
-                            :isEdit="false" 
-                            :propTagList="order_service_type" 
-                            v-model="contractBase.service_level" 
-                            :isSingle="true"></select-tag-component>
+                    <div class="detail-item-box line-three-list">
+                        <div class="detail-item">
+                            <p class="detail-title">服务人数： </p>
+                            <p class="detail-type-text">{{contractBase.service_count}}</p>
+                        </div>
                     </div>
-                    <div class="line-list">
-                        服务期限：<span>{{contractBase.service_start | timeFomatter}} - {{contractBase.service_end | timeFomatter}}</span> 
+                    <div class="detail-item-box line-three-list">
+                        <div class="detail-item">
+                            <p class="detail-title">服务期限： </p>
+                            <p class="detail-type-text">{{contractBase.service_start | timeFomatter}} - {{contractBase.service_end | timeFomatter}}</p>
+                        </div>
                     </div>
-                    <div class="line-list">
-                        工作时间：<span>{{contractBase.service_time}}</span> 
+                    <div class="detail-item-box line-three-list"></div>
+                    <div class="detail-item-box line-list">
+                        <div class="detail-item">
+                            <p class="detail-title">工作时间： </p>
+                            <p class="detail-type-text">{{contractBase.service_time}}</p>
+                        </div>
                     </div>
-                    <div class="line-list">
-                        劳务报酬：<span>{{contractBase.staff_wage}}</span> 
+                    <div class="detail-item-box line-three-list">
+                        <div class="detail-item">
+                            <p class="detail-title">劳务报酬： </p>
+                            <p class="detail-type-text">{{contractBase.staff_wage}}元</p>
+                        </div>
                     </div>
-                    <div class="line-list">
-                        客户服务费：<span>{{contractBase.user_charge}}</span> 
+                    <div class="detail-item-box line-three-list">
+                        <div class="detail-item">
+                            <p class="detail-title">客户服务费： </p>
+                            <p class="detail-type-text">{{contractBase.user_charge}}元</p>
+                        </div>
                     </div>
-                    <div class="line-list">
-                        客户缴纳：<span>{{contractBase.user_pay}}</span> 
+                    <div class="detail-item-box line-three-list">
+                        <div class="detail-item">
+                            <p class="detail-title">客户缴纳： </p>
+                            <p class="detail-type-text">{{contractBase.user_pay}}元</p>
+                        </div>
                     </div>
-                    <div class="line-list">
-                        劳动者押金：<span>{{contractBase.staff_deposit}}</span> 
+                    <div class="detail-item-box line-three-list">
+                        <div class="detail-item">
+                            <p class="detail-title">劳动者服务费： </p>
+                            <p class="detail-type-text">-</p>
+                        </div>
                     </div>
-                    <div class="line-list">
-                        保险受益人：<span>{{contractBase.insurance_benefit}}</span> 
+                    <div class="detail-item-box line-three-list">
+                        <div class="detail-item">
+                            <p class="detail-title">劳动者押金： </p>
+                            <p class="detail-type-text">{{contractBase.staff_deposit}}元</p>
+                        </div>
                     </div>
-                    <div class="line-list">
-                        保险期限：<span>{{contractBase.insurance_start | timeFomatter}} - {{contractBase.insurance_end | timeFomatter}}</span> 
+                    <div class="detail-item-box line-three-list"></div>
+                    <div class="detail-item-box line-three-list">
+                        <div class="detail-item">
+                            <p class="detail-title">保险受益人： </p>
+                            <p class="detail-type-text">{{contractBase.insurance_benefit}}</p>
+                        </div>
                     </div>
-                    <div class="line-list">
-                        合同备注：<span>{{contractBase.remarks}}</span> 
+                    <div class="detail-item-box line-three-list">
+                        <div class="detail-item">
+                            <p class="detail-title">保险期限： </p>
+                            <p class="detail-type-text">{{contractBase.insurance_start | timeFomatter}} - {{contractBase.insurance_end | timeFomatter}}</p>
+                        </div>
                     </div>
-                    <div class="line-list">
-                        合同照片：<span>{{contractBase.accessory}}</span> 
+                    <div class="detail-item-box line-three-list"></div>
+                    <div class="detail-item-box line-list">
+                        <div class="detail-item">
+                            <p class="detail-title">合同备注： </p>
+                            <p class="detail-type-text">{{contractBase.remarks}}</p>
+                        </div>
+                    </div>
+                    <div class="detail-item-box line-list">
+                        <div class="detail-item">
+                            <p class="detail-title">合同照片： </p>
+                            <div class="detail-photo-list">
+                                <photo-component
+                                    :pictureUrlArrtibute="'url'"
+                                    v-model="contractBase.accessory"
+                                    :height="'297px'"
+                                    :width="'210px'"
+                                    :isEdit="false"></photo-component>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -172,6 +233,9 @@
     import {operateService, $utils, saleService} from '../../../../common'
     import {
     selectTagComponent} from '@/pages/components'
+    import {
+        photoComponent,
+    } from '../worker/workerItem/index.js'
 
 export default {
     data(){
@@ -206,6 +270,7 @@ export default {
     },
     components: {
         selectTagComponent,
+        photoComponent,
     },
     computed:{
         /**
@@ -383,6 +448,65 @@ export default {
                         }
                     }
 
+                }
+                .detail-show-module{
+                    width: 100%;
+                    display: flex;
+                    flex-wrap:  wrap;
+                    justify-content: space-between;
+                    margin-bottom: 32px;
+                    padding: 10px;
+                    .detail-item-box {
+                        .detail-item{
+                            width: 100%;
+                            display: flex;
+                            justify-content: flex-start;
+                            margin-bottom: 16px;
+                            .detail-title{
+                                width: 120px;
+                                text-align: right;
+                                line-height: 30px;
+                                margin-right: 20px;
+                                color: rgba(0,0,0,.85);
+                            }
+                            .detail-picture-box{
+                                display: flex;
+                                .contract-picture{
+                                    margin: 0 15px 15px 0;
+                                    width: 210px;
+                                    height: 297px;
+                                    & img{
+                                        width: 210px;
+                                        height: 297px;
+                                    }
+                                }
+                            }
+                            .detail-type-text{
+                                line-height: 30px;
+                                color: rgba(0,0,0,.85);
+                            }
+                            .detail-photo-list{
+                                display: flex;
+                                flex-wrap: wrap;
+                                .icon-box{
+                                    height: 150px;
+                                    margin-right: 20px;
+                                    .icon-style{
+                                        height: 150px;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    .line-three-list{
+                        width: 33%;
+                    }
+                    .line-two-list{
+                        width: 50%;
+                    }
+                    .line-list{
+                        width: 100%;
+                    }
                 }
                 .order-list{
                     box-sizing: border-box;

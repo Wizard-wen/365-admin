@@ -38,8 +38,8 @@ export const sale_orderRequest = {
     /**
      * 获取订单列表
      */
-    getOrderList(type){
-        return saleRequest.getOrderList(type)
+    getOrderList(type, orderDeafultQueryObject){
+        return saleRequest.getOrderList(type, orderDeafultQueryObject)
     },
     /**
      * 获取订单信息
@@ -94,8 +94,8 @@ export const sale_matchServiceRequest = {
      * @param order_staff_id 候选人员信息id
      * @param order_id 订单id
      */
-    deleteOrderStaff(order_staff_id, order_id){
-        return saleRequest.deleteOrderStaff(order_staff_id, order_id)
+    deleteOrderStaff(deleteOrderStaff){
+        return saleRequest.deleteOrderStaff(deleteOrderStaff)
     },
     /**
      * 签约
@@ -119,8 +119,8 @@ export const sale_staffRequest = {
     /**
      * 销售创建服务人员
      */
-    createStaffBySeller(obj){
-        return saleRequest.createStaffBySeller(obj)
+    createWorkerBySeller(obj){
+        return saleRequest.createWorkerBySeller(obj)
     },
     /**
      * 销售创建服务人员

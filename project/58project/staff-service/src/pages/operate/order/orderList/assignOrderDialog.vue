@@ -40,7 +40,7 @@
 /**
  * type 0 新建  1 编辑
  */
-import {operateService} from '../../../../../common'
+import {operateService, saleService} from '../../../../../common'
 
 export default {
     props:{
@@ -120,7 +120,7 @@ export default {
                     //校验并提交
                     try{
                         this.is_loading = true
-                        await operateService.editAppLySource(this.assignOrderForm).then(data =>{
+                        await saleService.assignOrder(this.assignOrderForm).then(data =>{
                             if(data.code == '0'){
                                 this.$message({
                                     type:"success",

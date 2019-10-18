@@ -45,8 +45,8 @@ export default {
      * 编辑广告位
      * @param adObject
      */
-    editAdPosition(){
-        return customRequest.editAdPosition()
+    editAdPosition(adObject){
+        return customRequest.editAdPosition(adObject)
     },
     /**
      * 获取视频列表
@@ -72,5 +72,25 @@ export default {
      */
     deleteVideo(id){
         return customRequest.deleteVideo(id)
+    },
+    /**
+     * 获取广告位图片
+     * @param position_id 广告位id
+     * @param resource_id 广告位资源id
+     */
+    getAdPositionResource(position_id, resource_id){
+        return customRequest.getAdPositionResource(position_id, resource_id)
+    },
+    /**
+     * 编辑广告位图片
+     */
+    editAdPositionResource(paramObj){
+        return customRequest.editAdPositionResource(paramObj)
+    },
+    /**
+     * 删除广告位图片
+     */
+    deleteAdPositionResource(id){
+        return customRequest.deleteAdPositionResource(id)
     }
 }

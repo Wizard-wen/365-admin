@@ -13,7 +13,10 @@
 
             <template slot="searchForm">
                 <div class="search-tag-list">
-                    <query-tag-component @updateTable="updateTable"></query-tag-component>
+                    <query-tag-component 
+                        :queryFormConfig="orderApplyFormConfig"
+                        :queryedList="orderApplyQueryedList"
+                        @updateTable="updateTagTable"></query-tag-component>
                 </div>
             </template>
 
@@ -50,10 +53,10 @@
 </template>
 <script>
     import {operateService} from '../../../../common/'
-
+    import {queryTagComponent} from '@/pages/components/index.js'
     import {
         orderApplyTableComponent,
-        queryTagComponent,
+        // queryTagComponent,
         queryComponent,
     } from './orderApplyList/index.js'
 
@@ -85,6 +88,14 @@
                 systemVersion: '',//系统版本号
                 orderApplyId:'',//当前订单id
                 orderApplyPassVisible: false,//控制订单通过弹窗显示隐藏
+            }
+        },
+        computed:{
+            orderApplyFormConfig(){
+                return this.$store.state.operateModule.orderApplyFormConfig
+            },
+            orderApplyQueryedList(){
+                return this.$store.state.operateModule.orderApplyList
             }
         },
         methods: {
@@ -127,6 +138,14 @@
             // 由查询组件触发的更新表格事件
             async updateTable(){
                 await this.getTableList()
+            },
+            async updateTagTable(param){
+                //将查询组件数据变化存入vuex
+                await this.$store.commit('setOrderApplyList', {
+                    queryKey: param[0],
+                    queryedList: param[1]
+                })
+                await this.updateTable()
             },
             prevAndNextClick(val){
                 //设置page查询参数

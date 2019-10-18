@@ -2,30 +2,51 @@
     <div :class="['picture-box', isEdit? 'dashed-style' : '']">
         <div 
             class="image-box"
+            :style="{height: `${height}`,}"
             v-for="(item,index) in photo_fileList" 
             :key="index"  
             @mouseover="showPhotoblack(item, index, '0')" 
             @mouseout="showPhotoblack(item, index, '1')">
-            <img :src="item.url" class="image-item">
-            <div class="image-item-back" v-if="item.isBack && isEdit">
-                <i class="el-icon-delete image-edit-deal-icon" @click="deletePhoto(index)"></i>
-                <i class="el-icon-zoom-in image-edit-deal-icon" @click="openPictureDetailDialog(item)"></i>
+            <img :src="'./resource/'+item.url" class="image-item" :style="{height: `${height}`,width:`${width}`}">
+            <div 
+                class="image-item-back" 
+                :style="{height: `${height}`, width: `${width? width:'100%'}`}"
+                v-if="item.isBack && isEdit">
+                <i 
+                    class="el-icon-delete image-edit-deal-icon" 
+                    :style="{lineHeight: `${height}`}" 
+                    @click="deletePhoto(index)"></i>
+                <i 
+                    class="el-icon-zoom-in image-edit-deal-icon" 
+                    :style="{lineHeight: `${height}`}" 
+                    @click="openPictureDetailDialog(item)"></i>
             </div>
-            <div class="image-item-back" v-if="item.isBack && !isEdit">
-                <i class="el-icon-zoom-in image-deal-icon" @click="openPictureDetailDialog(item)"></i>
+            <div 
+                class="image-item-back" 
+                :style="{height: `${height}`, width: `${width? width:'100%'}`}"
+                v-if="item.isBack && !isEdit">
+                <i 
+                    class="el-icon-zoom-in image-deal-icon" 
+                    :style="{lineHeight: `${height}`}" 
+                    @click="openPictureDetailDialog(item)"></i>
             </div>
         </div>
-        <el-upload
-            v-if="isEdit"
-            accept=".jpg,.jpeg,.png,.gif,.bmp,.pdf,.JPG,.JPEG,.PBG,.GIF,.BMP,.PDF"
-            class="image-uploader"
-            action="/admin/common/uploadImage"
-            :show-file-list="false"
-            :on-success="photoUploadSuccess"
-            :before-upload="beforeAvatarUpload"
-            :headers="uploadHeader">
-            <i  class="el-icon-plus image-uploader-icon"></i>
-        </el-upload>
+        <div :style="{height: `${height}`, width: `${width? width:'100%'}`}">
+            <el-upload
+                v-if="isEdit"
+                accept=".jpg,.jpeg,.png,.gif,.bmp,.pdf,.JPG,.JPEG,.PBG,.GIF,.BMP,.PDF"
+                class="image-uploader"
+                action="/admin/common/uploadImage"
+                :show-file-list="false"
+                :on-success="photoUploadSuccess"
+                :before-upload="beforeAvatarUpload"
+                :headers="uploadHeader">
+                <i  
+                    class="el-icon-plus image-uploader-icon"
+                :style="{height: `${height}`, lineHeight: `${height}`,width: `${width? width:'100%'}`}"></i>
+            </el-upload>
+        </div>
+        
         <picture-detail-dialog
             :pictureDetailDialogVisible="pictureDetailDialogVisible"
             v-if="pictureDetailDialogVisible"
@@ -75,20 +96,41 @@ export default {
         isEdit: {
             type: Boolean,
             default: true,
+        },
+        /**
+         * 图片的高度
+         */
+        height: {
+            type: String,
+            default: '150px',
+        },
+        /**
+         * 图片的宽度
+         */
+        width: {
+            type: String,
+            default: '',
+        },
+        /**
+         * 图片对象中，url字段键名
+         */
+        pictureUrlArrtibute: {
+            type: String,
+            default: 'path'
         }
     },
     watch: {
-        // value: function(newVal,oldVal){
-        //     // debugger
-        //     console.log(1)
-        //     console.log(newVal, oldVal)
-        //     this.photo_fileList = newVal
-        // },
         value: {
             handler(newVal, oldVal){
-                // console.log(11)
                 if(newVal!= oldVal){
-                    this.photo_fileList = newVal
+                    //包装图片数组，url 展示图片url  isBack 是否显示遮罩
+                    this.photo_fileList =  newVal.map((item, index) =>{
+                        return {
+                            ...item,
+                            url: item[this.pictureUrlArrtibute],
+                            isBack: false,
+                        }
+                    })
                 }
             },
             immediate: true,
@@ -106,7 +148,7 @@ export default {
             this.photo_fileList =  this.photo_fileList.map((item, index) =>{
                 return {
                     ...item,
-                    url: `./resource/${item.path}`,
+                    url: item.path,
                     isBack: false,
                 }
             })
@@ -157,7 +199,7 @@ export default {
          * 打开图片详情弹窗
          */
         openPictureDetailDialog(item){
-            this.pictureDetailUrl = `./resource/${item.path}`
+            this.pictureDetailUrl = `./resource/${item.url}`
             this.pictureDetailDialogVisible = true;
         }
     }
@@ -168,34 +210,33 @@ export default {
 .picture-box{
     display: flex;
     flex-wrap: wrap;
+    padding: 10px;
+    //图片盒子
     .image-box{
-        margin: 10px;
-        height: 150px;
+        margin-right: 10px;
         position: relative;
+        //图片
         .image-item {
-            height: 150px;
             display: block;
         }
+        //遮罩
         .image-item-back{
-            position: absolute;
-            height: 150px;
-            width: 100%;
-            
+            position: absolute;        
             top: 0;
             z-index: 4;
             cursor: pointer;
             background: rgba(0,0,0,.5);
             display: flex;
+            //编辑
             .image-edit-deal-icon{
                 width: 50%;
-                line-height: 150px;
                 text-align: center;
                 color: #fff;
                 font-size: 20px;
             }
+            //查看
             .image-deal-icon{
                 width: 100%;
-                line-height: 150px;
                 text-align: center;
                 color: #fff;
                 font-size: 20px;
@@ -205,10 +246,8 @@ export default {
     //图片上传组件
     .image-uploader /deep/ .el-upload {
         display: block;
-        height: 150px;
-        width: 150px;
-        margin: 10px;
-
+        height: 100%;
+        width: 100%;
         cursor: pointer;
         position: relative;
         overflow: hidden;
@@ -222,12 +261,11 @@ export default {
     .image-uploader-icon {
         font-size: 16px;
         color: #8c939d;
-        width: 150px;
-        height: 150px;
         line-height: 150px;
         text-align: center;
     }
 }
+//组件外边框虚线
 .dashed-style{
     border: 1px dashed #ccc;
 }

@@ -15,18 +15,26 @@
 </template>
 <script>
 export default {
+    props: {
+        /**
+         * 查询索引
+         */
+        queryFormConfig: {
+            type: Object,
+            default: function(){return {}}
+        },
+        queryedList: {
+            type: Object,
+            default: function(){return {}}
+        }
+    },
     data(){
         return {
             leftPosition: 0,
         }
     },
     computed:{
-        orderFormConfig(){
-            return this.$store.state.saleModule.saleContractConfigForm
-        },
-        queryedList(){
-            return this.$store.state.saleModule.contractList
-        },
+
         queryListLength(){
             return this.queryTag.reduce((allNumber, item, index) =>{
                 return allNumber + 45 + item.name.length * 14
@@ -78,7 +86,7 @@ export default {
          * 名字
          */
         analysisValue(item, key){
-            return this.orderFormConfig[item].find(item => item.id == key).name
+            return this.queryFormConfig[item].find(item => item.id == key).name
         },
         closeTag(item){
             let configValue = this.queryedList[item.key], //取出queryedList中字段的值
@@ -90,15 +98,10 @@ export default {
             } else {
                 newValue = ''
             }
-            //将查询组件数据变化存入vuex
 
-            this.$store.commit('saleSetContractList', {
-                queryKey: item.key,
-                queryedList: newValue
-            })
 
             //更新表格数据
-            this.$emit('updateTable')
+            this.$emit('updateTable',[item.key, newValue])
         },
         leftChange(){
             if(Math.abs(this.leftPosition) + this.$refs.query.offsetWidth > this.queryListLength+50){

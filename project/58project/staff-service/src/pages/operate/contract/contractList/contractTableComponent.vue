@@ -17,8 +17,9 @@
                 row-key="1233444"
                 :header-cell-style="{height: '30px',padding: '0px',fontSize:'12px'}"
                 :cell-style="{height: '30px',padding: 0,fontSize:'12px',}">
+                <el-table-column fixed="left"  label="合同编号" prop="contract_number" align="center" width="160"></el-table-column>
 
-                <el-table-column fixed="left"  label="合同编号" prop="contract_code" align="center" width="160"></el-table-column>
+                <el-table-column label="合同流水号" prop="contract_code" align="center" width="160"></el-table-column>
 
                 <el-table-column  label="合同状态" prop="type" align="center"  width="150">
                     <template slot-scope="scope">

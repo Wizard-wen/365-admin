@@ -12,7 +12,10 @@
             </template>
 
             <template slot="searchForm" >
-                <query-tag-component @updateTable="updateTable"></query-tag-component>
+                <query-tag-component 
+                    :queryFormConfig="voidContractConfigForm"
+                    :queryedList="queryedVoidContractList"
+                    @updateTable="updateTagTable"></query-tag-component>
                 <el-button type="primary" size="mini" @click="openCreateVoidContractDialog">创建空合同</el-button>
             </template>
 
@@ -45,11 +48,10 @@
 </template>
 <script>
     import {operateService, saleService} from '../../../../common'
-
+    import {queryTagComponent} from '@/pages/components/index.js'
     import {
         voidContractTableComponent,
         queryComponent,
-        queryTagComponent,
         assignVoidContractDialog,
         createVoidContractDialog,
     } from './voidContractList/index.js'
@@ -94,7 +96,15 @@
             }
         },
         computed:{
-
+            /**
+             * 订单筛选字段
+             */
+            voidContractConfigForm(){
+                return this.$store.state.operateModule.voidContractConfigForm
+            },
+            queryedVoidContractList(){
+                return this.$store.state.operateModule.voidContractList
+            }
         },
         methods: {
              /**
@@ -137,9 +147,17 @@
             async updateTable(){
                 await this.getTableList()
             },
+            async updateTagTable(param){
+                //将查询组件数据变化存入vuex
+                await this.$store.commit('setVoidContractList', {
+                    queryKey: param[0],
+                    queryedList: param[1]
+                })
+                await this.updateTable()
+            },
             prevAndNextClick(val){
                 //设置page查询参数
-                this.$store.commit('setContractList', {
+                this.$store.commit('setVoidContractList', {
                     queryKey: 'page',
                     queryedList: val
                 })
@@ -149,7 +167,7 @@
              */
             async handleCurrentPage(val){
                 //设置page查询参数
-                this.$store.commit('setContractList', {
+                this.$store.commit('setVoidContractList', {
                     queryKey: 'page',
                     queryedList: val
                 })

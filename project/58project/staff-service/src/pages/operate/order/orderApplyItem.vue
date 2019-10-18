@@ -16,7 +16,7 @@
                         <div class="detail-left-line">申请创建人：{{ orderApplyDetail.created_manager_name }}</div>
                         <div class="detail-left-line">申请创建时间：{{ orderApplyDetail.created_at | formDate }}</div>
                         <div class="detail-left-line">来源门店：{{orderApplyDetail.apply_store_name }}</div>
-                        <div class="detail-left-line">来源人：{{orderApplyDetail.apply_manager_name}}</div>
+                        <div class="detail-left-line">来源人：{{orderApplyDetail.apply_manager_name?orderApplyDetail.apply_manager_name : '门店' }}</div>
                     </div>
                 </div>
                 <div class="detail-right">
@@ -114,7 +114,7 @@
                 <div class="card-contains">
                     <div class="detail-left-box">
                         <div class="detail-left-line">来源门店：{{orderApplyDetail.apply_store_name }}</div>
-                        <div class="detail-left-line">来源人：{{orderApplyDetail.apply_manager_name }}</div>
+                        <div class="detail-left-line">来源人：{{orderApplyDetail.apply_manager_name? orderApplyDetail.apply_manager_name :'门店' }}</div>
                     </div>
                 </div>
             </div>
@@ -131,7 +131,7 @@
                 <div class="card-contains">
                     <!-- 员工列表 -->
                     <el-table :data="applyLogTable" class="person-table" :header-cell-style="{height: '48px',background: '#fafafa'}">
-                        <el-table-column label="创建时间" prop="created_at" align="center"></el-table-column>
+                        <el-table-column label="创建时间" prop="created_at" :formatter="created_atFormatter" align="center"></el-table-column>
 
                         <el-table-column label="管理员姓名" prop="manager_name" align="center"></el-table-column>
 
@@ -361,7 +361,16 @@ export default {
          */
         goback(){
             this.$router.push('/operate/operateOrderApplyList')
-        }
+        },
+        /**
+         * 签约时间
+         */
+        created_atFormatter(row, column){
+            if(row.created_at == 0){
+                return '-'
+            }
+            return $utils.formatDate(new Date(row.created_at), 'yyyy-MM-dd')
+        },
     },
     filters: {
         /**

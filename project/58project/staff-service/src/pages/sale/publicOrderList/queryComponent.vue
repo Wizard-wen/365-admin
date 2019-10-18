@@ -1,23 +1,27 @@
 <template>
     <div class="queryBox">
-        <query-search-input
-            @updateTable="updateTable"
+       <query-search-input
+            @updateSearchInput="updateSearchInput"
+            :selectedText="queryOrderList.order_code"
             :queryKey="'order_code'"
             :queryName="'订单编号'"></query-search-input>
         <query-search-list
-            @updateTable="updateTable" 
+            @updateSearchList="updateSearchList"
+            :selectedList="queryOrderList.order_at"
             :queryKey="'order_at'" 
             :queryName="'客户下单时间'" 
             :isSingleQuery="true"
             :queryList="orderFormConfig.order_at"></query-search-list>
         <query-search-list
-            @updateTable="updateTable" 
+            @updateSearchList="updateSearchList"
+            :selectedList="queryOrderList.agent_manager_id"
             :queryKey="'agent_manager_id'" 
             :queryName="'订单经纪人'" 
             :isSingleQuery="true"
             :queryList="orderFormConfig.agent_manager_id"></query-search-list>
         <query-search-list
-            @updateTable="updateTable" 
+            @updateSearchList="updateSearchList"
+            :selectedList="queryOrderList.agent_store_id"
             :queryKey="'agent_store_id'" 
             :queryName="'订单经纪门店'" 
             :isSingleQuery="true"
@@ -28,7 +32,7 @@
 import {
     querySearchList,
     querySearchInput,
-} from './queryComponent/index.js'
+} from '@/pages/components/index.js'
 export default {
     data(){
         return {
@@ -46,10 +50,23 @@ export default {
         orderFormConfig(){
             return this.$store.state.operateModule.orderFormConfig
         },
+        queryOrderList(){
+            return this.$store.state.saleModule.publicOrderList
+        }
     },
     methods: {
-        // 更新表格数据
-        updateTable(){
+        updateSearchInput(queryObject){
+            this.$store.commit('saleSetPublicOrderList', {
+                queryKey: queryObject[0], 
+                queryedList: queryObject[1]
+            })
+            this.$emit('updateTable')
+        },
+        updateSearchList(queryObject){
+            this.$store.commit('saleSetPublicOrderList', {
+                queryKey: queryObject[0], 
+                queryedList: queryObject[1]
+            })
             this.$emit('updateTable')
         }
     },

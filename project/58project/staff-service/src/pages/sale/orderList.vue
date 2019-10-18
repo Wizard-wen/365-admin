@@ -3,20 +3,25 @@
         <sale-order-table-component
             :staffTable="orderApplyTable"
             :maxLength="maxLength"
-            :controlScopeLength="170">
+            :controlScopeLength="presentUser.is_store_manager == 1? 100:170 ">
             <template slot="searchList">
                 <div class="search-list">
                     <query-component @updateTable="updateTable"></query-component>
                 </div>
             </template>
             <template slot="searchForm">
-                <query-tag-component @updateTable="updateTable"></query-tag-component>
+                <query-tag-component 
+                    :queryFormConfig="orderFormConfig"
+                    :queryedList="queryOrderList"
+                    @updateTable="updateTagTable"></query-tag-component>
                 <el-button type="primary" @click="openOrderApplyDialog">订单申请</el-button>
             </template>
 
             <template slot="control" slot-scope="controler">
                 <el-button size="mini" type="text" @click="dealOrder(controler.scoper.row)">处理订单</el-button>
-                <el-button size="mini" type="text" @click="assignOrder(controler.scoper.row)">分派订单</el-button>
+                <el-button size="mini" type="text" 
+                    @click="assignOrder(controler.scoper.row)"
+                    v-if="presentUser.is_store_manager != 1">分派订单</el-button>
             </template>
 
             <template slot="pagination">
@@ -36,20 +41,20 @@
             v-if="assignDialogVisible"
             :openAssignDialog="assignDialogVisible"
             @closeAssignDialog="assignDialogVisible=false"
-            :assignOrderId="assignOrderId"></assign-dialog>
+            :order_id="assignOrderId"></assign-dialog>
         <!-- 订单申请弹出框 -->
         <apply-order-dialog
             v-if="applyOrderDialogVisible"
             :applyOrderDialogVisible="applyOrderDialogVisible"
-            @closeCreateStaffDialog="applyOrderDialogVisible=false"></apply-order-dialog>
+            @closeCreateStaffDialog="applyOrderDialogVisible=false"
+            :order_id="assignOrderId"></apply-order-dialog>
     </div>
 </template>
 <script>
     import {saleService, operateService} from '../../../common'
-
+    import {queryTagComponent} from '@/pages/components/index.js'
     import {
         saleOrderTableComponent,
-        queryTagComponent,
         queryComponent
     } from './orderList/index.js'
 
@@ -106,6 +111,15 @@
              */
             presentUser(){
                 return this.$store.state.loginModule.user
+            },
+            /**
+             * 订单筛选字段
+             */
+            orderFormConfig(){
+                return this.$store.state.operateModule.orderFormConfig
+            },
+            queryOrderList(){
+                return this.$store.state.saleModule.saleOrderList
             }
         },
         methods: {
@@ -116,9 +130,20 @@
                 try{
 
                     this.is_loading = true
+                    //订单默认查询参数
+                    let orderDeafultQueryObject = {}
+                    //如果当前不是店长
+                    if(this.presentUser.is_store_manager == 1){
+                        orderDeafultQueryObject.agent_store_id = [this.presentUser.store_id]
+                        orderDeafultQueryObject.agent_manager_id = [this.presentUser.id]
 
+                    } else {
+                        orderDeafultQueryObject.agent_store_id = [this.presentUser.store_id]
+                    }
+
+                    
                     await Promise.all([
-                        saleService.getOrderList(), //
+                        saleService.getOrderList(3,orderDeafultQueryObject), //
                         operateService.getOrderFormConfig()
                     ]).then((data) =>{
 
@@ -149,6 +174,14 @@
             async updateTable(){
                 await this.getTableList()
             },
+            async updateTagTable(param){
+                //将查询组件数据变化存入vuex
+                await this.$store.commit('saleSetOrderList', {
+                    queryKey: param[0],
+                    queryedList: param[1]
+                })
+                await this.updateTable()
+            },
             prevAndNextClick(val){
               //设置page查询参数
               this.$store.commit('saleSetOrderList', {
@@ -172,12 +205,19 @@
              * @param paramObj 列表参数对象
              */
             dealOrder(paramObj){
-                this.$router.push(`/sale/orderConfig?order_id=${paramObj.id}`)
+                this.$router.push({
+                    path: `/sale/orderConfig`,
+                    query: {
+                        order_id: paramObj.id,
+                        order_type: 2,//2代表来源于订单
+                    }
+                })
             },
             /**
              * 分派订单
              */
-            assignOrder(){
+            assignOrder(row){
+                this.assignOrderId = row.id
                 this.assignDialogVisible = true
             },
             //打开订单申请弹窗

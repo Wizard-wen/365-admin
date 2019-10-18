@@ -1,7 +1,7 @@
 <template>
 
     <el-dialog
-    v-loading="loading"
+        v-loading="loading"
         title="分配订单"
         :visible.sync="openAssignDialog"
         :show-close="false"

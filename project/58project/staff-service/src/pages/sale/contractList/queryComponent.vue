@@ -1,51 +1,61 @@
 <template>
     <div class="queryBox">
         <query-search-input
-            @updateTable="updateTable"
+            @updateSearchInput="updateSearchInput"
+            :selectedText="queryedSaleContractList.contract_code"
             :queryKey="'contract_code'"
             :queryName="'合同流水号'"></query-search-input>
         <query-search-input
-            @updateTable="updateTable"
+            @updateSearchInput="updateSearchInput"
+            :selectedText="queryedSaleContractList.contract_number"
             :queryKey="'contract_number'"
             :queryName="'合同编号'"></query-search-input>
         <query-search-list
-            @updateTable="updateTable"
+            @updateSearchList="updateSearchList"
+            :selectedList="queryedSaleContractList.sign_at"
             :queryKey="'sign_at'"
             :queryName="'签约时间'"
             :queryList="saleContractConfigForm.sign_at"
             :isSingleQuery="true"></query-search-list>
         <query-search-list
-            @updateTable="updateTable"
+            @updateSearchList="updateSearchList"
+            :selectedList="queryedSaleContractList.sign_manager_id"
             :queryKey="'sign_manager_id'"
             :queryName="'经纪人'"
             :queryList="saleContractConfigForm.sign_manager_id"
             :isSingleQuery="true"></query-search-list>
         <query-search-list
-            @updateTable="updateTable"
+            @updateSearchList="updateSearchList"
+            :selectedList="queryedSaleContractList.sign_store_id"
             :queryKey="'sign_store_id'"
             :queryName="'经纪门店'"
             :queryList="saleContractConfigForm.sign_store_id"
             :isSingleQuery="true"></query-search-list>
         <query-search-list
-            @updateTable="updateTable"
+            @updateSearchList="updateSearchList"
+            :selectedList="queryedSaleContractList.type"
             :queryKey="'type'"
             :queryName="'合同状态'"
             :queryList="saleContractConfigForm.type"
             :isSingleQuery="true"></query-search-list>
         <query-search-input
-            @updateTable="updateTable"
+            @updateSearchInput="updateSearchInput"
+            :selectedText="queryedSaleContractList.sign_user_name"
             :queryKey="'sign_user_name'"
             :queryName="'雇主姓名'"></query-search-input>
         <query-search-input
-            @updateTable="updateTable"
+            @updateSearchInput="updateSearchInput"
+            :selectedText="queryedSaleContractList.sign_user_phone"
             :queryKey="'sign_user_phone'"
             :queryName="'雇主电话'"></query-search-input>
         <query-search-input
-            @updateTable="updateTable"
+            @updateSearchInput="updateSearchInput"
+            :selectedText="queryedSaleContractList.sign_staff_name"
             :queryKey="'sign_staff_name'"
             :queryName="'服务人员姓名'"></query-search-input>
         <query-search-input
-            @updateTable="updateTable"
+            @updateSearchInput="updateSearchInput"
+            :selectedText="queryedSaleContractList.sign_staff_code"
             :queryKey="'sign_staff_code'"
             :queryName="'服务人员工号'"></query-search-input>
     </div>
@@ -54,7 +64,7 @@
 import {
     querySearchList,
     querySearchInput,
-} from './queryComponent/index.js'
+} from '@/pages/components/index.js'
 export default {
     data(){
         return {
@@ -72,10 +82,23 @@ export default {
         saleContractConfigForm(){
             return this.$store.state.saleModule.saleContractConfigForm
         },
+        queryedSaleContractList(){
+            return this.$store.state.saleModule.saleContractList
+        }
     },
     methods: {
-        // 更新表格数据
-        updateTable(){
+        updateSearchInput(queryObject){
+            this.$store.commit('saleSetContractList', {
+                queryKey: queryObject[0], 
+                queryedList: queryObject[1]
+            })
+            this.$emit('updateTable')
+        },
+        updateSearchList(queryObject){
+            this.$store.commit('saleSetContractList', {
+                queryKey: queryObject[0], 
+                queryedList: queryObject[1]
+            })
             this.$emit('updateTable')
         }
     },

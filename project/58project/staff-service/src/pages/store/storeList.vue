@@ -11,7 +11,10 @@
             </template>
 
             <template slot="searchForm">
-                <query-tag-component @updateTable="updateTable"></query-tag-component>
+                <query-tag-component 
+                    :queryFormConfig="queryFormConfig"
+                    :queryedList="queryedList"
+                    @updateTable="updateTagTable"></query-tag-component>
                 <el-button type="primary" @click="openCreateStoreDialog">创建门店</el-button>
             </template>
 
@@ -39,11 +42,11 @@
 </template>
 <script>
 	import {storeService,$utils} from '../../../common'
-	import {createStoreDialog} from './storeList/index.js'
+    import {createStoreDialog} from './storeList/index.js'
+    import {queryTagComponent} from '@/pages/components/index.js'
     import {
         storeTableComponent,
         queryComponent,
-        queryTagComponent,
     } from './storeList/index.js'
     export default {
         data() {
@@ -67,7 +70,21 @@
             storeTableComponent,
             queryComponent,
             queryTagComponent,
-		},
+        },
+        computed: {
+            /**
+             * 查询对象
+             */
+            queryedList(){
+                return this.$store.state.storeModule.storeList
+            },
+            /**
+             * 查询配置参数
+             */
+            queryFormConfig(){
+                return this.$store.state.storeModule.storeFormConfig
+            }
+        },
         methods: {
              /**
              * 请求表格数据
@@ -104,6 +121,14 @@
             // 由查询组件触发的更新表格事件
             async updateTable(){
                 await this.getTableList()
+            },
+            async updateTagTable(param){
+                //将查询组件数据变化存入vuex
+                await this.$store.commit('setStoreList', {
+                    queryKey: param[0],
+                    queryedList: param[1]
+                })
+                await this.updateTable()
             },
             // 上一页和下一页钩子
             prevAndNextClick(val){

@@ -12,7 +12,10 @@
             </template>
 
             <template slot="searchedForm">
-                <query-tag-component @updateTable="updateTable"></query-tag-component>
+                <query-tag-component 
+                    :queryFormConfig="workerConfigForm"
+                    :queryedList="queryedList"
+                    @updateTable="updateTagTable"></query-tag-component>
                 <el-button type="primary" @click="exportReturnStaff(1)">导入回访</el-button>
                 <el-button type="primary" @click="editStaff(0)">创建服务人员</el-button>
             </template>
@@ -45,11 +48,10 @@
 </template>
 <script>
     import {operateService} from '../../../../common'
-
+    import {queryTagComponent} from '@/pages/components/index.js'
     import {
         queryComponent,
         workerTableComponent,
-        queryTagComponent,
         returnStaffDialog,
     } from './workerList/index.js'
 
@@ -95,23 +97,29 @@
             /**
              * 服务人员信息
              */
-            workerConfigList(){
+            workerConfigForm(){
                 return this.$store.state.operateModule.workerConfigForm
-            }
+            },
+            /**
+             * 查询对象
+             */
+            queryedList(){
+                return this.$store.state.operateModule.workerList
+            },
         },
         methods: {
             computeStringLength(array, listKey, configKey){
                 let string = 0
                 if(Array.isArray(array)){
                     array.forEach((it, inds) =>{
-                        if(this.workerConfigList[configKey].find(i => i.id == it)){
-                            let baseLength = parseInt(this.workerConfigList[configKey].filter(i => i.id == it)[0].name.length *12 )
+                        if(this.workerConfigForm[configKey].find(i => i.id == it)){
+                            let baseLength = parseInt(this.workerConfigForm[configKey].filter(i => i.id == it)[0].name.length *12 )
                             string += (baseLength + 27)
                         }
                     })
                 } else {
-                    if(this.workerConfigList[configKey].find(i => i.id == array)){
-                        string = parseInt(this.workerConfigList[configKey].filter(i => i.id == array)[0].name.length * 12) + 27
+                    if(this.workerConfigForm[configKey].find(i => i.id == array)){
+                        string = parseInt(this.workerConfigForm[configKey].filter(i => i.id == array)[0].name.length * 12) + 27
                     } else {
                         string = 0
                     }
@@ -179,6 +187,15 @@
             // 由查询组件触发的更新表格事件
             async updateTable(){
                 await this.getTableList()
+            },
+            //
+            async updateTagTable(param){
+                //将查询组件数据变化存入vuex
+                await this.$store.commit('setWorkerList', {
+                    queryKey: param[0],
+                    queryedList: param[1]
+                })
+                await this.updateTable()
             },
             prevAndNextClick(val){
               //设置page查询参数

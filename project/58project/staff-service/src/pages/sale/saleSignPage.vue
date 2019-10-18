@@ -166,7 +166,7 @@
                             <el-input type="textarea" v-model="signForm.remarks"></el-input>
                         </el-form-item>
                         <el-form-item label="合同附件" prop="accessory" ref="accessory">
-                            <el-upload
+                            <!-- <el-upload
                                 accept=".jpg,.jpeg,.png,.gif,.bmp,.pdf,.JPG,.JPEG,.PBG,.GIF,.BMP,.PDF"
                                 action="/admin/common/uploadImage"
                                 :on-success="uploadSuccess"
@@ -175,7 +175,14 @@
                                 list-type="picture-card"
                                 :headers="uploadHeader">
                                 <i class="el-icon-plus"></i>
-                            </el-upload>
+                            </el-upload> -->
+                            <photo-component
+                                :pictureUrlArrtibute="'path'"
+                                :isEdit="true"
+                                :width="'210px'"
+                                :height="'297px'"
+                                v-model="signForm.accessory"
+                                :title="'合同附件'"></photo-component>
                         </el-form-item>
                     </div>
                 </div>
@@ -192,7 +199,12 @@
 import {
     selectTagComponent,} from '@/pages/components'
     import {saleService, operateService} from '../../../common'
+    import {photoComponent} from '../operate/worker/workerItem/index.js'
 export default {
+    components: {
+        selectTagComponent,
+        photoComponent,
+    },
     data(){
         var _this = this
         const validator = {
@@ -389,9 +401,7 @@ export default {
             }
         }
     },
-    components: {
-        selectTagComponent,
-    },
+
     computed:{
         /**
          * 订单签约字段

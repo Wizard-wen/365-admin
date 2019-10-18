@@ -116,13 +116,14 @@ export const saleModule = {
             identify: '',//身份证号
             address: '',//地址
             service_region: [],//服务地区
-            education: '',//教育程度
+            education: [],//教育程度
             urgent_phone: '',//紧急联系人电话
             bank_card: '',//银行卡号
             course: [],//参加培训
             teacher_comment:'',//教师评语
             paper_category: [],//证书标签
             source: [],//信息来源
+            source_name: '',//来源名城
             manager: [],//创建人
             updated_type: [],//更新时间
         },
@@ -182,7 +183,7 @@ export const saleModule = {
         /**
          * 订单列表查询参数
          */
-        orderList: {
+        saleOrderList: {
             page: 1, //请求页码
             pageNumber: 20,//单页信息数量
             order_code: '',//订单编号
@@ -217,7 +218,7 @@ export const saleModule = {
         /**
          *  合同列表查询字段 
          */
-        contractList: {
+        saleContractList: {
             /*********************表格字段查询******************************/
             page: 1, //请求页码
             pageNumber: 10,//单页信息数量
@@ -273,7 +274,7 @@ export const saleModule = {
         },
         //设置订单列表查询字段
         saleSetOrderList(state,payload){
-            state.orderList[payload.queryKey] = payload.queryedList
+            state.saleOrderList[payload.queryKey] = payload.queryedList
         },
         //设置公共订单列表查询字段
         saleSetPublicOrderList(state,payload){
@@ -281,7 +282,7 @@ export const saleModule = {
         },
         //设置合同列表查询字段
         saleSetContractList(state,payload){
-            state.contractList[payload.queryKey] = payload.queryedList
+            state.saleContractList[payload.queryKey] = payload.queryedList
         },
         //设置合同相关搜索接口
         setSaleContractConfigForm(state,saleContractConfigForm){
