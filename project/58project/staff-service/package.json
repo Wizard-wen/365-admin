@@ -11,10 +11,12 @@
   },
   "dependencies": {
     "axios": "^0.18.0",
+    "echarts": "^4.4.0",
     "element-ui": "^2.4.11",
     "html2canvas": "^1.0.0-rc.1",
     "sass-resources-loader": "^2.0.0",
     "vue": "^2.5.2",
+    "vue-echarts": "^4.0.4",
     "vue-router": "^3.0.1",
     "vuex": "^3.0.1",
     "vuex-persistedstate": "^2.5.4"

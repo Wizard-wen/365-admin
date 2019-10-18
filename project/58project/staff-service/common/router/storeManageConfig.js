@@ -4,6 +4,7 @@
 import storeList from '@/pages/store/storeList.vue'
 import storeItem from '@/pages/store/storeItem.vue'
 import storeEdit from '@/pages/store/storeEdit.vue'
+import storeStatistic from '@/pages/store/storeStatistic.vue'
 
 export const storeManageConfigModule = [
     {
@@ -20,5 +21,10 @@ export const storeManageConfigModule = [
         path: '/store/storeEdit',
         name: 'storeEdit',
         component: storeEdit,
+    },
+    {
+        path: '/store/storeStatistic',
+        name: 'storeStatistic',
+        component: storeStatistic,
     },
 ]

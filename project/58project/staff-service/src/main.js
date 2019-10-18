@@ -14,6 +14,17 @@ import 'element-ui/lib/theme-chalk/index.css';
 
 Vue.use(ElementUI);
 
+import ECharts from 'vue-echarts'
+import 'echarts/lib/chart/line'
+import 'echarts/lib/chart/pie'
+import 'echarts/lib/chart/bar'
+
+import 'echarts/lib/component/title'; //引入标题组件
+import 'echarts/lib/component/legend'; //引入图例组件
+import 'echarts/lib/component/tooltip'; //引入图例组件
+
+Vue.component('chart', ECharts)
+
 Vue.prototype.$axios = axios;
 
 //引入根组件

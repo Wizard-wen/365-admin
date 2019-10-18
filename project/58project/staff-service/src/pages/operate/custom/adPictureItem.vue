@@ -19,7 +19,7 @@
                 :show-all-levels="false"></el-cascader>
         </el-form-item>
 
-        <upload-single-picture v-else v-model="adPictureForm.activity_url_object" :label="'跳转页详情图片'"></upload-single-picture>
+        <upload-single-picture v-else v-model="adPictureForm.activity_object" :label="'跳转页详情图片'"></upload-single-picture>
         
         <el-form-item>
             <el-button type="primary" @click="editAdPositionResource('adPictureForm')">提交</el-button>
@@ -76,7 +76,7 @@ export default {
                 resource_object: {},//广告图片对象
                 jump_type: 1,//跳转页面类别
                 client_category_id: 0,//详情页id
-                activity_url_object: {},//活动图片对象
+                activity_object: {},//活动图片对象
             },
             //图片资源是否是编辑
             isResourceDialogEdit: false,

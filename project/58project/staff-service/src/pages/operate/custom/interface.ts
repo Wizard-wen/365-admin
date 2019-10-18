@@ -66,7 +66,7 @@ export interface adItem{
     
     client_category_id:string;//详情页id
 
-    activity_url_object: {
+    activity_object: {
         id:string;
         type: string;
         url: string;
