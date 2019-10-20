@@ -59,7 +59,9 @@ export default {
             editResourceVideoForm: {
                 name: '',//图片名称
                 teacher: '',//主讲人
+                picture_object: {}, //视频缩略图
                 video_url: '', //视频链接
+                video_detail_object: {}, //资源列表
             },
             editResourceVideoRules: {
                 name: [

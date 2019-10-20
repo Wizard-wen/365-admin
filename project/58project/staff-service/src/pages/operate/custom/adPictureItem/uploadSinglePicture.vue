@@ -60,6 +60,13 @@ export default {
             default: ''
         }
     },
+    watch: {
+        value: function(newVal, oldVal){
+            if(newVal!=oldVal){
+                this.pictureObject = newVal
+            }
+        }
+    },
     data(){
         return {
             //资源图片弹窗

@@ -100,6 +100,7 @@ export default {
                 await customService.getAdPositionResource(this.$route.query.position_id,this.$route.query.resource_id).then(data =>{
                     if(data.code == '0'){
                         this.adPictureForm = data.data
+                        this.adPictureForm.resource_object = data.data.resource_object
                         this.is_loading = false
                     }
                 }).catch(error =>{

@@ -94,6 +94,7 @@ export default {
                 id: '',
                 name: '',//图片名称
                 type: 1,//图片类型
+                icon: '',//新添加的图片
                 url: '',//图片路径
             },
             editResourcePictureRules: {
@@ -120,6 +121,7 @@ export default {
         },
         //头像上传成功
         iconUploadSuccess(res, file) {
+            this.editResourcePictureForm.icon = res.data.path;
             this.editResourcePictureForm.url = res.data.path;
         },
         /**

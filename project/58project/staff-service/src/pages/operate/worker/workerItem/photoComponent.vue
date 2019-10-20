@@ -189,7 +189,6 @@ export default {
         showPhotoblack(item,index, state){
             
             if(state == '0'){
-                console.log(1)
                 this.photo_fileList[index].isBack = true
             } else {
                 this.photo_fileList[index].isBack = false

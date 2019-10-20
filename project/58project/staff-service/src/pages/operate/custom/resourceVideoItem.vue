@@ -106,7 +106,6 @@ export default {
          * 提交数据
          */
         async onSubmit(formName){
-            debugger
             await this.$refs[formName].validate(async (valid) => {
                 if (valid) {
                     //校验并提交

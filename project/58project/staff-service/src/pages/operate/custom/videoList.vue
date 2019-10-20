@@ -9,7 +9,6 @@
             </div>
         </div>
         <edit-resource-video-dialog
-            :resourceVideoItem="resourceVideoItem"
             v-if="editResourceVideoVisible"
             :editResourceVideoVisible="editResourceVideoVisible"
             @closeEditResourcePictureDialog="closeEditResourcePictureDialog"></edit-resource-video-dialog>
@@ -85,7 +84,7 @@ export default {
             //创建资源图片弹窗
             editResourceVideoVisible: false,
             //当前编辑的资源图片
-            resourceVideoItem:{},
+            // resourceVideoItem:{},
         }
     },
     filters: {
@@ -163,7 +162,7 @@ export default {
          * 打开创建新资源图片弹窗
          */
         openEditResourceVideoDialog(item){
-            this.resourceVideoItem =  item
+            // this.resourceVideoItem =  item
             this.editResourceVideoVisible = true
         },
         /**

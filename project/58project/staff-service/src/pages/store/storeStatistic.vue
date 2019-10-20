@@ -34,7 +34,7 @@
             </div>
             <div class="card">
                 <div class="title">平均转化率</div>
-                <div class="number">{{`103`}}</div>
+                <div class="number">{{`70%`}}</div>
                 <div class="statistic" >
                 <div style="height: 30px;width: 100%">
                     <el-progress :text-inside="true" :stroke-width="18" :percentage="70"></el-progress>
@@ -42,7 +42,7 @@
                     
                 </div>
                 <div class="message">本月平均转化率&nbsp;&nbsp;
-                    <span>{{`10`}}</span>
+                    <span>{{`60%`}}</span>
                 </div>
             </div>
             <div class="card">
@@ -66,22 +66,43 @@
                 <div class="title-contains">
                     <div class="left">销售额走势</div>
                     <div class="right">
-                        <el-tag>这块可以切换时间范围 本周 本月 本年</el-tag>
+                        <div class="filter-box">
+                            <div class="filter-item">今日</div>
+                            <div class="filter-item">本月</div>
+                            <div class="filter-item">本季</div>
+                            <div class="filter-item">本年</div>
+                        </div>
+                        <el-date-picker
+                            v-model="value4"
+                            type="daterange"
+                            range-separator="至"
+                            start-placeholder="开始日期"
+                            end-placeholder="结束日期"></el-date-picker>
+                        
                     </div>
                 </div>
             </div>
             <div class="detail-show-module">
                 <chart ref="chart1" class="charts-box" :options="orgOptions" :auto-resize="true"></chart>
                 <div class="sort-box">
-                    排名
+                    <div class="sort-title">
+                        销售额排名
+                    </div>
+                    <div class="sort-list">
+                        <div 
+                            class="sort-list-item"
+                            v-for="(item, index) in 7" 
+                            :key="index">
+                            <div :class="['rank',index < 3?'rank-high': '']">{{item}}</div>
+                            <div class="sort-item-name">365总店</div>
+                            <div class="sort-item-number">334455</div>
+                        </div>
+                    </div>
                 </div>
             </div>
             
         </div>
         <chart ref="chart2" class="charts-box" :options="orgOptions2" :auto-resize="true"></chart>
-
-        <!-- <chart ref="chart2"  :options="options3" :auto-resize="true"></chart> -->
-        <el-progress :percentage="100" status="success"></el-progress>
     </div>
 </template>
 
@@ -90,6 +111,7 @@ export default {
     name: 'HelloWorld',
     data () {
         return {
+            value4: '',
             orgOptions: {},
             orgOptions2: {},
             options3: {},
@@ -99,14 +121,44 @@ export default {
         this.orgOptions = {
             xAxis: {
                 type: 'category',
-                data: ['4', '5', '6', '7月', '8月', '9月', '10月']
+                data: ['4', '5', '6', '7月', '8月', '9月', '10月'],
+                
+            },
+            toolbox: {
+                feature: {
+                    dataZoom: {
+                        yAxisIndex: 'none'
+                    },
+                    restore: {},
+                    saveAsImage: {}
+                }
+            },
+            tooltip : {
+                trigger: 'axis',
+                axisPointer: {
+                    type: 'cross',
+                    animation: false,
+                    label: {
+                        backgroundColor: '#505765'
+                    }
+                },
+                formatter: `月份：{b}<br/>金额：{c}`
             },
             yAxis: {
-                type: 'value'
+                type: 'value',
+                splitLine: {
+                    lineStyle: {
+                        type: 'dashed'
+                    }
+                }
             },
             series: [{
                 data: [18, 9, 10, 34, 29, 13, 20],
-                type: 'line',
+                type: 'bar',
+                itemStyle: {
+                    color: '#58afff',
+                },
+                barWidth: 35,
                 smooth: true
             }]
         }
@@ -295,6 +347,23 @@ export default {
                     white-space: nowrap;
                     text-overflow: ellipsis;
                 }
+                .right{
+                    display: flex;
+                    .filter-box{
+                        display: flex;
+                        margin-right: 20px;
+                        .filter-item{
+                            line-height: 48px;
+                            margin-left: 24px;
+                            color: rgba(0,0,0,.65);
+                            font-size: 14px;
+                            cursor: pointer;
+                        }
+                        .filter-item:hover{
+                            color: #58afff;
+                        }
+                    }
+                }
             }
 
         }
@@ -309,9 +378,48 @@ export default {
                 flex: 1;
             }
             .sort-box{
-                width:33%;
+                width:28%;
                 height: 400px;
-                border: 1px solid #ccc;
+                .sort-title{
+                    height: 30px;
+                    line-height: 30px;
+                    width: 100%;
+                    margin-bottom: 15px;
+                    color: rgba(0,0,0,.85);
+                    font-weight: 500;
+                }
+                .sort-list{
+                    // margin-top: 16px;
+                    
+                    .sort-list-item{
+                        display: flex;
+                        margin-top: 16px;
+                        .rank{
+                            line-height: 22px;
+                            text-align: center;
+                            height: 22px;
+                            width: 22px;
+                            border-radius: 50%;
+                            margin-right: 16px;
+                            color:rgba(0,0,0,.65);
+                        }
+                        .rank-high{
+                            background: #314659;
+                            color: #fff;
+                        }
+                        .sort-item-name{
+                            line-height: 22px;
+                            flex: 1;
+                            color: rgba(0,0,0,.65);
+                        }
+                        .sort-item-number{
+                            line-height: 22px;
+                            width:60px;
+                            color: rgba(0,0,0,.65);
+                        }
+                    }
+                    
+                }
             }
         }
     }
