@@ -1,5 +1,6 @@
 <template>
     <page-edit-component
+        v-loading="is_loading"
         :title="workerForm.name">
         <template slot="icon">
             <div class="icon">
@@ -26,57 +27,12 @@
             <make-image-component
                 :makeImageDialogVisible="makeImageDialogVisible"
                 v-if="makeImageDialogVisible"
-                @closeMakeImageDialog="makeImageDialogVisible = false">
+                @closeMakeImageDialog="makeImageDialogVisible = false"
+                :width="800"
+                :height="565">
                 <template slot="pictureContains">
-                    <div class="picture-contains">
-                        <div class="base">
-                            <div class="item">
-                                <div class="label">姓名：</div>
-                                <div class="value">{{workerForm.name || ''}}</div>
-                            </div>
-                            <div class="item">
-                                <div class="label">工龄：</div>
-                                <div class="value">{{workerForm.working_age_val || ''}}</div>
-                            </div>
-                            <div class="item">
-                                <div class="label">年龄</div>
-                                <div class="value">{{workerForm.age || ''}}</div>
-                            </div>
-                            <div class="item">
-                                <div class="label">学历：</div>
-                                <div class="value">{{workerForm.education_val || ''}}</div>
-                            </div>
-                            <div class="item">
-                                <div class="label">籍贯：</div>
-                                <div class="value">{{workerForm.birthplace || ''}}</div>
-                            </div>
-                            <div class="item">
-                                <div class="label">服务类型：</div>
-                                <div class="value">{{workerForm.type || ''}}</div>
-                            </div>
-                            <div class="item maxitem">
-                                <div class="label">联系地址：</div>
-                                <div class="value maxvalue">{{workerForm.address || ''}}</div>
-                            </div>
-
-                            <div class="item maxitem">
-                                <div class="label">职业类型：</div>
-                                <div class="value maxvalue">{{workerForm.service_category || ''}}</div>
-                            </div>
-                            <div class="item maxitem">
-                                <div class="label">服务区域：</div>
-                                <div class="value maxvalue">{{workerForm.service_region || ''}}</div>
-                            </div>
-                            <div class="item maxitem">
-                                <div class="label">技能证书：</div>
-                                <div class="value maxvalue">{{workerForm.paper_category || ''}}</div>
-                            </div>
-                        </div>
-                        <div class="icon">
-                            <img v-if="workerForm.icon" style="height:100px;width:100px;" :src="'./resource/'+workerForm.icon" alt="">
-                            <div v-else class="no-img">暂无头像</div>
-                        </div>
-                    </div>
+                    <worker-picture-component
+                        :pictureForm="workerForm"></worker-picture-component>
                 </template>
             </make-image-component>
         </template>
@@ -389,11 +345,13 @@ import {operateService, $utils} from '../../../common'
 import {
     paperComponent,
     photoComponent,
-    makeImageComponent} from '../operate/worker/workerItem/index.js'
+    workerPictureComponent,
+    } from '../operate/worker/workerItem/index.js'
 
 import {
     pictureDetailDialog,
     selectTagComponent,
+    makeImageComponent,
     pageEditComponent} from '@/pages/components/index.js'
 
 export default {
@@ -403,10 +361,12 @@ export default {
         selectTagComponent,//单选、多选框组件
         makeImageComponent, //创建图片组件
         pageEditComponent,
+        workerPictureComponent,
         pictureDetailDialog,
     },
     data() {
         return {
+            is_loading: false,
             sexList: [{id: 1, name: '男'},{id: 2, name: '女'},],
             //生成名片弹窗显示隐藏
             makeImageDialogVisible:false,//是否打开创建图片弹窗
@@ -793,55 +753,6 @@ export default {
     text-align: center;
     color: #fff;
     background: rgba(0,0,0,0.3)
-}
-.picture-contains{
-    position: relative;
-    height: 100%;
-    width: 100%;
-    .base{
-        height: 200px;
-        width: 500px;
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: space-between;
-        .item{
-            height: 30px;
-            line-height: 30px;
-            width: 250px;
-            display: flex;
-            font-size: 16px;
-            font-weight: bold;
-            .label{
-                width: 80px;
-            }
-            .value{
-                width: 170px;
-            }
-        }
-        .maxitem {
-            width: 500px;
-            .maxvalue {
-            width: 420px;
-            }
-        }
-    }
-    .icon{
-        position:absolute;
-        right:50px;
-        top: 0;
-        height: 100px;
-        width: 100px;
-        // background:#185;
-        .no-img{
-            height: 100px;
-            width: 100px;
-            // background: #dcdfe6;
-            line-height: 100px;
-            font-size: 16px;
-            text-align: center;
-
-        }
-    }
 }
 
 </style>

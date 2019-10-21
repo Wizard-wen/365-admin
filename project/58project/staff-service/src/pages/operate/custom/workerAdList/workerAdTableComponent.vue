@@ -133,7 +133,6 @@
         height:24px;
         line-height: 24px;
     }
-    .worker{
         .list-table{
             height: calc(100vh - 50px);
             width:100%;
@@ -170,5 +169,4 @@
                 }
             }
         }
-    }
 </style>

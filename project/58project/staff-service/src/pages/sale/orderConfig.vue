@@ -6,7 +6,7 @@
             </div>
             <div class="btn-group">
                 <!-- 仅店长有此权限 -->
-                <el-button type="primary" @click="assignOrder" size="mini">分派</el-button>
+                <el-button type="primary" @click="assignOrder" v-if="presentUser.is_store_manager != 1" size="mini">分派</el-button>
                 <el-button type="primary" size="mini" v-if="orderBase.type == 2" @click="goSignOrder(1)">续约</el-button>
                 <el-button type="danger" size="mini" v-if="orderBase.type == 3" @click="determinateOrder">终止订单</el-button>
                 <el-button size="mini" @click="goback">返回</el-button>
@@ -113,6 +113,21 @@
                     </div>
                 </div>
             </div>
+            <!-- 生成订单名片组件 -->
+            <template>
+                <make-image-component
+                    :height="500"
+                    :width="460"
+                    :makeImageDialogVisible="makeImageDialogVisible"
+                    v-if="makeImageDialogVisible"
+                    @closeMakeImageDialog="makeImageDialogVisible = false">
+                    <template slot="pictureContains">
+                        <order-picture-component
+                            :pictureForm="orderBase"></order-picture-component>
+                    </template>
+                </make-image-component>
+            </template>
+            
             <change-order-dialog
                 v-if="orderFieldVisible"
                 :orderId="orderBase.id"
@@ -270,8 +285,10 @@
         assignDialog,
         matchServiceList,
         contractList,
+        orderPictureComponent,
         changeOrderDialog} from './orderConfig/index.js'
     import {
+        makeImageComponent,
         tableTagComponent} from '@/pages/components'
 export default {
     data(){
@@ -296,6 +313,8 @@ export default {
             assignDialogVisible:false,
 
             matched_staff: null,//备选服务人员信息对象
+            //生成订单图片组件
+            makeImageDialogVisible: false,
         }
     },
     filters: {
@@ -312,7 +331,9 @@ export default {
         matchServiceList,
         contractList,
         changeOrderDialog,
-        tableTagComponent
+        tableTagComponent,
+        orderPictureComponent,
+        makeImageComponent,
     },
     computed:{
         /**
@@ -399,8 +420,8 @@ export default {
         /**
          * 生成订单图片
          */
-        makeOrderImage(){
-            
+        makeOrderImage(){   
+            this.makeImageDialogVisible = true
         },
         /**
          * 获取订单信息

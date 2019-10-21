@@ -1,11 +1,12 @@
 <template>
-    <div class="worker" v-loading="is_loading">
+    <div class="order" v-loading="is_loading">
         <sale-order-table-component
-            :staffTable="orderApplyTable"
+            :tableData="orderApplyTable"
             :maxLength="maxLength"
             :controlScopeLength="presentUser.is_store_manager == 1? 100:170 ">
+
             <template slot="searchList">
-                <div class="search-list">
+                <div class="left-search-module">
                     <query-component @updateTable="updateTable"></query-component>
                 </div>
             </template>

@@ -173,11 +173,11 @@
 import {operateService, $utils} from '../../../common'
 
 import {
-    paperComponent,
-    makeImageComponent} from '../operate/worker/workerItem/index.js'
+    paperComponent,} from '../operate/worker/workerItem/index.js'
 
 import {
     pictureDetailDialog,
+    makeImageComponent,
     selectTagComponent} from '@/pages/components'
 
 export default {

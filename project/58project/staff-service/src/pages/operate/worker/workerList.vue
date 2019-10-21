@@ -3,7 +3,7 @@
         <worker-table-component
             :tableData="workerTable"
             :maxLength="maxLength"
-            :controlScopeLength="170">
+            :controlScopeLength="200">
 
             <template slot="searchList">
                 <div class="left-search-module">
@@ -21,6 +21,8 @@
             </template>
 
             <template slot="control" slot-scope="controler">
+                
+                <el-button size="mini" type="text" @click="showWorker(controler.scoper.row)">查看</el-button>
                 <el-button size="mini" type="text" @click="editStaff(1, controler.scoper.row)">编辑</el-button>
                 <el-button size="mini" type="text" style="color:#f56c6c" v-if="controler.scoper.row.type == 'enable'" @click="openChangeStaffStatus(controler.scoper.row)">停用</el-button>
                 <el-button size="mini" type="text" style="color:#67c23a" @click="openChangeStaffStatus(controler.scoper.row)" v-else>启用</el-button>
@@ -290,6 +292,18 @@
                     query: {
                         type: type, //编辑为1 创建为 0
                         id: type == 1? row.id : 0
+                    }
+                })
+            },
+            /**
+             * 查看服务人员详情
+             */
+            showWorker(row){
+                this.$router.push({
+                    path: "/worker/workerItemShow",
+                    query: {
+                        id: row.id,
+                        from: 1,//
                     }
                 })
             },

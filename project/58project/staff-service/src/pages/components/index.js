@@ -3,6 +3,8 @@
 import cascaderComponent from './cascaderComponent.vue'
 //照片详情组件
 import pictureDetailDialog from './pictureDetailDialog.vue'
+//生成图片组件
+import makeImageComponent from './makeImageComponent.vue'
 
 
 /**
@@ -36,6 +38,7 @@ import pageEditComponent from './pageEditComponent.vue'
 export {
     cascaderComponent,
     pictureDetailDialog,
+    makeImageComponent,
     configTagComponent,
     selectTagComponent,
     cascaderTagComponent,

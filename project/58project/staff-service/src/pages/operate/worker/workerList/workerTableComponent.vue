@@ -13,7 +13,7 @@
             
             <el-table 
                 :data="tableData" 
-                class="worker-table" 
+                class="table-list" 
                 :stripe="true" 
                 border 
                 :fit="true"
@@ -370,7 +370,7 @@
                 flex: 1;
             }
         }
-        .worker-table{
+        .table-list{
             height: calc(100% - 72px);
             width: 100%;
             margin: 0 auto;

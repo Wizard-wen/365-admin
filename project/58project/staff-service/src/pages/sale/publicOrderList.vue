@@ -1,11 +1,11 @@
 <template>
     <div class="worker" v-loading="is_loading">
         <sale-public-order-table-component
-            :staffTable="orderApplyTable"
+            :tableData="orderApplyTable"
             :maxLength="maxLength"
-            :controlScopeLength="100">
+            :controlScopeLength="80">
             <template slot="searchList">
-                <div class="search-list">
+                <div class="left-search-module">
                     <query-component @updateTable="updateTable"></query-component>
                 </div>
             </template>

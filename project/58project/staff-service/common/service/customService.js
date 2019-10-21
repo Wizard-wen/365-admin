@@ -6,8 +6,8 @@ export default {
     /**
      * 获取广告位列表
      */
-    getAdPositionList(){
-        return customRequest.getAdPositionList()
+    getAdPositionList(paramObj){
+        return customRequest.getAdPositionList(paramObj)
     },
     /**
      * 获取全部资源列表

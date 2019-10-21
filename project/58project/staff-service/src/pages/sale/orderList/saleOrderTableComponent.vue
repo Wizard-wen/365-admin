@@ -1,15 +1,15 @@
 <template>
-    <div class="list-table">
+    <div class="table-box">
         <!-- 模糊搜索插槽 -->
         <slot name="searchList"></slot>
 
-        <div class="table-list">
-            <div class="search-form">
+        <div class="right-contains">
+            <div class="searched-form">
                 <slot name="searchForm"></slot>
             </div>  
             <el-table 
-                :data="staffTable" 
-                class="worker-table" 
+                :data="tableData" 
+                class="table-list" 
                 :stripe="true" 
                 border 
                 :fit="true"
@@ -176,7 +176,7 @@
         },
         props: {
             //员工信息列表
-            staffTable: {
+            tableData: {
                 type: Array,
                 default:function(){return []}
             },
@@ -264,47 +264,41 @@
         white-space:nowrap;
         width: 129px;
     }
-    .worker{
-        .list-table{
-            height: calc(100vh - 50px);
-            width:100%;
+//表格
+.table-box{
+    height: calc(100vh - 50px);
+    width:100%;
+    display: flex;
+    //左侧搜索模块
+    .left-search-module{
+        width: 200px;
+        height: 100%;
+        overflow-y: auto;
+        background: #fff;
+        margin-right: 5px;
+        margin-left: 5px;
+    }
+    .right-contains{
+        overflow: auto;
+        flex:1;
+        width: calc(100% - 180px);
+        height: calc(100vh - 50px);
+        .searched-form{
+            width: 100%;
             display: flex;
-            .search-list{
-                width: 200px;
-                height: 100%;
-                overflow-y: auto;
-                background: #fff;
-                margin-right: 5px;
-                margin-left: 5px;
-            }
-            .table-list{
-                overflow: auto;
-                flex:1;
-                width: calc(100% - 180px);
-                height: calc(100vh - 50px);
-                .search-form{
-                    height: 40px;
-                    width: 100%;
-                    display: flex;
-                    justify-content: space-between;
-                    .search-tag-list{
-                        flex: 1;
-                    }
-                }
-                .worker-table{
-                    height: calc(100% - 72px);
-                    width: 100%;
-                    margin: 0 auto;
-                }
-                .pagination-box{
-                    height:32px;
-                }
+            justify-content: space-between;
+            .search-tag-list{
+                flex: 1;
             }
         }
-            
-            
-        
-
-
+        .table-list{
+            height: calc(100% - 72px);
+            width: 100%;
+            margin: 0 auto;
+        }
+        .pagination-box{
+            height:32px;
+        }
     }
+}
 </style>

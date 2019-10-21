@@ -10,15 +10,16 @@
         </template>
 
         <template slot="searchForm">
-            <div class="search-left">
-                <el-input placeholder="请输入员工姓名" :maxlength="20"></el-input>
-                <el-input placeholder="请输入电话" :maxlength="20"></el-input>
-                <el-button type="primary" >查询</el-button>
-                <el-button type="primary" >重置</el-button>
-            </div>
-            <div class="search-right">
-
-            </div>
+                <div class="search-left">
+                    <el-input placeholder="请输入key值" v-model="queryForm.key" :maxlength="20"></el-input>
+                    <el-input placeholder="请输入广告位名" v-model="queryForm.name" :maxlength="20"></el-input>
+                    <el-button type="primary" @click="queryAdPosition">查询</el-button>
+                    <el-button type="primary" @click="reset">重置</el-button>
+                </div>
+                <div class="search-right">
+                    <el-button type="primary" @click="openCreateAdPositionDialog">创建</el-button>
+                </div>
+            
         </template>
 
         <template slot="control" slot-scope="controler">
@@ -51,6 +52,11 @@ export default {
             is_loading: false,
             //客户端广告位列表
             customAdList: [],
+            queryForm: {
+                client: 2,
+                key: '',
+                name: '',
+            },
             /**
              * 分页信息
              */
@@ -62,6 +68,19 @@ export default {
         }
     },
     methods: {
+        openCreateAdPositionDialog(){
+
+        },
+        /**
+         * 点击查询广告位按钮
+         */
+        async queryAdPosition(){
+            await this.getTableList()
+        },
+        reset(){
+            this.queryForm.key = ''
+            this.queryForm.name = ''
+        },
         /**
          * 请求表格数据
          */
@@ -70,7 +89,7 @@ export default {
 
                 this.is_loading = true
 
-                await customService.getAdPositionList().then((data) =>{
+                await customService.getAdPositionList(this.queryForm).then((data) =>{
 
                     this.customAdList = data.data.data
                     //分页信息
@@ -130,5 +149,8 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-
+.search-left{
+    display: flex;
+    width: 800px;
+}
 </style>

@@ -5,8 +5,10 @@ export default {
     /**
      * 获取广告位列表
      */
-    getAdPositionList(){
-        return axios.post(`./admin/ad/getAdPositionList`)
+    getAdPositionList(paramObj){
+        return axios.post(`./admin/ad/getAdPositionList`,{
+            ...paramObj
+        })
     },
     /**
      * 获取全部资源列表

@@ -43,6 +43,11 @@ export default {
             is_loading: false,
             //客户端广告位列表
             customAdList: [],
+            queryForm: {
+                client: 1,
+                key: '',
+                name: '',
+            },
             /**
              * 分页信息
              */
@@ -62,7 +67,7 @@ export default {
 
                 this.is_loading = true
 
-                await customService.getAdPositionList().then((data) =>{
+                await customService.getAdPositionList(this.queryForm).then((data) =>{
 
                     this.customAdList = data.data.data
                     //分页信息

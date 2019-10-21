@@ -38,11 +38,18 @@
         </template>
 
         <!-- 生成服务人员名片组件 -->
+        <!-- 生成服务人员名片组件 -->
         <template>
             <make-image-component
                 :makeImageDialogVisible="makeImageDialogVisible"
                 v-if="makeImageDialogVisible"
-                @closeMakeImageDialog="makeImageDialogVisible = false">
+                @closeMakeImageDialog="makeImageDialogVisible = false"
+                :width="800"
+                :height="565">
+                <template slot="pictureContains">
+                    <worker-picture-component
+                        :pictureForm="workerForm"></worker-picture-component>
+                </template>
             </make-image-component>
         </template>
 
@@ -269,13 +276,15 @@ import {operateService, $utils} from '../../../../common'
 import {
     paperComponent,
     photoComponent,
-    makeImageComponent} from './workerItem/index.js'
+    workerPictureComponent,
+} from './workerItem/index.js'
 
 import {
     pictureDetailDialog,
     selectTagComponent,
-    pageEditComponent} from '@/pages/components'
-
+    pageEditComponent,
+    makeImageComponent,
+    } from '@/pages/components/index.js'
 export default {
     components: {
         paperComponent,//证书组件
@@ -283,6 +292,7 @@ export default {
         selectTagComponent,//单选、多选框组件
         makeImageComponent, //创建图片组件
         pageEditComponent,
+        workerPictureComponent,
     },
     data() {
         let _this = this
@@ -923,4 +933,5 @@ export default {
         color: #333;
     }
 }
+
 </style>

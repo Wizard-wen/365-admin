@@ -52,6 +52,7 @@
                 <div class="title">
                     <div class="title-contains">
                         <div class="left">订单基本信息</div>
+                        <el-button type="primary" size="mini" @click="makeOrderImage">生成订单图片</el-button>
                     </div>
                 </div>
                 <div class="order-list">
@@ -78,7 +79,20 @@
                     </div>
                 </div>
             </div>
-
+            <!-- 生成订单名片组件 -->
+            <template>
+                <make-image-component
+                    :height="500"
+                    :width="460"
+                    :makeImageDialogVisible="makeImageDialogVisible"
+                    v-if="makeImageDialogVisible"
+                    @closeMakeImageDialog="makeImageDialogVisible = false">
+                    <template slot="pictureContains">
+                        <order-picture-component
+                            :pictureForm="orderBase"></order-picture-component>
+                    </template>
+                </make-image-component>
+            </template>
             <div class="order-message" v-if="orderBase.type == 1 || orderBase.type == 3">
                 <div class="title">
                     <div class="title-contains">
@@ -205,9 +219,11 @@
     import {operateService, $utils, saleService} from '../../../../common'
     import {
         matchServiceList,
-        contractList,} from './orderConfig/index.js'
+        contractList,
+        orderPictureComponent,} from './orderConfig/index.js'
     import {assignOrderDialog} from './orderList/index.js'
     import {
+        makeImageComponent,
         tableTagComponent} from '@/pages/components'
 export default {
     data(){
@@ -227,6 +243,7 @@ export default {
             assignOrderId: 0,
             //订单分派弹窗显示隐藏
             assignOrderDialogVisible: false,
+            makeImageDialogVisible: false,
         }
     },
     filters: {
@@ -241,7 +258,9 @@ export default {
         assignOrderDialog,
         matchServiceList,
         contractList,
-        tableTagComponent
+        tableTagComponent,
+        makeImageComponent,
+        orderPictureComponent,
     },
     computed:{
         /**
@@ -329,6 +348,12 @@ export default {
                 store.commit('setLoading',false)
             }
         },
+        /**
+         * 生成订单图片
+         */
+        makeOrderImage(){   
+            this.makeImageDialogVisible = true
+        },
 /*********************备选服务人员列表****************************************************/
         /**
          * 跳转至服务人员详情
@@ -336,7 +361,7 @@ export default {
          */
         goStaffDetail(paramObj){
             this.$router.push({
-                path: "/sale/saleWorkerShow",
+                path: "/worker/workerItemShow",
                 query: {
                     id: paramObj.id,
                     from: 2,

@@ -5,7 +5,7 @@
             :controlScopeLength="100">
 
             <template slot="searchList">
-                <div class="search-list">
+                <div class="left-search-module">
                     <query-component @updateTable="updateTable"></query-component>
                 </div>
             </template>

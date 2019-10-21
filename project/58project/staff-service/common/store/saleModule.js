@@ -170,13 +170,14 @@ export const saleModule = {
             identify: '',//身份证号
             address: '',//地址
             service_region: [],//服务地区
-            education: '',//教育程度
+            education: [],//教育程度
             urgent_phone: '',//紧急联系人电话
             bank_card: '',//银行卡号
             course: [],//参加培训
             teacher_comment:'',//教师评语
             paper_category: [],//证书标签
             source: [],//信息来源
+            source_name: '',//来源名称
             manager: [],//创建人
             updated_type: [],//更新时间
         }, 

@@ -1,168 +1,338 @@
 <template>
-    <div class="worker-box">
-        <el-form class="worker-form"  ref="form" :model="workerForm" label-width="140px">
-            <!-- 等同于更新时间 -->
-            <el-form-item label="登记日期" prop="register_at" class="form-item-size" size="small">
-                {{created_atFormatter}}
-            </el-form-item>
+    <page-edit-component
+        v-loading="is_loading"
+        :title="workerForm.name">
+        <template slot="icon">
+            <div class="icon">
+                <img style="height: 120px;width: 120px;" :src="`./resource/${workerForm.icon}`" alt="" v-if="workerForm.icon">
+                <div class="no-icon-style" v-else>暂无头像</div>
+            </div>
+        </template>
+        <template slot="detail">
+            <div class="detail-left">
+                <div class="detail-left-box">
+                    <div class="detail-left-line">创建人：{{workerForm.manager_name}}</div>
+                    <div class="detail-left-line">创建时间：{{workerForm.created_at | formDate}}</div>
+                    <div class="detail-left-line">更新时间：{{workerForm.updated_at | formDate}}</div>
+                </div>
+            </div>
+        </template>
+        <template slot="control">
+            <el-button size="mini" type="primary" @click="openMakeImageDialog">生成名片</el-button>
+            <el-button size="mini" @click="goback">返回</el-button>
+        </template>
 
-            <el-form-item label="更新日期" prop="updated_at" class="form-item-size" size="small">
-                {{updated_atFormatter}}
-            </el-form-item>
-
-            <el-form-item label="认证状态" prop="authentication" class="form-item-size" size="small">
-                <select-tag-component :isEdit="false" :propTagList="workerConfigList.authentication" v-model="workerForm.authentication" :isSingle="true"></select-tag-component>
-            </el-form-item>
-
-            <el-form-item label="姓名" prop="name" class="form-item-size" size="small">
-                {{workerForm.name}}
-            </el-form-item>
-
-            <el-form-item label="年龄" prop="age" class="form-item-size" size="small">
-                {{workerForm.age}}
-            </el-form-item>
-
-            <el-form-item label="出生日期" prop="birthday" class="form-item-size" size="small">
-                {{birthdayFormatter}}
-            </el-form-item>
-
-            <el-form-item label="电话" prop="phone" class="form-item-size" size="small">
-                {{workerForm.phone}}
-            </el-form-item>
-
-            <el-form-item label="回访信息" prop="return_msg" class="form-item-size" size="small">
-                {{workerForm.return_msg}}
-            </el-form-item>
-
-            <el-form-item label="接单状态" prop="working_status" class="form-item-size" size="small">
-                <select-tag-component :isEdit="false" :propTagList="workerConfigList.working_status" v-model="workerForm.working_status" :isSingle="true"></select-tag-component>
-            </el-form-item>
-
-            <el-form-item label="备注（商家情况）" prop="remarks" class="form-item-size" size="small">
-                {{workerForm.remarks}}
-            </el-form-item>
-
-            <el-form-item label="职业类型" prop="skill" class="form-item-size" size="small">
-                <select-tag-component :isEdit="false" :propTagList="workerConfigList.service_category" v-model="workerForm.skill" :isSingle="false"></select-tag-component>
-            </el-form-item>
-
-            <el-form-item label="服务类型" prop="service_type" class="form-item-size" size="small">
-                <select-tag-component :isEdit="false" :propTagList="workerConfigList.service_type" v-model="workerForm.service_type" :isSingle="false"></select-tag-component>
-            </el-form-item>
-
-            <el-form-item label="可服务人群" prop="service_crowd" class="form-item-size" size="small">
-                <select-tag-component :isEdit="false" :propTagList="workerConfigList.service_crowd" v-model="workerForm.service_crowd" :isSingle="false"></select-tag-component>
-            </el-form-item>
-
-            <el-form-item label="工龄" prop="working_age" class="form-item-size" size="small">
-                <select-tag-component :isEdit="false" :propTagList="workerConfigList.working_age" v-model="workerForm.working_age" :isSingle="true"></select-tag-component>
-            </el-form-item>
-
-            <el-form-item label="工作经验（备注）" prop="working_experience" class="form-item-size" size="small">
-                {{workerForm.working_experience}}
-            </el-form-item>
-
-            <el-form-item label="民族" prop="nation" class="form-item-size" size="small">
-                <select-tag-component :isEdit="false" :propTagList="workerConfigList.nation" v-model="workerForm.nation" :isSingle="true"></select-tag-component>
-            </el-form-item>
-
-            <el-form-item label="籍贯" prop="birthplace" class="form-item-size" size="small">
-                {{workerForm.birthplace}}
-            </el-form-item>
-
-            <el-form-item label="身份证号码" prop="identify" class="form-item-size" size="small">
-                {{workerForm.identify}}
-            </el-form-item>
-
-            <el-form-item label="证件照" class="form-item-size">
-                <div class="picture-box" v-if="id_photo_fileList.length">
-                    <div v-for="(item,index) in id_photo_fileList" :key="index" class="avatar-box">
-                        <img :src="item.url" class="avatar">
+        <!-- 生成服务人员名片组件 -->
+        <template>
+            <make-image-component
+                :makeImageDialogVisible="makeImageDialogVisible"
+                v-if="makeImageDialogVisible"
+                @closeMakeImageDialog="makeImageDialogVisible = false"
+                :width="800"
+                :height="565">
+                <template slot="pictureContains">
+                    <worker-picture-component
+                        :pictureForm="workerForm"></worker-picture-component>
+                </template>
+            </make-image-component>
+        </template>
+        <div class="detail-show-box" slot="form">
+            <div class="detail-show-title" >基本信息</div>
+            <div class="detail-show-module">
+                <div class="detail-item-box line-three-list">
+                    <div class="detail-item">
+                        <p class="detail-title">姓名: </p>
+                        <p class="detail-type-text">{{workerForm.name ? workerForm.name : '-'}}</p>
                     </div>
                 </div>
-            </el-form-item>
-
-            <el-form-item label="地址" prop="address" class="form-item-size" size="small">
-                {{workerForm.address}}
-            </el-form-item>
-
-            <el-form-item label="区域" prop="region" class="form-item-size" size="small">
-                <select-tag-component :isEdit="false" :propTagList="workerConfigList.service_region" v-model="workerForm.region" :isSingle="false"></select-tag-component>
-            </el-form-item>
-
-            <el-form-item label="学历" prop="education" class="form-item-size" size="small">
-                <select-tag-component :isEdit="false" :propTagList="workerConfigList.education" v-model="workerForm.education" :isSingle="true"></select-tag-component>
-            </el-form-item>
-
-            <el-form-item label="紧急联系人电话" prop="urgent_phone" class="form-item-size" size="small">
-                {{workerForm.urgent_phone}}
-            </el-form-item>
-
-            <el-form-item label="银行卡号" prop="bank_card" class="form-item-size" size="small">
-                {{workerForm.bank_card}}
-            </el-form-item>
-
-            <el-form-item label="头像" class="form-item-size">
-                <div v-if="workerForm.icon!=''" class="avatar-box">
-                    <img  :src="workerForm.icon == '' ? '' : `./resource/${workerForm.icon}`" class="avatar">
+                <div class="detail-item-box line-three-list">
+                    <div class="detail-item">
+                        <p class="detail-title">年龄: </p>
+                        <p class="detail-type-text">{{workerForm.age ? workerForm.age : '-'}}</p>
+                    </div>
                 </div>
-            </el-form-item>
-
-            <el-form-item label="照片" class="form-item-size">
-                <div class="picture-box" v-if="photo_fileList.length">
-                    <div v-for="(item,index) in photo_fileList" :key="index" class="avatar-box">
-                        <img :src="item.url" class="avatar">
-                        <div class="avatar-back" v-if="item.isBack" @click="deletePhoto">
-                            <i class="el-icon-delete avatar-uploader-icon" style=""></i>
+                <div class="detail-item-box line-three-list">
+                    <div class="detail-item">
+                        <p class="detail-title">电话: </p>
+                        <p class="detail-type-text">{{workerForm.phone ? workerForm.phone : '-'}}</p>
+                    </div>
+                </div>
+                <div class="detail-item-box line-three-list">
+                    <div class="detail-item">
+                        <p class="detail-title">出生日期: </p>
+                        <p class="detail-type-text">{{workerForm.birthday | formDate }}</p>
+                    </div>
+                </div>
+                <div class="detail-item-box line-three-list">
+                    <div class="detail-item">
+                        <p class="detail-title">民族: </p>
+                        <select-tag-component
+                            v-if="workerForm.nation"
+                            :propTagList="workerConfigList.nation"
+                            v-model="workerForm.nation"
+                            :isSingle="true"
+                            :isEdit="false"></select-tag-component>
+                        <p class="detail-type-text" v-else>-</p>
+                    </div>
+                </div>
+                <div class="detail-item-box line-three-list">
+                    <div class="detail-item">
+                        <p class="detail-title">身份证号: </p>
+                        <p class="detail-type-text">{{workerForm.identify ? workerForm.identify : '-'}}</p>
+                    </div>
+                </div>
+                <div class="detail-item-box line-three-list">
+                    <div class="detail-item">
+                        <p class="detail-title">学历: </p>
+                        <select-tag-component
+                            v-if="workerForm.education"
+                            :propTagList="workerConfigList.education"
+                            v-model="workerForm.education"
+                            :isSingle="true"
+                            :isEdit="false"></select-tag-component>
+                        <p class="detail-type-text" v-else>-</p>
+                    </div>
+                </div>
+                <div class="detail-item-box line-three-list">
+                    <div class="detail-item">
+                        <p class="detail-title">工龄: </p>
+                        <select-tag-component
+                            v-if="workerForm.working_age"
+                            :propTagList="workerConfigList.working_age"
+                            v-model="workerForm.working_age"
+                            :isSingle="true"
+                            :isEdit="false"></select-tag-component>
+                        <p class="detail-type-text" v-else>-</p>
+                    </div>
+                </div>
+                <div class="detail-item-box line-three-list">
+                    <div class="detail-item">
+                        <p class="detail-title">籍贯: </p>
+                        <p class="detail-type-text">{{workerForm.birthplace ? workerForm.birthplace : '-'}}</p>
+                    </div>
+                </div>
+                <div class="detail-item-box line-three-list">
+                    <div class="detail-item">
+                        <p class="detail-title">紧急联系人: </p>
+                        <p class="detail-type-text">{{workerForm.urgent_phone ? workerForm.urgent_phone : '-'}}</p>
+                    </div>
+                </div>
+                <div class="detail-item-box line-three-list">
+                    <div class="detail-item">
+                        <p class="detail-title">银行卡号: </p>
+                        <p class="detail-type-text">{{workerForm.bank_card ? workerForm.bank_card : '-'}}</p>
+                    </div>
+                </div>
+                <div class="detail-item-box line-three-list">
+                    <div class="detail-item">
+                        <p class="detail-title">性别: </p>
+                        <select-tag-component
+                            v-if="workerForm.sex"
+                            :propTagList="sexList"
+                            v-model="workerForm.sex"
+                            :isSingle="true"
+                            :isEdit="false"></select-tag-component>
+                        <p class="detail-type-text" v-else>-</p>
+                    </div>
+                </div>
+                <div class="detail-item-box line-list">
+                    <div class="detail-item">
+                        <p class="detail-title">地址: </p>
+                        <p class="detail-type-text">{{workerForm.address ? workerForm.address : '-'}}</p>
+                    </div>
+                </div>
+                
+                
+            </div>
+            <div class="detail-show-line"></div>
+            <div class="detail-show-title" >业务信息</div>
+            <div class="detail-show-module">
+                
+                <div class="detail-item-box line-three-list">
+                    <div class="detail-item">
+                        <p class="detail-title">认证状态: </p>
+                        <select-tag-component
+                            v-if="workerForm.authentication"
+                            :propTagList="workerConfigList.authentication"
+                            v-model="workerForm.authentication"
+                            :isSingle="true"
+                            :isEdit="false"></select-tag-component>
+                        <p class="detail-type-text" v-else>-</p>
+                    </div>
+                </div>
+                <div class="detail-item-box line-three-list">
+                    <div class="detail-item">
+                        <p class="detail-title">接单状态: </p>
+                        <select-tag-component
+                            v-if="workerForm.working_status"
+                            :propTagList="workerConfigList.working_status"
+                            v-model="workerForm.working_status"
+                            :isSingle="true"
+                            :isEdit="false"></select-tag-component>
+                        <p class="detail-type-text" v-else>-</p>
+                    </div>
+                </div>
+                <div class="detail-item-box line-three-list">
+                    <div class="detail-item">
+                        <p class="detail-title">服务类型: </p>
+                        <select-tag-component
+                            v-if="workerForm.service_type"
+                            :propTagList="workerConfigList.service_type"
+                            v-model="workerForm.service_type"
+                            :isSingle="false"
+                            :isEdit="false"></select-tag-component>
+                        <p class="detail-type-text" v-else>-</p>
+                    </div>
+                </div>
+                <div class="detail-item-box line-list">
+                    <div class="detail-item">
+                        <p class="detail-title">职业类型: </p>
+                        <select-tag-component
+                            v-if="workerForm.skill"
+                            :propTagList="workerConfigList.service_category"
+                            v-model="workerForm.skill"
+                            :isSingle="false"
+                            :isEdit="false"></select-tag-component>
+                        <p class="detail-type-text" v-else>-</p>
+                    </div>
+                </div>
+                <div class="detail-item-box line-list">
+                    <div class="detail-item">
+                        <p class="detail-title">可服务人群: </p>
+                        <select-tag-component
+                            v-if="workerForm.service_crowd"
+                            :propTagList="workerConfigList.service_crowd"
+                            v-model="workerForm.service_crowd"
+                            :isSingle="false"
+                            :isEdit="false"></select-tag-component>
+                        <p class="detail-type-text" v-else>-</p>
+                    </div>
+                </div>
+                <div class="detail-item-box line-list">
+                    <div class="detail-item">
+                        <p class="detail-title">服务区域: </p>
+                        <select-tag-component
+                            v-if="workerForm.region"
+                            :propTagList="workerConfigList.service_region"
+                            v-model="workerForm.region"
+                            :isSingle="false"
+                            :isEdit="false"></select-tag-component>
+                        <p class="detail-type-text" v-else>-</p>
+                    </div>
+                </div>
+                <div class="detail-item-box line-list">
+                    <div class="detail-item">
+                        <p class="detail-title">参加培训: </p>
+                        <select-tag-component
+                            v-if="workerForm.course"
+                            :propTagList="workerConfigList.course"
+                            v-model="workerForm.course"
+                            :isSingle="false"
+                            :isEdit="false"></select-tag-component>
+                        <p class="detail-type-text" v-else>-</p>
+                    </div>
+                </div>
+                <div class="detail-item-box line-list">
+                    <div class="detail-item">
+                        <p class="detail-title">技能证书标签: </p>
+                        <select-tag-component
+                            v-if="workerForm.paper"
+                            :propTagList="workerConfigList.paper_category"
+                            v-model="workerForm.paper"
+                            :isSingle="false"
+                            :isEdit="false"></select-tag-component>
+                        <p class="detail-type-text" v-else>-</p>
+                    </div>
+                </div>
+                <div class="detail-item-box line-list">
+                    <div class="detail-item">
+                        <p class="detail-title">回访信息: </p>
+                        <p class="detail-type-text">{{workerForm.return_msg ? workerForm.return_msg : '-'}}</p>
+                    </div>
+                </div>
+                <div class="detail-item-box line-list">
+                    <div class="detail-item">
+                        <p class="detail-title">备注（商家情况）: </p>
+                        <p class="detail-type-text">{{workerForm.remarks ? workerForm.remarks : '-'}}</p>
+                    </div>
+                </div>
+                <div class="detail-item-box line-list">
+                    <div class="detail-item">
+                        <p class="detail-title">工作经验（备注）: </p>
+                        <p class="detail-type-text">{{workerForm.working_experience ? workerForm.working_experience : '-'}}</p>
+                    </div>
+                </div>
+                <div class="detail-item-box line-list">
+                    <div class="detail-item">
+                        <p class="detail-title">教师评语: </p>
+                        <p class="detail-type-text">{{workerForm.teacher_comment ? workerForm.teacher_comment : '-'}}</p>
+                    </div>
+                </div>
+                <div class="detail-item-box line-list">
+                    <div class="detail-item">
+                        <p class="detail-title">信息来源: </p>
+                        <select-tag-component
+                            v-if="workerForm.source"
+                            :propTagList="workerConfigList.source"
+                            v-model="workerForm.source"
+                            :isSingle="true"
+                            :isEdit="false"></select-tag-component>
+                        <p class="detail-type-text" v-else>-</p>
+                    </div>
+                </div>
+                <div class="detail-item-box line-list">
+                    <div class="detail-item">
+                        <p class="detail-title">来源名称: </p>
+                        <p class="detail-type-text">{{workerForm.source_name ? workerForm.source_name : '-'}}</p>
+                    </div>
+                </div>
+            </div>
+            <div class="detail-show-line"></div>
+            <div class="detail-show-title" >图片信息</div>
+            <div class="detail-show-module">
+                <div class="detail-item-box line-list">
+                    <div class="detail-item">
+                        <p class="detail-title">证件照: </p>
+                        <div class="detail-photo-list">
+                            <photo-component
+                                :pictureUrlArrtibute="'path'"
+                                :isEdit="false"
+                                v-model="id_photo_fileList"
+                                :title="'证件照'"></photo-component>
                         </div>
                     </div>
                 </div>
-            </el-form-item>
-
-            <el-form-item label="参加培训" prop="course" class="form-item-size" size="small">
-                <select-tag-component :isEdit="false" :propTagList="workerConfigList.course" v-model="workerForm.course" :isSingle="false"></select-tag-component>
-            </el-form-item>
-
-            <el-form-item label="教师评语" prop="teacher_comment" class="form-item-size" size="small">
-                {{workerForm.teacher_comment}}
-            </el-form-item>
-
-            <el-form-item label="技能证书" prop="certificate" class="form-item-size">
-                <paper-component :isEdit="false" v-model="workerForm.certificate" ></paper-component>
-            </el-form-item>
-
-            <el-form-item label="技能证书标签" prop="paper" class="form-item-size">
-                <select-tag-component :isEdit="false" :propTagList="workerConfigList.paper_category" v-model="workerForm.paper" :isSingle="false"></select-tag-component>
-            </el-form-item>
-
-            <el-form-item label="信息来源" prop="source" class="form-item-size" size="small">
-                <select-tag-component :isEdit="false" :propTagList="workerConfigList.source" v-model="workerForm.source" :isSingle="true"></select-tag-component>
-            </el-form-item>
-
-            <el-form-item label="来源名称" prop="source_name" class="form-item-size" size="small">
-                {{workerForm.source_name}}
-            </el-form-item>
-
-            <el-form-item label="创建人姓名" prop="manager_name" class="form-item-size" size="small">
-                {{workerForm.manager_name}}
-            </el-form-item>
-
-            <el-form-item label="性别" prop="sex" class="form-item-size" v-if="workerForm.sex">
-                {{workerForm.sex == 1? '男' : '女'}}
-            </el-form-item>
-        </el-form>
-        <div class="control">
-            <el-button type="primary" @click="makeImage">生成名片</el-button>
-            <el-button @click="goback">返回</el-button>
+                <div class="detail-item-box line-list">
+                    <div class="detail-item">
+                        <p class="detail-title">照片: </p>
+                        <div class="detail-photo-list">
+                            <photo-component
+                                :pictureUrlArrtibute="'path'"
+                                :isEdit="false"
+                                v-model="photo_fileList"
+                                :title="'照片'"></photo-component>
+                        </div>
+                    </div>
+                </div>
+                <div class="detail-item-box line-list">
+                    <div class="detail-item">
+                        <p class="detail-title">技能证书: </p>
+                        <div class="detail-photo-list">
+                            <paper-component 
+                                :pictureUrlArrtibute="'path'"
+                                :isShow="true"
+                                v-model="workerForm.certificate" ></paper-component>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <picture-detail-dialog
+                :pictureDetailDialogVisible="pictureDetailDialogVisible"
+                v-if="pictureDetailDialogVisible"
+                :imageUrl="pictureDetailUrl"
+                @closePictureDetailDialog="pictureDetailDialogVisible = false"></picture-detail-dialog>
         </div>
-        <!-- 生成服务人员名片组件 -->
-        <make-image-component
-            :makeImageDialogVisible="makeImageDialogVisible"
-            v-if="makeImageDialogVisible"
-            @closeMakeImageDialog="makeImageDialogVisible = false"
-            :openMakeImage="openMakeImage">
-        </make-image-component>
-    </div>
+    </page-edit-component>
 </template>
 
 <script>
@@ -174,25 +344,43 @@ import {operateService, $utils} from '../../../../common'
 
 import {
     paperComponent,
-    makeImageComponent} from './workerItem/index.js'
+    photoComponent,
+    workerPictureComponent,
+    } from './workerItem/index.js'
 
 import {
     pictureDetailDialog,
-    selectTagComponent} from '@/pages/components'
+    selectTagComponent,
+    makeImageComponent,
+    pageEditComponent} from '@/pages/components/index.js'
 
 export default {
     components: {
-        paperComponent,
-        selectTagComponent,
+        paperComponent,//证书组件
+        photoComponent,//照片组件
+        selectTagComponent,//单选、多选框组件
         makeImageComponent, //创建图片组件
+        pageEditComponent,
+        workerPictureComponent,
+        pictureDetailDialog,
     },
     data() {
         return {
+            is_loading: false,
+            sexList: [{id: 1, name: '男'},{id: 2, name: '女'},],
+            //生成名片弹窗显示隐藏
             makeImageDialogVisible:false,//是否打开创建图片弹窗
-            openMakeImage: {},//创建图片传入的渲染字段
-            icon_fileList: [],//头像数组
-            photo_fileList: [],//照片数组
-            id_photo_fileList: [],//证件照片数组
+            //查看图片详情弹窗显示隐藏
+            pictureDetailDialogVisible: false,
+            //图片详情url
+            pictureDetailUrl: '',
+
+            //头像数组
+            icon_fileList: [],
+            //照片数组
+            photo_fileList: [],
+            //证件照片数组
+            id_photo_fileList: [],
             //员工信息表单
             workerForm: {
                 /************逻辑字段******************/
@@ -202,6 +390,7 @@ export default {
                 created_at:null,//创建时间
                 type:null,//签约状态
                 sex:1,//性别
+                log: [],//日志
                 /************业务字段******************/
                 register_at:null,//登记时间
                 updated_at:null,//更新时间
@@ -214,7 +403,7 @@ export default {
                 working_status:0,//接单状态
                 remarks:'',//备注（商家情况）
                 skill:[],//职业类型
-                service_type:0,//服务类型
+                service_type:[],//服务类型
                 service_crowd:[],//可服务人群
                 working_age:0,//工龄
                 working_experience:'',//工作经验（备注）
@@ -236,8 +425,12 @@ export default {
                 source:0,//信息来源
                 source_name:'',//来源名称
                 manager_id:0,//创建人id
-                manager_name:this.$store.state.loginModule.user.username,//创建人姓名
+                manager_name:'',//创建人姓名
             },
+            //图片上传header
+            uploadHeader:{
+                accessToken: this.$store.state.loginModule.token.access_token
+            }
         }
     },
     computed: {
@@ -245,290 +438,308 @@ export default {
         workerConfigList(){
             return this.$store.state.operateModule.workerConfigForm
         },
-        //创建时间字段转换
-        created_atFormatter(){
-            return $utils.formatDate(new Date(this.workerForm.created_at), 'yyyy-MM-dd')
-        },
-        //登记时间字段转换
-        register_atFormatter(){
-            return $utils.formatDate(new Date(this.workerForm.register_at), 'yyyy-MM-dd')
-        },
-        //更新时间字段转换
-        updated_atFormatter(){
-            return $utils.formatDate(new Date(this.workerForm.updated_at), 'yyyy-MM-dd')
-        },
-        //出生日期字段转换
-        birthdayFormatter(){
-            return $utils.formatDate(new Date(this.workerForm.birthday), 'yyyy-MM-dd')
-        },
+    },
+    filters: {
+        //时间格式转换
+        formDate(timestamp){
+           return $utils.formatDate(new Date(timestamp), 'yyyy-MM-dd')
+        }
     },
     methods: {
+        setFormItem(){
+            
+            //提交前，拷贝出一份数据做字段转换
+            let workerFormSend = {
+                ...this.workerForm
+            }
+            workerFormSend.photo = this.photo_fileList
+            workerFormSend.id_photo = this.id_photo_fileList
+            //字段转换
+            workerFormSend.service_crowd = this.setCommitAttr(
+                workerFormSend.service_crowd,
+                this.workerConfigList.service_crowd,
+                'service_crowd_id'
+            );
+
+            workerFormSend.region = this.setCommitAttr(
+                workerFormSend.region,
+                this.workerConfigList.service_region,
+                'region_id'
+            );
+
+            workerFormSend.skill = this.setCommitAttr(
+                workerFormSend.skill,
+                this.workerConfigList.service_category,
+                'service_category_id'
+            );
+
+            workerFormSend.course = this.setCommitAttr(
+                workerFormSend.course,
+                this.workerConfigList.course,
+                'course_id'
+            );
+
+            workerFormSend.service_type = this.setCommitAttr(
+                workerFormSend.service_type,
+                this.workerConfigList.service_type,
+                'service_type_id'
+            );
+
+            workerFormSend.paper = this.setCommitAttr(
+                workerFormSend.paper,
+                this.workerConfigList.paper_category,
+                'paper_category_id'
+            );
+            return workerFormSend
+        },
+
+        /**
+         * 拼接service_crowd（服务人群）字段
+         */
+        setCommitAttr(selectedArr, originArr, keyName){
+            return originArr.reduce((arr, item, index)=>{
+                var serviceItem = null
+                selectedArr.forEach((it, index) =>{
+
+                    if(it == item.id){
+                        serviceItem = {}
+                        serviceItem[keyName] = item.id;
+                        serviceItem['name'] = item.name;
+                    }
+                })
+                return serviceItem == null ? arr : arr.concat(serviceItem)
+            },[])
+        },
         /**
          * 返回
          */
         goback(){
-            this.$router.push("/sale/saleWorkerList")
+            if(this.$route.query.from == 1){
+                //从服务人员信息库
+                this.$router.push(`/worker/workerList`)
+            } else if(this.$route.query.from == 2){
+                //从订单配置备选服务人员列表
+                this.$router.push({
+                    path: `/operate/operateOrderConfig`,
+                    query: {
+                        order_id: this.$route.query.order_id,
+                        order_type:this.$route.query.from,
+                    }
+                })
+            } 
         },
         /**
          * 生成图片
          */
-        makeImage(){
+        openMakeImageDialog(){
             this.makeImageDialogVisible = true
-            this.openMakeImage = this.workerForm
-            var _workerConfigList = this.workerConfigList;
-            var _type = _workerConfigList.service_type.map(val=>{
-              let _item = [];
-              if(val.isSelected){
-                _item.push(val.name)
-              }
-              return _item
-            })
-            var _service_category = _workerConfigList.service_category.map(val=>{
-            let _item = [];
-            if(val.isSelected){
-              _item.push(val.name)
-            }
-            return _item
-          })
-            var _service_region = _workerConfigList.service_region.map(val=>{
-            let _item = [];
-            if(val.isSelected){
-              _item.push(val.name)
-            }
-            return _item
-          })
-            var _paper_category = _workerConfigList.paper_category.map(val=>{
-            let _item = [];
-            if(val.isSelected){
-              _item.push(val.name)
-            }
-            return _item
-          })
-           var _working_age_val = _workerConfigList.working_age.map(val=>{
-            let _item = [];
-            if(val.isSelected){
-              _item.push(val.name)
-            }
-            return _item
-          })
-           var _education_val = _workerConfigList.education.map(val=>{
-            let _item = [];
-            if(val.isSelected){
-              _item.push(val.name)
-            }
-            return _item
-          })
-            this.openMakeImage.type = _type.length?_type.join(' '):'';
-            this.openMakeImage.service_category = _service_category.length?_service_category.join(' '):'';
-            this.openMakeImage.service_region =_service_region.length? _service_region.join(' '):'';
-            this.openMakeImage.paper_category = _paper_category.length?_paper_category.join(' '):'';
-            this.openMakeImage.working_age_val = _working_age_val.length?_working_age_val.join(' '):'';
-            this.openMakeImage.education_val = _education_val.length?_education_val.join(' '):'';
         },
-
+        /**
+         * 打开图片详情弹窗
+         */
+        openPictureDetailDialog(item, name){
+            this.pictureDetailUrl = `./resource/${item.path}`
+            this.pictureDetailDialogVisible = true;
+        }
     },
     async mounted(){
         let _this = this;
 
-
         try{
-            await store.commit('setLoading',true)
-            //如果是编辑则请求接口
-            if(this.$route.query.type != 0){
-                await operateService.getStaff(this.$route.query.id).then(data =>{
-                    if(data.code == "0"){
+            
+            this.is_loading = true
+            await Promise.all([
+                operateService.getStaff(this.$route.query.id),
+                operateService.getWorkerFormConfig('edit'),
+            ]).then(data =>{
+                //转换数据格式
+                var workerForm = data[0].data
 
-                        var workerForm = data.data
-
-                        //技能证书
-                        workerForm.certificate.forEach((item, index) =>{
-                            item.images.forEach((it, index) =>{
-                                it.url = './resource/'+it.path
-                            })
-                        })
-                        //技能证书标签
-                        workerForm.paper = workerForm.paper.reduce((arr, item, index) =>{
-                            return arr.concat(item.paper_category_id)
-                        },[])
-                        //服务地区
-                        workerForm.region = workerForm.region.reduce((arr, item, index) =>{
-                            return arr.concat(item.region_id)
-                        },[])
-                        //可服务人群
-                        workerForm.service_crowd = workerForm.service_crowd.reduce((arr, item, index) =>{
-                            return arr.concat(item.service_crowd_id)
-                        },[])
-                        // 职业类型
-                        workerForm.skill = workerForm.skill.reduce((arr, item, index) =>{
-                            return arr.concat(item.service_category_id)
-                        },[])
-                        // 参加培训
-                        workerForm.course = workerForm.course.reduce((arr, item, index) =>{
-                            return arr.concat(item.course_id)
-                        },[])
-                        // 服务类型
-                        workerForm.service_type = workerForm.service_type.reduce((arr, item, index) =>{
-                            return arr.concat(item.service_type_id)
-                        },[])
-                        //头像
-                        this.icon_fileList = workerForm.icon == ''? [] : [{
-                            url: `./resource/${workerForm.icon}`,
-                            name: 'head'
-                        }]
-                        //照片
-                        this.photo_fileList =  workerForm.photo.map((item, index) =>{
-                            return {
-                                ...item,
-                                url: `./resource/${item.path}`,
-                                isBack: false,
-                            }
-                        })
-                        //证件照片
-                        this.id_photo_fileList =  workerForm.id_photo.map((item, index) =>{
-                            return {
-                                ...item,
-                                url: `./resource/${item.path}`,
-                                isBack: false,
-                            }
-                        })
-                        workerForm.id_photo = []
-                        this.workerForm = workerForm
-                    }
-                }).catch(error =>{
-                    this.$message({
-                        type:'error',
-                        message: error.message
+                //技能证书
+                workerForm.certificate.forEach((item, index) =>{
+                    item.images.forEach((it, index) =>{
+                        it.url = './resource/'+it.path
                     })
                 })
-            }
-            await operateService.getWorkerFormConfig('edit').then((data) =>{
-                if(data.code == '0'){
-                    // 将表单配置数据存入 vuex
-                    this.$store.commit('setWorkerConfigForm',data.data)
+                //技能证书标签
+                workerForm.paper = workerForm.paper.reduce((arr, item, index) =>{
+                    return arr.concat(item.paper_category_id)
+                },[])
+                //服务地区
+                workerForm.region = workerForm.region.reduce((arr, item, index) =>{
+                    return arr.concat(item.region_id)
+                },[])
+                //可服务人群
+                workerForm.service_crowd = workerForm.service_crowd.reduce((arr, item, index) =>{
+                    return arr.concat(item.service_crowd_id)
+                },[])
+                // 职业类型
+                workerForm.skill = workerForm.skill.reduce((arr, item, index) =>{
+                    return arr.concat(item.service_category_id)
+                },[])
+                // 参加培训
+                workerForm.course = workerForm.course.reduce((arr, item, index) =>{
+                    return arr.concat(item.course_id)
+                },[])
+                // 服务类型
+                workerForm.service_type = workerForm.service_type.reduce((arr, item, index) =>{
+                    return arr.concat(item.service_type_id)
+                },[])
+                if(workerForm.birthday == 0){
+                    workerForm.birthday = null
                 }
-            })
+                //头像
+                this.icon_fileList = workerForm.icon == ''? [] : [{
+                    url: `./resource/${workerForm.icon}`,
+                    name: 'head'
+                }]
+                //照片
+                this.photo_fileList =  workerForm.photo.map((item, index) =>{
+                    return {
+                        ...item,
+                        url: `./resource/${item.path}`,
+                        isBack: false,
+                    }
+                })
+                //证件照片
+                this.id_photo_fileList =  workerForm.id_photo.map((item, index) =>{
+                    return {
+                        ...item,
+                        url: `./resource/${item.path}`,
+                        isBack: false,
+                    }
+                })
+                this.workerForm = workerForm
+                
 
+                // 将表单配置数据存入 vuex
+                this.$store.commit('setWorkerConfigForm',data[1].data)
+
+                this.is_loading = false
+            }).catch(error =>{
+                this.$message({
+                    type:'error',
+                    message: error.message
+                })
+                this.is_loading = false
+            }).finally(() =>{
+                this.is_loading = false
+            })
         }catch(error){
             this.$message({
                 type:'error',
                 message: error.message
             })
+            this.is_loading = false
         }
-    await store.commit('setLoading',false)
     }
 }
 </script>
 <style lang="scss" scoped>
-    .worker-box{
+
+.detail-left{
+    flex:1;
+    .detail-left-box{
+        display: flex;
+        flex-wrap: wrap;
+        .detail-left-line{
+            width: 50%;
+            color: rgba(0,0,0,.65);
+            line-height: 20px;
+            padding-bottom: 8px;
+        }
+    }
+}
+.detail-right{
+    min-width: 400px;
+    display: flex;
+    .right-box{
+        height: 80px;
+        width: 50%;
+        .title{
+            color: rgba(0,0,0,.45);
+            font-size: 14px;
+            line-height: 1.5;
+        }
+        .value{
+            font-size: 20px;
+            color: rgba(0,0,0,.85);
+            line-height: 1.5;
+        }
+    }
+}
+
+
+.detail-show-box{
+    .detail-show-title{
+        width:100%;
+        margin-bottom: 20px;
+        color: rgba(0,0,0,.85);
+        font-weight: 700;
+        font-size: 16px;
+        line-height: 1.5;
+    }
+    .detail-show-module{
         width: 100%;
-        padding-top: 30px;
-        .worker-form{
-            width: 100%;
-            margin-bottom: 30px;
-            & /deep/ .el-form-item{
-                margin-bottom: 15px;
-            }
-            .form-item-size{
-                width: 900px;
-                & /deep/ .el-input{
-                    min-width: 260px;
+        display: flex;
+        flex-wrap:  wrap;
+        justify-content: space-between;
+        margin-bottom: 32px;
+        .detail-item-box {
+            .detail-item{
+                display: flex;
+                margin-bottom: 16px;
+                .detail-title{
+                    width: 120px;
+                    text-align: right;
+                    line-height: 30px;
+                    margin-right: 20px;
+                    color: rgba(0,0,0,.85);
                 }
-                .picture-box{
-                    border: 1px dashed #ccc;
-                    padding: 0 10px 10px 10px;
+                .detail-type-text{
+                    line-height: 30px;
+                    color: rgba(0,0,0,.85);
+                }
+                .detail-photo-list{
                     display: flex;
                     flex-wrap: wrap;
-                        .avatar-box{
-                            margin: 10px 10px 0 0;
-                            width:100px;
-                            height: 100px;
-                            position: relative;
-                            .avatar {
-                                width:100px;
-                                height: 100px;
-                                display: block;
-                            }
-                            .avatar-back{
-                                position: absolute;
-                                height: 100px;
-                                width: 100px;
-                                line-height: 100px;
-                                text-align: center;
-                                top: 0;
-                                z-index: 4;
-                                cursor: pointer;
-                                background: rgba(0,0,0,.5);
-                                .avatar-uploader-icon{
-                                    color: #fff;font-size: 20px;
-                                }
-                            }
+                    .icon-box{
+                        height: 150px;
+                        margin-right: 20px;
+                        .icon-style{
+                            height: 150px;
                         }
+                    }
                 }
             }
         }
-        .paper-imgs{
-            height: 110px!important;
-            padding: 5px 0;
-            .paper-item-img{
-                display: inline-block;
-                height:100px;
-                width: 100px;
-                margin : 0 10px;
-            }
+        .line-three-list{
+            width: 33%;
         }
-        .image-messsage{
-            line-height: 40px;
-            display: flex;
-            justify-content: space-between;
-            padding: 0 20px;
+        .line-two-list{
+            width: 50%;
         }
-        .control{
-            // position: fixed;
-            height: 60px;
-            padding: 10px 0;
+        .line-list{
             width: 100%;
-            // bottom: 0;
-            background: rgba(0,0,0,.2);
-            // opacity: .1;
-            // z-index: 3;
         }
     }
-    //图片上传
-    .avatar-uploader /deep/ .el-upload {
-        border: 1px dashed #d9d9d9;
-        border-radius: 6px;
-        cursor: pointer;
-        position: relative;
-        overflow: hidden;
+    .detail-show-line{
+        display: block;
+        clear: both;
+        width: 100%;
+        min-width: 100%;
+        height: 1px;
+        margin: 24px 0;
+        background: #e8e8e8;
     }
-    .avatar-uploader /deep/ .el-upload:hover {
-        border-color: #409EFF;
-    }
-    .avatar-uploader-icon {
-        font-size: 16px;
-        color: #8c939d;
-        width: 65px;
-        height: 65px;
-        line-height: 65px;
-        text-align: center;
-    }
-    .avatar-box{
-        width:65px;
-        height: 65px;
-        position: relative;
-        .avatar {
-            width:65px;
-            height: 65px;
-            display: block;
-        }
-        .avatar-back{
-            position: absolute;
-            height: 65px;
-            width: 65px;
-            top: 0;
-            z-index: 4;
-            background: rgba(0,0,0,.5)
-        }
-    }
+}
+.no-icon-style{
+    height: 120px;
+    width: 120px;
+    line-height: 120px;
+    text-align: center;
+    color: #fff;
+    background: rgba(0,0,0,0.3)
+}
 
 </style>

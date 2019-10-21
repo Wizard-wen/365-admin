@@ -1,12 +1,12 @@
 <template>
     <div class="worker" v-loading="is_loading">
         <sale-worker-table-component
-            :staffTable="staffTable"
+            :tableData="staffTable"
             :maxLength="maxLength"
             :controlScopeLength="150">
 
             <template slot="searchList">
-                <div class="search-list">
+                <div class="left-search-module">
                     <query-component :queryFrom="'order'" @updateTable="updateTable"></query-component>
                 </div>
             </template>
@@ -14,7 +14,7 @@
             <template slot="searchForm">
                 <query-tag-component 
                     :queryFormConfig="workerConfigForm"
-                    :queryedList="querySaleWorkerList"
+                    :queryedList="queryedSaleWorkerList"
                     @updateTable="updateTagTable"></query-tag-component>
                 <el-button type="primary" @click="createWorker">申请创建服务人员</el-button>
             </template>
@@ -72,11 +72,6 @@
             return {
                 //员工信息列表
                 staffTable: [],
-                //表单搜索项
-                staffSearch: {
-                    name: '', //姓名
-                    phone:'',//手机号
-                },
                 is_loading:false,
                 /**
                  * 分页信息
@@ -114,8 +109,8 @@
             workerConfigForm(){
                 return this.$store.state.operateModule.workerConfigForm
             },
-            querySaleWorkerList(){
-                return this.$store.state.saleModule.workerList
+            queryedSaleWorkerList(){
+                return this.$store.state.saleModule.saleWorkerList
             }
         },
         methods: {
@@ -248,7 +243,6 @@
                     query: {
                         id: row.id,
                         from: 1,//
-
                     }
                 })
             },

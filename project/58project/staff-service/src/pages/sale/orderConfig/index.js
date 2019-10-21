@@ -16,10 +16,12 @@ import contractList from  './contractList.vue'
 //更改订单详情字段弹窗
 import changeOrderDialog from './changeOrderDialog.vue'
 
+import orderPictureComponent from './orderPictureComponent.vue'
 export {
     refuseServiceDialog,
     assignDialog,
     matchServiceList,
     contractList,
-    changeOrderDialog
+    changeOrderDialog,
+    orderPictureComponent,
 }

@@ -1,7 +1,7 @@
 <template>
     <div class="worker">
         <contract-table-component
-            :staffTable="order_contract"
+            :tableData="order_contract"
             :controlScopeLength="200">
 
             <template slot="control" slot-scope="controler">

@@ -5,7 +5,7 @@
 
         <div class="table-list">
             <el-table 
-                :data="staffTable" 
+                :data="tableData" 
                 class="worker-table" 
                 :stripe="true" 
                 border 
@@ -65,7 +65,7 @@
         },
         props: {
             //员工信息列表
-            staffTable: {
+            tableData: {
                 type: Array,
                 default:function(){return []}
             },

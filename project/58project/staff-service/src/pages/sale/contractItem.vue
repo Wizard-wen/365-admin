@@ -325,9 +325,7 @@
 <script>
     import {operateService, $utils, saleService} from '../../../common'
     import {
-        // paperComponent,
         photoComponent,
-        // makeImageComponent
     } from '../operate/worker/workerItem/index.js'
     import {
     selectTagComponent} from '@/pages/components'

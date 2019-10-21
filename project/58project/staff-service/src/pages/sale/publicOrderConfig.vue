@@ -52,6 +52,20 @@
                     </div>
                 </div>
             </div>
+            <!-- 生成订单名片组件 -->
+            <template>
+                <make-image-component
+                    :height="500"
+                    :width="460"
+                    :makeImageDialogVisible="makeImageDialogVisible"
+                    v-if="makeImageDialogVisible"
+                    @closeMakeImageDialog="makeImageDialogVisible = false">
+                    <template slot="pictureContains">
+                        <order-picture-component
+                            :pictureForm="orderBase"></order-picture-component>
+                    </template>
+                </make-image-component>
+            </template>
             <div class="order-message" v-if="orderBase.type == 1 || orderBase.type == 3">
                 <div class="title">
                     <div class="title-contains">
@@ -121,18 +135,23 @@
 
     import {
         matchServiceList,
+        orderPictureComponent,
     } from './orderConfig/index.js'
     import {
-        tableTagComponent
+        tableTagComponent,
+        makeImageComponent
     } from '@/pages/components'
 export default {
     components: {
         matchServiceList,
-        tableTagComponent
+        tableTagComponent,
+        makeImageComponent,
+        orderPictureComponent,
     },
     data(){
         return {
             is_loading: false,
+            makeImageDialogVisible: false,
             matchStaffSignList: [
                 {id: 1, name: '未签约'},
                 {id: 2, name: '已签约'},
@@ -280,7 +299,7 @@ export default {
          * 生成订单图片
          */
         makeOrderImage(){
-            
+            this.makeImageDialogVisible = true
         },
     },
     async mounted(){
