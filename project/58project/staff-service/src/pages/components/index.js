@@ -1,4 +1,4 @@
-
+import Vue from 'vue'
 //级联选择器组件
 import cascaderComponent from './cascaderComponent.vue'
 //照片详情组件
@@ -30,10 +30,11 @@ import {
     querySearchList,
 } from './queryComponent/index.js'
 
-
-
 //表单页面组件
 import pageEditComponent from './pageEditComponent.vue'
+
+
+Vue.component('selectTagComponent', selectTagComponent);
 
 export {
     cascaderComponent,

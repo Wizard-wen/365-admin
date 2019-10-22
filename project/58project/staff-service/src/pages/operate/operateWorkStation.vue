@@ -64,74 +64,10 @@
         </div>
         <div class="down-board">
             <div class="left-board">
-                <div class="order-box">
-                    <div class="title">
-                        <div class="title-contains">
-                            <div class="left">新的订单申请</div>
-                            <div class="control">全部订单订单申请</div>
-                        </div>
-                    </div>
-                    <div class="order-list">
-                        <div class="order-card">
-                            <div class="tag-list">
-
-                            </div>
-                            <div class="control">
-                                <div class="time">创建于2019-07-14</div>
-                                <div class="btn">进入订单申请</div>
-                            </div>
-                        </div>
-                        <div class="order-card">
-
-                        </div>
-                        <div class="order-card">
-
-                        </div>
-                        <div class="order-card">
-
-                        </div>
-                        <div class="order-card">
-
-                        </div>
-                        <div class="order-card">
-
-                        </div>
-                    </div>
-                </div>
-                <div class="order-box">
-                    <div class="title">
-                        <div class="title-contains">
-                            <div class="left">新的服务人员申请</div>
-                            <div class="control">全部服务人员申请</div>
-                        </div>
-                    </div>
-                    <div class="order-list">
-                        <div class="order-card">
-                            <div class="tag-list">
-
-                            </div>
-                            <div class="control">
-                                <div class="time">创建于2019-07-14</div>
-                                <div class="btn">进入服务人员申请</div>
-                            </div>
-                        </div>
-                        <div class="order-card">
-
-                        </div>
-                        <div class="order-card">
-
-                        </div>
-                        <div class="order-card">
-
-                        </div>
-                        <div class="order-card">
-
-                        </div>
-                        <div class="order-card">
-
-                        </div>
-                    </div>
-                </div>
+                
+                <user-order-application></user-order-application>
+                <store-order-application></store-order-application>
+                <staff-application></staff-application>
             </div>
             <div class="right-board">
                 <div class="operation-box">
@@ -141,16 +77,20 @@
                         </div>
                     </div>
                     <div class="operation-list">
-                        <div class="control" @click="goWorkerList">全部服务人员</div>
-                        <div class="control" @click="goWorkerList">回访服务人员</div>
-                        <div class="control" @click="goWorkerList">我维护的劳动者</div>
-                        <div class="control" @click="goWorkerList">审核新服务人员</div>
-                        <div class="control" @click="goWorkerList">异常服务人员</div>
-                        <div class="control" @click="goWorkerList">全部订单</div>
-                        <div class="control" @click="goWorkerList">已签约订单</div>
-                        <div class="control" @click="goWorkerList">公海订单</div>
-                        <div class="control" @click="goWorkerList">门店订单申请</div>
-                        <div class="control" @click="goWorkerList">合同列表</div>
+                        <div class="control" @click="goWorkerList">服务人员信息库</div>
+                        <div class="control" @click="goReturnWorkerList">回访服务人员</div>
+                        <div class="control" @click="goNewWorkerList">审核新服务人员</div>
+                        <div class="control" @click="goErrorWorkerList">异常服务人员</div>
+                        <div class="control" @click="goOperateOrderList">订单列表</div>
+                        <div class="control" @click="goClientRequireList">客户端订单申请</div>
+                        <div class="control" @click="goOperateOrderApplyList">门店订单申请</div>
+                        <div class="control" @click="goOperateVoidContractList">空合同列表</div>
+                        <div class="control" @click="goOperateContractList">合同列表</div>
+                        <div class="control" @click="goProductList">服务商品列表</div>
+                        <div class="control" @click="goResourceList">广告资源库</div>
+                        <div class="control" @click="goVideoList">视频素材库</div>
+                        <div class="control" @click="goWorkerAdList">服务端广告位</div>
+                        <div class="control" @click="goCustomAdList">客户端广告位</div>
                     </div>
                 </div>
                 <div class="rank-box">
@@ -174,16 +114,127 @@
     </div>
 </template>
 <script>
+import {operateService} from '../../../common/index.js'
+
+import {
+    userOrderApplication,
+    storeOrderApplication,
+    staffApplication,
+} from './operateWorkstation/index.js'
 export default {
+    components: {
+        userOrderApplication,
+        storeOrderApplication,
+        staffApplication,
+    },
     data(){
         return {
-
+            is_loading: false,
+        }
+    },
+    computed: {
+        /**
+         * 当前用户信息
+         */
+        presentUser(){
+            return this.$store.state.loginModule.user
+        },
+        /**
+         * 工作台数据
+         */
+        saleWorkstation(){
+            return this.$store.state.operateModule.operateWorkstation
         }
     },
     methods: {
+        //服务人员信息库
         goWorkerList(){
-            this.$router.push('/sale/saleWorkerList')
+            this.$router.push('/worker/workerList')
+        },
+        //回访服务人员
+        goReturnWorkerList(){
+            this.$router.push('/worker/returnWorkerList')
+        },
+        //审核新服务人员
+        goNewWorkerList(){
+            this.$router.push('/worker/newWorkerList')
+        },
+        //异常服务人员
+        goErrorWorkerList(){
+            this.$router.push('/worker/errorWorkerList')
+        },
+        //订单列表
+        goOperateOrderList(){
+            this.$router.push('/operate/operateOrderList')
+        },
+        //客户端订单申请
+        goClientRequireList(){
+            this.$router.push('/operate/clientRequireList')
+        },
+        //门店订单申请
+        goOperateOrderApplyList(){
+            this.$router.push('/operate/operateOrderApplyList')
+        },
+        //合同列表
+        goOperateContractList(){
+            this.$router.push('/operate/operateContractList')
+        },
+        //空合同列表
+        goOperateVoidContractList(){
+            this.$router.push('/operate/operateVoidContractList')
+        },
+        //服务商品列表
+        goProductList(){
+            this.$router.push('/operate/productList')
+        },
+        //广告资源库
+        goResourceList(){
+            this.$router.push('/operate/resourceList')
+        },
+        //视频素材库
+        goVideoList(){
+            this.$router.push('/operate/videoList')
+        },
+        //服务端广告位
+        goWorkerAdList(){
+            this.$router.push('/operate/workerAdList')
+        },
+        //客户端广告位
+        goCustomAdList(){
+            this.$router.push('/operate/customAdList')
+        },
+        /**
+         * 获取运营工作台数据
+         */
+        async getData(){
+            try{
+                this.is_loading = true
+                await operateService.getOperateWorkBench(this.presentUser.id).then(data =>{
+                    if(data.code == '0'){
+                        //设置工作台数据
+                        this.$store.commit('configOperateWorkstation', data.data)
+                        this.is_loading = false
+                    }
+                }).catch(error =>{
+                    this.$message({
+                        message: error.message,
+                        type: 'error'
+                    })
+                    this.is_loading = false
+                }).finally(() =>{
+                    this.is_loading = false
+                })
+            } catch(error){
+                this.$message({
+                    message: error.message,
+                    type: 'error'
+                })
+                this.is_loading = false
+            }
         }
+    },
+    async mounted(){
+        await this.getData()
     }
 }
 </script>
@@ -276,78 +327,6 @@ export default {
         margin-top: 24px;
         .left-board{
             width: 67%;
-            .order-box{
-                margin: 0 10px;
-                margin-bottom:24px;
-                height: 342px;
-                background: #fff;
-                .title{
-                    min-height: 48px;
-                    margin-bottom: -1px;
-                    padding: 0 24px;
-                    color: rgba(0,0,0,.85);
-                    font-weight: 500;
-                    font-size: 16px;
-                    background: transparent;
-                    border-bottom: 1px solid #e8e8e8;
-                    border-radius: 2px 2px 0 0;
-                    zoom: 1;
-                    .title-contains{
-                        display: flex;
-                        align-items: center;
-                        .left{
-                            display: inline-block;
-                            flex: 1 1;
-                            padding: 16px 0;
-                            overflow: hidden;
-                            white-space: nowrap;
-                            text-overflow: ellipsis;
-                        }
-                        .control{
-                            float: right;
-                            margin-left: auto;
-                            padding: 16px 0;
-                            color: #1890ff;
-                            font-weight: 400;
-                            font-size: 14px;
-                        }
-                    }
-
-                }
-                .order-list{
-                    box-sizing: border-box;
-                    .order-card{
-                        float: left;
-                        height: 143px;
-                        width: 33.33%;
-                        padding: 20px;
-                        border: 0;
-                        border-radius: 0;
-                        box-shadow: 1px 0 0 0 #e8e8e8, 0 1px 0 0 #e8e8e8, 1px 1px 0 0 #e8e8e8, inset 1px 0 0 0 #e8e8e8, inset 0 1px 0 0 #e8e8e8;
-                        transition: all .3s;
-                        .tag-list{
-                            height: 90px;
-                            width: 100%;
-                        }
-                        .control{
-                            height: 30px;
-                            width: 100%;
-                            display: flex;
-                            justify-content: space-between;
-                            .time{
-                                line-height: 30px;
-                                flex: 1;
-                                font-size: 14px;
-                            }
-                            .btn{
-                                line-height: 30px;
-                                // width: 120px;
-                                color: #1890ff;
-                            }
-                        }
-                    }
-                }
-            }
             .message-box{
                 margin: 0 10px;
                 margin-top:24px;
@@ -427,7 +406,6 @@ export default {
             width: 33%;
             .operation-box{
                 margin: 0 10px;
-                height: 181px;
                 background: #fff;
                 .title{
                     min-height: 48px;
@@ -461,8 +439,9 @@ export default {
                     .control{
                         box-sizing: border-box;
                         display: inline-block;
-                        width: 25%;
+                        // width: 25%;
                         margin-bottom: 13px;
+                        margin-right: 10px;
                         color: rgba(0,0,0,.65);
                         font-size: 14px;
                         overflow: hidden;

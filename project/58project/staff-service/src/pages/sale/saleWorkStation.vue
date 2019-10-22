@@ -64,52 +64,8 @@
         </div>
         <div class="down-board">
             <div class="left-board">
-                <div class="order-box">
-                    <div class="title">
-                        <div class="title-contains">
-                            <div class="left">待处理订单</div>
-                            <div class="control" @click="goSaleOrderList">全部订单</div>
-                        </div>
-                    </div>
-                    <div class="order-list">
-                        <div 
-                            class="order-card" 
-                            v-for="(item, index) in saleWorkstation.processing_order"
-                            :key="index">
-                            <div class="tag-list">
-
-                            </div>
-                            <div class="control">
-                                <div class="time">创建于2019-07-14</div>
-                                <div class="btn" @click="goOrderDetailPage(item)">进入订单</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="message-box">
-                    <div class="title">
-                        <div class="title-contains">
-                            <div class="left">动态信息</div>
-                        </div>
-                    </div>
-                    <div class="message-list">
-                        <div 
-                            class="list-item"
-                            :key="index"
-                            v-for="(item, index) in saleWorkstation.dynamic_information">
-                            <div class="item-contains">
-                                <div class="icon-box">
-                                    <img src="./saleWorkStation/images/icon.png" alt="">
-                                </div>
-                                <div class="right">
-                                    <div class="news">和平门店 宋希文 创建订单</div>
-                                    <div class="time">2019-07-14</div>
-                                </div>
-                                <div class="btn" @click="goPublicOrderPage(item)">进入公海订单</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                <processing-order></processing-order>
+                <dynamic-information></dynamic-information>
             </div>
             <div class="right-board">
                 <div class="operation-box">
@@ -120,13 +76,12 @@
                     </div>
                     <div class="operation-list">
                         <div class="control" @click="openOrderApplyDialog">申请订单</div>
-                        <div class="control" @click="goSaleWorkerList" :title="'服务人员信息库'">服务人员信息库</div>
+                        <div class="control" @click="goSaleWorkerList">服务人员信息库</div>
                         <div class="control" @click="goSaleOrderList">我的订单</div>
                         <div class="control" >我的客户</div>
                         <div class="control" @click="goContractList">我的合同</div>
                         <div class="control" @click="goPublicOrderList">公海订单</div>
-                        <div class="control" @click="goSaleOwnWorkerList">我的服务人员</div>
-                        <div class="control" >待签约订单</div>
+                        <div class="control" @click="goSaleOwnWorkerList">我创建的服务人员</div>
                     </div>
                 </div>
                 <div class="rank-box">
@@ -155,18 +110,22 @@
     </div>
 </template>
 <script>
-import {applyOrderDialog} from './saleWorkStation/index.js'
+import {
+    applyOrderDialog,
+    processingOrder,
+    dynamicInformation,
+} from './saleWorkStation/index.js'
 import {saleService} from '../../../common/index.js'
 export default {
     data(){
         return {
             applyOrderDialogVisible: false,//订单申请弹窗显示隐藏
-
-
         }
     },
     components: {
         applyOrderDialog,
+        processingOrder,
+        dynamicInformation,
     },
     computed: {
         /**
@@ -356,153 +315,7 @@ export default {
         margin-top: 24px;
         .left-board{
             width: 67%;
-            .order-box{
-                margin: 0 10px;
-                height: 342px;
-                background: #fff;
-                .title{
-                    min-height: 48px;
-                    margin-bottom: -1px;
-                    padding: 0 24px;
-                    color: rgba(0,0,0,.85);
-                    font-weight: 500;
-                    font-size: 16px;
-                    background: transparent;
-                    border-bottom: 1px solid #e8e8e8;
-                    border-radius: 2px 2px 0 0;
-                    zoom: 1;
-                    .title-contains{
-                        display: flex;
-                        align-items: center;
-                        .left{
-                            display: inline-block;
-                            flex: 1 1;
-                            padding: 16px 0;
-                            overflow: hidden;
-                            white-space: nowrap;
-                            text-overflow: ellipsis;
-                        }
-                        .control{
-                            float: right;
-                            margin-left: auto;
-                            padding: 16px 0;
-                            color: #1890ff;
-                            font-weight: 400;
-                            font-size: 14px;
-                        }
-                    }
-
-                }
-                .order-list{
-                    box-sizing: border-box;
-                    .order-card{
-                        float: left;
-                        height: 143px;
-                        width: 33.33%;
-                        padding: 20px;
-                        border: 0;
-                        border-radius: 0;
-                        box-shadow: 1px 0 0 0 #e8e8e8, 0 1px 0 0 #e8e8e8, 1px 1px 0 0 #e8e8e8, inset 1px 0 0 0 #e8e8e8, inset 0 1px 0 0 #e8e8e8;
-                        transition: all .3s;
-                        .tag-list{
-                            height: 90px;
-                            width: 100%;
-                        }
-                        .control{
-                            height: 30px;
-                            width: 100%;
-                            display: flex;
-                            justify-content: space-between;
-                            .time{
-                                line-height: 30px;
-                                flex: 1;
-                                font-size: 14px;
-                            }
-                            .btn{
-                                line-height: 30px;
-                                // width: 120px;
-                                color: #1890ff;
-                            }
-                        }
-                    }
-                }
-            }
-            .message-box{
-                margin: 0 10px;
-                margin-top:24px;
-                height: 649px;
-                background: #fff;
-                .title{
-                    min-height: 48px;
-                    margin-bottom: -1px;
-                    padding: 0 24px;
-                    color: rgba(0,0,0,.85);
-                    font-weight: 500;
-                    font-size: 16px;
-                    background: transparent;
-                    border-bottom: 1px solid #e8e8e8;
-                    border-radius: 2px 2px 0 0;
-                    zoom: 1;
-                    .title-contains{
-                        display: flex;
-                        align-items: center;
-                        .left{
-                            display: inline-block;
-                            flex: 1 1;
-                            padding: 16px 0;
-                            overflow: hidden;
-                            white-space: nowrap;
-                            text-overflow: ellipsis;
-                        }
-                    }
-
-                }    
-                .message-list{
-                    padding: 0 24px 8px;
-                    height: 600px;
-                    overflow: auto;
-                    .list-item{
-                        padding: 16px 0;
-                        border-bottom: 1px solid #e8e8e8;
-                        .item-contains{
-                            position: relative;
-                            display: flex;
-                            align-items: flex-start;
-                            .icon-box{
-                                height: 32px;
-                                width: 32px;
-                                margin-right: 16px;
-                                & img{
-                                    height: 32px;
-                                    width: 32px;
-                                }
-                            }
-                            .right{
-                                .news{
-                                    margin-bottom: 4px;
-                                    color: rgba(0,0,0,.65);
-                                    font-size: 14px;
-                                    line-height: 22px;
-                                }
-                                .time{
-                                    color: rgba(0,0,0,.45);
-                                    font-size: 14px;
-                                    line-height: 22px;
-                                }
-                            }
-                            .btn{
-                                position: absolute;
-                                right: 10px;
-                                bottom: 5px;
-                                line-height: 30px;
-                                font-size: 14px;
-                                color: #1890ff;
-                                cursor: pointer;
-                            }
-                        }
-                    }
-                } 
-            }
+            
         }
         .right-board{
             width: 33%;

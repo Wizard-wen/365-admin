@@ -1,123 +1,125 @@
 <template>
-<div class="mySetting" v-loading="is_loading" >
+<div class="my-setting" v-loading="is_loading" >
+    <div class="my-setting-contains">
+        <el-tabs v-model="currentTabPosition" :tab-position="tabPosition" @tab-click="changeTab">
+            <el-tab-pane label="员工基本信息" name="basic">
+                <el-form label-width="120px" ref="baseForm" :model="baseForm" class="publicForm baseForm">
+                    <el-form-item label="账号"  prop="account">
+                        <!-- <el-input v-model="baseForm.account" :maxlength="20" :disabled="true" ></el-input> -->
+                        {{baseForm.account}}
+                    </el-form-item>
 
-  <el-tabs v-model="currentTabPosition" :tab-position="tabPosition" @tab-click="changeTab">
-    <el-tab-pane label="员工基本信息" name="basic">
-        <el-form label-width="120px" ref="baseForm" :model="baseForm" class="publicForm baseForm">
-            <el-form-item label="账号"  prop="account">
-                <!-- <el-input v-model="baseForm.account" :maxlength="20" :disabled="true" ></el-input> -->
-                {{baseForm.account}}
-            </el-form-item>
+                    <el-form-item label="工号" prop="manager_code">
+                        <!-- <el-input autocomplete="off" v-model="baseForm.manager_code"  :disabled="true" :maxlength="20"></el-input> -->
+                        {{baseForm.manager_code}}
+                    </el-form-item>
 
-            <el-form-item label="工号" prop="manager_code">
-                <!-- <el-input autocomplete="off" v-model="baseForm.manager_code"  :disabled="true" :maxlength="20"></el-input> -->
-                {{baseForm.manager_code}}
-            </el-form-item>
+                    <el-form-item label="真实姓名" prop="real_name">
+                        <!-- <el-input autocomplete="off" :disabled="true" v-model="baseForm.real_name" ></el-input> -->
+                        {{baseForm.real_name}}
+                    </el-form-item>
 
-            <el-form-item label="真实姓名" prop="real_name">
-                <!-- <el-input autocomplete="off" :disabled="true" v-model="baseForm.real_name" ></el-input> -->
-                {{baseForm.real_name}}
-            </el-form-item>
+                    <el-form-item label="所属部门" prop="department_id">
+                        <!-- <el-input v-model="department_name" :disabled="true"></el-input> -->
+                        <select-tag-component
+                            v-if="baseForm.department_id"
+                            :propTagList="departmentList"
+                            v-model="baseForm.department_id"
+                            :isSingle="true"
+                            :isEdit="false"></select-tag-component>
+                    </el-form-item>
+                </el-form>
+            </el-tab-pane>
+            <el-tab-pane label="员工个人信息" name="personal">
+                <el-form label-width="120px" ref="personalInfoForm" :rules="personalInfoRules" :model="personalInfoForm" class="publicForm personalInfoForm">
 
-            <el-form-item label="所属部门" prop="department_id">
-                <!-- <el-input v-model="department_name" :disabled="true"></el-input> -->
-                <select-tag-component
-                    v-if="baseForm.department_id"
-                    :propTagList="departmentList"
-                    v-model="baseForm.department_id"
-                    :isSingle="true"
-                    :isEdit="false"></select-tag-component>
-            </el-form-item>
-        </el-form>
-    </el-tab-pane>
-    <el-tab-pane label="员工个人信息" name="personal">
-        <el-form label-width="120px" ref="personalInfoForm" :rules="personalInfoRules" :model="personalInfoForm" class="publicForm personalInfoForm">
+                    <el-form-item label="用户名" prop="name">
+                        <el-input autocomplete="off" v-model="personalInfoForm.name" ></el-input>
+                    </el-form-item>
+                    <el-form-item label="头像" class="form-item-size">
+                        <el-upload
+                            accept=".jpg,.jpeg,.png,.gif,.bmp,.pdf,.JPG,.JPEG,.PBG,.GIF,.BMP,.PDF"
+                            class="icon-uploader"
+                            action="/admin/common/uploadImage"
+                            :show-file-list="false"
+                            :file-list="icon_fileList"
+                            :on-success="iconUploadSuccess"
+                            :before-upload="beforeAvatarUpload"
+                            :headers="uploadHeader">
 
-            <el-form-item label="用户名" prop="name">
-                <el-input autocomplete="off" v-model="personalInfoForm.name" ></el-input>
-            </el-form-item>
-            <el-form-item label="头像" class="form-item-size">
-                <el-upload
-                    accept=".jpg,.jpeg,.png,.gif,.bmp,.pdf,.JPG,.JPEG,.PBG,.GIF,.BMP,.PDF"
-                    class="icon-uploader"
-                    action="/admin/common/uploadImage"
-                    :show-file-list="false"
-                    :file-list="icon_fileList"
-                    :on-success="iconUploadSuccess"
-                    :before-upload="beforeAvatarUpload"
-                    :headers="uploadHeader">
+                            <div
+                                v-if="personalInfoForm.icon!=''"
+                                class="icon-box"
+                                @mouseover="showblack('0')"
+                                @mouseout="showblack('1')">
+                                <img class="icon-item" :src="personalInfoForm.icon == '' ? '' : `./resource/${personalInfoForm.icon}`" >
+                                <div class="icon-item-back" v-if="isShowBlack">
+                                    <i class="el-icon-edit icon-uploader-icon" style="color: #fff;font-size: 20px;"></i>
+                                </div>
+                            </div>
 
-                    <div
-                        v-if="personalInfoForm.icon!=''"
-                        class="icon-box"
-                        @mouseover="showblack('0')"
-                        @mouseout="showblack('1')">
-                        <img class="icon-item" :src="personalInfoForm.icon == '' ? '' : `./resource/${personalInfoForm.icon}`" >
-                        <div class="icon-item-back" v-if="isShowBlack">
-                            <i class="el-icon-edit icon-uploader-icon" style="color: #fff;font-size: 20px;"></i>
-                        </div>
-                    </div>
+                            <i v-else class="el-icon-plus icon-uploader-icon"></i>
+                        </el-upload>
+                    </el-form-item>
 
-                    <i v-else class="el-icon-plus icon-uploader-icon"></i>
-                </el-upload>
-            </el-form-item>
+                    <el-form-item label="手机号" prop="phone">
+                        <el-input autocomplete="off" v-model="personalInfoForm.phone" ></el-input>
+                    </el-form-item>
 
-            <el-form-item label="手机号" prop="phone">
-                <el-input autocomplete="off" v-model="personalInfoForm.phone" ></el-input>
-            </el-form-item>
+                    <el-form-item label="生日" prop="birthday">
+                        <el-date-picker 
+                            :picker-options="datePickerOption" 
+                            :default-value="timeDefaultShow"
+                            v-model="personalInfoForm.birthday" 
+                            value-format="timestamp" 
+                            type="date" 
+                            placeholder="请选择出生日期"></el-date-picker>
+                    </el-form-item>
 
-            <el-form-item label="生日" prop="birthday">
-                <el-date-picker 
-                    :picker-options="datePickerOption" 
-                    :default-value="timeDefaultShow"
-                    v-model="personalInfoForm.birthday" 
-                    value-format="timestamp" 
-                    type="date" 
-                    placeholder="请选择出生日期"></el-date-picker>
-            </el-form-item>
+                    <el-form-item label="邮箱" prop="email">
+                        <el-input autocomplete="off" v-model="personalInfoForm.email" ></el-input>
+                    </el-form-item>
 
-            <el-form-item label="邮箱" prop="email">
-                <el-input autocomplete="off" v-model="personalInfoForm.email" ></el-input>
-            </el-form-item>
+                    <el-form-item label="微信号" prop="wechat">
+                        <el-input autocomplete="off" v-model="personalInfoForm.wechat"></el-input>
+                    </el-form-item>
 
-            <el-form-item label="微信号" prop="wechat">
-                <el-input autocomplete="off" v-model="personalInfoForm.wechat"></el-input>
-            </el-form-item>
+                    <el-form-item label="个人简介" prop="personal_intro">
+                        <el-input type="textarea" v-model="personalInfoForm.personal_intro"></el-input>
+                    </el-form-item>
 
-            <el-form-item label="个人简介" prop="personal_intro">
-                <el-input type="textarea" v-model="personalInfoForm.personal_intro"></el-input>
-            </el-form-item>
+                    <el-form-item label="紧急联系人" prop="urgent">
+                        <el-input v-model="personalInfoForm.urgent"></el-input>
+                    </el-form-item>
 
-            <el-form-item label="紧急联系人" prop="urgent">
-                <el-input v-model="personalInfoForm.urgent"></el-input>
-            </el-form-item>
-
-            <el-form-item label="现住址" prop="current_address">
-                <el-input v-model="personalInfoForm.current_address"></el-input>
-            </el-form-item>
-            <el-form-item>
-                <el-button type="primary" @click="changePersonalInfo('personalInfoForm')">确认更改</el-button>
-            </el-form-item>
-        </el-form>
-    </el-tab-pane>
-    <el-tab-pane label="更改密码">
-        <el-form label-width="120px" ref="passwordChangeForm" :rules="passwordChangeRules" :model="passwordChangeForm" class="publicForm passwordChangeForm">
-            <el-form-item label="原密码" prop="password">
-                <el-input type="password" v-model="passwordChangeForm.password"></el-input>
-            </el-form-item>
-            <el-form-item label="新密码" prop="newPassword">
-                <el-input type="password" v-model="passwordChangeForm.newPassword"></el-input>
-            </el-form-item>
-            <el-form-item label="确认新密码" prop="reNewPassword">
-                <el-input type="password" v-model="passwordChangeForm.reNewPassword"></el-input>
-            </el-form-item>
-            <el-form-item>
-                <el-button type="primary" @click="changePassword('passwordChangeForm')">确认更改</el-button>
-                <el-button  @click="resetNewPasswordForm">重置</el-button>
-            </el-form-item>
-        </el-form>
-    </el-tab-pane>
-  </el-tabs>
+                    <el-form-item label="现住址" prop="current_address">
+                        <el-input v-model="personalInfoForm.current_address"></el-input>
+                    </el-form-item>
+                    <el-form-item>
+                        <el-button type="primary" @click="changePersonalInfo('personalInfoForm')">确认更改</el-button>
+                    </el-form-item>
+                </el-form>
+            </el-tab-pane>
+            <el-tab-pane label="更改密码">
+                <el-form label-width="120px" ref="passwordChangeForm" :rules="passwordChangeRules" :model="passwordChangeForm" class="publicForm passwordChangeForm">
+                    <el-form-item label="原密码" prop="password">
+                        <el-input type="password" v-model="passwordChangeForm.password"></el-input>
+                    </el-form-item>
+                    <el-form-item label="新密码" prop="newPassword">
+                        <el-input type="password" v-model="passwordChangeForm.newPassword"></el-input>
+                    </el-form-item>
+                    <el-form-item label="确认新密码" prop="reNewPassword">
+                        <el-input type="password" v-model="passwordChangeForm.reNewPassword"></el-input>
+                    </el-form-item>
+                    <el-form-item>
+                        <el-button type="primary" @click="changePassword('passwordChangeForm')">确认更改</el-button>
+                        <el-button  @click="resetNewPasswordForm">重置</el-button>
+                    </el-form-item>
+                </el-form>
+            </el-tab-pane>
+        </el-tabs>
+    </div>
+    
 </div>
 
 </template>
@@ -423,8 +425,16 @@ import {selectTagComponent} from '@/pages/components/index.js'
 
 
 <style lang="scss" scoped>
-.mySetting{
+
+.my-setting{
     padding: 24px;
+    min-height: calc(100vh - 50px);
+    width: 100%;
+    background: rgb(240, 242, 245);
+    .my-setting-contains{
+        background: #fff;
+        padding: 24px;
+    }
     .publicForm{
         width:760px;
     }

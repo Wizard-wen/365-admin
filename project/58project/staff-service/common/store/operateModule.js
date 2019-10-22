@@ -60,6 +60,18 @@ export const operateModule = {
         setWorkerConfigForm(state, workerConfigForm){
             state.workerConfigForm = workerConfigForm
         },
+        /**
+         * 初始化运营工作台数据
+         */
+        configOperateWorkstation(state, data){
+            state.operateWorkstation.staff_application = data.staff_application
+            state.operateWorkstation.store_order_application = data.store_order_application
+            state.operateWorkstation.user_order_application = data.user_order_application
+
+            state.operateWorkstation.return_staff_count = data.return_staff_count
+            state.operateWorkstation.staff_count = data.staff_count
+            state.operateWorkstation.user_count = data.user_count
+        },
         //设置订单申请相关搜索配置字段
         setOrderApplyConfigForm(state, orderApplyFormConfig){
             state.orderApplyFormConfig.apply_manager_id = orderApplyFormConfig.apply_manager_id
@@ -129,11 +141,23 @@ export const operateModule = {
         setClientRequire(state,payload){
             state.clientRequire[payload.queryKey] = payload.queryedList
         },
+        //设置运营工作台数据
+
     },
     state: {
         //服务人员相关列表配置
         workerConfigForm: {
 
+        },
+        //运营工作台
+        operateWorkstation: {
+            staff_application: [],//新服务人员申请
+            store_order_application: [],//门店订单申请
+            user_order_application: [],//客户订单申请
+
+            return_staff_count: {},//回访劳动者数量
+            staff_count: {},//劳动者数量
+            user_count: {},//用户数量
         },
         //订单申请相关列表筛选配置项
         orderApplyFormConfig: {

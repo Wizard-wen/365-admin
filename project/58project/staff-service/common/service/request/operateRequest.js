@@ -6,8 +6,19 @@
  */
 
 import axios from 'axios'
-// import {store} from '../../store/index.js'
-// console.log(store)
+
+
+
+/**
+ * 运营工作台
+ */
+export const operate_workstation = {
+    getOperateWorkBench(id){
+        return axios.get(`./admin/staff/workBench?id=${id}`)
+    }
+}
+
+
 /**
  * 运营中心客户端订单接口
  */
@@ -365,5 +376,6 @@ export default {
     ...operate_staffRequest,
     ...operate_serviceGood,
     ...operate_clientRequest,
-    ...operate_contract
+    ...operate_contract,
+    ...operate_workstation,
 }

@@ -14,15 +14,26 @@
                         </el-breadcrumb>
                     </div>
                     <div class="user">
-                        <img :src="minePic" alt="">
-                        <el-dropdown @command="handleCommand">
-                            <span class="el-dropdown-link">
-                                {{`你好！${$store.state.loginModule.user.name}`}}<i class="el-icon-arrow-down el-icon--right"></i>
-                            </span>
-                            <el-dropdown-menu slot="dropdown">
-                                <el-dropdown-item command="1">注销</el-dropdown-item>
-                            </el-dropdown-menu>
-                        </el-dropdown>
+                        <div class="user-contains">
+                            <div class="icon-box">
+                                <img class="user-icon" :src="minePic" alt="">
+                            </div>
+                            <div class="dropdown-box"> 
+                                  <el-dropdown @command="handleCommand" class="dropdown">
+                                    <span class="el-dropdown-link">
+                                        {{`你好！${$store.state.loginModule.user.name}`}}
+                                        <i class="el-icon-arrow-down el-icon--right"></i>
+                                    </span>
+                                    <el-dropdown-menu slot="dropdown">
+                                        <el-dropdown-item command="3">个人中心</el-dropdown-item>
+                                        <el-dropdown-item command="2">个人设置</el-dropdown-item>
+                                        <el-dropdown-item command="1">退出登录</el-dropdown-item>
+                                    </el-dropdown-menu>
+                                </el-dropdown>
+                            </div>
+                            
+                        </div>
+                        
                     </div>
                 </div>
             </div>
@@ -73,7 +84,7 @@ import menuVertical from '../menu/menuVertical/menuVertical.vue'
 import menuSpread from '../menu/menuSpread/menuSpread.vue'
 
 //图片
-import minePic from '../img/mine.svg'
+import minePic from '../img/header.png'
 
 //service方法
 import loginService from '../../service/loginService.js'
@@ -140,8 +151,10 @@ export default {
             if(type == '1'){
                 loginService.logout()
                 this.$router.push('/login')
+            } else if(type =='3'){
+                this.$router.push('/myCenter/homePage')
             } else if(type =='2'){
-                this.$router.push('/homePage')
+                this.$router.push('/myCenter/mySetting')
             }
         }
     },
@@ -207,10 +220,26 @@ export default {
                     float:right;
                     font-size: 14px;
                     line-height: 20px;
-                    padding: 10px 0;
-                    img{
-                        height: 20px;
-                        width: 20px;
+                    .user-contains{
+                        height: 50px;
+                        display: flex;
+                        .icon-box{
+                            height: 50px;
+                            width: 50px;
+                            padding: 13px;
+                            .user-icon{
+                                height: 24px;
+                                width: 24px;
+                            }
+                        }
+                        .dropdown{
+                            margin-top: 13px;
+                            height: 24px;
+                            line-height: 24px;
+                            .el-dropdown-link{
+
+                            }
+                        }
                     }
                 }
             }

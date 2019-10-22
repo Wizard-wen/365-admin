@@ -4,6 +4,16 @@
 import operateRequest from './request/operateRequest.js'
 import {store} from '../../common'
 
+
+/**
+ * 运营工作台
+ */
+export const operate_workstation = {
+    getOperateWorkBench(id){
+        return operateRequest.getOperateWorkBench(id)
+    }
+}
+
 /**
  * 运营订单申请service
  */
@@ -291,4 +301,5 @@ export default {
     ...operate_serviceGood,
     ...operate_clientRequest,
     ...operate_contract,
+    ...operate_workstation,
 }
