@@ -15,7 +15,7 @@ import operateOrderList from '@/pages/operate/order/orderList.vue'
 import operateOrderConfig from '@/pages/operate/order/orderConfig.vue'
 import operateOrderApplyList from '@/pages/operate/order/orderApplyList.vue'
 import operateOrderApplyItem from '@/pages/operate/order/orderApplyItem.vue'
- 
+import operateCreateOrderPage from '@/pages/operate/order/createOrderPage.vue'
 /**
  * 运营---合同管理
  */
@@ -51,7 +51,13 @@ import newWorkerList from '@/pages/operate/worker/newWorkerList.vue'
 import errorWorkerList from '@/pages/operate/worker/errorWorkerList.vue'
 import returnWorkerList from '@/pages/operate/worker/returnWorkerList.vue'
  
- 
+/**
+ * 客户管理
+ */ 
+import clientList from '@/pages/operate/client/clientList.vue'
+import clientItem from '@/pages/operate/client/clientItem.vue'
+
+
 export const operateConfigModule = [
     {
         path: '/operate/operateWorkStation',
@@ -62,6 +68,11 @@ export const operateConfigModule = [
         path: '/operate/operateOrderList',
         name: 'operateOrderList',
         component: operateOrderList,
+    },
+    {
+        path: '/operate/operateCreateOrderPage',
+        name: 'operateCreateOrderPage',
+        component: operateCreateOrderPage,
     },
     {
         path: '/operate/operateOrderConfig',
@@ -178,5 +189,15 @@ export const operateConfigModule = [
         path: '/worker/returnWorkerList',
         name: 'returnWorkerList',
         component: returnWorkerList,
+    },
+    {
+        path: '/operate/clientList',
+        name: 'clientList',
+        component: clientList,
+    },
+    {
+        path: '/operate/clientItem',
+        name: 'clientItem',
+        component: clientItem,
     },
 ]

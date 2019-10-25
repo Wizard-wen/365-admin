@@ -370,6 +370,23 @@ export const operate_contract = {
         return axios.get(`./admin/order/getManagerVoidContractSelection`)
     }
 }
+/**
+ * 客户列表 
+ */
+export const operate_userRequest = {
+    /**
+     * 获取用户列表
+     */
+    getUserList(){
+        return axios.get(`./admin/user/getUserList`)
+    },
+    /**
+     * 获取用户信息
+     */
+    getUser(id){
+        return axios.get(`./admin/user/getUser?id=${id}`)
+    }
+}
 export default {
     ...operate_orderApplyRequest,
     ...operate_publicRequest,
@@ -378,4 +395,5 @@ export default {
     ...operate_clientRequest,
     ...operate_contract,
     ...operate_workstation,
+    ...operate_userRequest,
 }

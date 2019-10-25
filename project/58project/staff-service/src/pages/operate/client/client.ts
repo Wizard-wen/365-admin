@@ -10,10 +10,15 @@ export interface clientObj{
     phone:string;//手机号码---筛选
     identify:string;//证件号码---筛选
 
+    /**
+     * 
+     */
     nick_name:string;//昵称---筛选
     icon:string;//头像---筛选
     sex:string;//性别---筛选
     birthday:string;//生日---筛选
 
     service_address:Array<object>;//服务地址，可能有多个，类似于淘宝的收货地址
+
+    orderList: [];
 }

@@ -10,7 +10,7 @@
 </template>
 
 <script>
-import {noticeArticleList} from './notice/index.js'
+import {noticeArticleList} from './noticeArticle/index.js'
 export default {
     data(){
         return {

@@ -141,13 +141,20 @@ export const operateModule = {
         setClientRequire(state,payload){
             state.clientRequire[payload.queryKey] = payload.queryedList
         },
-        //设置运营工作台数据
+        //设置客户端订单申请列表查询字段
+        setClientList(state,payload){
+            state.clientList[payload.queryKey] = payload.queryedList
+        },
 
     },
     state: {
         //服务人员相关列表配置
         workerConfigForm: {
 
+        },
+        //客户列表相关配置
+        clientConfigForm: {
+            
         },
         //运营工作台
         operateWorkstation: {
@@ -346,6 +353,14 @@ export const operateModule = {
           user_name: '',//客户姓名
           created_at: [],//创建时间
         },
+        // 运营客户列表
+        clientList: {
+            page: 1, //请求页码
+            pageNumber: 20,//单页信息数量
+
+            name: '',
+            phone: '',
+        }
     },
 }
 

@@ -3,22 +3,22 @@
 		<div class="home-left">
 			<div class="home-one">
 				<div class="home-icon">
-					<img src="./header.png" alt="">
+					<img :src="users.icon? `./resource/${users.icon}` : noHeaderImage" alt="">
 				</div>
 				<div class="home-name">{{users.name}}</div>
 				<div class="home-intro">祝你开心每一天！</div>
 			</div>
 			<div class="home-two">
 				<div class="staff-message-item">
-					<img class="icon" src="./images/work.svg" alt="">
+					<img class="icon" src="./homePage/images/work.svg" alt="">
 					<p class="message" v-for="(item, index) in users.role_name" :key="index">{{item}}</p>
 				</div>
 				<div class="staff-message-item">
-					<img class="icon" src="./images/company.svg" alt="">
+					<img class="icon" src="./homePage/images/company.svg" alt="">
 					<p class="message">中彤实业 - 365生活服务平台 - {{department_name}}</p>
 				</div>
 				<div class="staff-message-item">
-					<img class="icon" src="./images/area.svg" alt="">
+					<img class="icon" src="./homePage/images/area.svg" alt="">
 					<p class="message">辽宁省沈阳市</p>
 				</div>
 			</div>
@@ -48,11 +48,13 @@
 </template>
 
 <script>
-import {noticeArticleList} from './notice/index.js'
+import {noticeArticleList} from './noticeArticle/index.js'
+import noHeaderImage from './homePage/images/header.png'
 export default {
 	data() {
 		return {
 			noticeArticleList,
+			noHeaderImage,
 		};
 	},
 	computed: {

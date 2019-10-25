@@ -13,6 +13,7 @@
                     :queryFormConfig="orderFormConfig"
                     :queryedList="queryOrderList"
                     @updateTable="updateTagTable"></query-tag-component>
+                    <el-button type="primary" @click="goCreateOrderPage">创建订单</el-button>
             </template>
 
             <template slot="control" slot-scope="controler">
@@ -156,6 +157,11 @@
                     queryedList: val
                 })
                 await this.getOrderList()
+            },
+            goCreateOrderPage(){
+                this.$router.push({
+                    path: '/operate/operateCreateOrderPage'
+                })
             },
             /**
              * 前往订单处理页

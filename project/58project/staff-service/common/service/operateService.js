@@ -294,6 +294,21 @@ export const operate_contract = {
         return operateRequest.getManagerVoidContractSelection()
     }
 }
+/**
+ * 客户列表 
+ */
+export const operate_userRequest = {
+    getUserList(){
+        return operateRequest.getUserList()
+    },
+    /**
+     * 获取用户信息
+     */
+    getUser(id){
+        return operateRequest.getUser(id)
+    }
+}
+
 export default {
     ...operate_orderApplyRequest,
     ...operate_publicRequest,
@@ -302,4 +317,5 @@ export default {
     ...operate_clientRequest,
     ...operate_contract,
     ...operate_workstation,
+    ...operate_userRequest,
 }
