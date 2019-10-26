@@ -105,9 +105,8 @@ export default {
                 query: {
                     from: this.$route.query.from,
                     type: state == 'edit' ? 2 : 1,
-                    // position_id: this.$route.query.position_id,
-                    // resource_id: paperItem.id
-                    ad_position_resource_id: paperItem.ad_position_resource_id
+                    position_id: this.$route.query.position_id,
+                    resource_id: paperItem.id,
                 }
             })
         },
