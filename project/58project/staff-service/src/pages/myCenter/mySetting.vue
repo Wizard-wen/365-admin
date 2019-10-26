@@ -67,8 +67,7 @@
                     </el-form-item>
 
                     <el-form-item label="生日" prop="birthday">
-                        <el-date-picker 
-                            :picker-options="datePickerOption" 
+                        <el-date-picker  
                             :default-value="timeDefaultShow"
                             v-model="personalInfoForm.birthday" 
                             value-format="timestamp" 
@@ -117,7 +116,7 @@
                     </el-form-item>
                 </el-form>
             </el-tab-pane>
-        </el-tabs>
+        </el-tabs>  
     </div>
     
 </div>
@@ -200,7 +199,7 @@ import {selectTagComponent} from '@/pages/components/index.js'
                 get_for: 'personal',
                 name: '',//用户名
                 phone: '',//手机号
-                birthday: '',//生日
+                birthday: null,//生日
                 email: '',//邮箱
                 wechat: '',//微信
                 personal_intro: '',//个人简介
@@ -252,13 +251,11 @@ import {selectTagComponent} from '@/pages/components/index.js'
                         if(param.name == 'basic'){
                             this.baseForm = data.data
                         } else {
-                            this.timeDefaultShow = Date.parse(new Date());
+                            
                             this.personalInfoForm = {
                                 ...this.personalInfoForm,
-                                ...data.data
+                                ...data.data,
                             }
-                            // this.personalInfoForm.icon = this.personalInfoForm.icon ? 
-                            //     `./resource/${this.personalInfoForm.icon}` : ''
                         }
                     }).catch(error =>{
                         this.$message({
@@ -400,6 +397,7 @@ import {selectTagComponent} from '@/pages/components/index.js'
         },
     },
     async mounted(){
+        this.timeDefaultShow = Date.parse(new Date());
         try{
             this.is_loading = true
             await myCenterService.getPersonal(this.presentUser.id, 'basic').then(data =>{

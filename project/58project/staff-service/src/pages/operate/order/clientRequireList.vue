@@ -47,6 +47,12 @@
 			</template>
 
 		</client-list-table-component>
+		<pass-order-apply-dialog
+            v-if="orderApplyPassVisible"
+            :orderApplyId="orderApplyId"
+            @closeOrderApplyPassDialog="closeOrderApplyPassDialog"
+            :orderApplyPassVisible="orderApplyPassVisible"
+            :systemVersion="systemVersion"></pass-order-apply-dialog>
   </div>
 </template>
 
@@ -57,12 +63,13 @@ import {
   clientListTableComponent,
   queryComponent
 } from "./clientRequireList/index.js";
-
+import {passOrderApplyDialog} from './orderApplyItem/index.js'
 export default {
 	components: {
 		clientListTableComponent,
 		queryTagComponent,
 		queryComponent,
+		passOrderApplyDialog,
 	},
 	data() {
 		return {
@@ -83,6 +90,7 @@ export default {
 			},
 			systemVersion: "", //系统版本号
 			orderApplyId: "", //当前订单id
+			orderApplyPassVisible:false ,
 		};
 	},
 	computed:{
@@ -174,7 +182,8 @@ export default {
 		async openPassOrderApply(paramObj) {
 			this.orderApplyId = paramObj.id;
 			this.systemVersion = paramObj.version; //系统版本号
-
+			this.orderApplyPassVisible = true
+			return ;
 			await this.$confirm("确定通过该订单申请吗？此操作将会关闭订单拒绝","提示",{
 				confirmButtonText: "确定",
 				cancelButtonText: "取消",
@@ -187,6 +196,13 @@ export default {
 					message: "已放弃"
 				});
 			});
+		},
+		/**
+		 * 关闭通过订单申请弹窗
+		 */
+		async closeOrderApplyPassDialog(){
+			await this.getTableList()
+			this.orderApplyPassVisible = false
 		},
 		/**
 		 * 改变客户端订单申请状态

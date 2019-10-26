@@ -95,6 +95,14 @@ export const operate_orderApplyRequest = {
             ...changeObj
         })
     },
+    /**
+     * 运营创建订单
+     */
+    createOrder(orderParamObj){
+        return axios.post(`./admin/order/createOrder`,{
+            ...orderParamObj
+        })
+    }
 }
 /**
  * 运营中心公共接口

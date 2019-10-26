@@ -109,28 +109,6 @@ export default {
                     resource_id: paperItem.id
                 }
             })
-            return 
-            if(state == 'edit'){
-                //现在在编辑证书
-                this.adResourceDialogForm.isEditAdItem = true
-                //给要编辑的证书赋值
-                this.adResourceDialogForm.adItemForm = {
-                    id: paperItem.id,
-                    name: paperItem.name,
-                    resource: [...paperItem.resource],
-                }
-            } else {
-                //现在在新建证书
-                this.adResourceDialogForm.isEditAdItem = false
-                //新建一个证书，所有值给空
-                this.adResourceDialogForm.adItemForm = {
-                    id: null,
-                    name: '', //证书类型名
-                    resource: [], //证书图片
-                }
-            }
-            //打开弹出框
-            this.adResourceDialogForm.adItemDialogVisible = true
         },
         /**
          * 删除一条图片数据

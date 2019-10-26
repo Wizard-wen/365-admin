@@ -128,12 +128,12 @@
             :changeApplyField="changeApplyField"
             @closeChangeApplyDialog="closeChangeApplyDialog"
             :fieldChangeDialogVisible="orderApplyFieldVisible"></change-apply-dialog>
-        <change-order-origin-dialog
-            v-if="orderOriginVisible"
+        <pass-order-apply-dialog
+            v-if="orderApplyPassVisible"
             :orderApplyId="orderApplyDetail.id"
-            :changeOrderOriginField="changeOrderOriginField"
-            @closeChangeOriginDialog="closeChangeOriginDialog"
-            :orderOriginVisible="orderOriginVisible"></change-order-origin-dialog>
+            @closeOrderApplyPassDialog="closeOrderApplyPassDialog"
+            :orderApplyPassVisible="orderApplyPassVisible"
+            :systemVersion="systemVersion"></pass-order-apply-dialog>
     </div>
 </template>
 
@@ -143,6 +143,7 @@ import {
     changeApplyDialog,
     changeOrderOriginDialog,
     } from './clientRequireItem/index.js'
+import {passOrderApplyDialog} from './orderApplyItem/index.js'
 export default {
     data() {
         return {
@@ -178,13 +179,6 @@ export default {
                 fieldName: '',
                 value: '',
             },
-            //订单申请来源显示隐藏
-            orderOriginVisible: false,
-            //订单申请来源
-            changeOrderOriginField: {
-                apply_manager_id: '',
-                apply_store_id: '',
-            },
             //拒绝订单申请表单
             refuseOrderApplyObject: {
                 id: this.$route.query.id,
@@ -192,11 +186,14 @@ export default {
                 version: '',
             },
             systemVersion: '',//系统版本号
+            //订单申请通过弹窗
+            orderApplyPassVisible: false,
         };
     },
     components: {
         changeApplyDialog,
         changeOrderOriginDialog,
+        passOrderApplyDialog,
     },
     methods: {
         /**
@@ -221,40 +218,14 @@ export default {
         //打开通过订单申请弹窗
         async openPassOrderApplyDialog(){
             this.systemVersion = this.orderApplyDetail.version
-            let reault = await this.$confirm("确定通过该订单申请吗？此操作将会关闭订单拒绝","提示",{
-                confirmButtonText: "确定",
-                cancelButtonText: "取消",
-                type: "warning"
-            }).catch(() => {
-                this.$message({
-                    type: "info",
-                    message: "已放弃"
-                });
-            });
-            if (reault == "confirm") {
-                store.commit("setLoading", 1);
-                try {
-                    await operateService.changeRequireType(this.orderApplyDetail.id,3).then(async data => {
-                        if (data.code == 0) {
-                            this.$message({
-                                type: "success",
-                                message: data.message
-                            });
-                        }
-                        await this.getApplication()
-
-                    }).catch(error => {
-                        this.$message({
-                            type: "error",
-                            message: error.message
-                        });
-                    }).finally(() =>{
-                        store.commit("setLoading", false);
-                    })
-                } catch (error) {
-                    throw error;
-                }
-            }
+            this.orderApplyPassVisible = true
+        },
+        /**
+         * 关闭通过订单申请弹窗
+         */
+        async closeOrderApplyPassDialog(){
+            await this.getApplication()
+            this.orderApplyPassVisible = false
         },
         /**
          * 拒绝订单申请年轻

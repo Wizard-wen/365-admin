@@ -139,6 +139,7 @@ export default {
          */
         removePic(file, fileList){
             this.editResourcePictureForm.url = ''
+            this.editResourcePictureForm.icon = ''
         },
         async onSubmit(formName){
             await this.$refs[formName].validate(async (valid) => {
@@ -146,7 +147,15 @@ export default {
                     //校验并提交
                     try{
                         this.is_loading = true
-                        await customService.editAdResource(this.editResourcePictureForm).then(data =>{
+
+                        //传递的图片url
+                        let sendPictureObject = {}
+                        sendPictureObject = {
+                            ...this.editResourcePictureForm,
+                            url: this.editResourcePictureForm.icon
+                        }
+
+                        await customService.editAdResource(sendPictureObject).then(data =>{
                             if(data.code == '0'){
                                 this.$message({
                                     type:"success",

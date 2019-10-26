@@ -79,7 +79,13 @@
             </el-form-item>
 
             <el-form-item label="出生日期" prop="birthday" class="form-item-size" size="small">
-                <el-date-picker :picker-options="datePickerOption" :default-value="timeDefaultShow" v-model="workerForm.birthday" value-format="timestamp" type="date" placeholder="请选择出生日期"></el-date-picker>
+                <el-date-picker 
+                    :picker-options="datePickerOption" 
+                    :default-value="timeDefaultShow" 
+                    v-model="workerForm.birthday" 
+                    value-format="timestamp" 
+                    type="date" 
+                    placeholder="请选择出生日期"></el-date-picker>
             </el-form-item>
 
             <el-form-item label="电话" prop="phone" class="form-item-size" size="small">

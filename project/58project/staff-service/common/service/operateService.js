@@ -48,6 +48,12 @@ export const operate_orderApplyRequest = {
     editAppLySource(changeObj){
         return operateRequest.editAppLySource(changeObj)
     },
+    /**
+     * 运营创建订单
+     */
+    createOrder(orderParamObj){
+        return operateRequest.createOrder(orderParamObj)
+    }
 
 }
 

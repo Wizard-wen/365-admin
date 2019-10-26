@@ -102,6 +102,7 @@ export default {
                 id: 0,
                 version: 0,
                 banner_url: '',
+                // banner_icon: ''
                 name: '',//商品标题
                 parent_id: '',//商品父级id
                 status: 1,//是否展示

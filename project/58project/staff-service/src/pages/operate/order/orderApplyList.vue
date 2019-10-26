@@ -56,7 +56,6 @@
     import {queryTagComponent} from '@/pages/components/index.js'
     import {
         orderApplyTableComponent,
-        // queryTagComponent,
         queryComponent,
     } from './orderApplyList/index.js'
 

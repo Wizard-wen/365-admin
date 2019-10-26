@@ -150,7 +150,7 @@ export default {
                 if (valid) {
                     try{
                         this.is_loading = true
-                        await operateService.applyOrder(this.createOrderForm).then(data =>{
+                        await operateService.createOrder(this.createOrderForm).then(data =>{
                             if(data.code == '0'){
                                 this.$message({
                                     type:"success",

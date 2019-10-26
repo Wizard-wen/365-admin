@@ -16,7 +16,7 @@
                     <div class="user">
                         <div class="user-contains">
                             <div class="icon-box">
-                                <img class="user-icon" :src="minePic" alt="">
+                                <img class="user-icon" :src="presentUser.icon? `./resource/${presentUser.icon}`: minePic" alt="">
                             </div>
                             <div class="dropdown-box"> 
                                   <el-dropdown @command="handleCommand" class="dropdown">
@@ -119,6 +119,9 @@ export default {
     computed:{
         isLoaded(){
             return store.state.loadingModule.isLoading
+        },
+        presentUser(){
+            return this.$store.state.loginModule.user
         }
     },
     watch: {
@@ -230,6 +233,7 @@ export default {
                             .user-icon{
                                 height: 24px;
                                 width: 24px;
+                                border-radius: 50%;
                             }
                         }
                         .dropdown{
