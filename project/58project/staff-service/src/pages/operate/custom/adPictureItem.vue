@@ -20,7 +20,7 @@
         </el-form-item>
 
         <upload-single-picture v-else v-model="adPictureForm.activity_object" :label="'跳转页详情图片'"></upload-single-picture>
-        
+
         <el-form-item>
             <el-button type="primary" @click="editAdPositionResource('adPictureForm')">提交</el-button>
             <el-button @click="goback">返回</el-button>
@@ -83,11 +83,11 @@ export default {
             //服务商品列表
             serviceList: [],
             //级联选择器选中的
-            clientCategoryIds: [],         
+            clientCategoryIds: [],
             propAttribute: {
                 label: 'name',
                 value: 'id'
-            }            
+            }
         }
     },
     methods: {
@@ -97,7 +97,7 @@ export default {
         async getResourceItem(){
             try{
                 this.is_loading = true
-                await customService.getAdPositionResource(this.$route.query.position_id,this.$route.query.resource_id).then(data =>{
+                await customService.getAdPositionResource(this.$route.query.ad_position_resource_id).then(data =>{
                     if(data.code == '0'){
                         this.adPictureForm = data.data
                         this.adPictureForm.resource_object = data.data.resource_object
@@ -162,7 +162,7 @@ export default {
                         })
                         this.is_loading = false
                     }
-                    
+
                 } else {
                     return false;
                 }
@@ -177,7 +177,7 @@ export default {
             }
             this.resourceListDialogVisible = true
         },
-        
+
         goback(){
             this.$router.go(-1)
         },
@@ -225,7 +225,7 @@ export default {
                 message: error.message
             })
         }
-        
+
     }
 }
 </script>

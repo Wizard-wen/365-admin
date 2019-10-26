@@ -78,8 +78,8 @@ export default {
      * @param position_id 广告位id
      * @param resource_id 广告位资源id
      */
-    getAdPositionResource(position_id, resource_id){
-        return customRequest.getAdPositionResource(position_id, resource_id)
+    getAdPositionResource(id){
+        return customRequest.getAdPositionResource(id)
     },
     /**
      * 编辑广告位图片

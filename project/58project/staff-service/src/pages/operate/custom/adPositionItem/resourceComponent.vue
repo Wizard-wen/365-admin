@@ -1,15 +1,15 @@
 <template>
     <div class="ad-box">
-        <el-button 
-            v-if="!isShow && isAddAdPictureButtonShow" 
-            style="margin-bottom:15px;" 
-            icon="el-icon-plus"  
+        <el-button
+            v-if="!isShow && isAddAdPictureButtonShow"
+            style="margin-bottom:15px;"
+            icon="el-icon-plus"
             @click="goAdPictureItemPage('new', {})">添加图片</el-button>
-        
+
         <div class="ad-imgs-box" v-for="(item, index) in adPositionList" :key="index">
             <div class="ad-imgs">
-                <img 
-                    class="ad-item-img" 
+                <img
+                    class="ad-item-img"
                     :src="'./resource/'+item.url"
                     @click="showDetialPic(it.url)">
             </div>
@@ -83,7 +83,7 @@ export default {
             deep: true,
         }
     },
-    
+
     data(){
         return {
             //广告位图片显示列表
@@ -105,11 +105,12 @@ export default {
                 query: {
                     from: this.$route.query.from,
                     type: state == 'edit' ? 2 : 1,
-                    position_id: this.$route.query.position_id,
-                    resource_id: paperItem.id
+                    // position_id: this.$route.query.position_id,
+                    // resource_id: paperItem.id
+                    ad_position_resource_id: paperItem.ad_position_resource_id
                 }
             })
-            return 
+            return
             if(state == 'edit'){
                 //现在在编辑证书
                 this.adResourceDialogForm.isEditAdItem = true
@@ -157,7 +158,7 @@ export default {
                 this.$message({
                     type: 'info',
                     message: '已取消删除'
-                });          
+                });
             });
 
         },
@@ -205,7 +206,7 @@ export default {
             }
         }
     }
-    
+
 
 
 </style>

@@ -91,8 +91,8 @@ export default {
     /**
      * 获取广告位图片
      */
-    getAdPositionResource(position_id, resource_id){
-        return axios.get(`./admin/ad/getAdPositionResource?position_id=${position_id}&resource_id=${resource_id}`)
+    getAdPositionResource(id){
+        return axios.get(`./admin/ad/getAdPositionResource?id=${id}`)
     },
     /**
      * 编辑广告位图片
