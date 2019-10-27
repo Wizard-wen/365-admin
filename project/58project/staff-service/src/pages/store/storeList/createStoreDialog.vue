@@ -6,7 +6,7 @@
         :show-close="false"
         :close-on-press-escape="false"
         :close-on-click-modal="false">
-        <el-form :model="createStoreForm" label-width="120px" ref="createStoreForm">
+        <el-form :model="createStoreForm" label-width="120px" :rules="storeRules" ref="createStoreForm">
             <el-form-item label="店铺名" prop="name">
                 <el-input v-model="createStoreForm.name" placeholder="请填写店铺名"></el-input>
             </el-form-item>
@@ -34,6 +34,7 @@
  */
 import {storeService} from '../../../../common'
 import { selectTagComponent } from "@/pages/components";
+import { is_thirdList } from '../../../../common/store/storeModule';
 export default {
     props:{
         /**
@@ -51,13 +52,13 @@ export default {
             createStoreForm: {
                 name: "",//门店名
 				address: "",//门店地址
-				is_third: 0,//门店类型 直营 加盟
+				is_third: 1,//门店类型 直营 加盟
 				remarks: "",//备注信息
             },
             //店铺规则
 			storeRules: {
 				name: [{ required: true, message: '请填写店铺名称', trigger: "blur" }],
-				address: [{ required: true, message: '请填写门店地址', trigger: "blur" }]
+                address: [{ required: true, message: '请填写门店地址', trigger: "blur" }],
 			},
             //店铺类型列表
 			typeList: [{ id: 1, name: "直营店" }, { id: 2, name: "加盟店" }],

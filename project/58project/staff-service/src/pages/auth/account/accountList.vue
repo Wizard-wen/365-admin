@@ -31,7 +31,7 @@
             </el-form>
 
             <!-- 表格 -->
-            <el-table :data="accountTable" class="account-table" :header-cell-style="{height: '48px',background: '#fafafa'}">
+            <el-table v-loading="is_loading" :data="accountTable" class="account-table" :header-cell-style="{height: '48px',background: '#fafafa'}">
 
                 <el-table-column label="编号" prop="id" align="center"></el-table-column>
                 <el-table-column label="账号" prop="account" align="center"></el-table-column>
@@ -86,6 +86,7 @@
         data() {
 
             return {
+                is_loading: false,
                 //用户列表
                 accountTable: [],
                 //门店基本信息列表
@@ -153,9 +154,10 @@
                     searchSelect: this.searchArray
                 }
 
-                store.commit('setLoading',true)
+                
 
                 try{
+                    this.is_loading = true
                     await authService.getManagerList(tableOption).then(data =>{
                         if(data.code == "0"){
                             this.accountTable = data.data.list.data
@@ -165,25 +167,28 @@
                             //分页信息
                             this.pagination.currentPage = data.data.list.current_page //当前页码
                             this.pagination.total = data.data.list.total //列表总条数
-                            store.commit('setLoading',false)
+                            this.is_loading = false
                         }
                     }).catch(error =>{
                         this.$message({
                             type:'error',
                             message: error.message
                         })
+                        this.is_loading = false
                     }).finally(() =>{
-                        store.commit('setLoading',false)
+                        this.is_loading = false
                     })
                 } catch(error){
                     this.$message({
                         type:'error',
                         message: error.message
                     })
+                    this.is_loading = false
                 }
             },
-            prevAndNextClick(val){
+            async prevAndNextClick(val){
                 this.pagination.currentPage = val
+                await this.getTableList()
             },
             /**
              * 切换页码
@@ -229,7 +234,6 @@
                         id: row.id,
                     }
                 })
-
             },
             /**
              * 停用或启用账户

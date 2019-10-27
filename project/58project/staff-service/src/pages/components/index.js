@@ -1,4 +1,6 @@
+
 import Vue from 'vue'
+
 //级联选择器组件
 import cascaderComponent from './cascaderComponent.vue'
 //照片详情组件
@@ -24,6 +26,7 @@ import tableTagComponent from './tableTagComponent.vue'
 /****************** tag相关组件结束***************************************************/
 
 import queryTagComponent from './queryTagComponent.vue'
+
 //列表搜索组件
 import {
     querySearchInput,
@@ -33,9 +36,12 @@ import {
 //表单页面组件
 import pageEditComponent from './pageEditComponent.vue'
 
+//单一图片上传组件
+import uploadSinglePictureComponent from './uploadSinglePictureComponent.vue'
+
 
 Vue.component('selectTagComponent', selectTagComponent);
-
+Vue.component('uploadSinglePictureComponent', uploadSinglePictureComponent);
 export {
     cascaderComponent,
     pictureDetailDialog,
@@ -48,4 +54,5 @@ export {
     querySearchInput,
     querySearchList,
     queryTagComponent,
+    uploadSinglePictureComponent,
 }

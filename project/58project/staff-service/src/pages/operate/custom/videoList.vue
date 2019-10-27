@@ -18,12 +18,17 @@
                     <div style="padding: 0 10px;">
                         <el-card :body-style="{ padding: '0px' }">
                             <div class="resource-box">
-                                <img :src="`./resource/${item.picture_url}`" class="general-image">
+                                <div class="picture-box">
+                                    <img v-if="item.picture_url" :src="`./resource/${item.picture_url}`" class="general-image">
+                                    <div v-else>暂无</div>
+                                </div>
+                                
                                 <div class="resource-message">
                                     <div class="header">
-                                        <p class="title">{{item.name}}</p>
-                                        <div class="created_at">上传于{{item.created_at | timeFomatter}}</div>
+                                        <p class="title" :title="item.name">{{item.name}}</p>
+                                        <div class="created_at">上传于&nbsp;{{item.created_at | timeFomatter}}</div>
                                     </div>
+                                    <div></div>
                                     <div class="bottom">
                                         <div class="bottom-left">
                                             <el-tag size="small">{{item.teacher}}</el-tag>
@@ -264,23 +269,32 @@ export default {
 }
 
     .resource-box{
-        .general-image{
+        .picture-box{
             height: 210px;
             width: 100%;
-            display: block;
+            .general-image{
+                height: 210px;
+                width: 100%;
+                display: block;
+            }
         }
+        
         .resource-message{
-            padding: 14px;
+            padding: 14px 7px 7px 7px;
             .header{
                 height: 20px;
                 width: 100%;
                 display: flex;
                 .title{
                     flex: 1;
+                    overflow: hidden;
+                    text-overflow:ellipsis;
+                    white-space: nowrap;
                 }
                 .created_at{
                     width: 120px;
                     color: #ccc;
+                    text-align: right;
                 }
             }
             .bottom {
@@ -294,9 +308,10 @@ export default {
                     width: 90px;
                 }
                 .bottom-right{
-                    width: 90px;
+                    width: 65px;
                     .button{
                         padding: 0;
+                        margin: 0;
                     }
                 }
             }

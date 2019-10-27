@@ -1,8 +1,12 @@
+
+//广告资源图片列表弹窗
 import resourceListDialog from './resourceListDialog.vue'
-import uploadSinglePicture from './uploadSinglePicture.vue'
+
+//上传单张广告资源图片组件
+import uploadSingleAdResourceComponent from './uploadSingleAdResourceComponent.vue'
 
 
 export {
     resourceListDialog,
-    uploadSinglePicture,
+    uploadSingleAdResourceComponent,
 }

@@ -14,35 +14,21 @@
         </div>
         <div class="product-form-box" v-loading="is_contains_loading">
             <div class="control">
-                <el-button type="primary" @click="createProduct">创建商品</el-button>
+                <el-button type="primary" @click="openCreateProductDialog">创建商品</el-button>
             </div>
             <el-form class="productForm" ref="productForm" :model="productForm" label-width="120px">
                 <el-form-item v-if="productForm.parent_id == 0" label="分类banner图" prop="banner_url" class="form-item-size">
-                    <el-upload
-                        accept=".jpg,.jpeg,.png,.gif,.bmp,.pdf,.JPG,.JPEG,.PBG,.GIF,.BMP,.PDF"
-                        class="icon-uploader"
-                        action="/admin/common/uploadImage"
-                        :show-file-list="false"
-                        :on-success="iconUploadSuccess"
-                        :headers="uploadHeader">
-
-                        <div
-                            v-if="productForm.banner_url!=''"
-                            class="icon-box"
-                            @mouseover="showblack('0')"
-                            @mouseout="showblack('1')">
-                            <img class="icon-item" :src="productForm.banner_url == '' ? '' : `./resource/${productForm.banner_url}`" >
-                            <div class="icon-item-back" v-if="isShowBlack">
-                                <i class="el-icon-edit icon-uploader-edit-icon" style="color: #fff;font-size: 20px;"></i>
-                            </div>
-                        </div>
-
-                        <i v-else class="el-icon-plus icon-uploader-icon"></i>
-                    </el-upload>
+                    <upload-single-picture-component
+                        :height="'178px'"
+                        :width="'350px'"
+                        :pictureUrl="productForm.banner_url"
+                        @singlePictureUploadSucess="uploadIconSuccess"></upload-single-picture-component>
                 </el-form-item>
+
                 <el-form-item label="服务标题">
                     <el-input v-model="productForm.name"></el-input>
                 </el-form-item>
+                
                 <el-form-item label="商品父级id">
                     <el-select v-model="productForm.parent_id" placeholder="商品父级id" :disabled="!hasParentNode">
                         <el-option v-for="item in selectionList" :key="item.id" :label="item.names" :value="item.id"></el-option>
@@ -55,6 +41,7 @@
                         v-model="productForm.status"
                         :isSingle="true"></select-tag-component>
                 </el-form-item>
+                
                 <el-form-item label="商品详情" prop="files" ref="files" v-if="hasParentNode">
                     <el-upload
                         accept=".jpg,.jpeg,.png,.gif,.bmp,.pdf,.JPG,.JPEG,.PBG,.GIF,.BMP,.PDF"
@@ -80,9 +67,12 @@
     </div>
 </template>
 <script>
-import {productListData,createProductDialog} from './productList/index.js'
+import {
+    productListData,
+    createProductDialog
+} from './productList/index.js'
+
 import { operateService } from '../../../../common';
-import { operateModule } from '../../../../common/store/operateModule';
 
 import {selectTagComponent} from '@/pages/components/index.js'
 
@@ -91,6 +81,7 @@ export default {
         return {
             //树形商品列表
             productTreeList: [],
+            //商品树结构key
             defaultProps: {
                 children: 'children',
                 label: 'name'
@@ -101,8 +92,8 @@ export default {
             productForm: {
                 id: 0,
                 version: 0,
-                banner_url: '',
-                // banner_icon: ''
+                banner_url: '',//分类banner url 上传字段
+                banner_icon: '',//分类banner icon 
                 name: '',//商品标题
                 parent_id: '',//商品父级id
                 status: 1,//是否展示
@@ -121,11 +112,6 @@ export default {
             defaultExpandKeys: [],
             is_tree_loading: false,//商品树形结构loading
             is_contains_loading: false, //商品详情loading
-            isShowBlack: false,//头像阴影
-            //图片上传header
-            uploadHeader:{
-                accessToken: this.$store.state.loginModule.token.access_token
-            }
         }
     },
     components:{
@@ -139,14 +125,19 @@ export default {
         async saveProduct(){
             try{
                 this.is_contains_loading = true
-                await operateService.editService(this.productForm).then(data =>{
+
+                let sendProductObject = {
+                    ...this.productForm,
+                    banner_url: this.productForm.banner_icon,
+                }
+
+                await operateService.editService(sendProductObject).then(data =>{
                     if(data.code == '0'){
                         this.$message({
                             type:'success',
                             message: data.message
                         })
                         this.is_contains_loading = false
-                        
                     }
                 }).catch(error =>{
                     this.$message({
@@ -157,11 +148,15 @@ export default {
                 }).finally(() =>{
                     this.is_contains_loading = false
                 })
+
+
                 //获取商品树形结构
                 await this.getServiceTree()
+                //设置当前被点击的节点id
                 if(this.productTreeList.length){
                     await this.setCurrentKey(this.productTreeList[0].id)
                 }
+
             } catch(error){
                 this.$message({
                     type:'error',
@@ -207,13 +202,13 @@ export default {
             }
         },
         /**
-         * 创建商品
+         * 打开创建商品弹窗
          */
-        createProduct(){
+        openCreateProductDialog(){
             this.createProductDialogVisible = true
         },
         /**
-         * 点击节点
+         * 点击商品树节点
          */
         async nodeClick(clickObject,currentObject){
             this.hasParentNode = clickObject.parent_id == 0 ? false : true;
@@ -317,19 +312,10 @@ export default {
             }
             await this.nodeClick(this.productTreeList[0])
         },
-        //头像上传成功
-        iconUploadSuccess(res, file) {
-            this.productForm.banner_url = res.data.path;
-        },
-        /**
-         * 上传头像，显示阴影
-         */
-        showblack(type){
-            if(type == '0'){
-                this.isShowBlack = true
-            } else {
-                this.isShowBlack = false
-            }
+        //banner上传成功
+        uploadIconSuccess(param) {
+            this.productForm.banner_url = param;
+            this.productForm.banner_icon = param;
         },
     },
     async mounted(){

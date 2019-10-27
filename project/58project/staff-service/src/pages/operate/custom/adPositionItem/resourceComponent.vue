@@ -115,30 +115,50 @@ export default {
          * 删除一条图片数据
          * @param param 图片信息
          */
-        deleteAdPictureItem(param){
-            this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
+        async deleteAdPictureItem(param){
+            await this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
                 confirmButtonText: '确定',
                 cancelButtonText: '取消',
                 type: 'warning'
-            }).then(() => {
-                this.adPositionList.forEach((item, index) =>{
-                    //判断证书分类字段
-                    if(item.id == param.id){
-                        //删除证书
-                        this.adPositionList.splice(index, 1)
-                    }
-                })
-                this.$message({
-                    type: 'success',
-                    message: '删除成功!'
-                });
+            }).then(async () => {
+                await this.deleteAdPositionResource(param.id)
             }).catch(() => {
                 this.$message({
                     type: 'info',
                     message: '已取消删除'
                 });
             });
-
+        },
+        /**
+         * 删除一条图片资源接口调用
+         */
+        async deleteAdPositionResource(id){
+            try{
+                this.is_loading = true
+                await customService.deleteAdPositionResource(id).then(data =>{
+                    if(data.code == '0'){
+                        this.$message({
+                            type:'success',
+                            message: data.message
+                        })
+                        this.is_loading = false
+                    }
+                }).catch(error =>{
+                    this.$message({
+                        type:'error',
+                        message: error.message
+                    })
+                    this.is_loading = false
+                }).finally(() =>{
+                    this.is_loading = false
+                })
+            } catch(error){
+                this.$message({
+                    type:'error',
+                    message: error.message
+                })
+                this.is_loading = false
+            }
         },
         /**
          * 查看大图

@@ -18,9 +18,9 @@
             <el-input type="textarea" v-model="editResourceVideoForm.video_url"></el-input>
         </el-form-item>
 
-        <upload-single-picture  v-model="editResourceVideoForm.picture_object" :label="'视频缩略图片'"></upload-single-picture>
+        <upload-single-ad-resource-component  v-model="editResourceVideoForm.picture_object" :label="'视频缩略图片'"></upload-single-ad-resource-component>
 
-        <upload-single-picture  v-model="editResourceVideoForm.video_detail_object" :label="'视频详情图片'"></upload-single-picture>
+        <upload-single-ad-resource-component  v-model="editResourceVideoForm.video_detail_object" :label="'视频详情图片'"></upload-single-ad-resource-component>
 
         <el-form-item>
             <el-button type="primary" @click="onSubmit('editResourceVideoForm')">修改</el-button>
@@ -33,11 +33,11 @@
 
 import {customService} from '../../../../common'
 import {selectTagComponent} from '@/pages/components/index.js'
-import {uploadSinglePicture} from './adPictureItem/index.js'
+import {uploadSingleAdResourceComponent} from './adPictureItem/index.js'
 export default {
     components: {
         selectTagComponent,
-        uploadSinglePicture,
+        uploadSingleAdResourceComponent,
     },
     data() {
         return {

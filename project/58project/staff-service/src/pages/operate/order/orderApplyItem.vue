@@ -20,11 +20,11 @@
                     </div>
                 </div>
                 <div class="detail-right">
-                    <div class="right-box" v-if="orderApplyDetail.type != 1">
+                    <div class="right-box">
                         <div class="title">状态</div>
                         <div 
                             class="value"
-                            :style="{color: orderApplyDetail.type == 2? '#f56c6c' : '#67c23a'}">{{orderApplyDetail.type == 2?'已拒绝':'已通过'}}</div>
+                            :style="{color: orderTypeStyle.color}">{{orderTypeStyle.text}}</div>
                     </div>
                 </div>
             </div>
@@ -231,6 +231,26 @@ export default {
         changeApplyDialog,
         changeOrderOriginDialog,
         passOrderApplyDialog
+    },
+    computed: {
+        orderTypeStyle(){
+            if(this.orderApplyDetail.type == 1){
+                return {
+                    color: '#E6A23C',
+                    text: '待处理',
+                }
+            } else if(this.orderApplyDetail.type == 2){
+                return {
+                    color: '#f56c6c',
+                    text: '已拒绝',
+                }
+            } else {
+                return {
+                    color: '#67c23a',
+                    text: '已通过',
+                }
+            }
+        }
     },
     methods: {
         /**

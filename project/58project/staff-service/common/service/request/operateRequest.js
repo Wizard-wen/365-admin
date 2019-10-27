@@ -45,11 +45,11 @@ export const operate_clientRequest = {
   },
   /**
    * 客户端改变客户意向动态
-   * @param id
-   * @param type 状态 （待处理：1，拒绝：2，通过：3）
   */
- changeRequireType(id,type){
-    return axios.post(`./admin/order/changeRequireType`,{id:id,type:type})
+ changeRequireType(sendObj){
+    return axios.post(`./admin/order/changeRequireType`,{
+        ...sendObj,
+    })
   },
 }
 /**

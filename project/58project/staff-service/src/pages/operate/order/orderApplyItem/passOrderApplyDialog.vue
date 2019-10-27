@@ -58,6 +58,17 @@ export default {
             type: Number,
             default: 0
         },
+        /**
+         * 订单申请类型
+         * 1 门店订单申请 2 客户订单申请 
+         */
+        orderType: {    
+            type: Number,
+            default: 1,
+        },
+        /**
+         * 系统version
+         */
         systemVersion: {
             type: Number | String,
             default: ''
@@ -100,10 +111,51 @@ export default {
             })
         },
         async onSubmit(formName){
-            //校验并提交
+            if(this.orderType == 1){
+                await this.dealApplication()
+            } else {
+                await this.changeRequireType()
+            }
+        },
+        /**
+         * 门店订单通过接口
+         */
+        async dealApplication(){
             try{
                 this.is_loading = true
                 await operateService.dealApplication(this.orderApplyForm).then(data =>{
+                    if(data.code == '0'){
+                        this.$message({
+                            type:"success",
+                            message: data.message
+                        })
+                        this.is_loading = false
+                        this.$emit('closeOrderApplyPassDialog')
+                    }
+                }).catch(error =>{
+                    this.$message({
+                        type:'error',
+                        message: error.message
+                    })
+                    this.is_loading = false
+                }).finally(() =>{
+                    this.is_loading = false
+                })
+            } catch(error){
+                this.$message({
+                    type:'error',
+                    message: error.message
+                })
+                this.is_loading = false
+            }
+        },
+        /**
+         * 客户订单通过接口
+         */
+        async changeRequireType(){
+            try{
+                this.is_loading = true
+                await operateService.changeRequireType(this.orderApplyForm).then(data =>{
                     if(data.code == '0'){
                         this.$message({
                             type:"success",

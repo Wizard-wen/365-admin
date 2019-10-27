@@ -3,25 +3,25 @@
         <!-- 订单申请详情 -->
         <div class="orderApply-header">
             <div class="orderApply-name">
-                <h4>申请编号：{{orderApplyDetail.require_code}}</h4>
+                <h4>申请编号：{{clientRequireDetailItem.require_code}}</h4>
             </div>
             <div class="btn-group">
                 <el-button size="mini" @click="goback">返回</el-button>
-                <el-button v-if="orderApplyDetail.type == 1" size="mini" @click="openPassOrderApplyDialog" type="success">通过</el-button>
-                <el-button v-if="orderApplyDetail.type == 1" size="mini" @click="refuseOrderApply" type="danger">拒绝</el-button>
+                <el-button v-if="clientRequireDetailItem.type == 1" size="mini" @click="openPassOrderApplyDialog" type="success">通过</el-button>
+                <el-button v-if="clientRequireDetailItem.type == 1" size="mini" @click="refuseOrderApply" type="danger">拒绝</el-button>
             </div>
             <div class="orderApply-detail">
                 <div class="detail-left">
                     <div class="detail-left-box">
-                        <div class="detail-left-line">申请创建时间：{{ orderApplyDetail.created_at | formDate }}</div>
+                        <div class="detail-left-line">申请创建时间：{{ clientRequireDetailItem.created_at | formDate }}</div>
                     </div>
                 </div>
                 <div class="detail-right">
-                    <div class="right-box" v-if="orderApplyDetail.type != 1">
+                    <div class="right-box">
                         <div class="title">状态</div>
-                        <div
+                        <div 
                             class="value"
-                            :style="{color: orderApplyDetail.type == 2? '#f56c6c' : '#67c23a'}">{{orderApplyDetail.type == 2?'已拒绝':'已通过'}}</div>
+                            :style="{color: orderTypeStyle.color}">{{orderTypeStyle.text}}</div>
                     </div>
                 </div>
             </div>
@@ -36,59 +36,59 @@
                 <div class="card-contains">
                     <div class="detail-left-box">
                         <div class="detail-left-line">
-                            客户名：{{orderApplyDetail.user_name}}
+                            客户名：{{clientRequireDetailItem.user_name}}
                             <el-button
                                 type="text"
                                 style="color: #409EFF"
-                                v-if="orderApplyDetail.type == 1"
+                                v-if="clientRequireDetailItem.type == 1"
                                 @click="openChangeOrderApplyFieldDialog('user_name','客户名')">修改</el-button>
                         </div>
                         <div class="detail-left-line">
-                            联系电话：{{orderApplyDetail.user_phone}}
+                            联系电话：{{clientRequireDetailItem.user_phone}}
                             <el-button
                                 type="text"
                                 style="color: #409EFF"
-                                v-if="orderApplyDetail.type == 1"
+                                v-if="clientRequireDetailItem.type == 1"
                                 @click="openChangeOrderApplyFieldDialog('user_phone','联系电话')">修改</el-button>
                         </div>
                         <div class="detail-all-line">
-                            工种：{{orderApplyDetail.work_type}}
+                            工种：{{clientRequireDetailItem.work_type}}
                             <el-button
                                 type="text"
                                 style="color: #409EFF"
-                                v-if="orderApplyDetail.type == 1"
+                                v-if="clientRequireDetailItem.type == 1"
                                 @click="openChangeOrderApplyFieldDialog('work_type','工种')">修改</el-button>
                         </div>
                         <div class="detail-all-line">
-                            服务地址：{{orderApplyDetail.service_address}}
+                            服务地址：{{clientRequireDetailItem.service_address}}
                             <el-button
                                 type="text"
                                 style="color: #409EFF"
-                                v-if="orderApplyDetail.type == 1"
+                                v-if="clientRequireDetailItem.type == 1"
                                 @click="openChangeOrderApplyFieldDialog('service_address','服务地址')">修改</el-button>
                         </div>
                         <div class="detail-all-line">
-                            工作时间：{{orderApplyDetail.service_duration}}
+                            工作时间：{{clientRequireDetailItem.service_duration}}
                             <el-button
                                 type="text"
                                 style="color: #409EFF"
-                                v-if="orderApplyDetail.type == 1"
+                                v-if="clientRequireDetailItem.type == 1"
                                 @click="openChangeOrderApplyFieldDialog('service_duration','工作时间')">修改</el-button>
                         </div>
                         <div class="detail-all-line">
-                            工资：{{orderApplyDetail.wage}}
+                            工资：{{clientRequireDetailItem.wage}}
                             <el-button
                                 type="text"
                                 style="color: #409EFF"
-                                v-if="orderApplyDetail.type == 1"
+                                v-if="clientRequireDetailItem.type == 1"
                                 @click="openChangeOrderApplyFieldDialog('wage','工资')">修改</el-button>
                         </div>
                         <div class="detail-all-line">
-                            订单详情：{{orderApplyDetail.order_details}}
+                            订单详情：{{clientRequireDetailItem.order_details}}
                             <el-button
                                 type="text"
                                 style="color: #409EFF"
-                                v-if="orderApplyDetail.type == 1"
+                                v-if="clientRequireDetailItem.type == 1"
                                 @click="openChangeOrderApplyFieldDialog('order_details','订单详情')">修改</el-button>
                         </div>
                     </div>
@@ -124,13 +124,14 @@
         </div>
         <change-apply-dialog
             v-if="orderApplyFieldVisible"
-            :orderApplyId="orderApplyDetail.id"
+            :orderApplyId="clientRequireDetailItem.id"
             :changeApplyField="changeApplyField"
             @closeChangeApplyDialog="closeChangeApplyDialog"
             :fieldChangeDialogVisible="orderApplyFieldVisible"></change-apply-dialog>
         <pass-order-apply-dialog
             v-if="orderApplyPassVisible"
-            :orderApplyId="orderApplyDetail.id"
+            :orderApplyId="clientRequireDetailItem.id"
+            :orderType="2"
             @closeOrderApplyPassDialog="closeOrderApplyPassDialog"
             :orderApplyPassVisible="orderApplyPassVisible"
             :systemVersion="systemVersion"></pass-order-apply-dialog>
@@ -142,33 +143,32 @@ import { operateService, store, $utils } from "../../../../common";
 import {
     changeApplyDialog,
     changeOrderOriginDialog,
-    } from './clientRequireItem/index.js'
-import {passOrderApplyDialog} from './orderApplyItem/index.js'
+} from './clientRequireItem/index.js'
+
+import {
+    passOrderApplyDialog
+} from './orderApplyItem/index.js'
+
 export default {
     data() {
         return {
-            //订单申请详情
-            orderApplyDetail: {
+            //客户需求详情
+            clientRequireDetailItem: {
+                id: 0,//
+                require_code: '',//需求编号
+                version: 0,//
+                type: '',
+                created_at: 0,//
+
                 work_type: '',
                 wage: '',
-                version: '',
-                user_phone: '',
-                user_name: '',
-                type: 'pass',
-                apply_store_name: '',
-                apply_store_id: '',
                 service_duration: '',
                 order_details: '',
-                id: '',
-                created_manager_name: '',
-                created_manager_id: '',
-                created_at: '',
-                code: '',
-                apply_manager_name: '',
-                apply_manager_id: ''
+                service_address: '',
+
+                user_phone: '',
+                user_name: '',
             },
-            //员工列表
-            salesPersonTable: [],
             //订单申请日志列表
             applyLogTable: [],
             //订单申请字段显示隐藏
@@ -178,12 +178,6 @@ export default {
                 field: '',
                 fieldName: '',
                 value: '',
-            },
-            //拒绝订单申请表单
-            refuseOrderApplyObject: {
-                id: this.$route.query.id,
-                type: 2,
-                version: '',
             },
             systemVersion: '',//系统版本号
             //订单申请通过弹窗
@@ -195,6 +189,26 @@ export default {
         changeOrderOriginDialog,
         passOrderApplyDialog,
     },
+    computed: {
+        orderTypeStyle(){
+            if(this.clientRequireDetailItem.type == 1){
+                return {
+                    color: '#E6A23C',
+                    text: '待处理',
+                }
+            } else if(this.clientRequireDetailItem.type == 2){
+                return {
+                    color: '#f56c6c',
+                    text: '已拒绝',
+                }
+            } else {
+                return {
+                    color: '#67c23a',
+                    text: '已通过',
+                }
+            }
+        }
+    },
     methods: {
         /**
          * 打开更改订单申请字段弹窗
@@ -204,7 +218,7 @@ export default {
         openChangeOrderApplyFieldDialog(field,fileName){
             this.changeApplyField.field = field;
             this.changeApplyField.fieldName = fileName;
-            this.changeApplyField.value = this.orderApplyDetail[field]
+            this.changeApplyField.value = this.clientRequireDetailItem[field]
             this.orderApplyFieldVisible = true
         },
         /**
@@ -217,7 +231,7 @@ export default {
 
         //打开通过订单申请弹窗
         async openPassOrderApplyDialog(){
-            this.systemVersion = this.orderApplyDetail.version
+            this.systemVersion = this.clientRequireDetailItem.version
             this.orderApplyPassVisible = true
         },
         /**
@@ -228,51 +242,69 @@ export default {
             this.orderApplyPassVisible = false
         },
         /**
-         * 拒绝订单申请年轻
-         */
-        async refuseOrderApply(){
-            let response = await this.$confirm("确定拒绝该订单申请吗?此操作将会关闭订单申请", "提示", {
-                confirmButtonText: "确定",
-                cancelButtonText: "取消",
-                type: "warning"
-            }).catch((error) => {
-                this.$message({
-                    type: "info",
-                    message: '已放弃拒绝'
-                });
-            });
-            if (response == "confirm") {
-                store.commit("setLoading", 1);
-                try {
-                    this.refuseOrderApplyObject.version = this.orderApplyDetail.version
-                    await operateService.changeRequireType(this.orderApplyDetail.id,2).then(async data => {
-                        if (data.code == 0) {
-                            this.$message({
-                                type: "success",
-                                message: data.message
-                            });
-                        }
-                         await this.getApplication()
-                    }).catch(error => {
-                        this.$message({
-                            type: "error",
-                            message: error.message
-                        });
-                    }).finally(() =>{
-                        store.commit("setLoading", false);
-                    })
-                } catch (error) {
-                    throw error;
-                }
-            }
-        },
+		 * 改变客户端订单申请状态为拒绝
+		 */
+		async changeRequireType(paramObj){
+			try {
+				this.is_loading = true
+				//拒绝订单申请对象
+				let refuseClientReqiureObject = {
+					type: 2,//type == 2 为拒绝
+					version: this.systemVersion,
+					id: this.$route.query.id,
+				}
+				await operateService.changeRequireType(refuseClientReqiureObject).then(async data => {
+					if (data.code == 0) {
+						this.$message({
+							type: "success",
+							message: data.message
+						});
+						this.is_loading = false
+					}
+
+				}).catch(error => {
+					this.$message({
+						type: "error",
+						message: error.message
+					});
+					this.is_loading = false
+				}).finally(() =>{
+					this.is_loading = false
+				})
+			} catch (error) {
+				this.$message({
+					type: "error",
+					message: error.message
+				});
+				this.is_loading = false
+			}
+		},
+		/**
+		 * 拒绝订单申请年轻
+		 * @param
+		 */
+		async refuseOrderApply(paramObj){
+			await this.$confirm("确定拒绝该订单申请吗?此操作将会关闭订单申请", "提示", {
+				confirmButtonText: "确定",
+				cancelButtonText: "取消",
+				type: "warning"
+			}).then(async () =>{
+				await this.changeRequireType(paramObj)
+				await this.getApplication()
+			}).catch(() => {
+				this.$message({
+					type: "info",
+					message: "已放弃拒绝"
+				});
+			});
+		},
         /**
          * 获取订单申请信息
          */
         async getApplication() {
             await operateService.getClientRequire(this.$route.query.id).then(data => {
                     if (data.code == "0") {
-                        this.orderApplyDetail = data.data;
+                        this.clientRequireDetailItem = data.data;
                         //订单申请日志列表
                         this.applyLogTable = data.data.applyLog;
                     }

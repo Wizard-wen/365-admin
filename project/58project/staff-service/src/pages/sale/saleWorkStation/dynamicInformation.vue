@@ -25,8 +25,8 @@
                         <div class="time">{{item.created_at | timeFomatter}}</div>
                     </div>
                     <div class="order-message">
-                        <el-tag class="tag-item" size="mini">{{item.work_type}}</el-tag>
-                        <el-tag class="tag-item" size="mini">{{item.wage}}</el-tag>
+                        <el-tag class="tag-item" size="mini" v-if="item.work_type">{{item.work_type}}</el-tag>
+                        <el-tag class="tag-item" size="mini" v-if="item.wage">{{item.wage}}</el-tag>
                     </div>
                     <div class="btn" @click="goPublicOrderPage(item)">
                         <i class="el-icon-d-arrow-right"></i>

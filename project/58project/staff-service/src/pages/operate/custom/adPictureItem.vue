@@ -1,7 +1,9 @@
 <template>
     <el-form :model="adPictureForm" class="form-style" label-width="120px" :rules="adPictureRules" ref="adPictureForm">
 
-        <upload-single-picture v-model="adPictureForm.resource_object" :label="'跳转页详情图片'"></upload-single-picture>
+        <upload-single-ad-resource-component 
+            v-model="adPictureForm.resource_object" 
+            :label="'跳转页详情图片'"></upload-single-ad-resource-component>
 
         <el-form-item label="跳转类别" prop="jump_type">
             <select-tag-component
@@ -19,7 +21,10 @@
                 :show-all-levels="false"></el-cascader>
         </el-form-item>
 
-        <upload-single-picture v-else v-model="adPictureForm.activity_object" :label="'跳转页详情图片'"></upload-single-picture>
+        <upload-single-ad-resource-component 
+            v-else 
+            v-model="adPictureForm.activity_object" 
+            :label="'跳转页详情图片'"></upload-single-ad-resource-component>
 
         <el-form-item>
             <el-button type="primary" @click="editAdPositionResource('adPictureForm')">提交</el-button>
@@ -36,13 +41,13 @@
 import {operateService, customService} from '../../../../common'
 import {selectTagComponent} from '@/pages/components/index.js'
 
-import {uploadSinglePicture} from './adPictureItem/index.js'
+import {uploadSingleAdResourceComponent} from './adPictureItem/index.js'
 
 
 export default {
     components: {
         selectTagComponent,
-        uploadSinglePicture,
+        uploadSingleAdResourceComponent,
     },
     data() {
         return {
@@ -156,7 +161,13 @@ export default {
          * 返回
          */
         goback(){
-            this.$router.go(-1)
+            this.$router.push({
+                path: '/operate/adPositionItem',
+                query: {
+                    from: this.$route.query.from,
+                    position_id: this.$route.query.position_id,
+                }
+            })
         },
         /**
          * 改变跳转页类别

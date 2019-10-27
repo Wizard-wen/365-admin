@@ -49,6 +49,7 @@
 		</client-list-table-component>
 		<pass-order-apply-dialog
             v-if="orderApplyPassVisible"
+			:orderType="2"
             :orderApplyId="orderApplyId"
             @closeOrderApplyPassDialog="closeOrderApplyPassDialog"
             :orderApplyPassVisible="orderApplyPassVisible"
@@ -183,19 +184,6 @@ export default {
 			this.orderApplyId = paramObj.id;
 			this.systemVersion = paramObj.version; //系统版本号
 			this.orderApplyPassVisible = true
-			return ;
-			await this.$confirm("确定通过该订单申请吗？此操作将会关闭订单拒绝","提示",{
-				confirmButtonText: "确定",
-				cancelButtonText: "取消",
-				type: "warning"
-			}).then(async () =>{
-				await this.changeRequireType(paramObj.id, 3)
-			}).catch(() => {
-				this.$message({
-					type: "info",
-					message: "已放弃"
-				});
-			});
 		},
 		/**
 		 * 关闭通过订单申请弹窗
@@ -205,14 +193,18 @@ export default {
 			this.orderApplyPassVisible = false
 		},
 		/**
-		 * 改变客户端订单申请状态
-		 * @param id
-		 * @param @param type 状态 （待处理：1，拒绝：2，通过：3）
+		 * 改变客户端订单申请状态为拒绝
 		 */
-		async changeRequireType(id, type){
+		async changeRequireType(paramObj){
 			try {
 				this.is_loading = true
-				await operateService.changeRequireType(id, type).then(async data => {
+				//拒绝订单申请对象
+				let refuseClientReqiureObject = {
+					type: 2,//type == 2 为拒绝
+					version: paramObj.version,
+					id: paramObj.id,
+				}
+				await operateService.changeRequireType(refuseClientReqiureObject).then(async data => {
 					if (data.code == 0) {
 						this.$message({
 							type: "success",
@@ -220,7 +212,6 @@ export default {
 						});
 						this.is_loading = false
 					}
-					await this.getTableList()
 
 				}).catch(error => {
 					this.$message({
@@ -241,44 +232,22 @@ export default {
 		},
 		/**
 		 * 拒绝订单申请年轻
-		 * @paramObj
+		 * @param
 		 */
 		async refuseOrderApply(paramObj){
-		let response = await this.$confirm("确定拒绝该订单申请吗?此操作将会关闭订单申请", "提示", {
-			confirmButtonText: "确定",
-			cancelButtonText: "取消",
-			type: "warning"
-		}).catch(() => {
-			this.$message({
-				type: "info",
-				message: "已放弃拒绝"
+			await this.$confirm("确定拒绝该订单申请吗?此操作将会关闭订单申请", "提示", {
+				confirmButtonText: "确定",
+				cancelButtonText: "取消",
+				type: "warning"
+			}).then(async () =>{
+				await this.changeRequireType(paramObj)
+				await this.getTableList()
+			}).catch(() => {
+				this.$message({
+					type: "info",
+					message: "已放弃拒绝"
+				});
 			});
-		});
-		if (response == "confirm") {
-			this.is_loading = true
-			try {
-
-				await operateService.changeRequireType(paramObj.id,2).then(async data => {
-					if (data.code == 0) {
-						this.$message({
-							type: "success",
-							message: data.message
-						});
-					}
-					await this.getTableList()
-
-				}).catch(error => {
-					this.$message({
-						type: "error",
-						message: error.message
-					});
-				}).finally(() =>{
-					this.is_loading = false
-				})
-			} catch (error) {
-				throw error;
-			}
-		}
 		},
 		/**
 		 * 编辑订单申请

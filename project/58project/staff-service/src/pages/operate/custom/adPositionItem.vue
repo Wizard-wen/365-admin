@@ -18,7 +18,8 @@
             <select-tag-component
                 :propTagList="displayList"
                 v-model="adPositionForm.display"
-                :isSingle="true"></select-tag-component>
+                :isSingle="true"
+                :isEdit="false"></select-tag-component>
         </el-form-item>
         
         <el-form-item label="图片列表" prop="resource">
@@ -95,8 +96,6 @@ export default {
          * 提交广告位
          */
         async commitAdPosition(formName){
-            let _this = this;
-
             await this.$refs[formName].validate(async (valid) => {
                 if (valid) {
                     try{
