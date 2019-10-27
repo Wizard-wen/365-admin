@@ -10,8 +10,8 @@
             <div class="ad-imgs">
                 <img
                     class="ad-item-img"
-                    :src="'./resource/'+item.url"
-                    @click="showDetialPic(it.url)">
+                    :src="'./resource/'+item.resource_object.url"
+                    @click="showDetialPic(item.resource_object.url)">
             </div>
             <div class="image-messsage">
                 <p>{{item.name}}</p>
@@ -103,10 +103,11 @@ export default {
             this.$router.push({
                 path: '/operate/adPictureItem',
                 query: {
-                    from: this.$route.query.from,
-                    type: state == 'edit' ? 2 : 1,
-                    position_id: this.$route.query.position_id,
-                    resource_id: paperItem.id,
+                    from: this.$route.query.from,//来源于 客户端广告位还是服务端广告位
+                    type: state == 'edit' ? 2 : 1,//是否是编辑
+                    position_id: this.$route.query.position_id,//广告位id
+                    resource_id: paperItem.resource_object.id,//资源id
+                    ad_position_resource_id: paperItem.ad_position_resource_id,//资源关联id
                 }
             })
         },
@@ -144,7 +145,7 @@ export default {
          * @param pathParam 展示图片的url
          */
         showDetialPic(pathParam){
-            this.detailImageUrl = pathParam
+            this.detailImageUrl = './resource/'+pathParam
             this.pictureDetailDialogVisible = true
         },
     },
