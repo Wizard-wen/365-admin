@@ -55,7 +55,7 @@ export default {
             },
             //广告位图片表单
             adPictureForm: {
-                ad_position_resource_id: this.$route.query.ad_position_resource_id,//关联广告位id
+                ad_position_resource_id: this.$route.query.type == 2? this.$route.query.ad_position_resource_id : 0,//关联广告位id
                 position_id: this.$route.query.position_id,//所属广告位id
                 resource_id: this.$route.query.type == 2? this.$route.query.resource_id : 0,//资源id
                 resource_object: {},//广告图片对象
@@ -81,7 +81,7 @@ export default {
         async getResourceItem(){
             try{
                 this.is_loading = true
-                await customService.getAdPositionResource(this.$route.query.resource_id).then(data =>{
+                await customService.getAdPositionResource(this.$route.query.ad_position_resource_id).then(data =>{
                     if(data.code == '0'){
                         this.adPictureForm = data.data
                         this.adPictureForm.resource_object = data.data.resource_object

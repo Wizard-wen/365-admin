@@ -45,8 +45,8 @@ export default {
     /**
      * 获取广告位图片
      */
-    getAdPositionResource(resource_id){
-        return axios.get(`./admin/ad/getAdPositionResource?id=${resource_id}`)
+    getAdPositionResource(ad_position_resource_id){
+        return axios.get(`./admin/ad/getAdPositionResource?ad_position_resource_id=${ad_position_resource_id}`)
     },
     /**
      * 编辑广告位图片

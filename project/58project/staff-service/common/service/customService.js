@@ -37,10 +37,10 @@ export default {
 
     /**
      * 获取广告位图片
-     * @param resource_id 广告位资源id
+     * @param ad_position_resource_id 广告位资源关联id
      */
-    getAdPositionResource(resource_id){
-        return customRequest.getAdPositionResource(resource_id)
+    getAdPositionResource(ad_position_resource_id){
+        return customRequest.getAdPositionResource(ad_position_resource_id)
     },
     /**
      * 编辑广告位图片

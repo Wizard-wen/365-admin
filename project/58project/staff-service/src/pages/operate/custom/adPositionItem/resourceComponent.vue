@@ -106,8 +106,8 @@ export default {
                     from: this.$route.query.from,//来源于 客户端广告位还是服务端广告位
                     type: state == 'edit' ? 2 : 1,//是否是编辑
                     position_id: this.$route.query.position_id,//广告位id
-                    resource_id: paperItem.resource_object.id,//资源id
-                    ad_position_resource_id: paperItem.ad_position_resource_id,//资源关联id
+                    resource_id: state == 'edit' ? paperItem.resource_object.id : 0,//资源id
+                    ad_position_resource_id: state == 'edit' ? paperItem.ad_position_resource_id : 0,//资源关联id
                 }
             })
         },

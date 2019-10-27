@@ -18,15 +18,15 @@
                     <div class="base-message">
                         <div class="news">
                             <div class="base-news">
-                                {{`和平门店`}} {{`宋希文`}} {{`15001279361`}} 创建订单
+                                {{item.agent_store_name}} {{item.agent_manager_name}} {{item.agent_manager_phone}} 创建订单 {{item.order_code}}
                             </div>
                             
                         </div>
-                        <div class="time">2019-07-14</div>
+                        <div class="time">{{item.created_at | timeFomatter}}</div>
                     </div>
                     <div class="order-message">
-                        <el-tag class="tag-item" size="mini">保姆月嫂</el-tag>
-                        <el-tag class="tag-item" size="mini">月薪3000</el-tag>
+                        <el-tag class="tag-item" size="mini">{{item.work_type}}</el-tag>
+                        <el-tag class="tag-item" size="mini">{{item.wage}}</el-tag>
                     </div>
                     <div class="btn" @click="goPublicOrderPage(item)">
                         <i class="el-icon-d-arrow-right"></i>
@@ -43,6 +43,10 @@
 </template>
 
 <script>
+import {
+    $utils,
+
+} from '../../../../common'
 export default {
     data(){
         return {
@@ -51,6 +55,14 @@ export default {
     },
     props: {
 
+    },
+    filters: {
+        timeFomatter(value){ 
+            if(value == 0){
+                return '-'
+            }
+            return $utils.formatDate(new Date(value), 'yyyy-MM-dd')
+        }
     },
     computed: {
         dynamic_information(){
