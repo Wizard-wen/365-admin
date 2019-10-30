@@ -12,11 +12,11 @@
                 v-for="(item, index) in store_order_application"
                 :key="index">
                 <div class="tag-list">
-                    <div class="customer">唐先生 - 15001279361</div>
-                    <div class="text">保姆月嫂 / 月薪3000 / 早八晚五保姆月嫂</div>
+                    <div class="customer">{{item.user_name}} - {{item.user_phone}}</div>
+                    <div class="text">{{item.work_type}} / {{item.wage}} / {{item.service_duration}}</div>
                 </div>
                 <div class="control">
-                    <div class="time">2019-07-14</div>
+                    <div class="time">{{item.created_at | timeFomatter}}</div>
                     <div class="btn" @click="goOrderApplyItemPage(item)">
                         <i class="el-icon-d-arrow-right"></i>
                     </div>
@@ -32,9 +32,20 @@
 </template>
 
 <script>
+import {
+    $utils,
+} from '../../../../common'
 export default {
     props: {
 
+    },
+    filters: {
+        timeFomatter(value){ 
+            if(value == 0){
+                return '-'
+            }
+            return $utils.formatDate(new Date(value), 'yyyy-MM-dd')
+        }
     },
     computed: {
         store_order_application(){
@@ -54,7 +65,7 @@ export default {
             this.$router.push({
                 path: '/operate/operateOrderApplyItem',
                 query: {
-
+                    id: item.id
                 }
             })
         },

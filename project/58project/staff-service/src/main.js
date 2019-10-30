@@ -27,6 +27,9 @@ Vue.component('chart', ECharts)
 
 Vue.prototype.$axios = axios;
 
+
+import {$utils} from '../common'
+Vue.prototype.$utils = $utils
 //引入根组件
 import App from './App'
 

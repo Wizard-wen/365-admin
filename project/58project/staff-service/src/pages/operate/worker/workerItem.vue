@@ -1,6 +1,6 @@
 <template>
     <page-edit-component
-        :title="'服务人员信息配置'">
+        :title="workerForm.name">
         
         <template slot="log" v-if="$route.query.type != 0">
             <div class="log">

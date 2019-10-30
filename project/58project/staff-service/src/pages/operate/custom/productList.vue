@@ -25,11 +25,11 @@
                         @singlePictureUploadSucess="uploadIconSuccess"></upload-single-picture-component>
                 </el-form-item>
 
-                <el-form-item label="服务标题">
-                    <el-input v-model="productForm.name"></el-input>
+                <el-form-item label="服务标题" prop="name" >
+                    <el-input v-model="productForm.name" ></el-input>
                 </el-form-item>
                 
-                <el-form-item label="商品父级id">
+                <el-form-item label="商品父级id" prop="parent_id">
                     <el-select v-model="productForm.parent_id" placeholder="商品父级id" :disabled="!hasParentNode">
                         <el-option v-for="item in selectionList" :key="item.id" :label="item.names" :value="item.id"></el-option>
                     </el-select>
@@ -165,10 +165,24 @@ export default {
                 this.is_contains_loading = false
             }
         },
+        async deleteProduct(){
+            await this.$confirm('确定要删除该服务商品吗, 是否继续?', '提示', {
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                type: 'warning',
+            }).then(async () => {
+                await this.deleteService()
+            }).catch(() => {
+                this.$message({
+                    type: 'info',
+                    message: '已取消删除',
+                });          
+            });
+        },
         /**
          * 停用商品
          */
-        async deleteProduct(){
+        async deleteService(){
             try{
                 this.is_contains_loading = true
                 await operateService.deleteService(this.productForm.id).then(data =>{

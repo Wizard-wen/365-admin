@@ -13,11 +13,11 @@
                 </div>
                 <!-- canvas形成的图片 -->
                 <div class="imageCutBox" :style="{zIndex: isImageCompleted? '200' : '-200'}">
-                    <img :src="canvasCompletedImage" alt="" class="canvas-img">
+                    <img :src="canvasCompletedImage" :style="{height: `${height}px`,width: `${width}px`}" alt="" class="canvas-img">
                 </div>
                 <div class="footer" :style="{width: `${width}px`}">
                     <div class="imageBox-footer">
-                        <a class="down" :href="canvasCompletedImage" download="card.png">下载图片</a>
+                        <a class="down" :href="canvasCompletedImage" download="image.png">下载图片</a>
                         <el-button @click="closeMakeImageDialog">取 消</el-button>
                     </div>
                 </div>

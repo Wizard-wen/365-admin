@@ -47,292 +47,44 @@
             </div>
         </div>
         <div class="order-down">
-            <div class="order-message">
-                <div class="title">
-                    <div class="title-contains">
-                        <div class="left">合同详情</div>
-                    </div>
-                </div>
-                <div class="detail-show-module">
-                    <div class="detail-item-box line-three-list">
-                        <div class="detail-item">
-                            <p class="detail-title">护理依赖程度： </p>
-                             <select-tag-component 
-                                v-if="contractBase.service_level"
-                                :isEdit="false" 
-                                :propTagList="order_service_level" 
-                                v-model="contractBase.service_level" 
-                                :isSingle="true"></select-tag-component>
-                            <p class="detail-type-text" v-else>-</p>
-                        </div>
-                    </div>
-                    <div class="detail-item-box line-three-list">
-                        <div class="detail-item">
-                            <p class="detail-title">服务内容： </p>
-                            <select-tag-component 
-                                v-if="contractBase.service_contains"
-                                :isEdit="false" 
-                                :propTagList="order_service_contains" 
-                                v-model="contractBase.service_contains" 
-                                :isSingle="true"></select-tag-component>
-                            <p class="detail-type-text" v-else>-</p>
-                        </div>
-                    </div>
-                    <div class="detail-item-box line-three-list">
-                        <div class="detail-item">
-                            <p class="detail-title">服务方式： </p>
-                            <select-tag-component 
-                                v-if="contractBase.service_level"
-                                :isEdit="false" 
-                                :propTagList="order_service_type" 
-                                v-model="contractBase.service_level" 
-                                :isSingle="true"></select-tag-component>
-                            <p class="detail-type-text" v-else>-</p>
-                        </div>
-                    </div>
-                    <div class="detail-item-box line-three-list">
-                        <div class="detail-item">
-                            <p class="detail-title">服务人数： </p>
-                            <p class="detail-type-text">{{contractBase.service_count}}</p>
-                        </div>
-                    </div>
-                    <div class="detail-item-box line-three-list">
-                        <div class="detail-item">
-                            <p class="detail-title">服务期限： </p>
-                            <p class="detail-type-text">{{contractBase.service_start | timeFomatter}} - {{contractBase.service_end | timeFomatter}}</p>
-                        </div>
-                    </div>
-                    <div class="detail-item-box line-three-list"></div>
-                    <div class="detail-item-box line-list">
-                        <div class="detail-item">
-                            <p class="detail-title">工作时间： </p>
-                            <p class="detail-type-text">{{contractBase.service_time}}</p>
-                        </div>
-                    </div>
-                    <div class="detail-item-box line-three-list">
-                        <div class="detail-item">
-                            <p class="detail-title">劳务报酬： </p>
-                            <p class="detail-type-text">{{contractBase.staff_wage}}元</p>
-                        </div>
-                    </div>
-                    <div class="detail-item-box line-three-list">
-                        <div class="detail-item">
-                            <p class="detail-title">客户服务费： </p>
-                            <p class="detail-type-text">{{contractBase.user_charge}}元</p>
-                        </div>
-                    </div>
-                    <div class="detail-item-box line-three-list">
-                        <div class="detail-item">
-                            <p class="detail-title">客户缴纳： </p>
-                            <p class="detail-type-text">{{contractBase.user_pay}}元</p>
-                        </div>
-                    </div>
-                    <div class="detail-item-box line-three-list">
-                        <div class="detail-item">
-                            <p class="detail-title">劳动者服务费： </p>
-                            <p class="detail-type-text">-</p>
-                        </div>
-                    </div>
-                    <div class="detail-item-box line-three-list">
-                        <div class="detail-item">
-                            <p class="detail-title">劳动者押金： </p>
-                            <p class="detail-type-text">{{contractBase.staff_deposit}}元</p>
-                        </div>
-                    </div>
-                    <div class="detail-item-box line-three-list"></div>
-                    <div class="detail-item-box line-three-list">
-                        <div class="detail-item">
-                            <p class="detail-title">保险受益人： </p>
-                            <p class="detail-type-text">{{contractBase.insurance_benefit}}</p>
-                        </div>
-                    </div>
-                    <div class="detail-item-box line-three-list">
-                        <div class="detail-item">
-                            <p class="detail-title">保险期限： </p>
-                            <p class="detail-type-text">{{contractBase.insurance_start | timeFomatter}} - {{contractBase.insurance_end | timeFomatter}}</p>
-                        </div>
-                    </div>
-                    <div class="detail-item-box line-three-list"></div>
-                    <div class="detail-item-box line-list">
-                        <div class="detail-item">
-                            <p class="detail-title">合同备注： </p>
-                            <p class="detail-type-text">{{contractBase.remarks}}</p>
-                        </div>
-                    </div>
-                    <div class="detail-item-box line-list">
-                        <div class="detail-item">
-                            <p class="detail-title">合同照片： </p>
-                            <div class="detail-photo-list">
-                                <photo-component
-                                    :pictureUrlArrtibute="'url'"
-                                    v-model="contractBase.accessory"
-                                    :height="'297px'"
-                                    :width="'210px'"
-                                    :isEdit="false"></photo-component>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-
-
-            <div class="order-message">
-                <div class="title">
-                    <div class="title-contains">
-                        <div class="left">签约服务人员信息</div>
-                    </div>
-                </div>
-                <div class="order-list">
-                    
-                    <div class="line-two-list">
-                        编号：<span>{{contractBase.sign_staff_code}}</span> 
-                    </div>
-                    <div class="line-two-list">
-                        身份证号：<span>{{contractBase.sign_staff_identify}}</span> 
-                    </div>
-                    <div class="line-two-list">
-                        姓名：<span>{{contractBase.sign_staff_name}}</span>
-                    </div>
-                    <div class="line-two-list">
-                        电话：<span>{{contractBase.sign_staff_phone}}</span> 
-                    </div>
-                    <div class="line-list">
-                        户籍地址：<span>{{contractBase.sign_staff_law_address}}</span> 
-                    </div>
-                    <div class="line-list">
-                        现住址：<span>{{contractBase.sign_staff_cur_address}}</span> 
-                    </div>
-                    <div class="line-list">
-                        紧急联系人：<span>{{contractBase.sign_staff_urgent}}</span> 
-                    </div>
-                </div>
-            </div>
-            <div class="order-message">
-                <div class="title">
-                    <div class="title-contains">
-                        <div class="left">签约客户信息</div>
-                    </div>
-                </div>
-                <div class="order-list">
-                    <div class="line-two-list">
-                        姓名：<span>{{contractBase.sign_user_name}}</span>
-                    </div>
-                    <div class="line-two-list">
-                        电话：<span>{{contractBase.sign_user_phone}}</span> 
-                    </div>
-                    <div class="line-two-list">
-                        身份证号：<span>{{contractBase.sign_user_identify}}</span> 
-                    </div>
-                </div>
-            </div>
-            <div class="order-message">
-                <div class="title">
-                    <div class="title-contains">
-                        <div class="left">结算信息</div>
-                    </div>
-                </div>
-                <div class="order-list" >
-                    <div v-if="is_settle == 1">
-                        <div class="line-list">
-                            结算时间：<span>{{contractBase.account.created_at | timeFomatter}}</span>
-                        </div>
-                        <div class="line-list">
-                            服务期限：
-                            <span>
-                                {{contractBase.account.service_start | timeFomatter}}- 
-                                {{contractBase.account.service_end | timeFomatter}}
-                            </span> 
-                        </div>
-                        <div class="line-list">
-                            工作天数：<span>{{contractBase.account.service_days}}</span>
-                        </div>
-                        <div class="line-list">
-                            日工资：<span>{{contractBase.account.daily_wage}}</span>
-                        </div>
-                        <div class="line-list">
-                            首月工资合计：<span>{{contractBase.account.total_wage}}</span>
-                        </div>
-                        <div class="line-list">
-                            服务费扣除：<span>{{contractBase.account.service_cost}}</span>
-                        </div>
-                        <div class="line-list">
-                            其他扣除：<span>{{contractBase.account.other_cost}}</span>
-                        </div>
-                        <div class="line-list">
-                            扣除事由：<span>{{contractBase.account.cost_reason}}</span>
-                        </div>
-                        <div class="line-list">
-                            服务人员实发工资：<span>{{contractBase.account.real_wage}}</span>
-                        </div>
-                        <div class="line-list">
-                            返还客户金额：<span>{{contractBase.account.return_wage}}</span>
-                        </div>
-                    </div>
-                   
-                </div>
-            </div>
-            <div class="order-message">
-                <div class="title">
-                    <div class="title-contains">
-                        <div class="left">订单终止信息</div>
-                    </div>
-                </div>
-                <div class="order-list">
-                    <div v-if="is_settle == 2">
-                        <div class="line-list">
-                            终止事由：<span>{{contractBase.account.terminate_reason}}</span>
-                        </div>
-                        <div class="line-list">
-                            服务期限：
-                            <span>
-                                {{contractBase.account.service_start | timeFomatter}} - 
-                                {{contractBase.account.service_end | timeFomatter}}
-                            </span> 
-                        </div>
-                        <div class="line-list">
-                            工作天数：<span>{{contractBase.account.service_days}}</span>
-                        </div>
-                        <div class="line-list">
-                            日工资：<span>{{contractBase.account.daily_wage}}</span>
-                        </div>
-                        <div class="line-list">
-                            首月工资合计：<span>{{contractBase.account.total_wage}}</span>
-                        </div>
-                        <div class="line-list">
-                            服务费扣除：<span>{{contractBase.account.service_cost}}</span>
-                        </div>
-                        <div class="line-list">
-                            其他扣除：<span>{{contractBase.account.other_cost}}</span>
-                        </div>
-                        <div class="line-list">
-                            扣除事由：<span>{{contractBase.account.cost_reason}}</span>
-                        </div>
-                        <div class="line-list">
-                            服务人员实发工资：<span>{{contractBase.account.real_wage}}</span>
-                        </div>
-                        <div class="line-list">
-                            返还客户金额：<span>{{contractBase.account.return_wage}}</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            
-                     
+            <contract-detail-component
+                :contractBase="contractBase"></contract-detail-component>
+            <signed-service-detail-component
+                :signedServiceDetailObject="contractBase"></signed-service-detail-component>
+            <signed-user-detail-component 
+                :signedUserDetailObject="contractBase"></signed-user-detail-component>
+            <settled-detail-component
+                v-if="is_settle == 1"
+                :contractBase="contractBase"></settled-detail-component>
+            <terminal-detail-component
+                v-if="is_settle == 2"
+                :contractBase="contractBase"></terminal-detail-component>
         </div>
     </div>
 </template>
 <script>
     import {operateService, $utils, saleService} from '../../../common'
-    import {
-        photoComponent,
-    } from '../operate/worker/workerItem/index.js'
-    import {
-    selectTagComponent} from '@/pages/components'
     
-    import {settleWageDialog,terminateContractDialog} from './contractItem/index.js'
+    import {
+        settleWageDialog,
+        terminateContractDialog,
+        contractDetailComponent,
+        signedServiceDetailComponent,
+        signedUserDetailComponent,
+        settledDetailComponent,
+        terminalDetailComponent,
+    } from './contractItem/index.js'
 
 export default {
+    components: {
+        settleWageDialog,
+        terminateContractDialog,
+        contractDetailComponent,
+        signedServiceDetailComponent,
+        signedUserDetailComponent,
+        settledDetailComponent,
+        terminalDetailComponent,
+    },
     data(){
         return {
             is_loading: false,//
@@ -398,32 +150,9 @@ export default {
             }
         }
     },
-    components: {
-        selectTagComponent,
-        settleWageDialog,
-        terminateContractDialog,
-        photoComponent,
-    },
+    
     computed:{
-        /**
-         * 当前用户信息
-         */
-        presentUser(){
-            return this.$store.state.loginModule.user
-        },
-        //订单服务内容
-        order_service_contains(){
-            return this.$store.state.saleModule.order_service_contains
-        },
-        //订单护理依赖程度
-        order_service_level(){
-            return this.$store.state.saleModule.order_service_level
-        },
-        //订单服务方式
-        order_service_type(){
-            return this.$store.state.saleModule.order_service_type
-        },
-        //
+        //是否结算
         is_settle(){
             if(!this.contractBase.account){
                 return 3
@@ -479,7 +208,7 @@ export default {
             }
         },
         /**
-         * 结算工资
+         * 打开结算工资弹窗
          */
         openSettleWageDialog(){
             this.settleWageDialogVisible = true
@@ -508,51 +237,6 @@ export default {
                     await this.determinateContract()
                 }
             }
-
-        },
-        /**
-         * 终止合同（已发放工资）
-         */
-        async determinateContract(){
-            let response = await this.$confirm("确定终止该合同吗?此操作不可逆", "提示", {
-                confirmButtonText: "确定",
-                cancelButtonText: "取消",
-                type: "warning"
-            }).catch(() => {
-                this.$message({
-                    type: "info",
-                    message: "已放弃终止"
-                });
-            });
-            if (response == "confirm") {
-                this.is_loading = true
-                try {
-                    let determinateContractObj = {
-                        is_wage: this.contractBase.is_wage,
-                        contract_id: this.contractBase.id,
-                    }
-
-                    await saleService.stopContract(determinateContractObj).then(async data => {
-                        if (data.code == 0) {
-                            this.$message({
-                                type: "success",
-                                message: data.message
-                            });
-                        }
-                        await this.getContract()
-                        
-                    }).catch(error => {
-                        this.$message({
-                            type: "error",
-                            message: error.message
-                        });
-                    }).finally(() =>{
-                        this.is_loading = false
-                    })
-                } catch (error) {
-                    throw error;
-                }
-            }
         },
         /**
          * 关闭终止合同弹窗
@@ -560,6 +244,61 @@ export default {
         async closeDeterminateContractDialog(){
             await this.getContract()
             this.determinateContractDialogVisible = false
+        },
+        /**
+         * 终止合同（已发放工资/待执行状态）
+         */
+        async determinateContract(){
+            await this.$confirm("确定终止该合同吗?此操作不可逆", "提示", {
+                confirmButtonText: "确定",
+                cancelButtonText: "取消",
+                type: "warning"
+            }).then(async () =>{
+                await this.stopContract()
+                await this.getContract()
+            }).catch(() => {
+                this.$message({
+                    type: "info",
+                    message: "已放弃终止"
+                });
+            });
+        },
+        /**
+         * 终止订单接口
+         */
+        async stopContract(){
+            try {
+                this.is_loading = true
+
+                let determinateContractObj = {
+                    is_wage: this.contractBase.is_wage,
+                    contract_id: this.contractBase.id,
+                }
+
+                await saleService.stopContract(determinateContractObj).then(data => {
+                    if (data.code == 0) {
+                        this.$message({
+                            type: "success",
+                            message: data.message
+                        });
+                        this.is_loading = false
+                    }
+                }).catch(error => {
+                    this.$message({
+                        type: "error",
+                        message: error.message
+                    });
+                    this.is_loading = false
+                }).finally(() =>{
+                    this.is_loading = false
+                })
+            } catch (error) {
+                this.$message({
+                    type: "error",
+                    message: error.message
+                });
+                this.is_loading = false
+            }
         },
         /**
          * 返回
@@ -641,136 +380,7 @@ export default {
             }
         }
         .order-down{
-            margin: 24px;
-            .order-message{
-
-                width: 100%;
-                // height: 285px;
-                background: #fff;
-                margin-bottom: 24px; 
-                .title{
-                    min-height: 48px;
-                    margin-bottom: 20px;
-                    padding: 0 24px;
-                    color: rgba(0,0,0,.85);
-                    font-weight: 500;
-                    font-size: 16px;
-                    background: transparent;
-                    border-bottom: 1px solid #e8e8e8;
-                    border-radius: 2px 2px 0 0;
-                    zoom: 1;
-                    .title-contains{
-                        display: flex;
-                        align-items: center;
-                        .left{
-                            display: inline-block;
-                            flex: 1 1;
-                            padding: 16px 0;
-                            overflow: hidden;
-                            white-space: nowrap;
-                            text-overflow: ellipsis;
-                        }
-                    }
-
-                }
-                .detail-show-module{
-                    width: 100%;
-                    display: flex;
-                    flex-wrap:  wrap;
-                    justify-content: space-between;
-                    margin-bottom: 32px;
-                    padding: 10px;
-                    .detail-item-box {
-                        .detail-item{
-                            width: 100%;
-                            display: flex;
-                            justify-content: flex-start;
-                            margin-bottom: 16px;
-                            .detail-title{
-                                width: 120px;
-                                text-align: right;
-                                line-height: 30px;
-                                margin-right: 20px;
-                                color: rgba(0,0,0,.85);
-                            }
-                            .detail-picture-box{
-                                display: flex;
-                                .contract-picture{
-                                    margin: 0 15px 15px 0;
-                                    width: 210px;
-                                    height: 297px;
-                                    & img{
-                                        width: 210px;
-                                        height: 297px;
-                                    }
-                                }
-                            }
-                            .detail-type-text{
-                                line-height: 30px;
-                                color: rgba(0,0,0,.85);
-                            }
-                            .detail-photo-list{
-                                display: flex;
-                                flex-wrap: wrap;
-                                .icon-box{
-                                    height: 150px;
-                                    margin-right: 20px;
-                                    .icon-style{
-                                        height: 150px;
-                                    }
-                                }
-                            }
-                        }
-                    }
-                    .line-three-list{
-                        width: 33%;
-                    }
-                    .line-two-list{
-                        width: 50%;
-                    }
-                    .line-list{
-                        width: 100%;
-                    }
-                }
-                .order-list{
-                    box-sizing: border-box;
-                    padding: 24px;
-                    &:after{
-                        content: '';
-                        display: block;
-                        clear: both;
-                    }
-                    .line-three-list{
-                        float: left;
-                        width: 33%;
-                        line-height: 30px;
-                    }
-                    .line-two-list{
-                        float: left;
-                        width: 50%;
-                        line-height: 30px;
-                    }
-                    .line-list{
-                        float: left;
-                        width: 100%;
-                        line-height: 30px;
-                    }
-                    .change{
-                        margin-left: 15px;
-                        display: inline-block;
-                        color: #1890ff;
-                        line-height: 30px;
-                        height: 30px;
-                        font-size: 12px;
-                        cursor: pointer;
-                        & img{
-                            height: 30px;
-                            width: 30px;
-                            vertical-align: middle;
-                        }
-                    }
-                }
-            }
+            padding: 24px;
         }
     }
 </style>

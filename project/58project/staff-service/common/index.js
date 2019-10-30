@@ -78,7 +78,7 @@ import './style/styleConfig.scss'
 /**
  * utils 工具
  */
-import $utils from './utils'
+import {$utils} from './utils/index.js'
 export {
-    $utils
+    $utils,
 }

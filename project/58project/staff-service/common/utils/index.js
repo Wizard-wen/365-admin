@@ -1,8 +1,8 @@
 /**
  * 
  */
-
-export default {
+import Vue from 'vue'
+export var $utils =  {
     /**
      * 时间戳格式转换
      */
@@ -38,3 +38,5 @@ export default {
         return len;
     }  
 }
+
+// Vue.prototype.$utils = $utils

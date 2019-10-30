@@ -22,7 +22,7 @@
                         <div class="detail-left-line">来源人：{{orderBase.apply_manager_id == 0 ? '门店' : orderBase.apply_manager_name}}</div>
                         <div
                             v-if="orderBase.type != 1" 
-                            class="detail-left-line">签约时间：{{orderBase.sign_service_start | timeFomatter}}</div>
+                            class="detail-left-line">签约时间：{{orderBase.sign_at | timeFomatter}}</div>
                         <div
                             v-if="orderBase.type != 1" 
                             class="detail-left-line">服务周期：{{orderBase.sign_service_start | timeFomatter}} - {{orderBase.sign_service_end | timeFomatter}}</div>
@@ -47,274 +47,74 @@
                 :order_id="order_id"></assign-dialog>
         </div>
         <div class="order-down">
-            <div class="order-message">
-                <div class="title">
-                    <div class="title-contains">
-                        <div class="left">订单基本信息</div>
-                        <el-button type="primary" size="mini" @click="makeOrderImage">生成订单图片</el-button>
-                    </div>
-                </div>
-                <div class="order-list">
-                    <div class="line-three-list">
-                        客户姓名：<span>{{orderBase.order_user_name}}</span>
-                        <p  
-                            v-if="orderBase.type == 1 || orderBase.type == 3"
-                            @click="openChangeOrderDialog('order_user_name','客户姓名')" class="change">
-                            <img src="./orderConfig/images/change.svg" alt="">
-                        </p>
-                    </div>
-                    <div class="line-three-list">
-                        电话：<span>{{orderBase.order_user_phone}}</span> 
-                        <p  
-                            v-if="orderBase.type == 1 || orderBase.type == 3"
-                            @click="openChangeOrderDialog('order_user_phone','电话')" class="change">
-                            <img src="./orderConfig/images/change.svg" alt="">
-                        </p>
-                    </div>
-                    <div class="line-list">
-                        工种：<span>{{orderBase.work_type}}</span>
-                        <p  
-                            v-if="orderBase.type == 1 || orderBase.type == 3"
-                            @click="openChangeOrderDialog('work_type','工种')" class="change">
-                            <img src="./orderConfig/images/change.svg" alt="">
-                        </p>
-                    </div>
-                    <div class="line-list">
-                        工作时间：<span>{{orderBase.service_duration}}</span>
-                        <p  
-                            v-if="orderBase.type == 1 || orderBase.type == 3"
-                            @click="openChangeOrderDialog('service_duration','工作时间')" class="change">
-                            <img src="./orderConfig/images/change.svg" alt="">
-                        </p>
-                    </div>
-                    <div class="line-list">
-                        工资：<span>{{orderBase.wage}}</span>
-                        <p  
-                            v-if="orderBase.type == 1 || orderBase.type == 3"
-                            @click="openChangeOrderDialog('wage','工资')" class="change">
-                            <img src="./orderConfig/images/change.svg" alt="">
-                        </p>
-                    </div>
-                    <div class="line-list">
-                        服务地址： <span>{{orderBase.service_address}}</span>
-                        <p  
-                            v-if="orderBase.type == 1 || orderBase.type == 3"
-                            @click="openChangeOrderDialog('service_address','服务地址')" class="change">
-                            <img src="./orderConfig/images/change.svg" alt="">
-                        </p>
-                    </div>
-                    <div class="line-list">
-                        订单详情：<span>{{orderBase.order_details}}</span>
-                        <p  
-                            v-if="orderBase.type == 1 || orderBase.type == 3"
-                            @click="openChangeOrderDialog('order_details','订单详情')" class="change">
-                            <img src="./orderConfig/images/change.svg" alt="">
-                        </p>
-                    </div>
-                </div>
-            </div>
-            <!-- 生成订单名片组件 -->
-            <template>
-                <make-image-component
-                    :height="500"
-                    :width="460"
-                    :makeImageDialogVisible="makeImageDialogVisible"
-                    v-if="makeImageDialogVisible"
-                    @closeMakeImageDialog="makeImageDialogVisible = false">
-                    <template slot="pictureContains">
-                        <order-picture-component
-                            :pictureForm="orderBase"></order-picture-component>
-                    </template>
-                </make-image-component>
-            </template>
-            
-            <change-order-dialog
-                v-if="orderFieldVisible"
-                :orderId="orderBase.id"
-                :changeOrderField="changeOrderField"
-                @closeChangeDialog="closeChangeDialog"
-                :orderFieldVisible="orderFieldVisible"></change-order-dialog>
-            <div class="order-message" v-if="orderBase.type == 1 || orderBase.type == 3">
-                <div class="title">
-                    <div class="title-contains">
-                        <div class="left">服务人员匹配</div>
-                    </div>
-                </div>
-                <div class="order-list">
+
+            <order-base-component
+                :type="'normal'"
+                @updateOrderConfig="getOrder"></order-base-component>
+
+            <card-box-component
+                v-if="orderBase.type == 1 || orderBase.type == 3"
+                :title="'服务人员匹配'">
+                <template slot="contains">
                     <match-service-list @updateOrderConfig="getOrder"></match-service-list>
-                </div>
-            </div>
+                </template>    
+            </card-box-component>
 
-            <div class="order-message" v-if="orderBase.type == 1 || orderBase.type == 3">
-                <div class="title">
-                    <div class="title-contains">
-                        <div class="left">备选服务人员</div>
-                    </div>
-                </div>
-                <div class="order-list">
-                    <!-- 匹配劳动者列表 -->
-                    <el-table :data="order_staff" class="person-table" :header-cell-style="{height: '48px',background: '#fafafa'}">
-                        <el-table-column label="工号" prop="staff_code" align="center"></el-table-column>
-
-                        <el-table-column label="姓名" prop="staff_name" align="center"></el-table-column>
-
-                        <el-table-column label="头像" prop="staff_icon" align="center"></el-table-column>
-
-                        <el-table-column label="电话" prop="staff_phone" align="center"></el-table-column>
-
-                        <el-table-column label="签约状态" prop="type" align="center">
-                            <template slot-scope="scope">
-                                <table-tag-component :propList="matchStaffSignList" :tableOriginData="scope.row.type"></table-tag-component>
-                            </template>
-                        </el-table-column>
-
-                        <el-table-column label="添加人" prop="created_manager_name" align="center"></el-table-column>
-
-                        <el-table-column label="操作" align="center" width="300">
-                            <template slot-scope="scope">
-                                <el-button type="success" @click="goSignOrder(2,scope.row)" size="mini">签约</el-button>
-                                <el-button type="danger" @click="refuseService(scope.row)" size="mini">拒绝</el-button>
-                                <el-button type="primary" @click="goStaffDetail(scope.row)" size="mini">详情</el-button>
-                                <!-- 只有添加人才能删除 -->
-                                <el-button 
-                                    type="danger" 
-                                    size="mini"
-                                    @click="deleteMatchStaff(scope.row)" 
-                                    v-if="presentUser.id == scope.row.created_manager_id">删除</el-button>
-                            </template>
-                        </el-table-column>
-                        
-                    </el-table>
-                    <refuse-service-dialog
-                        v-if="refuseServiceDialogVisible"
-                        :refuseServiceDialogVisible="refuseServiceDialogVisible"
-                        @claseRefuseDialog="refuseServiceDialogVisible=false"
-                        :matched_staff="matched_staff"
-                        :order_id="order_id"></refuse-service-dialog>
-                </div>
-            </div>
-
-            <div class="order-message" v-if="orderBase.type != 1">
-                <div class="title">
-                    <div class="title-contains">
-                        <div class="left">合同列表</div>
-                    </div>
-                </div>
-                <div class="order-list">
+            <order-staff-component
+                :type="'normal'"
+                @updateOrderConfig="getOrder"
+                v-if="orderBase.type == 1 || orderBase.type == 3"></order-staff-component>
+            
+            <card-box-component
+                v-if="orderBase.type != 1"
+                :title="'合同列表'">
+                <template slot="contains">
                     <contract-list></contract-list>
-                </div>
-            </div>
-            
-            <div class="order-message" v-if="orderBase.type != 1">
-                <div class="title">
-                    <div class="title-contains">
-                        <div class="left">签约客户信息</div>
-                    </div>
-                </div>
-                <div class="order-list">
-                    <div class="line-two-list">
-                        姓名：<span>{{orderBase.sign_user_name}}</span>
-                    </div>
-                    <div class="line-two-list">
-                        电话：<span>{{orderBase.sign_user_phone}}</span> 
-                    </div>
-                    <div class="line-two-list">
-                        身份证号：<span>{{orderBase.sign_user_identify}}</span> 
-                    </div>
-                </div>
-            </div>
-
-            <div class="order-message" v-if="orderBase.type == 2">
-                <div class="title">
-                    <div class="title-contains">
-                        <div class="left">签约服务人员信息</div>
-                    </div>
-                </div>
-                <div class="order-list">
-                    
-                    <div class="line-two-list">
-                        编号：<span>{{orderBase.sign_staff_code}}</span> 
-                    </div>
-                    <div class="line-two-list">
-                        身份证号：<span>{{orderBase.sign_staff_identify}}</span> 
-                    </div>
-                    <div class="line-two-list">
-                        姓名：<span>{{orderBase.sign_staff_name}}</span>
-                    </div>
-                    <div class="line-two-list">
-                        电话：<span>{{orderBase.sign_staff_phone}}</span> 
-                    </div>
-                    <div class="line-list">
-                        户籍地址：<span>{{orderBase.sign_staff_law_address}}</span> 
-                    </div>
-                    <div class="line-list">
-                        现住址：<span>{{orderBase.sign_staff_cur_address}}</span> 
-                    </div>
-                    <div class="line-list">
-                        紧急联系人：<span>{{orderBase.sign_staff_urgent}}</span> 
-                    </div>
-                </div>
-            </div>
-            
-            <div class="order-message">
-                <div class="title">
-                    <div class="title-contains">
-                        <div class="left">日志列表</div>
-                    </div>
-                </div>
-                <div class="order-list">
-                    <!-- 日志列表 -->
-                    <el-table :data="order_logs" class="person-table" :header-cell-style="{height: '48px',background: '#fafafa'}">
-                        <el-table-column label="创建时间" prop="created_at" align="center"></el-table-column>
-
-                        <el-table-column label="管理员姓名" prop="manager_name" align="center"></el-table-column>
-
-                        <el-table-column label="日志内容" prop="message" align="center"></el-table-column>
-
-                    </el-table>
-                </div>
-            </div>   
-                     
+                </template>    
+            </card-box-component>
+            <signed-service-detail-component
+                v-if="orderBase.type != 1"
+                :signedServiceDetailObject="orderBase"></signed-service-detail-component>
+            <signed-user-detail-component 
+            v-if="orderBase.type != 1"
+                :signedUserDetailObject="orderBase"></signed-user-detail-component>
+            <order-config-log></order-config-log> 
         </div>
     </div>
 </template>
 <script>
     import {operateService, $utils, saleService} from '../../../common'
     import {
-        refuseServiceDialog,
         assignDialog,
         matchServiceList,
         contractList,
-        orderPictureComponent,
-        changeOrderDialog} from './orderConfig/index.js'
+        orderBaseComponent,
+        orderStaffComponent,
+        orderConfigLog,
+    } from './orderConfig/index.js'
+
     import {
-        makeImageComponent,
-        tableTagComponent} from '@/pages/components'
+        signedUserDetailComponent,
+        signedServiceDetailComponent,
+    } from './contractItem/index.js'
 export default {
+    components: {
+        assignDialog,
+        matchServiceList,
+        contractList,
+        orderBaseComponent,
+        orderStaffComponent,
+        orderConfigLog,
+        signedUserDetailComponent,
+        signedServiceDetailComponent,
+    },
     data(){
         return {
             is_loading: false,//
-            order_id: 0,//订单id
-            matchStaffSignList: [
-                {id: 1, name: '未签约'},
-                {id: 2, name: '已签约'},
-                {id: 3, name: '已拒绝'},
-            ],
-            //订单字段更改弹窗显示隐藏
-            orderFieldVisible: false,
-            //订单字段更改
-            changeOrderField: {
-                field: '',
-                fieldName: '',
-                value: '',
-            },
-            refuseServiceDialogVisible: false,//拒绝服务人员显示隐藏
+            //订单id
+            order_id: this.$route.query.order_id,
             //分配弹出框显示
             assignDialogVisible:false,
-
-            matched_staff: null,//备选服务人员信息对象
-            //生成订单图片组件
-            makeImageDialogVisible: false,
         }
     },
     filters: {
@@ -325,16 +125,7 @@ export default {
             return $utils.formatDate(new Date(value), 'yyyy-MM-dd')
         }
     },
-    components: {
-        refuseServiceDialog,
-        assignDialog,
-        matchServiceList,
-        contractList,
-        changeOrderDialog,
-        tableTagComponent,
-        orderPictureComponent,
-        makeImageComponent,
-    },
+
     computed:{
         /**
          * 
@@ -353,18 +144,6 @@ export default {
          */
         orderBase(){
             return this.$store.state.saleModule.order
-        },
-        /**
-         * 备选服务人员列表
-         */
-        order_staff(){
-            return this.$store.state.saleModule.order_staff
-        },
-        /**
-         * 订单日志
-         */
-        order_logs(){
-            return this.$store.state.saleModule.order_logs
         },
         /**
          * 订单状态
@@ -400,36 +179,12 @@ export default {
     },
     methods: {
         /**
-         * 更改订单字段弹窗
-         * @param filed 字段
-         * @param filedName 字段名
-         */
-        openChangeOrderDialog(field,fileName){
-            this.changeOrderField.field = field;
-            this.changeOrderField.fieldName = fileName;
-            this.changeOrderField.value = this.orderBase[field]
-            this.orderFieldVisible = true
-        },
-        /**
-         * 关闭更改订单字段弹窗
-         */
-        async closeChangeDialog(){
-            this.orderFieldVisible = false
-            await this.getOrder()
-        },
-        /**
-         * 生成订单图片
-         */
-        makeOrderImage(){   
-            this.makeImageDialogVisible = true
-        },
-        /**
          * 获取订单信息
          */
         async getOrder(){
             try{
                 this.is_loading = true
-                await saleService.getOrder(this.order_id).then((data) =>{
+                await saleService.getOrder(this.$route.query.order_id).then((data) =>{
                     if(data.code == "0"){
                         store.commit('configOrderData',data.data)
                     }
@@ -455,7 +210,6 @@ export default {
          * 切换页码
          */
         async handleContractCurrentPage(val){
-            // this.pagination.currentPage = val
             //设置page查询参数
             this.$store.commit('setContractList', {
                 queryKey: 'page', 
@@ -464,105 +218,6 @@ export default {
             await this.getTableList()
         },
 
-/*********************备选服务人员列表****************************************************/
-        /**
-         * 跳转至签约页面
-         * @param type 是签约还是续约 1 续约 2 首次签约
-         * @param paramObj 匹配服务人员信息对象
-         */
-        goSignOrder(type, paramObj){
-            this.$router.push({
-                path: `/sale/saleSignPage`,
-                query: {
-                    order_id: this.order_id,
-                    type: this.orderBase.type,//订单状态
-                    sign_staff_id: type == 1 ? this.orderBase.sign_staff_id : paramObj.staff_id,
-                    sign_staff_name: type == 1 ? this.orderBase.sign_staff_name : paramObj.staff_name,
-                    sign_user_name: this.orderBase.type == 3 ? this.orderBase.sign_user_name : '',
-                    sign_user_id: this.orderBase.type == 3 ? this.orderBase.sign_user_id : '',
-                    sign_user_identify: this.orderBase.type == 3 ? this.orderBase.sign_user_identify : '',
-                }
-            })
-        },
-        /**
-         * 拒绝劳动者
-         * @param paramObj 匹配服务人员信息对象
-         */
-        refuseService(paramObj){
-            this.matched_staff = paramObj
-            this.refuseServiceDialogVisible = true
-        },
-        /**
-         * 跳转至服务人员详情
-         * @param paramObj 匹配服务人员信息对象
-         */
-        goStaffDetail(paramObj){
-            this.$router.push({
-                path: "/sale/saleNewWorkerShow",
-                query: {
-                    id: paramObj.id,
-                    from: this.$route.query.order_type,
-                    order_id: this.$route.query.order_id
-                }
-            })
-        },
-        /**
-         * 删除备选服务人员
-         */
-        async deleteMatchStaff(item){
-            //要删除的备选劳动者
-            let deleteStaffObj = {
-                order_id: this.$route.query.order_id,
-                order_staff_id: item.id
-            }
-
-            await this.$confirm(`确定删除该备选服务人员吗?`, '提示', {
-                confirmButtonText: '确定',
-                cancelButtonText: '取消',
-                type: 'warning'
-            }).then(async () =>{
-                await this.deleteOrderStaff(deleteStaffObj)
-            }).catch(() => {
-                this.$message({
-                    type: 'info',
-                    message: `已取消删除`
-                });
-            });
-        },
-        /**
-         * 删除备选劳动者接口
-         * @param order_staff_id 候选人员信息id
-         * @param order_id 订单id
-         */
-        async deleteOrderStaff(deleteStaffObj){
-            try{
-                this.is_loading = true
-                await saleService.deleteOrderStaff(deleteStaffObj)
-                    .then(async data =>{
-                        if(data.code == "0"){
-                            this.$message({
-                                type:'success',
-                                message: data.message
-                            })
-                            this.is_loading = false
-                            await this.getTableList()
-                        }
-                        
-                    }).catch(error =>{
-                        this.$message({
-                            type:'error',
-                            message: error.message
-                        })
-                        this.is_loading = false
-                    })
-            } catch(error){
-                this.$message({
-                    type:'error',
-                    message: error.message
-                })
-                this.is_loading = false
-            }
-        },
         /********************订单操作栏***************************************/
         /**
          * 分派订单
@@ -582,11 +237,9 @@ export default {
         determinateOrder(){
             
         },
-        /******* */
  
     },
     async mounted(){
-        this.order_id = this.$route.query.order_id;//订单id
         await this.getOrder()
         
     }    
@@ -651,77 +304,7 @@ export default {
             }
         }
         .order-down{
-            margin: 24px;
-            .order-message{
-
-                width: 100%;
-                // height: 285px;
-                background: #fff;
-                margin-bottom: 24px; 
-                .title{
-                    min-height: 48px;
-                    margin-bottom: -1px;
-                    padding: 0 24px;
-                    color: rgba(0,0,0,.85);
-                    font-weight: 500;
-                    font-size: 16px;
-                    background: transparent;
-                    border-bottom: 1px solid #e8e8e8;
-                    border-radius: 2px 2px 0 0;
-                    zoom: 1;
-                    .title-contains{
-                        display: flex;
-                        align-items: center;
-                        .left{
-                            display: inline-block;
-                            flex: 1 1;
-                            padding: 16px 0;
-                            overflow: hidden;
-                            white-space: nowrap;
-                            text-overflow: ellipsis;
-                        }
-                    }
-
-                }
-                .order-list{
-                    box-sizing: border-box;
-                    padding: 24px;
-                    &:after{
-                        content: '';
-                        display: block;
-                        clear: both;
-                    }
-                    .line-three-list{
-                        float: left;
-                        width: 33%;
-                        line-height: 30px;
-                    }
-                    .line-two-list{
-                        float: left;
-                        width: 50%;
-                        line-height: 30px;
-                    }
-                    .line-list{
-                        float: left;
-                        width: 100%;
-                        line-height: 30px;
-                    }
-                    .change{
-                        margin-left: 15px;
-                        display: inline-block;
-                        color: #1890ff;
-                        line-height: 30px;
-                        height: 30px;
-                        font-size: 12px;
-                        cursor: pointer;
-                        & img{
-                            height: 30px;
-                            width: 30px;
-                            vertical-align: middle;
-                        }
-                    }
-                }
-            }
+            padding: 24px;
         }
     }
 </style>

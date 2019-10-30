@@ -55,7 +55,7 @@ export const created_at = [
 ]
 export const saleModule = {
     state: {
-        order: [],//订单基本信息
+        order: {},//订单基本信息
         order_staff: [],//待匹配服务人员
         order_contract: [], //合同列表
         order_logs: [],//订单日志

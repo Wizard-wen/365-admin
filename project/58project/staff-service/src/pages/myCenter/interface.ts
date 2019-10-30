@@ -52,6 +52,9 @@ export interface passwordChange {
 export interface systemConfig {
     store_id:string;//门店id
     store_name:string;//门店名
+    /**
+     * 1 是 
+     */
     is_administrator:string;//是否超级管理员
     is_store_manager:string;//是否是店长
 }

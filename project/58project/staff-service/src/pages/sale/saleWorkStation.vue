@@ -68,23 +68,30 @@
                 <dynamic-information></dynamic-information>
             </div>
             <div class="right-board">
-                <div class="operation-box">
-                    <div class="title">
-                        <div class="title-contains">
-                            <div class="left">快速操作</div>
+                <card-box-component :title="'快速操作'" class="operate-card-box">
+                    <template slot="contains">
+                        <div class="operation-list">
+                            <div class="control" @click="openOrderApplyDialog">申请订单</div>
+                            <div class="control" @click="goSaleWorkerList">服务人员信息库</div>
+                            <div class="control" @click="goSaleOrderList">我的订单</div>
+                            <div class="control" >我的客户</div>
+                            <div class="control" @click="goContractList">我的合同</div>
+                            <div class="control" @click="goPublicOrderList">公海订单</div>
+                            <div class="control" @click="goSaleOwnWorkerList">我创建的服务人员</div>
                         </div>
-                    </div>
-                    <div class="operation-list">
-                        <div class="control" @click="openOrderApplyDialog">申请订单</div>
-                        <div class="control" @click="goSaleWorkerList">服务人员信息库</div>
-                        <div class="control" @click="goSaleOrderList">我的订单</div>
-                        <div class="control" >我的客户</div>
-                        <div class="control" @click="goContractList">我的合同</div>
-                        <div class="control" @click="goPublicOrderList">公海订单</div>
-                        <div class="control" @click="goSaleOwnWorkerList">我创建的服务人员</div>
-                    </div>
-                </div>
-                <div class="rank-box">
+                    </template>
+                </card-box-component>
+                <card-box-component :title="'业绩排行'">
+                    <template slot="control">
+                        <div class="rank-control">
+                            <div class="type">销售额</div>
+                            <div class="type">劳动者</div>
+                            <div class="type">签单量</div>
+                            <div class="type">客户量</div>
+                        </div>
+                    </template>
+                </card-box-component>
+                <!-- <div class="rank-box">
                     <div class="title">
                         <div class="title-contains">
                             <div class="left">业绩排行</div>
@@ -99,7 +106,7 @@
                     <div class="rank-list">
 
                     </div>
-                </div>
+                </div> -->
             </div>
         </div>
         <!-- 订单申请弹出框 -->
@@ -315,111 +322,48 @@ export default {
         margin-top: 24px;
         .left-board{
             width: 67%;
-            
         }
         .right-board{
+            box-sizing: border-box;
             width: 33%;
-            .operation-box{
-                margin: 0 10px;
-                height: 153px;
-                background: #fff;
-                .title{
-                    min-height: 48px;
-                    margin-bottom: -1px;
-                    padding: 0 24px;
-                    color: rgba(0,0,0,.85);
-                    font-weight: 500;
-                    font-size: 16px;
-                    background: transparent;
-                    border-bottom: 1px solid #e8e8e8;
-                    border-radius: 2px 2px 0 0;
-                    zoom: 1;
-                    .title-contains{
-                        display: flex;
-                        align-items: center;
-                        .left{
-                            display: inline-block;
-                            flex: 1 1;
-                            padding: 16px 0;
-                            overflow: hidden;
-                            white-space: nowrap;
-                            text-overflow: ellipsis;
-                        }
-                    }
-
-                }
-                .operation-list{
+            padding: 0 10px;
+            .operate-card-box /deep/ .contains{
+                padding: 20px 0 8px 24px;
+            }
+            .operation-list{
+                box-sizing: border-box;
+                font-size: 0px;
+                .control{
                     box-sizing: border-box;
-                    padding: 20px 0 8px 24px;
-                    font-size: 0px;
-                    .control{
-                        box-sizing: border-box;
-                        display: inline-block;
-                        margin-right: 10px;
-                        margin-bottom: 13px;
-                        color: rgba(0,0,0,.65);
-                        font-size: 14px;
-                        overflow: hidden;
-                        white-space: nowrap;
-                        text-overflow: ellipsis;
-                        cursor: pointer;
-                        &:hover{
-                            color: #1890ff;
-                        }
+                    display: inline-block;
+                    margin-right: 10px;
+                    margin-bottom: 13px;
+                    color: rgba(0,0,0,.65);
+                    font-size: 14px;
+                    overflow: hidden;
+                    white-space: nowrap;
+                    text-overflow: ellipsis;
+                    cursor: pointer;
+                    &:hover{
+                        color: #1890ff;
                     }
                 }
             }
-            .rank-box{
-                margin: 0 10px;
-                margin-top: 24px;
-                height: 653px;
-                background: #fff;
-                .title{
-                    min-height: 48px;
-                    margin-bottom: -1px;
-                    padding: 0 24px;
-                    color: rgba(0,0,0,.85);
-                    font-weight: 500;
-                    font-size: 16px;
-                    background: transparent;
-                    border-bottom: 1px solid #e8e8e8;
-                    border-radius: 2px 2px 0 0;
-                    zoom: 1;
-                    .title-contains{
-                        display: flex;
-                        align-items: center;
-                        position: relative;
-                        .left{
-                            display: inline-block;
-                            flex: 1 1;
-                            padding: 16px 0;
-                            overflow: hidden;
-                            white-space: nowrap;
-                            text-overflow: ellipsis;
-                        }
-                        .right{
-                            position: absolute;
-                            bottom: 0px;
-                            right: -5px;
-                            display: flex;
-                            line-height: 30px;
-                            .type{
-                                margin-right: 12px;
-                                font-size: 14px;
-                                font-weight: normal;
-                            }
-                        }
-                    }
 
-                }
-                .rank-list{
-                    box-sizing: border-box;
-
+            .rank-control{
+                display: flex;
+                line-height: 20px;
+                .type{
+                    margin-right: 12px;
+                    font-size: 14px;
+                    font-weight: normal;
                 }
             }
         }
     }
 }
+
+
 </style>
 
 

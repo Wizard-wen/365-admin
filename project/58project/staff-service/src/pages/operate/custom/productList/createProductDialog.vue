@@ -9,7 +9,7 @@
         <el-form class="productTree-form" ref="productTreeForm" :model="productTreeForm" label-width="120px" :rules="productTreeRules">
 
             <el-form-item label="商品名字" prop="name">
-                <el-input v-model="productTreeForm.name" :maxlength="20"></el-input>
+                <el-input v-model="productTreeForm.name" :maxlength="6" placeholder="请输入商品名称，至多输入六个字"></el-input>
             </el-form-item>
 
             <el-form-item label="商品父级id" prop="parent_id">

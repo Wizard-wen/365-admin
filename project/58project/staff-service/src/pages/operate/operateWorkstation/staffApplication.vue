@@ -12,11 +12,11 @@
                 v-for="(item, index) in staff_application"
                 :key="index">
                 <div class="tag-list">
-                    <div class="customer">宋希文 - 15001279361</div>
-                    <div class="text">已认证 / 月薪3000 / 早八晚五保姆月嫂</div>
+                    <div class="customer">{{item.name}} - {{item.phone}}</div>
+                    <div class="text">创建人：{{item.manager_name}}</div>
                 </div>
                 <div class="control">
-                    <div class="time">2019-07-14</div>
+                    <div class="time">{{item.created_at | timeFomatter}}</div>
                     <div class="btn" @click="goworkerItemPage(item)">
                         <i class="el-icon-d-arrow-right"></i>
                     </div>
@@ -32,9 +32,18 @@
 </template>
 
 <script>
+import {$utils} from '../../../../common'
 export default {
     props: {
 
+    },
+    filters: {
+        timeFomatter(value){ 
+            if(value == 0){
+                return '-'
+            }
+            return $utils.formatDate(new Date(value), 'yyyy-MM-dd')
+        }
     },
     computed: {
         staff_application(){
@@ -55,6 +64,7 @@ export default {
                 path: '/worker/workerItem',
                 query: {
                     type: 4,
+                    id: item.id
                 }
             })
         },

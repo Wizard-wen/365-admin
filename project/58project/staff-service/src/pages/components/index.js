@@ -39,9 +39,15 @@ import pageEditComponent from './pageEditComponent.vue'
 //单一图片上传组件
 import uploadSinglePictureComponent from './uploadSinglePictureComponent.vue'
 
+//卡片展示块组价
+import cardBoxComponent from './cardBoxComponent.vue'
 
-Vue.component('selectTagComponent', selectTagComponent);
-Vue.component('uploadSinglePictureComponent', uploadSinglePictureComponent);
+//日志组件
+import logComponent from './logComponent.vue'
+
+
+
+
 export {
     cascaderComponent,
     pictureDetailDialog,
@@ -55,4 +61,24 @@ export {
     querySearchList,
     queryTagComponent,
     uploadSinglePictureComponent,
+    cardBoxComponent,
+    logComponent,
 }
+
+
+
+//注册至全局
+Vue.component('cascaderComponent', cascaderComponent);
+Vue.component('pictureDetailDialog', pictureDetailDialog);
+Vue.component('makeImageComponent', makeImageComponent);
+Vue.component('configTagComponent', configTagComponent);
+Vue.component('selectTagComponent', selectTagComponent);
+Vue.component('cascaderTagComponent', cascaderTagComponent);
+Vue.component('tableTagComponent', tableTagComponent);
+Vue.component('queryTagComponent', queryTagComponent);
+Vue.component('querySearchInput', querySearchInput);
+Vue.component('querySearchList', querySearchList);
+Vue.component('pageEditComponent', pageEditComponent);
+Vue.component('uploadSinglePictureComponent', uploadSinglePictureComponent);
+Vue.component('cardBoxComponent', cardBoxComponent);
+Vue.component('logComponent', logComponent);

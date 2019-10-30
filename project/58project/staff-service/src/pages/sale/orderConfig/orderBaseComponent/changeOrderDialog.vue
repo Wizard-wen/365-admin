@@ -24,7 +24,7 @@
 /**
  * type 0 新建  1 编辑
  */
-import {saleService} from '../../../../common'
+import {saleService} from '../../../../../common'
 
 export default {
     props:{
@@ -74,11 +74,12 @@ export default {
         },
         async onSubmit(formName){
             //校验并提交
-            await saleService.editOrder(this.orderApplyField).then(data =>{
+            try{
+                await saleService.editOrder(this.orderApplyField).then(data =>{
                     if(data.code == '0'){
                         this.$message({
                             type:"success",
-                            message: "更改成功"
+                            message: data.message
                         })
                         this.$emit('closeChangeDialog')
                     }
@@ -88,11 +89,14 @@ export default {
                         message: error.message
                     })
                 })
-
+            } catch(error){
+                this.$message({
+                    type:'error',
+                    message: error.message
+                })
+            }
         }
     },
-    async mounted(){
-    }
 }
 </script>
 

@@ -21,112 +21,19 @@
             </div>
         </div>
         <div class="order-down">
-            <div class="order-message">
-                <div class="title">
-                    <div class="title-contains">
-                        <div class="left">订单基本信息</div>
-                        <el-button type="primary" size="mini" @click="makeOrderImage">生成订单图片</el-button>
-                    </div>
-                </div>
-                <div class="order-list">
-                    <div class="line-two-list">
-                        经纪人：<span>{{orderBase.agent_manager_name}}</span>
-                    </div>
-                    <div class="line-two-list">
-                        经纪人电话：<span>{{orderBase.agent_manager_phone}}</span>
-                    </div>
-                    <div class="line-list">
-                        工种：<span>{{orderBase.work_type}}</span>
-                    </div>
-                    <div class="line-list">
-                        工作时间：<span>{{orderBase.service_duration}}</span>
-                    </div>
-                    <div class="line-list">
-                        工资：<span>{{orderBase.wage}}</span>
-                    </div>
-                    <div class="line-list">
-                        服务地址： <span>{{orderBase.service_address}}</span>
-                    </div>
-                    <div class="line-list">
-                        订单详情：<span>{{orderBase.order_details}}</span>
-                    </div>
-                </div>
-            </div>
-            <!-- 生成订单名片组件 -->
-            <template>
-                <make-image-component
-                    :height="500"
-                    :width="460"
-                    :makeImageDialogVisible="makeImageDialogVisible"
-                    v-if="makeImageDialogVisible"
-                    @closeMakeImageDialog="makeImageDialogVisible = false">
-                    <template slot="pictureContains">
-                        <order-picture-component
-                            :pictureForm="orderBase"></order-picture-component>
-                    </template>
-                </make-image-component>
-            </template>
-            <div class="order-message" v-if="orderBase.type == 1 || orderBase.type == 3">
-                <div class="title">
-                    <div class="title-contains">
-                        <div class="left">服务人员匹配</div>
-                    </div>
-                </div>
-                <div class="order-list">
+            <order-base-component
+                :type="'public'"></order-base-component>
+            <card-box-component
+                v-if="orderBase.type == 1 || orderBase.type == 3"
+                :title="'服务人员匹配'">
+                <template slot="contains">
                     <match-service-list @updateOrderConfig="getOrder"></match-service-list>
-                </div>
-            </div>
-
-            <div class="order-message" v-if="orderBase.type == 1 || orderBase.type == 3">
-                <div class="title">
-                    <div class="title-contains">
-                        <div class="left">备选服务人员</div>
-                    </div>
-                </div>
-                <div class="order-list">
-                    <!-- 匹配劳动者列表 -->
-                    <el-table :data="order_staff" class="person-table" :header-cell-style="{height: '48px',background: '#fafafa'}">
-                        <el-table-column label="工号" prop="staff_code" align="center"></el-table-column>
-
-                        <el-table-column label="姓名" prop="staff_name" align="center"></el-table-column>
-
-                        <el-table-column label="头像" prop="staff_icon" align="center">
-                            <template slot-scope="scope">
-                                <el-popover trigger="click" placement="top">
-                                    <img :src="scope.row.icon?'./resource/'+scope.row.icon:''" alt="" style="height: 200px; width: 200px;">
-                                    <div slot="reference" style="height: 30px;width: 30px;margin: 0 auto;">
-                                        <img :src="scope.row.icon?'./resource/'+scope.row.icon:''" alt="" style="height: 30px;width: 30px;">
-                                    </div>
-                                </el-popover>
-                            </template>
-                        </el-table-column>
-
-                        <el-table-column label="电话" prop="staff_phone" align="center"></el-table-column>
-
-                        <el-table-column label="签约状态" prop="type" align="center">
-                            <template slot-scope="scope">
-                                <table-tag-component :propList="matchStaffSignList" :tableOriginData="scope.row.type"></table-tag-component>
-                            </template>
-                        </el-table-column>
-
-                        <el-table-column label="添加人" prop="created_manager_name" align="center"></el-table-column>
-
-                        <el-table-column label="操作" align="center" width="300">
-                            <template slot-scope="scope">
-                                <el-button type="primary" @click="goStaffDetail(scope.row)" size="mini">详情</el-button>
-                                <!-- 只有添加人才能删除 -->
-                                <el-button 
-                                    type="danger" 
-                                    size="mini"
-                                    @click="deleteMatchStaff(scope.row)" 
-                                    v-if="presentUser.id == scope.row.created_manager_id">删除</el-button>
-                            </template>
-                        </el-table-column>
-                        
-                    </el-table>
-                </div>
-            </div>  
-                     
+                </template>    
+            </card-box-component>
+            
+            <order-staff-component
+                v-if="orderBase.type == 1 || orderBase.type == 3"
+                :type="'public'"></order-staff-component>                  
         </div>
     </div>
 </template>
@@ -135,18 +42,14 @@
 
     import {
         matchServiceList,
-        orderPictureComponent,
+        orderBaseComponent,
+        orderStaffComponent,
     } from './orderConfig/index.js'
-    import {
-        tableTagComponent,
-        makeImageComponent
-    } from '@/pages/components'
 export default {
     components: {
         matchServiceList,
-        tableTagComponent,
-        makeImageComponent,
-        orderPictureComponent,
+        orderBaseComponent,
+        orderStaffComponent,
     },
     data(){
         return {
@@ -366,77 +269,7 @@ export default {
             }
         }
         .order-down{
-            margin: 24px;
-            .order-message{
-
-                width: 100%;
-                // height: 285px;
-                background: #fff;
-                margin-bottom: 24px; 
-                .title{
-                    min-height: 48px;
-                    margin-bottom: -1px;
-                    padding: 0 24px;
-                    color: rgba(0,0,0,.85);
-                    font-weight: 500;
-                    font-size: 16px;
-                    background: transparent;
-                    border-bottom: 1px solid #e8e8e8;
-                    border-radius: 2px 2px 0 0;
-                    zoom: 1;
-                    .title-contains{
-                        display: flex;
-                        align-items: center;
-                        .left{
-                            display: inline-block;
-                            flex: 1 1;
-                            padding: 16px 0;
-                            overflow: hidden;
-                            white-space: nowrap;
-                            text-overflow: ellipsis;
-                        }
-                    }
-
-                }
-                .order-list{
-                    box-sizing: border-box;
-                    padding: 24px;
-                    &:after{
-                        content: '';
-                        display: block;
-                        clear: both;
-                    }
-                    .line-three-list{
-                        float: left;
-                        width: 33%;
-                        line-height: 30px;
-                    }
-                    .line-two-list{
-                        float: left;
-                        width: 50%;
-                        line-height: 30px;
-                    }
-                    .line-list{
-                        float: left;
-                        width: 100%;
-                        line-height: 30px;
-                    }
-                    .change{
-                        margin-left: 15px;
-                        display: inline-block;
-                        color: #1890ff;
-                        line-height: 30px;
-                        height: 30px;
-                        font-size: 12px;
-                        cursor: pointer;
-                        & img{
-                            height: 30px;
-                            width: 30px;
-                            vertical-align: middle;
-                        }
-                    }
-                }
-            }
+            padding: 24px;
         }
     }
 </style>

@@ -79,6 +79,11 @@ export default {
             createAdPositionDialogVisible: false,
         }
     },
+    computed: {
+        presentUser(){
+            return this.$store.state.loginModule.user
+        }
+    },
     methods: {
         /**
          * 打开创建广告位弹窗

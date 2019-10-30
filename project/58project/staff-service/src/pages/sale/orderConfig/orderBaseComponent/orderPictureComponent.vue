@@ -37,20 +37,12 @@
 
 <script>
 export default {
-    data(){
-        return {
-
-        }
-    },
     props: {
         pictureForm: {
             default: function(){return {}},
             type: Object
         }
     },
-    methods: {
-
-    }
 }
 </script>
 
