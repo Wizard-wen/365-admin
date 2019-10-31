@@ -45,8 +45,12 @@ import cardBoxComponent from './cardBoxComponent.vue'
 //日志组件
 import logComponent from './logComponent.vue'
 
+//头像组件
+import iconComponent from './iconComponent.vue'
 
-
+//表单展示组件
+import detailFormItemComponent from './detailFormItemComponent.vue'
+import detailFormComponent from './detailFormComponent.vue'
 
 export {
     cascaderComponent,
@@ -63,6 +67,9 @@ export {
     uploadSinglePictureComponent,
     cardBoxComponent,
     logComponent,
+    iconComponent,
+    detailFormItemComponent,
+    detailFormComponent,
 }
 
 
@@ -82,3 +89,6 @@ Vue.component('pageEditComponent', pageEditComponent);
 Vue.component('uploadSinglePictureComponent', uploadSinglePictureComponent);
 Vue.component('cardBoxComponent', cardBoxComponent);
 Vue.component('logComponent', logComponent);
+Vue.component('iconComponent', iconComponent);
+Vue.component('detailFormItemComponent', detailFormItemComponent);
+Vue.component('detailFormComponent', detailFormComponent);

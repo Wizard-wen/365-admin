@@ -218,6 +218,7 @@ export interface signItem{
     user_pay:string;// 客户缴纳
     
     staff_deposit:string;// 劳动者押金
+    staff_charge:string;//劳动者服务费
     
     insurance_benefit:string;// 保险受益人
     insurance_start:string;// 保险起始日

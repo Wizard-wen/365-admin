@@ -10,8 +10,8 @@
             您将拒绝服务人员<strong>{{serviceObj.staff_name}}(工号{{serviceObj.staff_code}})</strong>接单，请填写拒绝事由。
         </p>
         <el-form :model="refuseServiceForm" :rules="refuseServiceRules" label-width="120px" ref="refuseServiceForm">
-            <el-form-item label="拒绝事由" prop="reason">
-                <el-input v-model="refuseServiceForm.reason" type="textarea"></el-input>
+            <el-form-item label="拒绝事由" prop="message">
+                <el-input v-model="refuseServiceForm.message" type="textarea"></el-input>
             </el-form-item>
         </el-form>
         <div slot="footer" class="dialog-footer">
@@ -56,11 +56,11 @@ export default {
             //改变的字段内容
             refuseServiceForm: {
                 order_id: this.order_id,
-                order_staff_id: this.matched_staff.staff_id,
-                reason: '',//事由
+                order_staff_id: this.matched_staff.id,
+                message: '',//事由
             },
             refuseServiceRules: {
-                reason: [
+                message: [
                     {required: true, message: '请填写拒绝事由', trigger: 'blur'}
                 ]
             }
@@ -76,7 +76,7 @@ export default {
     },
     methods: {
         cancelRefuseDialog(){
-            this.refuseServiceForm.reason = ''
+            this.refuseServiceForm.message = ''
             this.$emit('closeRefuseDialog')
         },
         async onSubmit(formName){

@@ -1,21 +1,25 @@
 <template>
     <div class="pageEdit">
         <div class="edit-header">
-            <div class="icon-left-box">
+            <div class="header-contains">
                 <slot name="icon"></slot>
+                <div class="detail-box">
+                    <div class="detail-box-header">
+                        <h2>{{title}}</h2>
+                        <div class="control">
+                            <slot name="control"></slot>
+                        </div>
+                    </div>
+                    <div class="detail-box-contains">
+                        <div class="left-contains">
+                            <slot name="detail"></slot>
+                        </div>
+                        <div class="right-contains">
+                            <slot name="statistic"></slot>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div class="other-right-box">
-                <div class="edit-name">
-                    <h4>{{title}}</h4>
-                </div>
-                <div class="btn-group">
-                    <slot name="control"></slot>
-                </div>
-                <div class="edit-detail">
-                    <slot name="detail"></slot>
-                </div>
-            </div>
-            
         </div>
         <div class="page-edit-contains">
             <div class="form-box">
@@ -36,7 +40,7 @@ export default {
          */
         title: {
             type: String,
-            default: ''
+            default: '配置页'
         }
     },
     data(){
@@ -56,39 +60,47 @@ export default {
         background: #f0f2f5; 
         .edit-header{
             background: #fff;
-            
-            display: flex;
-            .icon-left-box{
-                height: 160px;
-                width: 156px;
-                padding: 30px 12px 10px 24px;
-            }
-            .other-right-box{
-                flex: 1;
-                padding: 30px 24px 10px 12px;
-                position: relative;
-                .edit-name{
-                    line-height: 28px;
-                    font-size: 20px;
-                    font-weight: 700;
-                }
-                .btn-group{
-                    & /deep/ .el-button{
-                        margin-left: 0px; 
+            padding: 24px 24px 12px 24px;
+            .header-contains{
+                display: flex;
+                width: 100%;
+                .detail-box{
+                    flex: 1;
+                    margin-left: 10px;
+                    .detail-box-header{
+                        display: flex;
+                        height: 32px;
+                        width: 100%;
+                        justify-content: space-between;
+                        h2{
+                            line-height: 32px;
+                        }
                     }
-                    position: absolute;
-                    right: 24px;
-                    top: 20px;
-                }
-                .edit-detail{
-                    padding-top: 12px;
-                    display: flex;
+                    .detail-box-contains{
+                        padding-top: 12px;
+                        display: flex;
+                        .left-contains{
+                            flex: 1;
+                        }
+                        .right-contains{
+                            min-width: 242px;
+                            margin-left: 88px;
+                            text-align: right;
+                        }
+                    }
                 }
             }
-            
+            .btn-group{
+                & /deep/ .el-button{
+                    margin-left: 0px; 
+                }
+                position: absolute;
+                right: 24px;
+                top: 20px;
+            } 
         }
         .page-edit-contains{
-            margin: 24px 24px 0;
+            padding: 24px;
             display: flex;
             .form-box{
                 padding: 24px;

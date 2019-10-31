@@ -19,10 +19,11 @@
             <el-form class="productForm" ref="productForm" :model="productForm" label-width="120px">
                 <el-form-item v-if="productForm.parent_id == 0" label="分类banner图" prop="banner_url" class="form-item-size">
                     <upload-single-picture-component
-                        :height="'178px'"
-                        :width="'350px'"
+                        :height="'125px'"
+                        :width="'343px'"
                         :pictureUrl="productForm.banner_url"
                         @singlePictureUploadSucess="uploadIconSuccess"></upload-single-picture-component>
+                    <p style="line-height: 20px;color: rgba(0,0,0,.65);">343 * 125</p>
                 </el-form-item>
 
                 <el-form-item label="服务标题" prop="name" >
@@ -387,40 +388,6 @@ export default {
                 width: 100%;
                 text-align:center;
                 font-size: 16px;
-            }
-        }
-    }
-        //头像上传
-    .icon-uploader{
-        & /deep/ .el-upload {
-            height: 178px;
-            width: 350px;
-            line-height: 178px;
-            border: 1px dashed #d9d9d9;
-            border-radius: 6px;
-            cursor: pointer;
-            position: relative;
-            overflow: hidden;
-        }
-        & /deep/ .el-upload:hover {
-            border-color: #409EFF;
-        }
-        .icon-box{
-            width:350px;
-            height: 178px;
-            position: relative;
-            .icon-item {
-                width:350px;
-                height: 178px;
-                display: block;
-            }
-            .icon-item-back{
-                position: absolute;
-                height: 178px;
-                width: 350px;
-                top: 0;
-                z-index: 4;
-                background: rgba(0,0,0,.5)
             }
         }
     }

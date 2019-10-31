@@ -11,10 +11,10 @@
         </template>
 
         <template slot="icon" >
-            <div class="icon">
-                <img style="height: 120px;width: 120px;" :src="`./resource/${workerForm.icon}`" alt="" v-if="workerForm.icon">
-                <div class="no-icon-style" v-else>暂无头像</div>
-            </div>
+            <icon-component
+                :iconUrl="workerForm.icon"
+                :height="120"
+                :width="120"></icon-component>
         </template>
         
         <template slot="detail" >
@@ -900,33 +900,6 @@ export default {
             padding-bottom: 8px;
         }
     }
-}
-.detail-right{
-    min-width: 400px;
-    display: flex;
-    .right-box{
-        height: 80px;
-        width: 50%;
-        .title{
-            color: rgba(0,0,0,.45);
-            font-size: 14px;
-            line-height: 1.5;
-        }
-        .value{
-            font-size: 20px;
-            color: rgba(0,0,0,.85);
-            line-height: 1.5;
-        }
-    }
-}
-// 没有头像
-.no-icon-style{
-    height: 120px;
-    width: 120px;
-    line-height: 120px;
-    text-align: center;
-    color: #fff;
-    background: rgba(0,0,0,0.3)
 }
 // 日志
 .log{

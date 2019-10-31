@@ -148,7 +148,6 @@ export default {
                 order_id: this.$route.query.order_id,
                 order_staff_id: item.id
             }
-
             await this.$confirm(`确定删除该备选服务人员吗?`, '提示', {
                 confirmButtonText: '确定',
                 cancelButtonText: '取消',

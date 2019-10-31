@@ -3,10 +3,10 @@
         v-loading="is_loading"
         :title="workerForm.name">
         <template slot="icon">
-            <div class="icon">
-                <img style="height: 120px;width: 120px;" :src="`./resource/${workerForm.icon}`" alt="" v-if="workerForm.icon">
-                <div class="no-icon-style" v-else>暂无头像</div>
-            </div>
+            <icon-component
+                :iconUrl="workerForm.icon"
+                :height="120"
+                :width="120"></icon-component>
         </template>
         <template slot="detail">
             <div class="detail-left">
@@ -732,14 +732,6 @@ export default {
         margin: 24px 0;
         background: #e8e8e8;
     }
-}
-.no-icon-style{
-    height: 120px;
-    width: 120px;
-    line-height: 120px;
-    text-align: center;
-    color: #fff;
-    background: rgba(0,0,0,0.3)
 }
 
 </style>

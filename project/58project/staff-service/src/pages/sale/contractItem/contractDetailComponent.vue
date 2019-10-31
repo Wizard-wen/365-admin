@@ -2,43 +2,43 @@
     <card-box-component
         :title="'合同详情'">
         <template slot="contains">
-            <div class="detail-show-module">
-                <div class="detail-item-box line-three-list">
-                    <div class="detail-item">
-                        <p class="detail-title">护理依赖程度： </p>
-                            <select-tag-component 
-                            v-if="contractBase.service_level"
-                            :isEdit="false" 
-                            :propTagList="order_service_level" 
-                            v-model="contractBase.service_level" 
-                            :isSingle="true"></select-tag-component>
-                        <p class="detail-type-text" v-else>-</p>
-                    </div>
-                </div>
-                <div class="detail-item-box line-three-list">
-                    <div class="detail-item">
-                        <p class="detail-title">服务内容： </p>
-                        <select-tag-component 
-                            v-if="contractBase.service_contains"
-                            :isEdit="false" 
-                            :propTagList="order_service_contains" 
-                            v-model="contractBase.service_contains" 
-                            :isSingle="true"></select-tag-component>
-                        <p class="detail-type-text" v-else>-</p>
-                    </div>
-                </div>
-                <div class="detail-item-box line-three-list">
-                    <div class="detail-item">
-                        <p class="detail-title">服务方式： </p>
-                        <select-tag-component 
-                            v-if="contractBase.service_level"
-                            :isEdit="false" 
-                            :propTagList="order_service_type" 
-                            v-model="contractBase.service_level" 
-                            :isSingle="true"></select-tag-component>
-                        <p class="detail-type-text" v-else>-</p>
-                    </div>
-                </div>
+            <detail-form-component>
+                <detail-form-item-component
+                    :label="'护理依赖程度'"
+                    :size="3"
+                    :value="contractBase.service_level">
+                    <select-tag-component 
+                        v-if="contractBase.service_level"
+                        :isEdit="false" 
+                        :propTagList="order_service_level" 
+                        v-model="contractBase.service_level" 
+                        :isSingle="true"></select-tag-component>
+                </detail-form-item-component>
+
+                <detail-form-item-component
+                    :label="'服务内容'"
+                    :size="3"
+                    :value="contractBase.service_level">
+                    <select-tag-component 
+                        v-if="contractBase.service_contains"
+                        :isEdit="false" 
+                        :propTagList="order_service_contains" 
+                        v-model="contractBase.service_contains" 
+                        :isSingle="true"></select-tag-component>
+                </detail-form-item-component>
+
+                <detail-form-item-component
+                    :label="'服务方式'"
+                    :size="3"
+                    :value="contractBase.service_level">
+                    <select-tag-component 
+                        v-if="contractBase.service_level"
+                        :isEdit="false" 
+                        :propTagList="order_service_type" 
+                        v-model="contractBase.service_level" 
+                        :isSingle="true"></select-tag-component>
+                </detail-form-item-component>
+
                 <div class="detail-item-box line-three-list">
                     <div class="detail-item">
                         <p class="detail-title">服务人数： </p>
@@ -101,27 +101,30 @@
                         <p class="detail-type-text">{{contractBase.insurance_start | timeFomatter}} - {{contractBase.insurance_end | timeFomatter}}</p>
                     </div>
                 </div>
+                <detail-form-item-component
+                    :label="'合同备注'"
+                    :size="1"
+                    :value="contractBase.remarks">
+                </detail-form-item-component>
+                
                 <div class="detail-item-box line-three-list"></div>
-                <div class="detail-item-box line-list">
-                    <div class="detail-item">
-                        <p class="detail-title">合同备注： </p>
-                        <p class="detail-type-text">{{contractBase.remarks}}</p>
-                    </div>
-                </div>
-                <div class="detail-item-box line-list">
-                    <div class="detail-item">
-                        <p class="detail-title">合同照片： </p>
-                        <div class="detail-photo-list">
-                            <photo-component
-                                :pictureUrlArrtibute="'url'"
-                                v-model="contractBase.accessory"
-                                :height="'297px'"
-                                :width="'210px'"
-                                :isEdit="false"></photo-component>
-                        </div>
-                    </div>
-                </div>
-            </div>
+                <detail-form-item-component
+                    :label="'合同备注'"
+                    :size="1"
+                    :value="contractBase.remarks">
+                </detail-form-item-component>
+                <detail-form-item-component
+                    :label="'合同照片'"
+                    :size="1"
+                    :value="contractBase.accessory">
+                    <photo-component
+                        :pictureUrlArrtibute="'url'"
+                        v-model="contractBase.accessory"
+                        :height="'297px'"
+                        :width="'210px'"
+                        :isEdit="false"></photo-component>
+                </detail-form-item-component>
+            </detail-form-component>
         </template>
     </card-box-component>
 </template>

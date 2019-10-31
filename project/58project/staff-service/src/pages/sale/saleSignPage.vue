@@ -1,7 +1,7 @@
 <template>
     <div class="signPage" v-loading="is_loading">
         <div class="sign-contains">
-            <el-form :model="signForm" :rules="signRules" ref="signForm" :label-width="'120px'">
+            <el-form :model="signForm" :rules="signRules" ref="signForm" :label-width="'120px'" >
                 <div class="order-message">
                     <div class="title">
                         <div class="title-contains">
@@ -10,7 +10,7 @@
                     </div>
                     <div class="order-list">
                         <el-form-item label="合同编号" prop="contract_number">
-                            <el-select v-model="signForm.contract_number" placeholder="合同编号">
+                            <el-select v-model="signForm.contract_number" placeholder="请选择合同编号">
                                 <el-option
                                     v-for="(item, index) in contract_numberList"
                                     :key="index"
@@ -28,13 +28,13 @@
                     </div>
                     <div class="order-list">
                         <el-form-item label="姓名" prop="sign_user_name">
-                            <el-input v-model="signForm.sign_user_name" :disabled="this.$route.query.type == 3"></el-input>
+                            <el-input v-model="signForm.sign_user_name" :disabled="this.$route.query.type == 3" placeholder="请输入雇主姓名"></el-input>
                         </el-form-item>
                         <el-form-item label="联系电话" prop="sign_user_phone">
-                            <el-input v-model.number="signForm.sign_user_phone"></el-input>
+                            <el-input v-model.number="signForm.sign_user_phone" placeholder="请输入雇主联系电话"></el-input>
                         </el-form-item>
                         <el-form-item label="身份证号" prop="sign_user_identify">
-                            <el-input v-model="signForm.sign_user_identify" :disabled="this.$route.query.type == 3"></el-input>
+                            <el-input v-model="signForm.sign_user_identify" :disabled="this.$route.query.type == 3" placeholder="请输入雇主身份证号"></el-input>
                         </el-form-item>
                     </div>
                 </div>
@@ -47,26 +47,25 @@
                     </div>
                     <div class="order-list">
                         <el-form-item label="姓名" prop="sign_staff_name">
-                            <el-input v-model="signForm.sign_staff_name" :disabled="true"></el-input>
+                            <el-input v-model="signForm.sign_staff_name" :disabled="true" placeholder="请输入家政服务员姓名"></el-input>
                         </el-form-item>
                         <el-form-item label="联系电话" prop="sign_staff_phone">
-                            <el-input v-model="signForm.sign_staff_phone"></el-input>
+                            <el-input v-model="signForm.sign_staff_phone" placeholder="请输入家政服务员联系电话"></el-input>
                         </el-form-item>
                         <el-form-item label="身份证号" prop="sign_staff_identify">
-                            <el-input v-model="signForm.sign_staff_identify"></el-input>
+                            <el-input v-model="signForm.sign_staff_identify" placeholder="请输入家政服务员身份证号"></el-input>
                         </el-form-item>
                         <el-form-item label="户籍地址" prop="sign_staff_law_address">
-                            <el-input v-model="signForm.sign_staff_law_address"></el-input>
+                            <el-input v-model="signForm.sign_staff_law_address" placeholder="请输入家政服务员户籍地址"></el-input>
                         </el-form-item>
                         <el-form-item label="现住址" prop="sign_staff_cur_address">
-                            <el-input v-model="signForm.sign_staff_cur_address"></el-input>
+                            <el-input v-model="signForm.sign_staff_cur_address" placeholder="请输入家政服务员现住址"></el-input>
                         </el-form-item>
                         <el-form-item label="紧急联系人" prop="sign_staff_urgent">
-                            <el-input v-model="signForm.sign_staff_urgent"></el-input>
+                            <el-input v-model="signForm.sign_staff_urgent" placeholder="请输入家政服务员紧急联系人"></el-input>
                         </el-form-item>
                     </div>
                 </div>
-
                 <div class="order-message">
                     <div class="title">
                         <div class="title-contains">
@@ -79,6 +78,9 @@
                                 :propTagList="orderConfigList.order_service_contains"
                                 v-model="signForm.service_contains"
                                 :isSingle="true"></select-tag-component>
+                        </el-form-item>
+                        <el-form-item label="服务地址" prop="service_address">
+                            <el-input v-model="signForm.service_address" placeholder="请输入服务地址"></el-input>
                         </el-form-item>
                         <el-form-item label="服务对象人数" prop="service_count">
                             <el-input-number v-model="signForm.service_count" :min="1" :max="20"></el-input-number>
@@ -107,7 +109,7 @@
                                 end-placeholder="服务结束日期"></el-date-picker>
                         </el-form-item>
                         <el-form-item label="工作时间" prop="service_time">
-                            <el-input v-model="signForm.service_time"></el-input>
+                            <el-input v-model="signForm.service_time" placeholder="请输入劳动者日常工作时间"></el-input>
                         </el-form-item>
                     </div>
                 </div>
@@ -119,16 +121,19 @@
                     </div>
                     <div class="order-list">
                         <el-form-item label="劳务报酬" prop="staff_wage">
-                            <el-input v-model.number="signForm.staff_wage"></el-input>
+                            <el-input v-model.number="signForm.staff_wage" placeholder="请输入劳动者劳务报酬"></el-input>
+                        </el-form-item>
+                        <el-form-item label="劳动者服务费" prop="staff_charge">
+                            <el-input v-model.number="signForm.staff_charge" placeholder="请输入劳动者服务费"></el-input>
                         </el-form-item>
                         <el-form-item label="客户服务费" prop="user_charge">
-                            <el-input v-model.number="signForm.user_charge"></el-input>
+                            <el-input v-model.number="signForm.user_charge" placeholder="请输入客户服务费"></el-input>
                         </el-form-item>
                         <el-form-item label="客户缴纳金额" prop="user_pay">
-                            <el-input v-model.number="signForm.user_pay"></el-input>
+                            <el-input v-model.number="signForm.user_pay" placeholder="请输入客户缴纳金额"></el-input>
                         </el-form-item>
                         <el-form-item label="劳动者押金" prop="staff_deposit">
-                            <el-input v-model.number="signForm.staff_deposit"></el-input>
+                            <el-input v-model.number="signForm.staff_deposit" placeholder="请输入劳动者押金"></el-input>
                         </el-form-item>
                     </div>
                 </div>
@@ -140,7 +145,7 @@
                     </div>
                     <div class="order-list">
                         <el-form-item label="保险受益人" prop="insurance_benefit">
-                            <el-input v-model="signForm.insurance_benefit" :disabled="true"></el-input>
+                            <el-input v-model="signForm.insurance_benefit" :disabled="true" placeholder="请输入保险受益人"></el-input>
                         </el-form-item>
                         <el-form-item label="保险期限" prop="insurance_duration">
                             <el-date-picker
@@ -163,7 +168,7 @@
                     </div>
                     <div class="order-list">
                         <el-form-item label="备注" prop="remarks">
-                            <el-input type="textarea" v-model="signForm.remarks"></el-input>
+                            <el-input type="textarea" v-model="signForm.remarks" placeholder="请输入合同备注信息"></el-input>
                         </el-form-item>
                         <el-form-item label="合同附件" prop="accessory" ref="accessory">
                             <!-- <el-upload
@@ -288,6 +293,10 @@ export default {
                 service_contains: [
                     { required:true,message:'请输入劳务报酬',trigger: 'change'},
                 ],
+                //服务地址
+                service_address: [
+                    { required:true,message:'请输入服务地址',trigger: 'blur'},
+                ],
                 //服务对象人数
                 service_count: [
                     { required:true,message:'请输入服务对象人数',trigger: 'change'},
@@ -319,6 +328,11 @@ export default {
                     { required:true,message:'请输入劳务报酬',trigger: 'blur'},
                     { type: 'number',message:'劳务报酬只能是数字',trigger: 'blur'},
                 ],
+                //劳动者服务费
+                staff_charge: [
+                    { required:true,message:'请输入劳动者服务费',trigger: 'blur'},
+                    { type: 'number',message:'劳动者服务费金额只能是数字',trigger: 'blur'},
+                ],
                 //客户服务费
                 user_charge: [
                     { required:true,message:'请输入客户服务费',trigger: 'blur'},
@@ -329,6 +343,7 @@ export default {
                     { required:true,message:'请输入客户缴纳金额',trigger: 'blur'},
                     { type: 'number',message:'客户缴纳金额只能是数字',trigger: 'blur'},
                 ],
+                
                 //劳动者押金
                 staff_deposit: [
                     { required:true,message:'请输入劳动者押金',trigger: 'blur'},
