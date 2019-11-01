@@ -8,6 +8,7 @@
                     :size="3"
                     :value="contractBase.service_level">
                     <select-tag-component 
+                        slot="define"
                         v-if="contractBase.service_level"
                         :isEdit="false" 
                         :propTagList="order_service_level" 
@@ -20,6 +21,7 @@
                     :size="3"
                     :value="contractBase.service_level">
                     <select-tag-component 
+                        slot="define"
                         v-if="contractBase.service_contains"
                         :isEdit="false" 
                         :propTagList="order_service_contains" 
@@ -32,6 +34,7 @@
                     :size="3"
                     :value="contractBase.service_level">
                     <select-tag-component 
+                        slot="define"
                         v-if="contractBase.service_level"
                         :isEdit="false" 
                         :propTagList="order_service_type" 
@@ -39,75 +42,74 @@
                         :isSingle="true"></select-tag-component>
                 </detail-form-item-component>
 
-                <div class="detail-item-box line-three-list">
-                    <div class="detail-item">
-                        <p class="detail-title">服务人数： </p>
-                        <p class="detail-type-text">{{contractBase.service_count}}</p>
-                    </div>
-                </div>
-                <div class="detail-item-box line-three-list">
-                    <div class="detail-item">
-                        <p class="detail-title">服务期限： </p>
-                        <p class="detail-type-text">{{contractBase.service_start | timeFomatter}} - {{contractBase.service_end | timeFomatter}}</p>
-                    </div>
-                </div>
-                <div class="detail-item-box line-three-list"></div>
-                <div class="detail-item-box line-list">
-                    <div class="detail-item">
-                        <p class="detail-title">工作时间： </p>
-                        <p class="detail-type-text">{{contractBase.service_time}}</p>
-                    </div>
-                </div>
-                <div class="detail-item-box line-three-list">
-                    <div class="detail-item">
-                        <p class="detail-title">劳务报酬： </p>
-                        <p class="detail-type-text">{{contractBase.staff_wage}}元</p>
-                    </div>
-                </div>
-                <div class="detail-item-box line-three-list">
-                    <div class="detail-item">
-                        <p class="detail-title">客户服务费： </p>
-                        <p class="detail-type-text">{{contractBase.user_charge}}元</p>
-                    </div>
-                </div>
-                <div class="detail-item-box line-three-list">
-                    <div class="detail-item">
-                        <p class="detail-title">客户缴纳： </p>
-                        <p class="detail-type-text">{{contractBase.user_pay}}元</p>
-                    </div>
-                </div>
-                <div class="detail-item-box line-three-list">
-                    <div class="detail-item">
-                        <p class="detail-title">劳动者服务费： </p>
-                        <p class="detail-type-text">-</p>
-                    </div>
-                </div>
-                <div class="detail-item-box line-three-list">
-                    <div class="detail-item">
-                        <p class="detail-title">劳动者押金： </p>
-                        <p class="detail-type-text">{{contractBase.staff_deposit}}元</p>
-                    </div>
-                </div>
-                <div class="detail-item-box line-three-list"></div>
-                <div class="detail-item-box line-three-list">
-                    <div class="detail-item">
-                        <p class="detail-title">保险受益人： </p>
-                        <p class="detail-type-text">{{contractBase.insurance_benefit}}</p>
-                    </div>
-                </div>
-                <div class="detail-item-box line-three-list">
-                    <div class="detail-item">
-                        <p class="detail-title">保险期限： </p>
-                        <p class="detail-type-text">{{contractBase.insurance_start | timeFomatter}} - {{contractBase.insurance_end | timeFomatter}}</p>
-                    </div>
-                </div>
                 <detail-form-item-component
-                    :label="'合同备注'"
+                    :label="'服务人数'"
+                    :size="3"
+                    :value="`${contractBase.service_count}人`">
+                </detail-form-item-component>
+                <detail-form-item-component
+                    :label="'服务期限'"
+                    :size="3"
+                    :value="contractBase.service_start">
+                    <p slot="define">
+                        {{contractBase.service_start | timeFomatter}} - {{contractBase.service_end | timeFomatter}}
+                    </p>
+                </detail-form-item-component>
+                <div class="detail-item-box line-three-list"></div>
+                <detail-form-item-component
+                    :label="'工作时间'"
                     :size="1"
-                    :value="contractBase.remarks">
+                    :value="contractBase.service_time">
+                </detail-form-item-component>
+
+                <detail-form-item-component
+                    :label="'劳务报酬'"
+                    :size="3"
+                    :value="`${contractBase.staff_wage}元`">
+                </detail-form-item-component>
+                <detail-form-item-component
+                    :label="'客户服务费'"
+                    :size="3"
+                    :value="`${contractBase.user_charge}元`">
+                </detail-form-item-component>
+                <detail-form-item-component
+                    :label="'客户缴纳'"
+                    :size="3"
+                    :value="`${contractBase.user_pay}元`">
+                </detail-form-item-component>
+                <detail-form-item-component
+                    :label="'劳动者服务费'"
+                    :size="3"
+                    :value="`${contractBase.staff_charge}元`">
+                </detail-form-item-component>
+                <detail-form-item-component
+                    :label="'劳动者押金'"
+                    :size="3"
+                    :value="`${contractBase.staff_deposit}元`">
+                </detail-form-item-component>
+                <div class="detail-item-box line-three-list"></div>
+                <detail-form-item-component
+                    :label="'保险受益人'"
+                    :size="3"
+                    :value="contractBase.insurance_benefit">
+                </detail-form-item-component>
+                <detail-form-item-component
+                    :label="'保险期限'"
+                    :size="3"
+                    :value="contractBase.insurance_start">
+                    <p slot="define">
+                        {{contractBase.insurance_start | timeFomatter}} - {{contractBase.insurance_end | timeFomatter}}
+                    </p>
                 </detail-form-item-component>
                 
                 <div class="detail-item-box line-three-list"></div>
+                <detail-form-item-component
+                    :label="'服务地址'"
+                    :size="1"
+                    :value="contractBase.service_address">
+                </detail-form-item-component>
+
+                
                 <detail-form-item-component
                     :label="'合同备注'"
                     :size="1"
@@ -118,6 +120,7 @@
                     :size="1"
                     :value="contractBase.accessory">
                     <photo-component
+                        slot="define"
                         :pictureUrlArrtibute="'url'"
                         v-model="contractBase.accessory"
                         :height="'297px'"

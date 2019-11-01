@@ -10,18 +10,18 @@
         <div 
             class="vertical-item-line" 
             @click="changeSpreadState(item, index)">
-            <img 
-                alt=""
-                :src="hightLightIndex == index ? circleActive : circle"
-                class="icon-position">
             <div 
                 class="vertical-item-title" 
-                :style="{fontSize: `${12-level *2}px`,textIndent: `${5 * level}px`,color: hightLightIndex == index?'#42AAFA' : ''}">
-                {{item.title}}
-                    <i 
-                    v-if="item.children"
-                    class="vertical-arrow"
-                    :class="(item.children && showState.isShow && (showState.shownIndex == index))? 'el-icon-arrow-down' : 'el-icon-arrow-right'"></i>
+                :style="{fontSize: `${12-level *2}px`,textIndent: `${5 * level}px`,color: hightLightIndex == index?'#ff6400' : ''}">
+                
+                <div class="left-circle-box">
+                    <i class="icon-position el-icon-menu"></i>
+                </div>
+                <div class="title-text">{{item.title}}</div>
+                <i 
+                v-if="item.children"
+                class="vertical-arrow"
+                :class="(item.children && showState.isShow && (showState.shownIndex == index))? 'el-icon-arrow-down' : 'el-icon-arrow-right'"></i>
             </div>
         </div>
         <slider-vertical
@@ -161,7 +161,7 @@ export default {
     }
 }
 </script>
-<style scoped>
+<style scoped lang="scss">
     .vertical-slider{
 
     }
@@ -184,29 +184,37 @@ export default {
         text-align: center;
         line-height: 40px;
     }
-    .icon-position{
-        display: inline-block;
-        height:18px;
-        width:18px;
-        position :absolute;
-        left : 11px;
-        top : 11px;
-    }
+    
     .vertical-item-title{
-        float :right;
+        display: flex;
         position : relative;
         height : 40px;
-        width : calc(100% - 40px);
+        width :100%;
         line-height: 40px;
+        &:hover{
+            color : #ff6400
+        }
+        .left-circle-box{
+            height: 40px;
+            width: 40px;
+            text-align: center;
+            line-height: 40px;
+            .icon-position{
+                font-size: 14px;
+                
+            }
+        }
+        .title-text{
+            flex:1;
+        }
+        //右侧箭头
+        .vertical-arrow{
+            position:absolute;
+            right: 10px;
+            top: calc(50% - 6px);
+        }
     }
-    .vertical-item-title:hover{
-        color : #42AAFA
-    }
-    .vertical-arrow{
-        position:absolute;
-        right: 10px;
-        top: calc(50% - 6px);
-    }
+    
     .vertical-arrow-transform{
         transform: rotate(180deg);
     }

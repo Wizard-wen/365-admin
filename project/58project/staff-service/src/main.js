@@ -12,8 +12,10 @@ import axios from 'axios'
 import ElementUI from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
 
-Vue.use(ElementUI);
 
+import './element-variables.scss'
+
+Vue.use(ElementUI);
 import ECharts from 'vue-echarts'
 import 'echarts/lib/chart/line'
 import 'echarts/lib/chart/pie'

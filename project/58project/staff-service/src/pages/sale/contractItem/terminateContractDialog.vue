@@ -8,7 +8,7 @@
         :close-on-click-modal="false">
         <el-form :model="determinateContractForm" label-width="120px" :rules="determinateContractRules" ref="determinateContractForm">
             <el-form-item label="终止事由" prop="terminate_reason">
-                <el-input v-model="determinateContractForm.terminate_reason"></el-input>
+                <el-input v-model="determinateContractForm.terminate_reason" type="textarea" placeholder="请输入终止事由"></el-input>
             </el-form-item>
             <el-form-item label="服务期限" prop="service_duration">
                 <el-date-picker
@@ -21,29 +21,30 @@
                     start-placeholder="服务开始日期"
                     end-placeholder="服务结束日期"></el-date-picker>
             </el-form-item>
+
             <el-form-item label="工作天数" prop="service_days">
-                <el-input v-model="determinateContractForm.service_days"></el-input>
+                <el-input v-model="determinateContractForm.service_days" placeholder="请输入工作天数"></el-input>
             </el-form-item>
             <el-form-item label="日工资" prop="daily_wage">
-                <el-input v-model="determinateContractForm.daily_wage"></el-input>
+                <el-input v-model="determinateContractForm.daily_wage" placeholder="请输入日工资"></el-input>
             </el-form-item>
             <el-form-item label="首月工资合计" prop="total_wage">
-                <el-input v-model="determinateContractForm.total_wage"></el-input>
+                <el-input v-model="determinateContractForm.total_wage" placeholder="请输入首月工资合计"></el-input>
             </el-form-item>
             <el-form-item label="服务费扣除" prop="service_cost">
-                <el-input v-model="determinateContractForm.service_cost"></el-input>
+                <el-input v-model="determinateContractForm.service_cost" placeholder="请输入服务费合计"></el-input>
             </el-form-item>
             <el-form-item label="其他扣除" prop="other_cost">
-                <el-input v-model="determinateContractForm.other_cost"></el-input>
+                <el-input v-model="determinateContractForm.other_cost" placeholder="请输入其他扣除"></el-input>
             </el-form-item>
             <el-form-item label="扣除事由" prop="cost_reason">
-                <el-input v-model="determinateContractForm.cost_reason"></el-input>
+                <el-input v-model="determinateContractForm.cost_reason" type="textarea" placeholder="请输入扣除事由"></el-input>
             </el-form-item>
             <el-form-item label="实发工资" prop="real_wage">
-                <el-input v-model="determinateContractForm.real_wage"></el-input>
+                <el-input v-model="determinateContractForm.real_wage" placeholder="请输入实发工资"></el-input>
             </el-form-item>
             <el-form-item label="返还客户金额" prop="return_wage">
-                <el-input v-model="determinateContractForm.return_wage"></el-input>
+                <el-input v-model="determinateContractForm.return_wage" placeholder="请输入返还客户金额"></el-input>
             </el-form-item>
         </el-form>
         <div slot="footer" class="dialog-footer">
@@ -96,7 +97,7 @@ export default {
                 contract_id: this.contractObj.id,//合同id
                 is_wage: this.contractObj.is_wage,//是否结算工资
                 terminate_reason: '',//终止事由
-                service_duration: [],
+                service_duration: [],//服务期限组件字段
                 service_start:'',//服务起始日
                 service_end:'',//服务终止日
                 service_days:'',//工作天数
@@ -109,7 +110,53 @@ export default {
                 return_wage:'',//返还客户金额
             },
             determinateContractRules: {
-                
+                //终止事由
+                terminate_reason:[
+                    {required: true, message: '请输入终止事由', tigger: 'blur'}
+                ],
+                //服务期限
+                service_duration: [
+                    {required: true, message: '请选择服务期限', tigger: 'change'}
+                ],
+                //工作天数
+                service_days: [
+                    {required: true, message: '请输入工作天数', tigger: 'blur'},
+                    { type: 'number',message:'工作天数只能是数字',trigger: 'blur'},
+                ],
+                //日工资
+                daily_wage: [
+                    {required: true, message: '请输入日工资金额', tigger: 'blur'},
+                    { type: 'number',message:'日工资金额只能是数字',trigger: 'blur'},
+                ],
+                //工资合计
+                total_wage: [
+                    {required: true, message: '请输入工资合计金额', tigger: 'blur'},
+                    { type: 'number',message:'工资合计金额只能是数字',trigger: 'blur'},
+                ],
+                //服务费扣除
+                service_cost: [
+                    {required: true, message: '请输入服务费扣除金额', tigger: 'blur'},
+                    { type: 'number',message:'服务费扣除金额只能是数字',trigger: 'blur'},
+                ],
+                //其他扣除
+                other_cost: [
+                    {required: true, message: '请输入其他扣除金额', tigger: 'blur'},
+                    { type: 'number',message:'其他扣除金额只能是数字',trigger: 'blur'},
+                ],
+                //扣除事由
+                cost_reason: [
+                    {required: true, message: '请输入其他扣除事由', tigger: 'blur'}
+                ],
+                //服务人员实发工资
+                real_wage: [
+                    {required: true, message: '请输入服务人员实发工资金额', tigger: 'blur'},
+                    { type: 'number',message:'实发工资金额只能是数字',trigger: 'blur'},
+                ],
+                //返还客户金额
+                return_wage: [
+                    {required: true, message: '请输入返还客户金额', tigger: 'blur'},
+                    { type: 'number',message:'返还客户金额只能是数字',trigger: 'blur'},
+                ],
             },
             pickerOptions: {
                 disabledDate(time) {

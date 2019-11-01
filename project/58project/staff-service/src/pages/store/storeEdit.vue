@@ -5,7 +5,7 @@
 				<el-input v-model="storeForm.name" :maxlength="20"></el-input>
 			</el-form-item>
 
-			<el-form-item label="门店地区" prop="address">
+			<el-form-item label="门店地址" prop="address">
 				<el-input v-model="storeForm.address" :maxlength="20"></el-input>
 			</el-form-item>
 
@@ -83,7 +83,6 @@ export default {
 				await storeService.getStore(this.$route.query.id).then(data => {
 					if (data.code == "0") {
 						this.storeForm = data.data.store
-						this.storeForm.type = this.storeForm.type == 'enable' ? 1 : 2
 						this.is_loading = false
 					}
 				}).catch(error => {

@@ -3,11 +3,16 @@
         <div class="detail-item">
             <p class="detail-title">{{label}}：</p>
             <div class="detail-contains">
-                <p class="detail-type-text" v-if="value && valueType == 'string'">{{value}}</p>
                 <template v-if="value && valueType!='string'">
-                    <slot></slot>
+                    <slot name="define"></slot>
                 </template>
-                <p class="detail-type-text" v-if="!value">-</p>
+                <template v-else-if="value && valueType == 'string'">
+                    <p class="detail-type-text" >{{value}}</p>
+                </template>
+                <template v-else>
+                    <p class="detail-type-text" >-</p>
+                </template>
+                
             </div>
         </div>
     </div>

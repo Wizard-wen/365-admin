@@ -3,7 +3,8 @@
         <div class="">
             <div class="header" ref="header">
                 <div class="logo">
-                    365生活服务平台
+                    <!-- 365后台管理系统 -->
+                    <img src="../img/logo.png" alt="">
                 </div>
                 <div class="header-right">
                     <div class="breadcrumb-box">
@@ -60,7 +61,7 @@
                     <!-- 菜单缩进 -->
                     <div class="menucontrol" :style="{width : `${siderWidth}px`}" v-if="menuState == 2">
                         <div class="icon-place" v-if="closeAble">
-                            <i class="el-icon-menu icon-position" type="md-menu" size="18" @click="changesider"></i>
+                            <i class="el-icon-d-arrow-left icon-position" type="md-menu" size="18" @click="changesider"></i>
                         </div>
                     </div>
                 </div>
@@ -191,7 +192,13 @@ export default {
                 text-align: center;
                 width:180px;
                 background: #333;
-                
+                color : #ff6400;
+                font-size: 16px;
+                font-weight: 500;
+                img{
+                    height: 50px;
+                    width: 180px;
+                }
                 &:after{
                     content : '';
                     position: absolute;
@@ -275,7 +282,7 @@ export default {
                             color : #fff;
                         }
                         .icon-position:hover{
-                            color : #42AAFA
+                            color : #ff6400
                         }
                     }
                 }

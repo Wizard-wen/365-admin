@@ -81,6 +81,14 @@ export const operate_publicRequest = {
         return operateRequest.getManagerSelection()
     },
     /**
+     * 获取某个部门的全部员工
+     */
+    getDepartmentManagerSelection(department_id){
+        return operateRequest.getDepartmentManagerSelection(department_id)
+    },
+
+
+    /**
      * 服务人员标签配置数据
      */
     getWorkerFormConfig(type){

@@ -31,9 +31,8 @@
                     @click="openPictureDetailDialog(item)"></i>
             </div>
         </div>
-        <div :style="{height: `${height}`, width: `${width? width:'100%'}`}">
+        <div :style="{height: `${height}`, width: `${width? width:'100%'}`}" v-if="isEdit">
             <el-upload
-                v-if="isEdit"
                 accept=".jpg,.jpeg,.png,.gif,.bmp,.pdf,.JPG,.JPEG,.PBG,.GIF,.BMP,.PDF"
                 class="image-uploader"
                 action="/admin/common/uploadImage"

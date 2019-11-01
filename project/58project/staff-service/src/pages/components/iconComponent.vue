@@ -5,10 +5,11 @@
             class="icon-image"
             :style="{height: `${height}px`, width: `${width}px`,borderRadius: displayType == 'circle'? '50%' : ''}" 
             :src="`./resource/${iconUrl}`" alt="" >
-        <div 
+        <img
             v-else
+            src="./iconComponent/images/noIconImage.png"
             class="no-icon-style" 
-            :style="{height: `${height}px`, width: `${width}px`,borderRadius: displayType == 'circle'? '50%' : ''}" >暂无头像</div>
+            :style="{height: `${height}px`, width: `${width}px`,borderRadius: displayType == 'circle'? '50%' : ''}" >
     </div>
 </template>
 
@@ -44,14 +45,7 @@ export default {
 
 <style lang="scss" scoped>
 .icon-box{
-    .no-icon-style{
-        height: 120px;
-        width: 120px;
-        line-height: 120px;
-        text-align: center;
-        color: #fff;
-        background: rgba(0,0,0,0.3)
-    }
+
 }
 
 </style>

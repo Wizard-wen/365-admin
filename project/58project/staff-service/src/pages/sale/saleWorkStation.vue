@@ -345,7 +345,7 @@ export default {
                     text-overflow: ellipsis;
                     cursor: pointer;
                     &:hover{
-                        color: #1890ff;
+                        color: #ff6400;
                     }
                 }
             }

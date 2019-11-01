@@ -15,6 +15,7 @@ export interface storeObject {
     store_manager_name:string;//门店店长名
     agent_count:string;//员工数量
     remarks: string; //备注
+    
     type: string; //门店状态
 	store_staff_list:Array<staffObject>;//门店员工
 	licenseFile: Array<licenseFileObject>;//门店营业执照

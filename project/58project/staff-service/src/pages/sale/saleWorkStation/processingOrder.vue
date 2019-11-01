@@ -146,7 +146,7 @@ export default {
             }
             .btn{
                 line-height: 20px;
-                color: #1890ff;
+                color: #ff6400;
                 font-size: 12px;
                 cursor: pointer;
             }

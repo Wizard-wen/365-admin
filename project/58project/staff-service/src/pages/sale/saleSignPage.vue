@@ -27,7 +27,7 @@
                         </div>
                     </div>
                     <div class="order-list">
-                        <el-form-item label="姓名" prop="sign_user_name">
+                        <el-form-item label="姓名" prop="sign_user_name" >
                             <el-input v-model="signForm.sign_user_name" :disabled="this.$route.query.type == 3" placeholder="请输入雇主姓名"></el-input>
                         </el-form-item>
                         <el-form-item label="联系电话" prop="sign_user_phone">
@@ -315,7 +315,7 @@ export default {
                 ],
                 //工作时间
                 service_time: [
-                    { required:true,message:'请输入工作时间',trigger: 'change'},
+                    { required:true,message:'请输入工作时间',trigger: 'blur'},
                 ],
 
 
@@ -460,33 +460,74 @@ export default {
         async signOrder(formName){
             this.$refs[formName].validate(async (valid) => {
                 if (valid) {
-
-                    this.is_loading = true;
-
-                    await saleService.sign(this.signForm).then(data =>{
-                            if(data.code == "0"){
-                                this.$message({
-                                    type:'success',
-                                    message: data.message
-                                })
-                                this.is_loading = false;
-                                //跳转回订单配置页
-                                this.$router.push(`/sale/orderConfig?order_id=${this.$route.query.order_id}`)
-                            }
-                            
-                        }).catch(error =>{
-                            this.$message({
-                                type:'error',
-                                message: error.message
-                            })
-                            this.is_loading = false;
-                        }).finally(() =>{
-                            this.is_loading = false;
-                        })
+                    await this.confirmSign()
                 } else {
                     return false;
                 }
             });
+        },
+        /**
+         * 二次确认签约
+         */
+        async confirmSign(){
+            await this.$confirm("此操作不可逆，请务必保证签约信息准确完整！", "提示", {
+                confirmButtonText: "确定",
+                cancelButtonText: "取消",
+                type: "warning"
+            }).then(async () =>{
+                await this.sign()
+            }).catch(() => {
+                this.$message({
+                    type: "info",
+                    message: "已放弃签约"
+                });
+            });
+        },
+        /**
+         * 签约接口
+         */
+        async sign(){
+            try{
+                this.is_loading = true;
+
+                await saleService.sign(this.signForm).then(data =>{
+                    if(data.code == "0"){
+                        this.$message({
+                            type:'success',
+                            message: data.message
+                        })
+                        this.is_loading = false;
+                        //跳转回订单配置页
+                        this.goOrderConfigPage()
+                    }
+                    
+                }).catch(error =>{
+                    this.$message({
+                        type:'error',
+                        message: error.message
+                    })
+                    this.is_loading = false;
+                }).finally(() =>{
+                    this.is_loading = false;
+                })
+            } catch(error){
+                this.$message({
+                    type:'error',
+                    message: error.message
+                })
+                this.is_loading = false;
+            }
+        },
+        /**
+         * 返回订单配置页
+         */
+        goOrderConfigPage(){
+            this.$router.push({
+                path: '/sale/orderConfig',
+                query: {
+                    order_id: this.$route.query.order_id,
+                }
+            })
         },
         /**
          * 保险期限时间转化
@@ -578,6 +619,7 @@ export default {
                 .order-list{
                     box-sizing: border-box;
                     padding: 24px;
+                    width: 880px;
                     &:after{
                         content: '';
                         display: block;

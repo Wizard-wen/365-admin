@@ -3,28 +3,41 @@
         <div class="my-setting-contains">
             <el-tabs v-model="currentTabPosition" :tab-position="tabPosition" @tab-click="changeTab">
                 <el-tab-pane label="员工基本信息" name="basic">
-                    <el-form label-width="120px" ref="baseForm" :model="baseForm" class="publicForm baseForm">
-                        <el-form-item label="账号"  prop="account">{{baseForm.account}}</el-form-item>
-
-                        <el-form-item label="工号" prop="manager_code">{{baseForm.manager_code}}</el-form-item>
-
-                        <el-form-item label="真实姓名" prop="real_name">{{baseForm.real_name}}</el-form-item>
-
-                        <el-form-item label="所属部门" prop="department_id">
-                            <select-tag-component
+                    <detail-form-component>
+                        <detail-form-item-component
+                            :label="'账号'"
+                            :size="1"
+                            :value="baseForm.account">
+                        </detail-form-item-component>
+                        <detail-form-item-component
+                            :label="'工号'"
+                            :size="1"
+                            :value="baseForm.manager_code">
+                        </detail-form-item-component>
+                        <detail-form-item-component
+                            :label="'真实姓名'"
+                            :size="1"
+                            :value="baseForm.real_name">
+                        </detail-form-item-component>
+                        <detail-form-item-component
+                            :label="'所属部门'"
+                            :size="1"
+                            :value="baseForm.department_id">
+                            <select-tag-component 
+                                slot="define"
                                 v-if="baseForm.department_id"
-                                :propTagList="departmentList"
-                                v-model="baseForm.department_id"
-                                :isSingle="true"
-                                :isEdit="false"></select-tag-component>
-                        </el-form-item>
-                    </el-form>
+                                :isEdit="false" 
+                                :propTagList="departmentList" 
+                                v-model="baseForm.department_id" 
+                                :isSingle="true"></select-tag-component>
+                        </detail-form-item-component>
+                    </detail-form-component>
                 </el-tab-pane>
                 <el-tab-pane label="员工个人信息" name="personal">
                     <el-form label-width="120px" ref="personalInfoForm" :rules="personalInfoRules" :model="personalInfoForm" class="publicForm personalInfoForm">
 
                         <el-form-item label="用户名" prop="name">
-                            <el-input autocomplete="off" v-model="personalInfoForm.name" ></el-input>
+                            <el-input autocomplete="off" v-model="personalInfoForm.name"  placeholder="请输入用户名"></el-input>
                         </el-form-item>
                         <el-form-item label="头像" class="form-item-size">
                             <upload-single-picture-component
@@ -33,7 +46,7 @@
                         </el-form-item>
 
                         <el-form-item label="手机号" prop="phone">
-                            <el-input autocomplete="off" v-model="personalInfoForm.phone" ></el-input>
+                            <el-input autocomplete="off" v-model="personalInfoForm.phone"  placeholder="请输入手机号"></el-input>
                         </el-form-item>
 
                         <el-form-item label="生日" prop="birthday">
@@ -46,24 +59,25 @@
                         </el-form-item>
 
                         <el-form-item label="邮箱" prop="email">
-                            <el-input autocomplete="off" v-model="personalInfoForm.email" ></el-input>
+                            <el-input autocomplete="off" v-model="personalInfoForm.email"  placeholder="请输入邮箱"></el-input>
                         </el-form-item>
 
                         <el-form-item label="微信号" prop="wechat">
-                            <el-input autocomplete="off" v-model="personalInfoForm.wechat"></el-input>
-                        </el-form-item>
-
-                        <el-form-item label="个人简介" prop="personal_intro">
-                            <el-input type="textarea" v-model="personalInfoForm.personal_intro"></el-input>
-                        </el-form-item>
-
-                        <el-form-item label="紧急联系人" prop="urgent">
-                            <el-input v-model="personalInfoForm.urgent"></el-input>
+                            <el-input autocomplete="off" v-model="personalInfoForm.wechat" placeholder="请输入微信号"></el-input>
                         </el-form-item>
 
                         <el-form-item label="现住址" prop="current_address">
-                            <el-input v-model="personalInfoForm.current_address"></el-input>
+                            <el-input v-model="personalInfoForm.current_address" placeholder="请输入现住址"></el-input>
                         </el-form-item>
+
+                        <el-form-item label="紧急联系人" prop="urgent">
+                            <el-input v-model="personalInfoForm.urgent" placeholder="请输入紧急联系人"></el-input>
+                        </el-form-item>
+
+                        <el-form-item label="个人简介" prop="personal_intro">
+                            <el-input type="textarea" v-model="personalInfoForm.personal_intro" placeholder="请输入个人简介"></el-input>
+                        </el-form-item>
+
                         <el-form-item>
                             <el-button type="primary" @click="changePersonalInfo('personalInfoForm')">确认更改</el-button>
                         </el-form-item>
@@ -72,13 +86,13 @@
                 <el-tab-pane label="更改密码">
                     <el-form label-width="120px" ref="passwordChangeForm" :rules="passwordChangeRules" :model="passwordChangeForm" class="publicForm passwordChangeForm">
                         <el-form-item label="原密码" prop="password">
-                            <el-input type="password" v-model="passwordChangeForm.password"></el-input>
+                            <el-input type="password" v-model="passwordChangeForm.password" placeholder="请输入原密码"></el-input>
                         </el-form-item>
                         <el-form-item label="新密码" prop="newPassword">
-                            <el-input type="password" v-model="passwordChangeForm.newPassword"></el-input>
+                            <el-input type="password" v-model="passwordChangeForm.newPassword" placeholder="请输入新密码"></el-input>
                         </el-form-item>
                         <el-form-item label="确认新密码" prop="reNewPassword">
-                            <el-input type="password" v-model="passwordChangeForm.reNewPassword"></el-input>
+                            <el-input type="password" v-model="passwordChangeForm.reNewPassword" placeholder="请再次输入新密码"></el-input>
                         </el-form-item>
                         <el-form-item>
                             <el-button type="primary" @click="changePassword('passwordChangeForm')">确认更改</el-button>

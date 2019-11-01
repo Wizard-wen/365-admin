@@ -128,6 +128,12 @@ export const operate_publicRequest = {
         return axios.get(`./admin/common/getManagerSelection`)
     },
     /**
+     * 获取某个部门的全部员工
+     */
+    getDepartmentManagerSelection(department_id){
+        return axios.get(`./admin/common/getDepartmentManagerSelection?department_id=${department_id}`)
+    },
+    /**
      * 请求服务人员标签配置数据
      * @param type config
      */

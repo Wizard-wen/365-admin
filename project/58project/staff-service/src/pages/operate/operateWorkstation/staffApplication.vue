@@ -115,7 +115,7 @@ export default {
                     float: right;
                     margin-left: auto;
                     padding: 16px 0;
-                    color: #1890ff;
+                    color: #ff6400;
                     font-weight: 400;
                     font-size: 14px;
                     cursor: pointer;
@@ -178,7 +178,7 @@ export default {
                     }
                     .btn{
                         line-height: 20px;
-                        color: #1890ff;
+                        color: #ff6400;
                         font-size: 12px;
                         cursor: pointer;
                     }

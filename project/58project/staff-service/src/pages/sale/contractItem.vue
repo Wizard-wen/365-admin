@@ -204,7 +204,7 @@ export default {
                     type:'error',
                     message: error.message
                 })
-                store.commit('setLoading',false)
+                this.is_loading = false
             }
         },
         /**
@@ -264,7 +264,7 @@ export default {
             });
         },
         /**
-         * 终止订单接口
+         * 终止合同接口
          */
         async stopContract(){
             try {

@@ -31,5 +31,5 @@ export const noticeArticleList =[
         created_manager: '宋希文',
         componentName: 'orderLife',
         component: orderLife
-    }
+    },
 ]

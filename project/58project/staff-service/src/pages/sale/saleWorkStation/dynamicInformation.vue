@@ -134,7 +134,7 @@ export default {
                 bottom: 5px;
                 line-height: 30px;
                 font-size: 14px;
-                color: #1890ff;
+                color: #ff6400;
                 cursor: pointer;
             }
         }

@@ -15,7 +15,7 @@ import HogLayout from '../../common/components/Layout/SystemLayout.vue'
 export default {
     data(){
         return {
-            closeAble: true,
+            closeAble: false,
         }
     },
     methods:{

@@ -2,17 +2,16 @@
     <div class="worker">
         <contract-table-component
             :tableData="order_contract"
-            :controlScopeLength="200">
-
+            :controlScopeLength="100">
             <template slot="control" slot-scope="controler">
                 <el-button size="mini" type="text" 
-                    @click="goContractPage(controler.scoper.row)">查看</el-button>
-                <el-button size="mini" type="text" 
+                    @click="goContractPage(controler.scoper.row)">处理</el-button>
+                <!-- <el-button size="mini" type="text" 
                     v-if="controler.scoper.row.type == 2 && controler.scoper.row.is_wage == 1" 
                     @click="sendErrorMessage(controler.scoper.row)">结算工资</el-button>
                 <el-button size="mini" type="text" style="color:#F56C6C"
                     v-if="controler.scoper.row.type != 3" 
-                    @click="sendErrorMessage(controler.scoper.row)">终止合同</el-button>
+                    @click="sendErrorMessage(controler.scoper.row)">终止合同</el-button> -->
             </template>
         </contract-table-component>
     </div>
@@ -50,9 +49,6 @@ export default {
             })
         },      
     },
-    async mounted(){
-
-    }
 }
 </script>
 

@@ -23,7 +23,7 @@
 			<div class="detail-right">
 				<div class="right-box">
 					<div class="title">经营状态</div>
-					<div class="value" :style="{color: storeDetail.type == 'enable'? '#67C23A' : '#F56C6C'}">{{storeDetail.type == 'enable'?'营业':'停业'}}</div>
+					<div class="value" :style="{color: storeDetail.type == 1? '#67C23A' : '#F56C6C'}">{{storeDetail.type == 1?'营业':'停业'}}</div>
 				</div>
 				<div class="right-box">
 					<div class="title">员工数量</div>
@@ -99,7 +99,9 @@ export default {
 			//添加新店员弹窗显示隐藏
 			addStoreStaffDialogVisible: false,
 			//门店员工职位
-			positionTypeList: [{id: 1, name: '店员'}, {id: 2, name: '店长'}]
+			positionTypeList: [{id: 1, name: '店员'}, {id: 2, name: '店长'}],
+			//经营状态
+			typeList: [{ id: 1, name: "正常" }, { id: 2, name: "关闭" }],
 		};
 	},
 	methods: {
@@ -167,12 +169,13 @@ export default {
 		 * 查看员工详情
 		 */
 		showStaffDetail(paramObj){
-			// this.$router.push({
-			// 	path: '/operate/',
-			// 	query: {
-			// 		id: paramObj.id,
-			// 	}
-			// })
+			this.$router.push({
+				path: '/auth/accountEdit',
+				query: {
+					id: paramObj.id,
+					type: 1,
+				}
+			})
 		},
 		/**
 		 * 解绑员工

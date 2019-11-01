@@ -534,7 +534,7 @@ export default {
                     .change{
                         margin-left: 15px;
                         display: inline-block;
-                        color: #1890ff;
+                        color: #ff6400;
                         line-height: 30px;
                         height: 30px;
                         font-size: 12px;
