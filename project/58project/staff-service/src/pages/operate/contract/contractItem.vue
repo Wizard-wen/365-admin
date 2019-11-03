@@ -534,7 +534,7 @@ export default {
                     .change{
                         margin-left: 15px;
                         display: inline-block;
-                        color: #ff6400;
+                        color: $viColor;
                         line-height: 30px;
                         height: 30px;
                         font-size: 12px;

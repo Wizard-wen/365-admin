@@ -32,6 +32,8 @@
 
                 <el-table-column  label="分派时间" prop="assign_at" align="center" width="" :formatter="assign_atFormatter"></el-table-column>
 
+                <el-table-column  label="合同录入者" prop="created_manager_name" align="center" width=""></el-table-column>
+
                 <el-table-column label="操作" align="center" fixed="right" width="">
                     <template slot-scope="scope">
                         <slot name="control" v-bind:scoper="scope"></slot>

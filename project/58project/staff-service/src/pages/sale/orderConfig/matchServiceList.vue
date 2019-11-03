@@ -20,8 +20,12 @@
             </template>
 
             <template slot="control" slot-scope="controler">
-                <el-button size="mini" type="text" @click="showStaff(controler.scoper.$index, controler.scoper.row)">查看</el-button>
-                <el-button size="mini" type="text" @click="addMatchStaff(controler.scoper.row)">添加备选</el-button>
+                <el-button 
+                    size="mini" type="text" 
+                    @click="showStaff(controler.scoper.row)">查看</el-button>
+                <el-button 
+                    size="mini" type="text" 
+                    @click="addMatchStaff(controler.scoper.row)">添加备选</el-button>
             </template>
 
             <template slot="pagination">
@@ -40,7 +44,7 @@
 </template>
 <script>
 import {saleService, operateService, $utils} from '../../../../common'
-import {queryTagComponent} from '@/pages/components/index.js'
+// import {queryTagComponent} from '@/pages/components/index.js'
 import {
     matchServiceTableComponent,
     queryComponent,
@@ -80,7 +84,7 @@ export default {
     components: {
         matchServiceTableComponent,
         queryComponent,
-        queryTagComponent
+        // queryTagComponent
     },
     computed:{
         workerConfigForm(){
@@ -203,7 +207,7 @@ export default {
         /**
          * 查看服务人员详情
          */
-        showStaff(index, row){
+        showStaff(row){
             this.$router.push({
                 path: "/sale/saleNewWorkerShow",
                 query: {

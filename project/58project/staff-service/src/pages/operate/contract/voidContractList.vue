@@ -118,9 +118,10 @@
 
                     await Promise.all([
                         operateService.getVoidContractList(),
-                        operateService.getOrderFormConfig()
+                        operateService.getOrderFormConfig(),
+                        operateService.getDepartmentManagerSelection(4),
                     ]).then((data) =>{
-
+                        this.$store.commit('setSaleStaffList', data[2].data)
                         this.contractList = data[0].data.data
                         //分页信息
                         this.pagination.currentPage = data[0].data.current_page //当前页码

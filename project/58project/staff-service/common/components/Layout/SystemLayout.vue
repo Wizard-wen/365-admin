@@ -192,7 +192,7 @@ export default {
                 text-align: center;
                 width:180px;
                 background: #333;
-                color : #ff6400;
+                color : $viColor;
                 font-size: 16px;
                 font-weight: 500;
                 img{
@@ -282,7 +282,7 @@ export default {
                             color : #fff;
                         }
                         .icon-position:hover{
-                            color : #ff6400
+                            color : $viColor
                         }
                     }
                 }

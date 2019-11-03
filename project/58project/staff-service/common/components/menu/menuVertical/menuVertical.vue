@@ -129,6 +129,11 @@ export default {
     components:{
         sliderVertical,
     },
+    watch: {
+        async $route(to, from ){
+            this._hashchange()
+        }
+    },
     mounted(){
         //监听路由变化事件
         this._hashchange = (e)=>{
@@ -148,6 +153,8 @@ export default {
                         return;
                     }
                 }
+            } else {
+
             }
         }
         

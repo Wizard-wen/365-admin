@@ -13,3 +13,76 @@
 $activeColor: rgb(66, 170, 250);
 
 
+//vi主题色
+$viColor: rgb(64, 158, 255);
+$viColor3:rgba(64, 158, 255, .3);
+$viColor5:rgba(64, 158, 255, .5);
+
+//标签色
+
+.tag-color0{
+    color: #409eff;
+    border: 1px solid rgba(64,158,255,.2);
+    background-color: rgba(64,158,255,.1);
+}
+.tag-color1{
+    background-color: rgba(103,194,58,.1);
+    border-color: rgba(103,194,58,.2);
+    color: #67c23a;
+}
+.tag-color2{
+    background-color: rgba(144,147,153,.1);
+    border-color: rgba(144,147,153,.2);
+    color: #909399;
+}
+.tag-color3{
+    background-color: rgba(230,162,60,.1);
+    border-color: rgba(230,162,60,.2);
+    color: #e6a23c;
+}
+.tag-color4{
+    background-color: rgba(245,108,108,.1);
+    border-color: rgba(245,108,108,.2);
+    color: #f56c6c;
+}
+
+.tag-color5{
+    background-color: rgba(8,103,81,.1);
+    border-color: rgba(8,103,81,.2);
+    color: #086751;
+}
+.tag-color6{
+    background-color: rgba(8,101,139,.1);
+    border-color: rgba(8,101,139,.2);
+    color: #08658B;
+}
+.tag-color7{
+    background-color: rgba(185,29,85,.1);
+    border-color: rgba(185,29,85,.2);
+    color: #b91d55;
+}
+
+
+.hide{
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    background: #fff;
+    opacity: .9;
+    top: 0;
+    left: 0;
+    z-index: 200;
+    filter: blur(3px);
+}
+.hide-text{
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    font-size: 18px;
+    width: 100%;
+    color: $viColor;
+    text-align: center;
+    z-index: 201;
+
+}

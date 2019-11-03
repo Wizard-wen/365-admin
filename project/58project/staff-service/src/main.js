@@ -29,9 +29,18 @@ Vue.component('chart', ECharts)
 
 Vue.prototype.$axios = axios;
 
+import {$styleConfig} from '../common/index.js'
 
-import {$utils} from '../common'
+import {$utils} from '../common/index.js'
+
 Vue.prototype.$utils = $utils
+Vue.prototype.$styleConfig = $styleConfig
+
+
+import '../common/directives/index.js'
+
+
+
 //引入根组件
 import App from './App'
 

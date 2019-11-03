@@ -81,7 +81,7 @@
     import {
         cascaderComponent,
         tableTagComponent} from '@/pages/components'
-    import {authService} from '../../../../common'
+    import {authService} from '@common/index.js'
     export default {
         data() {
 

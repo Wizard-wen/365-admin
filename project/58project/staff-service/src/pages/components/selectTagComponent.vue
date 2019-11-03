@@ -209,9 +209,9 @@ export default {
         }
     }
     .tag-color0{
-        color: #ff6400;
-        border: 1px solid rgba(255,100,0,.2);
-        background-color: rgba(255,100,0,.1);          
+        color: #409eff;
+        border: 1px solid rgba(64,158,255,.2);
+        background-color: rgba(64,158,255,.1);         
     }
     .tag-color1{
         background-color: rgba(103,194,58,.1);
@@ -248,11 +248,6 @@ export default {
         background-color: rgba(185,29,85,.1);
         border-color: rgba(185,29,85,.2);
         color: #b91d55;       
-    }
-    .tag-color8{
-        color: #409eff;
-        border: 1px solid rgba(64,158,255,.2);
-        background-color: rgba(64,158,255,.1);            
     }
 </style>
 

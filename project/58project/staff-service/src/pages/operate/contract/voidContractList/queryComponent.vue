@@ -31,7 +31,9 @@
             :selectedList="queryedVoidContractList.manager_id"
             :queryKey="'manager_id'"
             :queryName="'经纪人'"
-            :queryList="voidContractConfigForm.manager_id"
+            :queryKeyAttribute="'manager_id'"
+            :queryNameAttribute="'manager_name'"
+            :queryList="saleStaffList"
             :isSingleQuery="true"></query-search-list>
     </div>
 </template>
@@ -59,6 +61,9 @@ export default {
         },
         queryedVoidContractList(){
             return this.$store.state.operateModule.voidContractList
+        },
+        saleStaffList(){
+            return this.$store.state.saleModule.saleStaffList
         }
     },
     methods: {

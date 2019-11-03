@@ -298,7 +298,7 @@ export default {
          * 关闭通过订单申请弹窗
          */
         async closeOrderApplyPassDialog(){
-            orderApplyPassVisible = false
+            this.orderApplyPassVisible = false
             await this.getApplication()
         },
         /**

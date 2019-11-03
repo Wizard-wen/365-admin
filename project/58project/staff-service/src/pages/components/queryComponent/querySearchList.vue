@@ -12,7 +12,7 @@
                 :key="index" 
                 @click="addQuery(item)">
                 <span class="list-item-block" :class="'list-item-color'+ ((index+1)%5+1)"></span>
-                {{item.name}}
+                {{item[queryNameAttribute]}}
             </div>
         </div>
     </div>
@@ -60,6 +60,17 @@ export default {
         selectedList: {
             type: Array,
             default: function(){return []}
+        },
+        /**
+         * 查询组件值字段
+         */
+        queryNameAttribute: {
+            type: String,
+            default: 'name'
+        }   ,
+        queryKeyAttribute: {
+            type: String,
+            default: 'id'
         }
     },
     computed: {
@@ -68,7 +79,7 @@ export default {
             return this.queryList.map((item, index) =>{
                 return {
                     ...item,
-                    isSelected: _this.selectedList.includes(item.id)? true : false 
+                    isSelected: _this.selectedList.includes(item[this.queryKeyAttribute])? true : false 
                 }
             })
         },
@@ -88,17 +99,17 @@ export default {
             if(this.isSingleQuery){
                 // 清空id数组
                 this.queryedList = [];
-                this.queryedList.push(item.id);
+                this.queryedList.push(item[this.queryKeyAttribute]);
             } else {
                 // 清空id数组
                 this.queryedList = this.selectedList;
 
-                let indexNumber = this.selectedList.indexOf(item.id)
+                let indexNumber = this.selectedList.indexOf(item[this.queryKeyAttribute])
                
                if(indexNumber!=-1){
                    this.queryedList.splice(indexNumber, 1)
                } else {
-                   this.queryedList.push(item.id)
+                   this.queryedList.push(item[this.queryKeyAttribute])
                }
             }
             //更新表格数据

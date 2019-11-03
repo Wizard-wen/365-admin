@@ -106,8 +106,6 @@
 
                         <el-table-column label="姓名" prop="staff_name" align="center"></el-table-column>
 
-                        <el-table-column label="头像" prop="staff_icon" align="center"></el-table-column>
-
                         <el-table-column label="电话" prop="staff_phone" align="center"></el-table-column>
 
                         <el-table-column label="签约状态" prop="type" align="center">
@@ -514,7 +512,7 @@ export default {
                     .change{
                         margin-left: 15px;
                         display: inline-block;
-                        color: #ff6400;
+                        color: $viColor;
                         line-height: 30px;
                         height: 30px;
                         font-size: 12px;

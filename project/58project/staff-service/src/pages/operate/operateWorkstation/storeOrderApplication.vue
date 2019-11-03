@@ -116,7 +116,7 @@ export default {
                     float: right;
                     margin-left: auto;
                     padding: 16px 0;
-                    color: #ff6400;
+                    color: $viColor;
                     font-weight: 400;
                     font-size: 14px;
                     cursor: pointer;
@@ -179,7 +179,7 @@ export default {
                     }
                     .btn{
                         line-height: 20px;
-                        color: #ff6400;
+                        color: $viColor;
                         font-size: 12px;
                         cursor: pointer;
                     }

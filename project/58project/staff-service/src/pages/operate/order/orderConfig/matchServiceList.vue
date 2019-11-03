@@ -194,7 +194,7 @@ export default {
          */
         showStaff(index, row){
             this.$router.push({
-                    path: "/sale/saleWorkerShow",
+                    path: "/sale/saleNewWorkerShow",
                     query: {
                         id: row.id,
                         from: 2,//

@@ -111,6 +111,12 @@ router.beforeEach((to, from, next) => {
         next()
     }
 })
+//登录后不得返回登录页
+window.onhashchange = (e) =>{
+    if(e.target.location.hash == '#/login'){
+        router.push('/myCenter/homePage')
+    }
+}
 
 
 export default router

@@ -13,9 +13,9 @@
                         size="medium" 
                         type="text" 
                         placeholder="请输入用户名"
+                        @keyup.enter.native="submitForm('form')"
                         :clearable="true">
-                        <!-- <i slot="prefix" class="el-input__icon el-icon-search"></i> -->
-                        <img slot="prefix" style="heihgt: 16px;width: 16px;margin:12px 4px; " src="./login/images/user.png" alt="">
+                        <i slot="prefix" class="el-input__icon el-icon-user"></i>
                     </el-input>
                 </el-form-item>
                 <el-form-item prop="password">
@@ -27,24 +27,25 @@
                         size="medium"  
                         type="password"
                         placeholder="请输入密码"
+                        @keyup.enter.native="submitForm('form')"
                         :clearable="true">
-                        <img slot="prefix" style="heihgt: 16px;width: 16px;margin:12px 4px; " src="./login/images/password.png" alt="">
+                        <i slot="prefix" class="el-input__icon el-icon-lock"></i>
                     </el-input>
                 </el-form-item>
                 <el-form-item>
-                    <el-button style="width: 100%;background: #ff6400;color: #fff;" size="medium" @click="submitForm('form')">登录</el-button>
+                    <el-button class="btn-style" size="medium" @click="submitForm('form')">登录</el-button>
                 </el-form-item>
             </el-form>
         </div>
         <div class="login-back"></div>
-        <div>
-            Copyright © 2018 - 2019 365 Inc. All Rights Reserved
+        <div class="right">
+            Copyright © 365 Inc. All Rights Reserved
         </div>
     </div>
 </template>
 
 <script>
-import {loginService} from '../../common'
+import {loginService} from '@common/index.js'
 export default {
     data() {
         return {
@@ -114,12 +115,13 @@ export default {
         width :100%;
         background: #f2f2f2;
         .login-back{
+            display: none;
             position: fixed;
             top: calc(50% - 110px);
             left: 0;
             height: 220px;
             width: 100%;
-            background: #ff6400;
+            background: rgba(255, 100, 0, .5);
         }
         .login-box{
             position: fixed;
@@ -135,7 +137,7 @@ export default {
             .line{
                 height: 10px;
                 width: 100%;
-                background: #ff6400;
+                background: $viColor;
             }
             .logo-image{
                 height: 106px;
@@ -150,9 +152,23 @@ export default {
                 line-height: 47px;
                 font-size: 24px;
                 font-weight: 700;
-                color: #ff6400;
+                color: $viColor;
                 margin-bottom: 20px;
             }
+            .btn-style{
+                width: 100%;
+                background: $viColor;
+                color: #fff;
+            }
+        }
+        .right{
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            height: 30px;
+            line-height: 30px;
+            color: rgba(0,0,0,.65);
+            text-align: center;
         }
     }
 

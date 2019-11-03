@@ -92,8 +92,6 @@ textarea {
     }
 }
 
-
-
 .clearFix:before,
 .clearFix:after {
     content: '.';
@@ -103,21 +101,12 @@ textarea {
     visibility: hidden;
 }
 
-
-
 .html_file p {
     font: 18px/32px "Microsoft Yahei";
     color: #404040;
     text-indent: 2em;
     margin: 32px 0 0;
 }
-
-
-
-
-
-
-
 
 input[type=search]::-webkit-search-cancel-button {
     -webkit-appearance: none;
@@ -146,7 +135,6 @@ input[type=search]::-webkit-search-cancel-button {
     background-color: rgba(136,136,136,0.4);
 } */
 
-
 body .el-table th.gutter{
     display: table-cell!important;
 }
@@ -158,3 +146,7 @@ body .el-table colgroup.gutter{
 th{
     padding: 0!important;
 }
+
+
+
+

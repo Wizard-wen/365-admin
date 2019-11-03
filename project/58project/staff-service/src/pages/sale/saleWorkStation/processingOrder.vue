@@ -146,7 +146,7 @@ export default {
             }
             .btn{
                 line-height: 20px;
-                color: #ff6400;
+                color: $viColor;
                 font-size: 12px;
                 cursor: pointer;
             }

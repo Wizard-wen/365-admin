@@ -68,7 +68,7 @@ export const saleModule = {
         orderworkerConfigForm: {
             ...order_status,
         },
-
+        saleStaffList: [],//所有的销售人员
         saleContractConfigForm: {
             type: contract_type,
             sign_at: created_at,//签约时间 
@@ -255,6 +255,12 @@ export const saleModule = {
         configSaleWorkstation(state, data){
             state.saleWorkstation.dynamic_information = data.dynamic_information
             state.saleWorkstation.processing_order = data.processing_order
+        },
+        /**
+         * 设置全部销售人员
+         */
+        setSaleStaffList(state, data){
+            state.saleStaffList = data
         },
         /** 
          * 列表查询函数公共键值说明

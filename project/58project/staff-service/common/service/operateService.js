@@ -86,8 +86,6 @@ export const operate_publicRequest = {
     getDepartmentManagerSelection(department_id){
         return operateRequest.getDepartmentManagerSelection(department_id)
     },
-
-
     /**
      * 服务人员标签配置数据
      */

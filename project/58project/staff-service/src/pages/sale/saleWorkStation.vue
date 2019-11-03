@@ -122,7 +122,10 @@ import {
     processingOrder,
     dynamicInformation,
 } from './saleWorkStation/index.js'
-import {saleService} from '../../../common/index.js'
+
+import {saleService} from '@common/index.js'
+
+
 export default {
     data(){
         return {
@@ -345,7 +348,7 @@ export default {
                     text-overflow: ellipsis;
                     cursor: pointer;
                     &:hover{
-                        color: #ff6400;
+                        color: $viColor;
                     }
                 }
             }

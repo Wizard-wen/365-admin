@@ -5,7 +5,8 @@
             slot="contains"
             :data="order_staff" 
             class="person-table" 
-            :header-cell-style="{height: '48px',background: '#fafafa'}">
+            height="350"
+            :header-cell-style="{height: '40px',background: '#fafafa'}">
             <el-table-column label="工号" prop="staff_code" align="center"></el-table-column>
 
             <el-table-column label="姓名" prop="staff_name" align="center"></el-table-column>
@@ -14,7 +15,9 @@
 
             <el-table-column label="签约状态" prop="type" align="center">
                 <template slot-scope="scope">
-                    <table-tag-component :propList="matchStaffSignList" :tableOriginData="scope.row.type"></table-tag-component>
+                    <table-tag-component 
+                        :propList="matchStaffSignList" 
+                        :tableOriginData="scope.row.type"></table-tag-component>
                 </template>
             </el-table-column>
 
@@ -22,18 +25,25 @@
 
             <el-table-column label="操作" align="center" width="300">
                 <template slot-scope="scope">
-                    <el-button type="success" v-if="type == 'normal'" @click="goSignOrder(2,scope.row)" size="mini">签约</el-button>
-                    <el-button type="danger" v-if="type == 'normal'" @click="openRefuseServiceDialog(scope.row)" size="mini">拒绝</el-button>
-                    <el-button type="primary" @click="goStaffDetail(scope.row)" size="mini">详情</el-button>
+                    <el-button 
+                        type="success" size="mini"
+                        v-if="scope.row.type != 3 && type == 'normal'" 
+                        @click="goSignOrder(2,scope.row)">签约</el-button>
+                    <el-button 
+                        type="danger" size="mini"
+                        v-if=" scope.row.type != 3 && type == 'normal'" 
+                        @click="openRefuseServiceDialog(scope.row)">拒绝</el-button>
+                    <el-button 
+                        type="primary" size="mini"
+                        @click="goStaffDetail(scope.row)" >详情</el-button>
+                    
                     <!-- 只有添加人才能删除 -->
                     <el-button 
-                        type="danger" 
-                        size="mini"
-                        @click="deleteMatchStaff(scope.row)" 
-                        v-if="presentUser.id == scope.row.created_manager_id">删除</el-button>
+                        type="danger" size="mini"
+                        v-if="presentUser.id == scope.row.created_manager_id"
+                        @click="deleteMatchStaff(scope.row)">删除</el-button>
                 </template>
             </el-table-column>
-            
         </el-table>
         <refuse-service-dialog
             v-if="refuseServiceDialogVisible"
@@ -65,6 +75,9 @@ export default {
         }
     },
     props: {
+        /**
+         * 公海订单 public  一般订单 normal
+         */
         type: {
             default: 'normal',
             type: String,

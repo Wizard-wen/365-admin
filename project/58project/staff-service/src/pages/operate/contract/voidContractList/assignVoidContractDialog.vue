@@ -12,7 +12,7 @@
                     <el-option
                         v-for="(item, index) in selectionList"
                         :key="index"
-                        :label="item.manager_name"
+                        :label="item.real_name"
                         :value="item.manager_id"></el-option>
                 </el-select>
             </el-form-item>
@@ -106,38 +106,38 @@ export default {
                 }
             });
         },
+        /**
+         * 获取全部销售人员
+         */
 
     },
     async mounted(){
         try{
             this.loading = true
-
-            await Promise.all([
-                operateService.getManagerSelection(),
-            ]).then((data) =>{
-                if(data[0].code == "0"){
-                    this.selectionList = data[0].data
-                    this.selectionList.push({
-                        manager_name: '请选择',
-                        manager_id: 0,
-                    })
+            await operateService.getDepartmentManagerSelection(4).then((data) =>{
+                if(data.code == "0"){
+                    this.selectionList = [
+                        {real_name: '请选择', manager_id: 0},
+                        ...data.data,
+                    ]
+                    this.loading = true
                 }
             }).catch(error =>{
                 this.$message({
                     type:'error',
                     message: error.message
                 })
+                this.loading = true
             }).finally(() =>{
                 this.loading = false
             })
-
         } catch(error){
             this.$message({
                 type:'error',
                 message: error.message
             })
+            this.loading = true
         }
-
     }
 }
 </script>

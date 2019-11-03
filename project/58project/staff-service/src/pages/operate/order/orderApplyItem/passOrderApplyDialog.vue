@@ -23,13 +23,13 @@
                     <el-option
                         v-for="item in apply_manager_list"
                         :key="item.manager_id"
-                        :label="item.manager_name"
+                        :label="item.real_name"
                         :value="item.manager_id"></el-option>
                 </el-select>
             </el-form-item>
         </el-form>
         <div slot="footer" class="dialog-footer">
-            <el-button @click="cancelApplyChange">取 消</el-button>
+            <el-button @click="cancelOrderApplyPass">取 消</el-button>
             <el-button type="primary" @click="onSubmit">确定</el-button>
         </div>
     </el-dialog>
@@ -91,7 +91,7 @@ export default {
     },
     methods: {
         //取消分配订单
-        cancelApplyChange(){
+        cancelOrderApplyPass(){
             this.orderApplyForm.agent_manager_id = ''
             this.orderApplyForm.agent_store_id = ''
             this.$emit('closeOrderApplyPassDialog')

@@ -26,15 +26,18 @@
                             <div class="left">雇主信息</div>
                         </div>
                     </div>
-                    <div class="order-list">
-                        <el-form-item label="姓名" prop="sign_user_name" >
-                            <el-input v-model="signForm.sign_user_name" :disabled="this.$route.query.type == 3" placeholder="请输入雇主姓名"></el-input>
+                    <div class="order-list" >
+                        <el-form-item prop="sign_user_name" label="姓名">
+                            <el-input v-model="signForm.sign_user_name" :disabled="orderType == 3 || orderType == 2" placeholder="请输入雇主姓名"></el-input>
+                            <!-- <el-tooltip effect="dark" content="Top Left 提示文字" placement="top-start">
+                                <i class="el-icon-info"></i>
+                            </el-tooltip> -->
                         </el-form-item>
                         <el-form-item label="联系电话" prop="sign_user_phone">
                             <el-input v-model.number="signForm.sign_user_phone" placeholder="请输入雇主联系电话"></el-input>
                         </el-form-item>
                         <el-form-item label="身份证号" prop="sign_user_identify">
-                            <el-input v-model="signForm.sign_user_identify" :disabled="this.$route.query.type == 3" placeholder="请输入雇主身份证号"></el-input>
+                            <el-input v-model="signForm.sign_user_identify" :disabled="orderType == 3 || orderType == 2" placeholder="请输入雇主身份证号"></el-input>
                         </el-form-item>
                     </div>
                 </div>
@@ -243,6 +246,8 @@ export default {
                 id: 0,
                 contract_number: '请选择'
             }],
+            //订单状态
+            orderType: this.$route.query.type,
             signRules: {
                 //合同编号
                 contract_number: [
@@ -318,11 +323,6 @@ export default {
                     { required:true,message:'请输入工作时间',trigger: 'blur'},
                 ],
 
-
-
-
-
-
                 //劳务报酬
                 staff_wage: [
                     { required:true,message:'请输入劳务报酬',trigger: 'blur'},
@@ -367,10 +367,10 @@ export default {
                 order_id: this.$route.query.order_id,
                 
                 contract_number: '',//合同编号
-                sign_user_name:this.$route.query.type == 3?this.$route.query.sign_user_name : '' ,// 雇主
-                sign_user_id:this.$route.query.type == 3?this.$route.query.sign_user_id : '' ,// 雇主
+                sign_user_name:this.$route.query.type == 3 || 2?this.$route.query.sign_user_name : '' ,// 雇主
+                sign_user_id:this.$route.query.type == 3 || 2?this.$route.query.sign_user_id : '' ,// 雇主
                 sign_user_phone:'',// 雇主联系电话
-                sign_user_identify:this.$route.query.type == 3?this.$route.query.sign_user_identify : '',// 雇主身份证号
+                sign_user_identify:this.$route.query.type == 3 || 2?this.$route.query.sign_user_identify : '',// 雇主身份证号
                 
                 sign_staff_name:this.$route.query.sign_staff_name,// 签约家政服务员
                 sign_staff_id: this.$route.query.sign_staff_id,//签约家政服务员id

@@ -117,8 +117,8 @@
 </template>
 <script>
 
-import {authService} from '../../../../common'
-import {selectTagComponent,pageEditComponent} from '@/pages/components'
+import {authService} from '@common/index.js'
+
 
 export default {
     data(){
@@ -198,10 +198,6 @@ export default {
             roleList: [],//角色id
             isSetPassword: false,//是否展示设置密码
         }
-    },
-    components: {
-        selectTagComponent,
-        pageEditComponent
     },
     computed: {
         /**

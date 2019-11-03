@@ -82,3 +82,10 @@ import {$utils} from './utils/index.js'
 export {
     $utils,
 }
+
+
+import {$styleConfig} from './style/styleConfig.js'
+
+export {
+    $styleConfig,
+}

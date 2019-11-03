@@ -12,10 +12,10 @@
             @click="changeSpreadState(item, index)">
             <div 
                 class="vertical-item-title" 
-                :style="{fontSize: `${12-level *2}px`,textIndent: `${5 * level}px`,color: hightLightIndex == index?'#ff6400' : ''}">
+                :style="{fontSize: `${12-level *2}px`,textIndent: `${5 * level}px`,color: hightLightIndex == index?$styleConfig.$viColor : ''}">
                 
                 <div class="left-circle-box">
-                    <i class="icon-position el-icon-menu"></i>
+                    <i class="icon-position el-icon-eleme"></i>
                 </div>
                 <div class="title-text">{{item.title}}</div>
                 <i 
@@ -158,7 +158,7 @@ export default {
         changeHighLight(item){
             this.$emit('changeHighState',item)
         },
-    }
+    },
 }
 </script>
 <style scoped lang="scss">
@@ -191,8 +191,9 @@ export default {
         height : 40px;
         width :100%;
         line-height: 40px;
+        cursor: pointer;
         &:hover{
-            color : #ff6400
+            color : $viColor
         }
         .left-circle-box{
             height: 40px;
