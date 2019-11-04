@@ -95,32 +95,6 @@
                 </div>
             </div>
 
-            <div class="card-box">
-                <div class="card-title">
-                    <div class="title">
-                        日志列表
-                    </div>
-                    <div class="control">
-                        <el-button size="small" type="primary" @click="addLog">添加日志</el-button>
-                    </div>
-                </div>
-                <div class="card-contains">
-                    <!-- 员工列表 -->
-                    <el-table :data="applyLogTable" class="person-table" :header-cell-style="{height: '48px',background: '#fafafa'}">
-                        <el-table-column label="创建时间" prop="created_at" align="center"></el-table-column>
-
-                        <el-table-column label="管理员姓名" prop="manager_name" align="center"></el-table-column>
-
-                        <el-table-column label="日志内容" prop="message" align="center"></el-table-column>
-
-                        <el-table-column label="操作" align="center">
-                            <!-- <template slot-scope="scope"> -->
-                                <el-button size="mini">查看</el-button>
-                            <!-- </template> -->
-                        </el-table-column>
-                    </el-table>
-                </div>
-            </div>
         </div>
         <change-apply-dialog
             v-if="orderApplyFieldVisible"
@@ -302,31 +276,23 @@ export default {
          * 获取订单申请信息
          */
         async getApplication() {
-            await operateService.getClientRequire(this.$route.query.id).then(data => {
+            try{
+                await operateService.getClientRequire(this.$route.query.id).then(data => {
                     if (data.code == "0") {
                         this.clientRequireDetailItem = data.data;
                         //订单申请日志列表
                         this.applyLogTable = data.data.applyLog;
                     }
-                })
-                .catch(error => {
+                }).catch(error => {
                     this.$message({
                         type: "error",
                         message: error.message
                     });
                 });
-        },
-        /**
-         * 添加日志
-         */
-        addLog() {
-            // this.$router.push({
-            //     path: "/orderApply/storeEdit",
-            //     query: {
-            //         type: 1,
-            //         id: this.$route.query.id
-            //     }
-            // });
+            } catch(error){
+
+            }
+            
         },
         /**
          * 返回上一级
@@ -343,8 +309,8 @@ export default {
             return $utils.formatDate(new Date(timestamp * 1000), 'yyyy-MM-dd')
         }
     },
-    mounted() {
-        this.getApplication();
+    async mounted() {
+        await this.getApplication();
     }
 };
 </script>

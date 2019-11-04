@@ -1,7 +1,7 @@
 <template>
     <div class="signPage" v-loading="is_loading">
         <div class="sign-contains">
-            <el-form :model="signForm" :rules="signRules" ref="signForm" :label-width="'120px'" >
+            <el-form :model="signForm" :rules="signRules" ref="signForm" :label-width="'140px'" >
                 <div class="order-message">
                     <div class="title">
                         <div class="title-contains">
@@ -29,9 +29,6 @@
                     <div class="order-list" >
                         <el-form-item prop="sign_user_name" label="姓名">
                             <el-input v-model="signForm.sign_user_name" :disabled="orderType == 3 || orderType == 2" placeholder="请输入雇主姓名"></el-input>
-                            <!-- <el-tooltip effect="dark" content="Top Left 提示文字" placement="top-start">
-                                <i class="el-icon-info"></i>
-                            </el-tooltip> -->
                         </el-form-item>
                         <el-form-item label="联系电话" prop="sign_user_phone">
                             <el-input v-model.number="signForm.sign_user_phone" placeholder="请输入雇主联系电话"></el-input>
@@ -123,10 +120,23 @@
                         </div>
                     </div>
                     <div class="order-list">
-                        <el-form-item label="劳务报酬" prop="staff_wage">
+                        <el-form-item prop="staff_wage">
+                            <form-item-label-tooltip-component
+                                slot="label"
+                                :label="'劳务报酬'"
+                                :explain="'劳务报酬是指的双方约定的，服务人员服务一个月应得的报酬。'"></form-item-label-tooltip-component>
                             <el-input v-model.number="signForm.staff_wage" placeholder="请输入劳动者劳务报酬"></el-input>
                         </el-form-item>
-                        <el-form-item label="劳动者服务费" prop="staff_charge">
+                        <el-form-item prop="staff_charge">
+                            <form-item-label-tooltip-component
+                                slot="label"
+                                :label="'劳动者服务费'"
+                                :explain="''">
+                                <div slot="content">
+                                    <p>劳动者服务费，是指</p>
+                                    <p>a*b = c</p>
+                                </div>    
+                            </form-item-label-tooltip-component>
                             <el-input v-model.number="signForm.staff_charge" placeholder="请输入劳动者服务费"></el-input>
                         </el-form-item>
                         <el-form-item label="客户服务费" prop="user_charge">

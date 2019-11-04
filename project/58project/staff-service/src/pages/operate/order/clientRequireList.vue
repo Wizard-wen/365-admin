@@ -1,10 +1,9 @@
 <template>
 	<div class="worker" v-loading="is_loading">
-			<client-list-table-component
-			:staffTable="orderApplyTable"
-			:maxLength="maxLength"
-			:controlScopeLength="170"
-			>
+		<client-list-table-component
+				:staffTable="orderApplyTable"
+				:maxLength="maxLength"
+				:controlScopeLength="170">
 
 			<template slot="searchList">
 				<div class="search-list">
@@ -13,18 +12,23 @@
 			</template>
 
 			<template slot="searchForm">
-					<div class="search-tag-list">
-						<query-tag-component 
-							:queryFormConfig="clientRequireConfig"
-							:queryedList="queryedClientRequire"
-							@updateTable="updateTagTable"></query-tag-component>
-					</div>
+				<div class="search-tag-list">
+					<query-tag-component 
+						:queryFormConfig="clientRequireConfig"
+						:queryedList="queryedClientRequire"
+						@updateTable="updateTagTable"></query-tag-component>
+				</div>
 			</template>
 
-
 			<template slot="control" slot-scope="controler">
-				<el-button v-if="controler.scoper.row.type == 1" size="mini" type="text" @click="editOrderApply(1, controler.scoper.row)">编辑</el-button>
-				<el-button v-if="controler.scoper.row.type != 1" size="mini" type="text" @click="editOrderApply(1, controler.scoper.row)">查看</el-button>
+				<el-button 
+					v-if="controler.scoper.row.type == 1" 
+					size="mini" type="text" 
+					@click="editOrderApply(1, controler.scoper.row)">编辑</el-button>
+				<el-button 
+					v-if="controler.scoper.row.type != 1" 
+					size="mini" type="text" 
+					@click="editOrderApply(1, controler.scoper.row)">查看</el-button>
 				<el-button size="mini" type="text" style="color:#f56c6c"
 					v-if="controler.scoper.row.type == 1"
 					@click="refuseOrderApply(controler.scoper.row)">拒绝</el-button>

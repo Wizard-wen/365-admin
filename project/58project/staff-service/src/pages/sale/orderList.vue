@@ -53,20 +53,20 @@
 </template>
 <script>
     import {saleService, operateService} from '../../../common'
-    import {queryTagComponent} from '@/pages/components/index.js'
+    // import {queryTagComponent} from '@/pages/components/index.js'
     import {
         saleOrderTableComponent,
         queryComponent
     } from './orderList/index.js'
 
-    import {assignDialog} from './orderConfig/index.js'
+    import {assignDialog} from './orderConfig/orderHeaderComponent/index.js'
 
     import {applyOrderDialog} from './saleWorkStation/index.js'
 
     export default {
         components: {
             saleOrderTableComponent,
-            queryTagComponent,
+            // queryTagComponent,
             queryComponent,
             assignDialog,
             applyOrderDialog

@@ -334,7 +334,7 @@ export default {
                     type:'error',
                     message: error.message
                 })
-                store.commit('setLoading',false)
+                this.is_loading = false
             }
         },
         /**
@@ -417,9 +417,8 @@ export default {
             }
         }
         .order-down{
-            margin: 24px;
+            padding: 24px;
             .order-message{
-
                 width: 100%;
                 // height: 285px;
                 background: #fff;

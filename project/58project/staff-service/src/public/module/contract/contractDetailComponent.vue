@@ -1,0 +1,243 @@
+<template>
+    <card-box-component
+        :title="'合同详情'">
+        <template slot="contains">
+            <detail-form-component>
+                <detail-form-item-component
+                    :label="'护理依赖程度'"
+                    :size="3"
+                    :value="contractBase.service_level">
+                    <select-tag-component 
+                        slot="define"
+                        v-if="contractBase.service_level"
+                        :isEdit="false" 
+                        :propTagList="order_service_level" 
+                        v-model="contractBase.service_level" 
+                        :isSingle="true"></select-tag-component>
+                </detail-form-item-component>
+
+                <detail-form-item-component
+                    :label="'服务内容'"
+                    :size="3"
+                    :value="contractBase.service_level">
+                    <select-tag-component 
+                        slot="define"
+                        v-if="contractBase.service_contains"
+                        :isEdit="false" 
+                        :propTagList="order_service_contains" 
+                        v-model="contractBase.service_contains" 
+                        :isSingle="true"></select-tag-component>
+                </detail-form-item-component>
+
+                <detail-form-item-component
+                    :label="'服务方式'"
+                    :size="3"
+                    :value="contractBase.service_level">
+                    <select-tag-component 
+                        slot="define"
+                        v-if="contractBase.service_level"
+                        :isEdit="false" 
+                        :propTagList="order_service_type" 
+                        v-model="contractBase.service_level" 
+                        :isSingle="true"></select-tag-component>
+                </detail-form-item-component>
+
+                <detail-form-item-component
+                    :label="'服务人数'"
+                    :size="3"
+                    :value="`${contractBase.service_count}人`">
+                </detail-form-item-component>
+                <detail-form-item-component
+                    :label="'服务期限'"
+                    :size="3"
+                    :value="contractBase.service_start">
+                    <p slot="define">
+                        {{contractBase.service_start | timeFomatter}} - {{contractBase.service_end | timeFomatter}}
+                    </p>
+                </detail-form-item-component>
+                <div class="detail-item-box line-three-list"></div>
+                <detail-form-item-component
+                    :label="'工作时间'"
+                    :size="1"
+                    :value="contractBase.service_time">
+                </detail-form-item-component>
+
+                <detail-form-item-component
+                    :label="'劳务报酬'"
+                    :size="3"
+                    :value="`${contractBase.staff_wage}元`">
+                </detail-form-item-component>
+                <detail-form-item-component
+                    :label="'客户服务费'"
+                    :size="3"
+                    :value="`${contractBase.user_charge}元`">
+                </detail-form-item-component>
+                <detail-form-item-component
+                    :label="'客户缴纳'"
+                    :size="3"
+                    :value="`${contractBase.user_pay}元`">
+                </detail-form-item-component>
+                <detail-form-item-component
+                    :label="'劳动者服务费'"
+                    :size="3"
+                    :value="`${contractBase.staff_charge}元`">
+                </detail-form-item-component>
+                <detail-form-item-component
+                    :label="'劳动者押金'"
+                    :size="3"
+                    :value="`${contractBase.staff_deposit}元`">
+                </detail-form-item-component>
+                <div class="detail-item-box line-three-list"></div>
+                <detail-form-item-component
+                    :label="'保险受益人'"
+                    :size="3"
+                    :value="contractBase.insurance_benefit">
+                </detail-form-item-component>
+                <detail-form-item-component
+                    :label="'保险期限'"
+                    :size="3"
+                    :value="contractBase.insurance_start">
+                    <p slot="define">
+                        {{contractBase.insurance_start | timeFomatter}} - {{contractBase.insurance_end | timeFomatter}}
+                    </p>
+                </detail-form-item-component>
+                
+                <div class="detail-item-box line-three-list"></div>
+                <detail-form-item-component
+                    :label="'服务地址'"
+                    :size="1"
+                    :value="contractBase.service_address">
+                </detail-form-item-component>
+
+                
+                <detail-form-item-component
+                    :label="'合同备注'"
+                    :size="1"
+                    :value="contractBase.remarks">
+                </detail-form-item-component>
+                <detail-form-item-component
+                    :label="'合同照片'"
+                    :size="1"
+                    :value="contractBase.accessory">
+                    <photo-component
+                        slot="define"
+                        :pictureUrlArrtibute="'url'"
+                        v-model="contractBase.accessory"
+                        :height="'297px'"
+                        :width="'210px'"
+                        :isEdit="false"></photo-component>
+                </detail-form-item-component>
+            </detail-form-component>
+        </template>
+    </card-box-component>
+</template>
+
+<script>
+import {$utils} from '@common/index.js'
+import {
+    photoComponent,
+} from '@/pages/operate/worker/workerItem/index.js'
+export default {
+    components: {
+        photoComponent,
+    },
+    filters: {
+        timeFomatter(value){
+            if(value == 0){
+                return '-'
+            }
+            return $utils.formatDate(new Date(value), 'yyyy-MM-dd')
+        },
+    },
+    computed:{
+        /**
+         * 当前用户信息
+         */
+        presentUser(){
+            
+            return this.$store.state.loginModule.user
+        },
+        //订单服务内容
+        order_service_contains(){
+            return this.$store.state.saleModule.order_service_contains
+        },
+        //订单护理依赖程度
+        order_service_level(){
+            return this.$store.state.saleModule.order_service_level
+        },
+        //订单服务方式
+        order_service_type(){
+            return this.$store.state.saleModule.order_service_type
+        },
+    },
+    props: {
+        /**
+         * 合同基本信息
+         */
+        contractBase: {
+            type: Object,
+            default: function(){return {}}
+        }
+    },
+}
+</script>
+
+<style lang="scss" scoped>
+.detail-show-module{
+    width: 100%;
+    display: flex;
+    flex-wrap:  wrap;
+    justify-content: space-between;
+    .detail-item-box {
+        .detail-item{
+            width: 100%;
+            display: flex;
+            justify-content: flex-start;
+            margin-bottom: 16px;
+            .detail-title{
+                width: 120px;
+                text-align: right;
+                line-height: 30px;
+                margin-right: 20px;
+                color: rgba(0,0,0,.85);
+            }
+            .detail-picture-box{
+                display: flex;
+                .contract-picture{
+                    margin: 0 15px 15px 0;
+                    width: 210px;
+                    height: 297px;
+                    & img{
+                        width: 210px;
+                        height: 297px;
+                    }
+                }
+            }
+            .detail-type-text{
+                line-height: 30px;
+                color: rgba(0,0,0,.85);
+            }
+            .detail-photo-list{
+                display: flex;
+                flex-wrap: wrap;
+                .icon-box{
+                    height: 150px;
+                    margin-right: 20px;
+                    .icon-style{
+                        height: 150px;
+                    }
+                }
+            }
+        }
+    }
+    .line-three-list{
+        width: 33%;
+    }
+    .line-two-list{
+        width: 50%;
+    }
+    .line-list{
+        width: 100%;
+    }
+}
+</style>

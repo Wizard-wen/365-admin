@@ -52,6 +52,9 @@ import iconComponent from './iconComponent.vue'
 import detailFormItemComponent from './detailFormItemComponent.vue'
 import detailFormComponent from './detailFormComponent.vue'
 
+
+//表单label提示组件
+import formItemLabelTooltipComponent from './formItemLabelTooltipComponent.vue'
 export {
     cascaderComponent,
     pictureDetailDialog,
@@ -70,6 +73,7 @@ export {
     iconComponent,
     detailFormItemComponent,
     detailFormComponent,
+    formItemLabelTooltipComponent,
 }
 
 
@@ -92,3 +96,4 @@ Vue.component('logComponent', logComponent);
 Vue.component('iconComponent', iconComponent);
 Vue.component('detailFormItemComponent', detailFormItemComponent);
 Vue.component('detailFormComponent', detailFormComponent);
+Vue.component('formItemLabelTooltipComponent', formItemLabelTooltipComponent);

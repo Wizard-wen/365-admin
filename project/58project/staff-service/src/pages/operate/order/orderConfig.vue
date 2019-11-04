@@ -187,28 +187,8 @@
                     </div>
                 </div>
             </div>
-            
-            <div class="order-message">
-                <div class="title">
-                    <div class="title-contains">
-                        <div class="left">日志列表</div>
-                    </div>
-                </div>
-                <div class="order-list">
-                    <!-- 日志列表 -->
-                    <el-table :data="order_logs" class="person-table" :header-cell-style="{height: '48px',background: '#fafafa'}">
-                        <el-table-column label="创建时间" prop="created_at" align="center"></el-table-column>
 
-                        <el-table-column label="管理员姓名" prop="manager_name" align="center"></el-table-column>
-
-                        <el-table-column label="日志内容" prop="message" align="center"></el-table-column>
-
-                        <el-table-column label="操作" align="center">
-                            <el-button size="mini">查看</el-button>
-                        </el-table-column>
-                    </el-table>
-                </div>
-            </div>   
+            <order-config-log></order-config-log>
                      
         </div>
     </div>
@@ -223,7 +203,20 @@
     import {
         makeImageComponent,
         tableTagComponent} from '@/pages/components'
+    import { 
+        orderConfigLog,
+    } from '@/public/module/order/orderConfig/index.js'
 export default {
+    components: {
+        assignOrderDialog,
+        matchServiceList,
+        contractList,
+        tableTagComponent,
+        makeImageComponent,
+        orderPictureComponent,
+
+        orderConfigLog,
+    },
     data(){
         return {
             is_loading: false,//
@@ -252,14 +245,7 @@ export default {
             return $utils.formatDate(new Date(value), 'yyyy-MM-dd')
         }
     },
-    components: {
-        assignOrderDialog,
-        matchServiceList,
-        contractList,
-        tableTagComponent,
-        makeImageComponent,
-        orderPictureComponent,
-    },
+
     computed:{
         /**
          * 当前用户信息
@@ -278,12 +264,6 @@ export default {
          */
         order_staff(){
             return this.$store.state.saleModule.order_staff
-        },
-        /**
-         * 订单日志
-         */
-        order_logs(){
-            return this.$store.state.saleModule.order_logs
         },
         /**
          * 订单状态
@@ -343,7 +323,7 @@ export default {
                     type:'error',
                     message: error.message
                 })
-                store.commit('setLoading',false)
+                this.is_loading = false
             }
         },
         /**
@@ -454,7 +434,7 @@ export default {
             }
         }
         .order-down{
-            margin: 24px;
+            padding: 24px;
             .order-message{
 
                 width: 100%;

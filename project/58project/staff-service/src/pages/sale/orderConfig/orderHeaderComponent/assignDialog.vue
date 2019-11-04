@@ -27,7 +27,7 @@
 </template>
 <script>
 
-import {operateService, saleService, $utils} from '../../../../common'
+import {operateService, saleService, $utils} from '@common/index.js'
 export default {
     props: {
         //是否打弹出框

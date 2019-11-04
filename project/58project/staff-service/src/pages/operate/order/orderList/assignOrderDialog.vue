@@ -23,7 +23,7 @@
                     <el-option
                         v-for="item in store_manager_list"
                         :key="item.manager_id"
-                        :label="item.manager_name"
+                        :label="item.real_name"
                         :value="item.manager_id"></el-option>
                 </el-select>
             </el-form-item>
@@ -124,7 +124,7 @@ export default {
                             if(data.code == '0'){
                                 this.$message({
                                     type:"success",
-                                    message: "更改成功"
+                                    message: data.message
                                 })
                                 this.is_loading = false
                                 this.$emit('closeAssignOrderDialog')
@@ -147,7 +147,6 @@ export default {
                     return false;
                 }
             })
-
         }
     },
     async mounted(){
@@ -169,7 +168,9 @@ export default {
                     message: error.message
                 })
                 this.is_loading = false
-            }) 
+            }) .finally(() =>{
+                this.is_loading = false
+            })
         } catch(error){
             this.$message({
                 type:'error',
