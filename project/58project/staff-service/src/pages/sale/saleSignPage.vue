@@ -217,7 +217,9 @@
 import {
     selectTagComponent,} from '@/pages/components'
     import {saleService, operateService} from '@common/index.js'
-    import {photoComponent} from '../operate/worker/workerItem/index.js'
+    import {
+    photoComponent,
+} from '@/public/module/worker/workerShowComponent/index.js'
 export default {
     components: {
         selectTagComponent,

@@ -61,7 +61,7 @@
 
     import {assignDialog} from './orderConfig/orderHeaderComponent/index.js'
 
-    import {applyOrderDialog} from './saleWorkStation/index.js'
+    import {applyOrderDialog} from '../saleWorkStation/index.js'
 
     export default {
         components: {

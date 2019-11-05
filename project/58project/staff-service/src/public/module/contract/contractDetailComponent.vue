@@ -136,7 +136,7 @@
 import {$utils} from '@common/index.js'
 import {
     photoComponent,
-} from '@/pages/operate/worker/workerItem/index.js'
+} from '@/public/module/worker/workerShowComponent/index.js'
 export default {
     components: {
         photoComponent,

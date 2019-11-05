@@ -97,7 +97,7 @@
 <script>
 import {
     changeOrderApplyFieldDialog ,
-}from '@/pages/operate/order/public/apply/orderApplyBaseComponent/index.js'
+}from './orderApplyBaseComponent/index.js'
 export default {
     components: {
         changeOrderApplyFieldDialog,
