@@ -180,6 +180,7 @@ export default {
             });
         },
         async updatePublicAssignOrder(param){
+
             let orderApplyObject = {
                 id: param[1].id,
                 type: 3,

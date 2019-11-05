@@ -80,8 +80,13 @@ export default {
         /**
          * 进入公海订单配置页
          */
-        goPublicOrderConfig(item){
-
+        goPublicOrderPage(item){
+            this.$router.push({
+                path: '/sale/publicOrderConfig',
+                query: {
+                    order_id: item.id
+                }
+            })
         }
     }
 }
