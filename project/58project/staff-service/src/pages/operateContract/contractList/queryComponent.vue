@@ -22,7 +22,7 @@
             :selectedList="queryedContractList.sign_manager_id"
             :queryKey="'sign_manager_id'"
             :queryName="'经纪人'"
-            :queryList="contractConfigForm.sign_manager_id"
+            :queryList="storeManagerList"
             :isSingleQuery="true"></query-search-list>
         <query-search-list
             @updateSearchList="updateSearchList"
@@ -61,10 +61,14 @@
     </div>
 </template>
 <script>
+import {
+    operateService,
+} from '@common/index.js'
 export default {
     data(){
         return {
             setWorkerConfigForm: [],//本地接收的搜索config字段
+            storeManagerList: [],
         }
     },
     computed:{
@@ -94,6 +98,34 @@ export default {
             this.$emit('updateTable')
         }
     },
+    async mounted(){
+        /**
+         * 
+         */
+        try{
+            await operateService.getDepartmentManagerSelection(4).then(data =>{
+                this.storeManagerList = data.data.reduce((arr, item, index) =>{
+                    if(item.manager_id == 0){
+                        return arr
+                    }
+                    return [
+                        ...arr,
+                        {
+                            id: item.manager_id,
+                            name: item.real_name
+                        }
+                    ]
+                },[])
+            }).catch(error =>{
+                throw error
+            }).finally(() =>{
+
+            })
+        } catch(error){
+            throw error
+        }
+        
+    }
 }
 </script>
 <style lang="scss" scoped>

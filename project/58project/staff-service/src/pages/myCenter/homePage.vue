@@ -1,5 +1,5 @@
 <template>
-	<div class="home">
+	<div class="home" v-loading="is_loading">
 		<div class="home-contains">
 			<div class="home-left">
 				

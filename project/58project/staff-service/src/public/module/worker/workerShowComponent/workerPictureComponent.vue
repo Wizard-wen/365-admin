@@ -69,11 +69,7 @@
 </template>
 
 <script>
-import {selectTagComponent,} from '@/pages/components/index.js'
 export default {
-    components: {
-        selectTagComponent,
-    },
     data(){
         return {
 

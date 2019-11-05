@@ -44,7 +44,6 @@
 </template>
 <script>
 import {saleService, operateService, $utils} from '@common/index.js'
-// import {queryTagComponent} from '@/pages/components/index.js'
 import {
     matchServiceTableComponent,
     queryComponent,
@@ -84,7 +83,6 @@ export default {
     components: {
         matchServiceTableComponent,
         queryComponent,
-        // queryTagComponent
     },
     computed:{
         workerConfigForm(){

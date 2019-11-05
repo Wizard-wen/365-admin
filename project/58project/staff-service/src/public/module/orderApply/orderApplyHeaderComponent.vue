@@ -128,7 +128,7 @@ export default {
          * 更改时间戳格式
          */
         formDate(timestamp){
-            return $utils.formatDate(new Date(timestamp * 1000), 'yyyy-MM-dd')
+            return $utils.formatDate(new Date(timestamp), 'yyyy-MM-dd')
         }
     },
     methods: {

@@ -55,45 +55,45 @@ import detailFormComponent from './detailFormComponent.vue'
 
 //表单label提示组件
 import formItemLabelTooltipComponent from './formItemLabelTooltipComponent.vue'
-export {
-    cascaderComponent,
-    pictureDetailDialog,
-    makeImageComponent,
-    configTagComponent,
-    selectTagComponent,
-    cascaderTagComponent,
-    tableTagComponent,
-    pageEditComponent,
-    querySearchInput,
-    querySearchList,
-    queryTagComponent,
-    uploadSinglePictureComponent,
-    cardBoxComponent,
-    logComponent,
-    iconComponent,
-    detailFormItemComponent,
-    detailFormComponent,
-    formItemLabelTooltipComponent,
-}
+// export {
+//     cascaderComponent,
+//     pictureDetailDialog,
+//     makeImageComponent,
+//     configTagComponent,
+//     selectTagComponent,
+//     cascaderTagComponent,
+//     tableTagComponent,
+//     pageEditComponent,
+//     querySearchInput,
+//     querySearchList,
+//     queryTagComponent,
+//     uploadSinglePictureComponent,
+//     cardBoxComponent,
+//     logComponent,
+//     iconComponent,
+//     detailFormItemComponent,
+//     detailFormComponent,
+//     formItemLabelTooltipComponent,
+// }
 
 
 
 //注册至全局
-Vue.component('cascaderComponent', cascaderComponent);
-Vue.component('pictureDetailDialog', pictureDetailDialog);
-Vue.component('makeImageComponent', makeImageComponent);
-Vue.component('configTagComponent', configTagComponent);
-Vue.component('selectTagComponent', selectTagComponent);
-Vue.component('cascaderTagComponent', cascaderTagComponent);
-Vue.component('tableTagComponent', tableTagComponent);
-Vue.component('queryTagComponent', queryTagComponent);
-Vue.component('querySearchInput', querySearchInput);
-Vue.component('querySearchList', querySearchList);
-Vue.component('pageEditComponent', pageEditComponent);
-Vue.component('uploadSinglePictureComponent', uploadSinglePictureComponent);
-Vue.component('cardBoxComponent', cardBoxComponent);
-Vue.component('logComponent', logComponent);
-Vue.component('iconComponent', iconComponent);
-Vue.component('detailFormItemComponent', detailFormItemComponent);
-Vue.component('detailFormComponent', detailFormComponent);
-Vue.component('formItemLabelTooltipComponent', formItemLabelTooltipComponent);
+// Vue.component('cascaderComponent', cascaderComponent);
+// Vue.component('pictureDetailDialog', pictureDetailDialog);
+// Vue.component('makeImageComponent', makeImageComponent);
+// Vue.component('configTagComponent', configTagComponent);
+// Vue.component('selectTagComponent', selectTagComponent);
+// Vue.component('cascaderTagComponent', cascaderTagComponent);
+// Vue.component('tableTagComponent', tableTagComponent);
+// Vue.component('queryTagComponent', queryTagComponent);
+// Vue.component('querySearchInput', querySearchInput);
+// Vue.component('querySearchList', querySearchList);
+// Vue.component('pageEditComponent', pageEditComponent);
+// Vue.component('uploadSinglePictureComponent', uploadSinglePictureComponent);
+// Vue.component('cardBoxComponent', cardBoxComponent);
+// Vue.component('logComponent', logComponent);
+// Vue.component('iconComponent', iconComponent);
+// Vue.component('detailFormItemComponent', detailFormItemComponent);
+// Vue.component('detailFormComponent', detailFormComponent);
+// Vue.component('formItemLabelTooltipComponent', formItemLabelTooltipComponent);

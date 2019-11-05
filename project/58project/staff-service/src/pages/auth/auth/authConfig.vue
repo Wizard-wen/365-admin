@@ -45,7 +45,6 @@
  * type 0 新建  1 编辑
  */
 import {authService} from '@common/index.js'
-import {selectTagComponent} from '@/pages/components/index.js'
 export default {
     data() {
         return {
@@ -78,9 +77,6 @@ export default {
                 {name: '不展示', id: 2},
             ]
         }
-    },
-    components: {
-        selectTagComponent,
     },
     methods: {
         /**

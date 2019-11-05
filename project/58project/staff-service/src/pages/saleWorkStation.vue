@@ -1,5 +1,5 @@
 <template>
-    <div class="workstation">
+    <div class="workstation" v-loading="is_loading">
         <div class="performance">
             <number-card-component></number-card-component>
             <number-card-component></number-card-component>
@@ -58,6 +58,7 @@ import {saleService} from '@common/index.js'
 export default {
     data(){
         return {
+            is_loading: false,
             applyOrderDialogVisible: false,//订单申请弹窗显示隐藏
         }
     },

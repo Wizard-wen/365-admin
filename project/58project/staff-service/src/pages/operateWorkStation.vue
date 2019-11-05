@@ -57,6 +57,10 @@ import {
     staffApplication,
     numberCardComponent,
 } from './operateWorkstation/index.js'
+
+// import {
+//     cardBoxComponent,
+// } from '@/pages/components/index.js'
 export default {
     components: {
         userOrderApplication,

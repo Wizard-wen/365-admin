@@ -64,8 +64,6 @@ import {
     authService,
     saleService
 } from '@common/index.js'
-import {tableTagComponent} from '@/pages/components/index.js'
-
 export default {
     data(){
         return {
@@ -94,9 +92,6 @@ export default {
                 {name: '不展示', id: 2},
             ]
         }
-    },
-    components: {
-        tableTagComponent,
     },
     computed:{
         /**

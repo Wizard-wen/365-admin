@@ -165,18 +165,23 @@ export default {
         openAssignOrderDialog(){
             //运营可以任意分派，店长只能店内分派
             if(this.presentUser.department_id == 2){
+                //运营部分，可以分派至各个门店
                 this.publicAssignOrderDialogVisible = true
             } else {
+                //店长只能分派至本门店员工
                 this.assignOrderInStoreDialogVisible = true
             }
         },
         /**
-         * 关闭分派订单弹窗
+         * 关闭运营分派订单弹窗
          */
         closePublicAssignOrderDialog(){
             this.publicAssignOrderDialogVisible = false
             this.$emit('updateOrderConfig')
         },
+        /**
+         * 关闭店长分派订单弹窗
+         */
         closeAssignOrderInStoreDialog(){
             this.assignOrderInStoreDialogVisible = false
             this.$emit('updateOrderConfig')

@@ -1,5 +1,5 @@
 <template>
-    <div class="worker" v-loading="is_loading" v-hide>
+    <div class="worker" v-loading="is_loading">
         <sale-own-worker-table-component
             :staffTable="staffTable"
             :maxLength="maxLength"
@@ -7,7 +7,9 @@
 
             <template slot="control" slot-scope="controler">
                 <el-button size="mini" type="text" @click="showStaff(controler.scoper.$index, controler.scoper.row)">查看</el-button>
-                <el-button size="mini" style="color:#f56c6c" type="text" @click="sendErrorMessage(controler.scoper.row)">提交异常信息</el-button>
+                <el-button 
+                    size="mini" style="color:#f56c6c" type="text" 
+                    @click="sendErrorMessage(controler.scoper.row)">提交异常信息</el-button>
             </template>
 
             <template slot="pagination">

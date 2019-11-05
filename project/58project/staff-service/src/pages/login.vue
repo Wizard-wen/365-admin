@@ -2,8 +2,11 @@
     <div class="login" v-loading="is_loading">
         <div class="login-box">
             <div class="line"></div>
-            <img class="logo-image" src="./login/images/logo.png" alt="">
-            <div class="title">后台业务管理系统</div>
+            
+            <div class="logo-box">
+                <!-- <img class="logo-image" src="./login/images/logo.png" alt=""> -->
+            </div>
+            <div class="title">365后台业务管理系统</div>
             <el-form ref="form" :rules="rules" :model="form" style="padding: 0 40px;">
                 <el-form-item prop="username">
                     <el-input 
@@ -139,12 +142,22 @@ export default {
                 width: 100%;
                 background: $viColor;
             }
-            .logo-image{
+            .logo-box{
                 height: 106px;
                 width: 200px;
                 margin: 10px auto -5px auto;
-                display: block;
+                line-height: 106px;
+                font-size: 36px;
+                font-weight: 500;
+                text-align: center;
+                color: $viColor;
+                .logo-image{
+                    height: 106px;
+                    width: 200px;
+                    display: block;
+                }
             }
+            
             .title{
                 height: 47px;
                 width: 100%;

@@ -19,7 +19,7 @@
             :selectedList="orderApplyQueryedList.apply_manager_id"
             :queryKey="'apply_manager_id'" 
             :queryName="'来源人'" 
-            :queryList="orderApplyFormConfig.apply_manager_id"
+            :queryList="storeManagerList"
             :isSingleQuery="true"></query-search-list>
         <query-search-input
             @updateSearchInput="updateSearchInput"
@@ -31,7 +31,7 @@
             :selectedList="orderApplyQueryedList.created_manager_id"
             :queryKey="'created_manager_id'" 
             :queryName="'申请创建人'" 
-            :queryList="orderApplyFormConfig.created_manager_id"
+            :queryList="storeManagerList"
             :isSingleQuery="true"></query-search-list>
         <query-search-input
             @updateSearchInput="updateSearchInput"
@@ -53,10 +53,12 @@
     </div>
 </template>
 <script>
+import {operateService} from '@common/index.js'
 export default {
     data(){
         return {
             setWorkerConfigForm: [],//本地接收的搜索config字段
+            storeManagerList: [],
         }
     },
     computed:{
@@ -81,8 +83,36 @@ export default {
                 queryedList: queryObject[1]
             })
             this.$emit('updateTable')
-        }
+        },
     },
+    async mounted(){
+        /**
+         * 
+         */
+        try{
+            await operateService.getDepartmentManagerSelection(4).then(data =>{
+                this.storeManagerList = data.data.reduce((arr, item, index) =>{
+                    if(item.manager_id == 0){
+                        return arr
+                    }
+                    return [
+                        ...arr,
+                        {
+                            id: item.manager_id,
+                            name: item.real_name
+                        }
+                    ]
+                },[])
+            }).catch(error =>{
+                throw error
+            }).finally(() =>{
+
+            })
+        } catch(error){
+            throw error
+        }
+        
+    }
 }
 </script>
 <style lang="scss" scoped>

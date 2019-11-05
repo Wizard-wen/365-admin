@@ -22,7 +22,6 @@
 </template>
 <script>
 import {saleService} from '@common/index.js'
-import {selectTagComponent} from '@/pages/components'
 export default {
     props: {
         //是否打弹出框
@@ -45,9 +44,6 @@ export default {
             type: Number,
             default: 0,
         }
-    },
-    components: {
-        selectTagComponent
     },
     computed:{
         /**

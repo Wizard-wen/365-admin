@@ -42,8 +42,6 @@
 <script>
 
 import {paperDialog} from './paperComponent/index.js'
-import {pictureDetailDialog} from '@/pages/components'
-
 
 export default {
     props: {
@@ -78,7 +76,6 @@ export default {
     },
     components: {
         paperDialog,
-        pictureDetailDialog
     },
     data(){
         return {

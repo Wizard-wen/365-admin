@@ -35,7 +35,7 @@
             :queryKey="'apply_manager_id'" 
             :queryName="'来源人'" 
             :isSingleQuery="true"
-            :queryList="orderFormConfig.apply_manager_id"></query-search-list>
+            :queryList="storeManagerList"></query-search-list>
         <query-search-list
             @updateSearchList="updateSearchList"
             :selectedList="queryOrderList.apply_store_id"
@@ -81,14 +81,14 @@
             :queryKey="'created_manager_id'" 
             :queryName="'订单创建人'" 
             :isSingleQuery="true"
-            :queryList="orderFormConfig.created_manager_id"></query-search-list>
+            :queryList="operateManagerList"></query-search-list>
         <query-search-list
             @updateSearchList="updateSearchList"
             :selectedList="queryOrderList.agent_manager_id"
             :queryKey="'agent_manager_id'" 
             :queryName="'订单经纪人'" 
             :isSingleQuery="true"
-            :queryList="orderFormConfig.agent_manager_id"></query-search-list>
+            :queryList="storeManagerList"></query-search-list>
         <query-search-list
             @updateSearchList="updateSearchList"
             :selectedList="queryOrderList.agent_store_id"
@@ -99,10 +99,16 @@
     </div>
 </template>
 <script>
+import {
+    operateService,
+} from '@common/index.js'
+
 export default {
     data(){
         return {
             setWorkerConfigForm: [],//本地接收的搜索config字段
+            operateManagerList: [],
+            storeManagerList: [],
         }
     },
     computed:{
@@ -132,6 +138,43 @@ export default {
             this.$emit('updateTable')
         }
     },
+    async mounted(){
+        try{
+            await Promise.all([
+                operateService.getDepartmentManagerSelection(4),//销售
+                operateService.getDepartmentManagerSelection(2),//运营
+            ]
+            ).then(data =>{
+                this.storeManagerList = data[0].data.reduce((arr, item, index) =>{
+                    if(item.manager_id == 0){
+                        return arr
+                    }
+                    return [
+                        ...arr,
+                        {
+                            id: item.manager_id,
+                            name: item.real_name
+                        }
+                    ]
+                },[])
+                this.operateManagerList = data[1].data.reduce((arr, item, index) =>{
+                    return [
+                        ...arr,
+                        {
+                            id: item.manager_id,
+                            name: item.real_name
+                        }
+                    ]
+                },[])
+            }).catch(error =>{
+                throw error
+            }).finally(() =>{
+
+            })
+        } catch(error){
+            throw error
+        }
+    }
 }
 </script>
 <style lang="scss" scoped>

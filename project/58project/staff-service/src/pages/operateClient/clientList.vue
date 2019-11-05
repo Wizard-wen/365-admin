@@ -38,7 +38,6 @@
 </template>
 <script>
     import {operateService, saleService} from '@common/index.js'
-    import {queryTagComponent} from '@/pages/components/index.js'
     import {
         clientTableComponent,
         queryComponent,
@@ -47,7 +46,6 @@
         components: {
             clientTableComponent,
             queryComponent,
-            queryTagComponent,
         },
         data(){
             return {

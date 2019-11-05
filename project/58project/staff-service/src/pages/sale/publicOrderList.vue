@@ -36,7 +36,6 @@
 </template>
 <script>
     import {saleService, operateService} from '@common/index.js'
-    import {queryTagComponent} from '@/pages/components/index.js'
     import {
         salePublicOrderTableComponent,
         queryComponent
@@ -45,7 +44,6 @@
     export default {
         components: {
             salePublicOrderTableComponent,
-            queryTagComponent,
             queryComponent,
         },
         data(){

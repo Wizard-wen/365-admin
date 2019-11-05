@@ -257,18 +257,7 @@
 </template>
 <script>
     import {operateService, $utils} from '@common/index.js'
-    import {
-        cascaderComponent,
-        tableTagComponent} from '@/pages/components'
-
-    // import {queryComponent} from '../components'
-    
     export default {
-        components: {
-            // cascaderComponent,
-            tableTagComponent,
-            // queryComponent
-        },
         props: {
             //员工信息列表
             staffTable: {

@@ -50,7 +50,6 @@
 </template>
 <script>
     import {operateService} from '@common/index.js'
-    import {queryTagComponent} from '@/pages/components/index.js'
     import {
         queryComponent,
         workerTableComponent,
@@ -62,7 +61,6 @@
             queryComponent,
             workerTableComponent,
             returnStaffDialog,
-            queryTagComponent
         },
         data(){
             return {

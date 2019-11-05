@@ -160,6 +160,7 @@ export default {
                     path: "/sale/saleWorkerShow",
                     query: {
                         id: paramObj.id,
+                        //我的订单 2  公海订单 3
                         from: this.$route.query.order_type,
                         order_id: this.$route.query.order_id
                     }

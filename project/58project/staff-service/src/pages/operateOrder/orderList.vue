@@ -45,11 +45,16 @@
     </div>
 </template>
 <script>
-    import {saleService, operateService} from '@common/index.js'
+    import {
+        saleService, 
+        operateService
+    } from '@common/index.js'
+    
     import {
         orderTableComponent,
         queryComponent,
     } from './orderList/index.js'
+
     import {
         publicAssignOrderComponent,
     } from '@/public/module/common/index.js'

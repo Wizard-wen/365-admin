@@ -63,13 +63,7 @@
  * type 0 新建  1 编辑
  */
 import {operateService} from '@common/index.js'
-
-import {configTagComponent} from '@/pages/components'
-
 export default {
-    components: {
-        configTagComponent,
-    },
     data() {
 
         return {

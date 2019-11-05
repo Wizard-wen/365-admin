@@ -4,7 +4,8 @@
             <div class="header" ref="header">
                 <div class="logo">
                     <!-- 365后台管理系统 -->
-                    <img src="../img/logo.png" alt="">
+                    <!-- <img src="../img/logo.png" alt=""> -->
+                    365生活服务平台
                 </div>
                 <div class="header-right">
                     <div class="breadcrumb-box">
@@ -193,7 +194,7 @@ export default {
                 width:180px;
                 background: #333;
                 color : $viColor;
-                font-size: 16px;
+                font-size: 14px;
                 font-weight: 500;
                 img{
                     height: 50px;

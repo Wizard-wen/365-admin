@@ -54,13 +54,8 @@
     </div>
 </template>
 <script>
-import {
-    pictureDetailDialog,
-} from '@/pages/components/index.js'
+
 export default {
-    components: {
-        pictureDetailDialog,
-    },
     data(){
         return {
             //控制图片详情弹窗显示隐藏

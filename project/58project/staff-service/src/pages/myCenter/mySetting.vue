@@ -107,7 +107,6 @@
 </template>
 <script>
 import {myCenterService} from '@common/index.js'
-import {selectTagComponent} from '@/pages/components/index.js'
    export default {
     data() {
         let _this = this;
@@ -206,9 +205,6 @@ import {selectTagComponent} from '@/pages/components/index.js'
             //时间选择器默认时间
             timeDefaultShow:'',
         };
-    },
-    components: {
-        selectTagComponent,
     },
     computed: {
         /**

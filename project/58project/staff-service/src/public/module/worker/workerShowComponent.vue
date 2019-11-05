@@ -515,10 +515,13 @@ export default {
          * 返回
          */
         goback(){
+            //从门店进服务人员详情
             if(this.workerItemType == 2){
                 if(this.$route.query.from == 1){
                     //从服务人员信息库
-                    this.$router.push(`/sale/saleWorkerList`)
+                    this.$router.push({
+                        path: `/sale/saleWorkerList`,
+                    })
                 } else if(this.$route.query.from == 2){
                     //从订单配置备选服务人员列表
                     this.$router.push({
@@ -539,12 +542,16 @@ export default {
                     })
                 } else if(this.$route.query.from == 4){
                     //从我创建的服务人员列表啊
-                    this.$router.push(`/sale/saleOwnWorkerList`)
+                    this.$router.push({
+                        path: `/sale/saleOwnWorkerList`,
+                    })
                 }
             } else {
                 if(this.$route.query.from == 1){
                     //从服务人员信息库
-                    this.$router.push(`/worker/workerList`)
+                    this.$router.push({
+                        path: `/worker/workerList`,
+                    })
                 } else if(this.$route.query.from == 2){
                     //从订单配置备选服务人员列表
                     this.$router.push({

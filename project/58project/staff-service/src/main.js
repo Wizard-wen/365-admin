@@ -39,7 +39,7 @@ Vue.prototype.$styleConfig = $styleConfig
 
 import '../common/directives/index.js'
 
-
+import '@/public/components/index.js'
 
 //引入根组件
 import App from './App'

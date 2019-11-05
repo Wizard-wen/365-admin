@@ -20,8 +20,12 @@
             </template>
 
             <template slot="control" slot-scope="controler">
-                <el-button size="mini" type="text" @click="showWorker(controler.scoper.$index, controler.scoper.row)">查看</el-button>
-                <el-button size="mini" style="color:#f56c6c" type="text" @click="sendErrorMessage(controler.scoper.row)">提交异常信息</el-button>
+                <el-button 
+                    size="mini" type="text" 
+                    @click="goWorkerShowPage(controler.scoper.$index, controler.scoper.row)">查看</el-button>
+                <el-button 
+                    size="mini" type="text" style="color:#f56c6c"
+                    @click="sendErrorMessage(controler.scoper.row)">提交异常信息</el-button>
             </template>
 
             <template slot="pagination">
@@ -52,8 +56,6 @@
 </template>
 <script>
     import {operateService, $utils} from '@common/index.js'
-    import {queryTagComponent} from '@/pages/components/index.js'
-
     import {
         queryComponent,
         saleWorkerTableComponent,
@@ -66,7 +68,6 @@
             createWorkerDialog,
             errorWorkerDialog,
             queryComponent,
-            queryTagComponent
         },
         data() {
             return {
@@ -237,7 +238,7 @@
             /**
              * 查看服务人员详情
              */
-            showWorker(index, row){
+            goWorkerShowPage(index, row){
                 this.$router.push({
                     path: "/sale/saleWorkerShow",
                     query: {

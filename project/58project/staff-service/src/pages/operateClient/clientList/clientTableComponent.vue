@@ -40,12 +40,7 @@
 </template>
 <script>
     import {operateService, $utils} from '@common/index.js'
-    import {tableTagComponent} from '@/pages/components'
-    
     export default {
-        components: {
-            tableTagComponent,
-        },
         props: {
             //列表数据
             tableData: {

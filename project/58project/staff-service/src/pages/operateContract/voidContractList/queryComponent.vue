@@ -31,26 +31,20 @@
             :selectedList="queryedVoidContractList.manager_id"
             :queryKey="'manager_id'"
             :queryName="'经纪人'"
-            :queryKeyAttribute="'manager_id'"
-            :queryNameAttribute="'manager_name'"
-            :queryList="saleStaffList"
+            :queryList="storeManagerList"
             :isSingleQuery="true"></query-search-list>
     </div>
 </template>
 <script>
 import {
-    querySearchList,
-    querySearchInput,
-} from '@/pages/components/index.js'
+operateService,
+} from '@common/index.js'
 export default {
     data(){
         return {
             setWorkerConfigForm: [],//本地接收的搜索config字段
+            storeManagerList: [],
         }
-    },
-    components: {
-        querySearchList,
-        querySearchInput,
     },
     computed:{
         /**
@@ -62,9 +56,6 @@ export default {
         queryedVoidContractList(){
             return this.$store.state.operateModule.voidContractList
         },
-        saleStaffList(){
-            return this.$store.state.saleModule.saleStaffList
-        }
     },
     methods: {
         updateSearchInput(queryObject){
@@ -82,6 +73,34 @@ export default {
             this.$emit('updateTable')
         }
     },
+    async mounted(){
+        /**
+         * 
+         */
+        try{
+            await operateService.getDepartmentManagerSelection(4).then(data =>{
+                this.storeManagerList = data.data.reduce((arr, item, index) =>{
+                    if(item.manager_id == 0){
+                        return arr
+                    }
+                    return [
+                        ...arr,
+                        {
+                            id: item.manager_id,
+                            name: item.real_name
+                        }
+                    ]
+                },[])
+            }).catch(error =>{
+                throw error
+            }).finally(() =>{
+
+            })
+        } catch(error){
+            throw error
+        }
+        
+    }
 }
 </script>
 <style lang="scss" scoped>

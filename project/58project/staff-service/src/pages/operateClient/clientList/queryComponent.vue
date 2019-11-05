@@ -15,19 +15,11 @@
 </template>
 <script>
 
-import {
-    querySearchList,
-    querySearchInput,
-} from '@/pages/components/index.js'
 
 export default {
     data(){
         return {
         }
-    },
-    components: {
-        querySearchList,
-        querySearchInput,
     },
     computed:{
         clientConfigForm(){

@@ -285,19 +285,10 @@ import {
     workerPictureComponent,
 } from './workerItem/index.js'
 
-import {
-    pictureDetailDialog,
-    selectTagComponent,
-    pageEditComponent,
-    makeImageComponent,
-    } from '@/pages/components/index.js'
 export default {
     components: {
         paperComponent,//证书组件
         photoComponent,//照片组件
-        selectTagComponent,//单选、多选框组件
-        makeImageComponent, //创建图片组件
-        pageEditComponent,
         workerPictureComponent,
     },
     data() {

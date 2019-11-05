@@ -42,7 +42,6 @@
 <script>
 
 import {paperDialog} from './paperComponent/index.js'
-import {pictureDetailDialog} from '@/pages/components'
 
 
 export default {
@@ -78,7 +77,6 @@ export default {
     },
     components: {
         paperDialog,
-        pictureDetailDialog
     },
     data(){
         return {

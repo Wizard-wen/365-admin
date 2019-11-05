@@ -230,7 +230,7 @@ export const saleModule = {
             type: [],//合同状态
             sign_at: [],//签约时间 
             sign_manager_id: [],//签约经纪人
-            sign_store_id: [],//签约经纪门店
+            // sign_store_id: [],//签约经纪门店
 
             sign_user_name: '',//雇主
             sign_user_phone:'',//雇主电话

@@ -1,7 +1,7 @@
 <template>
     <div class="order" v-loading="is_loading">
         <sale-order-table-component
-            :tableData="orderApplyTable"
+            :tableData="orderTable"
             :maxLength="maxLength"
             :controlScopeLength="presentUser.is_store_manager == 1? 100:170 ">
 
@@ -21,7 +21,7 @@
             <template slot="control" slot-scope="controler">
                 <el-button size="mini" type="text" @click="dealOrder(controler.scoper.row)">处理订单</el-button>
                 <el-button size="mini" type="text" 
-                    @click="assignOrder(controler.scoper.row)"
+                    @click="openAssignOrderDialog(controler.scoper.row)"
                     v-if="presentUser.is_store_manager != 1">分派订单</el-button>
             </template>
 
@@ -38,11 +38,19 @@
             </template>
         </sale-order-table-component>
         <!-- 订单分派弹出框 -->
-        <assign-dialog
+        <!-- <assign-dialog
             v-if="assignDialogVisible"
             :openAssignDialog="assignDialogVisible"
             @closeAssignDialog="assignDialogVisible=false"
-            :order_id="assignOrderId"></assign-dialog>
+            :order_id="assignOrderId"></assign-dialog> -->
+
+        <!-- 店内订单分派弹出框 -->
+        <assign-order-in-store-dialog
+            v-if="assignOrderInStoreDialogVisible"
+            :assignOrderInStoreDialogVisible="assignOrderInStoreDialogVisible"
+            @closeAssignOrderInStoreDialog="closeAssignOrderInStoreDialog"
+            :orderObject="orderBase"></assign-order-in-store-dialog>
+
         <!-- 订单申请弹出框 -->
         <apply-order-dialog
             v-if="applyOrderDialogVisible"
@@ -53,28 +61,35 @@
 </template>
 <script>
     import {saleService, operateService} from '@common/index.js'
-    // import {queryTagComponent} from '@/pages/components/index.js'
+
+
     import {
         saleOrderTableComponent,
         queryComponent
     } from './orderList/index.js'
 
-    import {assignDialog} from './orderConfig/orderHeaderComponent/index.js'
+    import {
+        assignOrderInStoreDialog,
+    } from '@/public/module/order/orderConfig/orderHeaderComponent/index.js'
+
+    // import {assignDialog} from './orderConfig/orderHeaderComponent/index.js'
 
     import {applyOrderDialog} from '../saleWorkStation/index.js'
 
     export default {
         components: {
             saleOrderTableComponent,
+
             // queryTagComponent,
             queryComponent,
-            assignDialog,
+            // assignDialog,
+            assignOrderInStoreDialog,
             applyOrderDialog
         },
         data(){
             return {
-                //员工信息列表
-                orderApplyTable: [],
+                //订单信息列表
+                orderTable: [],
                 is_loading:false,
                 /**
                  * 分页信息
@@ -98,12 +113,17 @@
                     paper_ids: 80, //技能证书
                     source: 80,//信息来源
                 },
-                returnStaffDialofVisible: false,//添加回访数据显示隐藏
+                // returnStaffDialofVisible: false,//添加回访数据显示隐藏
                 //分配弹出框显示
-                assignDialogVisible:false,
+                // assignDialogVisible:false,
                 //待分配订单id
-                assignOrderId: 0,
+                // assignOrderId: 0,
+
                 applyOrderDialogVisible: false,//订单申请弹窗显示隐藏
+
+                orderBase: {},//订单基本信息
+                //门店内分派订单弹窗
+                assignOrderInStoreDialogVisible: false,
             }
         },
         computed: {
@@ -148,7 +168,7 @@
                         operateService.getOrderFormConfig()
                     ]).then((data) =>{
 
-                        this.orderApplyTable = data[0].data.data
+                        this.orderTable = data[0].data.data
                         //分页信息
                         this.pagination.currentPage = data[0].data.current_page //当前页码
                         this.pagination.total = data[0].data.total //列表总条数
@@ -184,11 +204,11 @@
                 await this.updateTable()
             },
             prevAndNextClick(val){
-              //设置page查询参数
-              this.$store.commit('saleSetOrderList', {
-                  queryKey: 'page',
-                  queryedList: val
-              })
+                //设置page查询参数
+                this.$store.commit('saleSetOrderList', {
+                    queryKey: 'page',
+                    queryedList: val
+                })
             },
             /**
              * 切换页码
@@ -215,12 +235,61 @@
                 })
             },
             /**
-             * 分派订单
+             * 打开门店内分派订单弹窗
              */
-            assignOrder(row){
-                this.assignOrderId = row.id
-                this.assignDialogVisible = true
+            openAssignOrderDialog(row){
+                this.orderBase = row
+                this.assignOrderInStoreDialogVisible = true
             },
+            /**
+             * 关闭店长分派订单弹窗
+             */
+            async closeAssignOrderInStoreDialog(){
+                this.assignOrderInStoreDialogVisible = false
+                await this.getTableList()
+            },
+            // /**
+            //  * 运营分派订单接口
+            //  */
+            // async updatePublicAssignOrder(param){
+            //     let assignOrderForm = {
+            //         ...param[0],
+            //         order_id: this.orderBase.id
+            //     }
+            //     await this.openAssignOrderDialog(assignOrderForm)
+            //     await this.closePublicAssignOrderDialog()
+            // },
+            // /**
+            //  * 分派订单接口
+            //  */
+            // async openAssignOrderDialog(assignOrderForm){
+            //     try{
+            //         this.is_loading = true
+            //         await saleService.openAssignOrderDialog(assignOrderForm).then(data =>{
+            //             if(data.code == '0'){
+            //                 this.$message({
+            //                     type:"success",
+            //                     message: data.message
+            //                 })
+            //                 this.is_loading = false
+            //             }
+            //         }).catch(error =>{
+            //             this.$message({
+            //                 type:'error',
+            //                 message: error.message
+            //             })
+            //             this.is_loading = false
+            //         }).finally(() =>{
+            //             this.is_loading = false
+            //         })
+            //     } catch(error){
+            //         this.$message({
+            //             type:'error',
+            //             message: error.message
+            //         })
+            //         this.is_loading = false
+            //     }
+            // },
             //打开订单申请弹窗
             openOrderApplyDialog(){
                 if(this.presentUser.store_id == 0){

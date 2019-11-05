@@ -1,7 +1,7 @@
 <template>
 
     <el-dialog
-        v-loading="loading"
+        v-loading="is_loading"
         title="分配订单"
         :visible.sync="assignOrderInStoreDialogVisible"
         :show-close="false"
@@ -41,27 +41,26 @@ export default {
         }
     },
     data(){
-        const managerNameValidator = function(rule, value, callback){
-            if (value == 0) {
-                callback(new Error('请选择销售人员'));
-            } else {
-                callback()
-            }
-        }
         return {
+            is_loading: false,
+            /**
+             * 分派订单表单
+             */
             assignOrderForm: {
                 order_id: this.orderObject.id,
                 agent_store_id: this.orderObject.agent_store_id,
                 agent_manager_id: 0,
                 version: this.orderObject.version,
             },
-            selectionList: [],
             assignOrderRules: {
-                agent_manager_id: [
-                    { validator: managerNameValidator, trigger: 'change'}
-                ]
+
             },
-            loading: false
+            /**
+             * 门店员工列表
+             */
+            selectionList: [],
+            
+            
         }
     },
     computed: {
@@ -95,7 +94,7 @@ export default {
         },
         async assignOrder(){
             try{
-                this.loading = true
+                this.is_loading = true
                 await saleService.assignOrder(this.assignOrderForm).then((data) =>{
                     if(data.code == "0"){
                         this.$message({
@@ -103,29 +102,29 @@ export default {
                             message: data.message
                         })
                         this.$emit('closeAssignOrderInStoreDialog')
-                        this.loading = false
+                        this.is_loading = false
                     }
                 }).catch(error =>{
                     this.$message({
                         type:'error',
                         message: error.message
                     })
-                    this.loading = false
+                    this.is_loading = false
                 }).finally(() =>{
-                    this.loading = false
+                    this.is_loading = false
                 })
             } catch(error){
                 this.$message({
                     type:'error',
                     message: error.message
                 })
-                this.loading = false
+                this.is_loading = false
             }
         }
     },
     async mounted(){
         try{
-            this.loading = true
+            this.is_loading = true
 
             await Promise.all([
                 operateService.getStoreManagerSelection(this.orderObject.agent_store_id),
@@ -139,7 +138,7 @@ export default {
                     message: error.message
                 })
             }).finally(() =>{
-                this.loading = false
+                this.is_loading = false
             })
 
         } catch(error){

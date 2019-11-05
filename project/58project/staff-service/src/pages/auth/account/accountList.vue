@@ -78,9 +78,6 @@
     </div>
 </template>
 <script>
-    import {
-        cascaderComponent,
-        tableTagComponent} from '@/pages/components'
     import {authService} from '@common/index.js'
     export default {
         data() {
@@ -134,9 +131,6 @@
             departmentList(){
                 return this.$store.state.authModule.departmentList
             }
-        },
-        components: {
-            tableTagComponent
         },
         methods: {
             /**

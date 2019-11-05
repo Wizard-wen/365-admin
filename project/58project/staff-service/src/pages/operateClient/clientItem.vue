@@ -27,14 +27,8 @@
 </template>
 
 <script>
-import {
-    pageEditComponent,
-} from '@/pages/components/index.js'
 import {operateService} from '@common/index.js'
 export default {
-    components: {
-        pageEditComponent,
-    },
     data(){
         return {
             is_loading: false,

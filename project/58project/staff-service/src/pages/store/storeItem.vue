@@ -81,11 +81,9 @@
 <script>
 import { storeService, store, $utils } from "@common/index.js";
 import {addStoreWorkerDialog} from './storeItem/index.js'
-// import {tableTagComponent} from '@/pages/components/index.js'
 export default {
 	components: {
 		addStoreWorkerDialog,
-		// tableTagComponent,
 	},
 	data() {
 		return {

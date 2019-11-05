@@ -149,22 +149,12 @@
 </template>
 <script>
 
-import {
-    querySearchList,
-    querySearchInput,
-} from '@/pages/components/index.js'
 
-// import {queryUpdated_at} from '../interface/query.js'
 export default {
     data(){
         return {
-            setWorkerConfigForm: [],//本地接收的搜索config字段
-            
+            setWorkerConfigForm: [],//本地接收的搜索config字段       
         }
-    },
-    components: {
-        querySearchList,
-        querySearchInput,
     },
     computed:{
         workerConfigForm(){

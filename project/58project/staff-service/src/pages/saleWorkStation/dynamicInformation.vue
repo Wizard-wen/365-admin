@@ -84,7 +84,8 @@ export default {
             this.$router.push({
                 path: '/sale/publicOrderConfig',
                 query: {
-                    order_id: item.id
+                    order_id: item.id,
+                    order_type: 3,
                 }
             })
         }

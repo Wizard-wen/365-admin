@@ -33,8 +33,6 @@
  * type 0 新建  1 编辑
  */
 import {storeService} from '@common/index.js'
-// import { selectTagComponent } from "@/pages/components";
-// import { is_thirdList } from '@common/index.js/store/storeModule';
 export default {
     props:{
         /**
@@ -64,9 +62,6 @@ export default {
 			typeList: [{ id: 1, name: "直营店" }, { id: 2, name: "加盟店" }],
         }
     },
-    components: {
-        // selectTagComponent,
-    },  
     methods: {
         cancelCreateStore(){
             this.createStoreForm.name = ''
