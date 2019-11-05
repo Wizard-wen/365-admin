@@ -14,10 +14,13 @@ import settledDetailComponent from './settledDetailComponent.vue'
 
 //终止信息组件
 import terminalDetailComponent from './terminalDetailComponent.vue'
+
+import contractHeaderComponent from './contractHeaderComponent.vue'
 export {
     contractDetailComponent,
     signedServiceDetailComponent,
     signedUserDetailComponent,
     settledDetailComponent,
     terminalDetailComponent,
+    contractHeaderComponent,
 }

@@ -4,18 +4,17 @@
         <h4>订单号：{{orderBase.order_code}}</h4>
     </div>
     <div class="btn-group">
-        <!-- 仅店长有此权限 -->
         <el-button 
             type="primary" size="mini"
-            v-if="presentUser.is_store_manager != 1"
+            v-if="presentUser.is_store_manager != 1 || presentUser.department_id == 2"
             @click="openAssignOrderDialog">分派</el-button>
         <el-button 
             type="primary" size="mini" 
-            v-if="orderBase.type == 2" 
+            v-if="orderBase.type == 2 && presentUser.department_id == 4 && publicOrderType !=4" 
             @click="goSignOrderPage(1)">续约</el-button>
         <el-button 
             type="danger" size="mini" 
-            v-if="orderBase.type == 1 || 3" 
+            v-if="(orderBase.type == 1 ||orderBase.type ==  3) && presentUser.department_id == 4 && publicOrderType !=4" 
             @click="openDeterminateOrderDialog">终止订单</el-button>
         <el-button 
             size="mini" 
@@ -31,15 +30,15 @@
                 <div class="detail-left-line">来源门店：{{orderBase.apply_store_name}}</div>
                 <div class="detail-left-line">来源人：{{orderBase.apply_manager_id == 0 ? '门店' : orderBase.apply_manager_name}}</div>
                 <div
-                    v-if="orderBase.type != 1" 
+                    v-if="orderBase.type != 1 && publicOrderType !=4" 
                     class="detail-left-line">签约时间：{{orderBase.sign_at | timeFomatter}}</div>
                 <div
-                    v-if="orderBase.type != 1" 
+                    v-if="orderBase.type != 1 && publicOrderType !=4" 
                     class="detail-left-line">服务周期：{{orderBase.sign_service_start | timeFomatter}} - {{orderBase.sign_service_end | timeFomatter}}</div>
             </div>
         </div>
         <div class="detail-right">
-            <div class="right-box" v-if="orderBase.type!= 1">
+            <div class="right-box" v-if="orderBase.type!= 1 && publicOrderType !=4">
                 <div class="title">
                     账户余额
                     <el-tooltip class="item" effect="dark" content="账户余额不包含客户服务费！" placement="top-start">
@@ -50,17 +49,25 @@
             </div>
             <div class="right-box" >
                 <div class="title">订单状态</div>
-                <div class="value" :style="{color: orderType.color}">{{ orderType.name}}</div>
+                <div class="value" :style="{color: orderTypeStyle.color}">{{ orderTypeStyle.name}}</div>
             </div>
         </div>
     </div>
-    <!-- 订单分派弹出框 -->
-    <assign-dialog
-        v-if="assignDialogVisible"
-        :openAssignDialog="assignDialogVisible"
-        @closeAssignDialog="closeAssignDialog"
-        :order_id="order_id"></assign-dialog>
-    <!-- 订单分派弹出框 -->
+    <!-- 运营订单分派 -->
+    <public-assign-order-component
+        v-if="publicAssignOrderDialogVisible"
+        :publicAssignOrderDialogVisible="publicAssignOrderDialogVisible"
+        @closePublicAssignOrderDialog="closePublicAssignOrderDialog"
+        @updatePublicAssignOrder="updatePublicAssignOrder"
+        :publicOrderType="publicOrderType"></public-assign-order-component>
+    <!-- 店内订单分派弹出框 -->
+    <assign-order-in-store-dialog
+        v-if="assignOrderInStoreDialogVisible"
+        :assignOrderInStoreDialogVisible="assignOrderInStoreDialogVisible"
+        @closeAssignOrderInStoreDialog="closeAssignOrderInStoreDialog"
+        :orderObject="orderBase"></assign-order-in-store-dialog>
+    
+    <!-- 终止订单弹出框 -->
     <terminate-order-dialog
         v-if="determinateOrderDialogVisible"
         :determinateOrderDialogVisible="determinateOrderDialogVisible"
@@ -72,22 +79,40 @@
 <script>
 
 import {
-    assignDialog,
+    assignOrderInStoreDialog,
     terminateOrderDialog
 } from './orderHeaderComponent/index.js'
 
-
+import {
+    publicAssignOrderComponent,
+} from '@/public/module/common/index.js'
 import { 
     $utils, 
+    saleService,
 } from '@common/index.js'
 
 export default {
     components: {
-        assignDialog,
+        assignOrderInStoreDialog,
         terminateOrderDialog,
+        publicAssignOrderComponent,
     },
     props: {
-
+        /**
+         * 订单基本信息
+         */
+        orderBase: {
+            type: Object,
+            default: function(){return {}}
+        },
+        /**
+         * 订单类型
+         * 1 门店订单申请 2 客户订单申请 3 门店订单 4 门店公海订单 5 运营订单
+         */
+        publicOrderType: {    
+            type: Number | String,
+            default: 1,
+        },
     },
     computed: {
         /**
@@ -97,40 +122,19 @@ export default {
             return this.$store.state.loginModule.user
         },
         /**
-         * 订单基本信息
-         */
-        orderBase(){
-            return this.$store.state.saleModule.order
-        },
-        /**
          * 订单状态
          */
-        orderType(){
+        orderTypeStyle(){
             if(this.orderBase.type == 1){
-                return {
-                    name: '匹配中',
-                    color: '#E6A23C'
-                }
+                return {name: '匹配中',color: '#E6A23C'}
             } else if(this.orderBase.type == 2){
-                return {
-                    name: '已签约',
-                    color: '#67C23A'
-                }
+                return {name: '已签约',color: '#67C23A'}
             } else if(this.orderBase.type == 3){
-                return {
-                    name: '售后匹配中',
-                    color: '#E6A23C'
-                }
+                return {name: '售后匹配中',color: '#E6A23C'}
             } else if(this.orderBase.type == 4){
-                return {
-                    name: '已终止',
-                    color: '#F56C6C'
-                }
+                return {name: '已终止',color: '#F56C6C'}
             } else {
-                return {
-                    name: '',
-                    color: ''
-                }
+                return {name: '',color: ''}
             }
         }
     },
@@ -147,9 +151,11 @@ export default {
             //订单id
             order_id: this.$route.query.order_id,
             //分配弹出框显示
-            assignDialogVisible:false,
+            assignOrderInStoreDialogVisible:false,
             //终止订单弹窗显示隐藏
             determinateOrderDialogVisible: false,
+            //分分派订单弹窗
+            publicAssignOrderDialogVisible: false,
         }
     },
     methods: {
@@ -157,22 +163,85 @@ export default {
          * 打开分派订单弹窗
          */
         openAssignOrderDialog(){
-            this.assignDialogVisible = true
+            //运营可以任意分派，店长只能店内分派
+            if(this.presentUser.department_id == 2){
+                this.publicAssignOrderDialogVisible = true
+            } else {
+                this.assignOrderInStoreDialogVisible = true
+            }
         },
         /**
          * 关闭分派订单弹窗
          */
-        closeAssignDialog(){
-            this.assignDialogVisible = false
+        closePublicAssignOrderDialog(){
+            this.publicAssignOrderDialogVisible = false
             this.$emit('updateOrderConfig')
+        },
+        closeAssignOrderInStoreDialog(){
+            this.assignOrderInStoreDialogVisible = false
+            this.$emit('updateOrderConfig')
+        },
+        /**
+         * 运营分派订单接口
+         */
+        async updatePublicAssignOrder(param){
+            let assignOrderForm = {
+                ...param[0],
+                order_id: this.orderBase.id
+            }
+            await this.assignOrder(assignOrderForm)
+            await this.closePublicAssignOrderDialog()
+        },
+        /**
+         * 分派订单接口
+         */
+        async assignOrder(assignOrderForm){
+            try{
+                this.is_loading = true
+                await saleService.assignOrder(assignOrderForm).then(data =>{
+                    if(data.code == '0'){
+                        this.$message({
+                            type:"success",
+                            message: data.message
+                        })
+                        this.is_loading = false
+                    }
+                }).catch(error =>{
+                    this.$message({
+                        type:'error',
+                        message: error.message
+                    })
+                    this.is_loading = false
+                }).finally(() =>{
+                    this.is_loading = false
+                })
+            } catch(error){
+                this.$message({
+                    type:'error',
+                    message: error.message
+                })
+                this.is_loading = false
+            }
         },
         /**
          * 返回
          */
         goback(){
-            this.$router.push({
-                path: '/sale/orderList',
-            })
+            if(this.publicOrderType == 3){
+                this.$router.push({
+                    path: '/sale/orderList',
+                })
+            } else if(this.publicOrderType == 4){
+                this.$router.push({
+                    path: '/sale/publicOrderList',
+                })
+            } else if(this.publicOrderType == 5){
+                this.$router.push({
+                    path: '/operate/operateOrderList',
+                })  
+            } else {
+                return
+            }
         },
         /**
          * 打开终止订单弹窗
@@ -194,7 +263,7 @@ export default {
             this.$router.push({
                 path: `/sale/saleSignPage`,
                 query: {
-                    order_id: this.order_id,
+                    order_id: this.orderBase.id,
                     type: this.orderBase.type,//订单状态
                     sign_staff_id: this.orderBase.sign_staff_id ,
                     sign_staff_name: this.orderBase.sign_staff_name,

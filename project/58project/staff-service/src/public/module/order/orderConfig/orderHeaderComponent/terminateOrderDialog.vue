@@ -84,6 +84,7 @@ export default {
     },
     data() {
         return {
+            is_loading: false,
             boolList: [{id: 1, name:'已平账'}, {id: 2, name: '未平账'}],
             determinateOrderForm: {
                 order_id: this.$route.query.order_id,//订单id
@@ -105,9 +106,6 @@ export default {
             }
         }
     },
-    watch: {
-
-    },
     methods: {
         /**
          * 取消终止订单
@@ -120,32 +118,44 @@ export default {
          */
         async onSubmit(formName){
             //校验并提交
-            await this.$refs[formName].validate((valid) => {
+            await this.$refs[formName].validate(async valid => {
                 if (valid) {
-                    debugger
-                    // saleService.settleWage(this.determinateOrderForm).then(data =>{
-                    //     if(data.code == '0'){
-                    //         this.$message({
-                    //             type:"success",
-                    //             message: data.message
-                    //         })
-                    //         this.$emit('closeDeterminateOrderDialog')
-                    //     }
-                    // }).catch(error =>{
-                    //     this.$message({
-                    //         type:'error',
-                    //         message: error.message
-                    //     })
-                    // })
+                    await this.cancelOrder()
                 } else {
                     return false;
                 }
             });
+        },
+        async cancelOrder(){
+            try{
+                this.is_loading = true
+                await saleService.cancelOrder(this.determinateOrderForm).then(data =>{
+                    if(data.code == '0'){
+                        this.$message({
+                            type:"success",
+                            message: data.message
+                        })
+                        this.is_loading = false
+                        this.$emit('closeDeterminateOrderDialog')
+                    }
+                }).catch(error =>{
+                    this.$message({
+                        type:'error',
+                        message: error.message
+                    })
+                    this.is_loading = false
+                }).finally(() =>{
+                    this.is_loading = false
+                })
+            } catch(error){
+                this.$message({
+                    type:'error',
+                    message: error.message
+                })
+                this.is_loading = false
+            }
         }
     },
-    async mounted(){
-
-    }
 }
 </script>
 

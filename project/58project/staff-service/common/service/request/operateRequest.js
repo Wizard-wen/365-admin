@@ -26,21 +26,21 @@ export const operate_clientRequest = {
   /**
    * 客户端订单列表
    */
-  getClientRequireList(){
+  getRequireList(){
     return axios.post(`./admin/order/getRequireList`,store.state.operateModule.clientRequire)
   },
   /**
    * 客户端订单详情
    * @param id 订单id
   */
-  getClientRequire(id){
+ getRequire(id){
     return axios.get(`./admin/order/getRequire?id=${id}`)
   },
   /**
    * 客户端订单编辑
    * @param obj 编辑对象
   */
- editClientRequire(obj){
+ editRequire(obj){
     return axios.post(`./admin/order/editRequire`,{...obj})
   },
   /**

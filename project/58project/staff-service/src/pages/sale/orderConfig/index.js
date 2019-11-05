@@ -24,9 +24,9 @@ import orderConfigLog from './orderConfigLog.vue'
 import orderHeaderComponent from './orderHeaderComponent.vue'
 export {
     matchServiceList,
-    contractList,
-    orderBaseComponent,
-    orderStaffComponent,
-    orderConfigLog,
-    orderHeaderComponent,
+    // contractList,
+    // orderBaseComponent,
+    // orderStaffComponent,
+    // orderConfigLog,
+    // orderHeaderComponent,
 }

@@ -28,13 +28,13 @@
                     </div>
                     <div class="order-list" >
                         <el-form-item prop="sign_user_name" label="姓名">
-                            <el-input v-model="signForm.sign_user_name" :disabled="orderType == 3 || orderType == 2" placeholder="请输入雇主姓名"></el-input>
+                            <el-input v-model="signForm.sign_user_name" :disabled="publicOrderType == 3 || publicOrderType == 2" placeholder="请输入雇主姓名"></el-input>
                         </el-form-item>
                         <el-form-item label="联系电话" prop="sign_user_phone">
                             <el-input v-model.number="signForm.sign_user_phone" placeholder="请输入雇主联系电话"></el-input>
                         </el-form-item>
                         <el-form-item label="身份证号" prop="sign_user_identify">
-                            <el-input v-model="signForm.sign_user_identify" :disabled="orderType == 3 || orderType == 2" placeholder="请输入雇主身份证号"></el-input>
+                            <el-input v-model="signForm.sign_user_identify" :disabled="publicOrderType == 3 || publicOrderType == 2" placeholder="请输入雇主身份证号"></el-input>
                         </el-form-item>
                     </div>
                 </div>
@@ -216,7 +216,7 @@
 <script>
 import {
     selectTagComponent,} from '@/pages/components'
-    import {saleService, operateService} from '../../../common'
+    import {saleService, operateService} from '@common/index.js'
     import {photoComponent} from '../operate/worker/workerItem/index.js'
 export default {
     components: {
@@ -257,7 +257,7 @@ export default {
                 contract_number: '请选择'
             }],
             //订单状态
-            orderType: this.$route.query.type,
+            publicOrderType: this.$route.query.type,
             signRules: {
                 //合同编号
                 contract_number: [

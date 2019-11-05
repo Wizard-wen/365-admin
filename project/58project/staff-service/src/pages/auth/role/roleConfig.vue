@@ -17,7 +17,7 @@
     </div>
 </template>
 <script>
-import {authService} from '../../../../common'
+import {authService} from '@common/index.js'
 export default {
     data(){
         return {

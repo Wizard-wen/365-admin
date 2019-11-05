@@ -28,7 +28,7 @@
 </template>
 <script>
 
-import {operateService} from '../../../common'
+import {operateService} from '@common/index.js'
 import html2canvas from 'html2canvas';
 import axios from 'axios'
 

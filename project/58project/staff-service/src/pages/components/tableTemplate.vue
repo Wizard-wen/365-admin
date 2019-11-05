@@ -50,7 +50,7 @@
     </div>
 </template>
 <script>
-import {authService, saleService} from '../../../../common'
+import {authService, saleService} from '@common/index.js'
 export default {
     data(){
         return {

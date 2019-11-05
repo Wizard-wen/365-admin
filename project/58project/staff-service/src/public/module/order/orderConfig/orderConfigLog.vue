@@ -15,6 +15,16 @@ export default {
             logDialogVisible:false,
         }
     },
+    props: {
+        /**
+         * 订单类型
+         * 1 门店订单申请 2 客户订单申请 3 门店订单 4 门店公海订单 5 运营订单
+         */
+        publicOrderType: {    
+            type: Number | String,
+            default: 1,
+        },
+    },
     computed: {
         /**
          * 订单日志

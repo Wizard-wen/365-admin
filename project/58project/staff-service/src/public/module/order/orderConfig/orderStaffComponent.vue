@@ -27,11 +27,11 @@
                 <template slot-scope="scope">
                     <el-button 
                         type="success" size="mini"
-                        v-if="scope.row.type != 3 && type == 'normal'" 
+                        v-if="scope.row.type != 3 && publicOrderType == 3" 
                         @click="goSignOrder(2,scope.row)">签约</el-button>
                     <el-button 
                         type="danger" size="mini"
-                        v-if=" scope.row.type != 3 && type == 'normal'" 
+                        v-if=" scope.row.type != 3 && publicOrderType == 3" 
                         @click="openRefuseServiceDialog(scope.row)">拒绝</el-button>
                     <el-button 
                         type="primary" size="mini"
@@ -76,12 +76,27 @@ export default {
     },
     props: {
         /**
-         * 公海订单 public  一般订单 normal
+         * 订单基本信息
          */
-        type: {
-            default: 'normal',
-            type: String,
-        }
+        orderBase: {
+            type: Object,
+            default: function(){return {}}
+        },
+        /**
+         * 订单类型
+         * 1 门店订单申请 2 客户订单申请 3 门店订单 4 门店公海订单 5 运营订单
+         */
+        publicOrderType: {    
+            type: Number | String,
+            default: 1,
+        },
+        /**
+         * 备选服务人员列表
+         */
+        order_staff: {
+            type: Array,
+            default: function(){return []}
+        },
     },
     computed: {
         /**
@@ -89,18 +104,6 @@ export default {
          */
         presentUser(){
             return this.$store.state.loginModule.user
-        },
-        /**
-         * 订单基本信息
-         */
-        orderBase(){
-            return this.$store.state.saleModule.order
-        },
-        /**
-         * 备选服务人员列表
-         */
-        order_staff(){
-            return this.$store.state.saleModule.order_staff
         },
     },
     methods: {
@@ -143,14 +146,28 @@ export default {
          * @param paramObj 匹配服务人员信息对象
          */
         goStaffDetail(paramObj){
-            this.$router.push({
-                path: "/sale/saleNewWorkerShow",
-                query: {
-                    id: paramObj.id,
-                    from: this.$route.query.order_type,
-                    order_id: this.$route.query.order_id
-                }
-            })
+            if(this.publicOrderType == 5){
+                this.$router.push({
+                    path: "/worker/workerItemShow",
+                    query: {
+                        id: paramObj.id,
+                        from: 2,
+                        order_id: this.$route.query.order_id
+                    }
+                })
+            } else if(this.publicOrderType == 3 || this.publicOrderType == 4){
+                this.$router.push({
+                    path: "/sale/saleWorkerShow",
+                    query: {
+                        id: paramObj.id,
+                        from: this.$route.query.order_type,
+                        order_id: this.$route.query.order_id
+                    }
+                })
+            } else {
+                return 
+            }
+            
         },
         /**
          * 删除备选服务人员

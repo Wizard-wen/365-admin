@@ -22,7 +22,7 @@
 /**
  * type 0 新建  1 编辑
  */
-import {saleService} from '../../../../../common'
+import {saleService} from '@common/index.js'
 
 export default {
     props:{

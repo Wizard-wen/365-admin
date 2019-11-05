@@ -52,7 +52,7 @@
     </div>
 </template>
 <script>
-    import {saleService, operateService} from '../../../common'
+    import {saleService, operateService} from '@common/index.js'
     // import {queryTagComponent} from '@/pages/components/index.js'
     import {
         saleOrderTableComponent,

@@ -80,6 +80,16 @@ export default {
             },
         }
     },
+    props: {
+        /**
+         * 订单类型
+         * 1 门店订单申请 2 客户订单申请 3 门店订单 4 门店公海订单 5 运营订单
+         */
+        publicOrderType: {    
+            type: Number | String,
+            default: 1,
+        },
+    },
     components: {
         matchServiceTableComponent,
         queryComponent,
@@ -208,7 +218,7 @@ export default {
          */
         showStaff(row){
             this.$router.push({
-                path: "/sale/saleNewWorkerShow",
+                path: "/sale/saleWorkerShow",
                 query: {
                     id: row.id,
                     from: this.$route.query.order_type,

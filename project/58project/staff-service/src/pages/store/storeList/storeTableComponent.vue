@@ -63,14 +63,10 @@
     </div>
 </template>
 <script>
-    import {operateService, $utils} from '../../../../common'
-    import {
-        tableTagComponent} from '@/pages/components'
+    import {operateService, $utils} from '@common/index.js'
+
     
     export default {
-        components: {
-            tableTagComponent,
-        },
         props: {
             //员工信息列表
             staffTable: {

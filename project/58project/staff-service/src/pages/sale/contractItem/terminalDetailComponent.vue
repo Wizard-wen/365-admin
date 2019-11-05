@@ -82,7 +82,7 @@
 </template>
 
 <script>
-import {$utils} from '../../../../common'
+import {$utils} from '@common/index.js'
 export default {
     filters: {
         timeFomatter(value){

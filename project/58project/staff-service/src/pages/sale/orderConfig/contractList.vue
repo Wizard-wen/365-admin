@@ -17,7 +17,7 @@
     </div>
 </template>
 <script>
-import {saleService, $utils} from '../../../../common'
+import {saleService, $utils} from '@common/index.js'
 import {
     contractTableComponent,
 } from './contractList/index.js'

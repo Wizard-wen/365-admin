@@ -211,22 +211,22 @@ export const operate_clientRequest = {
     /**
      * 客户端订单列表
      */
-    getClientRequireList(){
-      return operateRequest.getClientRequireList()
+    getRequireList(){
+      return operateRequest.getRequireList()
     },
     /**
      * 客户端订单详情
      * @param id 订单id
     */
-   getClientRequire(id){
-    return operateRequest.getClientRequire(id)
+   getRequire(id){
+    return operateRequest.getRequire(id)
     },
     /**
      * 客户端订单编辑
      * @param obj 编辑对象
     */
-   editClientRequire(obj){
-      return operateRequest.editClientRequire(obj)
+   editRequire(obj){
+      return operateRequest.editRequire(obj)
     },
     /**
      * 客户端改变客户意向动态
@@ -234,12 +234,7 @@ export const operate_clientRequest = {
     changeRequireType(sendObj){
       return operateRequest.changeRequireType(sendObj)
     },
-    /**
-     * 删除服务信息
-     */
-    deleteService(id){
-        return operateRequest.deleteService(id)
-    }
+    
 }
 
 /**
@@ -271,6 +266,12 @@ export const operate_serviceGood = {
      */
     editService(serviceObj){
         return operateRequest.editService(serviceObj)
+    },
+    /**
+     * 删除服务信息
+     */
+    deleteService(id){
+        return operateRequest.deleteService(id)
     }
 }
 /**

@@ -1,5 +1,5 @@
 <template>
-    <div class="worker" v-loading="is_loading">
+    <div class="worker" v-loading="is_loading" v-hide>
         <sale-own-worker-table-component
             :staffTable="staffTable"
             :maxLength="maxLength"
@@ -32,7 +32,7 @@
     </div>
 </template>
 <script>
-    import {operateService, $utils} from '../../../common'
+    import {operateService, $utils} from '@common/index.js'
 
 
     import {
@@ -252,7 +252,7 @@
              */
             showStaff(index, row){
                 this.$router.push({
-                    path: "/sale/saleNewWorkerShow",
+                    path: "/sale/saleWorkerShow",
                     query: {
                         id: row.id,
                         from: 1,//

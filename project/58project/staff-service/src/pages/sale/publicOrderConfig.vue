@@ -1,28 +1,15 @@
 <template>
     <div class="orderConfig" v-loading="is_loading">
-        <div class="order-header">
-            <div class="order-name">
-                <h4>订单号：{{orderBase.order_code}}</h4>
-            </div>
-            <div class="btn-group">
-                <el-button size="mini" @click="goback">返回</el-button>
-            </div>
-            <div class="order-detail">
-                <div class="detail-left">
-                    <div class="detail-left-box">
-                        <div class="detail-left-line">订单经纪人：{{ orderBase.agent_manager_name }}</div>
-                        <div class="detail-left-line">订单经纪门店：{{ orderBase.agent_store_name }}</div>
-                        <div class="detail-left-line">创建人：{{ orderBase.created_manager_name }}</div>
-                        <div class="detail-left-line">创建时间：{{orderBase.created_at | timeFomatter}}</div>
-                        <div class="detail-left-line">来源门店：{{orderBase.apply_store_name}}</div>
-                        <div class="detail-left-line">来源人：{{orderBase.apply_manager_name? orderBase.apply_manager_name : '门店'}}</div>
-                    </div>
-                </div>
-            </div>
-        </div>
+        <order-header-component
+            @updateOrderConfig="getOrder"
+            :orderBase="orderBase"
+            :publicOrderType="4"></order-header-component>
         <div class="order-down">
-            <order-base-component
-                :type="'public'"></order-base-component>
+            <public-order-base-component
+                :orderBaseDetail="orderBase"
+                :publicOrderType="4"
+                @updatePublicOrderBase="getOrder"></public-order-base-component>
+            
             <card-box-component
                 v-if="orderBase.type == 1 || orderBase.type == 3"
                 :title="'服务人员匹配'">
@@ -33,53 +20,52 @@
             
             <order-staff-component
                 v-if="orderBase.type == 1 || orderBase.type == 3"
-                :type="'public'"></order-staff-component>                  
+                :orderBase="orderBase"
+                :order_staff="order_staff"
+                :publicOrderType="4"
+                @updateOrderConfig="getOrder"></order-staff-component>
+
         </div>
     </div>
 </template>
 <script>
-    import {operateService, $utils, saleService} from '../../../common'
+    import {operateService, $utils, saleService} from '@common/index.js'
 
     import {
         matchServiceList,
-        orderBaseComponent,
-        orderStaffComponent,
     } from './orderConfig/index.js'
+    import { 
+        orderHeaderComponent,
+        orderConfigLog,
+        orderStaffComponent,
+        orderContractList,
+    } from '@/public/module/order/orderConfig/index.js'
+
+    import {
+        signedServiceDetailComponent,
+        signedUserDetailComponent,
+    } from '@/public/module/contract/index.js'
+    
+    import {
+        publicOrderBaseComponent,
+    } from '@/public/module/common/index.js'
 export default {
     components: {
         matchServiceList,
-        orderBaseComponent,
+        orderHeaderComponent,
         orderStaffComponent,
+        orderContractList,
+        orderConfigLog,
+        publicOrderBaseComponent,
+        signedServiceDetailComponent,
+        signedUserDetailComponent,
     },
     data(){
         return {
             is_loading: false,
-            makeImageDialogVisible: false,
-            matchStaffSignList: [
-                {id: 1, name: '未签约'},
-                {id: 2, name: '已签约'},
-                {id: 3, name: '已拒绝'},
-            ],
-        }
-    },
-    filters: {
-        /**
-         * 时间过滤器
-         */
-        timeFomatter(value){
-            if(value == 0){
-                return '-'
-            }
-            return $utils.formatDate(new Date(value), 'yyyy-MM-dd')
         }
     },
     computed:{
-        /**
-         * 当前用户信息
-         */
-        presentUser(){
-            return this.$store.state.loginModule.user
-        },
         /**
          * 订单基本信息
          */
@@ -128,7 +114,7 @@ export default {
          */
         goStaffDetail(paramObj){
             this.$router.push({
-                path: "/sale/saleNewWorkerShow",
+                path: "/sale/saleWorkerShow",
                 query: {
                     id: paramObj.id,
                     from: this.$route.query.order_type,
@@ -192,18 +178,7 @@ export default {
                 this.is_loading = false
             }
         },
-        /**
-         * 返回
-         */
-        goback(){
-            this.$router.push('/sale/orderList')
-        },
-        /**
-         * 生成订单图片
-         */
-        makeOrderImage(){
-            this.makeImageDialogVisible = true
-        },
+
     },
     async mounted(){
         await this.getOrder()

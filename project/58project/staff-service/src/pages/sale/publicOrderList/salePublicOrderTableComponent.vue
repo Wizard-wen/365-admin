@@ -87,7 +87,7 @@
     </div>
 </template>
 <script>
-    import {$utils} from '../../../../common'
+    import {$utils} from '@common/index.js'
     import {
         tableTagComponent} from '@/pages/components'
     

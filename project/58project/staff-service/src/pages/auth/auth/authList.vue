@@ -63,7 +63,7 @@
 import {
     authService,
     saleService
-} from '../../../../common'
+} from '@common/index.js'
 import {tableTagComponent} from '@/pages/components/index.js'
 
 export default {

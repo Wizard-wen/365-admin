@@ -51,7 +51,7 @@
     </div>
 </template>
 <script>
-    import {operateService, $utils} from '../../../common'
+    import {operateService, $utils} from '@common/index.js'
     import {queryTagComponent} from '@/pages/components/index.js'
 
     import {
@@ -239,7 +239,7 @@
              */
             showWorker(index, row){
                 this.$router.push({
-                    path: "/sale/saleNewWorkerShow",
+                    path: "/sale/saleWorkerShow",
                     query: {
                         id: row.id,
                         from: 1,//

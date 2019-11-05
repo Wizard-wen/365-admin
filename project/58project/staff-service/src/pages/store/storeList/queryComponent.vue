@@ -32,20 +32,11 @@
     </div>
 </template>
 <script>
-import {
-    querySearchList,
-    querySearchInput,
-} from '@/pages/components/index.js'
-
 export default {
     data(){
         return {
             setWorkerConfigForm: [],//本地接收的搜索config字段
         }
-    },
-    components: {
-        querySearchList,
-        querySearchInput,
     },
     computed:{
         /**

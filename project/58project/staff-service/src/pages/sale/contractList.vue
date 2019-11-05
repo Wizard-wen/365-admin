@@ -37,7 +37,7 @@
     </div>
 </template>
 <script>
-    import {operateService, saleService} from '../../../common'
+    import {operateService, saleService} from '@common/index.js'
     import {queryTagComponent} from '@/pages/components/index.js'
     import {
         contractTableComponent,

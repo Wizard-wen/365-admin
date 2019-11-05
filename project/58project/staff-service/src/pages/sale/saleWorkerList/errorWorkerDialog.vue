@@ -21,7 +21,7 @@
     </el-dialog>
 </template>
 <script>
-import {saleService} from '../../../../common'
+import {saleService} from '@common/index.js'
 import {selectTagComponent} from '@/pages/components'
 export default {
     props: {

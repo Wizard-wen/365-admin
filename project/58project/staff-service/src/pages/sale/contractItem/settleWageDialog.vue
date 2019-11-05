@@ -55,7 +55,7 @@
 /**
  * type 0 新建  1 编辑
  */
-import {saleService,operateService} from '../../../../common'
+import {saleService,operateService} from '@common/index.js'
 
 export default {
     props:{

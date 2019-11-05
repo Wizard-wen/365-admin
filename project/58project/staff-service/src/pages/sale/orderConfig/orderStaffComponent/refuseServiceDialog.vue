@@ -23,7 +23,7 @@
 
 <script>
 
-import {saleService} from '../../../../../common'
+import {saleService} from '@common/index.js'
 
 export default {
     props:{

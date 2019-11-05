@@ -41,8 +41,7 @@
 </template>
 
 <script>
-import { storeService } from "../../../common";
-import { selectTagComponent,cascaderTagComponent } from "@/pages/components";
+import { storeService } from "@common/index.js";
 export default {
 	data() {
 		return {
@@ -68,10 +67,6 @@ export default {
 			//经营状态
 			typeList: [{ id: 1, name: "正常" }, { id: 2, name: "关闭" }],
 		};
-	},
-	components: {
-		selectTagComponent,
-		cascaderTagComponent
 	},
 	methods: {
 		/**

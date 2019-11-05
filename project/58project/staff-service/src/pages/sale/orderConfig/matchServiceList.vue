@@ -43,7 +43,7 @@
     </div>
 </template>
 <script>
-import {saleService, operateService, $utils} from '../../../../common'
+import {saleService, operateService, $utils} from '@common/index.js'
 // import {queryTagComponent} from '@/pages/components/index.js'
 import {
     matchServiceTableComponent,
@@ -209,7 +209,7 @@ export default {
          */
         showStaff(row){
             this.$router.push({
-                path: "/sale/saleNewWorkerShow",
+                path: "/sale/saleWorkerShow",
                 query: {
                     id: row.id,
                     from: this.$route.query.order_type,

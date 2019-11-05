@@ -4,12 +4,13 @@
         <h4>合同编号：{{contractBase.contract_number}}</h4>
     </div>
     <div class="btn-group">
-        <!-- 仅店长有此权限 -->
-        <el-button type="primary" size="mini" 
-            v-if="contractBase.is_wage == 1 && contractBase.type == 2"
+        <el-button 
+            type="primary" size="mini" 
+            v-if="contractType == 2 && contractBase.is_wage == 1 && contractBase.type == 2"
             @click="openSettleWageDialog">结算工资</el-button>
-        <el-button type="danger" size="mini" 
-            v-if="contractBase.type != 3"
+        <el-button 
+            type="danger" size="mini" 
+            v-if="contractType == 2 && contractBase.type != 3"
             @click="openDeterminateContractDialog">终止合同</el-button>
         <el-button size="mini" @click="goback">返回</el-button>
         <!-- 订单申请弹出框 -->
@@ -36,7 +37,7 @@
         <div class="detail-right">
             <div class="right-box">
                 <div class="title">合同状态</div>
-                <div class="value" :style="{color: contractType.color}">{{ contractType.name}}</div>
+                <div class="value" :style="{color: contractTypeStyle.color}">{{ contractTypeStyle.name}}</div>
             </div>
             <div class="right-box" v-if="contractBase.type != 3">
                 <div class="title">是否发放首月工资</div>
@@ -52,7 +53,10 @@ import {
     settleWageDialog,
     terminateContractDialog,
 } from './contractHeaderComponent/index.js'
-
+import {
+    $utils,
+    saleService,
+} from '@common/index.js'
 export default {
     components: {
         settleWageDialog,
@@ -65,6 +69,14 @@ export default {
         contractBase: {
             type: Object,
             default: function(){return {}}
+        },
+        /**
+         * 合同来源
+         * 1 运营 2 门店
+         */
+        contractType: {
+            type: Number | String,
+            default: 1
         }
     },
     data(){
@@ -98,7 +110,7 @@ export default {
             }
         },
         //合同状态
-        contractType(value){
+        contractTypeStyle(value){
             if(this.contractBase.type == 1){
                 return {
                     name: '待执行',
@@ -128,7 +140,7 @@ export default {
          * 关闭结算工资弹窗
          */
         async closeSettleWageDialog(){
-            await this.getContract()
+            this.$emit('updateContract')
             this.settleWageDialogVisible = false
         },
         /**
@@ -153,7 +165,7 @@ export default {
          * 关闭终止合同弹窗
          */
         async closeDeterminateContractDialog(){
-            await this.getContract()
+            this.$emit('updateContract')
             this.determinateContractDialogVisible = false
         },
         /**
@@ -166,7 +178,7 @@ export default {
                 type: "warning"
             }).then(async () =>{
                 await this.stopContract()
-                await this.getContract()
+                this.$emit('updateContract')
             }).catch(() => {
                 this.$message({
                     type: "info",
@@ -215,21 +227,87 @@ export default {
          * 返回
          */
         goback(){
-            if(this.$route.query.from == 1){
-                this.$router.push({
-                    path: '/sale/orderConfig',
-                    query: {
-                        order_id: this.$route.query.from_id
-                    }
-                })
+            if(this.contractType == 1){
+                if(this.$route.query.from == 1){
+                    this.$router.push({
+                        path: '/operate/operateOrderConfig',
+                        query: {
+                            order_id: this.$route.query.from_id
+                        }
+                    })
+                } else {
+                    this.$router.push('/sale/contractList')
+                }
             } else {
-                this.$router.push('/sale/contractList')
+                if(this.$route.query.from == 1){
+                    this.$router.push({
+                        path: '/sale/orderConfig',
+                        query: {
+                            order_id: this.$route.query.from_id
+                        }
+                    })
+                } else {
+                    this.$router.push('/operate/operateContractList')
+                }
             }
+            
         },
     }
 }
 </script>
 
-<style>
-
+<style lang="scss" scoped>
+.order-header{
+    background: #fff;
+    padding: 30px 24px 24px 24px;
+    position: relative;
+    .order-name{
+        line-height: 28px;
+        font-size: 20px;
+        font-weight: 700;
+    }
+    .btn-group{
+        & /deep/ .el-button{
+            margin-left: 0px;
+        }
+        position: absolute;
+        right: 24px;
+        top: 20px;
+    }
+    .order-detail{
+        padding-top: 12px;
+        display: flex;
+        .detail-left{
+            flex:1;
+            .detail-left-box{
+                display: flex;
+                flex-wrap: wrap;
+                .detail-left-line{
+                    width: 50%;
+                    color: rgba(0,0,0,.65);
+                    line-height: 20px;
+                    padding-bottom: 8px;
+                }
+            }
+        }
+        .detail-right{
+            min-width: 400px;
+            display: flex;
+            .right-box{
+                height: 80px;
+                width: 50%;
+                .title{
+                    color: rgba(0,0,0,.45);
+                    font-size: 14px;
+                    line-height: 1.5;
+                }
+                .value{
+                    font-size: 20px;
+                    color: rgba(0,0,0,.85);
+                    line-height: 1.5;
+                }
+            }
+        }
+    }
+}
 </style>

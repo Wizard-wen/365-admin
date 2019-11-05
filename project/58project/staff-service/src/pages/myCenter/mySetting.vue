@@ -106,7 +106,7 @@
     </div>
 </template>
 <script>
-import {myCenterService} from '../../../common/index.js'
+import {myCenterService} from '@common/index.js'
 import {selectTagComponent} from '@/pages/components/index.js'
    export default {
     data() {

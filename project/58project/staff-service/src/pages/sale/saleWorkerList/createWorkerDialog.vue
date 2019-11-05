@@ -47,7 +47,7 @@
     </el-dialog>
 </template>
 <script>
-import {saleService} from '../../../../common'
+import {saleService} from '@common/index.js'
 import selectTagComponent from '../../components/selectTagComponent'
 export default {
     components: {

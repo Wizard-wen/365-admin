@@ -24,7 +24,7 @@
 </template>
 <script>
 
-import {operateService} from '../../../../common'
+import {operateService} from '@common/index.js'
 
 export default {
     props: {

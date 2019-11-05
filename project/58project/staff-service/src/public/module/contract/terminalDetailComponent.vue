@@ -98,7 +98,9 @@ export default {
          */
         contractBase: {
             type: Object,
-            default: function(){return {}}
+            default: function(){return {
+                account: {}
+            }}
         }
     },
 }

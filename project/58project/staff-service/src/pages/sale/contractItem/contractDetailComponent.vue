@@ -133,7 +133,7 @@
 </template>
 
 <script>
-import {$utils} from '../../../../common'
+import {$utils} from '@common/index.js'
 import {
     photoComponent
 } from '../../operate/worker/workerItem/index.js'

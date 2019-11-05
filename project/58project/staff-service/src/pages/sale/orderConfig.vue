@@ -1,13 +1,17 @@
 <template>
     <div class="orderConfig" v-loading="is_loading">
         
-        <order-header-component></order-header-component>
+        <order-header-component
+            @updateOrderConfig="getOrder"
+            :orderBase="orderBase"
+            :publicOrderType="3"></order-header-component>
         
         <div class="order-down">
 
-            <order-base-component
-                :type="'normal'"
-                @updateOrderConfig="getOrder"></order-base-component>
+            <public-order-base-component
+                :orderBaseDetail="orderBase"
+                :publicOrderType="3"
+                @updatePublicOrderBase="getOrder"></public-order-base-component>
 
             <card-box-component
                 v-if="orderBase.type == 1 || orderBase.type == 3"
@@ -18,27 +22,28 @@
             </card-box-component>
 
             <order-staff-component
-                :type="'normal'"
-                @updateOrderConfig="getOrder"
-                v-if="orderBase.type == 1 || orderBase.type == 3"></order-staff-component>
+                v-if="orderBase.type == 1 || orderBase.type == 3"
+                :orderBase="orderBase"
+                :order_staff="order_staff"
+                :publicOrderType="3"
+                @updateOrderConfig="getOrder"></order-staff-component>
             
-            <card-box-component
+            <order-contract-list
                 v-if="orderBase.type != 1"
-                :title="'合同列表'">
-                <template slot="contains">
-                    <contract-list></contract-list>
-                </template>    
-            </card-box-component>
+                :order_contract="order_contract"
+                :publicOrderType="3"></order-contract-list>
+
 
             <signed-service-detail-component
                 v-if="orderBase.type != 1"
                 :signedServiceDetailObject="orderBase"></signed-service-detail-component>
-            
-            <signed-user-detail-component 
+
+            <signed-user-detail-component
                 v-if="orderBase.type != 1"
                 :signedUserDetailObject="orderBase"></signed-user-detail-component>
-            
-            <order-config-log></order-config-log> 
+
+            <order-config-log
+                @updateOrderConfig="getOrder"></order-config-log>
         </div>
     </div>
 </template>
@@ -51,29 +56,52 @@
 
     import {
         matchServiceList,
-        contractList,
-        orderBaseComponent,
-        orderStaffComponent,
-        orderConfigLog,
-        orderHeaderComponent,
+        // contractList,
+        // orderBaseComponent,
+        // orderStaffComponent,
+        // orderConfigLog,
+        // orderHeaderComponent,
     } from './orderConfig/index.js'
 
-    import {
-        signedUserDetailComponent,
-        signedServiceDetailComponent,
-    } from './contractItem/index.js'
+    // import {
+    //     signedUserDetailComponent,
+    //     signedServiceDetailComponent,
+    // } from './contractItem/index.js'
 
+    import { 
+        orderHeaderComponent,
+        orderConfigLog,
+        orderStaffComponent,
+        orderContractList,
+    } from '@/public/module/order/orderConfig/index.js'
+
+    import {
+        signedServiceDetailComponent,
+        signedUserDetailComponent,
+    } from '@/public/module/contract/index.js'
+    
+    import {
+        publicOrderBaseComponent,
+    } from '@/public/module/common/index.js'
 
 export default {
     components: {
         matchServiceList,
-        contractList,
-        orderBaseComponent,
-        orderStaffComponent,
-        orderConfigLog,
-        signedUserDetailComponent,
-        signedServiceDetailComponent,
+        // contractList,
+        // orderBaseComponent,
+        // orderStaffComponent,
+        // orderConfigLog,
+        // signedUserDetailComponent,
+        // signedServiceDetailComponent,
+        // orderHeaderComponent,
+
         orderHeaderComponent,
+        orderStaffComponent,
+        orderContractList,
+        orderConfigLog,
+        publicOrderBaseComponent,
+        signedServiceDetailComponent,
+        signedUserDetailComponent,
     },
     data(){
         return {
@@ -95,6 +123,18 @@ export default {
          */
         orderBase(){
             return this.$store.state.saleModule.order
+        },
+        /**
+         * 订单基本信息
+         */
+        order_staff(){
+            return this.$store.state.saleModule.order_staff
+        },
+        /**
+         * 订单基本信息
+         */
+        order_contract(){
+            return this.$store.state.saleModule.order_contract
         },
     },
     methods: {

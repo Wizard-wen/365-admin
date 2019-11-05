@@ -6,56 +6,58 @@
 /**
  * 运营---工作台
  */
-import operateWorkStation from '@/pages/operate/operateWorkStation.vue'
+import operateWorkStation from '@/pages/operateWorkStation.vue'
 
 /**
- * 运营---订单管理
+ * 运营---订单运营
  */
-import operateOrderList from '@/pages/operate/order/orderList.vue'
-import operateOrderConfig from '@/pages/operate/order/orderConfig.vue'
-import operateOrderApplyList from '@/pages/operate/order/orderApplyList.vue'
-import operateOrderApplyItem from '@/pages/operate/order/orderApplyItem.vue'
-import operateCreateOrderPage from '@/pages/operate/order/createOrderPage.vue'
+import operateOrderList from '@/pages/operateOrder/orderList.vue'
+import operateOrderConfig from '@/pages/operateOrder/orderConfig.vue'
+import operateOrderApplyList from '@/pages/operateOrder/orderApplyList.vue'
+import operateOrderApplyItem from '@/pages/operateOrder/orderApplyItem.vue'
+import operateCreateOrderPage from '@/pages/operateOrder/createOrderPage.vue'
+import clientRequireList from '@/pages/operateOrder/clientRequireList.vue'
+import clientRequireItem from '@/pages/operateOrder/clientRequireItem.vue'
+
 /**
  * 运营---合同管理
  */
-import operateVoidContractList from '@/pages/operate/contract/voidContractList.vue'
-import operateContractList from '@/pages/operate/contract/contractList.vue'
-import operateContractItem from '@/pages/operate/contract/contractItem.vue'
+import operateVoidContractList from '@/pages/operateContract/voidContractList.vue'
+import operateContractList from '@/pages/operateContract/contractList.vue'
+import operateContractItem from '@/pages/operateContract/contractItem.vue'
 
 /**
  * 运营—--客户端订单
  */
-import clientRequireList from '@/pages/operate/order/clientRequireList.vue'
-import clientRequireItem from '@/pages/operate/order/clientRequireItem.vue'
+
  
 /**
  * 运营 --- 小程序运营
  */
-import productList from '@/pages/operate/custom/productList.vue'
-import resourceList from '@/pages/operate/custom/resourceList.vue'
-import videoList from '@/pages/operate/custom/videoList.vue'
-import workerAdList from '@/pages/operate/custom/workerAdList.vue'
-import customAdList from '@/pages/operate/custom/customAdList.vue'
-import adPositionItem from '@/pages/operate/custom/adPositionItem.vue'
-import adPictureItem from '@/pages/operate/custom/adPictureItem.vue'
-import resourceVideoItem from '@/pages/operate/custom/resourceVideoItem.vue'
+import productList from '@/pages/operateCustom/productList.vue'
+import resourceList from '@/pages/operateCustom/resourceList.vue'
+import videoList from '@/pages/operateCustom/videoList.vue'
+import workerAdList from '@/pages/operateCustom/workerAdList.vue'
+import customAdList from '@/pages/operateCustom/customAdList.vue'
+import adPositionItem from '@/pages/operateCustom/adPositionItem.vue'
+import adPictureItem from '@/pages/operateCustom/adPictureItem.vue'
+import resourceVideoItem from '@/pages/operateCustom/resourceVideoItem.vue'
 /**
  * 运营---服务人员管理
  */
-import workerList from '@/pages/operate/worker/workerList.vue'
-import workerFormConfig from '@/pages/operate/worker/workerFormConfig.vue'
-import workerItem from '@/pages/operate/worker/workerItem.vue'
-import workerItemShow from '@/pages/operate/worker/workerItemShow.vue'
-import newWorkerList from '@/pages/operate/worker/newWorkerList.vue'
-import errorWorkerList from '@/pages/operate/worker/errorWorkerList.vue'
-import returnWorkerList from '@/pages/operate/worker/returnWorkerList.vue'
+import workerList from '@/pages/operateWorker/workerList.vue'
+import workerFormConfig from '@/pages/operateWorker/workerFormConfig.vue'
+import workerItem from '@/pages/operateWorker/workerItem.vue'
+import workerItemShow from '@/pages/operateWorker/workerItemShow.vue'
+import newWorkerList from '@/pages/operateWorker/newWorkerList.vue'
+import errorWorkerList from '@/pages/operateWorker/errorWorkerList.vue'
+import returnWorkerList from '@/pages/operateWorker/returnWorkerList.vue'
  
 /**
  * 客户管理
  */ 
-import clientList from '@/pages/operate/client/clientList.vue'
-import clientItem from '@/pages/operate/client/clientItem.vue'
+import clientList from '@/pages/operateClient/clientList.vue'
+import clientItem from '@/pages/operateClient/clientItem.vue'
 
 
 export const operateConfigModule = [

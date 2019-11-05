@@ -41,9 +41,9 @@
     </div>
 </template>
 <script>
-	import {storeService,$utils} from '../../../common'
+	import {storeService,$utils} from '@common/index.js'
     import {createStoreDialog} from './storeList/index.js'
-    import {queryTagComponent} from '@/pages/components/index.js'
+    // import {queryTagComponent} from '@/pages/components/index.js'
     import {
         storeTableComponent,
         queryComponent,
@@ -69,7 +69,7 @@
             createStoreDialog,
             storeTableComponent,
             queryComponent,
-            queryTagComponent,
+            // queryTagComponent,
         },
         computed: {
             /**

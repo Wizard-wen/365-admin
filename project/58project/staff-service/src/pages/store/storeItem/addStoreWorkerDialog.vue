@@ -30,7 +30,7 @@
 /**
  * type 0 新建  1 编辑
  */
-import {operateService, storeService} from '../../../../common'
+import {operateService, storeService} from '@common/index.js'
 
 export default {
     props:{

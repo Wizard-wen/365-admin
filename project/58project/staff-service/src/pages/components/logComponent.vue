@@ -30,7 +30,7 @@
 
 <script>
 import {logDialog} from './logComponent/index.js'
-import {$utils} from '../../../common'
+import {$utils} from '@common/index.js'
 export default {
     components: {
         logDialog,

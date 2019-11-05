@@ -84,7 +84,7 @@
 <script>
 import {noticeArticleList} from './noticeArticle/index.js'
 import {staffDetailComponent} from './homePage/index.js'
-import {operateService} from '../../../common'
+import {operateService} from '@common/index.js'
 import noHeaderImage from './homePage/images/header.png'
 // import { departmentList } from './interface.ts';
 export default {

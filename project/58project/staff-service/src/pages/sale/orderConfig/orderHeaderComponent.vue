@@ -50,7 +50,7 @@
             </div>
             <div class="right-box" >
                 <div class="title">订单状态</div>
-                <div class="value" :style="{color: orderType.color}">{{ orderType.name}}</div>
+                <div class="value" :style="{color: publicOrderType.color}">{{ publicOrderType.name}}</div>
             </div>
         </div>
     </div>
@@ -105,7 +105,7 @@ export default {
         /**
          * 订单状态
          */
-        orderType(){
+        publicOrderType(){
             if(this.orderBase.type == 1){
                 return {
                     name: '匹配中',

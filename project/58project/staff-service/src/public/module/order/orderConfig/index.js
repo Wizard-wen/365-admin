@@ -7,9 +7,6 @@
 //订单头部组件
 import orderHeaderComponent from './orderHeaderComponent.vue'
 
-//订单基本信息组件
-import orderBaseComponent from './orderBaseComponent.vue'
-
 //全部服务人员筛选列表组件
 import orderMatchWorkerList from  './orderMatchWorkerList.vue'
 
@@ -23,12 +20,8 @@ import orderContractList from  './orderContractList.vue'
 import orderConfigLog from './orderConfigLog.vue'
 
 
-
-
-
 export {
     orderHeaderComponent,
-    orderBaseComponent,
     orderMatchWorkerList,
     orderStaffComponent,
     orderContractList,

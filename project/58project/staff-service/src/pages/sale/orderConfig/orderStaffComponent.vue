@@ -55,7 +55,7 @@
 </template>
 
 <script>
-import {saleService} from '../../../../common'
+import {saleService} from '@common/index.js'
 import {refuseServiceDialog} from './orderStaffComponent/index.js'
 export default {
     components: {
@@ -144,7 +144,7 @@ export default {
          */
         goStaffDetail(paramObj){
             this.$router.push({
-                path: "/sale/saleNewWorkerShow",
+                path: "/sale/saleWorkerShow",
                 query: {
                     id: paramObj.id,
                     from: this.$route.query.order_type,
