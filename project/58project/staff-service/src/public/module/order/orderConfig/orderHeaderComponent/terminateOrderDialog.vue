@@ -16,38 +16,38 @@
                 </span>
                 <el-input v-model="determinateOrderForm.message" type="textarea" placeholder="请输入终止事由"></el-input>
             </el-form-item>
-            <el-form-item label="客户余额" prop="hasUserCost">
-                <select-tag-component 
+            <el-form-item label="客户余额" prop="has_user_cost">
+                <select-tag-component
                     v-if="boolList"
-                    :propTagList="boolList" 
-                    v-model="determinateOrderForm.hasUserCost" 
+                    :propTagList="boolList"
+                    v-model="determinateOrderForm.has_user_cost"
                     :isSingle="true"></select-tag-component>
             </el-form-item>
-            <el-form-item label="返还客户金额" prop="returnUserCost">
-                <el-input v-model="determinateOrderForm.returnUserCost" placeholder="请输入返还客户金额"></el-input>
+            <el-form-item label="返还客户金额" prop="return_user_cost">
+                <el-input v-model="determinateOrderForm.return_user_cost" placeholder="请输入返还客户金额"></el-input>
             </el-form-item>
-            <el-form-item label="劳动者押金" prop="hasWorkerCost">
-                <select-tag-component 
+            <el-form-item label="劳动者押金" prop="has_worker_cost">
+                <select-tag-component
                     v-if="boolList"
-                    :propTagList="boolList" 
-                    v-model="determinateOrderForm.hasWorkerCost" 
+                    :propTagList="boolList"
+                    v-model="determinateOrderForm.has_worker_cost"
                     :isSingle="true"></select-tag-component>
             </el-form-item>
 
-            <el-form-item label="劳动者工资" prop="hasWorkerWage">
-                <select-tag-component 
+            <el-form-item label="劳动者工资" prop="has_worker_wage">
+                <select-tag-component
                     v-if="boolList"
-                    :propTagList="boolList" 
-                    v-model="determinateOrderForm.hasWorkerWage" 
+                    :propTagList="boolList"
+                    v-model="determinateOrderForm.has_worker_wage"
                     :isSingle="true"></select-tag-component>
             </el-form-item>
 
             <el-form-item label="备注" prop="remarks">
                 <el-input v-model="determinateOrderForm.remarks" type="textarea" placeholder="请输入备注信息"></el-input>
             </el-form-item>
-            
+
         </el-form>
-        
+
         <div slot="footer" class="dialog-footer">
             <el-button @click="cancelDeterminateOrder">取 消</el-button>
             <el-button type="primary" @click="onSubmit('determinateOrderForm')">确定</el-button>
@@ -89,13 +89,13 @@ export default {
             determinateOrderForm: {
                 order_id: this.$route.query.order_id,//订单id
                 //账户余额是否已经平账
-                hasUserCost: 1,
+                has_user_cost: 1,
                 //返还客户的金额
-                returnUserCost: 0,
+                return_user_cost: 0,
                 //劳动者押金是否已经平账
-                hasWorkerCost: 1,
+                has_worker_cost: 1,
                 //劳动者工资是否已平账
-                hasWorkerWage: 1,
+                has_worker_wage: 1,
                 message: '',//终止事由
             },
             determinateOrderRules: {

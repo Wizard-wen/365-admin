@@ -47,13 +47,14 @@
 				<el-table :data="salesPersonTable" class="person-table" :header-cell-style="{height: '48px',background: '#fafafa'}">
 					<el-table-column label="编号" prop="manager_code" align="center"></el-table-column>
 
-					<el-table-column label="姓名" prop="name" align="center"></el-table-column>
+					<!-- <el-table-column label="姓名" prop="name" align="center"></el-table-column> -->
+					<el-table-column label="姓名" prop="real_name" align="center"></el-table-column>
 
 					<el-table-column label="职位" prop="is_store_manager" align="center">
 						<template slot-scope="scope">
-							<table-tag-component 
-								v-if="positionTypeList" 
-								:propList="positionTypeList" 
+							<table-tag-component
+								v-if="positionTypeList"
+								:propList="positionTypeList"
 								:tableOriginData="scope.row.is_store_manager"></table-tag-component>
 						</template>
 					</el-table-column>
@@ -131,14 +132,14 @@ export default {
 				});
 				this.isLoading = false
 			}
-			
+
 		},
 		/**
 		 * 打开创建新店员弹窗
 		 */
 		openAddStroeStaffDialog(){
 			this.addStoreStaffDialogVisible = true
-		},	
+		},
 		/**
 		 * 关闭添加新店员弹窗
 		 */
@@ -223,7 +224,7 @@ export default {
 					this.isLoading = false
 				}
 				await _this.getStore()
-				
+
 			}
 		},
 

@@ -12,7 +12,7 @@
                     <el-option
                         v-for="item in storeStaffList"
                         :key="item.manager_id"
-                        :label="item.manager_name"
+                        :label="item.real_name"
                         :value="item.manager_id"
                         ></el-option>
                 </el-select>

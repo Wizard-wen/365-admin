@@ -101,12 +101,12 @@ export default {
 		 * 提交数据
 		 */
 		async onSubmit(formName) {
-			
+
 			await this.$refs[formName].validate( async valid => {
 				if (valid) {
 					let storeObj = {
 						...this.storeForm,
-						type: this.storeForm.type == 1 ? 'enable' : 'disable' 
+						// type: this.storeForm.type == 1 ? 'enable' : 'disable'
 					};
 					await storeService.editStore(storeObj).then(data => {
 						if (data.code == "0") {
