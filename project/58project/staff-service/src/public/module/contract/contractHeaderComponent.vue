@@ -228,6 +228,7 @@ export default {
          */
         goback(){
             if(this.contractType == 1){
+                debugger
                 if(this.$route.query.from == 1){
                     this.$router.push({
                         path: '/operate/operateOrderConfig',
