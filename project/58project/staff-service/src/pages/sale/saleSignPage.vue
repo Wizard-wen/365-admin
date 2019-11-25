@@ -9,7 +9,16 @@
                         </div>
                     </div>
                     <div class="order-list">
-                        <el-form-item label="合同编号" prop="contract_number">
+                        <el-form-item prop="contract_number">
+                            <form-item-label-tooltip-component
+                                slot="label"
+                                :label="'合同编号'"
+                                :explain="''">
+                                <div slot="content">
+                                    <p>签约前，请向运营申请纸质合同。</p>
+                                    <p>请务必按照已线下签约的实体合同的编号进行系统录入。</p>
+                                </div>    
+                            </form-item-label-tooltip-component>
                             <el-select v-model="signForm.contract_number" placeholder="请选择合同编号">
                                 <el-option
                                     v-for="(item, index) in contract_numberList"
@@ -28,9 +37,20 @@
                     </div>
                     <div class="order-list" >
                         <el-form-item prop="sign_user_name" label="姓名">
+                            
                             <el-input v-model="signForm.sign_user_name" :disabled="publicOrderType == 3 || publicOrderType == 2" placeholder="请输入雇主姓名"></el-input>
                         </el-form-item>
-                        <el-form-item label="联系电话" prop="sign_user_phone">
+                        <el-form-item prop="sign_user_phone">
+                            <form-item-label-tooltip-component
+                                slot="label"
+                                :label="'联系电话'"
+                                :explain="''">
+                                <div slot="content">
+                                    <p>如果当前合同是首次签约，订单将归属于输入的客户手机号账户中；</p>
+                                    <p>如果当前合同是二次匹配，订单将归属于第一次输入的手机号账户中，当前手机号只作为联系使用。</p>
+                                    <p>另外，如果签约客户不是我们的注册用户，首次签约后，客户将自动成为我们的注册用户，并可以在小程序查看自己的订单详情。</p>
+                                </div>    
+                            </form-item-label-tooltip-component>
                             <el-input v-model.number="signForm.sign_user_phone" placeholder="请输入雇主联系电话"></el-input>
                         </el-form-item>
                         <el-form-item label="身份证号" prop="sign_user_identify">
@@ -123,7 +143,7 @@
                         <el-form-item prop="staff_wage">
                             <form-item-label-tooltip-component
                                 slot="label"
-                                :label="'劳务报酬'"
+                                :label="'劳务报酬/月'"
                                 :explain="'劳务报酬是指的双方约定的，服务人员服务一个月应得的报酬。'"></form-item-label-tooltip-component>
                             <el-input v-model.number="signForm.staff_wage" placeholder="请输入劳动者劳务报酬"></el-input>
                         </el-form-item>
@@ -133,19 +153,45 @@
                                 :label="'劳动者服务费'"
                                 :explain="''">
                                 <div slot="content">
-                                    <p>劳动者服务费，是指</p>
-                                    <p>a*b = c</p>
+                                    <p>劳动者服务费是劳动者上户，并度过试用期后，后应当固定支付给公司的费用。</p>
+                                    <p>劳动者服务费 = 劳务报酬/月 ✖ 10%</p>
                                 </div>    
                             </form-item-label-tooltip-component>
                             <el-input v-model.number="signForm.staff_charge" placeholder="请输入劳动者服务费"></el-input>
                         </el-form-item>
-                        <el-form-item label="客户服务费" prop="user_charge">
+                        <el-form-item prop="user_charge">
+                            <form-item-label-tooltip-component
+                                slot="label"
+                                :label="'客户服务费'"
+                                :explain="''">
+                                <div slot="content">
+                                    <p>客户服务费是指公司为客户在一定期限内提供家政中介服务所产生的费用。</p>
+                                    <p>劳动者服务费 = 劳务报酬/月 ✖ 20%</p>
+                                </div>    
+                            </form-item-label-tooltip-component>
                             <el-input v-model.number="signForm.user_charge" placeholder="请输入客户服务费"></el-input>
                         </el-form-item>
-                        <el-form-item label="客户缴纳金额" prop="user_pay">
+                        <el-form-item prop="user_pay">
+                            <form-item-label-tooltip-component
+                                slot="label"
+                                :label="'客户缴纳金额'"
+                                :explain="''">
+                                <div slot="content">
+                                    <p>劳动者服务费 = 劳务报酬/月 + （客户服务费）- 客户余额</p>
+                                    <p>其中，只有首次签约才会产生客户服务费。</p>
+                                </div>    
+                            </form-item-label-tooltip-component>
                             <el-input v-model.number="signForm.user_pay" placeholder="请输入客户缴纳金额"></el-input>
                         </el-form-item>
-                        <el-form-item label="劳动者押金" prop="staff_deposit">
+                        <el-form-item prop="staff_deposit">
+                            <form-item-label-tooltip-component
+                                slot="label"
+                                :label="'劳动者押金'"
+                                :explain="''">
+                                <div slot="content">
+                                    <p>劳动者押金通常为200元</p>
+                                </div>    
+                            </form-item-label-tooltip-component>
                             <el-input v-model.number="signForm.staff_deposit" placeholder="请输入劳动者押金"></el-input>
                         </el-form-item>
                     </div>

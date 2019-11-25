@@ -21,8 +21,7 @@
             <settled-detail-component
                 v-if="is_settle == 1"
                 :contractBase="contractBase"></settled-detail-component>
-            
-                     
+                                 
         </div>
     </div>
 </template>

@@ -38,8 +38,17 @@
             <el-form-item label="实发工资" prop="real_wage">
                 <el-input v-model.number="settleWageForm.real_wage" placeholder="请输入实发工资"></el-input>
             </el-form-item>
+            <el-form-item label="客户余额" prop="user_account">
+                <el-input v-model.number="settleWageForm.user_account" placeholder="请输入客户余额"></el-input>
+            </el-form-item>
+            <el-form-item label="客户支出合计" prop="user_cost">
+                <el-input v-model.number="settleWageForm.user_cost" placeholder="请输入客户支出合计"></el-input>
+            </el-form-item>
             <el-form-item label="返还客户金额" prop="return_wage">
                 <el-input v-model.number="settleWageForm.return_wage" placeholder="请输入返还客户金额"></el-input>
+            </el-form-item>
+            <el-form-item label="扣除后客户余额" prop="finally_user_account">
+                <el-input v-model.number="settleWageForm.finally_user_account" placeholder="请输入扣除后客户余额"></el-input>
             </el-form-item>
         </el-form>
         
@@ -101,6 +110,7 @@ export default {
                 other_cost:'',//其他扣除
                 cost_reason:'',//扣除事由
                 real_wage:'',//服务人员实发工资
+                user_cost: '',//客户支出金额
                 return_wage:'',//返还客户金额
             },
             settleWageRules: {

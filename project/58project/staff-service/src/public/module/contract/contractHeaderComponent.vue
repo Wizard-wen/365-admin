@@ -90,7 +90,7 @@ export default {
             if(value == 0){
                 return '-'
             }
-            return $utils.formatDate(new Date(value), 'yyyy-MM-dd')
+            return $utils.formatDate(new Date(value), 'yyyy-MM-dd hh:mm:ss')
         },
         isWagedFormatter(value){
             if(value == 1){

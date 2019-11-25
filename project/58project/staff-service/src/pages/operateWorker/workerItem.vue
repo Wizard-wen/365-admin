@@ -420,7 +420,7 @@ export default {
                 //姓名
                 name: [
                     { required:true,message:'请输入姓名',trigger: 'blur' },
-                    { validator: validator.nameValidate,trigger: 'blur' },
+                    // { validator: validator.nameValidate,trigger: 'blur' },
                 ],
                 //年龄
                 age: [

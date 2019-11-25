@@ -40,13 +40,6 @@
                     <el-input autocomplete="off" v-model="accountForm.real_name" ></el-input>
                 </el-form-item>
 
-                <el-form-item label="角色配置" prop="roleIds">
-                    <select-tag-component :propTagList="roleList" v-model="accountForm.roleIds" :isSingle="false"></select-tag-component>
-                </el-form-item>
-
-                <el-form-item label="部门配置" prop="department_id">
-                    <select-tag-component :propTagList="departmentList" v-model="accountForm.department_id" :isSingle="true"></select-tag-component>
-                </el-form-item>
 
                 <!-- <el-form-item v-if="this.$route.query.type == 1" label="明文密码" prop="clear_password">
                     <el-input :maxlength="50" autocomplete="new-password" :disabled="true" v-model="accountForm.clear_password" type="text"></el-input>
@@ -71,17 +64,6 @@
                     <el-input autocomplete="off" v-model="accountForm.phone" :maxlength="11"></el-input>
                 </el-form-item>
 
-                <el-form-item label="生日" prop="phone">
-                    <el-date-picker
-                        v-model="accountForm.birthday"
-                        :picker-options="pickerOptions"
-                        type="date"
-                        placeholder="选择日期"
-                        format="yyyy 年 MM 月 dd 日"
-                        value-format="timestamp"></el-date-picker>
-                </el-form-item>
-
-                
                 <el-form-item label="邮箱" prop="email">
                     <el-input autocomplete="off" v-model="accountForm.email"></el-input>
                 </el-form-item>
@@ -89,9 +71,27 @@
                 <el-form-item label="微信号" prop="wechat">
                     <el-input autocomplete="off" v-model="accountForm.wechat"></el-input>
                 </el-form-item>
+
+                <el-form-item label="角色配置" prop="roleIds">
+                    <select-tag-component :propTagList="roleList" v-model="accountForm.roleIds" :isSingle="false"></select-tag-component>
+                </el-form-item>
+
+                <el-form-item label="部门配置" prop="department_id">
+                    <select-tag-component :propTagList="departmentList" v-model="accountForm.department_id" :isSingle="true"></select-tag-component>
+                </el-form-item>
                 
                 <el-form-item label="个人简介" prop="personal_intro">
                     <el-input autocomplete="off" type="textarea" v-model="accountForm.personal_intro"></el-input>
+                </el-form-item>
+
+                <el-form-item label="生日" prop="birthday">
+                    <el-date-picker
+                        v-model="accountForm.birthday"
+                        :picker-options="pickerOptions"
+                        type="date"
+                        placeholder="选择日期"
+                        format="yyyy 年 MM 月 dd 日"
+                        value-format="timestamp"></el-date-picker>
                 </el-form-item>
                 
                 <el-form-item label="紧急联系人" prop="urgent">
@@ -141,18 +141,16 @@ export default {
                 callback();
             }
         };
-        const validateAccount = (rule, value, callback) => {
-            if (value === '') {
-                callback(new Error('请输入账号名'));
+        const checkPhone = (rule, value, callback) => {
+            if (!value) {
+                return callback(new Error('手机号不能为空'));
             } else {
-                callback();
-            }
-        }
-        const validateUsername = (rule, value, callback) => {
-            if (value === '') {
-                callback(new Error('请输入用户名'));
-            } else {
-                callback();
+                const reg = /^1[0-9][0-9]\d{8}$/
+                if (reg.test(value)) {
+                    callback();
+                } else {
+                    return callback(new Error('请输入正确的手机号'));
+                }
             }
         }
         return {
@@ -178,16 +176,28 @@ export default {
             },
             accountRules: {
                 account: [
-                    { validator: validateAccount, trigger: 'blur' }
+                    {required: true, message: '请填写账号',trigger: 'blur',},
                 ],
                 name: [
-                    { validator: validateUsername, trigger: 'blur' }
+                    {required: true, message: '请填写用户名',trigger: 'blur',},
+                ],
+                real_name: [
+                    {required: true, message: '请填写真实姓名',trigger: 'blur',},
+                ],
+                phone: [
+                    {required: true, message: '请填写用户电话',trigger: 'blur',},
+                    {validator: checkPhone},
                 ],
                 password: [
+                    {required: true, message: '请输入密码',trigger: 'blur',},
                     { validator: validatePassword, trigger: 'blur' }
                 ],
                 repassword: [
+                    {required: true, message: '请再次输入密码',trigger: 'blur',},
                     { validator: validateRePassword, trigger: 'blur' }
+                ],
+                wechat: [
+                    {required: true, message: '请输入微信号', trigger: 'blur'},
                 ]
             },
             pickerOptions: {

@@ -47,15 +47,18 @@
                     :size="3"
                     :value="`${contractBase.service_count}人`">
                 </detail-form-item-component>
+                <div class="detail-item-box line-three-list"></div>
+                <div class="detail-item-box line-three-list"></div>
+
                 <detail-form-item-component
                     :label="'服务期限'"
-                    :size="3"
+                    :size="1"
                     :value="contractBase.service_start">
                     <p slot="define">
                         {{contractBase.service_start | timeFomatter}} - {{contractBase.service_end | timeFomatter}}
                     </p>
                 </detail-form-item-component>
-                <div class="detail-item-box line-three-list"></div>
+                
                 <detail-form-item-component
                     :label="'工作时间'"
                     :size="1"
@@ -93,9 +96,11 @@
                     :size="3"
                     :value="contractBase.insurance_benefit">
                 </detail-form-item-component>
+                <div class="detail-item-box line-three-list"></div>
+                <div class="detail-item-box line-three-list"></div>
                 <detail-form-item-component
                     :label="'保险期限'"
-                    :size="3"
+                    :size="1"
                     :value="contractBase.insurance_start">
                     <p slot="define">
                         {{contractBase.insurance_start | timeFomatter}} - {{contractBase.insurance_end | timeFomatter}}
@@ -146,7 +151,7 @@ export default {
             if(value == 0){
                 return '-'
             }
-            return $utils.formatDate(new Date(value), 'yyyy-MM-dd')
+            return $utils.formatDate(new Date(value), 'yyyy-MM-dd hh:mm:ss')
         },
     },
     computed:{
