@@ -331,14 +331,35 @@ export default {
                 }
             },
             //手机号
-            phoneValidate(rule, value, callback){
-                if (value === '') {
+            async phoneValidate(rule, value, callback){
+                // if (value === '') {
+                //     callback(new Error('请输入手机号'));
+                // } else {
+                //     if (!(/^1[345678]\d{9}$/.test(value))) {
+                //         callback(new Error('请输入正确格式的手机号'));
+                //     }
+                //     callback();
+                // }
+                if (value == '') {
+                    _this.phoneCheck = false
+                    _this.phoneCheckObject = {}
                     callback(new Error('请输入手机号'));
                 } else {
-                    if (!(/^1[345678]\d{9}$/.test(value))) {
-                        callback(new Error('请输入正确格式的手机号'));
+                    try{
+                        await operateService.checkStaffPhone(_this.workerForm.id, value).then((data) =>{
+                            if(data.code == '0'){
+                                callback()
+                                _this.phoneCheck = false
+                                _this.phoneCheckObject = {}
+                            } else {
+                                callback(new Error(data.message))
+                            }
+                        })
+                    } catch(error){
+                        _this.phoneCheck = true
+                        _this.phoneCheckObject = error.data
+                        callback(error.message)
                     }
-                    callback();
                 }
             },
             //身份证号
@@ -365,6 +386,11 @@ export default {
             //姓名检查
             nameCheck: false,
             nameCheckObject: {},//重复姓名列表
+            //手机号重复检测
+            phoneCheck: false,
+            phoneCheckObject: {
+
+            },
             //员工信息表单
             workerForm: {
                 /************逻辑字段******************/

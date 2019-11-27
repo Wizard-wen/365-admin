@@ -150,6 +150,12 @@ export const operate_staffRequest = {
         return operateRequest.checkStaffName(id, name)
     },
     /**
+     * 手机号查重
+     */
+    checkStaffPhone(id, phone){
+        return operateRequest.checkStaffPhone(id, phone)
+    },
+    /**
      * 停用服务人员
      */
     changeStaffType(id, version){

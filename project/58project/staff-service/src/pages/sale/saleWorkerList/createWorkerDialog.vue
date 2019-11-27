@@ -47,7 +47,7 @@
     </el-dialog>
 </template>
 <script>
-import {saleService} from '@common/index.js'
+import {saleService,operateService} from '@common/index.js'
 import selectTagComponent from '../../components/selectTagComponent'
 export default {
     components: {
@@ -74,6 +74,7 @@ export default {
         }
     },
     data(){
+        let _this = this;
         const remarksValidator = (rule, value, callback) => {
             if (value === '') {
                 callback(new Error('请填写日志信息'));
@@ -92,14 +93,27 @@ export default {
             }
         };
         //手机号
-        const phoneValidate = (rule, value, callback) => {
-            if (value === '') {
+        const phoneValidate = async (rule, value, callback) => {
+            if (value == '') {
+                _this.phoneCheck = false
+                _this.phoneCheckObject = {}
                 callback(new Error('请输入手机号'));
             } else {
-                if (!(/^1[34578]\d{9}$/.test(value))) {
-                    callback(new Error('请输入正确格式的手机号'));
+                try{
+                    await operateService.checkStaffPhone(0, value).then((data) =>{
+                        if(data.code == '0'){
+                            callback()
+                            _this.phoneCheck = false
+                            _this.phoneCheckObject = {}
+                        } else {
+                            callback(new Error(data.message))
+                        }
+                    })
+                } catch(error){
+                    _this.phoneCheck = true
+                    _this.phoneCheckObject = error.data
+                    callback(error.message)
                 }
-                callback();
             }
         };
         return {
@@ -112,6 +126,9 @@ export default {
                 service_type:[],//服务类型
                 seller_remarks: '',//备注信息
             },
+            //手机号检测
+            phoneCheck: false,
+            phoneCheckObject: {},
             //申请创建劳动者表单验证
             createWorkerRules: {
                 name: [

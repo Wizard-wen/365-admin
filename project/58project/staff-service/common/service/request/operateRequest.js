@@ -244,6 +244,15 @@ export const operate_staffRequest = {
             id: id
         })
     },
+     /**
+     * 手机号查重
+     */
+    checkStaffPhone(id, phone){
+        return axios.post(`./admin/staff/checkStaffPhone`,{
+            phone,
+            id,
+        })
+    },
     /**
      *  改变服务人员状态
      */
