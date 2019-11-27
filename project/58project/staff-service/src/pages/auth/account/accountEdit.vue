@@ -16,7 +16,7 @@
             <div class="detail-left">
                 <div class="detail-left-box">
                     <div class="detail-left-line">账号：{{accountForm.account}}</div>
-                    <div class="detail-left-line">工号：{{accountForm.staff_code}}</div>
+                    <div class="detail-left-line">工号：{{accountForm.manager_code}}</div>
                 </div>
             </div>
         </template>
@@ -32,9 +32,9 @@
                     <el-input autocomplete="off" v-model="accountForm.account" ></el-input>
                 </el-form-item>
 
-                <el-form-item v-if="!accountForm.id" label="工号" prop="staff_code">
-                    <el-input autocomplete="off" v-model="accountForm.staff_code" ></el-input>
-                </el-form-item>
+                <!-- <el-form-item v-if="!accountForm.id" label="工号" prop="manager_code">
+                    <el-input autocomplete="off" v-model="accountForm.manager_code" ></el-input>
+                </el-form-item> -->
 
                 <el-form-item label="真实姓名" prop="real_name">
                     <el-input autocomplete="off" v-model="accountForm.real_name" ></el-input>
@@ -87,13 +87,18 @@
                 <el-form-item label="生日" prop="birthday">
                     <el-date-picker
                         v-model="accountForm.birthday"
-                        :picker-options="pickerOptions"
                         type="date"
                         placeholder="选择日期"
                         format="yyyy 年 MM 月 dd 日"
                         value-format="timestamp"></el-date-picker>
                 </el-form-item>
                 
+                <el-form-item label="头像" class="form-item-size">
+                    <upload-single-picture-component
+                        :pictureUrl="accountForm.icon"
+                        @singlePictureUploadSucess="uploadIconSuccess"></upload-single-picture-component>
+                </el-form-item>
+
                 <el-form-item label="紧急联系人" prop="urgent">
                     <el-input autocomplete="off" v-model="accountForm.urgent"></el-input>
                 </el-form-item>
@@ -154,11 +159,11 @@ export default {
             }
         }
         return {
+            is_loading: false,
             //账户信息
             accountForm: {
                 id: this.$route.query.id ? this.$route.query.id : '',
                 account: '',//账号
-                staff_code: '',//工号
                 real_name: '',//真实姓名
                 roleIds: [],//角色
                 department_id: 0,//部门
@@ -167,7 +172,8 @@ export default {
 
                 name: '', //用户名
                 phone: '',//手机号
-                birthday: 0,//生日
+                birthday: this.getNowTime(),//生日
+                icon: '',//头像
                 email: '',//邮箱
                 wechat: '',//微信
                 personal_intro: '',//个人简介
@@ -200,11 +206,11 @@ export default {
                     {required: true, message: '请输入微信号', trigger: 'blur'},
                 ]
             },
-            pickerOptions: {
-                disabledDate(time) {
-                    return time.getTime() < Date.now() - 8.64e7;
-                },
-            },
+            // pickerOptions: {
+            //     disabledDate(time) {
+            //         return time.getTime() < Date.now() - 8.64e7;
+            //     },
+            // },
             roleList: [],//角色id
             isSetPassword: false,//是否展示设置密码
         }
@@ -257,41 +263,70 @@ export default {
                 }
             });
         },
+        /**
+         * 获取当前账号信息
+         */
+        async getManager(){
+            try{
+                this.is_loading = true
+                let managerId = this.$route.query.id? this.$route.query.id : 0
+                await authService.getManager(managerId).then(data =>{
+                    if(data.code == '0'){
+                        if(managerId){
+                            //账户表单配置项
+                            this.accountForm = data.data.manager
+                        }
+                        //全部角色列表
+                        this.roleList =  data.data.roleList
+                    }
+                }).catch(error =>{
+                    if(error.code == "1"){
+                        this.$message({
+                            type: 'error',
+                            message: error.message
+                        })
+                        this.is_loading = false
+                        this.$router.push('/auth/accountList')
+                    }
+                }).finally(() =>{
+                    this.is_loading = false
+                })
+            } catch(error){
+                this.$message({
+                    type: 'error',
+                    message: error.message
+                })
+                this.is_loading = false
+            }
+        },
+        /**
+         * 返回上一级
+         */
         goback(){
             this.$router.push('/auth/accountList')
-        }
+        },
+        //头像上传成功
+        uploadIconSuccess(param) {
+            this.accountForm.icon = param;
+            this.accountForm.icon_url = param;
+        },
+        //处理默认选中当前日期
+	    getNowTime() {
+	       var now = new Date();
+	       var year = now.getFullYear(); //得到年份
+	       var month = now.getMonth(); //得到月份
+	       var date = now.getDate(); //得到日期
+	       var hour =" 00:00:00"; //默认时分秒 如果传给后台的格式为年月日时分秒，就需要加这个，如若不需要，此行可忽略
+	       month = month + 1;
+	       month = month.toString().padStart(2, "0");
+	       date = date.toString().padStart(2, "0");
+	       var defaultDate = `${year}-${month}-${date}${hour}`;
+
+	       return defaultDate;
+	    },
     },
     async mounted(){
-        store.commit('setLoading',true)
-        try{
-            let managerId = this.$route.query.id?this.$route.query.id: '' //判断是不是有id
-
-            await authService.getManager(managerId).then(data =>{
-                if(data.code == '0'){
-                    //全部角色列表
-                    this.roleList =  data.data.roleList
-
-                    //账户表单配置项
-                    this.accountForm = data.data.manager
-                }
-
-            }).catch(error =>{
-                if(error.code == "1"){
-                    this.$message({
-                        type: 'error',
-                        message: error.message
-                    })
-                    this.$router.push('/auth/accountList')
-                }
-            }).finally(() =>{
-                store.commit('setLoading',false)
-            })
-        } catch(error){
-            this.$message({
-                type: 'error',
-                message: error.message
-            })
-        }
+        await this.getManager()
     }
 }
 </script>
@@ -338,5 +373,14 @@ export default {
             }
         }
     }
+.icon-uploader{
+    height: 178px;
+    width: 178px;
+    & /deep/ .el-upload {
+        height: 178px;
+        width: 178px;
+        line-height: 178px;
+    }
+}
 </style>
 
