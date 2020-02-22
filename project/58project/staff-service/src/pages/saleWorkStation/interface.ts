@@ -23,7 +23,7 @@ export interface dynamic_informationItem{
 }
 
 //待处理订单
-export interface  processing_orderItemP{
+export interface  processing_orderItem{
     id:string;
     order_code:string;//订单编号
     created_at:string;//订单创建时间（运营创建时间）

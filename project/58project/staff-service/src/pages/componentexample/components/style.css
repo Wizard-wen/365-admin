@@ -1,0 +1,61 @@
+.h1{
+    box-sizing : border-box ;
+    font-size : 26px ;
+    margin : 12px 0px ;
+    padding : 0px ;
+    display : inline-block ;
+    font-weight : 400 ;
+    color : #1c2438 ;
+}
+
+.h2, .h3{
+    box-sizing : border-box ;
+    padding : 0px ;
+    color : #1c2438 ;
+    margin : 12px 0px ;
+    font-size : 20px ;
+    font-weight: 500;
+    margin-top: 40px;
+}
+.h3{
+    font-size : 16px ;
+}
+
+.p {
+    box-sizing : border-box ;
+    margin : 5px 0;
+    padding : 0px ;
+    font-size : 14px ;
+    color : rgb(73, 80, 96) ;
+}
+
+.strong{
+    box-sizing : border-box ;
+    display : inline-block ;
+    background : rgb(247, 247, 247) ;
+    margin : 0px 3px ;
+    padding : 1px 5px ;
+    border-radius : 3px ;
+    color : rgb(102, 102, 102) ;
+    border : 1px solid rgb(238, 238, 238) ;
+    font-size : 14px ;
+}
+
+.ul{
+    margin : 0px ;
+    padding : 0px;
+}
+
+.li{
+    box-sizing : border-box ;
+    margin : 5px 17px 0;
+    padding : 0px ;
+    font-size : 14px ;
+    color : rgb(73, 80, 96) ;
+}
+
+.img{
+    width: 100vw;
+    max-width: 800px;
+    display: block;
+}

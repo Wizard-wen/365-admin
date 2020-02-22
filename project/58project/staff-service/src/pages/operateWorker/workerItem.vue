@@ -1,5 +1,6 @@
 <template>
     <page-edit-component
+        v-loading="is_loading"
         :title="workerForm.name">
         
         <template slot="log" v-if="$route.query.type != 0">
@@ -56,23 +57,24 @@
 
         <el-form class="worker-form" slot="form"  ref="form" :model="workerForm" :rules="staffRules" label-width="140px">
 
-            <el-form-item label="认证状态" ref="authentication" prop="authentication" class="form-item-size" size="small">
-                <select-tag-component
-                    :propTagList="workerConfigList.authentication"
-                    v-model="workerForm.authentication"
-                    :isSingle="true"></select-tag-component>
-            </el-form-item>
-
             <el-form-item label="姓名" prop="name" ref="name" class="form-item-size" size="small">
                 <el-input v-model="workerForm.name" :maxlength="20" placeholder="请输入服务人员姓名"></el-input>
             </el-form-item>
+
             <!-- 判断是否重名 -->
-            <div v-if="nameCheck" class="nameCheckBox">
+            <!-- <div v-if="nameCheck" class="nameCheckBox">
                 <p>{{`共有${nameCheckObject.count}个可能重名的人`}}</p>
                 <div class="nameBox">
                     <div class="name-tag" v-for="(item, index) in nameCheckObject.names" :key="index">{{item.name}}</div>
                 </div>
-            </div>
+            </div> -->
+
+            <el-form-item label="性别" prop="sex" class="form-item-size">
+                <el-radio-group v-model="workerForm.sex">
+                    <el-radio :label="1">男</el-radio>
+                    <el-radio :label="2">女</el-radio>
+                </el-radio-group>
+            </el-form-item>
 
             <el-form-item label="年龄" prop="age" class="form-item-size" size="small">
                 <el-input v-model="workerForm.age" :maxlength="2" placeholder="请输入年龄"></el-input>
@@ -92,21 +94,6 @@
                 <el-input v-model="workerForm.phone" :maxlength="11" placeholder="请输入手机号"></el-input>
             </el-form-item>
 
-            <el-form-item label="回访信息" prop="return_msg" class="form-item-size" size="small">
-                <el-input type="textarea" v-model="workerForm.return_msg" :maxlength="200" placeholder="请输入回访信息"></el-input>
-            </el-form-item>
-
-            <el-form-item label="接单状态" prop="working_status" class="form-item-size" size="small">
-                <select-tag-component
-                :propTagList="workerConfigList.working_status"
-                v-model="workerForm.working_status"
-                :isSingle="true"></select-tag-component>
-            </el-form-item>
-
-            <el-form-item label="备注（商家情况）" prop="remarks" class="form-item-size" size="small">
-                <el-input type="textarea" v-model="workerForm.remarks" :maxlength="200" placeholder="请输入备注信息"></el-input>
-            </el-form-item>
-
             <el-form-item label="职业类型" prop="skill" class="form-item-size" size="small">
                 <select-tag-component
                 :propTagList="workerConfigList.service_category"
@@ -114,29 +101,11 @@
                 :isSingle="false"></select-tag-component>
             </el-form-item>
 
-            <el-form-item label="服务类型" prop="service_type" class="form-item-size" size="small">
-                <select-tag-component
-                :propTagList="workerConfigList.service_type"
-                v-model="workerForm.service_type"
-                :isSingle="false"></select-tag-component>
-            </el-form-item>
-
-            <el-form-item label="可服务人群" prop="service_crowd" class="form-item-size" size="small">
-                <select-tag-component
-                :propTagList="workerConfigList.service_crowd"
-                v-model="workerForm.service_crowd"
-                :isSingle="false"></select-tag-component>
-            </el-form-item>
-
-            <el-form-item label="工龄" prop="working_age" class="form-item-size" size="small">
-                <select-tag-component
-                :propTagList="workerConfigList.working_age"
-                v-model="workerForm.working_age"
-                :isSingle="true"></select-tag-component>
-            </el-form-item>
-
-            <el-form-item label="工作经验（备注）" prop="working_experience" class="form-item-size" size="small">
-                <el-input type="textarea" v-model="workerForm.working_experience" :maxlength="200" placeholder="请输入备注信息"></el-input>
+            <el-form-item label="参加工作年份" prop="worked_at" class="form-item-size" size="small">
+                <el-date-picker
+                    v-model="workerForm.worked_at"
+                    type="year"
+                    placeholder="选择参加工作年份"></el-date-picker>
             </el-form-item>
 
             <el-form-item label="民族" prop="nation" class="form-item-size" size="small">
@@ -160,15 +129,8 @@
                     :title="'证件照'"></photo-component>
             </el-form-item>
 
-            <el-form-item label="地址" prop="address" class="form-item-size" size="small">
-                <el-input v-model="workerForm.address" :maxlength="50" placeholder="请输入地址"></el-input>
-            </el-form-item>
-
-            <el-form-item label="区域" prop="region" class="form-item-size" size="small">
-                <select-tag-component
-                :propTagList="workerConfigList.service_region"
-                v-model="workerForm.region"
-                :isSingle="false"></select-tag-component>
+            <el-form-item label="现住址" prop="address" class="form-item-size" size="small">
+                <el-input v-model="workerForm.address" :maxlength="50" placeholder="请输入现住址"></el-input>
             </el-form-item>
 
             <el-form-item label="学历" prop="education" class="form-item-size" size="small">
@@ -178,12 +140,8 @@
                 :isSingle="true"></select-tag-component>
             </el-form-item>
 
-            <el-form-item label="紧急联系人电话" prop="urgent_phone" class="form-item-size" size="small">
-                <el-input v-model="workerForm.urgent_phone" :maxlength="50" placeholder="请输入紧急联系人电话"></el-input>
-            </el-form-item>
-
-            <el-form-item label="银行卡号" prop="bank_card" class="form-item-size" size="small">
-                <el-input v-model="workerForm.bank_card" :maxlength="50" placeholder="请输入银行卡号"></el-input>
+            <el-form-item label="紧急联系人" prop="urgent_phone" class="form-item-size" size="small">
+                <el-input v-model="workerForm.urgent_phone" :maxlength="50" placeholder="请输入紧急联系人"></el-input>
             </el-form-item>
 
             <el-form-item label="头像" class="form-item-size">
@@ -225,10 +183,6 @@
                 :isSingle="false"></select-tag-component>
             </el-form-item>
 
-            <el-form-item label="教师评语" prop="teacher_comment" class="form-item-size" size="small">
-                <el-input type="textarea" v-model="workerForm.teacher_comment" :maxlength="200" placeholder="请输入教师评语"></el-input>
-            </el-form-item>
-
             <el-form-item label="技能证书" prop="certificate" class="form-item-size">
                 <paper-component v-model="workerForm.certificate" ></paper-component>
             </el-form-item>
@@ -240,23 +194,84 @@
                 :isSingle="false"></select-tag-component>
             </el-form-item>
 
-            <el-form-item label="信息来源" prop="source" class="form-item-size" size="small">
+            <el-form-item label="备注" prop="remarks" class="form-item-size" size="small">
+                <el-input type="textarea" v-model="workerForm.remarks" :maxlength="200" placeholder="请输入备注信息"></el-input>
+            </el-form-item>
+
+            <el-form-item label="回访信息" prop="return_msg" class="form-item-size" size="small">
+                <el-input type="textarea" v-model="workerForm.return_msg" :maxlength="200" placeholder="请输入回访信息"></el-input>
+            </el-form-item>
+
+            
+
+            <!-- <el-form-item label="信息来源" prop="source" class="form-item-size" size="small">
                 <select-tag-component
                 :propTagList="workerConfigList.source"
                 v-model="workerForm.source"
                 :isSingle="true"></select-tag-component>
-            </el-form-item>
+            </el-form-item> -->
 
-            <el-form-item label="来源名称" prop="source_name" class="form-item-size" size="small">
+            <!-- <el-form-item label="来源名称" prop="source_name" class="form-item-size" size="small">
                 <el-input v-model="workerForm.source_name" :maxlength="50" placeholder="请输入来源名城"></el-input>
-            </el-form-item>
+            </el-form-item> -->
 
-            <el-form-item label="性别" prop="sex" class="form-item-size">
-                <el-radio-group v-model="workerForm.sex">
-                    <el-radio :label="1">男</el-radio>
-                    <el-radio :label="2">女</el-radio>
-                </el-radio-group>
-            </el-form-item>
+            <!-- <el-form-item label="认证状态" ref="authentication" prop="authentication" class="form-item-size" size="small">
+                <select-tag-component
+                    :propTagList="workerConfigList.authentication"
+                    v-model="workerForm.authentication"
+                    :isSingle="true"></select-tag-component>
+            </el-form-item> -->
+
+            <!-- <el-form-item label="教师评语" prop="teacher_comment" class="form-item-size" size="small">
+                <el-input type="textarea" v-model="workerForm.teacher_comment" :maxlength="200" placeholder="请输入教师评语"></el-input>
+            </el-form-item> -->
+
+            <!-- <el-form-item label="银行卡号" prop="bank_card" class="form-item-size" size="small">
+                <el-input v-model="workerForm.bank_card" :maxlength="50" placeholder="请输入银行卡号"></el-input>
+            </el-form-item> -->
+
+            <!-- <el-form-item label="区域" prop="region" class="form-item-size" size="small">
+                <select-tag-component
+                :propTagList="workerConfigList.service_region"
+                v-model="workerForm.region"
+                :isSingle="false"></select-tag-component>
+            </el-form-item> -->
+
+            <!-- <el-form-item label="工作经验（备注）" prop="working_experience" class="form-item-size" size="small">
+                <el-input type="textarea" v-model="workerForm.working_experience" :maxlength="200" placeholder="请输入备注信息"></el-input>
+            </el-form-item> -->
+            
+            <!-- <el-form-item label="服务类型" prop="service_type" class="form-item-size" size="small">
+                <select-tag-component
+                :propTagList="workerConfigList.service_type"
+                v-model="workerForm.service_type"
+                :isSingle="false"></select-tag-component>
+            </el-form-item> -->
+
+            <!-- <el-form-item label="可服务人群" prop="service_crowd" class="form-item-size" size="small">
+                <select-tag-component
+                :propTagList="workerConfigList.service_crowd"
+                v-model="workerForm.service_crowd"
+                :isSingle="false"></select-tag-component>
+            </el-form-item> -->
+
+            <!-- <el-form-item label="工龄" prop="working_age" class="form-item-size" size="small">
+                <select-tag-component
+                :propTagList="workerConfigList.working_age"
+                v-model="workerForm.working_age"
+                :isSingle="true"></select-tag-component>
+            </el-form-item> -->
+
+            <!-- <el-form-item label="接单状态" prop="working_status" class="form-item-size" size="small">
+                <select-tag-component
+                :propTagList="workerConfigList.working_status"
+                v-model="workerForm.working_status"
+                :isSingle="true"></select-tag-component>
+            </el-form-item> -->
+
+            <!-- <el-form-item label="备注（商家情况）" prop="remarks" class="form-item-size" size="small">
+                <el-input type="textarea" v-model="workerForm.remarks" :maxlength="200" placeholder="请输入备注信息"></el-input>
+            </el-form-item> -->
 
             <el-form-item>
                 <!-- 创建/编辑 -->
@@ -274,10 +289,10 @@
 
 <script>
 
-/**
- * type 0 新建  1 编辑
- */
-import {operateService, $utils} from '@common/index.js'
+import {
+    operateService, 
+    $utils
+} from '@common/index.js'
 
 import {
     paperComponent,
@@ -296,40 +311,40 @@ export default {
         //表单验证
         const validator = {
             //姓名
-            async nameValidate(rule, value, callback){
-                if (value == '') {
-                    _this.nameCheck = false
-                    _this.nameCheckObject = {}
-                    callback(new Error('请输入姓名'));
-                } else {
-                    try{
-                        await operateService.checkStaffName(_this.workerForm.id, value).then((data) =>{
-                            if(data.code == '0'){
-                                callback()
-                                _this.nameCheck = false
-                                _this.nameCheckObject = {}
-                            } else {
-                                callback(new Error(data.message))
-                            }
-                        })
-                    } catch(error){
-                        _this.nameCheck = true
-                        _this.nameCheckObject = error.data
-                        callback(error.message)
-                    }
-                }
-            },
+            // async nameValidate(rule, value, callback){
+            //     if (value == '') {
+            //         _this.nameCheck = false
+            //         _this.nameCheckObject = {}
+            //         callback(new Error('请输入姓名'));
+            //     } else {
+            //         try{
+            //             await operateService.checkStaffName(_this.workerForm.id, value).then((data) =>{
+            //                 if(data.code == '0'){
+            //                     callback()
+            //                     _this.nameCheck = false
+            //                     _this.nameCheckObject = {}
+            //                 } else {
+            //                     callback(new Error(data.message))
+            //                 }
+            //             })
+            //         } catch(error){
+            //             _this.nameCheck = true
+            //             _this.nameCheckObject = error.data
+            //             callback(error.message)
+            //         }
+            //     }
+            // },
             //年龄
-            ageValidate(rule, value, callback){
-                if (!value) {
-                    callback(new Error('请输入年龄'));
-                } else {
-                    if (!(/^\d+$/.test(value))) {
-                        callback(new Error('年龄只能是数字'));
-                    }
-                    callback();
-                }
-            },
+            // ageValidate(rule, value, callback){
+            //     if (!value) {
+            //         callback(new Error('请输入年龄'));
+            //     } else {
+            //         if (!(/^\d+$/.test(value))) {
+            //             callback(new Error('年龄只能是数字'));
+            //         }
+            //         callback();
+            //     }
+            // },
             //手机号
             async phoneValidate(rule, value, callback){
                 // if (value === '') {
@@ -375,6 +390,7 @@ export default {
             },
         }
         return {
+            is_loading: false,//
             makeImageDialogVisible:false,//是否打开创建图片弹窗
             editText: '',//编辑按钮文案
             submitText: '',//提交按钮文案
@@ -397,62 +413,67 @@ export default {
                 id:null,//员工id
                 staff_code:null,//员工号
                 version:null,//操作版本号
-                created_at:null,//创建时间
-                type:null,//签约状态
+                status: null,//员工停用启用
                 sex:1,//性别
                 log: [],//日志
                 /************业务字段******************/
-                register_at:null,//登记时间
+                manager_id:0,//创建人id
+                //创建人这块有bug
+                manager_name:this.$store.state.loginModule.user.username,//创建人姓名
+                created_at:null,//创建时间
                 updated_at:null,//更新时间
-                authentication:0,//认证状态
+                return_at:null,//上次回访时间
                 name:'',//姓名
                 age:null,//年龄
                 birthday:null,//出生日期
+                identify:'',//身份证号码
                 phone:'',//电话
-                return_msg:'',//回访信息
-                working_status:0,//接单状态
-                remarks:'',//备注（商家情况）
                 skill:[],//职业类型
                 service_type:[],//服务类型
                 service_crowd:[],//可服务人群
-                working_age:0,//工龄
-                working_experience:'',//工作经验（备注）
+                worked_at:0,//何时参加工作
                 nation:0,//民族
-                birthplace:'',//籍贯
-                identify:'',//身份证号码
                 id_photo: [],//证件照
                 address:'',//地址
-                region:[],//服务区域
                 education:0,//学历
                 urgent_phone:'',//紧急联系人电话
-                bank_card:'',//银行卡号
                 photo: [],//照片
                 icon:'',//头像
                 course:[],//参加培训
-                teacher_comment:'',//教师评语
                 paper:[],//技能证书标签
                 certificate: [],//技能证书图片
-                source:0,//信息来源
-                source_name:'',//来源名称
-                manager_id:0,//创建人id
-                manager_name:this.$store.state.loginModule.user.username,//创建人姓名
+                remarks:'',//备注（商家情况）
+                return_msg:'',//回访信息
+
+                // type:null,//签约状态
+                // register_at:null,//登记时间
+                // source:0,//信息来源
+                // source_name:'',//来源名称
+                // bank_card:'',//银行卡号
+                // teacher_comment:'',//教师评语
+                // region:[],//服务区域
+                // birthplace:'',//籍贯
+                // working_experience:'',//工作经验（备注）
+                // working_status:0,//接单状态
+                // authentication:0,//认证状态
+                // working_age:0,//工龄
             },
             //表单验证规则
             staffRules: {
                 //登记日期
-                register_at:[
-                    { type:'date', required:true, message:'选择登记时间', trigger: ['blur', 'change']},
-                ],
+                // register_at:[
+                //     { type:'date', required:true, message:'选择登记时间', trigger: ['blur', 'change']},
+                // ],
                 //姓名
                 name: [
                     { required:true,message:'请输入姓名',trigger: 'blur' },
                     // { validator: validator.nameValidate,trigger: 'blur' },
                 ],
                 //年龄
-                age: [
-                    { required:true,message:'请输入年龄',trigger: 'blur'},
-                    {validator: validator.ageValidate, trigger: 'blur'}
-                ],
+                // age: [
+                //     { required:true,message:'请输入年龄',trigger: 'blur'},
+                //     {validator: validator.ageValidate, trigger: 'blur'}
+                // ],
                 //电话
                 phone: [
                     { required:true,message:'请输入电话',trigger: 'blur'},
@@ -547,14 +568,14 @@ export default {
                 if (valid) {
                     let workerFormSend = this.setFormItem()
                     try{
-                        store.commit('setLoading',true)
+                        this.is_loading = true
                         await operateService.editStaff(workerFormSend).then(data =>{
                             if(data.code == '0'){
                                 this.$message({
                                     type:"success",
                                     message: "修改成功"
                                 })
-                                store.commit('setLoading',false)
+                                this.is_loading = false
 
                                 this.goback()
                             }
@@ -564,7 +585,7 @@ export default {
                                 message: error.message
                             })
                         }).finally(() =>{
-                            store.commit('setLoading',false)
+                            this.is_loading = false
                         })
                     } catch(error){
                         this.$message({
@@ -610,14 +631,14 @@ export default {
             let workerFormSend = this.setFormItem()
 
             try{
-                store.commit('setLoading',true)
+                this.is_loading = true
                 await operateService.agreeStaffSingle(module_type, 'edit',workerFormSend).then(data =>{
                     if(data.code == '0'){
                         this.$message({
                             type:"success",
                             message: "提交成功"
                         })
-                        store.commit('setLoading',false)
+                        this.is_loading = false
 
                         this.goback()
                     }
@@ -627,7 +648,7 @@ export default {
                         message: error.message
                     })
                 }).finally(() =>{
-                    store.commit('setLoading',false)
+                    this.is_loading = false
                 })
             } catch(error){
                 this.$message({
@@ -723,16 +744,16 @@ export default {
     },
     async mounted(){
         let _this = this;
-
+        // 设定日期选择器为当前日期
         this.timeDefaultShow = Date.parse(new Date());
+
         //按钮显示隐藏，文案
         this.editText = this.setEditButtonText(this.$route.query.type)
         this.submitText  = this.setSubmitButtonText(this.$route.query.type)
         this.isShowImageButton = this.setIsShowImageButton(this.$route.query.type)
 
-
         try{
-            await store.commit('setLoading',true)
+            this.is_loading = true
             //如果是编辑则请求接口
             if(this.$route.query.type != 0){
                 await operateService.getStaff(this.$route.query.id).then(data =>{
@@ -740,23 +761,10 @@ export default {
 
                         var workerForm = data.data
 
-                        //技能证书
-                        workerForm.certificate.forEach((item, index) =>{
-                            item.images.forEach((it, index) =>{
-                                it.url = './resource/'+it.path
-                            })
-                        })
+                        
                         //技能证书标签
                         workerForm.paper = workerForm.paper.reduce((arr, item, index) =>{
                             return arr.concat(item.paper_category_id)
-                        },[])
-                        //服务地区
-                        workerForm.region = workerForm.region.reduce((arr, item, index) =>{
-                            return arr.concat(item.region_id)
-                        },[])
-                        //可服务人群
-                        workerForm.service_crowd = workerForm.service_crowd.reduce((arr, item, index) =>{
-                            return arr.concat(item.service_crowd_id)
                         },[])
                         // 职业类型
                         workerForm.skill = workerForm.skill.reduce((arr, item, index) =>{
@@ -766,13 +774,29 @@ export default {
                         workerForm.course = workerForm.course.reduce((arr, item, index) =>{
                             return arr.concat(item.course_id)
                         },[])
-                        // 服务类型
-                        workerForm.service_type = workerForm.service_type.reduce((arr, item, index) =>{
-                            return arr.concat(item.service_type_id)
-                        },[])
+
+                        // //服务地区
+                        // workerForm.region = workerForm.region.reduce((arr, item, index) =>{
+                        //     return arr.concat(item.region_id)
+                        // },[])
+                        // //可服务人群
+                        // workerForm.service_crowd = workerForm.service_crowd.reduce((arr, item, index) =>{
+                        //     return arr.concat(item.service_crowd_id)
+                        // },[])
+                        // // 服务类型
+                        // workerForm.service_type = workerForm.service_type.reduce((arr, item, index) =>{
+                        //     return arr.concat(item.service_type_id)
+                        // },[])
+
                         if(workerForm.birthday == 0){
                             workerForm.birthday = null
                         }
+                        //技能证书
+                        workerForm.certificate.forEach((item, index) =>{
+                            item.images.forEach((it, index) =>{
+                                it.url = './resource/'+it.path
+                            })
+                        })
                         //头像
                         this.icon_fileList = workerForm.icon == ''? [] : [{
                             url: `./resource/${workerForm.icon}`,
@@ -796,11 +820,6 @@ export default {
                         })
                         this.workerForm = workerForm
                     }
-                }).catch(error =>{
-                    this.$message({
-                        type:'error',
-                        message: error.message
-                    })
                 })
             }
             await operateService.getWorkerFormConfig('edit').then((data) =>{
@@ -809,14 +828,14 @@ export default {
                     this.$store.commit('setWorkerConfigForm',data.data)
                 }
             })
-
         }catch(error){
             this.$message({
                 type:'error',
                 message: error.message
             })
+            this.is_loading = false
         }
-    await store.commit('setLoading',false)
+        this.is_loading = false
     }
 }
 </script>

@@ -1,5 +1,5 @@
 <template>
-    <div class="card" v-hide>
+    <div class="card" >
         <div class="title">我维护的客户</div>
         <div class="number">{{`300`}}</div>
         <div class="statistic">

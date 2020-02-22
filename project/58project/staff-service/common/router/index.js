@@ -19,6 +19,11 @@ import {saleConfigModule} from './saleConfig.js'
 // 门店管理
 import {storeManageConfigModule} from './storeManageConfig'
 
+//项目组件例子
+import {componentExampleModule} from './componentExample'
+
+
+
 //登录页
 import loginPage from '@/pages/Login.vue'
 
@@ -48,6 +53,7 @@ window.router = new Router({
                 ...operateConfigModule, //服务人员管理模块
                 ...saleConfigModule,//销售人员模块
                 ...storeManageConfigModule,//门店管理
+                ...componentExampleModule,//项目组件例子
             ],
         },
         {

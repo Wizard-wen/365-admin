@@ -36,6 +36,7 @@ import {$utils} from '../common/index.js'
 Vue.prototype.$utils = $utils
 Vue.prototype.$styleConfig = $styleConfig
 
+import '@/pages/componentexample/components/index.js' 
 
 import '../common/directives/index.js'
 

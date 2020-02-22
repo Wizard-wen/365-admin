@@ -103,6 +103,8 @@ export interface orderTableObject{
     apply_manager_name:string;// 来源人
     apply_manager_id:string;// 来源人id
     
+    first_sign_at:string;//首次签约时间,为了记录订单转化率
+
     sign_user_name:string;// 签约客户
     sign_user_phone:string;// 签约客户联系方式
     sign_user_identify:string;//签约客户身份证号
