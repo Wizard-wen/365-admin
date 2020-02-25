@@ -1,59 +1,74 @@
 <template>
-    <div class="worker-config-box">
+    <div class="worker-config-box" 
+    v-loading="is_loading">
         <el-form class="worker-config-form" ref="form" :model="workworkerConfigForm" label-width="140px">
 
             <!-- <el-form-item label="认证状态" prop="authentication" class="form-item-size" size="small">
-                <config-tag-component @reload="getWorkerFormConfig" v-model="workworkerConfigForm.authentication" :tableConfig="'authentication'"></config-tag-component>
+                <config-tag-component  :tagList="workworkerConfigForm.authentication" :tagConfigKey="'authentication'"></config-tag-component>
             </el-form-item> -->
 
             <!-- <el-form-item label="参加培训" prop="course" class="form-item-size" size="small">
-                <config-tag-component @reload="getWorkerFormConfig" v-model="workworkerConfigForm.course" :tableConfig="'course'"></config-tag-component>
+                <config-tag-component  :tagList="workworkerConfigForm.course" :tagConfigKey="'course'"></config-tag-component>
             </el-form-item> -->
 
             <el-form-item label="证书" prop="paper_category" class="form-item-size" size="small">
-                <config-tag-component @reload="getWorkerFormConfig" v-model="workworkerConfigForm.paper_category" :tableConfig="'paper_category'"></config-tag-component>
+                <config-tag-component 
+                    @editTag="editTag"
+                    :tagList="workworkerConfigForm.paper_category" 
+                    :tagConfigKey="'paper_category'"></config-tag-component>
             </el-form-item>
 
-            <!-- <el-form-item label="职业类型" prop="service_category" class="form-item-size" size="small">
-                <config-tag-component @reload="getWorkerFormConfig" v-model="workworkerConfigForm.service_category" :tableConfig="'service_category'"></config-tag-component>
-            </el-form-item> -->
+            <el-form-item label="职业类型" prop="service_category" class="form-item-size" size="small">
+                <config-tag-component  :tagList="workworkerConfigForm.service_category" :tagConfigKey="'service_category'"></config-tag-component>
+            </el-form-item>
 
             <!-- <el-form-item label="可服务人群" prop="source" class="form-item-size" size="small">
-                <config-tag-component @reload="getWorkerFormConfig" v-model="workworkerConfigForm.service_crowd" :tableConfig="'service_crowd'"></config-tag-component>
+                <config-tag-component  :tagList="workworkerConfigForm.service_crowd" :tagConfigKey="'service_crowd'"></config-tag-component>
             </el-form-item> -->
 
             <!-- <el-form-item label="服务类型" prop="source" class="form-item-size" size="small">
-                <config-tag-component @reload="getWorkerFormConfig" v-model="workworkerConfigForm.service_type" :tableConfig="'service_type'"></config-tag-component>
+                <config-tag-component  :tagList="workworkerConfigForm.service_type" :tagConfigKey="'service_type'"></config-tag-component>
             </el-form-item> -->
 
             <!-- <el-form-item label="信息来源" prop="source" class="form-item-size" size="small">
-                <config-tag-component @reload="getWorkerFormConfig" v-model="workworkerConfigForm.source" :tableConfig="'source'"></config-tag-component>
+                <config-tag-component  :tagList="workworkerConfigForm.source" :tagConfigKey="'source'"></config-tag-component>
             </el-form-item> -->
 
             <!-- <el-form-item label="工龄" prop="source" class="form-item-size" size="small">
-                <config-tag-component @reload="getWorkerFormConfig" v-model="workworkerConfigForm.working_age" :tableConfig="'working_age'"></config-tag-component>
+                <config-tag-component  :tagList="workworkerConfigForm.working_age" :tagConfigKey="'working_age'"></config-tag-component>
             </el-form-item> -->
 
             <!-- <el-form-item label="服务区域" prop="source" class="form-item-size" size="small">
-                <config-tag-component @reload="getWorkerFormConfig" v-model="workworkerConfigForm.service_region" :tableConfig="'service_region'"></config-tag-component>
+                <config-tag-component  :tagList="workworkerConfigForm.service_region" :tagConfigKey="'service_region'"></config-tag-component>
             </el-form-item> -->
 
             <!-- <el-form-item label="接单状态" prop="source" class="form-item-size" size="small">
-                <config-tag-component @reload="getWorkerFormConfig" v-model="workworkerConfigForm.working_status" :tableConfig="'working_status'"></config-tag-component>
+                <config-tag-component  :tagList="workworkerConfigForm.working_status" :tagConfigKey="'working_status'"></config-tag-component>
             </el-form-item> -->
 
             <el-form-item label="民族" prop="nation" class="form-item-size" size="small">
-                <config-tag-component @reload="getWorkerFormConfig" v-model="workworkerConfigForm.nation" :tableConfig="'nation'"></config-tag-component>
+                <config-tag-component 
+                    @editTag="editTag"
+                    :tagList="workworkerConfigForm.nation" 
+                    :tagConfigKey="'nation'"></config-tag-component>
             </el-form-item>
 
             <el-form-item label="学历" prop="education" class="form-item-size" size="small">
-                <config-tag-component @reload="getWorkerFormConfig" v-model="workworkerConfigForm.education" :tableConfig="'education'"></config-tag-component>
+                <config-tag-component 
+                    @editTag="editTag"
+                    :tagList="workworkerConfigForm.education" 
+                    :tagConfigKey="'education'"></config-tag-component>
             </el-form-item>
 
             <!-- <el-form-item label="更新时间" prop="updated_types" class="form-item-size" size="small">
-                <config-tag-component @reload="getWorkerFormConfig" v-model="workworkerConfigForm.updated_types" :tableConfig="'updated_types'"></config-tag-component>
+                <config-tag-component  :tagList="workworkerConfigForm.updated_types" :tagConfigKey="'updated_types'"></config-tag-component>
             </el-form-item> -->
         </el-form>
+        <config-tag-dialog
+            v-if="tagDialogVisible"
+            :tagDialogVisible="tagDialogVisible"
+            @closeTagDialog="closeTagDialog"
+            :tagConfigForm="tagConfigForm"></config-tag-dialog>
     </div>
 </template>
 
@@ -63,10 +78,17 @@
  * type 0 新建  1 编辑
  */
 import {operateService} from '@common/index.js'
+import {
+    configTagDialog
+} from './workerFormConfig/index.js'
 export default {
+    components: {
+        configTagDialog,
+    },
     data() {
 
         return {
+            is_loading: false,
             //员工信息表单
             workworkerConfigForm: {
                 authentication: [],//认证状态
@@ -81,6 +103,8 @@ export default {
                 working_status:[],//接单状态
                 education: [],//教育程度
             },
+            tagDialogVisible: false,//标签配置弹窗显示隐藏
+            tagConfigForm: {},//标签配置表单
         }
     },
     methods: {
@@ -88,28 +112,47 @@ export default {
          * tag组件更改后通过reload方法刷新页面
          */
         async getWorkerFormConfig(){
-            store.commit('setLoading',true)
             try{
+                this.is_loading = true
                 await operateService.getWorkerFormConfig('config').then(data =>{
                     if(data.code == "0"){
                         this.workworkerConfigForm = data.data
                     }
-                }).catch(err =>{
+                    this.is_loading = false
+                }).catch(error =>{
                     this.$message({
                         type:'error',
-                        message: err.message
+                        message: error.message
                     })
+                    this.is_loading = false
                 }).finally(() =>{
-                    store.commit('setLoading',false)
+                    this.is_loading = false
                 })
-            }catch(e){
+            }catch(error){
                 this.$message({
                     type:'error',
-                    message: e.message
+                    message: error.message
                 })
+                this.is_loading = true
             }
-
         },
+        /**
+         * 新建&编辑标签弹窗
+         */
+        editTag(item){
+            this.tagConfigForm = {}
+            if(item){
+                this.tagConfigForm = item
+            } 
+            this.tagDialogVisible = true
+        },
+        /**
+         * 关闭标签配置弹窗
+         */
+        closeTagDialog(){
+            this.tagDialogVisible = false
+            this.getWorkerFormConfig()
+        }
     },
     async mounted(){
         await this.getWorkerFormConfig()

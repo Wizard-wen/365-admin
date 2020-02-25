@@ -2,30 +2,27 @@
     <div class="tag-box">
         <span 
             class="tag-element" 
-            v-for="(item, index) in value" 
+            v-for="(item, index) in tagList" 
             :key="index"
             @click="changeTag(item)"
             :class="[ item.type == 'enable'? `tag-color${(index%5+1)}` : '']">{{item[setLabel.label]}}</span>
-        <el-button icon="el-icon-plus" circle @click="changeTag"></el-button>
-        <config-tag-dialog
-            v-if="tagDialogVisible"
-            :openTagDialog="tagDialogVisible"
-            @closeTagDialog="reloadPage"
-            :workerConfigForm="workerConfigForm"></config-tag-dialog>
+        <el-button icon="el-icon-plus" circle @click="changeTag(null)"></el-button>
     </div>
 </template>
 
 <script>
-import {configTagDialog} from './configTagComponent/index.js'
+import {
+    configTagDialog
+} from './configTagComponent/index.js'
 export default {
     components: {
-        configTagDialog
+        configTagDialog,
     },
     props: {
         /**
-         * v-model数据
+         * 标签数组
          */
-        value: {
+        tagList: {
             default: function(){return []},
             type: Array,
         },
@@ -44,16 +41,9 @@ export default {
         /**
          * 当前tag组件的字段名
          */
-        tableConfig:{
+        tagConfigKey:{
             default: '',
             type: String,
-        }
-    },
-    data(){
-        return {
-            tagDialogVisible:false,//弹出框隐藏
-            //tag配置项
-            workerConfigForm: {},
         }
     },
     methods: {
@@ -62,7 +52,7 @@ export default {
          */
         changeTag(item){
             let workerConfigForm = {
-                table: this.tableConfig
+                table: this.tagConfigKey
             }
             if(item){
                 workerConfigForm = {
@@ -70,19 +60,10 @@ export default {
                     ...item,
                 }
             } 
-            this.workerConfigForm = workerConfigForm
-            this.tagDialogVisible = true
+
+            this.$emit('editTag',workerConfigForm)
         },
-        /**
-         * 刷新上层页面
-         */
-        reloadPage(){
-            this.tagDialogVisible = false
-            this.$emit('reload') //刷新上层页面
-        }
     },
-    mounted(){
-    }
 }
 </script>
 <style lang="scss" scoped>

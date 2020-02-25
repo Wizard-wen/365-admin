@@ -83,6 +83,7 @@
     "typescript": "^3.3.4000",
     "uglifyjs-webpack-plugin": "^1.1.1",
     "url-loader": "^0.5.8",
+    "vue-cropper": "^0.5.0",
     "vue-loader": "^13.3.0",
     "vue-pdf": "^4.0.7",
     "vue-style-loader": "^3.0.1",

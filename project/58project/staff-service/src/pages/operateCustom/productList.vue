@@ -19,8 +19,8 @@
             <el-form class="productForm" ref="productForm" :model="productForm" label-width="120px">
                 <el-form-item v-if="productForm.parent_id == 0" label="分类banner图" prop="banner_url" class="form-item-size">
                     <upload-single-picture-component
-                        :height="'125px'"
-                        :width="'343px'"
+                        :height="'125'"
+                        :width="'343'"
                         :pictureUrl="productForm.banner_url"
                         @singlePictureUploadSucess="uploadIconSuccess"></upload-single-picture-component>
                     <p style="line-height: 20px;color: rgba(0,0,0,.65);">343 * 125</p>

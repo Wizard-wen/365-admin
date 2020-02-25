@@ -3,15 +3,21 @@
         <div class="detail-item">
             <p class="detail-title">{{label}}：</p>
             <div class="detail-contains">
-                <template v-if="value && valueType!='string'">
-                    <slot name="define"></slot>
-                </template>
-                <template v-else-if="value && valueType == 'string'">
-                    <p class="detail-type-text" >{{value}}</p>
+                <template v-if="type == 'original'">
+                    <template v-if="value && valueType!='string'">
+                        <slot name="define"></slot>
+                    </template>
+                    <template v-else-if="value && valueType == 'string'">
+                        <p class="detail-type-text" >{{value}}</p>
+                    </template>
+                    <template v-else>
+                        <p class="detail-type-text" >-</p>
+                    </template>
                 </template>
                 <template v-else>
-                    <p class="detail-type-text" >-</p>
+                    <slot name="template"></slot>
                 </template>
+
                 
             </div>
         </div>
@@ -33,6 +39,15 @@ export default {
             type: String | Array| Object,
             default: ''
         },
+        /**
+         * 是否按原始字符显示
+         * @param original 按原始值展示
+         * @param template 按模板展示
+         */
+        type: {
+            type: String,
+            default: 'original'
+        }
     },
     computed: {
         /**

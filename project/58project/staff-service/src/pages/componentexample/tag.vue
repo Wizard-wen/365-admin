@@ -14,7 +14,7 @@
             <cascader-tag-component
                 slot="demo"
                 :optionList="optionList"
-                v-model="tagList"></cascader-tag-component>
+                v-model="tagList1"></cascader-tag-component>
             <Fun slot="demo"  :data="`
                 * @param {Array}   optionList       级联选择器渲染数组
                 * @param {Array}   tagList          当前被选中的tag标签，v-model数据
@@ -32,16 +32,21 @@
         <Demo title="通过级联选择器添加标签">
             <config-tag-component
                 slot="demo"
-                :optionList="optionList"
-                v-model="tagList"></config-tag-component>
+                @editTag="editTag"
+                :tagList="tagList2"
+                :tagConfigKey="'abc'"
+                :setLabel="{mainKey: 'id', label: 'name'}"></config-tag-component>
             <Fun slot="demo"  :data="`
-                * @param {String}   tableConfig       级联选择器渲染数组
-                * @param {Objecy}   setLabel          当前被选中的tag标签，v-model数据
-                * @param {Array}    v-model         v-model数据
+                * @param {Array}   tagList       标签数组列表
+                * @param {String}   tagConfigKey    当前tag标签的key值
+                * @param {Object}    setLabel         字段自定义配置
+            `"></Fun>
+            <Fun slot="demo"  :data="`
+                * @param {Object}  @editTag  回调当前标签的信息
             `"></Fun>
             
 
-            <Code lang="html" slot="code">{{code1}}</Code>
+            <Code lang="html" slot="code">{{code2}}</Code>
         </Demo>
     </Article>
 </template>
@@ -59,30 +64,63 @@ export default {
     data(){
         return {
             optionList: [{id:1,name:"aaa"}],
-            tagList: [],
-            code1: 
-            `<template>
-                <cascader-tag-component
-                    slot="demo"
-                    :optionList="optionList"
-                    :tagList="tagList"></cascader-tag-component>
-            <template>
-            <script>
-                import {
-                    cascaderTagComponent
-                } from '@/public/components/index.js'
-                export default {
-                    components: {
-                        cascaderTagComponent,
-                    },
-                    data(){
-                        return {
-                            optionList: [{id:1,name:"aaa"}],
-                            tagList: [],
-                        }
-                    }
-                }
-            ${'<'}/script>`,
+            tagList1: [],
+            tagList2: [{id:1,name:"aaa", type: 'enable'},{id:2,name:"bbb", type: 'disable'}],
+            code1: `
+<template>
+    <cascader-tag-component
+        :optionList="optionList"
+        :tagList="tagList"></cascader-tag-component>
+<template>
+<script>
+    import {
+        cascaderTagComponent
+    } from '@/public/components/index.js'
+    export default {
+        components: {
+            cascaderTagComponent,
+        },
+        data(){
+            return {
+                optionList: [{id:1,name:"aaa"}],
+                tagList: [],
+            }
+        }
+    }
+${'<'}/script>`,
+            code2: `
+<template>
+    <config-tag-component
+        @editTag="editTag"
+        :tagList="tagList"
+        :tagConfigKey="'abc'"
+        :setLabel="{mainKey: 'id', label: 'name'}"></config-tag-component>
+<template>
+<script>
+    import {
+        configTagComponent
+    } from '@/public/components/index.js'
+    export default {
+        components: {
+            configTagComponent,
+        },
+        data(){
+            return {
+                tagList2: [{id:1,name:"aaa", type: 'enable'},{id:2,name:"bbb", type: 'disable'}],
+            }
+        },
+        methods: {
+            editTag(){
+                alert('回调方法')
+            }
+        }
+    }
+${'<'}/script>`,
+        }
+    },
+    methods: {
+        editTag(){
+            alert('回调方法')
         }
     }
 }

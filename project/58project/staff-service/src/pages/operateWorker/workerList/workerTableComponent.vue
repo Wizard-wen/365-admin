@@ -356,6 +356,7 @@
     .right-contains{
         overflow: auto;
         flex:1;
+        // width: 100%;
         width: calc(100% - 180px);
         height: calc(100vh - 50px);
         .searched-form{
