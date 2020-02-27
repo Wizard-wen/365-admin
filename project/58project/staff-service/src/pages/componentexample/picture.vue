@@ -43,7 +43,9 @@
 
             <Code lang="html" slot="code">{{code1}}</Code>
         </Demo>
-        <copper-test></copper-test>
+        <copper-test
+            @imgupload="imgupload"
+            :initUrl="initUrl"></copper-test>
     </Article>
 </template>
 
@@ -58,6 +60,7 @@ export default {
             code1:`
 <icon-component :height="120" :width="90" :baseUrl="''"></icon-component>`,
 pictureUrl: '',
+            initUrl: '',
 
         }
     },
@@ -65,6 +68,10 @@ pictureUrl: '',
         getPicturePath(path){
             alert(path)
             this.pictureUrl = path
+        },
+        imgupload(res){
+            // alert(res)
+            this.initUrl = './resource/'+res
         }
     }
 }

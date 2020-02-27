@@ -21,17 +21,20 @@ interface staffItem{
     return_at:number// 上次回访时间  新字段
 
     /**
-     * enable 启用
-     * disable 已停用
-     * 字段类型改成数字
+     * 1 启用 2  停用
      */
-    type:number;//停用、启用状态 
+    status:number;//停用、启用状态 
     
-    // 可接单 已签约
-    //之前不展示，前端要加上
-    status?:number;//接单状态
+    // 1 未签约 2 已签约
+    sign_status?:number;//签约状态
 
     log:Array<object>;//日志
+
+    //skill 和服务商品列表保持一致
+    // 职业类型字段根据服务商品列表返回的树形结构展示，前端采用element的复选框
+    skill:Array<object>;//职业类型
+
+    course?:number;//参加培训
     
     /*****************************业务字段***********************************************/
 
@@ -42,6 +45,15 @@ interface staffItem{
     phone:string;//电话
     sex:number;//性别
 
+    // 1-12 鼠 猪
+    zodiac_ign:string;//属相
+    body_height:string;//身高
+    body_weight:string;//体重
+
+
+
+
+
     /**
      * 若身份证号未知，年龄、出生日期将为空
      */
@@ -49,8 +61,7 @@ interface staffItem{
     birthday:number;//出生日期
     identify?:string;//身份证号码
     
-    // 职业类型字段根据服务商品列表返回的树形结构展示，前端采用element的复选框
-    skill:Array<object>;//职业类型
+    
 
     //这个字段将替代工龄
     worked_at:number;//参加工作时间
@@ -81,7 +92,7 @@ interface staffItem{
      */
     icon?:string;//头像
 
-    course?:number;//参加培训
+    
     
     paper?:Array<object>;//技能证书标签
     certificate?:Array<object>,//技能证书
@@ -116,9 +127,7 @@ interface searchWorkerItem{
     staff_code:string;//员工编号
     manager_name?:string;//创建人
     created_at:number;//创建时间
-
     name:string;//姓名
     
 }
-
 

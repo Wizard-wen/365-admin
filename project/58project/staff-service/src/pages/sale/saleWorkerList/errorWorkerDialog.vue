@@ -64,7 +64,7 @@ export default {
         return {
             //申请创建劳动者信息
             errorWorkerForm : {
-                working_status: this.errorWorkerWorkingStatus,
+                // working_status: this.errorWorkerWorkingStatus,
                 warning_log: '',//日志信息
                 id: this.staffId,//
             },

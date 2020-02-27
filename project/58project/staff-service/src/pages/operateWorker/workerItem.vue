@@ -126,7 +126,8 @@
             <el-form-item label="证件照" class="form-item-size">
                 <photo-component
                     v-model="id_photo_fileList"
-                    :title="'证件照'"></photo-component>
+                    :title="'证件照'"
+                    :width="'237px'"></photo-component>
             </el-form-item>
 
             <el-form-item label="现住址" prop="address" class="form-item-size" size="small">
@@ -282,6 +283,9 @@
                 <el-button size="mini" @click="goback">返回</el-button>
             </el-form-item>
         </el-form>
+        
+        <log-component></log-component>
+
     </page-edit-component>
 
 
