@@ -2,6 +2,8 @@
     <!-- 添加证书 -->
     <el-dialog
         title="添加证书"
+        v-loading="is_loading"
+        v-if="paperDialogVisible"
         :visible.sync="paperDialogVisible"
         :show-close="false"
         :close-on-press-escape="false"
@@ -9,13 +11,16 @@
         <el-form :model="paperForm" label-width="120px" :rules="paperRules" ref="paperForm">
 
             <el-form-item label="证书" prop="paper_category_id" style="margin-bottom:30px;">
-                <el-select v-model="paperForm.paper_category_id" placeholder="请选择" :disabled="isEditPaper">
+                <el-select v-model="paperForm.paper_category_id" placeholder="请选择证书" :disabled="isEditPaper">
                     <el-option v-for="item in paperCategoryList" :key="item.id" :label="item.name" :value="item.id"></el-option>
                 </el-select>
             </el-form-item>
 
-            <el-form-item label="上传图片" prop="images" ref="paper">
-                <el-upload
+            <el-form-item prop="images" ref="paper">
+                <el-tooltip slot="label" class="item" effect="dark" content="证书尺寸为150*237" placement="top-start">
+                    <span>上传图片<i class="el-icon-info"></i></span>
+                </el-tooltip>
+                <!-- <el-upload
                     accept=".jpg,.jpeg,.png,.gif,.bmp,.pdf,.JPG,.JPEG,.PBG,.GIF,.BMP,.PDF"
                     action="/admin/common/uploadImage"
                     :on-success="uploadSuccess"
@@ -24,7 +29,12 @@
                     list-type="picture-card"
                     :headers="uploadHeader">
                     <i class="el-icon-plus"></i>
-                </el-upload>
+                </el-upload> -->
+                <multiple-picture-upload
+                    :uploadHeader="uploadHeader"
+                    :height="height"
+                    :width="width"
+                    v-model="paperForm.images"></multiple-picture-upload>
             </el-form-item>
 
         </el-form>
@@ -65,7 +75,9 @@ export default {
          */
         paperProps: {
             type: Object,
-            default: function(){ return {} }
+            default: function(){ return {
+
+            } }
         },
         /**
          * 已经添加的证书
@@ -74,6 +86,14 @@ export default {
             type: Array,
             default: function(){ return [] }
         },
+        height: {
+            type: Number | String,
+            default: 178
+        },
+        width: {
+            type: Number |String,
+            default: 178,
+        }
     },
     data() {
         var _this = this;
@@ -100,6 +120,8 @@ export default {
             }
         }
         return {
+            is_loading: false,
+            images: [],
             //表单校验
             paperRules: {
                 paper_category_id: [
@@ -114,7 +136,7 @@ export default {
                 id: this.paperProps.id? this.paperProps.id : null,
                 paper_category_name: this.paperProps.paper_category_name,//证书分类名
                 paper_category_id: this.paperProps.paper_category_id,//证书分类id
-                images: this.paperProps.images,//证书图片数组
+                images: [...this.paperProps.images],//证书图片数组
             },
             //证书分类数组
             paperCategoryList: [],
@@ -124,33 +146,17 @@ export default {
             }
         }
     },
-    methods: {
-        /**
-         * 上传成功后，接收图片数据，送入图片回显数组
-         */
-        uploadSuccess(response, file, fileList) {
-            let picItem = {
-                path: response.data.path,
-                url: './resource/'+response.data.path,
-                name: response.data.name
-            }
-            this.paperForm.images.push(picItem)
-            
-            //消除表单验证
-            if(this.paperForm.images.length){
-                this.$refs.paper.clearValidate()
-            }
-        },
-        /**
-         * 移出图片
-         */
-        removePic(file, fileList){
-            this.paperForm.images.forEach((item, index) =>{
-                if(item.uid == file.uid){
-                    this.paperForm.images.splice(index,1)
+    watch: {
+        'paperForm.images': {
+            handler: function(val, oldVal){
+                if(val.length){
+                    this.$refs.paper.clearValidate()
                 }
-            })
-        },
+            },
+            deep: true,
+        }
+    },
+    methods: {
         /**
          * 提交修改
          */

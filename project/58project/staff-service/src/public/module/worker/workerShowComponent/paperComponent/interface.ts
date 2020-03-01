@@ -4,7 +4,6 @@
 /**
  * 证书数组
  */
-const paperList:Array<parperItem> = [];
 
 interface parperItem{
     id?:number;
@@ -23,7 +22,6 @@ interface imageItem{
 /**
  * 证书类型数组
  */
-const paper_category:Array<paper_category_item> = [];
 
 interface paper_category_item{
     id:number;

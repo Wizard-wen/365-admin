@@ -20,5 +20,5 @@ export interface clientObj{
 
     service_address:Array<object>;//服务地址，可能有多个，类似于淘宝的收货地址
 
-    orderList: [];
+    orderList: Array<object>;
 }

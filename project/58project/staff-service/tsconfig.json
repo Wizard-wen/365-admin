@@ -8,7 +8,14 @@
       "preserveConstEnums": true,
       "sourceMap": true, //编译文件对应关系
       "moduleResolution": "node",//决定如何处理模块。
-      "target": "es5"//编译目标平台
+      "target": "es5",//编译目标平台
+      "lib": [
+            "es6"
+        ],
+
+        // "skipLibCheck": true,
+        // "esModuleInterop": true,
+        // "experimentalDecorators": true
   },
   "include": [//包含的编译目录
       "src/**/*",

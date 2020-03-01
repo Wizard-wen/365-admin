@@ -1,7 +1,7 @@
 /**
  * 门店管理
  */
-import storeList from '@/pages/store/storeList.vue'
+import storeList from '@/pages/store/storeList/index.vue'
 import storeItem from '@/pages/store/storeItem.vue'
 import storeEdit from '@/pages/store/storeEdit.vue'
 import storeStatistic from '@/pages/store/storeStatistic.vue'

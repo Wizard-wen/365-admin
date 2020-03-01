@@ -179,9 +179,11 @@ export const operate_staffRequest = {
      * 获取员工列表
      * @param type 列表类别
      */
-    getStaffList(type){
+    getStaffList(queryObject){
         let baseUrl = `./admin/staff/getStaffList`;
+        return axios.post(baseUrl,queryObject)
 
+        return 
         if(type == 0){
             return axios.post(
                 baseUrl,

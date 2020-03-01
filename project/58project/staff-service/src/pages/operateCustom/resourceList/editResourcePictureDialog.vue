@@ -18,27 +18,12 @@
                     :isSingle="true"></select-tag-component>
             </el-form-item>
             <el-form-item label="图片" prop="url" class="form-item-size">
-                <el-upload
-                    accept=".jpg,.jpeg,.png,.gif,.bmp,.pdf,.JPG,.JPEG,.PBG,.GIF,.BMP,.PDF"
-                    class="icon-uploader"
-                    action="/admin/common/uploadImage"
-                    :show-file-list="false"
-                    :on-success="iconUploadSuccess"
-                    :headers="uploadHeader">
-
-                    <div
-                        v-if="editResourcePictureForm.url!=''"
-                        class="icon-box"
-                        @mouseover="showblack('0')"
-                        @mouseout="showblack('1')">
-                        <img class="icon-item" :src="editResourcePictureForm.url == '' ? '' : `./resource/${editResourcePictureForm.url}`" >
-                        <div class="icon-item-back" v-if="isShowBlack">
-                            <i class="el-icon-edit icon-uploader-edit-icon" style="color: #fff;font-size: 20px;"></i>
-                        </div>
-                    </div>
-
-                    <i v-else class="el-icon-plus icon-uploader-icon"></i>
-                </el-upload>
+                <single-picture-upload
+                    :uploadHeader="uploadHeader"
+                    :height="150"
+                    :width="237"
+                    :initUrl="editResourcePictureForm.url?`./resource/${editResourcePictureForm.url}`: ''"
+                    @onSinglePictureSuccess="onSinglePictureSuccess"></single-picture-upload>
             </el-form-item>
         </el-form>
         <div slot="footer" class="dialog-footer">
@@ -116,26 +101,9 @@ export default {
             this.$emit('closeEditResourcePictureDialog')
         },
         //头像上传成功
-        iconUploadSuccess(res, file) {
-            this.editResourcePictureForm.icon = res.data.path;
-            this.editResourcePictureForm.url = res.data.path;
-        },
-        /**
-         * 上传头像，显示阴影
-         */
-        showblack(type){
-            if(type == '0'){
-                this.isShowBlack = true
-            } else {
-                this.isShowBlack = false
-            }
-        },
-        /**
-         * 移出图片
-         */
-        removePic(file, fileList){
-            this.editResourcePictureForm.url = ''
-            this.editResourcePictureForm.icon = ''
+        onSinglePictureSuccess(res, file) {
+            this.editResourcePictureForm.icon = res.path;
+            this.editResourcePictureForm.url = res.path;
         },
         async onSubmit(formName){
             await this.$refs[formName].validate(async (valid) => {

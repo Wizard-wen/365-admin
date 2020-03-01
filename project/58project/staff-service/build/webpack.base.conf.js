@@ -38,13 +38,22 @@ module.exports = {
         options: vueLoaderConfig
       },
       {
-        test: /\.tsx?$/,
-        loader: 'ts-loader',
-        exclude: /node_modules/,
-        options: {
-            appendTsSuffixTo: [/\.vue$/],
-        }
+        test: /\.ts(x?)$/,
+        include: [resolve('src'), resolve('test'), resolve('common')],
+        use: [{
+            loader: 'babel-loader',
+        }, {
+            loader: 'ts-loader',
+        }]
       },
+      // {
+      //   test: /\.tsx?$/,
+      //   loader: 'ts-loader',
+      //   exclude: /node_modules/,
+      //   options: {
+      //       appendTsSuffixTo: [/\.vue$/],
+      //   }
+      // },
       {
         test: /\.js$/,
         loader: 'babel-loader',

@@ -1,7 +1,6 @@
 <template>
     <div 
         :class="[ isEdit? 'tag-edit-box': 'tag-show-box']" 
-
         :style="{width: maxWidth, border: isEditHasBorder? '1px dashed #ccc;' : ''}" >
         <div 
             class="tag-element" 

@@ -1,5 +1,4 @@
 <template>
-
     <el-dialog 
         :title="title" 
         :visible.sync="pictureDetailDialogVisible"
@@ -11,7 +10,6 @@
             <el-button @click="closeDialog">关 闭</el-button>
         </div>
     </el-dialog>
-        
 </template>
 <script>
 

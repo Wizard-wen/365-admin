@@ -46,9 +46,7 @@ import {customService} from '@common/index.js'
 import {
     workerAdTableComponent,
 } from './workerAdList/index.js'
-import {
-    createAdPositionDialog,
-} from './customAdList/index.js'
+import createAdPositionDialog from './customAdList/createAdPositionDialog.vue'
 
 export default {
     components: {

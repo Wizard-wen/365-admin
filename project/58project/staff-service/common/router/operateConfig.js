@@ -34,25 +34,25 @@ import operateContractItem from '@/pages/operateContract/contractItem.vue'
 /**
  * 运营 --- 小程序运营
  */
-import productList from '@/pages/operateCustom/productList.vue'
-import resourceList from '@/pages/operateCustom/resourceList.vue'
-import videoList from '@/pages/operateCustom/videoList.vue'
+import productList from '@/pages/operateCustom/productList/index.vue'
+import resourceList from '@/pages/operateCustom/resourceList/index.vue'
+import videoList from '@/pages/operateCustom/videoList/index.vue'
 import workerAdList from '@/pages/operateCustom/workerAdList.vue'
-import customAdList from '@/pages/operateCustom/customAdList.vue'
-import adPositionItem from '@/pages/operateCustom/adPositionItem.vue'
-import adPictureItem from '@/pages/operateCustom/adPictureItem.vue'
-import resourceVideoItem from '@/pages/operateCustom/resourceVideoItem.vue'
+import customAdList from '@/pages/operateCustom/customAdList/index.vue'
+import adPositionItem from '@/pages/operateCustom/adPositionItem/index.vue'
+import adPictureItem from '@/pages/operateCustom/adPictureItem/index.vue'
+import resourceVideoItem from '@/pages/operateCustom/resourceVideoItem/index.vue'
 /**
  * 运营---服务人员管理
  */
-import workerList from '@/pages/operateWorker/workerList.vue'
-import workerFormConfig from '@/pages/operateWorker/workerFormConfig.vue'
-import workerItem from '@/pages/operateWorker/workerItem.vue'
+import workerList from '@/pages/operateWorker/workerList/index.vue'
+import workerFormConfig from '@/pages/operateWorker/workerFormConfig/index.vue'
+import workerItem from '@/pages/operateWorker/workerItem/index.vue'
 import workerItemShow from '@/pages/operateWorker/workerItemShow.vue'
-import newWorkerList from '@/pages/operateWorker/newWorkerList.vue'
-import errorWorkerList from '@/pages/operateWorker/errorWorkerList.vue'
-import returnWorkerList from '@/pages/operateWorker/returnWorkerList.vue'
-import workerList1 from '@/pages/operateWorker/workerList1.vue'
+import newWorkerList from '@/pages/operateWorker/newWorkerList/index.vue'
+import errorWorkerList from '@/pages/operateWorker/errorWorkerList/index.vue'
+import returnWorkerList from '@/pages/operateWorker/returnWorkerList/index.vue'
+import workerList1 from '@/pages/operateWorker/workerList1/index.vue'
 /**
  * 客户管理
  */ 

@@ -1,19 +1,26 @@
 
 import Vue from 'vue'
 
-//级联选择器组件
-import cascaderComponent from './cascaderComponent.vue'
+
+
 //照片详情组件
 import pictureDetailDialog from './pictureDetailDialog.vue'
 //生成图片组件
 import makeImageComponent from './makeImageComponent.vue'
-
+// 上传单张图片
+import singlePictureUpload from './singlePictureUpload/index.vue'
+// 上传多张图片
+import multiplePictureUpload from './multiplePictureUpload/index.vue'
+//头像组件
+import iconComponent from './iconComponent/index.vue'
+//日志组件
+import logComponent from './logComponent/index.vue'
 
 /**
  * 和tag标签相关的组件
  */
 //tag标签信息配置
-import configTagComponent from './configTagComponent.vue'
+import configTagComponent from './configTagComponent/index.vue'
 
 //表单项，直接点击，单选或多选tag标签
 import selectTagComponent from './selectTagComponent.vue'
@@ -21,42 +28,39 @@ import selectTagComponent from './selectTagComponent.vue'
 //表单项，通过级联选择器添加、删除tag标签组件
 import cascaderTagComponent from './cascaderTagComponent.vue'
 
-//列表项内的标签组件
-import tableTagComponent from './tableTagComponent.vue'
-/****************** tag相关组件结束***************************************************/
 
-import queryTagComponent from './queryTagComponent.vue'
 
+
+//表单页面组件
+import pageEditComponent from './page/pageEditComponent.vue'
+
+//卡片展示块组价
+import cardBoxComponent from './page/cardBoxComponent.vue'
+
+
+
+//表单展示组件
+import detailFormItemComponent from './form/detailFormItemComponent.vue'
+import detailFormComponent from './form/detailFormComponent.vue'
+//表单label提示组件
+import formItemLabelTooltipComponent from './form/formItemLabelTooltipComponent.vue'
+
+
+
+
+/*******************旧列表组件 */
 //列表搜索组件
 import {
     querySearchInput,
     querySearchList,
-} from './queryComponent/index.js'
-
-//表单页面组件
-import pageEditComponent from './pageEditComponent.vue'
-
-//单一图片上传组件
-import uploadSinglePictureComponent from './uploadSinglePictureComponent.vue'
-
-//卡片展示块组价
-import cardBoxComponent from './cardBoxComponent.vue'
-
-//日志组件
-import logComponent from './logComponent.vue'
-
-//头像组件
-import iconComponent from './iconComponent.vue'
-
-//表单展示组件
-import detailFormItemComponent from './detailFormItemComponent.vue'
-import detailFormComponent from './detailFormComponent.vue'
+} from './oldtable/queryComponent/index.js'
+//列表项内的标签组件
+import tableTagComponent from './oldtable/tableTagComponent.vue'
+// 已选中标签
+import queryTagComponent from './oldtable/queryTagComponent.vue'
 
 
-//表单label提示组件
-import formItemLabelTooltipComponent from './formItemLabelTooltipComponent.vue'
 export {
-    cascaderComponent,
     pictureDetailDialog,
     makeImageComponent,
     configTagComponent,
@@ -67,19 +71,18 @@ export {
     querySearchInput,
     querySearchList,
     queryTagComponent,
-    uploadSinglePictureComponent,
     cardBoxComponent,
     logComponent,
     iconComponent,
     detailFormItemComponent,
     detailFormComponent,
     formItemLabelTooltipComponent,
+    singlePictureUpload,
 }
 
 
 
 //注册至全局
-Vue.component('cascaderComponent', cascaderComponent);
 Vue.component('pictureDetailDialog', pictureDetailDialog);
 Vue.component('makeImageComponent', makeImageComponent);
 Vue.component('configTagComponent', configTagComponent);
@@ -90,10 +93,14 @@ Vue.component('queryTagComponent', queryTagComponent);
 Vue.component('querySearchInput', querySearchInput);
 Vue.component('querySearchList', querySearchList);
 Vue.component('pageEditComponent', pageEditComponent);
-Vue.component('uploadSinglePictureComponent', uploadSinglePictureComponent);
 Vue.component('cardBoxComponent', cardBoxComponent);
 Vue.component('logComponent', logComponent);
 Vue.component('iconComponent', iconComponent);
 Vue.component('detailFormItemComponent', detailFormItemComponent);
 Vue.component('detailFormComponent', detailFormComponent);
 Vue.component('formItemLabelTooltipComponent', formItemLabelTooltipComponent);
+
+Vue.component('singlePictureUpload', singlePictureUpload);
+Vue.component('multiplePictureUpload', multiplePictureUpload);
+
+

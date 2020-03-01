@@ -3,7 +3,6 @@
 import tag from '@/pages/componentexample/tag.vue'
 import form from '@/pages/componentexample/form.vue'
 import picture from '@/pages/componentexample/picture.vue'
-import copperTest from '@/pages/componentexample/copperTest.vue'
 
 
 
@@ -24,10 +23,5 @@ export const componentExampleModule = [
         path: '/example/picture',
         name: 'picture',
         component: picture,
-    },
-    {
-        path: '/example/copperTest',
-        name: 'copperTest',
-        component: copperTest,
     },
 ]

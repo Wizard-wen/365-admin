@@ -43,20 +43,27 @@
 
             <Code lang="html" slot="code">{{code1}}</Code>
         </Demo>
-        <copper-test
-            @imgupload="imgupload"
-            :initUrl="initUrl"></copper-test>
+        <singlePictureUpload
+            :uploadHeader="uploadHeader"
+            @onSinglePictureSuccess="onSinglePictureSuccess"
+            :initUrl="pictureUrl"
+            :height="200"
+            :width="400"></singlePictureUpload>
+        <multiplePictureUpload
+            :height="200"
+            :width="400"></multiplePictureUpload>
     </Article>
 </template>
 
 <script>
-import copperTest from './copperTest.vue'
 export default {
-    components: {
-        copperTest
-    },
+
     data(){
         return {
+            //图片上传header
+            uploadHeader:{
+                accessToken: this.$store.state.loginModule.token.access_token
+            },
             code1:`
 <icon-component :height="120" :width="90" :baseUrl="''"></icon-component>`,
 pictureUrl: '',
@@ -67,11 +74,14 @@ pictureUrl: '',
     methods: {
         getPicturePath(path){
             alert(path)
-            this.pictureUrl = path
+            this.pictureUrl = './resource/'+path
         },
-        imgupload(res){
-            // alert(res)
-            this.initUrl = './resource/'+res
+        onSinglePictureSuccess(res){
+            if(res){
+                console.log(res)
+                this.pictureUrl = './resource/'+res.path
+            }
+            
         }
     }
 }

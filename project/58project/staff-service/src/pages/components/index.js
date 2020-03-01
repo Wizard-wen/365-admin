@@ -36,8 +36,8 @@ import {
 //表单页面组件
 import pageEditComponent from './pageEditComponent.vue'
 
-//单一图片上传组件
-import uploadSinglePictureComponent from './uploadSinglePictureComponent.vue'
+// //单一图片上传组件
+// import uploadSinglePictureComponent from './uploadSinglePictureComponent.vue'
 
 //卡片展示块组价
 import cardBoxComponent from './cardBoxComponent.vue'
