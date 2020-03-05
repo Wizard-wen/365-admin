@@ -1,6 +1,6 @@
 <template>
     <log-component
-        :order_logs="order_logs"
+        :logList="order_logs"
         :logDialogVisible="logDialogVisible"
         @openLogDialog="openLogDialog"
         @closeLogDialog="closeLogDialog"

@@ -1,22 +1,25 @@
-
 /**
  * 服务人员搜索字段
  */
 export interface searchWorkerItem{
+
     get_for:string;//请求数据类型
+
     page?:number;//页码
     pageNumber?:number; //单页数量
+
     name?:string;//姓名
     phone?:string;//电话
     identify?:string;//身份证号
     staff_code?:string;//员工编号
-    skill?:Array<number>;//技能累心
+    skill?:Array<number>;//职业类型
+    // course:Array<number>;//参加培训
+    manager_id?:Array<number>;//创建人
     sign_status?:number;//签约状态
+    // working_age:number;//工龄
     nation?:number;//民族
     education?:number;//教育程度
-    paper?:Array<object>;//技能证书
-    // manager_name?:string;//创建人
-    // created_at:number;//创建时间
+    paper?:Array<number>;//技能证书
 }
 
 
@@ -52,4 +55,30 @@ export const educationList = [
     {name: '高中',oldId: 7, containsId:[5,6]},
     {name: '初中',oldId: 8,},
     {name: '小学',oldId: 9,}
+]
+
+
+export const zodiac_ignList =[
+    {id: 1, name: '鼠'},
+    {id: 2, name: '牛'},
+    {id: 3, name: '虎'},
+    {id: 4, name: '兔'},
+    {id: 5, name: '龙'},
+    {id: 6, name: '蛇'},
+    {id: 7, name: '马'},
+    {id: 8, name: '羊'},
+    {id: 9, name: '猴'},
+    {id: 10, name: '鸡'},
+    {id: 11, name: '狗'},
+    {id: 12, name: '猪'},
+]
+
+export const work_age_list = [
+    {id: 0, name: '全部'},
+    {id: 1, name: '1年'},
+    {id: 2, name: '2年'},
+    {id: 3, name: '3年'},
+    {id: 4, name: '4年'},
+    {id: 5, name: '5年'},
+    {id: 6, name: '5年以上'},
 ]

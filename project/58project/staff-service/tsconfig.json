@@ -12,7 +12,6 @@
       "lib": [
             "es6"
         ],
-
         // "skipLibCheck": true,
         // "esModuleInterop": true,
         // "experimentalDecorators": true

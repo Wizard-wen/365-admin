@@ -7,7 +7,7 @@
             :key="index"  
             @mouseover="showPhotoblack(item, index, '0')" 
             @mouseout="showPhotoblack(item, index, '1')">
-            <img :src="'./resource/'+item.url" class="image-item" :style="{height: `${height}px`,width:`${width}px`}">
+            <img :src="showCompleteUrl+item.url" class="image-item" :style="{height: `${height}px`,width:`${width}px`}">
             <div 
                 class="image-item-back" 
                 :style="{height: `${height}px`, width: `${width}px`}"
@@ -61,6 +61,7 @@ export default {
             uploadHeader:{
                 accessToken: this.$store.state.loginModule.token.access_token
             },
+            //本地展示的图片数组
             photo_fileList: []
         }
     },
@@ -105,7 +106,7 @@ export default {
          */
         pictureUrlArrtibute: {
             type: String,
-            default: 'path'
+            default: 'url'
         },
         /**
          * 最多可以上传几个图片
@@ -113,6 +114,13 @@ export default {
         maxCount: {
             type: Number | String,
             default: 10, 
+        },
+        /**
+         * 完整url路径
+         */
+        showCompleteUrl: {
+            type: String,
+            default: './resource/',
         }
     },
     watch: {
@@ -153,7 +161,6 @@ export default {
                 return {
                     ...item,
                     url: item.path,
-                    path: item.path,
                     isBack: false,
                 }
             })
@@ -195,7 +202,7 @@ export default {
          * 打开图片详情弹窗
          */
         openPictureDetailDialog(item){
-            this.pictureDetailUrl = `./resource/${item.url}`
+            this.pictureDetailUrl = this.showCompleteUrl + item.url
             this.pictureDetailDialogVisible = true;
         }
     }

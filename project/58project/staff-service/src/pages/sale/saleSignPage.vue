@@ -230,23 +230,12 @@
                             <el-input type="textarea" v-model="signForm.remarks" placeholder="请输入合同备注信息"></el-input>
                         </el-form-item>
                         <el-form-item label="合同附件" prop="accessory" ref="accessory">
-                            <!-- <el-upload
-                                accept=".jpg,.jpeg,.png,.gif,.bmp,.pdf,.JPG,.JPEG,.PBG,.GIF,.BMP,.PDF"
-                                action="/admin/common/uploadImage"
-                                :on-success="uploadSuccess"
-                                :on-remove="removePic"
-                                :file-list="signForm.accessory"
-                                list-type="picture-card"
-                                :headers="uploadHeader">
-                                <i class="el-icon-plus"></i>
-                            </el-upload> -->
-                            <photo-component
-                                :pictureUrlArrtibute="'path'"
-                                :isEdit="true"
-                                :width="'210px'"
-                                :height="'297px'"
+                            <multiple-picture-upload
                                 v-model="signForm.accessory"
-                                :title="'合同附件'"></photo-component>
+                                :title="'合同附件'"
+                                :height="210"
+                                :width="197"></multiple-picture-upload>
+
                         </el-form-item>
                     </div>
                 </div>
@@ -261,13 +250,7 @@
 </template>
 <script>
     import {saleService, operateService} from '@common/index.js'
-    import {
-    photoComponent,
-} from '@/public/module/worker/workerShowComponent/index.js'
 export default {
-    components: {
-        photoComponent,
-    },
     data(){
         var _this = this
         const validator = {

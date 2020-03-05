@@ -19,7 +19,6 @@ export default {
     },
     // 压缩图片
     compress(img, scale) {
-        console.log(scale)
         let canvas = document.createElement('canvas');
         let ctx = canvas.getContext('2d');
 

@@ -13,9 +13,11 @@ interface parperItem{
 }
 
 interface imageItem{
-    name: string;//图片名
-    path:string;//返回后台的url
-    url:string;//前端渲染的url
+    name:string;//图片名--后端
+    // path:string;//地址--后端
+    url:string;//回显的url
+    status?:string;
+    uid?:number;
 }
 
 

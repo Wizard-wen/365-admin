@@ -65,7 +65,7 @@ export default {
         return {
             optionList: [{id:1,name:"aaa"}],
             tagList1: [],
-            tagList2: [{id:1,name:"aaa", type: 'enable'},{id:2,name:"bbb", type: 'disable'}],
+            tagList2: [{id:1,name:"aaa", type: 1},{id:2,name:"bbb", type: 2}],
             code1: `
 <template>
     <cascader-tag-component
@@ -106,7 +106,7 @@ ${'<'}/script>`,
         },
         data(){
             return {
-                tagList2: [{id:1,name:"aaa", type: 'enable'},{id:2,name:"bbb", type: 'disable'}],
+                tagList2: [{id:1,name:"aaa", type: '1'},{id:2,name:"bbb", type: 'disable'}],
             }
         },
         methods: {

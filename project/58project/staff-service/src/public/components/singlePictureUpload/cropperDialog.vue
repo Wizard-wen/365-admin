@@ -189,8 +189,11 @@ export default {
 		realTime (data) {
 			this.previews = data;
         },
+        /**
+         * 关闭裁剪弹窗
+         */
         closeCropperDialog(){
-            this.$emit('closeCropperDialog','')
+            this.$emit('closeCropperDialog',null)
         },
         /**
          * 点击上传按钮
@@ -244,7 +247,6 @@ export default {
                     if (data.code == 0) {
                         // 上传成功将照片传回父组件
                         const currentPic = data.data;
-
                         this.$emit('closeCropperDialog', currentPic)
 
                         this.is_loading = false;
@@ -261,7 +263,7 @@ export default {
                     })
                     this.is_loading = false;
 
-                    this.$emit('closeCropperDialog','')
+                    this.$emit('closeCropperDialog',null)
                 })
             } catch(error) {
                 this.$message({

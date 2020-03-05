@@ -14,7 +14,7 @@ import multiplePictureUpload from './multiplePictureUpload/index.vue'
 //头像组件
 import iconComponent from './iconComponent/index.vue'
 //日志组件
-import logComponent from './logComponent/index.vue'
+import logComponent from './logComponent.vue'
 
 /**
  * 和tag标签相关的组件

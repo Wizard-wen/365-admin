@@ -54,13 +54,13 @@
                         <el-button
                             size="mini"
                             type="danger"
-                            v-if="scope.row.type == 'enable'"
-                            @click="setAccountState('disable', scope.row)">停用</el-button>
+                            v-if="scope.row.type == 1"
+                            @click="setAccountState(2, scope.row)">停用</el-button>
                         <el-button
                             size="mini"
                             type="success"
                             v-else
-                            @click="setAccountState('enable', scope.row)">启用</el-button>
+                            @click="setAccountState(1, scope.row)">启用</el-button>
                     </template>
                 </el-table-column>
             </el-table>
@@ -235,7 +235,7 @@
             async setAccountState(type, row) {
 
                 let _this= this,
-                    status = type == 'disable' ? '停用' : '启用'
+                    status = type == 2 ? '停用' : '启用'
 
                 let response = await this.$confirm(`确定${status}该账户吗?`, '提示', {
                     confirmButtonText: '确定',

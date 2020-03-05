@@ -125,7 +125,7 @@ export default {
             }
         },
         /**
-         * 
+         * 打开裁剪弹窗
          */
         openCropperDialog (file, fileList) {
             // 点击弹出剪裁框
@@ -134,9 +134,15 @@ export default {
                 ...file
             };
         },
+        /**
+         * 关闭截图弹窗
+         */
         closeCropperDialog(res){
             this.cropperDialogVisible = false
-            this.$emit('onSinglePictureSuccess', res);
+            if(res){
+                this.$emit('onSinglePictureSuccess', res);
+            }
+            
         },
     },
 }

@@ -1,12 +1,12 @@
 <template>
     <el-dialog 
-        :title="'添加日志'" 
+        :title="`添加${title}`" 
         :visible.sync="logDialogVisible"
         :show-close="false"
         :close-on-press-escape="false"
         :close-on-click-modal="false">
         <el-form :model="logForm" :label-width="'120px'" ref="logForm" :rules="logRules">
-            <el-form-item label="日志信息" prop="message">
+            <el-form-item :label="title" prop="message">
                 <el-input placeholder="请最多输入200字符" :maxlength="100" autosize v-model="logForm.message" type="textarea"></el-input>
             </el-form-item>
         </el-form>
@@ -25,6 +25,10 @@ export default {
             type: Boolean,
             default: false,
         },
+        title: {
+            type: String,
+            default: '日志'
+        }
     },
     data(){
         return {

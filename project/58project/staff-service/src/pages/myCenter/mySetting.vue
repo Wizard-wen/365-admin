@@ -40,9 +40,12 @@
                             <el-input autocomplete="off" v-model="personalInfoForm.name"  placeholder="请输入用户名"></el-input>
                         </el-form-item>
                         <el-form-item label="头像" class="form-item-size">
-                            <upload-single-picture-component
-                                :pictureUrl="personalInfoForm.icon"
-                                @singlePictureUploadSucess="uploadIconSuccess"></upload-single-picture-component>
+                            <single-picture-upload
+                                :uploadHeader="uploadHeader"
+                                :height="140"
+                                :width="100"
+                                :initUrl="personalInfoForm.icon?`./resource/${personalInfoForm.icon}`:''"
+                                @onSinglePictureSuccess="uploadIconSuccess"></single-picture-upload>
                         </el-form-item>
 
                         <el-form-item label="手机号" prop="phone">
@@ -144,6 +147,10 @@ import {myCenterService} from '@common/index.js'
                     return time.getTime() > Date.now();//如果没有后面的-8.64e6就是不可以选择今天的
                 }
             },
+            //图片上传header
+            uploadHeader:{
+                accessToken: this.$store.state.loginModule.token.access_token
+            },
             /**
              * 更改密码字段
              */
@@ -188,7 +195,6 @@ import {myCenterService} from '@common/index.js'
                 urgent: '',//紧急联系人
                 current_address: '',//现住址
                 icon: '',//头像
-                icon_url: '',
             },
             //个人信息表单验证
             personalInfoRules: {
@@ -237,7 +243,7 @@ import {myCenterService} from '@common/index.js'
                             this.personalInfoForm = {
                                 ...this.personalInfoForm,
                                 ...data.data,
-                                icon_url: '',
+                                // icon_url: '',
                             }
                         }
                     }).catch(error =>{
@@ -271,7 +277,7 @@ import {myCenterService} from '@common/index.js'
                         //定义用户信息传输字段
                         let sendPersonalInfoObject = {
                             ...this.personalInfoForm,
-                            icon: this.personalInfoForm.icon_url
+                            // icon: this.personalInfoForm.icon_url
                         }
 
                         await myCenterService.editPersonal(sendPersonalInfoObject).then(data =>{
@@ -358,8 +364,7 @@ import {myCenterService} from '@common/index.js'
         },
         //头像上传成功
         uploadIconSuccess(param) {
-            this.personalInfoForm.icon = param;
-            this.personalInfoForm.icon_url = param;
+            this.personalInfoForm.icon = param.path
         },
     },
     async mounted(){

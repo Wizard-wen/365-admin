@@ -20,16 +20,6 @@
                 <el-tooltip slot="label" class="item" effect="dark" content="证书尺寸为150*237" placement="top-start">
                     <span>上传图片<i class="el-icon-info"></i></span>
                 </el-tooltip>
-                <!-- <el-upload
-                    accept=".jpg,.jpeg,.png,.gif,.bmp,.pdf,.JPG,.JPEG,.PBG,.GIF,.BMP,.PDF"
-                    action="/admin/common/uploadImage"
-                    :on-success="uploadSuccess"
-                    :on-remove="removePic"
-                    :file-list="paperForm.images"
-                    list-type="picture-card"
-                    :headers="uploadHeader">
-                    <i class="el-icon-plus"></i>
-                </el-upload> -->
                 <multiple-picture-upload
                     :uploadHeader="uploadHeader"
                     :height="height"
@@ -193,22 +183,29 @@ export default {
         }
     },
     async mounted(){
-        store.commit('setLoading',true)
         try{
-            let data = await Promise.all([
-                operateService.getPaperSelection('enable'), //获取证书字段列表
-            ])
-
-            //promise.all 赋值
-            this.paperCategoryList = data[0].data
-
+            this.is_loading = true
+            //获取证书字段列表
+            await operateService.getPaperSelection('enable').then(data =>{
+                 this.paperCategoryList = data.data
+                 this.is_loading = false
+            }).catch(error =>{
+                this.$message({
+                    type:'error',
+                    message: error.message
+                })
+                this.is_loading = false
+            }).finally(() =>{
+                this.is_loading = false
+            })
         }catch(error){
             this.$message({
                 type:'error',
                 message: error.message
             })
+            this.is_loading = false
         }
-        store.commit('setLoading',false)
+        
     }
 }
 </script>

@@ -18,8 +18,8 @@
                 </el-select>
             </el-form-item>
 
-            <el-form-item label="是否展示" prop="type">
-                <el-switch v-model="productTreeForm.type"></el-switch>
+            <el-form-item label="是否展示" prop="status">
+                <el-switch v-model="productTreeForm.status"></el-switch>
             </el-form-item>
 
             <el-form-item>
@@ -31,9 +31,7 @@
 </template>
 <script>
 
-/**
- * type 0 新建  1 编辑
- */
+
 import {authService, operateService} from '@common/index.js'
 
 export default {
@@ -52,7 +50,7 @@ export default {
             //商品树表单
             productTreeForm: {
                 name: '',//商品名
-                type: true,// enable 允许 disable 禁止
+                status: true,// 1 允许 2 禁止
                 parent_id: 0,//权限父级id
                 version: 0,//新建version
             },
@@ -63,7 +61,7 @@ export default {
                 parent_id: [
                     { required: true, message: '请选择父级id', trigger: 'change' },
                 ],
-                type: [
+                status: [
                     { required: true, message: '请选择状态', trigger: 'change' },
                 ],
             },
@@ -79,10 +77,10 @@ export default {
         async onSubmit(formName) {
             await this.$refs[formName].validate(async (valid) => {
                 if (valid) {
-                    if(this.productTreeForm.type){
-                        this.productTreeForm.type = 'enable'
+                    if(this.productTreeForm.status){
+                        this.productTreeForm.status = '1'
                     } else {
-                        this.productTreeForm.type = 'disable'
+                        this.productTreeForm.status = '2'
                     }
                     try{
                         this.is_loading = true

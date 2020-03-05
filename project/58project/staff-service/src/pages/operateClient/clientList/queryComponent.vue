@@ -1,54 +1,72 @@
 <template>
-    <div class="">
-        <!-- <query-search-list
-            @updateSearchList="updateSearchList"
-            :selectedList="queryedClientList.authentication"
-            :queryKey="'authentication'" 
-            :queryName="'认证状态'" 
-            :queryList="clientConfigForm.authentication"></query-search-list> -->
-        <query-search-input
-            @updateSearchInput="updateSearchInput"
-            :selectedText="queryedClientList.name"
-            :queryKey="'name'" 
-            :queryName="'姓名'"></query-search-input>
+    <div class="search-box">
+        <el-form :inline="true" size="mini" ref="localQueryedForm" label-width="90px" :model="localQueryedForm" class="account-form">
+            <el-form-item label="姓名" prop="name">
+                <el-input placeholder="请输入姓名" v-model="localQueryedForm.name" :maxlength="20"></el-input>
+            </el-form-item>
+            <el-form-item label="电话" prop="phone">
+                <el-input placeholder="请输入电话号" v-model="localQueryedForm.phone" :maxlength="20"></el-input>
+            </el-form-item>
+            <el-form-item >
+                <div style="width: 263px;display: flex;justify-content: flex-end">
+                    <el-button type="primary" @click="searchForm">查询</el-button>
+                    <el-button type="primary" @click="resetForm('localQueryedForm')">重置</el-button>
+                </div>
+            </el-form-item>        
+        </el-form>
     </div>
 </template>
+
 <script>
-
-
 export default {
     data(){
         return {
+            cascaderProps: {
+                label:'name',
+                value:'id'
+            },
+            localQueryedForm: {
+                phone: '',
+                name: '',
+            }
         }
     },
-    computed:{
-        clientConfigForm(){
-            return this.$store.state.operateModule.clientConfigForm
+    props: {
+        /**
+         * 待选择的数据
+         */
+        queryForm: {
+            type: Object,
+            default: function(){
+                return {}
+            }
         },
-        queryedClientList(){
-            return this.$store.state.operateModule.clientList
-        }
     },
     methods: {
-        updateSearchInput(queryObject){
-            this.$store.commit('setClientList', {
-                queryKey: queryObject[0], 
-                queryedList: queryObject[1]
-            })
-            this.$emit('updateTable')
+        /**
+         * 搜索
+         */
+        searchForm(){
+            this.$emit('changeQueryedForm', this.localQueryedForm)
         },
-        updateSearchList(queryObject){
-            this.$store.commit('setClientList', {
-                queryKey: queryObject[0], 
-                queryedList: queryObject[1]
-            })
-            this.$emit('updateTable')
+        /**
+         * 重置
+         */
+        resetForm(formName) {
+            this.$refs[formName].resetFields();
+            this.$emit('changeQueryedForm', this.localQueryedForm)
         }
-    },
+    }
 }
 </script>
+
 <style lang="scss" scoped>
-
+    .search-box{
+        background: #fff;
+        padding: 18px 30px 18px 30px;
+        margin-bottom: 18px;
+        .account-form{
+            background: #fff;
+        }
+    }
 </style>
-
-

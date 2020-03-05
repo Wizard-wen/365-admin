@@ -124,13 +124,13 @@
                     :label="'合同照片'"
                     :size="1"
                     :value="contractBase.accessory">
-                    <photo-component
+                    <multiple-picture-upload
                         slot="define"
-                        :pictureUrlArrtibute="'url'"
                         v-model="contractBase.accessory"
-                        :height="'297px'"
-                        :width="'210px'"
-                        :isEdit="false"></photo-component>
+                        :title="'合同附件'"
+                        :height="210"
+                        :width="197"
+                        :isEdit="false"></multiple-picture-upload>
                 </detail-form-item-component>
             </detail-form-component>
         </template>
@@ -139,13 +139,7 @@
 
 <script>
 import {$utils} from '@common/index.js'
-import {
-    photoComponent,
-} from '@/public/module/worker/workerShowComponent/index.js'
 export default {
-    components: {
-        photoComponent,
-    },
     filters: {
         timeFomatter(value){
             if(value == 0){

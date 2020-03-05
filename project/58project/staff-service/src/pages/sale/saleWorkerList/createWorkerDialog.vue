@@ -48,11 +48,11 @@
 </template>
 <script>
 import {saleService,operateService} from '@common/index.js'
-import selectTagComponent from '../../components/selectTagComponent'
+// import selectTagComponent from '../../components/selectTagComponent'
 export default {
-    components: {
-        selectTagComponent//单选、多选框组件
-    },
+    // components: {
+    //     selectTagComponent//单选、多选框组件
+    // },
     props: {
         //是否打弹出框
         openCreateWorkerDialog: {

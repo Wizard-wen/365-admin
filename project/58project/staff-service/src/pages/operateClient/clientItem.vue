@@ -27,7 +27,7 @@
 </template>
 
 <script>
-import {operateService} from '@common/index.js'
+import {clientService} from '@/service/operateClient.ts'
 export default {
     data(){
         return {
@@ -41,7 +41,7 @@ export default {
             try{
                 this.is_loading = true
 
-                await operateService.getUser(this.$route.query.id).then((data) =>{
+                await clientService.getUser(this.$route.query.id).then((data) =>{
 
                     this.userItem = data.data
                     this.is_loading = false

@@ -15,7 +15,7 @@
 
 <script>
 import {operateService} from '@common/index.js'
-import {storeService} from '@common/service/store'
+import {storeService} from '@/service/store'
 
 import queryComponent from './queryComponent/index.vue'
 import workerTableComponent from './workerTableComponent/index.vue'
@@ -44,7 +44,7 @@ export default {
                 pageNumber: 20,
             },
             //查询对象
-            queryedFrom: {
+            queryForm: {
                 is_third: [],
                 type: [],
                 name: '',
@@ -61,7 +61,7 @@ export default {
             return {
                 page: this.pagination.currentPage, //请求页码
                 pageNumber: this.pagination.pageNumber,//单页信息数量
-                ...this.queryedFrom,
+                ...this.queryForm,
             }
         }
     },
@@ -103,7 +103,7 @@ export default {
             await this.getTable()
         },
         async changeQueryedForm(res){
-            this.queryedFrom = res
+            this.queryForm = res
             await this.getTable()
         },
         
