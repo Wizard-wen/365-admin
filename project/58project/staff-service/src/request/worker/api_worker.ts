@@ -4,12 +4,12 @@ import {
 }from '../../pages/operateWorker/workerItem/IworkerItem'
 
 import {
-    searchWorkerItem,
+    operateSearchWorkerItem,
 }from '../../pages/operateWorker/workerList/IworkerList'
 
 export interface api_worker{
     getOperateWorkBench: {(id:string): Promise<any>},
-    getStaffList:{(queryObject:searchWorkerItem):Promise<any>},//获取服务人员列表
+    getStaffList:{(queryObject:operateSearchWorkerItem):Promise<any>},//获取服务人员列表
     getStaff:{(id:string):Promise<any>},//获取服务人员
     editStaff:{(queryObject:workerItem):Promise<any>},//编辑服务人员
     checkStaffName:{(id:string,name:string):Promise<any>},//检测服务人员姓名是否重复

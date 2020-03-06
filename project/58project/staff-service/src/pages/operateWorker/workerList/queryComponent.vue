@@ -50,14 +50,22 @@
             </el-form-item>
         
             <el-form-item v-if="isWorkerList == 1" label="签约状态" prop="sign_status">
-                <el-select v-model="localQueryedForm.sign_status" placeholder="请选择接单状态">
+                <el-select 
+                    v-model="localQueryedForm.sign_status" 
+                    placeholder="请选择接单状态"
+                    filterable
+                    clearable>
                     <el-option label="全部" :value="0"></el-option>
                     <el-option label="未签约" :value="1"></el-option>
                     <el-option label="已签约" :value="2"></el-option>
                 </el-select>
             </el-form-item>
             <el-form-item label="工龄">
-                <el-select v-model="localQueryedForm.working_age" placeholder="请选择接单状态">
+                <el-select 
+                    v-model="localQueryedForm.working_age" 
+                    placeholder="请选择接单状态"
+                    filterable
+                    clearable>
                     <el-option 
                         v-for="(item, index) in work_age_list" 
                         :key="index" 
@@ -66,7 +74,11 @@
                 </el-select>
             </el-form-item>
             <el-form-item v-if="isWorkerList == 1" label="民族" prop="nation">
-                <el-select v-model="localQueryedForm.nation" placeholder="请选择民族">
+                <el-select 
+                    v-model="localQueryedForm.nation" 
+                    placeholder="请选择民族"
+                    filterable
+                    clearable>
                     <el-option label="全部" :value="0"></el-option>
                     <el-option 
                         v-for="(item, index) in queryForm.nation" 
@@ -87,7 +99,11 @@
                 </el-select>
             </el-form-item>
             <el-form-item v-if="isWorkerList == 1" label="技能证书" prop="paper">
-                <el-select v-model="localQueryedForm.paper" placeholder="请选择技能证书">
+                <el-select 
+                    v-model="localQueryedForm.paper" 
+                    placeholder="请选择技能证书"
+                    filterable
+                    clearable>
                     <el-option label="全部" :value="0"></el-option>
                     <el-option 
                         v-for="(item, index) in queryForm.paper_category" 
@@ -109,6 +125,7 @@
 
 <script>
 import {work_age_list} from './IworkerList.ts'
+import {operateWorkerService} from '@/service/operateWorker'
 export default {
     data(){
         return {
@@ -122,14 +139,14 @@ export default {
                 phone: '',//电话
                 identify: '',//身份证号
                 staff_code: '',//员工号
-                skill: [],//技能标签
+                skill: [0],//职业技能
                 // course: [],//课程
                 sign_status: [],//签约状态
-                working_age: 0,//工龄
-                manager_id: [],//创建人
-                nation: [],//民族
-                education: [],//教育程度
-                paper: [],//技能证书
+                working_age: [0],//工龄
+                manager_id: [0],//创建人
+                nation: [0],//民族
+                education: [0],//教育程度
+                paper: [0],//技能证书
             }
         }
     },
@@ -149,22 +166,19 @@ export default {
             type: Number,
             default: 1,
         }
-        // /**
-        //  * 已选中的标签
-        //  */
-        // queryedForm: {
-        //     type: Object,
-        //     default: function(){
-        //         return {}
-        //     }
-        // }
     },
     methods: {
         /**
          * 搜索
          */
         searchForm(){
-            this.$emit('changeQueryedForm', this.localQueryedForm)
+            let sendForm = {
+                ...this.localQueryedForm,
+            }
+            sendForm.skill = operateWorkerService.sendCascanderData(sendForm.skill) 
+            sendForm.manager_id = operateWorkerService.sendCascanderData(sendForm.manager_id) 
+            // sendForm.source = operateWorkerService.sendCascanderData(sendForm.source) 
+            this.$emit('changeQueryedForm', sendForm)
         },
         /**
          * 重置

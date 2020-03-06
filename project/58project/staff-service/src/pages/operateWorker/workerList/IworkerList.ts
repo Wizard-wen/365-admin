@@ -1,8 +1,22 @@
-/**
- * 服务人员搜索字段
- */
-export interface searchWorkerItem{
+import {workerItem} from '@/pages/operateWorker/workerItem/IworkerItem'
 
+/**
+ * 服务人员列表
+ * des 共五种服务人员列表
+ */
+export enum listType {
+    workerList = "total",//运营中心服务人员信息库,
+    returnWorkerList ="return",//回访服务人员
+    newWorkerList ="apply",//审核新服务人员
+    errorWorkerList ="warning",//异常服务人员
+    // saleOwnWorkerList ="",
+    saleWorkerList ="seller",//门店服务人员信息库
+    matchWorkerList ="match",//订单配置服务人员匹配列表
+}
+/**
+ * 服务人员基本搜索字段
+ */
+export interface baseSearchWorkerItem {
     get_for:string;//请求数据类型
 
     page?:number;//页码
@@ -10,32 +24,65 @@ export interface searchWorkerItem{
 
     name?:string;//姓名
     phone?:string;//电话
+}
+
+/**
+ * 运营中心服务人员信息库搜索字段
+ */
+export interface operateSearchWorkerItem extends baseSearchWorkerItem{
     identify?:string;//身份证号
     staff_code?:string;//员工编号
     skill?:Array<number>;//职业类型
-    // course:Array<number>;//参加培训
+    course:Array<number>;//参加培训
     manager_id?:Array<number>;//创建人
-    sign_status?:number;//签约状态
-    // working_age:number;//工龄
-    nation?:number;//民族
-    education?:number;//教育程度
+    sign_status?:Array<number>;//签约状态
+    working_age:Array<number>;//工龄
+    nation?:Array<number>;//民族
+    education?:Array<number>;//教育程度
     paper?:Array<number>;//技能证书
 }
+/**
+ * 运营中心回访服务人员搜索字段
+ */
+export interface operateReturnSearchWorkerItem extends baseSearchWorkerItem{}
+/**
+ * 运营中心异常服务人员搜索字段
+ */
+export interface operateErrorSearchWorkerItem extends baseSearchWorkerItem{}
+/**
+ * 运营中心新建服务人员搜索字段
+ */
+export interface operateCreateSearchWorkerItem extends baseSearchWorkerItem{}
+/**
+ * 门店服务人员信息库搜索字段
+ */
+export interface saleSearchWorkerItem extends operateSearchWorkerItem{
+    /**
+     * 销售门店之前存在”由我创建的服务人员“，现在取消这个列表
+     * 在门店的服务人员中增加一个由我创建的选项，
+     * 这个选项会自动将当前门店工作人员的id作为manager_id的查询参数
+     */
+    manager_id?:Array<number>;//创建人
+}
+/**
+ * 运营中心回访服务人员搜索字段
+ */
+export interface orderMatchSearchWorkerItem extends baseSearchWorkerItem{}
+
+
 
 
 /**
- * 请求列表状态
+ * 服务人员列表字段
  */
-export const get_forList = [
-    {id: 0,key: 'total',},//全部服务人员,
-    {id: 1,key: 'return',},//回访服务人员
-    {id: 2,key: 'warning'},//异常服务人员
-    {id: 3,key: 'apply'},//审核新服务人员
-    {id: 4,key: 'seller'},//服务人员信息库
-    {id: 5,key: 'match'},//订单配置服务人员匹配列表
-]
+export interface workerList extends workerItem{
+    paper_ids:Array<number>;
+    skill_ids:Array<number>;
+    course_ids:Array<number>;
+}
 
-export const queryUpdated_at = [
+// 时间查询区间
+export const updated_at = [
     {id: 1,name: '今天',},
     {id: 2,name: '昨天',},
     {id: 3,name: '过去7天',},
@@ -48,16 +95,15 @@ export const queryUpdated_at = [
     {id: 10,name: '本年',},
     {id: 11,name: '上年',},
 ]
-
+// 教育程度
 export const educationList = [
-    {name: '本科及以上',oldId: 1, containsId:[2]},
-    {name: '专科',oldId: 4, containsId:[3,10]},
-    {name: '高中',oldId: 7, containsId:[5,6]},
-    {name: '初中',oldId: 8,},
-    {name: '小学',oldId: 9,}
+    {name: '本科及以上',id: 1,},
+    {name: '专科',id: 2,},
+    {name: '高中',id: 3,},
+    {name: '初中',id: 4,},
+    {name: '小学',id: 5,},
 ]
-
-
+// 生肖
 export const zodiac_ignList =[
     {id: 1, name: '鼠'},
     {id: 2, name: '牛'},
@@ -72,7 +118,7 @@ export const zodiac_ignList =[
     {id: 11, name: '狗'},
     {id: 12, name: '猪'},
 ]
-
+// 工龄查询区间
 export const work_age_list = [
     {id: 0, name: '全部'},
     {id: 1, name: '1年'},
@@ -80,5 +126,5 @@ export const work_age_list = [
     {id: 3, name: '3年'},
     {id: 4, name: '4年'},
     {id: 5, name: '5年'},
-    {id: 6, name: '5年以上'},
+    {id: 6, name: '6年及以上'},
 ]

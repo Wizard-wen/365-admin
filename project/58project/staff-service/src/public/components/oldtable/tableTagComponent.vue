@@ -55,9 +55,24 @@ export default {
                 setTableOriginData =  this.tableOriginData
             }
             this.showList = []
-            setTableOriginData.forEach((item, index) =>{
-                let a = this.propList.filter(it => it.id == item)
 
+                function findTagId(id, arr){
+                    for(var i = 0; i<arr.length; i++){
+                        if(arr[i].children){
+                            return findTagId(id, arr[i].children)
+                        } else {
+                            if(arr[i].id == id){
+                                return arr[i]
+                            } 
+                        }
+                    }
+                }
+
+
+            setTableOriginData.forEach((item, index) =>{
+
+                // let a = this.propList.filter(it => it.id == item)
+                let a = findTagId(item,this.propList)
                 if(typeof this.propList.find(it => it.id == item) != 'undefined'){
                     this.showList.push(this.propList.find(it => it.id == item))
                 }

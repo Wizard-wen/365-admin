@@ -20,7 +20,11 @@ export interface workerItem{
     // 1 未签约 2 已签约
     sign_status?:number;//签约状态
 
-    /****************************基本信息15个***************** */
+    /****************************客户可见 **********************/
+
+    cus_working_experience:string;//工作经历、个人技能
+
+    /****************************基本信息16个***************** */
     name:string;//姓名
     // 1 男 2 女
     sex:number;//性别
@@ -45,23 +49,24 @@ export interface workerItem{
      * 确定一下尺寸
      */
     icon?:string;//头像
-
+    //是 否
+    isMarried: string,//是否结婚
 
     /***************技能信息 7个****************** */
     //skill 和服务商品列表保持一致
     // 职业类型字段根据服务商品列表返回的树形结构展示，前端采用element的复选框
-    skill:Array<object>;//职业类型
+    skill:Array<number>;//职业类型
     //树形结构
     course?:number;//参加培训
     //年份
-    worked_at:number;//参加工作时间
+    worked_at:number|string;//参加工作时间
     /**
      * 这个字段现在包含全部种类的照片，头像，证书，证件照等，将来要逐步拆分
      * 这个字段目前要保留，但是会逐步被替代
      */
     photo?:Array<object>;//照片
     //下拉框
-    paper?:Array<object>;//技能证书标签
+    paper?:Array<number>;//技能证书标签
     certificate?:Array<object>,//技能证书
     //后台跑脚本，将这个字段和working_experience字段合并
     remarks?:string;//备注（商家情况）

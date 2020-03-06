@@ -25,10 +25,10 @@
                 <div class="label ">体重</div>:
                 <div class="value">-</div>
             </div>
-            <div class="item">
-                <div class="label ">籍贯</div>:
-                <div class="value">{{pictureForm.birthplace || ''}}</div>
-            </div>
+            <!-- <div class="item">
+                <div class="label ">婚姻状况</div>:
+                <div class="value">{{pictureForm.isMarried || ''}}</div>
+            </div> -->
 
             <div class="item">
                 <div class="label ">学历</div>:
@@ -46,23 +46,28 @@
                     <span v-for="(item, index) in service_type" :key="index">{{`${item.name}&nbsp;/&nbsp;`}}</span>
                 </div>
             </div>
+
+            <!-- <div class="item item-double-line">
+                <div class="label ">职业类型</div>:
+                <div class="value long">
+                    <span v-for="(item, index) in paper" :key="index">{{`${item.name}&nbsp;/&nbsp;`}}</span>
+                </div>
+            </div> -->
+
+            
+            <!-- <div class="item item-double-line">
+                <div class="label ">工作经历</div>:
+                <div class="value">{{pictureForm.working_experience || ''}}</div>
+            </div> -->
             <div class="item">
                 <div class="label ">技能证书</div>:
                 <div class="value long">
                     <span v-for="(item, index) in paper" :key="index">{{`${item.name}&nbsp;/&nbsp;`}}</span>
                 </div>
             </div>
-            <div class="item item-double-line">
-                <div class="label ">工作经历</div>:
-                <div class="value">{{pictureForm.working_experience || ''}}</div>
-            </div>
-            <div class="item item-double-line">
-                <div class="label ">自我评价</div>:
-                <div class="value">-</div>
-            </div>
         </div>
         <div class="icon">
-            <img v-if="pictureForm.icon" style="height:100px;width:100px;" :src="'./resource/'+pictureForm.icon" alt="">
+            <img v-if="pictureForm.icon" style="height:140px;width:100px;" :src="'./resource/'+pictureForm.icon" alt="">
             <div v-else class="no-img">暂无头像</div>
         </div>
     </div>
@@ -71,16 +76,16 @@
 <script>
 export default {
 
-    data(){
-        return {
-
+    props: {
+        /**
+         * 服务人员字段配置
+         */
+        workerConfigForm:{
+            type: Object,
+            default(){return {}}
         }
     },
     computed: {
-        //服务人员表单配置项
-        workerConfigList(){
-            return this.$store.state.operateModule.workerConfigForm
-        },
         sex(){
             if(this.pictureForm.sex){
                 return this.pictureForm.sex == 1 ? '男' : '女'
@@ -89,23 +94,11 @@ export default {
             }
         },
         paper(){
-            if(this.workerConfigList){
+            if(this.workerConfigForm){
                 return this.pictureForm.paper.reduce((arr,item,index) =>{
-                    return this.workerConfigList.paper_category.some(it => it.id == item)? 
+                    return this.workerConfigForm.paper.some(it => it.id == item)? 
                         arr.concat({
-                            ...this.workerConfigList.paper_category.find(it => it.id == item),
-                        }) : arr
-                },[])
-            } else {
-                return []
-            }
-        },
-        service_type(){
-            if(this.workerConfigList){
-                return this.pictureForm.service_type.reduce((arr,item,index) =>{
-                    return this.workerConfigList.service_type.some(it => it.id == item)? 
-                        arr.concat({
-                            ...this.workerConfigList.service_type.find(it => it.id == item),
+                            ...this.workerConfigForm.paper.find(it => it.id == item),
                         }) : arr
                 },[])
             } else {
@@ -113,7 +106,7 @@ export default {
             }
         },
         education(){
-            return this.workerConfigList.education.find(it => it.id == this.pictureForm.education)
+            return this.workerConfigForm.education.find(it => it.id == this.pictureForm.education)
         }
     },
     filters: {

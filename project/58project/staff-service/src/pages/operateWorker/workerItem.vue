@@ -49,8 +49,9 @@
         <template slot="control">
             <div class="control-contains">
                 <!-- 创建/编辑 -->
-                <el-button size="mini" type="primary" @click="editStaff('form')">{{editText}}</el-button>
-                <el-button size="mini" type="primary" @click="makeImage" v-if="isShowImageButton">生成名片</el-button>
+                <el-button size="mini" type="primary" @click="editWorker('form')">{{editText}}</el-button>
+                <!-- <el-button size="mini" type="primary" @click="makeImage" v-if="isShowImageButton">生成名片</el-button> -->
+                <make-image-btn :workerForm="workerForm"></make-image-btn>
                 <!-- 导出回访 / 恢复 / 提交至信息库-->
                 <el-button size="mini" type="primary" @click="submitStaff" v-if="submitText != ''">{{submitText}}</el-button>
                 <el-button size="mini" @click="goback">返回</el-button>
@@ -59,7 +60,7 @@
 
         <!-- 生成服务人员名片组件 -->
         <!-- 生成服务人员名片组件 -->
-        <template>
+        <!-- <template>
             <make-image-component
                 :makeImageDialogVisible="makeImageDialogVisible"
                 v-if="makeImageDialogVisible"
@@ -71,7 +72,7 @@
                         :pictureForm="workerForm"></worker-picture-component>
                 </template>
             </make-image-component>
-        </template>
+        </template> -->
 
         
         
@@ -296,8 +297,9 @@
             </card-box-component>
             <el-form-item>
                 <!-- 创建/编辑 -->
-                <el-button size="mini" type="primary" @click="editStaff('form')">{{editText}}</el-button>
-                <el-button size="mini" type="primary" @click="makeImage" v-if="isShowImageButton">生成名片</el-button>
+                <el-button size="mini" type="primary" @click="editWorker('form')">{{editText}}</el-button>
+                <!-- <el-button size="mini" type="primary" @click="makeImage" v-if="isShowImageButton">生成名片</el-button> -->
+                <make-image-btn :workerForm="workerForm"></make-image-btn>
                 <!-- 导出回访 / 恢复 / 提交至信息库-->
                 <el-button size="mini" type="primary" @click="submitStaff" v-if="submitText != ''">{{submitText}}</el-button>
                 <el-button size="mini" @click="goback">返回</el-button>
@@ -321,12 +323,17 @@ import workerPictureComponent from './workerItem/workerPictureComponent.vue'
 import {operateWorkerService} from '@/service/operateWorker'
 
 import {zodiac_ignList} from './workerList/IworkerList.ts'
+
+
 import returnMsgComponent from './workerItem/returnMsgComponent.vue'
+import makeImageBtn from '@/pages/operateWorker/workerList/workerTableComponent/control/makeImageBtn.vue'
+
 export default {
     components: {
         paperComponent,//上传证书照片证书组件
         workerPictureComponent,//生成服务人员名片组件
         returnMsgComponent,
+        makeImageBtn,
     },
     data() {
         let _this = this
@@ -426,7 +433,7 @@ export default {
                 certificate: [],//技能证书图片
                 remarks:'',//备注（商家情况）
                 return_msg:'',//回访信息
-
+                
                 // type:null,//签约状态
                 // register_at:null,//登记时间
                 // source:0,//信息来源
@@ -482,7 +489,7 @@ export default {
         /**
          * 提交表单
          */
-        async editStaff(formName) {
+        async editWorker(formName) {
             let _this = this;
             await this.$refs[formName].validate(async (valid, fileds) => {
                 if (valid) {
@@ -494,14 +501,11 @@ export default {
                         workerFormSend.id = this.$store.state.loginModule.user.username
                     }
 
-                    workerFormSend.skill = workerFormSend.skill.reduce((arr,item) => {
-                        console.log(item)
-                        return [...arr,item[1]]
-                    },[])
+                    workerFormSend.skill = operateWorkerService.sendCascanderData(workerFormSend.skill) 
 
                     try{
                         this.is_loading = true
-                        await operateService.editStaff(workerFormSend).then(data =>{
+                        await operateWorkerService.editWorker(workerFormSend).then(data =>{
                             if(data.code == '0'){
                                 this.$message({
                                     type:"success",
@@ -596,9 +600,9 @@ export default {
         /**
          * 生成图片
          */
-        makeImage(){
-            this.makeImageDialogVisible = true
-        },
+        // makeImage(){
+        //     this.makeImageDialogVisible = true
+        // },
         /**
          * 控制编辑按钮文案
          */

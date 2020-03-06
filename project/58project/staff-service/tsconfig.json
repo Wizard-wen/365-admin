@@ -10,8 +10,14 @@
       "moduleResolution": "node",//决定如何处理模块。
       "target": "es5",//编译目标平台
       "lib": [
-            "es6"
-        ],
+          "es6"
+      ],
+      "baseUrl": "./",
+      "paths": {
+        "@/*": [
+          "src/*"
+        ]
+      },
         // "skipLibCheck": true,
         // "esModuleInterop": true,
         // "experimentalDecorators": true

@@ -14,14 +14,14 @@ import {
 } from '../pages/operateWorker/workerFormConfig/IworkerFormConfig'
 
 import {
-    searchWorkerItem,
+    operateSearchWorkerItem,
 } from '../pages/operateWorker/workerList/IworkerList'
 
 export const operateWorkerService = {
     /**
      * 请求列表数据
      */
-    getTableList(type:string, queryObject:searchWorkerItem):Promise<any>{
+    getTableList(type:string, queryObject:operateSearchWorkerItem):Promise<any>{
 
         return  Promise.all([
             apiRequestFormConfig.getWorkerFormConfig(type), //获取表单配置字段
@@ -42,29 +42,6 @@ export const operateWorkerService = {
             }
         })
     },
-
-    /**
-     * 拼接service_crowd（服务人群）字段
-     * @param selectedArr 原始数据
-     * 
-     */
-    // setCommitAttr(selectedArr:Array<object>, configList:any, keyName:string){
-    //     class sendItem {
-    //         name
-    //     }
-    //     return selectedArr.reduce((arr:any, item:any)=>{
-    //         var serviceItem:any = null
-    //         selectedArr.forEach((it:any) =>{
-
-    //             if(it == item.id){
-    //                 serviceItem = {}
-    //                 serviceItem[keyName] = item.id;
-    //                 serviceItem['name'] = item.name;
-    //             }
-    //         })
-    //         return serviceItem == null ? arr : arr.concat(serviceItem)
-    //     },[])
-    // },
     /**
      * 
      * @param type 查询类型  edit 使用 config 编辑
@@ -72,6 +49,11 @@ export const operateWorkerService = {
     async getWorkerFormConfig(type:string):Promise<any>{
         return apiRequestFormConfig.getWorkerFormConfig(type)
     },
+    /**
+     * 获取服务人员信息
+     * @param id 
+     * @param workerFormConfig 
+     */
     async getWorker(id:string, workerFormConfig:workerFormConfig):Promise<any>{
         let skillConfig = workerFormConfig.skill
         return apiRequestWorker.getStaff(id).then(data =>{
@@ -85,9 +67,32 @@ export const operateWorkerService = {
                 return workerForm
             }
         })
-    }
-
-
+    },
+    /**
+     * 包装级联选择器的数据
+     * @param arr 级联选择器原始数据
+     */
+    sendCascanderData(originArr:any){
+        if(Array.isArray(originArr[0])){
+            return originArr.reduce((arr:any,item:any) => {
+                if(item.length == 1){
+                    return [...arr,item[0]]
+                } else {
+                    let length = item.length -1
+                    return [...arr,item[length]]
+                }   
+            },[])
+        } else {
+            return [originArr[originArr.length-1]]
+        }
+    },
+    /**
+     * 编辑服务人员信息
+     * @param workerForm 
+     */
+    async editWorker(workerForm:workerItem):Promise<any>{
+        return apiRequestWorker.editStaff(workerForm)
+    },
 }
 /**
  * 将叶节点数组，转换成级联选择器的数据格式
@@ -115,6 +120,7 @@ function setTreeArray(key:number,tree:Array<any>){
     getTreeInitModel(key,tree);
     return tmpParentIdList.reverse()
 }
+
 
 
 
