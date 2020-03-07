@@ -38,11 +38,11 @@ export interface operateSearchWorkerItem extends baseSearchWorkerItem{
     service_category:Array<number>;//职业类型
     course:Array<number>;//参加培训
     manager:Array<number>;//创建人
-    sign_status:Array<number> | number;//签约状态
-    working_age:Array<number> | number;//工龄
-    nation:Array<number> | number;//民族
-    education:Array<number> | number;//教育程度
-    paper_category:Array<number> | number;//技能证书
+    sign_status:number;//签约状态
+    working_age:number;//工龄
+    nation:Array<number>;//民族
+    education:Array<number>;//教育程度
+    paper_category:Array<number>;//技能证书
 }
 /**
  * 运营中心回访服务人员搜索字段
