@@ -6,7 +6,7 @@ import {
 
 import {workerItem} from '@/pages/operateWorker/workerItem/IworkerItem'
 
-import {workerFormConfig} from '@/pages/operateWorker/workerFormConfig/IworkerFormConfig'
+import {workerConfigForm} from '@/pages/operateWorker/workerConfigForm/IworkerConfigForm'
 
 import {operateSearchWorkerItem} from '@/pages/operateWorker/workerList/IworkerList'
 
@@ -45,10 +45,10 @@ export const operateWorkerService = {
     /**
      * 获取服务人员信息
      * @param id 
-     * @param workerFormConfig 
+     * @param workerConfigForm 
      */
-    async getWorker(id:string, workerFormConfig:workerFormConfig):Promise<any>{
-        let skillConfig = workerFormConfig.skill
+    async getWorker(id:string, workerConfigForm:workerConfigForm):Promise<any>{
+        let skillConfig = workerConfigForm.skill
         return apiRequestWorker.getStaff(id).then(data =>{
             if(data.code == "0"){
 

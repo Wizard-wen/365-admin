@@ -7,7 +7,7 @@
 /**
  * 服务人员配置项
  */
-export interface workerFormConfig{
+export interface workerConfigForm{
     course:Array<formConfigItem>;//参加培训
     nation:Array<formConfigItem>;//民族
     paper_category:Array<formConfigItem>;//技能证书标签

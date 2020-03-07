@@ -1,17 +1,8 @@
 <template>
-    <span style="margin-left: 10px;" v-loading="is_loading">
-        <el-button 
-            v-if="currentWorker.status == 2"
-            size="mini" 
-            type="danger"
-            @click="openChangeStaffStatus()">停用</el-button>
-        <el-button 
-            v-else
-            size="mini"  
-            type="success"
-            @click="openChangeStaffStatus()" 
-            >启用</el-button>
-    </span>
+    <el-button 
+        size="mini" 
+        :type="currentWorker.status == 1?'danger':'success'"
+        @click="openChangeStaffStatus">{{currentWorker.status == 1?'停用':'启用'}}</el-button>
 </template>
 
 <script>
@@ -39,7 +30,7 @@ export default {
          */
         async openChangeStaffStatus(){
 
-            let status = this.currentWorker.status == 2? '停用' : '启用'
+            let status = this.currentWorker.status == 1? '停用' : '启用'
 
             let response = await this.$confirm(`确定${status}该服务人员吗?`, '提示', {
                 confirmButtonText: '确定',

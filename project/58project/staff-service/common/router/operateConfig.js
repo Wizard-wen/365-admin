@@ -47,7 +47,7 @@ import resourceVideoItem from '@/pages/operateCustom/resourceVideoItem.vue'
  * 运营---服务人员管理
  */
 import workerList from '@/pages/operateWorker/workerList.vue'
-import workerFormConfig from '@/pages/operateWorker/workerFormConfig.vue'
+import workerConfigForm from '@/pages/operateWorker/workerConfigForm.vue'
 import workerItem from '@/pages/operateWorker/workerItem.vue'
 import workerItemShow from '@/pages/operateWorker/workerItemShow.vue'
 import newWorkerList from '@/pages/operateWorker/newWorkerList.vue'
@@ -194,9 +194,9 @@ export const operateConfigModule = [
         component: workerItemShow,
     },
     {
-        path: '/worker/workerFormConfig',
-        name: 'workerFormConfig',
-        component: workerFormConfig,
+        path: '/worker/workerConfigForm',
+        name: 'workerConfigForm',
+        component: workerConfigForm,
     },
     {
         path: '/worker/returnWorkerList',

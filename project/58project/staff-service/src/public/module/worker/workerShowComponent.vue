@@ -5,7 +5,7 @@
 
         <template slot="icon" >
             <icon-component
-                :iconUrl="workerForm.icon"
+                :iconUrl="workerForm.icon?`./resource/${workerForm.icon}`:''"
                 :height="140"
                 :width="100"></icon-component>
         </template>
@@ -73,8 +73,6 @@
           
             <card-box-component 
                 :title="'基本信息'">
-                
-
                 <div slot="contains" class="contains-form">
                     <detail-form-component>
                         <detail-form-item-component
@@ -109,7 +107,11 @@
                             :label="'民族'"
                             :size="3"
                             :value="workerForm.nation">
-                            <p slot="template">{{workerForm.nation}}</p>
+                            <table-tag-component 
+                                slot="template"
+                                v-if="workerConfigForm.nation" 
+                                :propList="workerConfigForm.nation" 
+                                :tableOriginData="workerForm.nation"></table-tag-component>
                         </detail-form-item-component>
                         <detail-form-item-component
                             :type="'template'"
@@ -142,19 +144,8 @@
                             :value="`${workerForm.body_weight}kg`"></detail-form-item-component>
                         <detail-form-item-component
                             :type="'template'"
-                            :label="'头像'"
-                            :size="3"
-                            :value="workerForm.icon">
-                            <icon-component
-                                slot="template"
-                                :height="140"
-                                :width="100"
-                                :iconUrl="workerForm.icon?`./resource/${workerForm.icon}`:''"></icon-component>
-                        </detail-form-item-component>
-                        <detail-form-item-component
-                            :type="'template'"
                             :label="'证件照'"
-                            :size="3"
+                            :size="1"
                             :value="workerForm.id_photo">
                             <multiple-picture-upload
                                 slot="template"
@@ -173,13 +164,71 @@
                             :size="1"
                             :value="workerForm.urgent_phone"></detail-form-item-component>
                     </detail-form-component>
-
                 </div>
-                
+            </card-box-component>
+            <card-box-component 
+                :title="'基本信息'">
+                <div slot="contains" class="contains-form">
+                    <detail-form-component>
+                        <detail-form-item-component
+                            :type="'template'"
+                            :label="'职业类型'"
+                            :size="1"
+                            :value="workerForm.skill">
+                            <table-tag-component 
+                                slot="template"
+                                v-if="workerConfigForm.skill" 
+                                :propList="workerConfigForm.skill" 
+                                :tableOriginData="workerForm.skill"></table-tag-component>
+                        </detail-form-item-component>
+                        <detail-form-item-component
+                            :type="'template'"
+                            :label="'参加培训'"
+                            :size="1"
+                            :value="workerForm.course">
+                            <table-tag-component 
+                                slot="template"
+                                v-if="workerConfigForm.course" 
+                                :propList="workerConfigForm.course" 
+                                :tableOriginData="workerForm.course"></table-tag-component>
+                        </detail-form-item-component>
+                        <detail-form-item-component
+                            :type="'template'"
+                            :label="'技能证书'"
+                            :size="1"
+                            :value="workerForm.paper">
+                            <table-tag-component 
+                                slot="template"
+                                v-if="workerConfigForm.paper_category" 
+                                :propList="workerConfigForm.paper_category" 
+                                :tableOriginData="workerForm.paper"></table-tag-component>
+                        </detail-form-item-component>
+                        <detail-form-item-component
+                            :label="'参加工作年份'"
+                            :size="3"
+                            :value="`${workerForm.worked_at}年`"></detail-form-item-component>
+                        <detail-form-item-component
+                            :type="'template'"
+                            :label="'照片'"
+                            :size="1"
+                            :value="workerForm.photo">
+                            <multiple-picture-upload
+                                slot="template"
+                                :isEdit="false"
+                                v-model="workerForm.photo"
+                                :title="'照片'"
+                                :maxCount="10"
+                                :height="150"
+                                :width="237"></multiple-picture-upload>
+                        </detail-form-item-component>
+                    </detail-form-component>
+                </div>
             </card-box-component>
         
-            <log-component :logList="workerForm.log"></log-component>
+            <log-component :title="'日志'" :isEdit="false" :logList="workerForm.log"></log-component>
 
+            <return-msg-component :return_msg="workerForm.log" @updateOrderConfig="getWorkerForm"></return-msg-component>
+            
         
             <el-button size="mini" type="primary" @click="makeImage" v-if="isShowImageButton">生成名片</el-button>
             <el-button size="mini" @click="goback">返回</el-button>
@@ -201,11 +250,12 @@ import workerPictureComponent from './workerShowComponent/workerPictureComponent
 import {operateWorkerService} from '@/service/operateWorker'
 
 import {zodiac_signList,educationList} from '@/pages/operateWorker/workerList/IworkerList.ts'
-
+import returnMsgComponent from '@/pages/operateWorker/workerItem/returnMsgComponent.vue'
 export default {
     components: {
         paperComponent,//上传证书照片证书组件
         workerPictureComponent,//生成服务人员名片组件
+        returnMsgComponent,
     },
     data() {
 
@@ -257,7 +307,7 @@ export default {
                 remarks:'',//备注（商家情况）
                 return_msg:'',//回访信息
             },
-            workerFormConfig: {},
+            workerConfigForm: {},
             datePickerOption: {
                 disabledDate(time) {
                     return time.getTime() > Date.now();//如果没有后面的-8.64e6就是不可以选择今天的
@@ -271,6 +321,9 @@ export default {
         }
     },
     filters: {
+        // nationFormat(target){
+        //     return this.workerConfigForm.nation.find(item => item.id == target ).name
+        // },
         educationFormat(target){
             return educationList.find(item => item.id == target ).name
         },
@@ -352,7 +405,7 @@ export default {
 
                 await operateWorkerService.getWorkerFormConfig('edit').then((data) =>{
                     if(data.code == '0'){
-                        this.workerFormConfig = data.data
+                        this.workerConfigForm = data.data
                     }
                 }).catch(error =>{
                     this.$message({
@@ -362,7 +415,10 @@ export default {
                 })
                 //如果是编辑则请求接口
                 if(this.$route.query.type != 0){
-                    await operateWorkerService.getWorker(this.$route.query.id,this.workerFormConfig).then(data =>{
+                    await operateWorkerService.getWorker(this.$route.query.id,this.workerConfigForm).then(data =>{
+                        let responseData = data
+                        responseData.skill = operateWorkerService.sendCascanderData(responseData.skill)
+                        responseData.course = operateWorkerService.sendCascanderData(responseData.course)
                         this.workerForm = data
                     }).catch(error =>{
                         this.$message({

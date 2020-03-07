@@ -50,10 +50,17 @@
             <div class="control-contains">
                 <!-- 创建/编辑 -->
                 <el-button size="mini" type="primary" @click="editWorker('form')">{{editText}}</el-button>
-                <make-image-btn :workerForm="workerForm" :isShowImageButton="$route.query.type == 1"></make-image-btn>
+                <make-image-btn 
+                    :workerForm="workerForm" 
+                    :workerConfigForm="workerConfigForm" 
+                    :isShowImageButton="$route.query.type == 1"></make-image-btn>
                 <!-- 导出回访 / 恢复 / 提交至信息库-->
-                <el-button size="mini" type="primary" @click="handleWorker" v-if="submitText != ''">{{submitText}}</el-button>
-                <el-button size="mini" @click="goback">返回</el-button>
+                <el-button 
+                    size="mini" 
+                    type="primary" 
+                    @click="handleWorker" 
+                    v-if="submitText != ''">{{submitText}}</el-button>
+                <back-btn></back-btn>
             </div>
         </template>
 
@@ -103,7 +110,7 @@
                             placeholder="请选择民族"
                             filterable>
                             <el-option
-                                v-for="item in workerFormConfig.nation"
+                                v-for="item in workerConfigForm.nation"
                                 :key="item.id"
                                 :label="item.name"
                                 :value="item.id"></el-option>
@@ -195,7 +202,7 @@
                                 value: 'id',
                                 multiple: true
                             }"
-                            :options="workerFormConfig.skill"
+                            :options="workerConfigForm.skill"
                             :show-all-levels="false"></el-cascader>
                     </el-form-item>
                     <el-form-item label="参加工作年份" prop="worked_at" class="form-item-size form-item-2-size" size="small">
@@ -215,7 +222,7 @@
                                 multiple: true
                             }"
                             placeholder="请选择培训项目"
-                            :options="workerFormConfig.course"
+                            :options="workerConfigForm.course"
                             :show-all-levels="false"></el-cascader>
                     </el-form-item>
                     <el-form-item slot="contains" label="技能证书标签" prop="paper" class="form-item-size form-item-2-size" size="small">
@@ -225,7 +232,7 @@
                             filterable
                             multiple>
                             <el-option
-                                v-for="item in workerFormConfig.paper_category"
+                                v-for="item in workerConfigForm.paper_category"
                                 :key="item.id"
                                 :label="item.name"
                                 :value="item.id"></el-option>
@@ -269,16 +276,16 @@
 
             <log-component :title="'日志'" :isEdit="false" :logList="workerForm.log"></log-component>
 
-            <return-msg-component :return_msg="workerForm.log" @updateOrderConfig="getWorkerForm"></return-msg-component>
+            <return-msg-component :isEdit="this.$route.query.type == 2? true :false" :return_msg="workerForm.log" @updateOrderConfig="getWorkerForm"></return-msg-component>
             
             <el-form-item>
                 <!-- 创建/编辑 -->
                 <el-button size="mini" type="primary" @click="editWorker('form')">{{editText}}</el-button>
                 <!-- 生成图片按钮 -->
-                <make-image-btn :workerForm="workerForm" :isShowImageButton="$route.query.type == 1"></make-image-btn>
+                <make-image-btn :workerForm="workerForm"  :workerConfigForm="workerConfigForm" :isShowImageButton="$route.query.type == 1"></make-image-btn>
                 <!-- 导出回访 / 恢复 / 提交至信息库-->
                 <el-button size="mini" type="primary" @click="handleWorker" v-if="submitText != ''">{{submitText}}</el-button>
-                <el-button size="mini" @click="goback">返回</el-button>
+                <back-btn></back-btn>
             </el-form-item>
         </el-form>
     </page-edit-component>
@@ -304,12 +311,14 @@ import {educationList} from './workerList/IworkerList.ts'
 import returnMsgComponent from './workerItem/returnMsgComponent.vue'
 import makeImageBtn from '@/pages/operateWorker/workerList/workerTableComponent/control/makeImageBtn.vue'
 
+import backBtn from '@/pages/operateWorker/workerItem/control/backBtn.vue'
 export default {
     components: {
         paperComponent,//上传证书照片证书组件
         workerPictureComponent,//生成服务人员名片组件
         returnMsgComponent,
         makeImageBtn,
+        backBtn,
     },
     data() {
         let _this = this
@@ -409,7 +418,7 @@ export default {
                 log: [],//日志
             },
             //配置项
-            workerFormConfig: {
+            workerConfigForm: {
                 course: [],
                 nation: [],
                 paper_category: [],
@@ -553,21 +562,21 @@ export default {
         onIconPictureSuccess(res){
             this.workerForm.icon = res.path
         },
-        /**
-         * 返回
-         */
-        goback(){
-            let fromPage = this.$route.query.type
-            if(fromPage == 0 || fromPage == 1){
-                this.$router.push("/worker/workerList")
-            } else if (fromPage == 2){
-                this.$router.push("/worker/returnWorkerList")
-            } else if (fromPage == 3){
-                this.$router.push("/worker/errorWorkerList")
-            } else if (fromPage == 4){
-                this.$router.push("/worker/newWorkerList")
-            }
-        },
+        // /**
+        //  * 返回
+        //  */
+        // goback(){
+        //     let fromPage = this.$route.query.type
+        //     if(fromPage == 0 || fromPage == 1){
+        //         this.$router.push("/worker/workerList")
+        //     } else if (fromPage == 2){
+        //         this.$router.push("/worker/returnWorkerList")
+        //     } else if (fromPage == 3){
+        //         this.$router.push("/worker/errorWorkerList")
+        //     } else if (fromPage == 4){
+        //         this.$router.push("/worker/newWorkerList")
+        //     }
+        // },
         /**
          * 控制编辑按钮文案
          */
@@ -603,7 +612,7 @@ export default {
 
                 await operateWorkerService.getWorkerFormConfig('edit').then((data) =>{
                     if(data.code == '0'){
-                        this.workerFormConfig = data.data
+                        this.workerConfigForm = data.data
                     }
                 }).catch(error =>{
                     this.$message({
@@ -613,7 +622,7 @@ export default {
                 })
                 //如果是编辑则请求接口
                 if(this.$route.query.type != 0){
-                    await operateWorkerService.getWorker(this.$route.query.id,this.workerFormConfig).then(data =>{
+                    await operateWorkerService.getWorker(this.$route.query.id,this.workerConfigForm).then(data =>{
                         this.workerForm = data
                     }).catch(error =>{
                         this.$message({

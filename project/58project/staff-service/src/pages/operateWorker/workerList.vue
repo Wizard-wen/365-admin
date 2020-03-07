@@ -5,7 +5,7 @@
             @changeQueryedForm="changeQueryedForm"></query-component>
         <worker-table-component
             :tableData="workerTable"
-            :workerConfigList="workerConfigForm"
+            :workerConfigForm="workerConfigForm"
             @updateTable="updateTable"></worker-table-component>
         <pagination
             :pagination="pagination"

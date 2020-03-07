@@ -8,7 +8,7 @@
                 :value="currentWorker.icon">
                 <icon-component
                     slot="template"
-                    :iconUrl="currentWorker.icon"
+                    :iconUrl="currentWorker.icon?`./resource/${currentWorker.icon}`:''"
                     :height="140"
                     :width="100"></icon-component>
             </detail-form-item-component>
@@ -18,8 +18,8 @@
             <detail-form-item-component :type="'template'" :label="'民族'" :size="2" :value="currentWorker.nation">
                 <table-tag-component 
                     slot="template"
-                    v-if="workerFormConfig.nation" 
-                    :propList="workerFormConfig.nation" 
+                    v-if="workerConfigForm.nation" 
+                    :propList="workerConfigForm.nation" 
                     :tableOriginData="currentWorker.nation"></table-tag-component>
             </detail-form-item-component>
             <detail-form-item-component :type="'template'" :label="'教育程度'" :size="2" :value="currentWorker.education">
@@ -62,9 +62,9 @@
                 v-if="workerListType == 'total'"
                 @updateTable="$emit('updateTable')" 
                 :currentWorker="currentWorker"></change-status-btn>
-            <make-image-btn 
-                :workerFormConfig="workerFormConfig" 
-                :workerForm="currentWorker"></make-image-btn>
+            <!-- <make-image-btn 
+                :workerConfigForm="workerConfigForm" 
+                :workerForm="currentWorker"></make-image-btn> -->
             <error-by-sale-btn
                 v-if="workerListType == 'seller'"
                 :workerForm="currentWorker"
@@ -131,7 +131,7 @@ export default {
         /**
          * 字段配置
          */
-        workerFormConfig: {
+        workerConfigForm: {
             type: Object,
             default(){return {}}
         },

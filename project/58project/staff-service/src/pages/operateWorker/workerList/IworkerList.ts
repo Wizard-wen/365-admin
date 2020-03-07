@@ -83,6 +83,15 @@ export interface workerList extends workerItem{
     skill_ids:Array<number>;
     course_ids:Array<number>;
 }
+//由列表进入服务人员编辑页时的状态
+export const goWorkerItemType = [
+    {type: 0,des: '运营人员创建'},
+    {type: 1,des: '运营人员编辑'},
+    {type: 2,des: '运营人员回访时编辑'},
+    {type: 3,des: '运营人员处理异常时编辑'},
+    {type: 4,des: '运营人员处理新建申请'},
+]
+
 
 // 时间查询区间
 export const updated_at = [

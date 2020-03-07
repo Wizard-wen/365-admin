@@ -2,6 +2,7 @@
     <log-component
         :title="'回访'"
         :logList="return_msg"
+        :isEdit="isEdit"
         :logDialogVisible="logDialogVisible"
         @openLogDialog="openLogDialog"
         @closeLogDialog="closeLogDialog"
@@ -23,6 +24,9 @@ export default {
         return_msg: {
             type: Array,
             default(){return []}
+        },
+        isEdit: {
+
         }
     },
     methods: {
@@ -39,7 +43,7 @@ export default {
             this.logDialogVisible = false
         },
         /**
-         * 提交日志
+         * 提交回访信息
          */
         async submitLogDialog(param){
 

@@ -54,7 +54,7 @@
                         <el-button
                             size="mini"
                             type="danger"
-                            v-if="scope.row.type == 1"
+                            v-if="scope.row.status == 1"
                             @click="setAccountState(2, scope.row)">停用</el-button>
                         <el-button
                             size="mini"

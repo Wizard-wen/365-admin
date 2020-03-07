@@ -44,11 +44,10 @@
             <div class="item item-double-line">
                 <div class="label ">职业类型</div>:
                 <div class="value long">
-                    <!-- <span v-for="(item, index) in paper" :key="index">{{`${item.name}&nbsp;/&nbsp;`}}</span> -->
                     <table-tag-component 
-                        v-if="workerFormConfig.skill" 
-                        :propList="workerFormConfig.skill" 
-                        :tableOriginData="pictureForm.skill_ids"></table-tag-component>
+                        v-if="workerConfigForm.skill" 
+                        :propList="workerConfigForm.skill" 
+                        :tableOriginData="pictureForm.skill"></table-tag-component>
                 </div>
             </div>
 
@@ -86,7 +85,7 @@ export default {
         /**
          * 服务人员字段配置
          */
-        workerFormConfig:{
+        workerConfigForm:{
             type: Object,
             default(){return {}}
         }
@@ -102,11 +101,11 @@ export default {
             if(!this.pictureForm.paper_ids.length){
                 return []
             }
-            if(this.workerFormConfig){
+            if(this.workerConfigForm){
                 return this.pictureForm.paper_ids.reduce((arr,item,index) =>{
-                    return this.workerFormConfig.paper_category.some(it => it.id == item)? 
+                    return this.workerConfigForm.paper_category.some(it => it.id == item)? 
                         arr.concat({
-                            ...this.workerFormConfig.paper_category.find(it => it.id == item),
+                            ...this.workerConfigForm.paper_category.find(it => it.id == item),
                         }) : arr
                 },[])
             } else {
@@ -114,7 +113,7 @@ export default {
             }
         },
         education(){
-            return this.workerFormConfig.education.find(it => it.id == this.pictureForm.education)
+            return this.workerConfigForm.education.find(it => it.id == this.pictureForm.education)
         }
     },
     filters: {

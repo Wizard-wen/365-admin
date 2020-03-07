@@ -10,11 +10,6 @@
 </template>
 <script>
 export default {
-    data(){
-        return {
-            showList: []
-        }
-    },
     props: {
         /**
          * 全部字段数据
@@ -30,61 +25,56 @@ export default {
             default : function(){return [] | 0},
             type: [Number, Array, String]
         },
-
     },
-    watch: {
-        tableOriginData: function(newVal, oldVal){
-            if(newVal != oldVal){
-                this.changeData()
+    computed: {
+        showList(){
+            let showList = []
+            
+            if(this.tableOriginData && this.propList.length){
+                
+                var arr = this.changeOriginData(this.tableOriginData)
+                arr.forEach((item, index) =>{
+                    if(this.propList.length){
+                        let a = this.findTargetId(item,this.propList)
+                        if(a.hasOwnProperty('id')){
+                            showList.push(a)
+                        }
+                    }
+                })
+                return showList
+            } else {
+                return []
             }
             
         }
     },
     methods: {
-        changeData(){
-            let setTableOriginData = []
+        changeOriginData(val){
+            if(Array.isArray(val)){return val}
+            
+            if(typeof val == 'number' || typeof val == 'string'){
+                return [Number(val)]
+            } 
+        },
+        findTargetId(targetId,arr){
+            let targetObject = null;
 
-            if(typeof this.tableOriginData == 'number'){
-                setTableOriginData =  [this.tableOriginData]
-            } else if(typeof this.tableOriginData == 'string'){
-                setTableOriginData =  [Number(this.tableOriginData)]
-            } else {
-                setTableOriginData =  this.tableOriginData
-            }
-
-            this.showList = []
-
-            if(setTableOriginData.length){
-
-                function findTargetId(targetId,arr){
-                    let targetObject = null;
-
-                    function findTagId(arr){
-                        for(var i = 0; i<arr.length; i++){
-                            if(arr[i].id == targetId){
-                                targetObject = arr[i]
-                            } 
-                            if(arr[i].children){
-                                findTagId(arr[i].children)
-                            }
-                        }
-                    }
-                    findTagId(arr)
-                    if(targetObject!=null){
-                        return targetObject
+            function findTagId(arr){
+                for(var i = 0; i<arr.length; i++){
+                    if(arr[i].id == targetId){
+                        targetObject = arr[i]
+                    } 
+                    if(arr[i].children){
+                        findTagId(arr[i].children)
                     }
                 }
-
-                setTableOriginData.forEach((item, index) =>{
-                    let a = findTargetId(item,this.propList)
-                    this.showList.push(a)
-                })
             }
-        }
+            findTagId(arr)
+            if(targetObject!=null){
+                return targetObject
+            }
+        },
     },
-    mounted(){
-        this.changeData()
-    }
 }
 </script>
 <style lang="scss" scoped>
