@@ -3,11 +3,11 @@
         <div class="base">
             <div class="item">
                 <div class="label ">姓名</div>:
-                <div class="value">{{pictureForm.name || ''}}</div>
+                <div class="value">{{pictureForm.name}}</div>
             </div>
             <div class="item">
                 <div class="label ">性别</div>:
-                <div class="value">{{sex}}</div>
+                <div class="value">{{pictureForm.sex == 1?'男': '女'}}</div>
             </div>
             <div class="item">
                 <div class="label ">年龄</div>:
@@ -15,44 +15,42 @@
             </div>
             <div class="item">
                 <div class="label ">属相</div>:
-                <div class="value">-</div>
+                <div class="value">{{pictureForm.zodiac_sign | zodiac_signFormat}}</div>
             </div>
             <div class="item">
                 <div class="label ">身高</div>:
-                <div class="value">-</div>
+                <div class="value">{{pictureForm.body_height + 'cm'}}</div>
             </div>
             <div class="item">
                 <div class="label ">体重</div>:
-                <div class="value">-</div>
+                <div class="value">{{pictureForm.body_weight + 'kg'}}</div>
             </div>
-            <!-- <div class="item">
+            <div class="item">
                 <div class="label ">婚姻状况</div>:
-                <div class="value">{{pictureForm.isMarried || ''}}</div>
-            </div> -->
+                <div class="value">{{pictureForm.is_married==1?'是':'否'}}</div>
+            </div>
 
             <div class="item">
                 <div class="label ">学历</div>:
                 <div class="value">
-                    <span>{{education.name}}</span>
+                    <span>{{pictureForm.education | educationFormat}}</span>
                 </div>
             </div>
             <div class="item item-long-line">
                 <div class="label ">现住址</div>:
-                <div class="value">-</div>
-            </div>
-            <div class="item">
-                <div class="label ">服务类别</div>:
-                <div class="value">
-                    <span v-for="(item, index) in service_type" :key="index">{{`${item.name}&nbsp;/&nbsp;`}}</span>
-                </div>
+                <div class="value">{{pictureForm.address}}</div>
             </div>
 
-            <!-- <div class="item item-double-line">
+            <div class="item item-double-line">
                 <div class="label ">职业类型</div>:
                 <div class="value long">
-                    <span v-for="(item, index) in paper" :key="index">{{`${item.name}&nbsp;/&nbsp;`}}</span>
+                    <!-- <span v-for="(item, index) in paper" :key="index">{{`${item.name}&nbsp;/&nbsp;`}}</span> -->
+                    <table-tag-component 
+                        v-if="workerFormConfig.skill" 
+                        :propList="workerFormConfig.skill" 
+                        :tableOriginData="pictureForm.skill_ids"></table-tag-component>
                 </div>
-            </div> -->
+            </div>
 
             
             <!-- <div class="item item-double-line">
@@ -74,31 +72,41 @@
 </template>
 
 <script>
-export default {
+import {
+    zodiac_signList,
+    educationList,
 
+} from '@/pages/operateWorker/workerList/IworkerList.ts'
+export default {
     props: {
+        pictureForm: {
+            default: function(){return {}},
+            type: Object
+        },
         /**
          * 服务人员字段配置
          */
-        workerConfigForm:{
+        workerFormConfig:{
             type: Object,
             default(){return {}}
         }
     },
+    data(){
+        return {
+            // zodiac_signList,
+            // educationList,
+        }
+    },
     computed: {
-        sex(){
-            if(this.pictureForm.sex){
-                return this.pictureForm.sex == 1 ? '男' : '女'
-            } else {
-                return '-'
-            }
-        },
         paper(){
-            if(this.workerConfigForm){
-                return this.pictureForm.paper.reduce((arr,item,index) =>{
-                    return this.workerConfigForm.paper.some(it => it.id == item)? 
+            if(!this.pictureForm.paper_ids.length){
+                return []
+            }
+            if(this.workerFormConfig){
+                return this.pictureForm.paper_ids.reduce((arr,item,index) =>{
+                    return this.workerFormConfig.paper_category.some(it => it.id == item)? 
                         arr.concat({
-                            ...this.workerConfigForm.paper.find(it => it.id == item),
+                            ...this.workerFormConfig.paper_category.find(it => it.id == item),
                         }) : arr
                 },[])
             } else {
@@ -106,18 +114,21 @@ export default {
             }
         },
         education(){
-            return this.workerConfigForm.education.find(it => it.id == this.pictureForm.education)
+            return this.workerFormConfig.education.find(it => it.id == this.pictureForm.education)
         }
     },
     filters: {
-
-    },
-    props: {
-        pictureForm: {
-            default: function(){return {}},
-            type: Object
+        educationFormat(target){
+            return educationList.find(item => item.id == target ).name
+        },
+        zodiac_signFormat(target){
+            return zodiac_signList.find(item => item.id == target ).name
+        },
+        formDate(timestamp){
+            return $utils.formatDate(new Date(timestamp), 'yyyy-MM-dd')
         }
     },
+
     methods: {
 
     }
@@ -183,15 +194,16 @@ export default {
     }
     .icon{
         position:absolute;
-        right:33px;
-        top: 65px;
-        height: 200px;
-        width: 130px;
+        right:43px;
+        top: 85px;
+        height: 140px;
+        width: 100px;
         background: rgba(0,0,0,0.3);
         .no-img{
-            height: 200px;
-            width: 130px;
-            line-height: 200px;
+            color: #fff;
+            height: 140px;
+            width: 100px;
+            line-height: 140px;
             font-size: 16px;
             text-align: center;
         }

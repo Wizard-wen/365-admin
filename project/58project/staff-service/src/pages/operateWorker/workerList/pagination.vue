@@ -39,6 +39,7 @@ export default {
          */
         async handleCurrentPage(val){
             this.$emit('changePage', val)
+            
         },
     }
 }

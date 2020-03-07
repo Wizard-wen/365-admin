@@ -3,9 +3,10 @@
         <el-button type="primary" @click="openCreateWorkerBySaleDialog">申请创建服务人员</el-button>
         <!-- 申请添加服务人员 -->
         <create-worker-dialog
+            :workerConfigForm="workerConfigForm"
             v-if="createWorkerDialogVisible"
             :openCreateWorkerDialog="createWorkerDialogVisible"
-            @closeCreateWorkeBySalerDialog="closeCreateWorkeBySalerDialog"></create-worker-dialog>
+            @closeCreateWorkerDialog="closeCreateWorkerDialog"></create-worker-dialog>
     </div>
     
 </template>
@@ -15,6 +16,12 @@ import  createWorkerDialog from './createBySale/createWorkerDialog.vue'
 export default {
     components: {
         createWorkerDialog,
+    },
+    props: {
+        workerConfigForm: {
+            type: Object,
+            default(){return {}}
+        }
     },
     data(){
         return {
@@ -30,8 +37,9 @@ export default {
         openCreateWorkerBySaleDialog(){
             this.createWorkerDialogVisible = true;
         },
-        closeCreateWorkeBySalerDialog(){
-            this.createWorkerDialogVisible=false            
+        closeCreateWorkerDialog(){
+            this.createWorkerDialogVisible=false       
+            this.$emit('updataTable')     
         }
     }
 }

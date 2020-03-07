@@ -35,7 +35,7 @@ export interface workerItem{
     //phone作为id
     phone:string;//电话
     // 1-12 鼠 猪
-    zodiac_ign:number;//属相
+    zodiac_sign:number;//属相
     body_height:string;//身高
     body_weight:string;//体重
     nation?:number;//民族
@@ -49,8 +49,8 @@ export interface workerItem{
      * 确定一下尺寸
      */
     icon?:string;//头像
-    //是 否
-    isMarried: string,//是否结婚
+    //是 1 否 2
+    is_married: string,//是否结婚
 
     /***************技能信息 7个****************** */
     //skill 和服务商品列表保持一致

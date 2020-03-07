@@ -31,7 +31,7 @@ export interface workerItem{
     //phone作为id
     phone:string;//电话
     // 1-12 鼠 猪
-    zodiac_ign:number;//属相
+    zodiac_sign:number;//属相
     body_height:string;//身高
     body_weight:string;//体重
     nation?:number;//民族

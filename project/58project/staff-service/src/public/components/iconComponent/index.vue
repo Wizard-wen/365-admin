@@ -4,7 +4,7 @@
             v-if="iconUrl"
             class="icon-image"
             :style="{height: `${height}px`, width: `${width}px`,borderRadius: displayType == 'circle'? '50%' : ''}" 
-            :src="`./resource/${iconUrl}`" alt="" >
+            :src="iconUrl" alt="" >
         <img
             v-else
             src="./images/noIconImage.png"

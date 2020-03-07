@@ -1,21 +1,14 @@
 import {
     apiRequestWorker,
-    apiRequestCommon,
     apiRequestFormConfig,
     apiRequestService,
-} from '../request/index'
+} from '@/request/index'
 
-import {
-    workerItem,
-} from '../pages/operateWorker/workerItem/IworkerItem'
+import {workerItem} from '@/pages/operateWorker/workerItem/IworkerItem'
 
-import {
-    workerFormConfig,
-} from '../pages/operateWorker/workerFormConfig/IworkerFormConfig'
+import {workerFormConfig} from '@/pages/operateWorker/workerFormConfig/IworkerFormConfig'
 
-import {
-    operateSearchWorkerItem,
-} from '../pages/operateWorker/workerList/IworkerList'
+import {operateSearchWorkerItem} from '@/pages/operateWorker/workerList/IworkerList'
 
 export const operateWorkerService = {
     /**
@@ -73,6 +66,9 @@ export const operateWorkerService = {
      * @param arr 级联选择器原始数据
      */
     sendCascanderData(originArr:any){
+        if(originArr.length == 0){
+            return []
+        }
         if(Array.isArray(originArr[0])){
             return originArr.reduce((arr:any,item:any) => {
                 if(item.length == 1){

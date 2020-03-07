@@ -11,8 +11,11 @@ export enum listType {
     errorWorkerList ="warning",//异常服务人员
     // saleOwnWorkerList ="",
     saleWorkerList ="seller",//门店服务人员信息库
+    //match为非停用服务人员
     matchWorkerList ="match",//订单配置服务人员匹配列表
 }
+
+
 /**
  * 服务人员基本搜索字段
  */
@@ -30,16 +33,16 @@ export interface baseSearchWorkerItem {
  * 运营中心服务人员信息库搜索字段
  */
 export interface operateSearchWorkerItem extends baseSearchWorkerItem{
-    identify?:string;//身份证号
-    staff_code?:string;//员工编号
-    skill?:Array<number>;//职业类型
+    identify:string;//身份证号
+    staff_code:string;//员工编号
+    service_category:Array<number>;//职业类型
     course:Array<number>;//参加培训
-    manager_id?:Array<number>;//创建人
-    sign_status?:Array<number>;//签约状态
-    working_age:Array<number>;//工龄
-    nation?:Array<number>;//民族
-    education?:Array<number>;//教育程度
-    paper?:Array<number>;//技能证书
+    manager:Array<number>;//创建人
+    sign_status:Array<number> | number;//签约状态
+    working_age:Array<number> | number;//工龄
+    nation:Array<number> | number;//民族
+    education:Array<number> | number;//教育程度
+    paper_category:Array<number> | number;//技能证书
 }
 /**
  * 运营中心回访服务人员搜索字段
@@ -62,7 +65,7 @@ export interface saleSearchWorkerItem extends operateSearchWorkerItem{
      * 在门店的服务人员中增加一个由我创建的选项，
      * 这个选项会自动将当前门店工作人员的id作为manager_id的查询参数
      */
-    manager_id?:Array<number>;//创建人
+    manager:Array<number>;//创建人
 }
 /**
  * 运营中心回访服务人员搜索字段
@@ -83,6 +86,7 @@ export interface workerList extends workerItem{
 
 // 时间查询区间
 export const updated_at = [
+    {name: '全部',id: 0},
     {id: 1,name: '今天',},
     {id: 2,name: '昨天',},
     {id: 3,name: '过去7天',},
@@ -97,6 +101,7 @@ export const updated_at = [
 ]
 // 教育程度
 export const educationList = [
+    {name: '全部',id: 0},
     {name: '本科及以上',id: 1,},
     {name: '专科',id: 2,},
     {name: '高中',id: 3,},
@@ -104,7 +109,8 @@ export const educationList = [
     {name: '小学',id: 5,},
 ]
 // 生肖
-export const zodiac_ignList =[
+export const zodiac_signList =[
+    {name: '全部',id: 0},
     {id: 1, name: '鼠'},
     {id: 2, name: '牛'},
     {id: 3, name: '虎'},

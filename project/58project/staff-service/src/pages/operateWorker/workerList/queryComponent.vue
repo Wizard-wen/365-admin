@@ -7,16 +7,16 @@
             <el-form-item label="电话" prop="phone">
                 <el-input class="input" style="width: 173px" v-model="localQueryedForm.phone" placeholder="请输入服务人员姓名" :maxlength="20"></el-input>
             </el-form-item>
-            <el-form-item v-if="isWorkerList == 1" label="身份证号" prop="identify">
+            <el-form-item v-if="workerListType == 'total'" label="身份证号" prop="identify">
                 <el-input class="input" style="width: 173px" v-model="localQueryedForm.identify" placeholder="请输入服务人员姓名" :maxlength="20"></el-input>
             </el-form-item>
-            <el-form-item v-if="isWorkerList == 1" label="员工号" prop="staff_code">
+            <el-form-item v-if="workerListType == 'total'" label="员工号" prop="staff_code">
                 <el-input class="input" style="width: 173px" v-model="localQueryedForm.staff_code" placeholder="请输入服务人员姓名" :maxlength="20"></el-input>
             </el-form-item>
             
-            <el-form-item v-if="isWorkerList == 1" label="职业类型" prop="skill">
+            <el-form-item v-if="workerListType == 'total'" label="职业类型" prop="service_category">
                 <el-cascader
-                    v-model="localQueryedForm.skill"
+                    v-model="localQueryedForm.service_category"
                     :options="queryForm.skill"
                     :props="cascaderProps"
                     :show-all-levels="false"
@@ -28,28 +28,25 @@
                 <el-cascader
                     v-model="localQueryedForm.source"
                     :options="queryForm.skill"
-                    :props="{
-                        label: 'name',
-                        value: 'id',
-                    }"
+                    :props="cascaderProps"
                     :show-all-levels="false"
                     filterable
                     clearable></el-cascader>
             </el-form-item>
-            <el-form-item label="创建人" prop="manager_id">
+            <el-form-item label="创建人" prop="manager">
                 <el-cascader
-                    v-model="localQueryedForm.manager_id"
+                    v-model="localQueryedForm.manager"
                     :options="queryForm.manager"
                     :props="{
-                        label: 'title',
-                        value: 'id',
+                        label:'title',
+                        value:'id'
                     }"
                     :show-all-levels="false"
                     filterable
                     clearable></el-cascader>
             </el-form-item>
-        
-            <el-form-item v-if="isWorkerList == 1" label="签约状态" prop="sign_status">
+            
+            <el-form-item v-if="workerListType == 'total'" label="签约状态" prop="sign_status">
                 <el-select 
                     v-model="localQueryedForm.sign_status" 
                     placeholder="请选择接单状态"
@@ -63,7 +60,7 @@
             <el-form-item label="工龄">
                 <el-select 
                     v-model="localQueryedForm.working_age" 
-                    placeholder="请选择接单状态"
+                    placeholder="请选择工龄"
                     filterable
                     clearable>
                     <el-option 
@@ -73,7 +70,7 @@
                         :value="item.id"></el-option>
                 </el-select>
             </el-form-item>
-            <el-form-item v-if="isWorkerList == 1" label="民族" prop="nation">
+            <el-form-item v-if="workerListType == 'total'" label="民族" prop="nation">
                 <el-select 
                     v-model="localQueryedForm.nation" 
                     placeholder="请选择民族"
@@ -88,19 +85,19 @@
                 </el-select>
             </el-form-item>
         
-            <el-form-item v-if="isWorkerList == 1" label="教育程度" prop="education">
+            <el-form-item v-if="workerListType == 'total'" label="教育程度" prop="education">
                 <el-select v-model="localQueryedForm.education" placeholder="请选择教育程度">
                     <el-option label="全部" :value="0"></el-option>
                     <el-option 
-                        v-for="(item, index) in queryForm.education" 
+                        v-for="(item, index) in educationList" 
                         :key="index" 
                         :label="item.name" 
                         :value="item.id"></el-option>
                 </el-select>
             </el-form-item>
-            <el-form-item v-if="isWorkerList == 1" label="技能证书" prop="paper">
+            <el-form-item v-if="workerListType == 'total'" label="技能证书" prop="paper_category">
                 <el-select 
-                    v-model="localQueryedForm.paper" 
+                    v-model="localQueryedForm.paper_category" 
                     placeholder="请选择技能证书"
                     filterable
                     clearable>
@@ -124,7 +121,11 @@
 </template>
 
 <script>
-import {work_age_list} from './IworkerList.ts'
+import {
+    work_age_list,
+    educationList
+} from './IworkerList.ts'
+
 import {operateWorkerService} from '@/service/operateWorker'
 export default {
     data(){
@@ -134,19 +135,20 @@ export default {
                 value:'id'
             },
             work_age_list,
+            educationList,
             localQueryedForm: {
                 name: '', //姓名
                 phone: '',//电话
                 identify: '',//身份证号
                 staff_code: '',//员工号
-                skill: [0],//职业技能
-                // course: [],//课程
-                sign_status: [],//签约状态
-                working_age: [0],//工龄
-                manager_id: [0],//创建人
-                nation: [0],//民族
-                education: [0],//教育程度
-                paper: [0],//技能证书
+                service_category: [],//职业技能
+                course: [],//课程
+                sign_status: 0,//签约状态
+                working_age: 0,//工龄
+                manager: [],//创建人
+                nation: 0,//民族
+                education: 0,//教育程度
+                paper_category: 0,//技能证书
             }
         }
     },
@@ -160,11 +162,9 @@ export default {
                 return {}
             }
         },
-        //是否是全部服务人员列表
-        // 1 是 2 不是
-        isWorkerList: {
-            type: Number,
-            default: 1,
+        workerListType: {
+            type: String,
+            default: 'total',
         }
     },
     methods: {
@@ -175,8 +175,8 @@ export default {
             let sendForm = {
                 ...this.localQueryedForm,
             }
-            sendForm.skill = operateWorkerService.sendCascanderData(sendForm.skill) 
-            sendForm.manager_id = operateWorkerService.sendCascanderData(sendForm.manager_id) 
+            sendForm.service_category = operateWorkerService.sendCascanderData(sendForm.service_category) 
+            sendForm.manager = operateWorkerService.sendCascanderData(sendForm.manager) 
             // sendForm.source = operateWorkerService.sendCascanderData(sendForm.source) 
             this.$emit('changeQueryedForm', sendForm)
         },

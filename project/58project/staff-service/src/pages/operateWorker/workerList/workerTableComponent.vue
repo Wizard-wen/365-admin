@@ -1,7 +1,12 @@
 <template>
     <div class="table-contains">
         <div class="btn-contains">
-            <create-by-operate-btn></create-by-operate-btn>
+            <create-by-operate-btn 
+                v-if="workerListType == 'total'"></create-by-operate-btn>
+            <create-by-sale-btn 
+                @updateTable="$emit('updateTable')"  
+                :workerConfigForm="workerConfigForm" 
+                v-if="workerListType == 'seller'"></create-by-sale-btn>
         </div>
         <el-table 
             :data="tableData" 
@@ -13,7 +18,9 @@
                     <table-item-form 
                         @updateTable="$emit('updateTable')" 
                         :currentWorker="props.row"
-                        :workerFormConfig="workerConfigList"></table-item-form>
+                        :currentPage="currentPage"
+                        :workerConfigForm="workerConfigForm"
+                        :workerListType="workerListType"></table-item-form>
                 </template>
             </el-table-column>
 
@@ -44,26 +51,26 @@
             <el-table-column  label="职业类型" prop="skill_ids" :min-width="150" align="center">
                 <template slot-scope="scope">
                     <table-tag-component 
-                    v-if="workerConfigList.skill" 
-                    :propList="workerConfigList.skill" 
+                    v-if="workerConfigForm.skill" 
+                    :propList="workerConfigForm.skill" 
                     :tableOriginData="scope.row.skill_ids"></table-tag-component>
                 </template>
             </el-table-column>
 
-            <el-table-column  label="参加培训" prop="course" :min-width="150" align="center">
+            <!-- <el-table-column  label="参加培训" prop="course" :min-width="150" align="center">
                 <template slot-scope="scope">
                     <table-tag-component 
-                        v-if="workerConfigList.course" 
-                        :propList="workerConfigList.course" 
+                        v-if="workerConfigForm.course" 
+                        :propList="workerConfigForm.course" 
                         :tableOriginData="scope.row.course"></table-tag-component>
                 </template>
-            </el-table-column>
+            </el-table-column> -->
 
             <el-table-column  label="技能证书" prop="paper_ids" align="center" :min-width="150">
                 <template slot-scope="scope">
                     <table-tag-component 
-                        v-if="workerConfigList.paper_category" 
-                        :propList="workerConfigList.paper_category" 
+                        v-if="workerConfigForm.paper_category" 
+                        :propList="workerConfigForm.paper_category" 
                         :tableOriginData="scope.row.paper_ids"></table-tag-component>
                 </template>
             </el-table-column>
@@ -73,19 +80,17 @@
 </template>
 <script>
     import {operateService, $utils} from '@common/index.js'
-    import createByOperateBtn from './workerTableComponent/control/createByOperateBtn.vue'
+    import createByOperateBtn from '@/pages/operateWorker/workerList/workerTableComponent/control/createByOperateBtn.vue'
+    import createBySaleBtn from '@/pages/operateWorker/workerList/workerTableComponent/control/createBySaleBtn.vue'
+
     import tableItemForm from './workerTableComponent/tableItemForm.vue'
-    import {
-        tableTagComponent,
-        
-    } from '@/public/components/index.js'
     
     export default {
         components: {
-            tableTagComponent,
             tableItemForm,
             createByOperateBtn,
-        },
+            createBySaleBtn,
+        },  
         filters: {
             /**
              * 接单状态
@@ -104,10 +109,18 @@
                 type: Array,
                 default:function(){return []}
             },
-            workerConfigList: {
+            workerConfigForm: {
                 type: Object,
                 default: function(){return {}}
             },
+            currentPage: {
+                type: String | Number,
+                default: 1,
+            },
+            workerListType: {
+                type: String,
+                default: 'total'  
+            }
         },
         methods: {
             /**

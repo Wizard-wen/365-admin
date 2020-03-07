@@ -56,12 +56,12 @@
                     :tagConfigKey="'nation'"></config-tag-component>
             </el-form-item>
 
-            <el-form-item label="学历" prop="education" class="form-item-size" size="small">
+            <!-- <el-form-item label="学历" prop="education" class="form-item-size" size="small">
                 <config-tag-component 
                     @editTag="editTag"
                     :tagList="workworkerConfigForm.education" 
                     :tagConfigKey="'education'"></config-tag-component>
-            </el-form-item>
+            </el-form-item> -->
 
             <!-- <el-form-item label="更新时间" prop="updated_types" class="form-item-size" size="small">
                 <config-tag-component  :tagList="workworkerConfigForm.updated_types" :tagConfigKey="'updated_types'"></config-tag-component>

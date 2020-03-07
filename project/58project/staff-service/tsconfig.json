@@ -29,5 +29,8 @@
   "exclude": [    //排出不编译的目录
       "node_modules",
       "**/*.spec.ts"
-  ]
+  ],
+  "rules": {
+    "no-console": false
+  }
 }

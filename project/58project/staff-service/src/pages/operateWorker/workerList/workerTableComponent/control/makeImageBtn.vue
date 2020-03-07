@@ -10,7 +10,7 @@
                 :height="565">
                 <template slot="pictureContains">
                     <worker-picture-component
-                        :workerConfigForm="workerConfigForm"
+                        :workerFormConfig="workerFormConfig"
                         :pictureForm="workerForm"></worker-picture-component>
                 </template>
             </make-image-component>
@@ -47,7 +47,7 @@ export default {
         /**
          * 服务人员信息配置项
          */
-        workerConfigForm: {
+        workerFormConfig: {
             type: Object,
             default(){return {}}
         }

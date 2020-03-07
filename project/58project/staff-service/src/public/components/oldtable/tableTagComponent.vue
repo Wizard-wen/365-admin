@@ -1,5 +1,5 @@
 <template>
-    <div v-if="showList.length" class="tag-box" :style="{width: width?width+'px': ''}">
+    <div v-if="showList.length" class="tag-box">
         <div 
             class="tag-item-style"
             :class="'tag-color'+ (item.id%8)" 
@@ -30,10 +30,7 @@ export default {
             default : function(){return [] | 0},
             type: [Number, Array, String]
         },
-        width: {
-            default: 0,
-            type: Number
-        }
+
     },
     watch: {
         tableOriginData: function(newVal, oldVal){
@@ -54,29 +51,35 @@ export default {
             } else {
                 setTableOriginData =  this.tableOriginData
             }
+
             this.showList = []
 
-                function findTagId(id, arr){
-                    for(var i = 0; i<arr.length; i++){
-                        if(arr[i].children){
-                            return findTagId(id, arr[i].children)
-                        } else {
-                            if(arr[i].id == id){
-                                return arr[i]
+            if(setTableOriginData.length){
+
+                function findTargetId(targetId,arr){
+                    let targetObject = null;
+
+                    function findTagId(arr){
+                        for(var i = 0; i<arr.length; i++){
+                            if(arr[i].id == targetId){
+                                targetObject = arr[i]
                             } 
+                            if(arr[i].children){
+                                findTagId(arr[i].children)
+                            }
                         }
+                    }
+                    findTagId(arr)
+                    if(targetObject!=null){
+                        return targetObject
                     }
                 }
 
-
-            setTableOriginData.forEach((item, index) =>{
-
-                // let a = this.propList.filter(it => it.id == item)
-                let a = findTagId(item,this.propList)
-                if(typeof this.propList.find(it => it.id == item) != 'undefined'){
-                    this.showList.push(this.propList.find(it => it.id == item))
-                }
-            })
+                setTableOriginData.forEach((item, index) =>{
+                    let a = findTargetId(item,this.propList)
+                    this.showList.push(a)
+                })
+            }
         }
     },
     mounted(){

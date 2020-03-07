@@ -50,29 +50,12 @@
             <div class="control-contains">
                 <!-- 创建/编辑 -->
                 <el-button size="mini" type="primary" @click="editWorker('form')">{{editText}}</el-button>
-                <!-- <el-button size="mini" type="primary" @click="makeImage" v-if="isShowImageButton">生成名片</el-button> -->
-                <make-image-btn :workerForm="workerForm"></make-image-btn>
+                <make-image-btn :workerForm="workerForm" :isShowImageButton="$route.query.type == 1"></make-image-btn>
                 <!-- 导出回访 / 恢复 / 提交至信息库-->
-                <el-button size="mini" type="primary" @click="submitStaff" v-if="submitText != ''">{{submitText}}</el-button>
+                <el-button size="mini" type="primary" @click="handleWorker" v-if="submitText != ''">{{submitText}}</el-button>
                 <el-button size="mini" @click="goback">返回</el-button>
             </div>
         </template>
-
-        <!-- 生成服务人员名片组件 -->
-        <!-- 生成服务人员名片组件 -->
-        <!-- <template>
-            <make-image-component
-                :makeImageDialogVisible="makeImageDialogVisible"
-                v-if="makeImageDialogVisible"
-                @closeMakeImageDialog="makeImageDialogVisible = false"
-                :width="800"
-                :height="565">
-                <template slot="pictureContains">
-                    <worker-picture-component
-                        :pictureForm="workerForm"></worker-picture-component>
-                </template>
-            </make-image-component>
-        </template> -->
 
         
         
@@ -93,6 +76,8 @@
                             <el-radio :label="2">女</el-radio>
                         </el-radio-group>
                     </el-form-item>
+
+                    
                     
                     <el-form-item label="身份证号码" prop="identify" class="form-item-size form-item-3-size" size="small">
                         <el-input v-model="workerForm.identify" :maxlength="18" placeholder="请输入身份证号"></el-input>
@@ -116,7 +101,6 @@
                         <el-select 
                             v-model="workerForm.nation" 
                             placeholder="请选择民族"
-                            clearable
                             filterable>
                             <el-option
                                 v-for="item in workerFormConfig.nation"
@@ -130,26 +114,28 @@
                         <el-select 
                             v-model="workerForm.education" 
                             placeholder="请选择学历"
-                            clearable
                             filterable>
-                            <!-- <el-option></el-option> -->
                             <el-option
-                                v-for="item in workerFormConfig.education"
+                                v-for="item in educationList"
                                 :key="item.id"
                                 :label="item.name"
                                 :value="item.id"></el-option>
                         </el-select>
                     </el-form-item>
-                    <div class="form-item-size form-item-3-size"></div>
+                    <el-form-item label="婚姻状况" prop="is_married" class="form-item-3-size">
+                        <el-radio-group v-model="workerForm.is_married">
+                            <el-radio :label="1">是</el-radio>
+                            <el-radio :label="2">否</el-radio>
+                        </el-radio-group>
+                    </el-form-item>
 
-                    <el-form-item label="生肖" prop="zodiac_ign" class="form-item-size form-item-3-size" size="small">
+                    <el-form-item label="生肖" prop="zodiac_sign" class="form-item-size form-item-3-size" size="small">
                         <el-select 
-                            v-model="workerForm.zodiac_ign" 
+                            v-model="workerForm.zodiac_sign" 
                             placeholder="请选择生肖"
-                            clearable
                             filterable>
                             <el-option
-                                v-for="item in zodiac_ignList"
+                                v-for="item in zodiac_signList"
                                 :key="item.id"
                                 :label="item.name"
                                 :value="item.id"></el-option>
@@ -236,7 +222,6 @@
                         <el-select 
                             v-model="workerForm.paper" 
                             placeholder="请选择技能证书"
-                            clearable
                             filterable
                             multiple>
                             <el-option
@@ -281,27 +266,18 @@
                     <el-input type="textarea" v-model="workerForm.remarks" :maxlength="200" placeholder="请输入备注信息"></el-input>
                 </el-form-item>
             </card-box-component>
+
             <log-component :title="'日志'" :isEdit="false" :logList="workerForm.log"></log-component>
 
             <return-msg-component :return_msg="workerForm.log" @updateOrderConfig="getWorkerForm"></return-msg-component>
-
             
-            <card-box-component 
-                :title="'备注信息'">
-                <el-form-item slot="contains" label="回访信息" prop="return_msg" class="form-item-size" size="small">
-                    <el-tooltip slot="label" class="item" effect="dark" content="" placement="top-start">
-                        <span>回访信息<i class="el-icon-info"></i></span>
-                    </el-tooltip>
-                    <el-input type="textarea" v-model="workerForm.return_msg" :maxlength="200" placeholder="请输入回访信息"></el-input>
-                </el-form-item>
-            </card-box-component>
             <el-form-item>
                 <!-- 创建/编辑 -->
                 <el-button size="mini" type="primary" @click="editWorker('form')">{{editText}}</el-button>
-                <!-- <el-button size="mini" type="primary" @click="makeImage" v-if="isShowImageButton">生成名片</el-button> -->
-                <make-image-btn :workerForm="workerForm"></make-image-btn>
+                <!-- 生成图片按钮 -->
+                <make-image-btn :workerForm="workerForm" :isShowImageButton="$route.query.type == 1"></make-image-btn>
                 <!-- 导出回访 / 恢复 / 提交至信息库-->
-                <el-button size="mini" type="primary" @click="submitStaff" v-if="submitText != ''">{{submitText}}</el-button>
+                <el-button size="mini" type="primary" @click="handleWorker" v-if="submitText != ''">{{submitText}}</el-button>
                 <el-button size="mini" @click="goback">返回</el-button>
             </el-form-item>
         </el-form>
@@ -322,8 +298,8 @@ import workerPictureComponent from './workerItem/workerPictureComponent.vue'
 
 import {operateWorkerService} from '@/service/operateWorker'
 
-import {zodiac_ignList} from './workerList/IworkerList.ts'
-
+import {zodiac_signList} from './workerList/IworkerList.ts'
+import {educationList} from './workerList/IworkerList.ts'
 
 import returnMsgComponent from './workerItem/returnMsgComponent.vue'
 import makeImageBtn from '@/pages/operateWorker/workerList/workerTableComponent/control/makeImageBtn.vue'
@@ -378,12 +354,11 @@ export default {
         return {
             
             is_loading: false,//
-            makeImageDialogVisible:false,//是否打开创建图片弹窗
             editText: '',//编辑按钮文案
             submitText: '',//提交按钮文案
-            isShowImageButton: false,//是否显示生成名片按钮
             timeDefaultShow: '',//当前日期
-            zodiac_ignList,//生肖数组
+            zodiac_signList,//生肖数组
+            educationList,//学历数组
             //手机号重复检测
             phoneCheck: false,
             phoneCheckObject: {
@@ -401,10 +376,9 @@ export default {
                 version:null,//操作版本号
                 status: null,//员工停用启用
                 sex:1,//性别
-                log: [],//日志
+                is_married:1,//婚姻状况
                 /************业务字段******************/
                 manager_id:0,//创建人id
-                //创建人这块有bug
                 manager_name:'',//创建人姓名
                 created_at:null,//创建时间
                 updated_at:null,//更新时间
@@ -415,39 +389,34 @@ export default {
                 identify:'',//身份证号码
                 phone:'',//电话
                 skill:[1],//职业类型
-                // service_type:[],//服务类型
-                // service_crowd:[],//可服务人群
-                zodiac_ign:[],
-                body_weight: '',
-                body_height: '',
-                worked_at:'2015',//何时参加工作
-                nation:0,//民族
+                zodiac_sign:[0],//生肖
+                body_weight: '',//体重
+                body_height: '',//身高
+                worked_at:'',//何时参加工作
+                nation:[0],//民族
                 id_photo: [],//证件照
                 address:'',//地址
-                education:0,//学历
+                education:[0],//学历
                 urgent_phone:'',//紧急联系人电话
                 photo: [],//照片
                 icon:'',//头像
                 course:[],//参加培训
                 paper:[],//技能证书标签
                 certificate: [],//技能证书图片
+
                 remarks:'',//备注（商家情况）
-                return_msg:'',//回访信息
-                
-                // type:null,//签约状态
-                // register_at:null,//登记时间
-                // source:0,//信息来源
-                // source_name:'',//来源名称
-                // bank_card:'',//银行卡号
-                // teacher_comment:'',//教师评语
-                // region:[],//服务区域
-                // birthplace:'',//籍贯
-                // working_experience:'',//工作经验（备注）
-                // working_status:0,//接单状态
-                // authentication:0,//认证状态
-                // working_age:0,//工龄
+                return_msg:[],//回访信息
+                log: [],//日志
             },
-            workerFormConfig: {},
+            //配置项
+            workerFormConfig: {
+                course: [],
+                nation: [],
+                paper_category: [],
+                updated_type: [],
+                manager: [],
+                skill: [],
+            },
             //表单验证规则
             staffRules: {
                 //姓名
@@ -469,7 +438,6 @@ export default {
                     return time.getTime() > Date.now();//如果没有后面的-8.64e6就是不可以选择今天的
                 }
             },
-            isShowBlack: false,//头像阴影
             //图片上传header
             uploadHeader:{
                 accessToken: this.$store.state.loginModule.token.access_token
@@ -486,6 +454,8 @@ export default {
         }
     },
     methods: {
+
+        
         /**
          * 提交表单
          */
@@ -502,6 +472,7 @@ export default {
                     }
 
                     workerFormSend.skill = operateWorkerService.sendCascanderData(workerFormSend.skill) 
+                    workerFormSend.course = operateWorkerService.sendCascanderData(workerFormSend.course) 
 
                     try{
                         this.is_loading = true
@@ -537,9 +508,9 @@ export default {
             });
         },
         /**
-         * 提交信息
+         * 导出回访 / 恢复 / 提交至信息库
          */
-        async submitStaff(){
+        async handleWorker(){
             let type = this.$route.query.type,
                 module_type = '';
             if(type == 2){
@@ -598,12 +569,6 @@ export default {
             }
         },
         /**
-         * 生成图片
-         */
-        // makeImage(){
-        //     this.makeImageDialogVisible = true
-        // },
-        /**
          * 控制编辑按钮文案
          */
         setEditButtonText(type){
@@ -627,16 +592,6 @@ export default {
                 return '保存并提交'
             } else {
                 return ''
-            }
-        },
-        /**
-         * 控制生成图片按钮是否显示
-         */
-        setIsShowImageButton(type){
-            if(type == 1){
-                return true
-            } else {
-                return false
             }
         },
         /**
@@ -688,10 +643,9 @@ export default {
         //按钮显示隐藏，文案
         this.editText = this.setEditButtonText(this.$route.query.type)
         this.submitText  = this.setSubmitButtonText(this.$route.query.type)
-        this.isShowImageButton = this.setIsShowImageButton(this.$route.query.type)
         
         
-        this.getWorkerForm()
+        await this.getWorkerForm()
 
     }
 }

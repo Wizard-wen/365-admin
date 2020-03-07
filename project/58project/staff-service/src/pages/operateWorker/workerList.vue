@@ -21,7 +21,6 @@ import queryComponent from './workerList/queryComponent.vue'
 import workerTableComponent from './workerList/workerTableComponent.vue'
 import pagination from './workerList/pagination.vue'
 
-
 export default {
     components: {
         queryComponent,
@@ -47,11 +46,13 @@ export default {
                 phone: '',
                 identify: '',
                 staff_code: '',
-                skill: [],
-                sign_status: '',
-                nation: '',
-                education: '',
-                paper: [],
+                service_category: [],
+                sign_status: 0,
+                manager: [],
+                nation: 0,
+                course: [],
+                education: 0,
+                paper_category: 0,
             },
         }
     },
@@ -108,11 +109,18 @@ export default {
          * 更新表格
          */
         async updateTable(res){
-            this.queryForm = res
+            this.queryForm = {
+                ...res
+            }
             await this.getTable()
         },
+        /**
+         * 变更查询条件
+         */
         async changeQueryedForm(res){
-            this.queryForm = res
+            this.queryForm = {
+                ...res
+            }
             await this.getTable()
         }
     },

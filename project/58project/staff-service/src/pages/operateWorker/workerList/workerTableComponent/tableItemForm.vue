@@ -22,41 +22,96 @@
                     :propList="workerFormConfig.nation" 
                     :tableOriginData="currentWorker.nation"></table-tag-component>
             </detail-form-item-component>
-            <detail-form-item-component :label="'教育程度'" :size="2" :value="currentWorker.education"></detail-form-item-component>
-            <detail-form-item-component :label="'创建时间'" :size="2" :value="currentWorker.created_at"></detail-form-item-component>
+            <detail-form-item-component :type="'template'" :label="'教育程度'" :size="2" :value="currentWorker.education">
+                <table-tag-component 
+                    slot="template"
+                    v-if="educationList" 
+                    :propList="educationList" 
+                    :tableOriginData="currentWorker.education"></table-tag-component>
+            </detail-form-item-component>
+            <detail-form-item-component :type="'template'" :label="'创建时间'" :size="2" :value="currentWorker.created_at">
+                <p slot="template">{{currentWorker.created_at | formDate}}</p>
+            </detail-form-item-component>
             <detail-form-item-component :label="'出生日期'" :size="2" :value="currentWorker.birthday"></detail-form-item-component>
-            <!-- <detail-form-item-component :label="'工龄'" :size="2" :value="currentWorker.worked_at"></detail-form-item-component> -->
-            <detail-form-item-component :label="'身高'" :size="2" :value="currentWorker.body_height"></detail-form-item-component>
-            <detail-form-item-component :label="'属相'" :size="2" :value="currentWorker.zodiac_ign"></detail-form-item-component>
-            <detail-form-item-component :label="'体重'" :size="2" :value="currentWorker.body_weight"></detail-form-item-component>
-            <detail-form-item-component :label="'更新时间'" :size="2" :value="currentWorker.updated_at"></detail-form-item-component>
+            <detail-form-item-component :label="'参加工作时间'" :size="2" :value="currentWorker.worked_at">
+
+            </detail-form-item-component>
+            <detail-form-item-component :label="'身高'" :size="2" :value="`${currentWorker.body_height}cm`"></detail-form-item-component>
+            <detail-form-item-component :type="'template'" :label="'属相'" :size="2" :value="currentWorker.zodiac_sign">
+                <table-tag-component 
+                    slot="template"
+                    v-if="zodiac_signList" 
+                    :propList="zodiac_signList" 
+                    :tableOriginData="currentWorker.zodiac_sign"></table-tag-component>
+            </detail-form-item-component>
+            <detail-form-item-component :label="'体重'" :size="2" :value="`${currentWorker.body_weight}kg`"></detail-form-item-component>
+            <detail-form-item-component :type="'template'" :label="'更新时间'" :size="2" :value="currentWorker.updated_at">
+                <p slot="template">{{currentWorker.updated_at | formDate}}</p>
+            </detail-form-item-component>
             <detail-form-item-component :label="'创建人'" :size="2" :value="currentWorker.manager_name"></detail-form-item-component>
         </detail-form-component>
         <div>
-            <show-btn :currentPage="currentPage" :currentWorkerItem="currentWorker"></show-btn>
-            <edit-by-operate-btn :currentPage="currentPage" :currentWorker="currentWorker"></edit-by-operate-btn>
-            <change-status-btn @updateTable="$emit('updateTable')" :currentWorker="currentWorker"></change-status-btn>
+            <show-btn 
+                :currentPage="currentPage" 
+                :currentWorkerItem="currentWorker"></show-btn>
+            <edit-by-operate-btn 
+                v-if="workerListType == 'total'"
+                :currentPage="currentPage" 
+                :currentWorker="currentWorker"></edit-by-operate-btn>
+            <change-status-btn 
+                v-if="workerListType == 'total'"
+                @updateTable="$emit('updateTable')" 
+                :currentWorker="currentWorker"></change-status-btn>
+            <make-image-btn 
+                :workerFormConfig="workerFormConfig" 
+                :workerForm="currentWorker"></make-image-btn>
+            <error-by-sale-btn
+                v-if="workerListType == 'seller'"
+                :workerForm="currentWorker"
+                @updateTable="$emit('updateTable')" ></error-by-sale-btn>
         </div>
     </div>
 </template>
 
 <script>
+import {
+    $utils,
+    operateService,
+} from '@common/index.js'
 
 import showBtn from './control/showBtn.vue'
 import changeStatusBtn from './control/changeStatusBtn.vue'
-import createByOperateBtn from './control/createByOperateBtn.vue'
 import editByOperateBtn from './control/editByOperateBtn.vue'
+import makeImageBtn from '@/pages/operateWorker/workerList/workerTableComponent/control/makeImageBtn.vue'
+
+import errorBySaleBtn from '@/pages/operateWorker/workerList/workerTableComponent/control/errorBySaleBtn.vue'
+
 import {
     iconComponent
 } from '@/public/components/index.js'
-
+import {educationList,zodiac_signList}from '@/pages/operateWorker/workerList/IworkerList.ts'
 export default {
     components: {
         showBtn,
         changeStatusBtn,
-        createByOperateBtn,
         editByOperateBtn,
         iconComponent,
+        makeImageBtn,
+        errorBySaleBtn,
+    },
+    filters: {
+        /**
+         * 更改时间戳格式
+         */
+        formDate(timestamp){
+            return $utils.formatDate(new Date(timestamp), 'yyyy-MM-dd')
+        }
+    },
+    data(){
+        return {
+            educationList,
+            zodiac_signList,
+        }
     },
     props: {
         /**
@@ -79,8 +134,11 @@ export default {
         workerFormConfig: {
             type: Object,
             default(){return {}}
-       
-       }
+        },
+        workerListType: {
+            type: String,
+            default: 'total'
+        }
     }
 }
 </script>
