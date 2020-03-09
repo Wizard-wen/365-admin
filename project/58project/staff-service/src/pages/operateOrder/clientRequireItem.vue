@@ -2,7 +2,7 @@
     <div class="orderApply" v-loading="is_loading">
         <order-apply-header-component
             :publicOrderType="2"
-            :orderApplyDetail="clientRequireDetailItem"
+            :currentOrderApply="clientRequireDetailItem"
             @updateOrderApply="getApplication"></order-apply-header-component>
         <div class="layout-content">
             <public-order-base-component
@@ -19,11 +19,11 @@ import { operateService, $utils } from "@common/index.js";
 
 import {
     orderApplyHeaderComponent,
-} from '@/public/module/orderApply/index.js'
+} from '@/public/module/orderApplyItem/index.js'
 
 import {
     publicOrderBaseComponent,
-} from '@/public/module/common/index.js'
+} from '@/public/module/orderPublic/index.js'
 export default {
     components: {
         publicOrderBaseComponent,

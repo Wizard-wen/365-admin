@@ -3,9 +3,10 @@
 
         <order-header-component
             @updateOrderConfig="getOrder"
-            :orderBase="orderBase"
+            :currentOrder="orderBase"
+            :orderModuleType="'operate'"
             :publicOrderType="5"></order-header-component>
-        
+            
         <div class="order-down">
 
             <public-order-base-component
@@ -13,16 +14,17 @@
                 :publicOrderType="5"
                 @updatePublicOrderBase="getOrder"></public-order-base-component>
 
-            <order-staff-component
+            <order-matched-worker-list-component
                 v-if="orderBase.type == 1 || orderBase.type == 3"
                 :orderBase="orderBase"
                 :order_staff="order_staff"
                 :publicOrderType="5"
-                @updateOrderConfig="getOrder"></order-staff-component>
+                @updateOrderConfig="getOrder"></order-matched-worker-list-component>
 
             <order-contract-list
                 v-if="orderBase.type != 1"
                 :order_contract="order_contract"
+                :contractModuleType="'operateOrderConfig'"
                 :publicOrderType="5"></order-contract-list>
 
             <signed-service-detail-component
@@ -45,22 +47,22 @@
     import { 
         orderHeaderComponent,
         orderConfigLog,
-        orderStaffComponent,
+        orderMatchedWorkerListComponent,
         orderContractList,
-    } from '@/public/module/order/orderConfig/index.js'
+    } from '@/public/module/orderConfig/index.js'
 
     import {
         signedServiceDetailComponent,
         signedUserDetailComponent,
-    } from '@/public/module/contract/index.js'
+    } from '@/public/module/contractItem/index.js'
     
     import {
         publicOrderBaseComponent,
-    } from '@/public/module/common/index.js'
+    } from '@/public/module/orderPublic/index.js'
 export default {
     components: {
         orderHeaderComponent,
-        orderStaffComponent,
+        orderMatchedWorkerListComponent,
         orderContractList,
         orderConfigLog,
         publicOrderBaseComponent,

@@ -99,6 +99,13 @@ export interface workerItem{
 
 
 
+export interface createNewWorkerItem{
+    name: string;//服务人员姓名
+    phone: string;//服务人员电话
+    skill:Array<number>;
+    seller_remarks: string;//备注信息
+}
+
 
 
 

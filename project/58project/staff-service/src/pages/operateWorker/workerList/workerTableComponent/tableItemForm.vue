@@ -52,23 +52,28 @@
         </detail-form-component>
         <div>
             <show-btn 
-                :currentPage="currentPage" 
-                :currentWorkerItem="currentWorker"></show-btn>
-            <edit-by-operate-btn 
-                v-if="workerListType == 'total'"
+                :currentPage="currentPage"
+                :workerListType="workerListType" 
+                :currentWorker="currentWorker"></show-btn>
+            <edit-by-operate-btn
+                :workerListType="workerListType" 
+                v-if="workerListType!='match'&& workerListType!='seller'"
                 :currentPage="currentPage" 
                 :currentWorker="currentWorker"></edit-by-operate-btn>
-            <change-status-btn 
+            <change-status-btn
+                :workerListType="workerListType" 
                 v-if="workerListType == 'total'"
                 @updateTable="$emit('updateTable')" 
                 :currentWorker="currentWorker"></change-status-btn>
-            <!-- <make-image-btn 
-                :workerConfigForm="workerConfigForm" 
-                :workerForm="currentWorker"></make-image-btn> -->
             <error-by-sale-btn
+                :workerListType="workerListType"
                 v-if="workerListType == 'seller'"
                 :workerForm="currentWorker"
                 @updateTable="$emit('updateTable')" ></error-by-sale-btn>
+            <add-worker-to-order-satff
+                v-if="workerListType == 'match'"
+                :workerForm="currentWorker"
+                @updateTable="$emit('updateTable')"></add-worker-to-order-satff>
         </div>
     </div>
 </template>
@@ -85,7 +90,7 @@ import editByOperateBtn from './control/editByOperateBtn.vue'
 import makeImageBtn from '@/pages/operateWorker/workerList/workerTableComponent/control/makeImageBtn.vue'
 
 import errorBySaleBtn from '@/pages/operateWorker/workerList/workerTableComponent/control/errorBySaleBtn.vue'
-
+import addWorkerToOrderStaff from '@/pages/operateWorker/workerList/workerTableComponent/control/addWorkerToOrderStaff.vue'
 import {
     iconComponent
 } from '@/public/components/index.js'
@@ -98,6 +103,7 @@ export default {
         iconComponent,
         makeImageBtn,
         errorBySaleBtn,
+        addWorkerToOrderStaff,
     },
     filters: {
         /**

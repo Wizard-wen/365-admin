@@ -1,11 +1,11 @@
 import {
     apiRequestAd
-} from '../request/ad/index'
+} from '@/request/ad/index'
 
 
 import {
     searchCustomAdItem,
-} from '../pages/operateCustom/customAdList/ICustomAdList'
+} from '@/pages/operateCustom/customAdList/ICustomAdList'
 import {
     customAdItem,
 } from '../pages/operateCustom/adPositionItem/IAdPositionItem'

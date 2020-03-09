@@ -7,7 +7,7 @@
             <el-form-item label="电话" prop="phone">
                 <el-input class="input" style="width: 173px" v-model="localQueryedForm.phone" placeholder="请输入服务人员姓名" :maxlength="20"></el-input>
             </el-form-item>
-            <el-form-item v-if="workerListType == 'total'" label="身份证号" prop="identify">
+            <el-form-item  label="身份证号" prop="identify">
                 <el-input class="input" style="width: 173px" v-model="localQueryedForm.identify" placeholder="请输入服务人员姓名" :maxlength="20"></el-input>
             </el-form-item>
             <el-form-item v-if="workerListType == 'total'" label="员工号" prop="staff_code">
@@ -146,9 +146,9 @@ export default {
                 sign_status: 0,//签约状态
                 working_age: 0,//工龄
                 manager: [],//创建人
-                nation: 0,//民族
-                education: 0,//教育程度
-                paper_category: 0,//技能证书
+                nation: [],//民族
+                education: [],//教育程度
+                paper_category: [],//技能证书
             }
         }
     },
@@ -178,6 +178,11 @@ export default {
             sendForm.service_category = operateWorkerService.sendCascanderData(sendForm.service_category) 
             sendForm.manager = operateWorkerService.sendCascanderData(sendForm.manager) 
             // sendForm.source = operateWorkerService.sendCascanderData(sendForm.source) 
+
+            sendForm.course = sendForm.course? [sendForm.course]: []
+            sendForm.nation = sendForm.nation? [sendForm.nation]: []
+            sendForm.education = sendForm.education? [sendForm.education]: []
+            sendForm.paper_category = sendForm.paper_category? [sendForm.paper_category]: []
             this.$emit('changeQueryedForm', sendForm)
         },
         /**
@@ -185,7 +190,7 @@ export default {
          */
         resetForm(formName) {
             this.$refs[formName].resetFields();
-            this.$emit('changeQueryedForm', this.localQueryedForm)
+            this.searchForm()
         }
     }
 }

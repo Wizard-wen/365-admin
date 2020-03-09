@@ -1,244 +1,158 @@
 <template>
-    <div class="worker" v-loading="is_loading">
+    <div class="table-box" v-loading="is_loading">
+        <order-query-component
+            :orderModuleType="'operate'"
+            :queryForm="orderConfigForm"
+            @changeQueryedForm="changeQueryedForm"></order-query-component>
         <order-table-component
-            :staffTable="orderTable"
-            :controlScopeLength="170">
-            <template slot="searchList">
-                <div class="search-list">
-                    <query-component @updateTable="updateTable"></query-component>
-                </div>
-            </template>
-            <template slot="searchForm">
-                <query-tag-component 
-                    :queryFormConfig="orderFormConfig"
-                    :queryedList="queryOrderList"
-                    @updateTable="updateTagTable"></query-tag-component>
-                    <el-button type="primary" @click="goCreateOrderPage">创建订单</el-button>
-            </template>
-
-            <template slot="control" slot-scope="controler">
-                <el-button size="mini" type="text" @click="goDealOrderPage(controler.scoper.row)">处理订单</el-button>
-                <el-button size="mini" type="text" @click="openAssignOrderDialog(controler.scoper.row)">分派订单</el-button>
-            </template>
-
-            <template slot="pagination">
-                <el-pagination
-                    class="pagination"
-                    @current-change="handleCurrentPage"
-                    @prev-click="prevAndNextClick"
-                    @next-click="prevAndNextClick"
-                    :current-page.sync="pagination.currentPage"
-                    :page-size="pagination.pageNumber"
-                    layout="prev, pager, next, jumper"
-                    :total="pagination.total"></el-pagination>
-            </template>
-        </order-table-component>
-
-        <!-- 运营订单分派 -->
-        <public-assign-order-component
-            v-if="publicAssignOrderDialogVisible"
-            :orderItemObject="assignOrderObject"
-            :publicAssignOrderDialogVisible="publicAssignOrderDialogVisible"
-            @closePublicAssignOrderDialog="closePublicAssignOrderDialog"
-            @updatePublicAssignOrder="updatePublicAssignOrder"
-            :publicOrderType="5"></public-assign-order-component>
+            :orderModuleType="'operate'"
+            :tableData="orderTable"
+            :currentPage="pagination.terminateOrderBtn"
+            :orderConfigForm="orderConfigForm"
+            @updateTable="updateTable"></order-table-component>
+        <pagination
+            :pagination="pagination"
+            @changePage="changePage"></pagination>
     </div>
 </template>
 <script>
-    import {
-        saleService, 
-        operateService
-    } from '@common/index.js'
-    
-    import {
-        orderTableComponent,
-        queryComponent,
-    } from './orderList/index.js'
+    import {operateService, $utils} from '@common/index.js'
 
-    import {
-        publicAssignOrderComponent,
-    } from '@/public/module/common/index.js'
+    import {saleService} from '@/service/sale.ts'
+
+    import orderQueryComponent from '@/public/module/orderList/orderQueryComponent.vue'
+    import orderTableComponent from '@/public/module/orderList/orderTableComponent.vue'
+    import pagination from '@/pages/operateWorker/workerList/pagination.vue'
 
     export default {
         components: {
+            orderQueryComponent,
+            pagination,
             orderTableComponent,
-            queryComponent,
-            publicAssignOrderComponent,
         },
-        data(){
+        data() {
             return {
-                //员工信息列表
+                is_loading: false,
+                //列表
                 orderTable: [],
-                is_loading:false,
-                /**
-                 * 分页信息
-                 */
+                // 列表配置项
+                orderConfigForm: {},
+                // 页码
                 pagination: {
+                    currentPage:1,
                     total: 0,
-                    currentPage: 1,
                     pageNumber: 20,
                 },
-                //待分配订单id
-                assignOrderObject: {},
-                //订单分派弹窗显示隐藏
-                publicAssignOrderDialogVisible: false,
+                //查询对象  16个
+                queryForm: {
+                    // contract_code: '',//合同流水号
+                    // contract_number: '',//合同编号
+                    // sign_at: [],//签约时间
+                    // sign_manager_id: [],//经纪人
+                    // status: [],//合同状态
+                    // sign_user_name: '',//雇主姓名
+                    // sign_user_phone: '',//雇主电话
+                    // sign_staff_name: '',//服务人员姓名
+                    // sign_staff_code: '',//服务人员工号
+
+                    order_code: '',//订单编号
+                    type: [],//订单状态
+                    order_at: [],//客户下单时间
+                    order_user_phone:'',//下单客户电话
+                    order_user_name: '',//下单客户姓名
+                    apply_store_id: [],//来源门店
+                    apply_manager_id: [],//来源人
+                    sign_user_name: '',//签约客户名
+                    sign_user_phone: '',//签约客户电话
+                    sign_staff_name: '',//签约服务人员姓名
+                    sign_staff_code: '',//签约服务人员编号
+                    sign_staff_phone: '',//签约服务人员电话
+                    created_at: [],//订单创建时间
+                    created_manager_id: [],//订单创建人
+                    agent_store_id: [],//经纪门店id
+                    agent_manager_id: [], //经纪人id
+                },
             }
         },
         computed:{
             /**
-             * 订单筛选字段
+             * 列表查询对象
              */
-            orderFormConfig(){
-                return this.$store.state.operateModule.orderFormConfig
+            queryObject(){
+                return {
+                    page: this.pagination.currentPage, //请求页码
+                    pageNumber: this.pagination.pageNumber,//单页信息数量
+                    ...this.queryForm,
+                }
             },
-            queryOrderList(){
-                return this.$store.state.operateModule.orderList
-            }
         },
         methods: {
-             /**
-             * 请求表格数据
+            /**
+             * 请求列表数据
              */
-            async getOrderList(){
+            async getTable(){          
                 try{
-
                     this.is_loading = true
 
-                    await Promise.all([
-                        saleService.getOrderList(1), //
-                        operateService.getOrderFormConfig()
-                    ]).then((data) =>{
-
-                        this.orderTable = data[0].data.data
-                        //分页信息
-                        this.pagination.currentPage = data[0].data.current_page //当前页码
-                        this.pagination.total = data[0].data.total //列表总条数
-
-                        //配置订单相关标签
-                        this.$store.commit('setOrderConfigForm',data[1].data)
-
+                    await saleService.getOrderList(this.queryObject).then(data=>{
+                        
+                        this.pagination = data.pagination
+                        this.orderTable = data.orderTable
+                        this.orderConfigForm = data.orderConfigForm
+                        
                         this.is_loading = false
                     }).catch(error =>{
                         this.$message({
-                            type:'error',
-                            message: error.message
-                        })
-                        this.is_loading = false
-                    }).finally(() =>{
-                        this.is_loading = false
-                    })
-
-                } catch(error){
-                    this.$message({
-                        type:'error',
-                        message: error.message
-                    })
-                    this.is_loading = false
-                }
-            },
-            // 由查询组件触发的更新表格事件
-            async updateTable(){
-                await this.getOrderList()
-            },
-            async updateTagTable(param){
-                //将查询组件数据变化存入vuex
-                await this.$store.commit('setOrderList', {
-                    queryKey: param[0],
-                    queryedList: param[1]
-                })
-                await this.updateTable()
-            },
-            prevAndNextClick(val){
-                //设置page查询参数
-                this.$store.commit('setOrderList', {
-                    queryKey: 'page',
-                    queryedList: val
-                })
-            },
-            /**
-             * 切换页码
-             */
-            async handleCurrentPage(val){
-                //设置page查询参数
-                this.$store.commit('setOrderList', {
-                    queryKey: 'page',
-                    queryedList: val
-                })
-                await this.getOrderList()
-            },
-            goCreateOrderPage(){
-                this.$router.push({
-                    path: '/operate/operateCreateOrderPage'
-                })
-            },
-            /**
-             * 前往订单处理页
-             * @param paramObj 列表参数对象
-             */
-            goDealOrderPage(paramObj){
-                this.$router.push({
-                    path: `/operate/operateOrderConfig`,
-                    query: {
-                        order_id: paramObj.id
-                    }
-                })
-            },
-            /**
-             * 打开分派订单弹窗
-             */
-            openAssignOrderDialog(paramObj){
-                this.assignOrderObject = paramObj;
-                this.publicAssignOrderDialogVisible = true
-            },
-            async updatePublicAssignOrder(param){
-                let assignOrderObject = {
-                    ...param[0],
-                    order_id: param[1].id,
-                }
-                await this.assignOrder(assignOrderObject)
-                await this.closePublicAssignOrderDialog()
-            },
-            /**
-             * 关闭分派订单弹窗
-             */
-            async closePublicAssignOrderDialog(){
-                this.publicAssignOrderDialogVisible = false
-                await this.getOrderList()
-            },
-            /**
-             * 分派订单接口
-             */
-            async assignOrder(assignOrderObject){
-                try{
-                    this.is_loading = true
-                    await saleService.assignOrder(assignOrderObject).then(data =>{
-                        if(data.code == '0'){
-                            this.$message({
-                                type:"success",
-                                message: data.message
-                            })
-                            this.is_loading = false
-                        }
-                    }).catch(error =>{
-                        this.$message({
-                            type:'error',
+                            type: 'error',
                             message: error.message
                         })
                         this.is_loading = false
                     })
                 } catch(error){
                     this.$message({
-                        type:'error',
+                        type: 'error',
                         message: error.message
                     })
                     this.is_loading = false
                 }
-            }
+            },
+            /**
+             * 改变页码
+             */
+            async changePage(res){
+                this.pagination.currentPage = res
+                await this.getTable()
+            },
+            /**
+             * 更新表格
+             */
+            async updateTable(res){
+                this.queryForm = {
+                    ...res
+                }
+                await this.getTable()
+            },
+            /**
+             * 变更查询条件
+             */
+            async changeQueryedForm(res){
+                this.queryForm = {
+                    ...res
+                }
+                await this.getTable()
+            },
         },
         async mounted(){
-            await this.getOrderList()
+            if(this.$route.query.currentPage){
+                this.pagination.currentPage = Number(this.$route.query.currentPage)
+            }
+            await this.getTable()
         }
     }
 </script>
 <style lang="scss" scoped>
+    .table-box{
+        padding: 24px;
+        background: #f1f2f5;
+    }
 </style>

@@ -100,15 +100,15 @@ export default {
         },
         //跳转至订单页
         goSaleOrderList(){
-            this.$router.push('/sale/orderList')
+            this.$router.push('/sale/saleOrderList')
         },
         //跳转至我的合同
         goContractList(){
-            this.$router.push('/sale/contractList')
+            this.$router.push('/sale/saleContractList')
         },
         //跳转至公海订单列表
         goPublicOrderList(){
-            this.$router.push('/sale/publicOrderList')
+            this.$router.push('/sale/salePublicOrderList')
         },
         //跳转至由我创建的服务人员
         goSaleOwnWorkerList(){
@@ -130,7 +130,7 @@ export default {
          */
         goOrderDetailPage(item){
             this.$router.push({
-                path: `/sale/orderConfig`,
+                path: `/sale/saleOrderConfig`,
                 query: {
                     order_id: item.id
                 }

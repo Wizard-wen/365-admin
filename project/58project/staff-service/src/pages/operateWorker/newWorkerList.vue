@@ -1,11 +1,12 @@
 <template>
     <div class="table-box" v-loading="is_loading">
         
-        <query-component
+        <new-query-component
             :isWorkerList="2"
             :queryForm="workerConfigForm"
-            @changeQueryedForm="changeQueryedForm"></query-component>
+            @changeQueryedForm="changeQueryedForm"></new-query-component>
         <worker-table-component
+            :workerListType="'apply'"
             :tableData="workerTable"
             :workerConfigList="workerConfigForm"
             @updateTable="updateTable"></worker-table-component>
@@ -19,13 +20,13 @@
 import {operateService} from '@common/index.js'
 import {operateWorkerService} from '@/service/operateWorker.ts'
 
-import queryComponent from './workerList/queryComponent.vue'
-import workerTableComponent from './workerList/workerTableComponent.vue'
-import pagination from './workerList/pagination.vue'
+import newQueryComponent from '@/pages/operateWorker/newWorkerList/newQueryComponent.vue'
+import workerTableComponent from '@/public/module/workerList/workerTableComponent.vue'
+import pagination from '@/public/module/workerList/pagination.vue'
 
 export default {
     components: {
-        queryComponent,
+        newQueryComponent,
         pagination,
         workerTableComponent,
     },
@@ -46,13 +47,6 @@ export default {
             queryForm: {
                 name: '',
                 phone: '',
-                identify: '',
-                staff_code: '',
-                skill: [],
-                sign_status: '',
-                nation: '',
-                education: '',
-                paper: [],
             },
         }
     },

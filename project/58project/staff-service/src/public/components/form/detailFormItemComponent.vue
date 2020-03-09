@@ -1,7 +1,7 @@
 <template>
     <div :class="['detail-item-box','abc', sizeStyleClass]">
         <div class="detail-item">
-            <p class="detail-title">{{label}}：</p>
+            <p class="detail-title" :style="{width: `${labelWidth}px`}">{{label}}：</p>
             <div class="detail-contains">
                 <template v-if="type == 'original'">
                     <template v-if="value && valueType!='string'">
@@ -47,6 +47,10 @@ export default {
         type: {
             type: String,
             default: 'original'
+        },
+        labelWidth: {
+            type: Number,
+            default: 120,
         }
     },
     computed: {
@@ -84,7 +88,6 @@ export default {
         margin-bottom: 16px;
         line-height: 30px;
         .detail-title{
-            width: 120px;
             text-align: right;
             line-height: 30px;
             margin-right: 20px;

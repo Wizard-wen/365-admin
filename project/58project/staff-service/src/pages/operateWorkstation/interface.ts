@@ -2,6 +2,17 @@
 
 
 
+
+
+
+/**
+ * 
+ */
+export interface operate{
+
+}
+
+
 /**
  * 服务人员申请字段
  */

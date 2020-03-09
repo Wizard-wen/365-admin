@@ -62,99 +62,21 @@ export interface orderUserRequireObject {
 }
 
 
-/**
- * 订单列表字段
- */
-
-export interface orderTableObject{
-    id:string;
-    version:string;
-    apply_id:string;//申请单id，后端字段
-
-    /**
-     * 1 - 否
-     * 2 - 是
-     */
-    is_wage:string;//是否发放工资
-
-    order_code:string;//订单编号
-
-    /**
-     * 订单状态
-     * 1 - 匹配中：订单申请通过后，尚未签约的状态，这就是公海订单状态；
-     * 2 - 已签约：已经签约，从公海订单中撤出；
-     * 3 - 售后匹配中：首次签约后，订单中的合同终止，进入重新匹配状态；
-     * 4 - 已终止：订单被终止，订单终止应当是在合同终止余额结算完毕后执行；
-     */
-    type:string;//订单状态
-    
-    
-
-    order_at:string;// 客户下单时间
-    order_user_phone:string;//下单客户电话
-    order_user_name:string;//下单客户
-
-
-
-
-    apply_at:string;//订单申请时间，从订单申请表传过来的
-    apply_store_name:string;// 来源门店
-    apply_store_id:string;// 来源门店id
-    apply_manager_name:string;// 来源人
-    apply_manager_id:string;// 来源人id
-    
-    first_sign_at:string;//首次签约时间,为了记录订单转化率
-
-    sign_user_name:string;// 签约客户
-    sign_user_phone:string;// 签约客户联系方式
-    sign_user_identify:string;//签约客户身份证号
-    sign_user_account:string;// 签约客户余额
-    sign_service_start:string;//签约服务开始时间
-    sign_service_end:string;//签约服务结束时间
-    
-    sign_staff_name:string;// 签约服务人员
-    sign_staff_id:string;// 签约服务人员id
-    sign_staff_code:string// 签约服务人员编号
-    sign_staff_phone:string;//签约服务人员电话
-    sign_staff_identify:string;//签约服务人员身份证号
-    sign_staff_law_address:string;//签约服务人员户籍地址
-    sign_staff_cur_address:string;//签约服务人员现住址
-    sign_staff_urgent:string;//签约服务人员紧急联系人
-    
-    created_at:string;// 订单创建时间
-    created_manager_name:string;// 订单创建人
-    created_manager_id:string;//订单创建人id
-    
-    agent_manager_name:string;// 订单经纪人
-    agent_manager_phone:string;// 订单经纪人电话
-    agent_manager_id:string;// 订单经纪人id
-    agent_store_name:string;// 订单经纪门店
-    agent_store_id:string;// 订单经纪门店id
-
-    /***********订单基本信息*********************/
-    work_type:string;//工种
-    order_details:string;//订单详情
-    service_address:string;//服务地址
-    service_duration:string;//工作期间
-    wage:string;//工资
-}
-
-
-
 
 /**
- * 备选服务人员
+ * 已备选服务人员
  */
-export interface matchServiceItem {
+export interface matchedServiceItem {
     id:string;//
     order_id:string;//订单id
     staff_id:string;//员工id
+    created_manager_id:string;// 添加人id
+    // 展示字段
     staff_code:string; //工号
     staff_name:string;//姓名
     staff_icon:string;//头像
     staff_phone:string;//电话
     type:number;// 签约状态
-    created_manager_id:string;// 添加人id
     create_manager_name:string;// 添加人
 }
 
@@ -374,3 +296,7 @@ export interface voidContractItem {
     manager_id:string;//经纪人id
     manager_name:string;//经纪人名字（筛选）
 }
+
+
+
+

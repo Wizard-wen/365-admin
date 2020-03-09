@@ -31,7 +31,7 @@ export const apiRequestCommon:api_common = {
      * 获取某个门店员工列表
      * @param store_id 门店id
      */
-    getStoreManagerSelection(store_id){
+    getStoreManagerSelection(store_id:number){
         return axios.get(`./admin/common/getStoreManagerSelection?store_id=${store_id}`)
     },
     /**

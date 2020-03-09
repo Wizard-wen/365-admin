@@ -53,7 +53,7 @@
                 <make-image-btn 
                     :workerForm="workerForm" 
                     :workerConfigForm="workerConfigForm" 
-                    :isShowImageButton="$route.query.type == 1"></make-image-btn>
+                    :isShowImageButton="$route.query.type == (1 || 5)"></make-image-btn>
                 <!-- 导出回访 / 恢复 / 提交至信息库-->
                 <el-button 
                     size="mini" 
@@ -101,7 +101,7 @@
                         <el-tooltip slot="label" class="item" effect="dark" content="出生日期根据身份证号确定" placement="top-start">
                             <span>出生日期<i class="el-icon-info"></i></span>
                         </el-tooltip>
-                        {{workerForm.birthday? workerForm.birthday: '暂无信息'}}
+                        {{ workerForm.birthday | formDate }}
                     </el-form-item>
 
                     <el-form-item label="民族" prop="nation" class="form-item-size form-item-3-size" size="small">
@@ -276,13 +276,19 @@
 
             <log-component :title="'日志'" :isEdit="false" :logList="workerForm.log"></log-component>
 
-            <return-msg-component :isEdit="this.$route.query.type == 2? true :false" :return_msg="workerForm.log" @updateOrderConfig="getWorkerForm"></return-msg-component>
+            <return-msg-component 
+                :isEdit="$route.query.type == 2? true :false" 
+                :return_msg="workerForm.return_log" 
+                @updateOrderConfig="getWorkerForm"></return-msg-component>
             
             <el-form-item>
                 <!-- 创建/编辑 -->
                 <el-button size="mini" type="primary" @click="editWorker('form')">{{editText}}</el-button>
                 <!-- 生成图片按钮 -->
-                <make-image-btn :workerForm="workerForm"  :workerConfigForm="workerConfigForm" :isShowImageButton="$route.query.type == 1"></make-image-btn>
+                <make-image-btn 
+                    :workerForm="workerForm" 
+                    :workerConfigForm="workerConfigForm" 
+                    :isShowImageButton="$route.query.type == (1 || 5)"></make-image-btn>
                 <!-- 导出回访 / 恢复 / 提交至信息库-->
                 <el-button size="mini" type="primary" @click="handleWorker" v-if="submitText != ''">{{submitText}}</el-button>
                 <back-btn></back-btn>
@@ -524,7 +530,9 @@ export default {
                 module_type = '';
             if(type == 2){
                 module_type = 'return'
-            } else if(type == 3){
+            }  
+            
+            if(type == 3){
                 module_type = 'warning'
             } else if(type == 4){
                 module_type = 'apply'

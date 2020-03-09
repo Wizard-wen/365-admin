@@ -17,9 +17,9 @@
 import {operateService} from '@common/index.js'
 import {operateWorkerService} from '@/service/operateWorker.ts'
 
-import queryComponent from './workerList/queryComponent.vue'
-import workerTableComponent from './workerList/workerTableComponent.vue'
-import pagination from './workerList/pagination.vue'
+import queryComponent from '@/public/module/workerList/queryComponent.vue'
+import workerTableComponent from '@/public/module/workerList/workerTableComponent.vue'
+import pagination from '@/public/module/workerList/pagination.vue'
 
 export default {
     components: {

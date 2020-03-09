@@ -1,9 +1,9 @@
 <template>
     <div class="table-box" v-loading="is_loading">
-        <query-component
+        <sale-worker-list-query-component
             :workerListType="'seller'"
             :queryForm="workerConfigForm"
-            @changeQueryedForm="changeQueryedForm"></query-component>
+            @changeQueryedForm="changeQueryedForm"></sale-worker-list-query-component>
         <worker-table-component
             :workerListType="'seller'"
             :tableData="workerTable"
@@ -12,28 +12,20 @@
         <pagination
             :pagination="pagination"
             @changePage="changePage"></pagination>
-        <!-- 提交服务人员异常信息 -->
-        <error-worker-dialog
-            v-if="errorWorkerDialogVisible"
-            :openErrorWorkerDialog="errorWorkerDialogVisible"
-            @closeErrorWorkerDialog="closeErrorWorkerDialog"
-            :errorWorkerWorkingStatus="errorWorkerRow.working_status"
-            :staffId="errorWorkerId"></error-worker-dialog>
     </div>
 </template>
 <script>
     import {operateService, $utils} from '@common/index.js'
-    import {
-        errorWorkerDialog} from './saleWorkerList/index.js'
+
     import {operateWorkerService} from '@/service/operateWorker.ts'
 
-    import queryComponent from '@/pages/operateWorker/workerList/queryComponent.vue'
-    import workerTableComponent from '@/pages/operateWorker//workerList/workerTableComponent.vue'
-    import pagination from '@/pages/operateWorker//workerList/pagination.vue'
+    import saleWorkerListQueryComponent from './saleWorkerList/saleWorkerListQueryComponent.vue'
+    import workerTableComponent from '@/public/module/workerList/workerTableComponent.vue'
+    import pagination from '@/public/module/workerList/pagination.vue'
+
     export default {
         components: {
-            errorWorkerDialog,
-            queryComponent,
+            saleWorkerListQueryComponent,
             pagination,
             workerTableComponent,
         },

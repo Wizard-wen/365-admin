@@ -2,8 +2,10 @@
     <div class="table-contains">
         <div class="btn-contains">
             <create-by-operate-btn 
+                :workerListType="workerListType"
                 v-if="workerListType == 'total'"></create-by-operate-btn>
             <create-by-sale-btn 
+                :workerListType="workerListType"
                 @updateTable="$emit('updateTable')"  
                 :workerConfigForm="workerConfigForm" 
                 v-if="workerListType == 'seller'"></create-by-sale-btn>

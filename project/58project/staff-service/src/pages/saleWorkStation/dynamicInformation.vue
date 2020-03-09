@@ -74,7 +74,7 @@ export default {
          */
         goPublicOrderList(){
             this.$router.push({
-                path: '/sale/publicOrderList'
+                path: '/sale/salePublicOrderList'
             })
         },
         /**

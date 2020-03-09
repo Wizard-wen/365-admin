@@ -1,176 +1,151 @@
 <template>
-    <div class="worker" v-loading="is_loading">
+    <div class="table-box" v-loading="is_loading">
+        <query-contract-component
+            :queryForm="contractConfigForm"
+            @changeQueryedForm="changeQueryedForm"></query-contract-component>
         <contract-table-component
-            :staffTable="contractList"
-            :maxLength="maxLength"
-            :controlScopeLength="100">
-
-            <template slot="searchList">
-                <div class="search-list">
-                    <query-component @updateTable="updateTable"></query-component>
-                </div>
-            </template>
-
-            <template slot="searchForm">
-                <query-tag-component 
-                    :queryFormConfig="contractConfigForm"
-                    :queryedList="queryedContractList"
-                    @updateTable="updateTagTable"></query-tag-component>
-            </template>
-
-            <template slot="control" slot-scope="controler">
-                <el-button size="mini" type="text" @click="goContractPage( controler.scoper.row)">查看</el-button>
-            </template>
-
-            <template slot="pagination">
-                <el-pagination
-                    class="pagination"
-                    @current-change="handleCurrentPage"
-                    @prev-click="prevAndNextClick"
-                    @next-click="prevAndNextClick"
-                    :current-page.sync="pagination.currentPage"
-                    :page-size="pagination.pageNumber"
-                    layout="prev, pager, next, jumper"
-                    :total="pagination.total"></el-pagination>
-            </template>
-        </contract-table-component>
+            :contractModuleType="'operateContractList'"
+            :tableData="contractTable"
+            :currentPage="pagination.currentPage"
+            :contractConfigForm="contractConfigForm"
+            @updateTable="updateTable"></contract-table-component>
+        <pagination
+            :pagination="pagination"
+            @changePage="changePage"></pagination>
     </div>
 </template>
 <script>
-    import {operateService, saleService} from '@common/index.js'
-    import {
-        contractTableComponent,
-        queryComponent,
-    } from './contractList/index.js'
+    import {operateService, $utils} from '@common/index.js'
+
+    import {saleService} from '@/service/sale.ts'
+
+    import queryContractComponent from '@/public/module/contractList/queryContractComponent.vue'
+    import contractTableComponent from '@/public/module/contractList/contractTableComponent.vue'
+    import pagination from '@/pages/operateWorker/workerList/pagination.vue'
+
     export default {
         components: {
+            queryContractComponent,
+            pagination,
             contractTableComponent,
-            queryComponent,
         },
-        data(){
+        data() {
             return {
-                //合同列表
-                contractList: [],
-                is_loading:false,
-                /**
-                 * 分页信息
-                 */
+
+                is_loading: false,
+                //列表
+                contractTable: [],
+                // 列表配置项
+                contractConfigForm: {},
+                // 页码
                 pagination: {
+                    currentPage:1,
                     total: 0,
-                    currentPage: 1,
                     pageNumber: 20,
                 },
-                //计算列表每一列的最大宽度
-                maxLength: {
-                    authentication: 80, //认证状态
-                    working_status: 80,//接单状态
-                    skill_ids: 80,// 职业类型
-                    service_type: 80,//服务类型
-                    service_crowd: 100,//可服务人群
-                    working_age: 80,// 工龄
-                    nation: 80,// 民族
-                    region_ids:80,//服务地区
-                    course: 80,//参加培训
-                    paper_ids: 80, //技能证书
-                    source: 80,//信息来源
+                //查询对象
+                queryForm: {
+                    contract_code:'',//合同流水号
+                    contract_number:'',//合同编号
+
+
+                    status: [],//合同状态
+                    sign_at: [],//签约时间 
+                    sign_manager_id: [],//签约经纪人
+                    // sign_store_id: [],//签约经纪门店
+
+                    sign_user_name: '',//雇主
+                    sign_user_phone:'',//雇主电话
+
+                    sign_staff_name:'',//签约家政服务员
+                    sign_staff_code: '',//签约家政服务员员工号
                 },
             }
         },
         computed:{
             /**
-             * 合同筛选字段
+             * 列表查询对象
              */
-            contractConfigForm(){
-                return this.$store.state.operateModule.contractConfigForm
-            },
-            queryedContractList(){
-                return this.$store.state.operateModule.contractList
-            }
-        },
-        methods: {
-             /**
-             * 请求表格数据
-             */
-            async getTableList(){
-                try{
-
-                    this.is_loading = true
-
-
-                    await Promise.all([
-                        saleService.getContractList(2),
-                        operateService.getOrderFormConfig()
-                    ]).then((data) =>{
-
-                        this.contractList = data[0].data.data
-                        //分页信息
-                        this.pagination.currentPage = data[0].data.current_page //当前页码
-                        this.pagination.total = data[0].data.total //列表总条数
-                        //配置订单相关标签
-                        this.$store.commit('setContractConfigForm',data[1].data)
-                    }).catch(error =>{
-                        this.$message({
-                            type:'error',
-                            message: error.message
-                        })
-                    }).finally(() =>{
-                        this.is_loading = false
-                    })
-
-                } catch(error){
-                    this.$message({
-                        type:'error',
-                        message: error.message
-                    })
+            queryObject(){
+                return {
+                    page: this.pagination.currentPage, //请求页码
+                    pageNumber: this.pagination.pageNumber,//单页信息数量
+                    ...this.queryForm,
                 }
             },
-            // 由查询组件触发的更新表格事件
-            async updateTable(){
-                await this.getTableList()
+            /**
+             * 当前用户信息
+             */
+            presentUser(){
+                return this.$store.state.loginModule.user
             },
-            async updateTagTable(param){
-                //将查询组件数据变化存入vuex
-                await this.$store.commit('setContractList', {
-                    queryKey: param[0],
-                    queryedList: param[1]
-                })
-                await this.updateTable()
-            },
-            prevAndNextClick(val){
-                //设置page查询参数
-                this.$store.commit('setContractList', {
-                    queryKey: 'page',
-                    queryedList: val
-                })
+        },
+        methods: {
+            /**
+             * 请求列表数据
+             */
+            async getTable(){          
+                try{
+                    this.is_loading = true
+                    //如果当前不是店长
+
+                    await saleService.getContractList(this.queryObject).then(data=>{
+                        
+                        this.pagination = data.pagination
+                        this.contractTable = data.contractTable
+                        this.contractConfigForm = data.contractConfigForm
+                        
+                        this.is_loading = false
+                    }).catch(error =>{
+                        this.$message({
+                            type: 'error',
+                            message: error.message
+                        })
+                        this.is_loading = false
+                    })
+                } catch(error){
+                    this.$message({
+                        type: 'error',
+                        message: error.message
+                    })
+                    this.is_loading = false
+                }
             },
             /**
-             * 切换页码
+             * 改变页码
              */
-            async handleCurrentPage(val){
-                //设置page查询参数
-                this.$store.commit('setContractList', {
-                    queryKey: 'page',
-                    queryedList: val
-                })
-                await this.getTableList()
+            async changePage(res){
+                this.pagination.currentPage = res
+                await this.getTable()
             },
             /**
-             * 前往合同详情页
+             * 更新表格
              */
-            goContractPage(row){
-                this.$router.push({
-                    path: "/operate/operateContractItem",
-                    query: {
-                        id: row.id,
-                        from: 2,
-                    }
-                })
+            async updateTable(res){
+                this.queryForm = {
+                    ...res
+                }
+                await this.getTable()
+            },
+            /**
+             * 变更查询条件
+             */
+            async changeQueryedForm(res){
+                this.queryForm = {
+                    ...res
+                }
+                await this.getTable()
             },
         },
         async mounted(){
-            await this.getTableList()
+            await this.getTable()
         }
     }
 </script>
 <style lang="scss" scoped>
+    .table-box{
+        padding: 24px;
+        background: #f1f2f5;
+    }
 </style>
+s

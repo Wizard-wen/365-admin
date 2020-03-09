@@ -561,7 +561,7 @@ export default {
          */
         goOrderConfigPage(){
             this.$router.push({
-                path: '/sale/orderConfig',
+                path: '/sale/saleOrderConfig',
                 query: {
                     order_id: this.$route.query.order_id,
                 }

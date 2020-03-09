@@ -53,7 +53,6 @@ import workerItemShow from '@/pages/operateWorker/workerItemShow.vue'
 import newWorkerList from '@/pages/operateWorker/newWorkerList.vue'
 import errorWorkerList from '@/pages/operateWorker/errorWorkerList.vue'
 import returnWorkerList from '@/pages/operateWorker/returnWorkerList.vue'
-import workerList1 from '@/pages/operateWorker/workerList1.vue'
 /**
  * 客户管理
  */ 
@@ -167,11 +166,6 @@ export const operateConfigModule = [
         path: '/worker/workerList',
         name: 'workerList',
         component: workerList,
-    },
-    {
-        path: '/worker/workerList1',
-        name: 'workerList1',
-        component: workerList1,
     },
     {
         path: '/worker/errorWorkerList',

@@ -35,7 +35,7 @@
         signedUserDetailComponent,
         contractDetailComponent,
         contractHeaderComponent,
-    } from '@/public/module/contract/index.js'
+    } from '@/public/module/contractItem/index.js'
 export default {
     components: {
         settledDetailComponent,

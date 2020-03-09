@@ -84,138 +84,138 @@ export const saleModule = {
         /**
          *  服务人员信息库查询字段 
          */
-        saleWorkerList: {
-            /*********************表格字段查询******************************/
-            get_for: 'seller',
-            page: 1, //请求页码
-            pageNumber: 20,//单页信息数量
-            /*********************逻辑字段查询*****************************/
+        // saleWorkerList: {
+        //     /*********************表格字段查询******************************/
+        //     get_for: 'seller',
+        //     page: 1, //请求页码
+        //     pageNumber: 20,//单页信息数量
+        //     /*********************逻辑字段查询*****************************/
             
-            // staff_code: '',//员工号
-            // sex: '',//性别
-            // create_at: '', //创建时间
+        //     // staff_code: '',//员工号
+        //     // sex: '',//性别
+        //     // create_at: '', //创建时间
 
-            /*********************业务字段查询*****************************/
+        //     /*********************业务字段查询*****************************/
             
-            // register_at:'',//登记时间
-            // updated_at:'',更新时间
-            authentication: [],//认证状态
-            name: '', //姓名
-            // age: null,//年龄--按年龄段搜索
-            phone: '',//电话
-            return_msg: '',//回访信息
-            working_status: [],//接单状态 ------
-            remarks: '',//备注（商家情况）
-            service_category: [],//职业类型
-            service_type: [],//服务类型
-            service_crowd: [],//可服务人群
-            working_age: [],//工龄
-            working_experience: '',//工作经验
-            nation: [],//民族
-            birthplace: '',//籍贯
-            identify: '',//身份证号
-            address: '',//地址
-            service_region: [],//服务地区
-            education: [],//教育程度
-            urgent_phone: '',//紧急联系人电话
-            bank_card: '',//银行卡号
-            course: [],//参加培训
-            teacher_comment:'',//教师评语
-            paper_category: [],//证书标签
-            source: [],//信息来源
-            source_name: '',//来源名城
-            manager: [],//创建人
-            updated_type: [],//更新时间
-        },
+        //     // register_at:'',//登记时间
+        //     // updated_at:'',更新时间
+        //     authentication: [],//认证状态
+        //     name: '', //姓名
+        //     // age: null,//年龄--按年龄段搜索
+        //     phone: '',//电话
+        //     return_msg: '',//回访信息
+        //     working_status: [],//接单状态 ------
+        //     remarks: '',//备注（商家情况）
+        //     service_category: [],//职业类型
+        //     service_type: [],//服务类型
+        //     service_crowd: [],//可服务人群
+        //     working_age: [],//工龄
+        //     working_experience: '',//工作经验
+        //     nation: [],//民族
+        //     birthplace: '',//籍贯
+        //     identify: '',//身份证号
+        //     address: '',//地址
+        //     service_region: [],//服务地区
+        //     education: [],//教育程度
+        //     urgent_phone: '',//紧急联系人电话
+        //     bank_card: '',//银行卡号
+        //     course: [],//参加培训
+        //     teacher_comment:'',//教师评语
+        //     paper_category: [],//证书标签
+        //     source: [],//信息来源
+        //     source_name: '',//来源名城
+        //     manager: [],//创建人
+        //     updated_type: [],//更新时间
+        // },
         /**
          * 我创建的服务人员列表
          */
-        saleOwnWorkerList: {
-            page: 1, //请求页码
-            pageNumber: 20,//单页信息数量
-            manager: [],
-        },
+        // saleOwnWorkerList: {
+        //     page: 1, //请求页码
+        //     pageNumber: 20,//单页信息数量
+        //     manager: [],
+        // },
         /**
          * 备选服务人员列表查询字段
          */
-        matchServiceList: {
-            /*********************表格字段查询******************************/
-            get_for: 'match',
-            page: 1, //请求页码
-            pageNumber: 20,//单页信息数量
-            /*********************逻辑字段查询*****************************/
+        // matchServiceList: {
+        //     /*********************表格字段查询******************************/
+        //     get_for: 'match',
+        //     page: 1, //请求页码
+        //     pageNumber: 20,//单页信息数量
+        //     /*********************逻辑字段查询*****************************/
             
-            // staff_code: '',//员工号
-            // sex: '',//性别
-            // create_at: '', //创建时间
+        //     // staff_code: '',//员工号
+        //     // sex: '',//性别
+        //     // create_at: '', //创建时间
 
-            /*********************业务字段查询*****************************/
+        //     /*********************业务字段查询*****************************/
             
-            // register_at:'',//登记时间
-            // updated_at:'',更新时间
-            authentication: [],//认证状态
-            name: '', //姓名
-            // age: null,//年龄--按年龄段搜索
-            phone: '',//电话
-            return_msg: '',//回访信息
-            working_status: [],//接单状态 ------
-            remarks: '',//备注（商家情况）
-            service_category: [],//职业类型
-            service_type: [],//服务类型
-            service_crowd: [],//可服务人群
-            working_age: [],//工龄
-            working_experience: '',//工作经验
-            nation: [],//民族
-            birthplace: '',//籍贯
-            identify: '',//身份证号
-            address: '',//地址
-            service_region: [],//服务地区
-            education: [],//教育程度
-            urgent_phone: '',//紧急联系人电话
-            bank_card: '',//银行卡号
-            course: [],//参加培训
-            teacher_comment:'',//教师评语
-            paper_category: [],//证书标签
-            source: [],//信息来源
-            source_name: '',//来源名称
-            manager: [],//创建人
-            updated_type: [],//更新时间
-        }, 
+        //     // register_at:'',//登记时间
+        //     // updated_at:'',更新时间
+        //     authentication: [],//认证状态
+        //     name: '', //姓名
+        //     // age: null,//年龄--按年龄段搜索
+        //     phone: '',//电话
+        //     return_msg: '',//回访信息
+        //     working_status: [],//接单状态 ------
+        //     remarks: '',//备注（商家情况）
+        //     service_category: [],//职业类型
+        //     service_type: [],//服务类型
+        //     service_crowd: [],//可服务人群
+        //     working_age: [],//工龄
+        //     working_experience: '',//工作经验
+        //     nation: [],//民族
+        //     birthplace: '',//籍贯
+        //     identify: '',//身份证号
+        //     address: '',//地址
+        //     service_region: [],//服务地区
+        //     education: [],//教育程度
+        //     urgent_phone: '',//紧急联系人电话
+        //     bank_card: '',//银行卡号
+        //     course: [],//参加培训
+        //     teacher_comment:'',//教师评语
+        //     paper_category: [],//证书标签
+        //     source: [],//信息来源
+        //     source_name: '',//来源名称
+        //     manager: [],//创建人
+        //     updated_type: [],//更新时间
+        // }, 
         /**
          * 订单列表查询参数
          */
-        saleOrderList: {
-            page: 1, //请求页码
-            pageNumber: 20,//单页信息数量
-            order_code: '',//订单编号
-            type: [],//订单状态 
-            order_at: [],//客户下单时间
-            order_user_phone:'',//下单客户电话
-            order_user_name: '',//下单客户姓名
-            apply_store_id: [],//来源门店
-            apply_manager_id: [],//来源人
-            sign_user_name: '',//签约客户名
-            sign_user_phone: '',//签约客户电话
-            sign_staff_name: '',//签约服务人员姓名
-            sign_staff_code: '',//签约服务人员编号
-            sign_staff_phone: '',//签约服务人员电话
-            created_at: [],//订单创建时间
-            created_manager_id: [],//订单创建人
-            agent_store_id: [],//经纪门店id
-            agent_manager_id: [], //经纪人id
-        },
+        // saleOrderList: {
+        //     page: 1, //请求页码
+        //     pageNumber: 20,//单页信息数量
+        //     order_code: '',//订单编号
+        //     type: [],//订单状态 
+        //     order_at: [],//客户下单时间
+        //     order_user_phone:'',//下单客户电话
+        //     order_user_name: '',//下单客户姓名
+        //     apply_store_id: [],//来源门店
+        //     apply_manager_id: [],//来源人
+        //     sign_user_name: '',//签约客户名
+        //     sign_user_phone: '',//签约客户电话
+        //     sign_staff_name: '',//签约服务人员姓名
+        //     sign_staff_code: '',//签约服务人员编号
+        //     sign_staff_phone: '',//签约服务人员电话
+        //     created_at: [],//订单创建时间
+        //     created_manager_id: [],//订单创建人
+        //     agent_store_id: [],//经纪门店id
+        //     agent_manager_id: [], //经纪人id
+        // },
         /**
          * 订单列表查询参数
          */
-        publicOrderList: {
-            get_for: 'public',
-            page: 1, //请求页码
-            pageNumber: 20,//单页信息数量
-            order_code: '',//订单编号
-            order_at: [],//客户下单时间
-            agent_store_id: [],//经纪门店id
-            agent_manager_id: [], //经纪人id
-        },
+        // publicOrderList: {
+        //     get_for: 'public',
+        //     page: 1, //请求页码
+        //     pageNumber: 20,//单页信息数量
+        //     order_code: '',//订单编号
+        //     order_at: [],//客户下单时间
+        //     agent_store_id: [],//经纪门店id
+        //     agent_manager_id: [], //经纪人id
+        // },
         /**
          *  合同列表查询字段 
          */
@@ -268,17 +268,17 @@ export const saleModule = {
          * @param queryedList 键值，可能是数组，也可能是字符串
          */
         //设置全部服务人员查询字段
-        saleSetWorkerList(state,payload){
-            state.saleWorkerList[payload.queryKey] = payload.queryedList
-        },
+        // saleSetWorkerList(state,payload){
+        //     state.saleWorkerList[payload.queryKey] = payload.queryedList
+        // },
         //设置我创建的服务人员查询字段
-        saleSetOwnWorkerList(state,payload){
-            state.saleOwnWorkerList.manager = payload
-        },
+        // saleSetOwnWorkerList(state,payload){
+        //     state.saleOwnWorkerList.manager = payload
+        // },
         //设置备选服务人员查询字段
-        saleSetMatchSerivceList(state,payload){
-            state.matchServiceList[payload.queryKey] = payload.queryedList
-        },
+        // saleSetMatchSerivceList(state,payload){
+        //     state.matchServiceList[payload.queryKey] = payload.queryedList
+        // },
         //设置订单列表查询字段
         saleSetOrderList(state,payload){
             state.saleOrderList[payload.queryKey] = payload.queryedList

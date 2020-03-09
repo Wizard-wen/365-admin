@@ -65,7 +65,7 @@ export default {
          */
         goOrderConfigPage(item){
             this.$router.push({
-                path: '/sale/orderConfig',
+                path: '/sale/saleOrderConfig',
                 query: {
                     order_id: item.id,
                     order_type: 2,
@@ -77,7 +77,7 @@ export default {
          */
         goOrderListPage(){
             this.$router.push({
-                path: '/sale/orderList',
+                path: '/sale/saleOrderList',
                 query: {
 
                 }
