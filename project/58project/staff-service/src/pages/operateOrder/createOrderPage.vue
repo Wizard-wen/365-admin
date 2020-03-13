@@ -86,7 +86,8 @@
 </template>
 
 <script>
-import {operateService} from '@common/index.js'
+// import {operateService} from '@common/index.js'
+import {operateOrderService} from '@/service/operateOrder' 
 export default {
     data() {
         var checkPhone = (rule, value, callback) => {
@@ -104,10 +105,8 @@ export default {
         return {
             is_loading: false,
             storeList: [],//门店列表
-            //
-            agentStoreManagerList: [],//
-            //
-            applyStoreManagerList: [],
+            agentStoreManagerList: [],//门店经纪人列表
+            applyStoreManagerList: [],//
             
             createOrderForm: {
                 work_type: '', //工种
@@ -115,8 +114,10 @@ export default {
                 service_duration: '',//工作时间
                 wage: '',//工资
                 order_details: '',//订单详情
+
                 order_user_phone: '',//客户联系电话
                 order_user_name: '',//客户姓名
+                
                 apply_store_id: 1,//来源门店id
                 apply_manager_id: 0,//来源人id
                 agent_store_id: 1,//经纪门店id
@@ -177,7 +178,7 @@ export default {
         async getStoreManagerSelection(value){
             try{
                 this.is_loading = true
-                return operateService.getStoreManagerSelection(value).then(data =>{
+                return operateOrderService.getStoreManagerSelection(value).then(data =>{
                     if(data.code == '0'){
                         return data.data
                         this.is_loading = false
@@ -205,7 +206,7 @@ export default {
                 if (valid) {
                     try{
                         this.is_loading = true
-                        await operateService.createOrder(this.createOrderForm).then(data =>{
+                        await operateOrderService.operateCreateOrder(this.createOrderForm).then(data =>{
                             if(data.code == '0'){
                                 this.$message({
                                     type:"success",
@@ -236,35 +237,41 @@ export default {
                 }
             });
         },
-        goback(){
-            this.$router.push('/operate/operateOrderList')
-        }
-    },
-    async mounted(){
-        try{
-            this.is_loading = true
-            await Promise.all([
-                operateService.getStoreSelection(),
-                operateService.getStoreManagerSelection(1)
-            ]).then((data) =>{
-                this.storeList = data[0].data
-                this.agentStoreManagerList = data[1].data
-                this.applyStoreManagerList = data[1].data
-                this.is_loading = false
-            }).catch((error) =>{
+        /**
+         * 初始化门店数据
+         */
+        async initSelectionData(){
+            try{
+                this.is_loading = true
+                await Promise.all([
+                    operateOrderService.getStoreSelection(),
+                    operateOrderService.getStoreManagerSelection(1)
+                ]).then((data) =>{
+                    this.storeList = data[0].data
+                    this.agentStoreManagerList = data[1].data
+                    this.applyStoreManagerList = data[1].data
+                    this.is_loading = false
+                }).catch((error) =>{
+                    this.$message({
+                        type:'error',
+                        message: error.message
+                    })
+                    this.is_loading = false
+                })
+            } catch(error){
                 this.$message({
                     type:'error',
                     message: error.message
                 })
                 this.is_loading = false
-            })
-        } catch(error){
-            this.$message({
-                type:'error',
-                message: error.message
-            })
-            this.is_loading = false
+            }
+        },
+        goback(){
+            this.$router.push('/operate/operateOrderList')
         }
+    },
+    async mounted(){
+        this.initSelectionData()
     }
 }
 </script>

@@ -57,7 +57,7 @@
                     <el-option label="已签约" :value="2"></el-option>
                 </el-select>
             </el-form-item>
-            <el-form-item label="工龄">
+            <el-form-item label="工龄" prop="working_age">
                 <el-select 
                     v-model="localQueryedForm.working_age" 
                     placeholder="请选择工龄"
@@ -124,7 +124,7 @@
 import {
     work_age_list,
     educationList
-} from '@/pages/operateWorker/workerList/IworkerList.ts'
+} from '@/public/module/workerList/IworkerList.ts'
 
 import {operateWorkerService} from '@/service/operateWorker'
 export default {

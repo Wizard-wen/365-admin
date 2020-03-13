@@ -11,10 +11,8 @@
                     filterable
                     clearable>
                     <el-option 
-                        v-for="(item, index) in order_typeList" 
-                        :key="index" 
-                        :label="item.name" 
-                        :value="item.id"></el-option>
+                        v-for="(item, index) in order_apply_typeList" 
+                        :key="index" :label="item.name" :value="item.id"></el-option>
                 </el-select>
             </el-form-item >
             <el-form-item label="申请订单时间" prop="created_at">
@@ -25,9 +23,7 @@
                     clearable>
                     <el-option 
                         v-for="(item, index) in created_atList" 
-                        :key="index" 
-                        :label="item.name" 
-                        :value="item.id"></el-option>
+                        :key="index" :label="item.name" :value="item.id"></el-option>
                 </el-select>
             </el-form-item >
             <el-form-item label="客户电话" prop="user_phone">
@@ -49,16 +45,16 @@
 <script>
 
 import {
-    created_atList,
-    order_typeList
+    created_atList
 } from '@/public/module/orderList/IorderList.ts'
 
+import {order_apply_typeList} from '@/public/module/orderApplyList/IorderApplyList.ts'
 
 export default {
     data(){
         return {
             created_atList,
-            order_typeList,
+            order_apply_typeList,
             localQueryedForm: {
                 type: [],//订单申请类型
                 require_code: '',//订单申请编号
@@ -106,7 +102,7 @@ export default {
         resetForm(formName) {
             this.$refs[formName].resetFields();
 
-            this.setSearchForm()
+            this.searchForm()
         }
     }
 }

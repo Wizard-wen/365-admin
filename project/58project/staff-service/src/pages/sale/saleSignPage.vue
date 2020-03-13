@@ -2,14 +2,10 @@
     <div class="signPage" v-loading="is_loading">
         <div class="sign-contains">
             <el-form :model="signForm" :rules="signRules" ref="signForm" :label-width="'140px'" >
-                <div class="order-message">
-                    <div class="title">
-                        <div class="title-contains">
-                            <div class="left">合同编号</div>
-                        </div>
-                    </div>
-                    <div class="order-list">
-                        <el-form-item prop="contract_number">
+                
+                <card-box-component :title="'合同编号'">
+                    <div slot="contains" class="contains-form">
+                        <el-form-item prop="contract_number" class="form-item-3-size" size="small">
                             <form-item-label-tooltip-component
                                 slot="label"
                                 :label="'合同编号'"
@@ -28,19 +24,13 @@
                             </el-select>
                         </el-form-item>
                     </div>
-                </div>
-                <div class="order-message">
-                    <div class="title">
-                        <div class="title-contains">
-                            <div class="left">雇主信息</div>
-                        </div>
-                    </div>
-                    <div class="order-list" >
-                        <el-form-item prop="sign_user_name" label="姓名">
-                            
+                </card-box-component>
+                <card-box-component :title="'雇主信息'">
+                    <div slot="contains" class="contains-form">
+                        <el-form-item prop="sign_user_name" label="姓名" class="form-item-3-size" size="small">
                             <el-input v-model="signForm.sign_user_name" :disabled="publicOrderType == 3 || publicOrderType == 2" placeholder="请输入雇主姓名"></el-input>
                         </el-form-item>
-                        <el-form-item prop="sign_user_phone">
+                        <el-form-item prop="sign_user_phone" class="form-item-3-size" size="small">
                             <form-item-label-tooltip-component
                                 slot="label"
                                 :label="'联系电话'"
@@ -53,73 +43,80 @@
                             </form-item-label-tooltip-component>
                             <el-input v-model.number="signForm.sign_user_phone" placeholder="请输入雇主联系电话"></el-input>
                         </el-form-item>
-                        <el-form-item label="身份证号" prop="sign_user_identify">
+                        <el-form-item label="身份证号" prop="sign_user_identify" class="form-item-3-size" size="small">
                             <el-input v-model="signForm.sign_user_identify" :disabled="publicOrderType == 3 || publicOrderType == 2" placeholder="请输入雇主身份证号"></el-input>
                         </el-form-item>
                     </div>
-                </div>
-
-                <div class="order-message">
-                    <div class="title">
-                        <div class="title-contains">
-                            <div class="left">家政服务员信息</div>
-                        </div>
-                    </div>
-                    <div class="order-list">
-                        <el-form-item label="姓名" prop="sign_staff_name">
-                            <el-input v-model="signForm.sign_staff_name" :disabled="true" placeholder="请输入家政服务员姓名"></el-input>
+                </card-box-component>
+                <card-box-component :title="'家政服务员信息'">
+                    <div slot="contains" class="contains-form">
+                        <el-form-item label="姓名" prop="sign_staff_name" class="form-item-3-size" size="small">
+                            <el-input v-model="signForm.sign_staff_name" :disabled="true" placeholder=""></el-input>
                         </el-form-item>
-                        <el-form-item label="联系电话" prop="sign_staff_phone">
-                            <el-input v-model="signForm.sign_staff_phone" placeholder="请输入家政服务员联系电话"></el-input>
+                        <el-form-item label="联系电话" prop="sign_staff_phone" class="form-item-3-size" size="small">
+                            <el-input v-model="signForm.sign_staff_phone" :disabled="true" placeholder=""></el-input>
                         </el-form-item>
-                        <el-form-item label="身份证号" prop="sign_staff_identify">
-                            <el-input v-model="signForm.sign_staff_identify" placeholder="请输入家政服务员身份证号"></el-input>
+                        <el-form-item label="身份证号" prop="sign_staff_identify" class="form-item-3-size" size="small">
+                            <el-input v-model="signForm.sign_staff_identify" :disabled="true" placeholder=""></el-input>
                         </el-form-item>
-                        <el-form-item label="户籍地址" prop="sign_staff_law_address">
-                            <el-input v-model="signForm.sign_staff_law_address" placeholder="请输入家政服务员户籍地址"></el-input>
+                        <el-form-item label="户籍地址" prop="sign_staff_law_address" class="form-item-size form-item-1-size" size="small">
+                            <el-input v-model="signForm.sign_staff_law_address" placeholder=""></el-input>
                         </el-form-item>
-                        <el-form-item label="现住址" prop="sign_staff_cur_address">
-                            <el-input v-model="signForm.sign_staff_cur_address" placeholder="请输入家政服务员现住址"></el-input>
+                        <el-form-item label="现住址" prop="sign_staff_cur_address" class="form-item-size form-item-1-size" size="small">
+                            <el-input v-model="signForm.sign_staff_cur_address" :disabled="true" placeholder=""></el-input>
                         </el-form-item>
-                        <el-form-item label="紧急联系人" prop="sign_staff_urgent">
-                            <el-input v-model="signForm.sign_staff_urgent" placeholder="请输入家政服务员紧急联系人"></el-input>
+                        <el-form-item label="紧急联系人" prop="sign_staff_urgent" class="form-item-size form-item-1-size" size="small">
+                            <el-input v-model="signForm.sign_staff_urgent" :disabled="true" placeholder=""></el-input>
                         </el-form-item>
                     </div>
-                </div>
-                <div class="order-message">
-                    <div class="title">
-                        <div class="title-contains">
-                            <div class="left">服务内容</div>
-                        </div>
-                    </div>
-                    <div class="order-list">
-                        <el-form-item label="服务内容" prop="service_contains">
-                            <select-tag-component
-                                :propTagList="orderConfigList.order_service_contains"
-                                v-model="signForm.service_contains"
-                                :isSingle="true"></select-tag-component>
+                </card-box-component>
+                <card-box-component :title="'服务内容'">
+                    <div slot="contains" class="contains-form">
+                        <el-form-item label="服务内容" prop="service_contains" class="form-item-size form-item-3-size" size="small">
+                            <el-select 
+                                v-model="signForm.service_contains" 
+                                placeholder="请选择服务内容"
+                                filterable>
+                                <el-option
+                                    v-for="item in orderConfigList.order_service_contains"
+                                    :key="item.id"
+                                    :label="item.name"
+                                    :value="item.id"></el-option>
+                            </el-select>
                         </el-form-item>
-                        <el-form-item label="服务地址" prop="service_address">
-                            <el-input v-model="signForm.service_address" placeholder="请输入服务地址"></el-input>
-                        </el-form-item>
-                        <el-form-item label="服务对象人数" prop="service_count">
-                            <el-input-number v-model="signForm.service_count" :min="1" :max="20"></el-input-number>
-                        </el-form-item>
-                        <el-form-item label="护理依赖程度" prop="service_level">
-                            <select-tag-component
+                        <el-form-item label="护理依赖程度" prop="service_level" class="form-item-size form-item-3-size" size="small">
+                            <el-radio-group v-model="signForm.service_level">
+                                <el-radio :label="1">自理</el-radio>
+                                <el-radio :label="2">不自理</el-radio>
+                            </el-radio-group>
+                            <!-- <select-tag-component
                                 :propTagList="orderConfigList.order_service_level"
                                 v-model="signForm.service_level"
-                                :isSingle="true"></select-tag-component>
+                                :isSingle="true"></select-tag-component> -->
                         </el-form-item>
-                        <el-form-item label="服务方式" prop="service_type">
-                            <select-tag-component
+                        <el-form-item label="服务方式" prop="service_type" class="form-item-size form-item-3-size" size="small">
+                            <!-- <select-tag-component
                                 :propTagList="orderConfigList.order_service_type"
                                 v-model="signForm.service_type"
-                                :isSingle="true"></select-tag-component>
+                                :isSingle="true"></select-tag-component> -->
+                            <el-select 
+                                v-model="signForm.service_type" 
+                                placeholder="请选择服务方式"
+                                filterable>
+                                <el-option
+                                    v-for="item in orderConfigList.order_service_type"
+                                    :key="item.id"
+                                    :label="item.name"
+                                    :value="item.id"></el-option>
+                            </el-select>
                         </el-form-item>
-                        <el-form-item label="服务期限" prop="service_duration">
+                         <el-form-item label="服务对象人数" prop="service_count" class="form-item-size form-item-3-size" size="small">
+                            <el-input-number v-model="signForm.service_count" :min="1" :max="20"></el-input-number>
+                        </el-form-item>
+                        
+                        <el-form-item label="服务期限" prop="service_duration" class="form-item-size form-item-23-size" size="small">
                             <el-date-picker
-                                v-model="signForm.service_duration"
+                                v-model="service_duration"
                                 value-format="timestamp"
                                 @change="changeServiceDuration"
                                 :picker-options="pickerOptions"
@@ -128,26 +125,36 @@
                                 start-placeholder="服务开始日期"
                                 end-placeholder="服务结束日期"></el-date-picker>
                         </el-form-item>
-                        <el-form-item label="工作时间" prop="service_time">
+                        <el-form-item label="服务地址" prop="service_address" class="form-item-size form-item-1-size" size="small">
+                            <el-input v-model="signForm.service_address" placeholder="请输入服务地址"></el-input>
+                        </el-form-item>
+                       
+                        <el-form-item label="工作时间" prop="service_time" class="form-item-size form-item-1-size" size="small">
                             <el-input v-model="signForm.service_time" placeholder="请输入劳动者日常工作时间"></el-input>
                         </el-form-item>
+                        <el-form-item label="服务所在行业" prop="service_skill" class="form-item-size form-item-1-size" size="small">
+                            <el-cascader
+                                v-model="signForm.service_skill"
+                                :props="{
+                                    label: 'name',
+                                    value: 'id',
+                                }"
+                                :options="workerConfigForm.skill"
+                                :show-all-levels="false"></el-cascader>
+                        </el-form-item>
+                        
                     </div>
-                </div>
-                <div class="order-message">
-                    <div class="title">
-                        <div class="title-contains">
-                            <div class="left">报酬及服务费用</div>
-                        </div>
-                    </div>
-                    <div class="order-list">
-                        <el-form-item prop="staff_wage">
+                </card-box-component>
+                <card-box-component :title="'报酬及服务费用'">
+                    <div slot="contains" class="contains-form">
+                        <el-form-item prop="staff_wage" class="form-item-size form-item-3-size" size="small">
                             <form-item-label-tooltip-component
                                 slot="label"
                                 :label="'劳务报酬/月'"
                                 :explain="'劳务报酬是指的双方约定的，服务人员服务一个月应得的报酬。'"></form-item-label-tooltip-component>
                             <el-input v-model.number="signForm.staff_wage" placeholder="请输入劳动者劳务报酬"></el-input>
                         </el-form-item>
-                        <el-form-item prop="staff_charge">
+                        <el-form-item prop="staff_charge" class="form-item-size form-item-3-size" size="small">
                             <form-item-label-tooltip-component
                                 slot="label"
                                 :label="'劳动者服务费'"
@@ -159,7 +166,7 @@
                             </form-item-label-tooltip-component>
                             <el-input v-model.number="signForm.staff_charge" placeholder="请输入劳动者服务费"></el-input>
                         </el-form-item>
-                        <el-form-item prop="user_charge">
+                        <el-form-item prop="user_charge" class="form-item-size form-item-3-size" size="small">
                             <form-item-label-tooltip-component
                                 slot="label"
                                 :label="'客户服务费'"
@@ -171,7 +178,7 @@
                             </form-item-label-tooltip-component>
                             <el-input v-model.number="signForm.user_charge" placeholder="请输入客户服务费"></el-input>
                         </el-form-item>
-                        <el-form-item prop="user_pay">
+                        <el-form-item prop="user_pay" class="form-item-size form-item-3-size" size="small">
                             <form-item-label-tooltip-component
                                 slot="label"
                                 :label="'客户缴纳金额'"
@@ -183,7 +190,7 @@
                             </form-item-label-tooltip-component>
                             <el-input v-model.number="signForm.user_pay" placeholder="请输入客户缴纳金额"></el-input>
                         </el-form-item>
-                        <el-form-item prop="staff_deposit">
+                        <el-form-item prop="staff_deposit" class="form-item-size form-item-3-size" size="small">
                             <form-item-label-tooltip-component
                                 slot="label"
                                 :label="'劳动者押金'"
@@ -195,20 +202,15 @@
                             <el-input v-model.number="signForm.staff_deposit" placeholder="请输入劳动者押金"></el-input>
                         </el-form-item>
                     </div>
-                </div>
-                <div class="order-message">
-                    <div class="title">
-                        <div class="title-contains">
-                            <div class="left">服务人员保险</div>
-                        </div>
-                    </div>
-                    <div class="order-list">
-                        <el-form-item label="保险受益人" prop="insurance_benefit">
+                </card-box-component>
+                <card-box-component :title="'服务人员保险'">
+                    <div slot="contains" class="contains-form">
+                        <el-form-item label="保险受益人" prop="insurance_benefit" class="form-item-size form-item-3-size" size="small">
                             <el-input v-model="signForm.insurance_benefit" :disabled="true" placeholder="请输入保险受益人"></el-input>
                         </el-form-item>
-                        <el-form-item label="保险期限" prop="insurance_duration">
+                        <el-form-item label="保险期限" prop="insurance_duration" class="form-item-size form-item-23-size" size="small">
                             <el-date-picker
-                                v-model="signForm.insurance_duration"
+                                v-model="insurance_duration"
                                 value-format="timestamp"
                                 @change="changeInsuranceDuration"
                                 :picker-options="pickerOptions"
@@ -218,27 +220,23 @@
                                 end-placeholder="保险结束日期"></el-date-picker>
                         </el-form-item>
                     </div>
-                </div>
-                <div class="order-message">
-                    <div class="title">
-                        <div class="title-contains">
-                            <div class="left">合同附件及备注</div>
-                        </div>
-                    </div>
-                    <div class="order-list">
-                        <el-form-item label="备注" prop="remarks">
+                </card-box-component>
+
+                <card-box-component :title="'合同文本及备注'">
+                    <div slot="contains" class="contains-form">
+                        <el-form-item label="备注" prop="remarks" class="form-item-size form-item-1-size" size="small">
                             <el-input type="textarea" v-model="signForm.remarks" placeholder="请输入合同备注信息"></el-input>
                         </el-form-item>
-                        <el-form-item label="合同附件" prop="accessory" ref="accessory">
+                        <el-form-item label="合同附件" prop="accessory" ref="accessory" class="form-item-size form-item-1-size" size="small">
                             <multiple-picture-upload
                                 v-model="signForm.accessory"
                                 :title="'合同附件'"
                                 :height="210"
                                 :width="197"></multiple-picture-upload>
-
                         </el-form-item>
                     </div>
-                </div>
+                </card-box-component>
+
                 <el-form-item>
                     <el-button type="primary" @click="signOrder('signForm')">立即签约</el-button>
                     <el-button @click="goback">取消</el-button>
@@ -249,7 +247,7 @@
     </div>
 </template>
 <script>
-    import {saleService, operateService} from '@common/index.js'
+    import {saleService} from '@/service/sale.ts'
 export default {
     data(){
         var _this = this
@@ -307,34 +305,34 @@ export default {
                 ],
                 //签约服务人员姓名
                 sign_staff_name: [
-                    { required:true,message:'请输入签约服务人员姓名',trigger: 'blur'},
+                    { required:true,message:'缺少签约服务人员姓名，不能签约，请联系运营中心更改！',trigger: 'blur'},
                 ],
                 //签约服务人员手机号
                 sign_staff_phone: [
-                    { required:true,message:'请输入签约服务人员手机号',trigger: 'blur'},
+                    { required:true,message:'缺少签约服务人员手机号，不能签约，请联系运营中心更改！',trigger: 'blur'},
                     {validator: validator.phoneValidate, trigger: 'blur'}
                 ],
                 //签约服务人员身份证号
                 sign_staff_identify: [
-                    { required:true,message:'请输入签约身份证号',trigger: 'blur'},
+                    { required:true,message:'缺少签约身份证号，不能签约，请联系运营中心更改！',trigger: 'blur'},
                     {validator: validator.identifyValidate, trigger: 'blur'}
                 ],
                 //签约服务人员户籍地址
                 sign_staff_law_address: [
-                    { required:true,message:'请输入签约服务人员户籍地址',trigger: 'blur'},
+                    { required:true,message:'缺少签约服务人员户籍地址，不能签约，请联系运营中心更改！',trigger: 'blur'},
                 ],
                 //签约服务人员现住址
                 sign_staff_cur_address: [
-                    { required:true,message:'请输入签约服务人员现住址',trigger: 'blur'},
+                    { required:true,message:'缺少签约服务人员现住址，不能签约，请联系运营中心更改！',trigger: 'blur'},
                 ],
                 //签约服务人员紧急联系人
                 sign_staff_urgent: [
-                    { required:true,message:'请输入签约服务人员紧急联系人',trigger: 'blur'},
+                    { required:true,message:'缺少签约服务人员紧急联系人，不能签约，请联系运营中心更改！',trigger: 'blur'},
                 ],
 
                 //服务内容
                 service_contains: [
-                    { required:true,message:'请输入劳务报酬',trigger: 'change'},
+                    { required:true,message:'请选择服务内容',trigger: 'change'},
                 ],
                 //服务地址
                 service_address: [
@@ -405,13 +403,13 @@ export default {
                 order_id: this.$route.query.order_id,
                 
                 contract_number: '',//合同编号
-                sign_user_name:this.$route.query.type == 3 || 2?this.$route.query.sign_user_name : '' ,// 雇主
-                sign_user_id:this.$route.query.type == 3 || 2?this.$route.query.sign_user_id : '' ,// 雇主
-                sign_user_phone:'',// 雇主联系电话
+                sign_user_name:this.$route.query.type == 3 || 2?this.$route.query.sign_user_name : '' ,// 雇主姓名
+                sign_user_id:this.$route.query.type == 3 || 2?this.$route.query.sign_user_id : '' ,// 雇主id
+                sign_user_phone:this.$route.query.type == 3 || 2?this.$route.query.sign_user_phone : '',// 雇主联系电话
                 sign_user_identify:this.$route.query.type == 3 || 2?this.$route.query.sign_user_identify : '',// 雇主身份证号
                 
-                sign_staff_name:this.$route.query.sign_staff_name,// 签约家政服务员
-                sign_staff_id: this.$route.query.sign_staff_id,//签约家政服务员id
+                sign_staff_name:'',// 签约家政服务员
+                sign_staff_id: '',//签约家政服务员id
                 sign_staff_phone:'',// 签约家政服务员电话
                 sign_staff_identify:'',// 签约家政服务员身份证号
                 sign_staff_law_address:'',// 签约家政服务员户籍地址
@@ -420,12 +418,11 @@ export default {
                 
                 service_contains:'',// 服务内容
                 service_count:'',// 服务对象人数
-                service_level:'',// 护理依赖程度
+                service_level:1,// 护理依赖程度
                 service_type:'',// 服务方式
-                service_duration:[],// 服务期限展示字段
+                service_skill: [], //服务所在行业
+    
                 service_start:'',// 服务期限起始
-                service_end: '',//服务期限截止
-                service_start: '',//服务期限起始
                 service_end: '',//服务期限截止
                 service_time:'',// 工作时间
 
@@ -433,21 +430,22 @@ export default {
                 user_charge:'',// 客户服务费
                 user_pay:'',// 客户缴纳
                 staff_deposit:'',// 劳动者押金
-                insurance_benefit:this.$route.query.sign_staff_name,// 保险受益人
-                insurance_duration:[],// 保险期限
+                insurance_benefit:'',// 保险受益人
+                
                 insurance_start:'',// 保险起始日
                 insurance_end:'',//保险终止日
-                insurance_start: '',//保险起始日
-                insurance_end: '',//保险终止日
                 accessory:[],// 上传附件
                 remarks:'',//备注
             },
+            workerConfigForm: {},
+            workerItem: {},
             pickerOptions: {
                 disabledDate(time) {
                     return time.getTime() < Date.now() - 8.64e7;
                 },
             },
-            service_period:[],//服务起止时间段
+            service_duration:[],// 服务期限展示字段
+            insurance_duration:[],// 保险期限
             //图片上传header
             uploadHeader:{
                 accessToken: this.$store.state.loginModule.token.access_token
@@ -466,31 +464,6 @@ export default {
     methods: {
         goback(){
             this.$router.go(-1)
-        },
-        /**
-         * 上传成功后，接收图片数据，送入图片回显数组
-         */
-        uploadSuccess(response, file, fileList) {
-            let picItem = {
-                path: response.data.path,
-                url: './resource/'+response.data.path,
-                name: response.data.name
-            }
-            this.signForm.accessory.push(picItem)
-            //消除表单验证
-            if(this.signForm.accessory.length){
-                this.$refs.accessory.clearValidate()
-            }
-        },
-        /**
-         * 移出图片
-         */
-        removePic(file, fileList){
-            this.signForm.accessory.forEach((item, index) =>{
-                if(item.name == file.name){
-                    this.signForm.accessory.splice(index,1)
-                }
-            })
         },
         /**
          * 提交签约表单
@@ -527,8 +500,10 @@ export default {
         async sign(){
             try{
                 this.is_loading = true;
-
-                await saleService.sign(this.signForm).then(data =>{
+                let signForm = {
+                    ...this.signForm,
+                }
+                await saleService.sign(signForm).then(data =>{
                     if(data.code == "0"){
                         this.$message({
                             type:'success',
@@ -580,35 +555,52 @@ export default {
         changeServiceDuration(value){
             this.signForm.service_start = value[0]
             this.signForm.service_end = value[1]
-        }
+        },
     },
     async mounted(){
         /**
          * 获取可签约合同列表
          */
         try{
-            await operateService.getManagerVoidContractSelection().then(data =>{
-                if(data.code == '0'){
-                    this.contract_numberList = data.data
-                    if(this.contract_numberList.length == 0){
-                        this.$message({
-                            type: 'error',
-                            message: '您目前没有可签约的合同，请及时联系运营申请！'
-                        })
-                    }
-                }
+            this.is_loading = true
+            Promise.all([
+                saleService.getManagerVoidContractSelection(),
+                saleService.getWorker(this.$route.query.worker_id),
+                saleService.getWorkerFormConfig('edit')
+            ]).then(data => {
+                this.contract_numberList = data[0].data
+                this.workerItem = data[1].data
+                // 初始化签约服务人员数据
+                this.signForm.sign_staff_name = this.workerItem.name// 签约家政服务员
+                this.signForm.sign_staff_id =  this.workerItem.id//签约家政服务员id
+                this.signForm.sign_staff_phone = this.workerItem.phone// 签约家政服务员电话
+                this.signForm.sign_staff_identify = this.workerItem.identify// 签约家政服务员身份证号
+                this.signForm.sign_staff_cur_address = this.workerItem.address// 签约家政服务员现住址
+                this.signForm.sign_staff_urgent = this.workerItem.urgent// 签约家政服务员紧急联系方式
+                this.signForm.insurance_benefit = this.workerItem.name
+
+                this.workerConfigForm = data[2].data
+                this.is_loading = false
                 
+                if(this.contract_numberList.length == 0){
+                    this.$message({
+                        type: 'error',
+                        message: '您目前没有可签约的合同，请及时联系运营申请！'
+                    })
+                }
             }).catch(error => {
                 this.$message({
                     type:'error',
                     message: error.message
                 }) 
+                this.is_loading = false
             })
         } catch(error){
             this.$message({
                 type:'error',
                 message: error.message
             }) 
+            this.is_loading = false
         }
         
     }
@@ -619,52 +611,73 @@ export default {
         width: 100%;
         min-height: calc(100vh - 50px);
         background:#f0f2f5;
+        .contains-form{
+            display: flex;
+            flex-wrap:wrap;
+        }
         .sign-contains{
             padding: 24px;
         }
     }
-            .order-message{
+            // .order-message{
 
-                width: 100%;
-                // height: 285px;
-                background: #fff;
-                margin-bottom: 24px; 
-                .title{
-                    min-height: 48px;
-                    margin-bottom: -1px;
-                    padding: 0 24px;
-                    color: rgba(0,0,0,.85);
-                    font-weight: 500;
-                    font-size: 16px;
-                    background: transparent;
-                    border-bottom: 1px solid #e8e8e8;
-                    border-radius: 2px 2px 0 0;
-                    zoom: 1;
-                    .title-contains{
-                        display: flex;
-                        align-items: center;
-                        .left{
-                            display: inline-block;
-                            flex: 1 1;
-                            padding: 16px 0;
-                            overflow: hidden;
-                            white-space: nowrap;
-                            text-overflow: ellipsis;
-                        }
-                    }
+            //     width: 100%;
+            //     // height: 285px;
+            //     background: #fff;
+            //     margin-bottom: 24px; 
+            //     .title{
+            //         min-height: 48px;
+            //         margin-bottom: -1px;
+            //         padding: 0 24px;
+            //         color: rgba(0,0,0,.85);
+            //         font-weight: 500;
+            //         font-size: 16px;
+            //         background: transparent;
+            //         border-bottom: 1px solid #e8e8e8;
+            //         border-radius: 2px 2px 0 0;
+            //         zoom: 1;
+            //         .title-contains{
+            //             display: flex;
+            //             align-items: center;
+            //             .left{
+            //                 display: inline-block;
+            //                 flex: 1 1;
+            //                 padding: 16px 0;
+            //                 overflow: hidden;
+            //                 white-space: nowrap;
+            //                 text-overflow: ellipsis;
+            //             }
+            //         }
 
-                }
-                .order-list{
-                    box-sizing: border-box;
-                    padding: 24px;
-                    width: 880px;
-                    &:after{
-                        content: '';
-                        display: block;
-                        clear: both;
-                    }
-                }
-            }
+            //     }
+            //     .order-list{
+            //         box-sizing: border-box;
+            //         padding: 24px;
+            //         width: 880px;
+            //         &:after{
+            //             content: '';
+            //             display: block;
+            //             clear: both;
+            //         }
+            //     }
+            // }
+
+
+.form-item-3-size{
+    width: 33%;
+}
+.form-item-23-size{
+    width: 66%;
+}
+.form-item-1-size{
+    width: 100%;
+}
+.form-item-2-size{
+    width: 50%;
+}
+.form-item-size{
+    max-width: 900px;
+}
 </style>
 
 

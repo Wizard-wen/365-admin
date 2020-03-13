@@ -17,16 +17,14 @@
 <script>
     import {operateService, $utils} from '@common/index.js'
 
-    import {operateWorkerService} from '@/service/operateWorker.ts'
+    import {saleService} from '@/service/sale'
 
     import saleWorkerListQueryComponent from './saleWorkerList/saleWorkerListQueryComponent.vue'
     import workerTableComponent from '@/public/module/workerList/workerTableComponent.vue'
-    import pagination from '@/public/module/workerList/pagination.vue'
 
     export default {
         components: {
             saleWorkerListQueryComponent,
-            pagination,
             workerTableComponent,
         },
         data() {
@@ -85,7 +83,7 @@
             async getTable(){          
                 try{
                     this.is_loading = true
-                    await operateWorkerService.getTableList('edit',this.queryObject).then(data=>{
+                    await saleService.getSaleWorkerList('edit',this.queryObject).then(data=>{
                         
                         this.pagination = data.pagination
                         this.workerTable = data.workerTable

@@ -56,10 +56,7 @@
 
 <script>
 
-/**
- * type 0 新建  1 编辑
- */
-import {saleService,operateService} from '@common/index.js'
+import {publicModuleService} from '@/service/publicModule'
 
 export default {
     props:{
@@ -191,7 +188,7 @@ export default {
             //校验并提交
             await this.$refs[formName].validate((valid) => {
                 if (valid) {
-                    saleService.stopContract(this.determinateContractForm).then(data =>{
+                    publicModuleService.stopContract(this.determinateContractForm).then(data =>{
                         if(data.code == '0'){
                             this.$message({
                                 type:"success",

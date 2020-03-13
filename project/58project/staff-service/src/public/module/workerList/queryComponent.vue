@@ -57,7 +57,7 @@
                     <el-option label="已签约" :value="2"></el-option>
                 </el-select>
             </el-form-item>
-            <el-form-item label="工龄">
+            <el-form-item v-if="workerListType == 'total'" label="工龄" prop="working_age">
                 <el-select 
                     v-model="localQueryedForm.working_age" 
                     placeholder="请选择工龄"
@@ -87,7 +87,6 @@
         
             <el-form-item v-if="workerListType == 'total'" label="教育程度" prop="education">
                 <el-select v-model="localQueryedForm.education" placeholder="请选择教育程度">
-                    <el-option label="全部" :value="0"></el-option>
                     <el-option 
                         v-for="(item, index) in educationList" 
                         :key="index" 
@@ -177,7 +176,7 @@ export default {
             }
             sendForm.service_category = operateWorkerService.sendCascanderData(sendForm.service_category) 
             sendForm.manager = operateWorkerService.sendCascanderData(sendForm.manager) 
-            // sendForm.course = operateWorkerService.sendCascanderData(sendForm.course) 
+            sendForm.course = operateWorkerService.sendCascanderData(sendForm.course) 
 
             // sendForm.course = sendForm.course? [sendForm.course]: []
             sendForm.nation = sendForm.nation? [sendForm.nation]: []

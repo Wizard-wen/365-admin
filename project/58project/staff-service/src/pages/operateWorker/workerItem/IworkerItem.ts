@@ -115,23 +115,28 @@ export interface createNewWorkerItem{
 export const workerItemType = [
     {
         id: 0,
-        type:'运营人员-全部服务人员-创建',
+        type:'create',
+        des: '运营人员-全部服务人员-创建'
     },
     {
         id: 1,
-        type: "运营人员-全部服务人员-编辑"
+        type: "edit",
+        des: '运营人员-全部服务人员-编辑'
     },
     {
         id: 2,
-        type: "运营人员-回访-编辑"
+        type: "return",
+        des: '运营人员-回访-编辑'
     },
     {
         id: 3,
-        type: "运营人员-异常处理-编辑"
+        type: "warning",
+        des: '运营人员-异常处理-编辑'
     },
     {
         id: 4,
-        type: '运营人员-处理新建申请-编辑'
+        type: 'apply',
+        des: '运营人员-处理新建申请-编辑'
     }
 ]
 

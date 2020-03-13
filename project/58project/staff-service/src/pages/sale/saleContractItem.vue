@@ -1,24 +1,25 @@
 <template>
     <div class="orderConfig" v-loading="is_loading">
+        <!-- 订单头部数据 -->
         <contract-header-component
             :contractType="2"
             :contractBase="contractBase"
-            @updateContract="getContract"></contract-header-component>
+            @updateContract="getSaleContract"></contract-header-component>
         <div class="order-down">
-
+            <!-- 订单基本信息 -->
             <contract-detail-component
                 :contractBase="contractBase"></contract-detail-component>
-            
+            <!-- 签约服务人员信息 -->
             <signed-service-detail-component
                 :signedServiceDetailObject="contractBase"></signed-service-detail-component>
-
+            <!-- 签约客户信息 -->
             <signed-user-detail-component
                 :signedUserDetailObject="contractBase"></signed-user-detail-component>
-
+            <!-- 合同终止信息 -->
             <terminal-detail-component
                 v-if="is_settle == 2"
                 :contractBase="contractBase"></terminal-detail-component>
-
+            <!-- 合同结算信息 -->
             <settled-detail-component
                 v-if="is_settle == 1"
                 :contractBase="contractBase"></settled-detail-component>  
@@ -26,8 +27,7 @@
     </div>
 </template>
 <script>
-    import {operateService, $utils, saleService} from '@common/index.js'
-
+import {saleService} from '@/service/sale.ts'
     import {
         settledDetailComponent,
         terminalDetailComponent,
@@ -51,69 +51,8 @@ export default {
             contractBase: {},//合同信息
         }
     },
-    filters: {
-        timeFomatter(value){
-            if(value == 0){
-                return '-'
-            }
-            return $utils.formatDate(new Date(value), 'yyyy-MM-dd')
-        },
-        contractTypeFormatter(value){
-            if(value == 1){
-                return '待执行'
-            } else if (value == 2){
-                return '执行中'
-            } else {
-                return '已终止'
-            }
-        },
-        isWagedFormatter(value){
-            if(value == 1){
-                return '否'
-            } else {
-                return '是'
-            }
-        }
-    },
     computed:{
-        /**
-         * 当前用户信息
-         */
-        presentUser(){
-            return this.$store.state.loginModule.user
-        },
-        //订单服务内容
-        order_service_contains(){
-            return this.$store.state.saleModule.order_service_contains
-        },
-        //订单护理依赖程度
-        order_service_level(){
-            return this.$store.state.saleModule.order_service_level
-        },
-        //订单服务方式
-        order_service_type(){
-            return this.$store.state.saleModule.order_service_type
-        },
-        //合同状态
-        contractType(value){
-            if(this.contractBase.type == 1){
-                return {
-                    name: '待执行',
-                    color: '#E6A23C'
-                }
-            } else if (this.contractBase.type == 2){
-                return {
-                    name: '执行中',
-                    color: '#67C23A'
-                }
-            } else {
-                return {
-                    name: '已终止',
-                    color: '#F56C6C'
-                }
-            }
-        },
-        //是否结算
+        //是否已经结算
         is_settle(){
             if(!this.contractBase.account){
                 return 3
@@ -126,10 +65,10 @@ export default {
         /**
          * 获取订单信息
          */
-        async getContract(){
+        async getSaleContract(){
             try{
                 this.is_loading = true
-                await saleService.getContract(this.$route.query.id).then((data) =>{
+                await saleService.getSaleContract(this.$route.query.id).then((data) =>{
                     this.contractBase = data.data
                 }).catch(e =>{
                     this.$message({
@@ -148,24 +87,9 @@ export default {
                 this.is_loading = false
             }
         },
-        /**
-         * 返回
-         */
-        goback(){
-            if(this.$route.query.from == 1){
-                this.$router.push({
-                    path: '/operate/operateOrderConfig',
-                    query: {
-                        order_id: this.$route.query.from_id
-                    }
-                })
-            } else {
-                this.$router.push('/operate/operateContractList')
-            }
-        },
     },
     async mounted(){
-        await this.getContract()
+        await this.getSaleContract()
     }    
 }
 </script>

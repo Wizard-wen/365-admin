@@ -65,7 +65,8 @@ export default {
             this.$router.push({
                 path: '/operate/operateOrderApplyItem',
                 query: {
-                    id: item.id
+                    id: item.id,
+                    from : 'apply'
                 }
             })
         },

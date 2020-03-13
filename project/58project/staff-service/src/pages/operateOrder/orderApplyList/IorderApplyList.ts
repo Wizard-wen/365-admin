@@ -1,7 +1,7 @@
 
 
 
-
+import {order_apply_typeList} from '@/public/module/orderApplyList/IorderApplyList'
 
 // 请求门店订单申请表单
 export interface searchOrderApplyForm{

@@ -5,7 +5,7 @@
 
         <template slot="icon" >
             <icon-component
-                :iconUrl="workerForm.icon"
+                :iconUrl="workerForm.icon?`./resource/${workerForm.icon}`:''"
                 :height="140"
                 :width="100"></icon-component>
         </template>
@@ -21,7 +21,7 @@
             </div>
         </template>
         <template slot="statistic">
-            <div class="detail-right">
+            <!-- <div class="detail-right">
                 <div class="right-box">
                     <div class="title">
                         签约状态
@@ -44,23 +44,27 @@
                         {{ workerForm.status == 1? '启用': '停用'}}
                     </div>
                 </div>
-            </div>
+            </div> -->
+            <worker-status
+                v-if="$route.query.type !=0"
+                :workerForm="workerForm"></worker-status>
         </template>
         <template slot="control">
             <div class="control-contains">
                 <!-- 创建/编辑 -->
                 <el-button size="mini" type="primary" @click="editWorker('form')">{{editText}}</el-button>
-                <make-image-btn 
-                    :workerForm="workerForm" 
-                    :workerConfigForm="workerConfigForm" 
-                    :isShowImageButton="$route.query.type == (1 || 5)"></make-image-btn>
+
                 <!-- 导出回访 / 恢复 / 提交至信息库-->
                 <el-button 
+                    v-if="$route.query.type == 3 || $route.query.type == 4"
                     size="mini" 
-                    type="primary" 
-                    @click="handleWorker" 
-                    v-if="submitText != ''">{{submitText}}</el-button>
-                <back-btn></back-btn>
+                    type="success" 
+                    @click="handleWorker('form')">
+                    {{$route.query.type == 3 ? '恢复':'保存并提交'}}
+                </el-button>
+                
+                <back-worker-list-btn ref="back"></back-worker-list-btn>
+
             </div>
         </template>
 
@@ -84,8 +88,6 @@
                         </el-radio-group>
                     </el-form-item>
 
-                    
-                    
                     <el-form-item label="身份证号码" prop="identify" class="form-item-size form-item-3-size" size="small">
                         <el-input v-model="workerForm.identify" :maxlength="18" placeholder="请输入身份证号"></el-input>
                     </el-form-item>
@@ -94,7 +96,7 @@
                         <el-tooltip slot="label" class="item" effect="dark" content="年龄根据身份证号确定" placement="top-start">
                             <span>年龄<i class="el-icon-info"></i></span>
                         </el-tooltip>
-                        {{workerForm.age? workerForm.age: '暂无信息'}}
+                        {{workerForm.age? workerForm.age: '-'}}
                     </el-form-item>
 
                     <el-form-item prop="birthday" class="form-item-size form-item-3-size" size="small">
@@ -261,9 +263,9 @@
                             :width="237"></multiple-picture-upload>
                     </el-form-item>
                     
-                </div>
-                
+                </div>   
             </card-box-component>
+
             <card-box-component 
                 :title="'备注信息'">
                 <el-form-item slot="contains" prop="remarks" class="form-item-size" size="small">
@@ -271,6 +273,28 @@
                         <span>备注<i class="el-icon-info"></i></span>
                     </el-tooltip>
                     <el-input type="textarea" v-model="workerForm.remarks" :maxlength="200" placeholder="请输入备注信息"></el-input>
+                </el-form-item>
+            </card-box-component>
+
+            <!-- <card-box-component 
+                v-if="$route.query.type == 3"
+                :title="'异常信息'">
+                <el-form-item slot="contains" prop="warning_log" class="form-item-size" size="small">
+                    <el-tooltip slot="label" class="item" effect="dark" content="由门店提出的需要改进的信息" placement="top-start">
+                        <span>异常服务人员备注<i class="el-icon-info"></i></span>
+                    </el-tooltip>
+                    <el-input type="textarea" v-model="workerForm.warning_log"  disabled :maxlength="200" placeholder="请输入备注信息"></el-input>
+                </el-form-item>
+            </card-box-component> -->
+
+            <card-box-component 
+                v-if="$route.query.type == 4"
+                :title="'新服务人员备注'">
+                <el-form-item slot="contains" prop="seller_remarks" class="form-item-size" size="small">
+                    <el-tooltip slot="label" class="item" effect="dark" content="由门店提出的新服务人员备注信息" placement="top-start">
+                        <span>备注<i class="el-icon-info"></i></span>
+                    </el-tooltip>
+                    <el-input type="textarea" v-model="workerForm.seller_remarks"  disabled :maxlength="200" placeholder="请输入备注信息"></el-input>
                 </el-form-item>
             </card-box-component>
 
@@ -282,16 +306,7 @@
                 @updateOrderConfig="getWorkerForm"></return-msg-component>
             
             <el-form-item>
-                <!-- 创建/编辑 -->
-                <el-button size="mini" type="primary" @click="editWorker('form')">{{editText}}</el-button>
-                <!-- 生成图片按钮 -->
-                <make-image-btn 
-                    :workerForm="workerForm" 
-                    :workerConfigForm="workerConfigForm" 
-                    :isShowImageButton="$route.query.type == (1 || 5)"></make-image-btn>
-                <!-- 导出回访 / 恢复 / 提交至信息库-->
-                <el-button size="mini" type="primary" @click="handleWorker" v-if="submitText != ''">{{submitText}}</el-button>
-                <back-btn></back-btn>
+
             </el-form-item>
         </el-form>
     </page-edit-component>
@@ -304,27 +319,29 @@ import {
     $utils
 } from '@common/index.js'
 
-//上传证书组件
-import paperComponent from './workerItem/paperComponent.vue'
 
-import workerPictureComponent from './workerItem/workerPictureComponent.vue'
+
 
 import {operateWorkerService} from '@/service/operateWorker'
 
-import {zodiac_signList} from './workerList/IworkerList.ts'
-import {educationList} from './workerList/IworkerList.ts'
+import {zodiac_signList} from '@/public/module/workerList/IworkerList.ts'
+import {educationList} from '@/public/module/workerList/IworkerList.ts'
 
+//上传证书组件
+import paperComponent from './workerItem/paperComponent.vue'
 import returnMsgComponent from './workerItem/returnMsgComponent.vue'
-import makeImageBtn from '@/pages/operateWorker/workerList/workerTableComponent/control/makeImageBtn.vue'
-
-import backBtn from '@/pages/operateWorker/workerItem/control/backBtn.vue'
+import backWorkerListBtn from '@/pages/operateWorker/workerItem/control/backWorkerListBtn.vue'
+// import recoverErrorWorkerBtn from '@/public/module/workerList/control/recoverErrorWorkerBtn.vue'
+// import submitNewWorkerBtn from '@/public/module/workerList/control/submitNewWorkerBtn.vue'
+import workerStatus from '@/public/module/workerShow/workerShowComponent/workerStatus.vue'
 export default {
     components: {
         paperComponent,//上传证书照片证书组件
-        workerPictureComponent,//生成服务人员名片组件
         returnMsgComponent,
-        makeImageBtn,
-        backBtn,
+        backWorkerListBtn,
+        // recoverErrorWorkerBtn,
+        // submitNewWorkerBtn,
+        workerStatus,
     },
     data() {
         let _this = this
@@ -338,7 +355,7 @@ export default {
                     callback(new Error('请输入手机号'));
                 } else {
                     try{
-                        await operateService.checkStaffPhone(_this.workerForm.id, value).then((data) =>{
+                        await operateWorkerService.checkNewWorkerPhone(_this.workerForm.id, value).then((data) =>{
                             if(data.code == '0'){
                                 callback()
                                 _this.phoneCheck = false
@@ -370,7 +387,6 @@ export default {
             
             is_loading: false,//
             editText: '',//编辑按钮文案
-            submitText: '',//提交按钮文案
             timeDefaultShow: '',//当前日期
             zodiac_signList,//生肖数组
             educationList,//学历数组
@@ -390,8 +406,8 @@ export default {
                 staff_code:null,//员工号
                 version:null,//操作版本号
                 status: null,//员工停用启用
-                sex:1,//性别
-                is_married:1,//婚姻状况
+                sex:'',//性别
+                is_married:'',//婚姻状况
                 /************业务字段******************/
                 manager_id:0,//创建人id
                 manager_name:'',//创建人姓名
@@ -403,15 +419,15 @@ export default {
                 birthday:null,//出生日期
                 identify:'',//身份证号码
                 phone:'',//电话
-                skill:[1],//职业类型
-                zodiac_sign:[0],//生肖
+                skill:[],//职业类型
+                zodiac_sign:'',//生肖
                 body_weight: '',//体重
                 body_height: '',//身高
                 worked_at:'',//何时参加工作
-                nation:[0],//民族
+                nation:null,//民族
                 id_photo: [],//证件照
                 address:'',//地址
-                education:[0],//学历
+                education:0,//学历
                 urgent_phone:'',//紧急联系人电话
                 photo: [],//照片
                 icon:'',//头像
@@ -453,10 +469,6 @@ export default {
                     return time.getTime() > Date.now();//如果没有后面的-8.64e6就是不可以选择今天的
                 }
             },
-            //图片上传header
-            uploadHeader:{
-                accessToken: this.$store.state.loginModule.token.access_token
-            }
         }
     },
     filters: {
@@ -464,15 +476,125 @@ export default {
             if(timestamp){
                 return $utils.formatDate(new Date(timestamp), 'yyyy-MM-dd')
             } else {
-                '-'
+                return '-'
+            }
+        }
+    },
+    computed: {
+        handleWorkerButton(){
+            if(this.$route.query.type == 3){
+                return {
+                    text: '恢复',
+                    style: 'success'
+                }
+            } 
+            if(this.$route.query.type == 4){
+                return {
+                    text: '保存并提交',
+                    style: 'success'
+                }
             }
         }
     },
     methods: {
-
-        
         /**
-         * 提交表单
+         * 处理当前服务人员
+         *  case 1 将异常服务人员提交至服务人员信息库
+         *  case 2 将审核通过的新服务人员提交至服务人员信息库
+         */        
+        async handleWorker(formName){
+            this.$refs[formName].validate(async (valid, fileds) => {
+                if (valid) {
+
+                    let handleText = ''
+                    if(this.$route.query.type == 3){
+                        handleText= '恢复'
+                    } else {
+                        handleText = '保存并提交'
+                    }
+
+                    await this.$confirm(`确定${handleText}该服务人员吗?`, '提示', {
+                        confirmButtonText: '确定',
+                        cancelButtonText: '取消',
+                        type: 'warning'
+                    }).then(async () =>{
+                        this.handleWorkerRequest()
+                    }).catch(() => {
+                        this.$message({
+                            type: 'info',
+                            message: `已取消${handleText}操作`
+                        });
+                    });
+                } else {
+                    return false
+                }
+            })
+        },
+        // 处理服务人员请求
+        async handleWorkerRequest(){
+            let workerFormSend = {
+                    ...this.workerForm,
+                }
+
+                if(!workerFormSend.id){
+                    workerFormSend.id = this.$store.state.loginModule.user.username
+                }
+
+                workerFormSend.skill = operateWorkerService.sendCascanderData(workerFormSend.skill) 
+                workerFormSend.course = operateWorkerService.sendCascanderData(workerFormSend.course) 
+                
+                let response
+                let changeWorkerTypeForm = {}
+
+                if(this.$route.query.type == 3){
+                    changeWorkerTypeForm = {
+                        module: 'warning',
+                        from : 'edit',
+                        ...workerFormSend
+                    }
+                    response = operateWorkerService.recoverErrorWorkerToWorkerList(changeWorkerTypeForm)
+                } 
+                if (this.$route.query.type == 4){
+                    changeWorkerTypeForm = {
+                        module: 'apply',
+                        from : 'edit',
+                        ...workerFormSend
+                    }
+                    response = operateWorkerService.addNewWorkerToWorkerList(changeWorkerTypeForm)
+                }
+
+                try{
+                    this.is_loading = true
+                    await response.then(data =>{
+                        if(data.code == '0'){
+                            this.$message({
+                                type:"success",
+                                message: data.message
+                            })
+                            this.is_loading = false
+                            // 返回上一级列表
+                            let path = operateWorkerService.gobackToWorkerList(this.$route.query.type)
+                            this.$router.push(path)
+                        }
+                    }).catch(error =>{
+                        this.$message({
+                            type:'error',
+                            message: error.message
+                        })
+                        this.is_loading = false
+                    }).finally(() =>{
+                        this.is_loading = false
+                    })
+                } catch(error){
+                    this.$message({
+                        type:'error',
+                        message: error.message
+                    })
+                    this.is_loading = false
+                }
+        },
+        /**
+         * 编辑、创建、保存服务人员
          */
         async editWorker(formName) {
             let _this = this;
@@ -498,8 +620,7 @@ export default {
                                     message: data.message
                                 })
                                 this.is_loading = false
-
-                                this.goback()
+                                this.$refs.back.goback()
                             }
                         }).catch(error =>{
                             this.$message({
@@ -522,69 +643,10 @@ export default {
                 }
             });
         },
-        /**
-         * 导出回访 / 恢复 / 提交至信息库
-         */
-        async handleWorker(){
-            let type = this.$route.query.type,
-                module_type = '';
-            if(type == 2){
-                module_type = 'return'
-            }  
-            
-            if(type == 3){
-                module_type = 'warning'
-            } else if(type == 4){
-                module_type = 'apply'
-            }
-            let workerFormSend = this.setFormItem()
-
-            try{
-                this.is_loading = true
-                await operateService.agreeStaffSingle(module_type, 'edit',workerFormSend).then(data =>{
-                    if(data.code == '0'){
-                        this.$message({
-                            type:"success",
-                            message: "提交成功"
-                        })
-                        this.is_loading = false
-
-                        this.goback()
-                    }
-                }).catch(error =>{
-                    this.$message({
-                        type:'error',
-                        message: error.message
-                    })
-                }).finally(() =>{
-                    this.is_loading = false
-                })
-            } catch(error){
-                this.$message({
-                    type:'error',
-                    message: error.message
-                })
-            }
-        },
         //头像上传成功
         onIconPictureSuccess(res){
             this.workerForm.icon = res.path
         },
-        // /**
-        //  * 返回
-        //  */
-        // goback(){
-        //     let fromPage = this.$route.query.type
-        //     if(fromPage == 0 || fromPage == 1){
-        //         this.$router.push("/worker/workerList")
-        //     } else if (fromPage == 2){
-        //         this.$router.push("/worker/returnWorkerList")
-        //     } else if (fromPage == 3){
-        //         this.$router.push("/worker/errorWorkerList")
-        //     } else if (fromPage == 4){
-        //         this.$router.push("/worker/newWorkerList")
-        //     }
-        // },
         /**
          * 控制编辑按钮文案
          */
@@ -598,27 +660,13 @@ export default {
             }
         },
         /**
-         * 控制提交按钮文案
-         */
-        setSubmitButtonText(type){
-            if(type == 2){
-                return '导出回访'
-            } else if(type == 3){
-                return '恢复'
-            } else if(type == 4){
-                return '保存并提交'
-            } else {
-                return ''
-            }
-        },
-        /**
          * 获取表单数据
          */
         async getWorkerForm(){
             try{
                 this.is_loading = true
 
-                await operateWorkerService.getWorkerFormConfig('edit').then((data) =>{
+                await operateWorkerService.getWorkerConfigForm('edit').then((data) =>{
                     if(data.code == '0'){
                         this.workerConfigForm = data.data
                     }
@@ -631,6 +679,7 @@ export default {
                 //如果是编辑则请求接口
                 if(this.$route.query.type != 0){
                     await operateWorkerService.getWorker(this.$route.query.id,this.workerConfigForm).then(data =>{
+                        
                         this.workerForm = data
                     }).catch(error =>{
                         this.$message({
@@ -639,7 +688,6 @@ export default {
                         })
                     })
                 }
-
                 this.is_loading = false
             }catch(error){
                 this.$message({
@@ -659,8 +707,6 @@ export default {
 
         //按钮显示隐藏，文案
         this.editText = this.setEditButtonText(this.$route.query.type)
-        this.submitText  = this.setSubmitButtonText(this.$route.query.type)
-        
         
         await this.getWorkerForm()
 

@@ -211,7 +211,7 @@ export default {
             sendForm.order_at = sendForm.order_at? [sendForm.order_at]: []
             sendForm.agent_manager_id = sendForm.agent_manager_id? [sendForm.agent_manager_id]: []
             sendForm.agent_store_id = sendForm.agent_store_id? [sendForm.agent_store_id]: []
-            sendForm.status = sendForm.status? [sendForm.status]: []
+            sendForm.type = sendForm.type? [sendForm.type]: []
             sendForm.apply_store_id = sendForm.apply_store_id? [sendForm.apply_store_id]: []
             sendForm.apply_manager_id = sendForm.apply_manager_id? [sendForm.apply_manager_id]: []
             sendForm.created_at = sendForm.created_at? [sendForm.created_at]: []
@@ -224,7 +224,7 @@ export default {
         resetForm(formName) {
             this.$refs[formName].resetFields();
 
-            this.setSearchForm()
+            this.searchForm()
         }
     }
 }

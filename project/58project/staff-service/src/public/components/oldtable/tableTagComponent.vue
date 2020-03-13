@@ -6,10 +6,18 @@
             v-for="(item, index) in showList" :key="index">
             {{item.name}}
         </div>
+        <!-- <el-tag 
+            :size="'mini'" :key="index" :color="item.color" 
+            v-for="(item, index) in showList" >{{item.name}}</el-tag> -->
     </div>
 </template>
 <script>
 export default {
+    data(){
+        return {
+            colorList: ['#409eff','#67c23a','#909399','#e6a23c','#f56c6c','#086751','#08658B','#b91d55']
+        }
+    },
     props: {
         /**
          * 全部字段数据
@@ -41,12 +49,21 @@ export default {
                         }
                     }
                 })
+                showList = showList.reduce((arr,item,index) => {
+                    return [
+                        ...arr,
+                        {
+                            ...item,
+                            color: this.colorList[index%8]
+                        }
+                    ]
+                },[])
                 return showList
             } else {
                 return []
             }
             
-        }
+        },
     },
     methods: {
         changeOriginData(val){
@@ -80,28 +97,12 @@ export default {
 <style lang="scss" scoped>
 .tag-box{
     // width:200px;
-    display: flex;
-    justify-content: flex-start;
-    flex-wrap: wrap;
+    // display: flex;
+    // justify-content: space-between;
+    // flex-wrap: wrap;
     .tag-item-style{
-        // background-color: rgba(64,158,255,.1);
-        // padding: 0 10px;
-        // height: 24px;
-        // line-height: 24px;
-        // font-size: 12px;
-        // color: #fff;
-        // border-radius: 4px;
-        // -webkit-box-sizing: border-box;
-        // box-sizing: border-box;
-        // border: 1px solid rgba(64,158,255,.2);
-        // white-space: nowrap;
-        // margin-right:5px;
-        
-
-
         display: inline-block;
         padding: 0 10px;
-        // margin: 8px 14px 0 0;
         height: 24px;
         line-height: 24px;
         font-size: 12px;
@@ -153,39 +154,6 @@ export default {
         border-color: rgba(185,29,85,.2);
         color: #b91d55;       
     }
-    // .tag-color0{  
-    //     color: #fff;
-    //     background:#409eff;    
-    // }
-    // .tag-color1{
-    //     color: #fff;
-    //     background:#67c23a;
-    // }
-    // .tag-color2{
-    //     color: #fff;
-    //     background:#909399;
-    // }
-    // .tag-color3{
-    //     color: #fff;
-    //     background:#e6a23c;
-    // }
-    // .tag-color4{
-    //     color: #fff;
-    //     background:#f56c6c;  
-    // }
-
-    // .tag-color5{
-    //     color: #fff;
-    //     background:#086751;     
-    // }
-    // .tag-color6{
-    //     color: #fff;
-    //     background:#08658B;      
-    // }
-    // .tag-color7{   
-    //     color: #fff;
-    //     background:#b91d55;   
-    // }
 </style>
 
 

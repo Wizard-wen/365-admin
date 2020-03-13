@@ -9,25 +9,19 @@ export enum orderModuleType{
 }
 
 
-export interface baseSearchOrderItem{
+export interface basesearchOrderForm{
     page: 1, //请求页码
     pageNumber: 20,//单页信息数量
 }
 // 公海订单搜索
-export interface publicSearchOrderItem extends baseSearchOrderItem{
+export interface publicsearchOrderForm extends basesearchOrderForm{
     order_code: string//订单编号
     order_at: Array<number>;//客户下单时间
     agent_store_id: Array<number>;//经纪门店id
     agent_manager_id: Array<number>; //经纪人id
 }
 //门店订单搜索 运营订单搜索
-export interface searchOrderItem extends publicSearchOrderItem{
-    
-    // order_code: string;//订单编号
-    // order_at: Array<number>;//客户下单时间
-    // agent_store_id: Array<number>;//经纪门店id
-    // agent_manager_id: Array<number>; //经纪人id
-
+export interface searchOrderForm extends publicsearchOrderForm{
     type?: Array<number>;//订单状态
     order_user_phone?:string;//下单客户电话
     order_user_name?: string;//下单客户姓名
@@ -40,8 +34,8 @@ export interface searchOrderItem extends publicSearchOrderItem{
     sign_staff_phone?: string;//签约服务人员电话
     created_at?: Array<number>;//订单创建时间
     created_manager_id?: Array<number>;//订单创建人
-    
 }
+
 // 订单配置项
 export interface orderFormConfig {
     type: Array<object>;//订单状态
@@ -54,7 +48,36 @@ export interface orderFormConfig {
     agent_manager_id: Array<object>;//订单经纪人
 }
 
+/**
+ * 门店订单申请表单
+ */
+export interface saleApplyOrderForm {
+    id:string;//
+    version:string;//
 
+    //申请
+    created_manager_id:string;//申请创建人id
+    create_manager_name:string;//申请创建人
+    create_at:string;//申请创建时间
+
+    type:string;//---订单申请类型 
+    apply_code:string;//---订单申请编号
+
+    apply_store_name?:string;// 来源门店
+    apply_store_id:string;// 来源门店id
+    apply_manager_name?:string;// 来源人
+    apply_manager_id:string;// 来源人id
+
+    user_phone:string;//客户联系电话
+    user_name:string;//客户姓名
+    
+    //业务字段
+    work_type:string;//工种
+    service_address:string;//地址
+    service_duration:string;//工作时间
+    wage:string;//工资
+    order_details:string;//订单详情
+}
 
 /**
  * 订单状态

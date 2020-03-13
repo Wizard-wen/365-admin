@@ -32,7 +32,7 @@ export interface baseSearchWorkerItem {
 /**
  * 运营中心服务人员信息库搜索字段
  */
-export interface operateSearchWorkerItem extends baseSearchWorkerItem{
+export interface searchWorkerForm extends baseSearchWorkerItem{
     identify:string;//身份证号
     staff_code:string;//员工编号
     service_category:Array<number>;//职业类型
@@ -59,7 +59,7 @@ export interface operateCreateSearchWorkerItem extends baseSearchWorkerItem{}
 /**
  * 门店服务人员信息库搜索字段
  */
-export interface saleSearchWorkerItem extends operateSearchWorkerItem{
+export interface saleSearchWorkerItem extends searchWorkerForm{
     /**
      * 销售门店之前存在”由我创建的服务人员“，现在取消这个列表
      * 在门店的服务人员中增加一个由我创建的选项，
@@ -85,21 +85,21 @@ export interface workerList extends workerItem{
 }
 //由列表进入服务人员编辑页时的状态
 export const goWorkerItemType = [
-    {type: 0,des: '运营人员创建'},
-    {type: 1,des: '运营人员编辑'},
-    {type: 2,des: '运营人员回访时编辑'},
-    {type: 3,des: '运营人员处理异常时编辑'},
-    {type: 4,des: '运营人员处理新建申请'},
+    {type: 'create',fromPage: 'workerList',des: '运营人员创建', id: 0},
+    {type: 'edit',fromPage: 'workerList',des: '运营人员编辑', id: 1},
+    {type: 'return',fromPage: 'returnWorkerList',des: '运营人员回访时编辑', id: 2},
+    {type: 'warning',fromPage: 'errorWorkerList',des: '运营人员处理异常时编辑', id: 3},
+    {type: 'apply',fromPage: 'newWorkerList',des: '运营人员处理新建申请', id: 4},
 ]
 
 //由列表进入服务人员详情页时的状态
 export const goWorkerShowItemType = [
-    {type: 1,des: '运营人员一般查看'},
-    {type: 2,des: '运营人员回访时查看'},
-    {type: 3,des: '运营人员处理异常时查看'},
-    // {type: 4,des: '运营人员处理新建申请'},
-    {type: 5,des: '门店查看'},
-    {type: 6,des: '点单匹配查看'},
+    {fromPage: 'workerList',from_des: '服务人员运营',id: 1,},
+    {fromPage: 'returnWorkerList',from_des: '回访服务人员运营',id: 2,},
+    {fromPage: 'errorWorkerList',from_des: '异常服务人员运营',id: 3,},
+    {fromPage: 'saleWorkerList',from_des: '门店服务人员列表',id: 4,},
+    {fromPage: 'operateOrderConfig',from_des: '运营订单匹配服务人员',id: 5,},
+    {fromPage: 'saleOrderConfig',from_des: '门店订单匹配服务人员',id: 6,},
 ]
 
 
@@ -153,3 +153,56 @@ export const work_age_list = [
     {id: 5, name: '5年'},
     {id: 6, name: '6年及以上'},
 ]
+
+
+
+/**
+ * 提交新申请服务人员 / 恢复异常服务人员 / 导出回访人员
+ * @param module  apply warning return
+ * @param from list 从列表提交 还是从编辑详情提交
+ * @param id 若是from=list id为人员id  若是from=edit id是服务人员信息object
+ */
+export interface changeWorkerTypeForm {
+    module:string;
+    from :string;  
+    id:string | object;
+}
+
+/**
+ * 门店工作人员创建服务人员
+ */
+export interface createWorkerBySellerForm{
+    name: string;//服务人员姓名
+    phone: string;//服务人员电话
+    skill:Array<number>;//技能信息
+    seller_remarks: string;//备注信息
+}
+
+/**
+ * 提交异常服务人员字段
+ */
+export interface errorWorkerForm {
+    warning_log: string;//日志信息
+    id: string;//服务人员id
+}
+/**
+ * 添加服务人员至备选
+ */
+export interface addWorkerToMatchedWorkListForm{
+    staff_id:string;
+    order_id: string;
+}
+/**
+ * 改变停用启用状态
+ */
+export interface changeWorkerStatusForm{
+    version: string;
+    id: string;
+}
+/**
+ * 检测服务人员手机号是否重复字段
+ */
+export interface checkWorkerPhoneForm{
+    id:string;
+    phone:string;
+}

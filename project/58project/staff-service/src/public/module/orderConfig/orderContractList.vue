@@ -9,7 +9,6 @@
     </card-box-component>
 </template>
 <script>
-import {saleService, $utils} from '@common/index.js'
 import contractTableComponent from '@/public/module/contractList/contractTableComponent.vue'
 export default {
     components: {
@@ -23,13 +22,6 @@ export default {
             type: Array,
             default: function(){return []}
         },
-        /**
-         * 订单类型
-         */
-        // publicOrderType: {    
-        //     type: Number | String,
-        //     default: 1,
-        // },
     },
 }
 </script>

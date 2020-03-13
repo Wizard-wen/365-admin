@@ -19,7 +19,7 @@
     </el-dialog>
 </template>
 <script>
-import {saleService} from '@common/index.js'
+import {publicModuleService} from '@/service/publicModule'
 export default {
     props: {
         //是否打弹出框
@@ -59,7 +59,7 @@ export default {
                     
                     try{
                         this.is_loading = true
-                        await saleService.changeWorkingStatus(this.errorWorkerForm).then(data =>{
+                        await publicModuleService.addWorkerToErrorWorkerList(this.errorWorkerForm).then(data =>{
                             if(data.code == "0"){
                                 this.$message({
                                     type:'success',

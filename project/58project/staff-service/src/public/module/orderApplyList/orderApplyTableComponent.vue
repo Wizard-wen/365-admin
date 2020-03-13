@@ -20,12 +20,17 @@
             </el-table-column>
 
             <el-table-column  
-                v-if="orderApplyModuleType=='apply'" label="订单申请编号" prop="apply_code" align="center" ></el-table-column>
+                v-if="orderApplyModuleType=='apply'" 
+                label="订单申请编号" prop="apply_code" align="center" width="150"></el-table-column>
 
             <el-table-column  
-                v-if="orderApplyModuleType=='require'" label="需求申请编号" prop="require_code" align="center" ></el-table-column>
+                v-if="orderApplyModuleType=='require'" 
+                label="需求申请编号" prop="require_code" align="center" ></el-table-column>
+            <el-table-column  
+                label="申请时间" prop="created_at" align="center" width="130"
+                :formatter="created_atFormatter"></el-table-column>
 
-            <el-table-column  label="订单申请状态" prop="type" align="center" width="120">
+            <el-table-column  label="申请状态" prop="type" align="center" width="100">
                 <template slot-scope="scope">
                     <table-tag-component 
                     v-if="order_apply_typeList" 
@@ -34,7 +39,7 @@
                 </template>
             </el-table-column>
 
-            <el-table-column  label="工种" prop="work_type" align="center" >
+            <el-table-column  label="工种" prop="work_type" align="center" width="120">
                 <template slot-scope="scope">
                     <el-popover trigger="click" placement="top">
                         <p>{{ scope.row.work_type }}</p>
@@ -52,7 +57,7 @@
                 </template>
             </el-table-column>
 
-            <el-table-column  label="服务地址" prop="service_address" align="center" >
+            <el-table-column  label="服务地址" prop="service_address" align="center" width="300">
                 <template slot-scope="scope">
                     <el-popover trigger="click" placement="top">
                         <p>{{ scope.row.service_address }}</p>
@@ -70,7 +75,7 @@
                 </template>
             </el-table-column>
 
-            <el-table-column  label="工资" prop="wage" align="center" >
+            <el-table-column  label="工资" prop="wage" align="center" width="120">
                 <template slot-scope="scope">
                     <el-popover trigger="click" placement="top">
                         <p>{{ scope.row.wage }}</p>
@@ -120,6 +125,14 @@
                 order_apply_typeList,
             }
         },
+        methods: {
+            created_atFormatter(row, column){
+                if(row.created_at == 0){
+                    return '-'
+                }
+                return $utils.formatDate(new Date(row.created_at), 'yyyy-MM-dd')
+            },
+        }
     }
 </script>
 <style lang="scss" scoped>

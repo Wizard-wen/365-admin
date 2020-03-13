@@ -1,11 +1,10 @@
 <template>
     <div class="table-box" v-loading="is_loading">
         <match-query-component
-            :workerListType="'match'"
             :queryForm="workerConfigForm"
             @changeQueryedForm="changeQueryedForm"></match-query-component>
         <worker-table-component
-            :workerListType="'match'"
+            :workerListType="workerListType"
             :tableData="workerTable"
             :workerConfigForm="workerConfigForm"
             @updateTable="updateTable"></worker-table-component>
@@ -15,18 +14,15 @@
     </div>
 </template>
 <script>
-    import {operateService, $utils} from '@common/index.js'
-
-    import {operateWorkerService} from '@/service/operateWorker.ts'
+    import {saleService} from '@/service/sale.ts'
 
     import matchQueryComponent from './matchServiceList/matchQueryComponent.vue'
+
     import workerTableComponent from '@/public/module/workerList/workerTableComponent.vue'
-    import pagination from '@/public/module/workerList/pagination.vue'
 
     export default {
         components: {
             matchQueryComponent,
-            pagination,
             workerTableComponent,
         },
         data() {
@@ -65,6 +61,12 @@
                 errorWorkerRow: null,
             }
         },
+        props: {
+            workerListType: {
+                type: String,
+                default: 'match'
+            }
+        },
         computed:{
             /**
              * 列表查询对象
@@ -85,12 +87,12 @@
             async getTable(){          
                 try{
                     this.is_loading = true
-                    await operateWorkerService.getTableList('edit',this.queryObject).then(data=>{
+                    await saleService.getSaleOrderConfigMatchWorkerList('edit',this.queryObject).then(data=>{
                         
                         this.pagination = data.pagination
                         this.workerTable = data.workerTable
                         this.workerConfigForm = data.workerConfigForm
-                        
+                        this.$emit('updateOrderConfig')
                         this.is_loading = false
                     }).catch(error =>{
                         this.$message({
@@ -122,7 +124,7 @@
                     ...res
                 }
                 await this.getTable()
-                this.$emit('updateOrderConfig')
+                
             },
             /**
              * 变更查询条件
@@ -131,21 +133,6 @@
                 this.queryForm = {
                     ...res
                 }
-                await this.getTable()
-            },
-            /**
-             * 异常服务人员申请
-             */
-            sendErrorMessage(row){
-                this.errorWorkerRow = row
-                this.errorWorkerId = row.id
-                this.errorWorkerDialogVisible = true;
-            },
-            /**
-             * 关闭异常弹窗
-             */
-            async closeErrorWorkerDialog(){
-                this.errorWorkerDialogVisible = false;
                 await this.getTable()
             },
         },

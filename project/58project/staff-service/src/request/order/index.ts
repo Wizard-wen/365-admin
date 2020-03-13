@@ -163,10 +163,10 @@ export const apiRequestOrder:api_order = {
     },
     /**
      * 获取订单信息
-     * @param order_id 订单id
+     * @param id 订单id
      */
-    getOrder(order_id){
-        return axios.get(`./admin/order/getOrder?id=${order_id}`)
+    getOrder(id){
+        return axios.get(`./admin/order/getOrder?id=${id}`)
     },
     /**
      * 编辑订单详情字段

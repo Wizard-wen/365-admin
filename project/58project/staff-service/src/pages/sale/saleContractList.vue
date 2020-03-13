@@ -7,7 +7,6 @@
             :contractModuleType="'saleContractList'"
             :tableData="contractTable"
             :currentPage="pagination.currentPage"
-            :contractConfigForm="contractConfigForm"
             @updateTable="updateTable"></contract-table-component>
         <pagination
             :pagination="pagination"
@@ -15,18 +14,15 @@
     </div>
 </template>
 <script>
-    import {operateService, $utils} from '@common/index.js'
 
     import {saleService} from '@/service/sale.ts'
 
     import queryContractComponent from '@/public/module/contractList/queryContractComponent.vue'
     import contractTableComponent from '@/public/module/contractList/contractTableComponent.vue'
-    import pagination from '@/pages/operateWorker/workerList/pagination.vue'
 
     export default {
         components: {
             queryContractComponent,
-            pagination,
             contractTableComponent,
         },
         data() {
@@ -48,11 +44,10 @@
                     contract_code:'',//合同流水号
                     contract_number:'',//合同编号
 
-
                     status: [],//合同状态
                     sign_at: [],//签约时间 
                     sign_manager_id: [],//签约经纪人
-                    // sign_store_id: [],//签约经纪门店
+                    sign_store_id: [],//签约经纪门店
 
                     sign_user_name: '',//雇主
                     sign_user_phone:'',//雇主电话
@@ -88,8 +83,11 @@
                 try{
                     this.is_loading = true
                     //如果当前不是店长
-
-                    await saleService.getContractList(this.queryObject).then(data=>{
+                    let queryForm = {
+                        ...this.queryObject,
+                    }
+                    queryForm.sign_store_id = [this.presentUser.store_id]
+                    await saleService.getSaleContractList(queryForm).then(data=>{
                         
                         this.pagination = data.pagination
                         this.contractTable = data.contractTable

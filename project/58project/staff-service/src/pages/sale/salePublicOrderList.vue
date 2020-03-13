@@ -15,18 +15,16 @@
     </div>
 </template>
 <script>
-    import {operateService, $utils} from '@common/index.js'
+    // import {operateService, $utils} from '@common/index.js'
     // 
     import {saleService} from '@/service/sale.ts'
     // 
     import publicQueryComponent from '@/pages/sale/salePublicOrderList/publicQueryComponent.vue'
     import orderTableComponent from '@/public/module/orderList/orderTableComponent.vue'
-    import pagination from '@/pages/operateWorker/workerList/pagination.vue'
 
     export default {
         components: {
             publicQueryComponent,
-            pagination,
             orderTableComponent,
         },
         data() {
@@ -72,7 +70,7 @@
             async getTable(){          
                 try{
                     this.is_loading = true
-                    await saleService.getOrderList(this.queryObject).then(data=>{
+                    await saleService.getSalePublicOrderList(this.queryObject).then(data=>{
                         
                         this.pagination = data.pagination
                         this.orderTable = data.orderTable

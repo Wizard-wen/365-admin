@@ -8,16 +8,20 @@ import {workerItem} from '@/pages/operateWorker/workerItem/IworkerItem'
 
 import {workerConfigForm} from '@/pages/operateWorker/workerConfigForm/IworkerConfigForm'
 
-import {operateSearchWorkerItem} from '@/pages/operateWorker/workerList/IworkerList'
+import {
+    searchWorkerForm,
+    changeWorkerTypeForm,
+    checkWorkerPhoneForm,
+} from '@/public/module/workerList/IworkerList'
 
 export const operateWorkerService = {
     /**
      * 请求列表数据
      */
-    getTableList(type:string, queryObject:operateSearchWorkerItem):Promise<any>{
+    getWorkerList(queryObject:searchWorkerForm):Promise<any>{
 
         return  Promise.all([
-            apiRequestFormConfig.getWorkerFormConfig(type), //获取表单配置字段
+            apiRequestFormConfig.getWorkerFormConfig('edit'), //获取表单配置字段
             apiRequestWorker.getStaffList(queryObject), //获取列表数据
             apiRequestService.getServiceTree() //服务商品树形
         ]).then(data =>{
@@ -39,7 +43,7 @@ export const operateWorkerService = {
      * 
      * @param type 查询类型  edit 使用 config 编辑
      */
-    async getWorkerFormConfig(type:string):Promise<any>{
+    async getWorkerConfigForm(type:string):Promise<any>{
         return apiRequestFormConfig.getWorkerFormConfig(type)
     },
     /**
@@ -53,9 +57,22 @@ export const operateWorkerService = {
             if(data.code == "0"){
 
                 var workerForm = data.data
+
                 workerForm.skill = workerForm.skill.map((item:number) =>{
                     return setTreeArray(item,skillConfig)
                 })
+                if(workerForm.nation == 0){
+                    workerForm.nation = ''
+                }
+                if(workerForm.education == 0){
+                    workerForm.education = ''
+                }
+                if(workerForm.sex == 0){
+                    workerForm.sex = ''
+                }
+                if(workerForm.zodiac_sign == 0){
+                    workerForm.zodiac_sign = ''
+                }
 
                 return workerForm
             }
@@ -88,6 +105,44 @@ export const operateWorkerService = {
      */
     async editWorker(workerForm:workerItem):Promise<any>{
         return apiRequestWorker.editStaff(workerForm)
+    },
+    /**
+     * 从编辑页返回服务人员列表页
+     */
+    gobackToWorkerList(type:number):string{ 
+        if(type == 0 || type == 1){
+            return "/worker/workerList"
+        } else if (type == 2){
+            return "/worker/returnWorkerList"
+        } else if (type == 3){
+            return "/worker/errorWorkerList"
+        } else if (type == 4){
+            return "/worker/newWorkerList"
+        } else {
+            return ''
+        }
+    },
+
+    /**
+     * 检查服务人员手机号是否重复
+     * @param checkWorkerPhoneForm 
+     */
+    checkNewWorkerPhone(checkWorkerPhoneForm:checkWorkerPhoneForm){
+        return apiRequestWorker.checkStaffPhone(checkWorkerPhoneForm)
+    },
+
+    /**
+     * 将新服务人员添加至服务人员信息库
+     * @param changeWorkerTypeForm 
+     */
+    addNewWorkerToWorkerList(changeWorkerTypeForm:changeWorkerTypeForm){    
+        return apiRequestWorker.agreeStaffSingle(changeWorkerTypeForm)
+    },
+    /**
+     * 恢复异常服务人员至服务人员信息库
+     */
+    recoverErrorWorkerToWorkerList(changeWorkerTypeForm:changeWorkerTypeForm){
+        return apiRequestWorker.agreeStaffSingle(changeWorkerTypeForm)
     },
 }
 /**

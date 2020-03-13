@@ -1,5 +1,5 @@
 <template>
-    <el-button size="mini" type="primary" @click="editOrderApply">{{isEdit? '编辑': '查看'}}</el-button>
+    <el-button size="mini" type="primary" @click="editOrderApply">{{buttonText}}</el-button>
 </template>
 
 <script>
@@ -15,8 +15,8 @@ export default {
         }
     },
     computed: {
-        isEdit(){
-            return this.currentOrderApply.type == 1
+        buttonText(){
+            return this.currentOrderApply.type == 1 ? '编辑': '查看'
         }
     },
     methods: {

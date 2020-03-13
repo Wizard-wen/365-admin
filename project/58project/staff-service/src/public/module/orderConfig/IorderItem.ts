@@ -7,9 +7,6 @@ export enum is_wage {
     YES = 1,
     NO = 2,
 }
-let a:is_wage;
-
-a = 1;
 
 
 export interface orderItem {
@@ -20,8 +17,12 @@ export interface orderItem {
 }
 
 // 订单信息
-export interface orderBaseItem extends order_agentItem, order_sign_workerItem, 
-order_base_messageItem, order_agentItem, order_applyItem
+export interface orderBaseItem extends 
+order_agentItem, 
+order_sign_workerItem, 
+order_base_messageItem, 
+order_agentItem, 
+order_applyItem
 {
     id:string;
     version:string;
@@ -107,14 +108,48 @@ export interface matchedServiceItem {
     type:number;// 签约状态
     create_manager_name:string;// 添加人
 }
-// 订单状态
-// export const order_typeList = [
-//     {id: 1, name: '匹配中', des: '订单申请通过后，尚未签约的状态，这就是公海订单状态'},
-//     {id: 2, name: '已签约', des: '已经签约，从公海订单中撤出'},
-//     {id: 3, name: '售后匹配中', des: '售后匹配中：首次签约后，订单中的合同终止，进入重新匹配状态'},
-//     {id: 4, name: '已终止', des: '已终止：订单被终止，订单终止应当是在合同终止余额结算完毕后执行'},
-// ]
 
+//已匹配劳动者签约状态
+export const orderMatchedWorkerList = [
+    {id: 1, name: '未签约', color: '#E6A23C'},
+    {id: 2, name: '已签约', color: '#67C23A'},
+    {id: 3, name: '已拒绝', color: '#F56C6C'},
+]
+
+// 删除订单中已匹配服务人员表单
+export interface deleteMatchedWorkerForm {
+    order_id: number; //订单id
+    order_staff_id: number;//服务人员id
+}
+
+export interface refuseMatchedWorkerForm {
+    order_id: number; //订单id
+    order_staff_id: number;//服务人员id
+    message: '';//拒绝事由
+}
+// 终止订单表单
+export interface determinateOrderForm{
+    order_id: number;//订单id
+    //账户余额是否已经平账   boolList
+    has_user_cost: number;
+    //返还客户的金额
+    return_user_cost: number;
+    //劳动者押金是否已经平账   boolList
+    has_worker_cost: number;
+    //劳动者工资是否已平账   boolList
+    has_worker_wage: number;
+    message: string;//终止事由
+}
+export const boolList = [{id: 1, name:'已平账'}, {id: 2, name: '未平账'}]
+/**
+ * 门店内分派订单表单
+ */
+export interface assignStoreOrderForm {
+    order_id: number; //订单id
+    agent_store_id: number;//经纪门店
+    agent_manager_id: number;//经纪人
+    version: number;//版本
+}
 
 
 // 订单类型

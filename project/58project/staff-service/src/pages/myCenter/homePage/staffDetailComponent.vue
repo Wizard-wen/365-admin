@@ -1,11 +1,12 @@
 <template>
     <detail-form-component>
         <detail-form-item-component
+            :type="'template'"
             :label="'头像'"
             :size="1"
             :value="staffForm">
             <icon-component
-                slot="define"
+                slot="template"
                 :iconUrl="staffForm.icon"
                 :height="60"
                 :width="60"

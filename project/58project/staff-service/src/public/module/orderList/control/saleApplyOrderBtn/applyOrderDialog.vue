@@ -66,10 +66,7 @@
 
 <script>
 
-/**
- * type 0 新建  1 编辑
- */
-import {saleService,operateService} from '@common/index.js'
+import {publicModuleService} from '@/service/publicModule'
 
 export default {
     props:{
@@ -107,10 +104,12 @@ export default {
                     { required: true, message: '请填写服务地址', trigger: 'blur' }
                 ],
                 service_duration: [
-                    { required: true, message: '请填写工作时间', trigger: 'blur' }
+                    { required: true, message: '请填写工作时间', trigger: 'blur' },
+                    {  max: 10, message: '至多输入10个字符', trigger: 'blur' }
                 ],
                 wage: [
-                    { required: true, message: '请填写工资', trigger: 'blur' }
+                    { required: true, message: '请填写工资', trigger: 'blur' },
+                    {  max: 10, message: '至多输入10个字符', trigger: 'blur' }
                 ],
                 order_details: [
                     { required: true, message: '请填写订单详情', trigger: 'blur' }
@@ -173,7 +172,7 @@ export default {
                 if (valid) {
                     try{
                         this.is_loading = true
-                        await saleService.applyOrder(this.applyOrderForm).then(data =>{
+                        await publicModuleService.saleApplyOrder(this.applyOrderForm).then(data =>{
                             if(data.code == '0'){
                                 this.$message({
                                     type:"success",

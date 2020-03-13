@@ -1,7 +1,6 @@
 <template>
     <div class="table-box" v-loading="is_loading">
         <order-apply-query-component
-            :orderApplyModuleType="'apply'"
             :queryForm="orderApplyConfigForm"
             @changeQueryedForm="changeQueryedForm"></order-apply-query-component>
         <order-apply-table-component
@@ -20,12 +19,10 @@
 
     import orderApplyQueryComponent from './orderApplyList/orderApplyQueryComponent'
     import orderApplyTableComponent from '@/public/module/orderApplyList/orderApplyTableComponent.vue'
-    import pagination from '@/public/module/orderApplyList/pagination.vue'
 
     export default {
         components: {
             orderApplyQueryComponent,
-            pagination,
             orderApplyTableComponent,
         },
         data() {

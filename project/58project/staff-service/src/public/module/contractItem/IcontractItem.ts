@@ -4,7 +4,7 @@ import {
     sign_service_typeList,
     sign_service_containsList,
     sign_service_levelList,
-} from '@/public/module/orderConfig/IsignItem.ts'
+} from '@/pages/sale/saleSignPage/IsaleSignItem'
 /**
  * 合同字段
  */
@@ -119,12 +119,12 @@ export interface contract_settle_terminate_base {
 }
 
 // 结算合同提交表单
-interface settleContractForm extends contract_settle_terminate_base{
+export interface settleContractForm extends contract_settle_terminate_base{
     contract_id:string;
 }
 
 // 终止合同提交表单
-interface terminateContractForm extends contract_settle_terminate_base{
+export interface terminateContractForm extends contract_settle_terminate_base{
     contract_id:string;//合同id
     terminate_reason:string;//终止事由
     is_wage?:string;//是否发放工资
@@ -148,15 +148,15 @@ export interface contractTerminateItem extends contract_settle_terminate_base{
 
 // 是否发放工资
 export const is_wageList = [
-    {id: 1,name: '否'},
-    {id: 2, name: '是'}
+    {id: 1,name: '否', color: '#F56C6C' },
+    {id: 2, name: '是', color: '#67C23A'}
 ]
 
 //合同状态
 export const contract_typeList = [
-    {id: 1, name: '待执行'},
-    {id: 2, name: '执行中'},
-    {id: 3, name: '已终止'},
+    {id: 1, name: '待执行',color: '#E6A23C'},
+    {id: 2, name: '执行中',color: '#67C23A'},
+    {id: 3, name: '已终止',color: '#F56C6C'},
 ]
 
 

@@ -8,7 +8,7 @@
             <!-- 日志列表 -->
             <el-table 
                 :data="logList" 
-                class="log-table" 
+                max-height="500"
                 :header-cell-style="{height: '48px',background: '#fafafa'}">
                 <el-table-column label="创建时间" :formatter="created_atFormatter" prop="created_at" width="200" align="center"></el-table-column>
 
@@ -102,6 +102,6 @@ export default {
 
 <style lang="scss" scoped>
     .log-table{
-        max-height: 600px;
+        
     }
 </style>

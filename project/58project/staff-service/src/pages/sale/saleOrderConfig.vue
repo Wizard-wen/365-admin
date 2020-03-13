@@ -2,60 +2,56 @@
     <div class="orderConfig" v-loading="is_loading">
         
         <order-header-component
-            @updateOrderConfig="getOrder"
-            :currentOrder="orderBase"
+            @updateOrderConfig="getSaleOrder"
+            :currentOrder="saleOrderItem.order"
             :orderModuleType="'sale'"
             :publicOrderType="3"></order-header-component>
         
         <div class="order-down">
 
             <public-order-base-component
-                :orderBaseDetail="orderBase"
+                :orderBaseDetail="saleOrderItem.order"
                 :publicOrderType="3"
-                @updatePublicOrderBase="getOrder"></public-order-base-component>
+                @updatePublicOrderBase="getSaleOrder"></public-order-base-component>
 
             <card-box-component
-                v-if="orderBase.type == 1 || orderBase.type == 3"
+                v-if="saleOrderItem.order.type == 1 || saleOrderItem.order.type == 3"
                 :title="'服务人员匹配'">
                 <template slot="contains">
-                    <match-service-list @updateOrderConfig="getOrder"></match-service-list>
+                    <match-service-list @updateOrderConfig="getSaleOrder"></match-service-list>
                 </template>    
             </card-box-component>
 
             <order-matched-worker-list-component
-                v-if="orderBase.type == 1 || orderBase.type == 3"
-                :orderBase="orderBase"
-                :order_staff="order_staff"
+                v-if="saleOrderItem.order.type == 1 || saleOrderItem.order.type == 3"
+                :orderBase="saleOrderItem.order"
+                :order_staff="saleOrderItem.order_staff"
                 :publicOrderType="3"
-                @updateOrderConfig="getOrder"></order-matched-worker-list-component>
+                @updateOrderConfig="getSaleOrder"></order-matched-worker-list-component>
             
             <order-contract-list
-                v-if="orderBase.type != 1"
+                v-if="saleOrderItem.order.type != 1"
                 :contractModuleType="'saleOrderConfig'"
-                :order_contract="order_contract"
+                :order_contract="saleOrderItem.order_contract"
                 :publicOrderType="3"></order-contract-list>
 
 
             <signed-service-detail-component
-                v-if="orderBase.type != 1"
-                :signedServiceDetailObject="orderBase"></signed-service-detail-component>
+                v-if="saleOrderItem.order.type != 1"
+                :signedServiceDetailObject="saleOrderItem.order"></signed-service-detail-component>
 
             <signed-user-detail-component
-                v-if="orderBase.type != 1"
-                :signedUserDetailObject="orderBase"></signed-user-detail-component>
+                v-if="saleOrderItem.order.type != 1"
+                :signedUserDetailObject="saleOrderItem.order"></signed-user-detail-component>
 
             <order-config-log
-                @updateOrderConfig="getOrder"></order-config-log>
+                @updateOrderConfig="getSaleOrder"
+                :order_logs="saleOrderItem.order_logs"></order-config-log>
         </div>
     </div>
 </template>
 <script>
-    import {
-        operateService, 
-        $utils, 
-        saleService
-    } from '@common/index.js'
-
+    import {saleService} from '@/service/sale.ts'
     import matchServiceList from './saleOrderConfig/matchServiceList.vue'
 
     import { 
@@ -88,47 +84,26 @@ export default {
     data(){
         return {
             is_loading: false,//
+            saleOrderItem: {
+                order: {},
+                order_staff: [],
+                order_contract:[],
+                order_logs:[],
+            },
             //订单id
             order_id: this.$route.query.order_id,
         }
-    },
-
-    computed:{
-        /**
-         * 
-         */
-        workerConfigList(){
-            return this.$store.state.operateModule.workerConfigForm
-        },
-        /**
-         * 订单基本信息
-         */
-        orderBase(){
-            return this.$store.state.saleModule.order
-        },
-        /**
-         * 订单基本信息
-         */
-        order_staff(){
-            return this.$store.state.saleModule.order_staff
-        },
-        /**
-         * 订单基本信息
-         */
-        order_contract(){
-            return this.$store.state.saleModule.order_contract
-        },
     },
     methods: {
         /**
          * 获取订单信息
          */
-        async getOrder(){
+        async getSaleOrder(){
             try{
                 this.is_loading = true
-                await saleService.getOrder(this.$route.query.order_id).then((data) =>{
-                    if(data.code == "0"){
-                        store.commit('configOrderData',data.data)
+                await saleService.getSaleOrder(this.$route.query.order_id).then((data) =>{
+                    this.saleOrderItem = {
+                        ...data,
                     }
                     this.is_loading = false
                 }).catch(e =>{
@@ -148,20 +123,9 @@ export default {
                 this.is_loading = false
             }
         },
-        /**
-         * 切换页码
-         */
-        async handleContractCurrentPage(val){
-            //设置page查询参数
-            this.$store.commit('setContractList', {
-                queryKey: 'page', 
-                queryedList: val
-            })
-            await this.getTableList()
-        },
     },
     async mounted(){
-        await this.getOrder()
+        await this.getSaleOrder()
         
     }    
 }

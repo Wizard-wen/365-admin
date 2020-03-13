@@ -20,6 +20,19 @@
                         :value="item.id"></el-option>
                 </el-select>
             </el-form-item >
+            <el-form-item label="经纪门店" prop="sign_store_id">
+                <el-select 
+                    v-model="localQueryedForm.sign_store_id" 
+                    placeholder="请选择经纪门店"
+                    filterable
+                    clearable>
+                    <el-option 
+                        v-for="(item, index) in queryForm.apply_store_id" 
+                        :key="index" 
+                        :label="item.name" 
+                        :value="item.id"></el-option>
+                </el-select>
+            </el-form-item >
             <el-form-item label="经纪人" prop="sign_manager_id">
                 <el-select 
                     v-model="localQueryedForm.sign_manager_id" 
@@ -27,15 +40,15 @@
                     filterable
                     clearable>
                     <el-option 
-                        v-for="(item, index) in contract_typeList" 
+                        v-for="(item, index) in queryForm.apply_manager_id" 
                         :key="index" 
                         :label="item.name" 
                         :value="item.id"></el-option>
                 </el-select>
             </el-form-item >
-            <el-form-item label="合同状态" prop="status">
+            <el-form-item label="合同状态" prop="type">
                 <el-select 
-                    v-model="localQueryedForm.status" 
+                    v-model="localQueryedForm.type" 
                     placeholder="请选择合同状态"
                     filterable
                     clearable>
@@ -47,17 +60,17 @@
                 </el-select>
             </el-form-item >
 
-            <el-form-item label="雇主姓名" prop="sign_user_name">
-                <el-input class="input" style="width: 173px" v-model="localQueryedForm.sign_user_name" placeholder="请输入订单编号" :maxlength="20"></el-input>
+            <el-form-item label="签约客户姓名" prop="sign_user_name">
+                <el-input class="input" style="width: 173px" v-model="localQueryedForm.sign_user_name" placeholder="请输入签约客户姓名" :maxlength="20"></el-input>
             </el-form-item>
-            <el-form-item label="雇主电话" prop="sign_user_phone">
-                <el-input class="input" style="width: 173px" v-model="localQueryedForm.sign_user_phone" placeholder="请输入订单编号" :maxlength="20"></el-input>
+            <el-form-item label="签约客户电话" prop="sign_user_phone">
+                <el-input class="input" style="width: 173px" v-model="localQueryedForm.sign_user_phone" placeholder="请输入签约客户电话" :maxlength="20"></el-input>
             </el-form-item>
-            <el-form-item label="服务人员姓名" prop="sign_staff_name">
-                <el-input class="input" style="width: 173px" v-model="localQueryedForm.sign_staff_name" placeholder="请输入订单编号" :maxlength="20"></el-input>
+            <el-form-item label="签约服务人员姓名" prop="sign_staff_name">
+                <el-input class="input" style="width: 173px" v-model="localQueryedForm.sign_staff_name" placeholder="请输入签约服务人员姓名" :maxlength="20"></el-input>
             </el-form-item>
-            <el-form-item label="服务人员工号" prop="sign_staff_code">
-                <el-input class="input" style="width: 173px" v-model="localQueryedForm.sign_staff_code" placeholder="请输入订单编号" :maxlength="20"></el-input>
+            <el-form-item label="签约服务人员工号" prop="sign_staff_code">
+                <el-input class="input" style="width: 173px" v-model="localQueryedForm.sign_staff_code" placeholder="请输入签约服务人员工号" :maxlength="20"></el-input>
             </el-form-item>
             <el-form-item >
                 <div style="width: 263px;display: flex;justify-content: flex-end">
@@ -71,12 +84,8 @@
 
 <script>
 
-import {
-    created_atList,
-} from '@/public/module/orderList/IorderList.ts'
-import{
-    contract_typeList,
-}  from '@/public/module/contractList/IcontractList.ts'
+import {created_atList} from '@/public/module/orderList/IorderList.ts'
+import{contract_typeList}  from '@/public/module/contractList/IcontractList.ts'
 export default {
     data(){
         return {
@@ -87,7 +96,8 @@ export default {
                 contract_number: '',//合同编号
                 sign_at: [],//签约时间
                 sign_manager_id: [],//经纪人
-                status: [],//合同状态
+                sign_store_id: [],//经纪门店
+                type: [],//合同状态
                 sign_user_name: '',//雇主姓名
                 sign_user_phone: '',//雇主电话
                 sign_staff_name: '',//服务人员姓名
@@ -114,6 +124,10 @@ export default {
             let sendForm = {
                 ...this.localQueryedForm,
             }
+            sendForm.sign_at = sendForm.sign_at? [sendForm.sign_at]: []
+            sendForm.sign_manager_id = sendForm.sign_manager_id? [sendForm.sign_manager_id]: []
+            sendForm.sign_store_id = sendForm.sign_store_id? [sendForm.sign_store_id]: []
+            sendForm.type = sendForm.type? [sendForm.type]: []
             this.$emit('changeQueryedForm', sendForm)
         },
         /**
@@ -121,7 +135,7 @@ export default {
          */
         resetForm(formName) {
             this.$refs[formName].resetFields();
-            this.$emit('changeQueryedForm', this.localQueryedForm)
+            this.searchForm()
         }
     }
 }

@@ -8,39 +8,30 @@
                 <el-select 
                     v-model="localQueryedForm.type" 
                     placeholder="请选择订单申请状态"
-                    filterable
-                    clearable>
+                    filterable clearable>
                     <el-option 
                         v-for="(item, index) in order_typeList" 
-                        :key="index" 
-                        :label="item.name" 
-                        :value="item.id"></el-option>
+                        :key="index" :label="item.name" :value="item.id"></el-option>
                 </el-select>
             </el-form-item >
             <el-form-item label="申请订单时间" prop="created_at">
                 <el-select 
                     v-model="localQueryedForm.created_at" 
                     placeholder="请选择申请订单时间"
-                    filterable
-                    clearable>
+                    filterable clearable>
                     <el-option 
                         v-for="(item, index) in created_atList" 
-                        :key="index" 
-                        :label="item.name" 
-                        :value="item.id"></el-option>
+                        :key="index" :label="item.name" :value="item.id"></el-option>
                 </el-select>
             </el-form-item >
             <el-form-item label="申请订单创建人" prop="created_manager_id">
                 <el-select 
                     v-model="localQueryedForm.created_manager_id" 
                     placeholder="请选择申请订单创建人"
-                    filterable
-                    clearable>
+                    filterable clearable>
                     <el-option 
                         v-for="(item, index) in queryForm.apply_manager_id" 
-                        :key="index" 
-                        :label="item.name" 
-                        :value="item.id"></el-option>
+                        :key="index" :label="item.name" :value="item.id"></el-option>
                 </el-select>
             </el-form-item >
             <el-form-item label="客户电话" prop="user_phone">
@@ -53,26 +44,20 @@
                 <el-select 
                     v-model="localQueryedForm.apply_manager_id" 
                     placeholder="请选择来源人"
-                    filterable
-                    clearable>
+                    filterable clearable>
                     <el-option 
                         v-for="(item, index) in queryForm.apply_manager_id" 
-                        :key="index" 
-                        :label="item.name" 
-                        :value="item.id"></el-option>
+                        :key="index" :label="item.name" :value="item.id"></el-option>
                 </el-select>
             </el-form-item >
             <el-form-item label="来源门店" prop="apply_store_id"> 
                 <el-select 
                     v-model="localQueryedForm.apply_store_id" 
                     placeholder="请选择来源门店"
-                    filterable
-                    clearable>
+                    filterable clearable>
                     <el-option 
                         v-for="(item, index) in queryForm.apply_store_id" 
-                        :key="index" 
-                        :label="item.name" 
-                        :value="item.id"></el-option>
+                        :key="index" :label="item.name" :value="item.id"></el-option>
                 </el-select>
             </el-form-item >
             <el-form-item >
@@ -149,7 +134,7 @@ export default {
         resetForm(formName) {
             this.$refs[formName].resetFields();
 
-            this.setSearchForm()
+            this.searchForm()
         }
     }
 }

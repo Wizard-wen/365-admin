@@ -20,7 +20,7 @@
                 </template>
             </el-table-column>
 
-            <el-table-column  label="订单编号" prop="order_code" align="center" ></el-table-column>
+            <el-table-column  label="订单编号" prop="order_code" align="center" width="150"></el-table-column>
 
             <el-table-column  v-if="orderModuleType=='operate' || orderModuleType=='sale'" label="订单状态" prop="type" align="center" width="100">
                 <template slot-scope="scope">
@@ -80,11 +80,13 @@
     
 </template>
 <script>
-    import {operateService, $utils} from '@common/index.js'
+    import {$utils} from '@common/index.js'
 
+    import {
+        saleApplyOrderBtn,
+        operateCreateOrderBtn,
+    } from './control/index.js'
 
-    import saleApplyOrderBtn from './control/saleApplyOrderBtn.vue'
-    import operateCreateOrderBtn from './control/operateCreateOrderBtn.vue'
     import tableItemForm from './orderTableComponent/tableItemForm.vue'
     
     import {order_typeList} from '@/public/module/orderList/IorderList.ts'

@@ -7,9 +7,6 @@
 //订单头部组件
 import orderHeaderComponent from './orderHeaderComponent.vue'
 
-//全部服务人员筛选列表组件
-// import orderMatchWorkerList from  './orderMatchWorkerList.vue'
-
 //当前订单已匹配劳动者组件
 import orderMatchedWorkerListComponent from './orderMatchedWorkerListComponent.vue'
 
@@ -22,7 +19,6 @@ import orderConfigLog from './orderConfigLog.vue'
 
 export {
     orderHeaderComponent,
-    // orderMatchWorkerList,
     orderMatchedWorkerListComponent,
     orderContractList,
     orderConfigLog,

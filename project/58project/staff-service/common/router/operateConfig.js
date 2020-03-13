@@ -11,25 +11,27 @@ import operateWorkStation from '@/pages/operateWorkStation.vue'
 /**
  * 运营---订单运营
  */
-import operateOrderList from '@/pages/operateOrder/orderList.vue'
-import operateOrderConfig from '@/pages/operateOrder/orderConfig.vue'
+// 订单列表
+import operateOrderList from '@/pages/operateOrder/operateOrderList.vue'
+import operateOrderConfig from '@/pages/operateOrder/operateOrderConfig.vue'
+import operateCreateOrderPage from '@/pages/operateOrder/createOrderPage.vue'
+// 门店订单申请
 import operateOrderApplyList from '@/pages/operateOrder/orderApplyList.vue'
 import operateOrderApplyItem from '@/pages/operateOrder/orderApplyItem.vue'
-import operateCreateOrderPage from '@/pages/operateOrder/createOrderPage.vue'
+// 客户需求列表
 import clientRequireList from '@/pages/operateOrder/clientRequireList.vue'
 import clientRequireItem from '@/pages/operateOrder/clientRequireItem.vue'
 
 /**
  * 运营---合同管理
  */
-import operateVoidContractList from '@/pages/operateContract/voidContractList.vue'
-import operateContractList from '@/pages/operateContract/contractList.vue'
-import operateContractItem from '@/pages/operateContract/contractItem.vue'
+import operateVoidContractList from '@/pages/operateContract/operateVoidContractList.vue'
+import operateContractList from '@/pages/operateContract/operateContractList.vue'
+import operateContractItem from '@/pages/operateContract/operateContractItem.vue'
 
 /**
  * 运营—--客户端订单
  */
-
  
 /**
  * 运营 --- 小程序运营

@@ -1,29 +1,25 @@
 <template>
     <div class="orderApply" v-loading="is_loading">
         <order-apply-header-component
-            :publicOrderType="2"
-            :currentOrderApply="clientRequireDetailItem"
-            @updateOrderApply="getApplication"></order-apply-header-component>
+            :orderApplyModuleType="'require'"
+            :currentOrderApply="clientRequireItem"
+            @updateOrderApply="getClientRequire"></order-apply-header-component>
         <div class="layout-content">
             <public-order-base-component
                 :publicOrderType="2"
-                :orderBaseDetail="clientRequireDetailItem"
-                @updatePublicOrderBase="getApplication"></public-order-base-component>
+                :orderBaseDetail="clientRequireItem"
+                @updatePublicOrderBase="getClientRequire"></public-order-base-component>
         </div>
     </div>
 </template>
 
+        }
 <script>
-import { operateService, $utils } from "@common/index.js";
+import {operateOrderService} from '@/service/operateOrder.ts'
 
+import orderApplyHeaderComponent from '@/public/module/orderApplyItem/orderApplyHeaderComponent.vue'
+import {publicOrderBaseComponent} from '@/public/module/orderPublic/index.js'
 
-import {
-    orderApplyHeaderComponent,
-} from '@/public/module/orderApplyItem/index.js'
-
-import {
-    publicOrderBaseComponent,
-} from '@/public/module/orderPublic/index.js'
 export default {
     components: {
         publicOrderBaseComponent,
@@ -33,9 +29,10 @@ export default {
         return {
             is_loading: false,
             //客户需求详情
-            clientRequireDetailItem: {
+            clientRequireItem: {
                 id: 0,//
                 require_code: '',//需求编号
+
                 version: 0,//
                 type: '',
                 created_at: 0,//
@@ -55,12 +52,12 @@ export default {
         /**
          * 获取订单申请
          */
-        async getApplication() {
+        async getClientRequire() {
             try{
                 this.is_loading = true
-                await operateService.getRequire(this.$route.query.id).then(data => {
+                await operateOrderService.getClientRequire(this.$route.query.id).then(data => {
                     if (data.code == "0") {
-                        this.clientRequireDetailItem = data.data;
+                        this.clientRequireItem = data.data;
                         this.is_loading = true
                     }
                 }).catch(error => {
@@ -82,7 +79,7 @@ export default {
         },
     },
     async mounted() {
-        await this.getApplication();
+        await this.getClientRequire();
     }
 };
 </script>

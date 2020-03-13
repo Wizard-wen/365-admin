@@ -4,31 +4,15 @@
         <h4>合同编号：{{contractBase.contract_number}}</h4>
     </div>
     <div class="btn-group">
-
-
         <contract-back-btn></contract-back-btn>
-        <terminate-contract-btn :currentContract="contractBase"></terminate-contract-btn>
-        <settle-wage-btn :currentContract="contractBase"></settle-wage-btn>
-        <!-- <el-button 
-            type="primary" size="mini" 
-            v-if="contractType == 2 && contractBase.is_wage == 1 && contractBase.type == 2"
-            @click="openSettleWageDialog">结算工资</el-button>
-        <el-button 
-            type="danger" size="mini" 
+        <terminate-contract-btn 
+            @updateContract="$emit('updateContract')"
             v-if="contractType == 2 && contractBase.type != 3"
-            @click="openDeterminateContractDialog">终止合同</el-button>
-        <el-button size="mini" @click="goback">返回</el-button> -->
-        <!-- 订单申请弹出框 -->
-        <!-- <settle-wage-dialog
-            :contractObj="contractBase"
-            v-if="settleWageDialogVisible"
-            :settleWageDialogVisible="settleWageDialogVisible"
-            @closeSettleWageDialog="closeSettleWageDialog"></settle-wage-dialog>
-        <terminate-contract-dialog
-            :contractObj="contractBase"
-            v-if="determinateContractDialogVisible"
-            :determinateContractDialogVisible="determinateContractDialogVisible"
-            @closeDeterminateContractDialog="closeDeterminateContractDialog"></terminate-contract-dialog> -->
+            :currentContract="contractBase"></terminate-contract-btn>
+        <settle-wage-btn 
+            @updateContract="$emit('updateContract')"
+            v-if="contractType == 2 && contractBase.is_wage == 1 && contractBase.type == 2"
+            :currentContract="contractBase"></settle-wage-btn>
     </div>
     <div class="order-detail">
         <div class="detail-left">
@@ -40,13 +24,13 @@
             </div>
         </div>
         <div class="detail-right">
-            <div class="right-box">
+            <div class="right-box" v-if="contractTypeStyle">
                 <div class="title">合同状态</div>
                 <div class="value" :style="{color: contractTypeStyle.color}">{{ contractTypeStyle.name}}</div>
             </div>
-            <div class="right-box" v-if="contractBase.type != 3">
+            <div class="right-box" v-if="contractIsSettleStyle && contractBase.type != 3">
                 <div class="title">是否发放首月工资</div>
-                <div class="value" :style="{color: contractBase.is_wage == 1? '#F56C6C' : '#67C23A'}">{{ contractBase.is_wage | isWagedFormatter}}</div>
+                <div class="value" :style="{color: contractIsSettleStyle.color}">{{ contractIsSettleStyle.name}}</div>
             </div>
         </div>
     </div>
@@ -54,22 +38,20 @@
 </template>
 
 <script>
-// import {
-//     settleWageDialog,
-//     terminateContractDialog,
-// } from './contractHeaderComponent/index.js'
 
 import contractBackBtn from './contractHeaderComponent/control/contractBackBtn.vue'
 import terminateContractBtn from './contractHeaderComponent/control/terminateContractBtn.vue'
 import settleWageBtn from './contractHeaderComponent/control/settleWageBtn.vue'
+
+import {
+    contract_typeList
+} from '@/public/module/contractList/IcontractList.ts'
+import {is_wageList} from '@/public/module/contractItem/IcontractItem.ts'
 import {
     $utils,
-    saleService,
 } from '@common/index.js'
 export default {
     components: {
-        // settleWageDialog,
-        // terminateContractDialog,
         settleWageBtn,
         contractBackBtn,
         terminateContractBtn,
@@ -95,12 +77,6 @@ export default {
             default: 1,
         }
     },
-    data(){
-        return {
-            // settleWageDialogVisible: false,//结算工资弹窗显示隐藏
-            // determinateContractDialogVisible: false, //终止合同弹窗显示隐藏
-        }
-    },
     filters: {
         timeFomatter(value){
             if(value == 0){
@@ -108,167 +84,17 @@ export default {
             }
             return $utils.formatDate(new Date(value), 'yyyy-MM-dd hh:mm:ss')
         },
-        isWagedFormatter(value){
-            if(value == 1){
-                return '否'
-            } else {
-                return '是'
-            }
-        }
     },
     computed:{
-        //是否结算
-        is_settle(){
-            if(!this.contractBase.account){
-                return 3
-            } else {
-                return this.contractBase.account.type
-            }
-        },
         //合同状态
-        contractTypeStyle(value){
-            if(this.contractBase.type == 1){
-                return {
-                    name: '待执行',
-                    color: '#E6A23C'
-                }
-            } else if (this.contractBase.type == 2){
-                return {
-                    name: '执行中',
-                    color: '#67C23A'
-                }
-            } else {
-                return {
-                    name: '已终止',
-                    color: '#F56C6C'
-                }
-            }
+        contractTypeStyle(){
+            return contract_typeList.find(item => item.id == this.contractBase.type)
         },
+        //结算状态
+        contractIsSettleStyle(){
+            return is_wageList.find(item => item.id == this.contractBase.is_wage)
+        }
     },
-    methods: {
-        /**
-        //  * 打开结算工资弹窗
-        //  */
-        // openSettleWageDialog(){
-        //     this.settleWageDialogVisible = true
-        // },
-        // /**
-        //  * 关闭结算工资弹窗
-        //  */
-        // async closeSettleWageDialog(){
-        //     this.$emit('updateContract')
-        //     this.settleWageDialogVisible = false
-        // },
-        // /**
-        //  * 打开终止合同弹窗
-        //  */
-        // async openDeterminateContractDialog(){
-        //     //待执行状态合同终止
-        //     if(this.contractBase.type == 1){
-        //         await this.determinateContract()
-        //     } else {
-        //         /**
-        //          * is_wage 1 未发放工资 2 已发放工资
-        //          */
-        //         if(this.contractBase.is_wage == 1){
-        //             this.determinateContractDialogVisible = true
-        //         } else {
-        //             await this.determinateContract()
-        //         }
-        //     }
-        // },
-        // /**
-        //  * 关闭终止合同弹窗
-        //  */
-        // async closeDeterminateContractDialog(){
-        //     this.$emit('updateContract')
-        //     this.determinateContractDialogVisible = false
-        // },
-        // /**
-        //  * 终止合同（已发放工资/待执行状态）
-        //  */
-        // async determinateContract(){
-        //     await this.$confirm("确定终止该合同吗?此操作不可逆", "提示", {
-        //         confirmButtonText: "确定",
-        //         cancelButtonText: "取消",
-        //         type: "warning"
-        //     }).then(async () =>{
-        //         await this.stopContract()
-        //         this.$emit('updateContract')
-        //     }).catch(() => {
-        //         this.$message({
-        //             type: "info",
-        //             message: "已放弃终止"
-        //         });
-        //     });
-        // },
-        // /**
-        //  * 终止合同接口
-        //  */
-        // async stopContract(){
-        //     try {
-        //         this.is_loading = true
-
-        //         let determinateContractObj = {
-        //             is_wage: this.contractBase.is_wage,
-        //             contract_id: this.contractBase.id,
-        //         }
-
-        //         await saleService.stopContract(determinateContractObj).then(data => {
-        //             if (data.code == 0) {
-        //                 this.$message({
-        //                     type: "success",
-        //                     message: data.message
-        //                 });
-        //                 this.is_loading = false
-        //             }
-        //         }).catch(error => {
-        //             this.$message({
-        //                 type: "error",
-        //                 message: error.message
-        //             });
-        //             this.is_loading = false
-        //         }).finally(() =>{
-        //             this.is_loading = false
-        //         })
-        //     } catch (error) {
-        //         this.$message({
-        //             type: "error",
-        //             message: error.message
-        //         });
-        //         this.is_loading = false
-        //     }
-        // },
-        // /**
-        //  * 返回
-        //  */
-        // goback(){
-        //     if(this.contractType == 1){
-        //         if(this.$route.query.from == 1){
-        //             this.$router.push({
-        //                 path: '/operate/operateOrderConfig',
-        //                 query: {
-        //                     order_id: this.$route.query.from_id
-        //                 }
-        //             })
-        //         } else {
-        //             this.$router.push('/sale/saleContractList')
-        //         }
-        //     } else {
-        //         if(this.$route.query.from == 1){
-        //             this.$router.push({
-        //                 path: '/sale/saleOrderConfig',
-        //                 query: {
-        //                     order_id: this.$route.query.from_id
-        //                 }
-        //             })
-        //         } else {
-        //             this.$router.push('/operate/operateContractList')
-        //         }
-        //     }
-            
-        // },
-    }
 }
 </script>
 

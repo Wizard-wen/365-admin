@@ -60,6 +60,7 @@ import tableTagComponent from './oldtable/tableTagComponent.vue'
 import queryTagComponent from './oldtable/queryTagComponent.vue'
 
 
+import pagination from './pagination.vue'
 export {
     pictureDetailDialog,
     makeImageComponent,
@@ -78,6 +79,7 @@ export {
     detailFormComponent,
     formItemLabelTooltipComponent,
     singlePictureUpload,
+    pagination,
 }
 
 
@@ -102,5 +104,7 @@ Vue.component('formItemLabelTooltipComponent', formItemLabelTooltipComponent);
 
 Vue.component('singlePictureUpload', singlePictureUpload);
 Vue.component('multiplePictureUpload', multiplePictureUpload);
+
+Vue.component('pagination', pagination);
 
 

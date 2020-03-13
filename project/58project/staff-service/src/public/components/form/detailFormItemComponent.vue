@@ -1,13 +1,10 @@
 <template>
-    <div :class="['detail-item-box','abc', sizeStyleClass]">
-        <div class="detail-item">
+    <div :class="['detail-item-box', sizeStyleClass]">
+        <div class="detail-item" v-if="label">
             <p class="detail-title" :style="{width: `${labelWidth}px`}">{{label}}：</p>
             <div class="detail-contains">
                 <template v-if="type == 'original'">
-                    <template v-if="value && valueType!='string'">
-                        <slot name="define"></slot>
-                    </template>
-                    <template v-else-if="value && valueType == 'string'">
+                    <template v-if="value">
                         <p class="detail-type-text" >{{value}}</p>
                     </template>
                     <template v-else>
@@ -17,8 +14,6 @@
                 <template v-else>
                     <slot name="template"></slot>
                 </template>
-
-                
             </div>
         </div>
     </div>
@@ -62,19 +57,12 @@ export default {
                 return 'line-list'
             } else if(this.size == 2){
                 return 'line-two-list'
+            } else if(this.size == 23){
+                return 'list-two-three-list'
             } else {
                 return 'line-three-list'
             }
         },
-        valueType(){
-            if(typeof this.value == 'string'){
-                return 'string'
-            } else if(Array.isArray(this.value)){
-                return 'array'
-            } else {
-                return 'object'
-            }
-        }
     }
 }
 </script>
@@ -100,34 +88,13 @@ export default {
                 color: rgba(0,0,0,.85);
             }
         }
-        // .detail-picture-box{
-        //     display: flex;
-        //     .contract-picture{
-        //         margin: 0 15px 15px 0;
-        //         width: 210px;
-        //         height: 297px;
-        //         & img{
-        //             width: 210px;
-        //             height: 297px;
-        //         }
-        //     }
-        // }
-        
-        // .detail-photo-list{
-        //     display: flex;
-        //     flex-wrap: wrap;
-        //     .icon-box{
-        //         height: 150px;
-        //         margin-right: 20px;
-        //         .icon-style{
-        //             height: 150px;
-        //         }
-        //     }
-        // }
     }
 }
 .line-three-list{
     width: 33%;
+}
+.list-two-three-list{
+    width: 66%
 }
 .line-two-list{
     width: 50%;

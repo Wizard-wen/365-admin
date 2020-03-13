@@ -11,7 +11,7 @@
 
 <script>
 import terminateContractDialog from'./terminateContractBtn/terminateContractDialog.vue'
-import {saleService} from '@common/index.js'
+import {publicModuleService} from '@/service/publicModule'
 export default {
     components: {
         terminateContractDialog,
@@ -84,7 +84,7 @@ export default {
                     contract_id: this.currentContract.id,
                 }
 
-                await saleService.stopContract(determinateContractObj).then(data => {
+                await publicModuleService.stopContract(determinateContractObj).then(data => {
                     if (data.code == 0) {
                         this.$message({
                             type: "success",

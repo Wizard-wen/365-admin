@@ -14,32 +14,17 @@
             v-if="isShowOperateAssignOrderBtn"
             :currentOrder="currentOrder"
             @refreshOrder="$emit('updateOrderConfig')"></operate-assign-order-btn>
-        
-        <!-- <el-button 
-            type="primary" size="mini"
-            v-if="presentUser.is_store_manager != 1 || presentUser.department_id == 2"
-            @click="openAssignOrderDialog">分派</el-button> -->
-        
-        <!-- <el-button 
-            type="primary" size="mini" 
-            v-if="currentOrder.type == 2 && presentUser.department_id == 4 && publicOrderType !=4" 
-            @click="goSignOrderPage(1)">续约</el-button> -->
         <!-- 续签 -->
         <resign-btn 
             v-if="isShowResignBtn" 
             :currentOrder="currentOrder"></resign-btn>
-        <!-- <el-button 
-            type="danger" size="mini" 
-            v-if="(currentOrder.type == 1 ||currentOrder.type ==  3) && presentUser.department_id == 4 && publicOrderType !=4" 
-            @click="openDeterminateOrderDialog">终止订单</el-button> -->
         <!-- 终止订单 -->
         <terminate-order-btn 
             v-if="isShowTerminateOrderBtn" 
             :currentOrder="currentOrder"
-            @refreshOrder="$emit('updateOrderConfig')"></terminate-order-btn>
-        
+            @refreshOrder="$emit('updateOrderConfig')"></terminate-order-btn>  
         <!-- 返回订单列表 -->
-        <back-order-list :publicOrderType="publicOrderType"></back-order-list>
+        <back-order-list-btn :publicOrderType="publicOrderType"></back-order-list-btn>
     </div>
     <div class="order-detail">
         <div class="detail-left">
@@ -74,45 +59,26 @@
             </div>
         </div>
     </div>
-    <!-- 运营订单分派 -->
-    <!-- <public-assign-order-component
-        v-if="publicAssignOrderDialogVisible"
-        :publicAssignOrderDialogVisible="publicAssignOrderDialogVisible"
-        @closePublicAssignOrderDialog="closePublicAssignOrderDialog"
-        @updatePublicAssignOrder="updatePublicAssignOrder"
-        :publicOrderType="publicOrderType"></public-assign-order-component> -->
-    <!-- 店内订单分派弹出框 -->
-    <!-- <assign-order-in-store-dialog
-        v-if="assignOrderInStoreDialogVisible"
-        :assignOrderInStoreDialogVisible="assignOrderInStoreDialogVisible"
-        @closeAssignOrderInStoreDialog="closeAssignOrderInStoreDialog"
-        :orderObject="currentOrder"></assign-order-in-store-dialog> -->
-    
-    <!-- 终止订单弹出框 -->
-    <!-- <terminate-order-dialog
-        v-if="determinateOrderDialogVisible"
-        :determinateOrderDialogVisible="determinateOrderDialogVisible"
-        @closeDeterminateOrderDialog="closeDeterminateOrderDialog"
-        :order_id="order_id"></terminate-order-dialog> -->
 </div>
 </template>
 
 <script>
 
-// import {
-//     assignOrderInStoreDialog,
-//     terminateOrderDialog
-// } from './orderHeaderComponent/index.js'
+// import operateAssignOrderBtn from '@/public/module/orderConfig/orderHeaderComponent/operateAssignOrderBtn.vue'
+// import saleAssignOrderBtn from '@/public/module/orderConfig/orderHeaderComponent/saleAssignOrderBtn.vue'
+// import resignBtn from '@/public/module/orderConfig/orderHeaderComponent/resignBtn.vue'
+// import terminateOrderBtn from '@/public/module/orderConfig/orderHeaderComponent/terminateOrderBtn.vue'
 
-import operateAssignOrderBtn from '@/public/module/orderConfig/orderHeaderComponent/control/operateAssignOrderBtn.vue'
-import saleAssignOrderBtn from '@/public/module/orderConfig/orderHeaderComponent/control/saleAssignOrderBtn.vue'
-import resignBtn from '@/public/module/orderConfig/orderHeaderComponent/control/resignBtn.vue'
-import terminateOrderBtn from '@/public/module/orderConfig/orderHeaderComponent/control/terminateOrderBtn.vue'
-import backOrderList from '@/public/module/orderConfig/orderHeaderComponent/control/backOrderList.vue'
+// import backOrderListBtn from '@/public/module/orderConfigbackOrderListBtn.vue'
+import {
+    backOrderListBtn,
+    terminateOrderBtn,
+    resignBtn,
+    saleAssignOrderBtn,
+    operateAssignOrderBtn,
+} from './orderHeaderComponent/index.js'
+
 import {order_typeList} from '@/public/module/orderList/IorderList.ts'
-// import {
-//     publicAssignOrderComponent,
-// } from '@/public/module/orderPublic/index.js'
 
 import { 
     $utils, 
@@ -121,14 +87,11 @@ import {
 
 export default {
     components: {
-        // assignOrderInStoreDialog,
-        // terminateOrderDialog,
-        // publicAssignOrderComponent,
         operateAssignOrderBtn,
         saleAssignOrderBtn,
         resignBtn,
         terminateOrderBtn,
-        backOrderList,
+        backOrderListBtn,
     },
     props: {
         /**
@@ -171,9 +134,6 @@ export default {
          * 订单状态为已签约 && 处于门店订单配置页
          */
         isShowResignBtn(){
-            // return  this.currentOrder.type == 2 && 
-            //         this.presentUser.department_id == 4 && 
-            //         this.publicOrderType !=4 
             return  this.currentOrder.type == 2 &&
                     this.orderModuleType == 'sale'
         },
@@ -182,9 +142,6 @@ export default {
          * 订单状态为(匹配中 || 售后匹配中)  && 处于门店订单配置页
          */
         isShowTerminateOrderBtn(){
-            // return (currentOrder.type == 1 ||currentOrder.type ==  3) && 
-            // presentUser.department_id == 4 && 
-            // publicOrderType !=4
             return  (this.currentOrder.type == 1 || this.currentOrder.type ==  3) &&
                     this.orderModuleType == 'sale'
         },
@@ -212,119 +169,6 @@ export default {
             return $utils.formatDate(new Date(value), 'yyyy-MM-dd')
         }
     },
-    data(){
-        return {
-            //订单id
-            // order_id: this.$route.query.order_id,
-            //分配弹出框显示
-            // assignOrderInStoreDialogVisible:false,
-            // //终止订单弹窗显示隐藏
-            // determinateOrderDialogVisible: false,
-            // //分分派订单弹窗
-            // publicAssignOrderDialogVisible: false,
-        }
-    },
-    methods: {
-        /**
-         * 打开分派订单弹窗
-         */
-        // openAssignOrderDialog(){
-        //     //运营可以任意分派，店长只能店内分派
-        //     if(this.presentUser.department_id == 2){
-        //         //运营部分，可以分派至各个门店
-        //         this.publicAssignOrderDialogVisible = true
-        //     } else {
-        //         //店长只能分派至本门店员工
-        //         this.assignOrderInStoreDialogVisible = true
-        //     }
-        // },
-        /**
-         * 关闭运营分派订单弹窗
-         */
-        // closePublicAssignOrderDialog(){
-        //     this.publicAssignOrderDialogVisible = false
-        //     this.$emit('updateOrderConfig')
-        // },
-        /**
-         * 关闭店长分派订单弹窗
-         */
-        // closeAssignOrderInStoreDialog(){
-        //     this.assignOrderInStoreDialogVisible = false
-        //     this.$emit('updateOrderConfig')
-        // },
-        /**
-         * 运营分派订单接口
-         */
-        // async updatePublicAssignOrder(param){
-        //     let assignOrderForm = {
-        //         ...param[0],
-        //         order_id: this.currentOrder.id
-        //     }
-        //     await this.assignOrder(assignOrderForm)
-        //     await this.closePublicAssignOrderDialog()
-        // },
-        /**
-         * 分派订单接口
-         */
-        // async assignOrder(assignOrderForm){
-        //     try{
-        //         this.is_loading = true
-        //         await saleService.assignOrder(assignOrderForm).then(data =>{
-        //             if(data.code == '0'){
-        //                 this.$message({
-        //                     type:"success",
-        //                     message: data.message
-        //                 })
-        //                 this.is_loading = false
-        //             }
-        //         }).catch(error =>{
-        //             this.$message({
-        //                 type:'error',
-        //                 message: error.message
-        //             })
-        //             this.is_loading = false
-        //         }).finally(() =>{
-        //             this.is_loading = false
-        //         })
-        //     } catch(error){
-        //         this.$message({
-        //             type:'error',
-        //             message: error.message
-        //         })
-        //         this.is_loading = false
-        //     }
-        // },
-        /**
-         * 打开终止订单弹窗
-         */
-        // async openDeterminateOrderDialog(){
-        //     this.determinateOrderDialogVisible = true
-        // },
-        /**
-         * 关闭终止订单弹窗
-         */
-        // closeDeterminateOrderDialog(){
-        //     this.determinateOrderDialogVisible = false
-        //     this.$emit('updateOrderConfig')
-        // },
-        /**
-         * 续约跳转至签约页面
-         */
-        // goSignOrderPage(){
-        //     this.$router.push({
-        //         path: `/sale/saleSignPage`,
-        //         query: {
-        //             order_id: this.currentOrder.id,
-        //             type: this.currentOrder.type,//订单状态
-        //             sign_staff_id: this.currentOrder.sign_staff_id ,
-        //             sign_staff_name: this.currentOrder.sign_staff_name,
-        //             sign_user_name: this.currentOrder.sign_user_name,
-        //             sign_user_id: this.currentOrder.sign_user_id,
-        //             sign_user_identify: this.currentOrder.sign_user_identify,
-        //         }
-        //     })
-        // },
-    }
 }
 </script>
 

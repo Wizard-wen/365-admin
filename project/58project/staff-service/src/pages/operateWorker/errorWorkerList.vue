@@ -18,17 +18,14 @@
 </template>
 
 <script>
-import {operateService} from '@common/index.js'
 import {operateWorkerService} from '@/service/operateWorker.ts'
 
 import errorQueryComponent from './errorWorkerList/errorQueryComponent.vue'
 import workerTableComponent from '@/public/module/workerList/workerTableComponent.vue'
-import pagination from '@/public/module/workerList/pagination.vue'
 
 export default {
     components: {
         errorQueryComponent,
-        pagination,
         workerTableComponent,
     },
     data(){
@@ -71,7 +68,7 @@ export default {
         async getTable(){          
             try{
                 this.is_loading = true
-                await operateWorkerService.getTableList('edit',this.queryObject).then(data=>{
+                await operateWorkerService.getWorkerList(this.queryObject).then(data=>{
                     
                     this.pagination = data.pagination
                     this.workerTable = data.workerTable

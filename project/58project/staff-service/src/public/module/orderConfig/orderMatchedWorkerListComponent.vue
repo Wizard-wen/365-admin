@@ -5,7 +5,7 @@
             slot="contains"
             :data="order_staff" 
             class="person-table" 
-            height="350"
+            height="500"
             :header-cell-style="{height: '40px',background: '#fafafa'}">
             <el-table-column label="工号" prop="staff_code" align="center"></el-table-column>
 
@@ -13,10 +13,10 @@
 
             <el-table-column label="电话" prop="staff_phone" align="center"></el-table-column>
 
-            <el-table-column label="签约状态" prop="type" align="center">
+            <el-table-column label="匹配状态" prop="type" align="center">
                 <template slot-scope="scope">
                     <table-tag-component 
-                        :propList="matchStaffSignList" 
+                        :propList="orderMatchedWorkerList" 
                         :tableOriginData="scope.row.type"></table-tag-component>
                 </template>
             </el-table-column>
@@ -29,52 +29,46 @@
                         type="success" size="mini"
                         v-if="scope.row.type != 3 && publicOrderType == 3" 
                         @click="goSignOrder(2,scope.row)">签约</el-button>
-                    <el-button 
-                        type="danger" size="mini"
-                        v-if=" scope.row.type != 3 && publicOrderType == 3" 
-                        @click="openRefuseServiceDialog(scope.row)">拒绝</el-button>
-                    <!-- <el-button 
-                        type="primary" size="mini"
-                        @click="goStaffDetail(scope.row)" >详情</el-button> -->
-                    <show-btn :workerListType="'match'" :currentWorker="scope.row"></show-btn>
-                    
+                    <!-- 拒绝服务人员 -->
+                    <refuse-matched-worker-btn
+                        v-if=" scope.row.type != 3 && publicOrderType == 3"
+                        @updateOrderConfig="$emit('updateOrderConfig')"
+                        :currentWorker="scope.row"
+                        :currentOrder="orderBase"></refuse-matched-worker-btn>
+                    <!-- 查看服务人员详情 -->
+                    <go-worker-show-item-btn :workerListType="'publicMatch'" :currentWorker="scope.row"></go-worker-show-item-btn>
                     <!-- 只有添加人才能删除 -->
-                    <el-button 
-                        type="danger" size="mini"
+                    <delete-matched-worker-btn
                         v-if="presentUser.id == scope.row.created_manager_id"
-                        @click="deleteMatchStaff(scope.row)">删除</el-button>
+                        @updateOrderConfig="$emit('updateOrderConfig')"
+                        :currentWorker="scope.row"
+                        :currentOrder="orderBase"></delete-matched-worker-btn>
                 </template>
             </el-table-column>
         </el-table>
-        <refuse-service-dialog
-            v-if="refuseServiceDialogVisible"
-            :refuseServiceDialogVisible="refuseServiceDialogVisible"
-            @closeRefuseDialog="closeRefuseDialog"
-            :matched_staff="matched_staff"
-            :order_id="order_id"></refuse-service-dialog>
     </card-box-component>
 </template>
 
 <script>
-import {saleService} from '@common/index.js'
-import {refuseServiceDialog} from './orderMatchedWorkerListComponent/index.js'
-import showBtn from '@/public/module/workerList/control/showBtn.vue'
+
+import {publicModuleService} from '@/service/publicModule.ts'
+
+import {orderMatchedWorkerList} from '@/public/module/orderConfig/IorderItem.ts'
+
+import refuseMatchedWorkerBtn from './orderMatchedWorkerListComponent/refuseMatchedWorkerBtn.vue'
+import deleteMatchedWorkerBtn from './orderMatchedWorkerListComponent/deleteMatchedWorkerBtn.vue'
+import goWorkerShowItemBtn from '@/public/module/workerList/control/goWorkerShowItemBtn.vue'
+
 export default {
     components: {
-        refuseServiceDialog,
-        showBtn,
+        refuseMatchedWorkerBtn,
+        deleteMatchedWorkerBtn,
+        goWorkerShowItemBtn,
     },
     data(){
         return {
-            order_id: this.$route.query.order_id,
             //已匹配劳动者签约状态
-            matchStaffSignList: [
-                {id: 1, name: '未签约'},
-                {id: 2, name: '已签约'},
-                {id: 3, name: '已拒绝'},
-            ],
-            refuseServiceDialogVisible: false,//拒绝服务人员显示隐藏
-            matched_staff: null,//备选服务人员信息对象
+            orderMatchedWorkerList,
         }
     },
     props: {
@@ -87,7 +81,6 @@ export default {
         },
         /**
          * 订单类型
-         * 1 门店订单申请 2 客户订单申请 3 门店订单 4 门店公海订单 5 运营订单
          */
         publicOrderType: {    
             type: Number | String,
@@ -115,117 +108,40 @@ export default {
          * @param type 是签约还是续约 1 续约 2 首次签约
          * @param paramObj 匹配服务人员信息对象
          */
-        goSignOrder(type, paramObj){
-            this.$router.push({
-                path: `/sale/saleSignPage`,
-                query: {
-                    order_id: this.order_id,
-                    type: this.orderBase.type,//订单状态
-                    sign_staff_id: type == 1 ? this.orderBase.sign_staff_id : paramObj.staff_id,
-                    sign_staff_name: type == 1 ? this.orderBase.sign_staff_name : paramObj.staff_name,
-                    sign_user_name: this.orderBase.type == 3 ? this.orderBase.sign_user_name : '',
-                    sign_user_id: this.orderBase.type == 3 ? this.orderBase.sign_user_id : '',
-                    sign_user_identify: this.orderBase.type == 3 ? this.orderBase.sign_user_identify : '',
-                }
-            })
-        },
-        /**
-         * 打开拒绝劳动者弹窗
-         * @param paramObj 匹配服务人员信息对象
-         */
-        openRefuseServiceDialog(paramObj){
-            this.matched_staff = paramObj
-            this.refuseServiceDialogVisible = true
-        },
-        /**
-         * 关闭拒绝劳动者弹窗
-         */
-        closeRefuseDialog(){
-            this.refuseServiceDialogVisible = false
-            this.$emit('updateOrderConfig')
-        },
-        /**
-         * 跳转至服务人员详情
-         * @param paramObj 匹配服务人员信息对象
-         */
-        goStaffDetail(paramObj){
-            if(this.publicOrderType == 5){
-                this.$router.push({
-                    path: "/worker/workerItemShow",
-                    query: {
-                        id: paramObj.id,
-                        from: 2,
-                        order_id: this.$route.query.order_id
-                    }
-                })
-            } else if(this.publicOrderType == 3 || this.publicOrderType == 4){
-                this.$router.push({
-                    path: "/sale/saleWorkerShow",
-                    query: {
-                        id: paramObj.id,
-                        //我的订单 2  公海订单 3
-                        from: this.$route.query.order_type,
-                        order_id: this.$route.query.order_id
-                    }
-                })
-            } else {
-                return 
-            }
-            
-        },
-        /**
-         * 删除备选服务人员
-         */
-        async deleteMatchStaff(item){
-            //要删除的备选劳动者
-            let deleteStaffObj = {
-                order_id: this.$route.query.order_id,
-                order_staff_id: item.id
-            }
-            await this.$confirm(`确定删除该备选服务人员吗?`, '提示', {
-                confirmButtonText: '确定',
-                cancelButtonText: '取消',
-                type: 'warning'
-            }).then(async () =>{
-                await this.deleteOrderStaff(deleteStaffObj)
-                this.$emit('updateOrderConfig')
-            }).catch(() => {
-                this.$message({
-                    type: 'info',
-                    message: `已取消删除`
-                });
-            });
-        },
-        /**
-         * 删除备选劳动者接口
-         * @param order_staff_id 候选人员信息id
-         * @param order_id 订单id
-         */
-        async deleteOrderStaff(deleteStaffObj){
+        async goSignOrder(type, paramObj){
             try{
-                this.is_loading = true
-                await saleService.deleteOrderStaff(deleteStaffObj)
-                    .then(async data =>{
-                        if(data.code == "0"){
-                            this.$message({
-                                type:'success',
-                                message: data.message
-                            })
-                            this.is_loading = false
-                        }
-                    }).catch(error =>{
-                        this.$message({
-                            type:'error',
-                            message: error.message
+                await publicModuleService.getWorker(paramObj.staff_id).then(data =>{
+                    let workerItem = data.data
+                    if(workerItem.name && workerItem.phone && workerItem.identify && workerItem.address && workerItem.urgent){
+                        this.$router.push({
+                            path: `/sale/saleSignPage`,
+                            query: {
+                                order_id: this.orderBase.id,
+                                type: this.orderBase.type,//订单状态\
+                                worker_id: type == 1 ? this.orderBase.sign_staff_id : paramObj.staff_id,
+                                sign_user_name: this.orderBase.type == 3 ? this.orderBase.sign_user_name : '',
+                                sign_user_id: this.orderBase.type == 3 ? this.orderBase.sign_user_id : '',
+                                sign_user_phone: this.orderBase.type == 3 ? this.orderBase.sign_user_phone : '',
+                                sign_user_identify: this.orderBase.type == 3 ? this.orderBase.sign_user_identify : '',
+                            }
                         })
-                        this.is_loading = false
+                    } else {
+                        this.$message({
+                            type: 'warning',
+                            message: `该备选服务人员基本信息不全，请联系运营完善信息！`
+                        })
+                    }
+                }).catch(error =>{
+                    this.$message({
+                        type: 'error',
+                        message: error.message
                     })
+                })
             } catch(error){
                 this.$message({
-                    type:'error',
+                    type: 'error',
                     message: error.message
                 })
-                this.is_loading = false
             }
         },
     }

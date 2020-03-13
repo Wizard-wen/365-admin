@@ -7,8 +7,7 @@
                         <detail-form-item-component
                             :label="'账号'"
                             :size="1"
-                            :value="baseForm.account">
-                        </detail-form-item-component>
+                            :value="baseForm.account"></detail-form-item-component>
                         <detail-form-item-component
                             :label="'工号'"
                             :size="1"
@@ -17,14 +16,14 @@
                         <detail-form-item-component
                             :label="'真实姓名'"
                             :size="1"
-                            :value="baseForm.real_name">
-                        </detail-form-item-component>
+                            :value="baseForm.real_name"></detail-form-item-component>
                         <detail-form-item-component
+                            :type="'template'"
                             :label="'所属部门'"
                             :size="1"
                             :value="baseForm.department_id">
                             <select-tag-component 
-                                slot="define"
+                                slot="template"
                                 v-if="baseForm.department_id"
                                 :isEdit="false" 
                                 :propTagList="departmentList" 

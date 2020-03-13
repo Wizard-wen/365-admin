@@ -14,7 +14,6 @@
                         @updateTable="$emit('updateTable')" 
                         :currentContract="props.row"
                         :currentPage="currentPage"
-                        :contractConfigForm="contractConfigForm"
                         :contractModuleType="contractModuleType"></table-item-form>
                 </template>
             </el-table-column>
@@ -23,9 +22,9 @@
                 
             <el-table-column label="合同编号" prop="contract_number" align="center"></el-table-column>
             
-            <el-table-column  label="合同状态" prop="type" align="center"  >
+            <el-table-column  label="合同状态" prop="type" align="center">
                 <template slot-scope="scope">
-                    <table-tag-component  :propList="contract_typeList" :tableOriginData="scope.row.type"></table-tag-component>
+                    <table-tag-component :propList="contract_typeList" :tableOriginData="scope.row.type"></table-tag-component>
                 </template>
             </el-table-column>
 
@@ -54,10 +53,6 @@
                 type: Array,
                 default:function(){return []}
             },
-            contractConfigForm: {
-                type: Object,
-                default: function(){return {}}
-            },
             currentPage: {
                 type: String | Number,
                 default: 1,
@@ -77,21 +72,21 @@
             }
         },
         methods: {
-            /**
-             * 客户下单时间字段转换
-             */
+            // 签约时间
             sign_atFormatter(row, column){
                 if(row.sign_at == 0){
                     return '-'
                 }
                 return $utils.formatDate(new Date(row.sign_at), 'yyyy-MM-dd')
             },
+            // 服务开始时间
             service_startFormatter(row, column){
                 if(row.service_start == 0){
                     return '-'
                 }
                 return $utils.formatDate(new Date(row.service_start), 'yyyy-MM-dd')
             },
+            // 服务截止时间
             service_endFormatter(row, column){
                 if(row.service_end == 0){
                     return '-'

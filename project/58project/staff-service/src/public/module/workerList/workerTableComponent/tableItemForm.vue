@@ -30,15 +30,15 @@
                     :tableOriginData="currentWorker.education"></table-tag-component>
             </detail-form-item-component>
             <detail-form-item-component :type="'template'" :label="'创建时间'" :size="2" :value="currentWorker.created_at">
-                <p slot="template">{{currentWorker.created_at | formDate}}</p>
+                <p slot="template">{{currentWorker.created_at | formatDate}}</p>
             </detail-form-item-component>
             <detail-form-item-component :type="'template'" :label="'出生日期'" :size="2" :value="currentWorker.birthday">
-                <p slot="template">{{currentWorker.birthday | formDate}}</p>
+                <p slot="template">{{currentWorker.birthday | formatDate}}</p>
             </detail-form-item-component>
             <detail-form-item-component :label="'参加工作时间'" :size="2" :value="currentWorker.worked_at">
 
             </detail-form-item-component>
-            <detail-form-item-component :label="'身高'" :size="2" :value="`${currentWorker.body_height}cm`"></detail-form-item-component>
+            <detail-form-item-component :label="'身高'" :size="2" :value="currentWorker.body_height?`${currentWorker.body_height}cm`:''"></detail-form-item-component>
             <detail-form-item-component :type="'template'" :label="'属相'" :size="2" :value="currentWorker.zodiac_sign">
                 <table-tag-component 
                     slot="template"
@@ -46,64 +46,71 @@
                     :propList="zodiac_signList" 
                     :tableOriginData="currentWorker.zodiac_sign"></table-tag-component>
             </detail-form-item-component>
-            <detail-form-item-component :label="'体重'" :size="2" :value="`${currentWorker.body_weight}kg`"></detail-form-item-component>
+            <detail-form-item-component :label="'体重'" :size="2" :value="currentWorker.body_weight?`${currentWorker.body_weight}kg`:''"></detail-form-item-component>
             <detail-form-item-component :type="'template'" :label="'更新时间'" :size="2" :value="currentWorker.updated_at">
-                <p slot="template">{{currentWorker.updated_at | formDate}}</p>
+                <p slot="template">{{currentWorker.updated_at | formatDate}}</p>
             </detail-form-item-component>
             <detail-form-item-component :label="'创建人'" :size="2" :value="currentWorker.manager_name"></detail-form-item-component>
         </detail-form-component>
         <div>
-            <show-btn 
+            <!-- 查看服务人员 -->
+            <go-worker-show-item-btn
+                v-if="workerListType !='apply'"
                 :currentPage="currentPage"
                 :workerListType="workerListType" 
-                :currentWorker="currentWorker"></show-btn>
-            <edit-by-operate-btn
+                :currentWorker="currentWorker"></go-worker-show-item-btn>
+            <!-- 运营人员编辑 -->
+            <edit-worker-by-operate-btn
                 :workerListType="workerListType" 
-                v-if="workerListType!='match'&& workerListType!='seller'"
+                v-if="workerListType!='publicMatch' && workerListType!='match'&& workerListType!='seller'"
                 :currentPage="currentPage" 
-                :currentWorker="currentWorker"></edit-by-operate-btn>
-            <change-status-btn
+                :currentWorker="currentWorker"></edit-worker-by-operate-btn>
+            <!-- 停用、启用 -->
+            <change-worker-status-btn
                 :workerListType="workerListType" 
                 v-if="workerListType == 'total'"
                 @updateTable="$emit('updateTable')" 
-                :currentWorker="currentWorker"></change-status-btn>
-            <error-by-sale-btn
+                :currentWorker="currentWorker"></change-worker-status-btn>
+            <!-- 添加服务人员至异常服务人员 -->
+            <error-worker-by-sale-btn
                 :workerListType="workerListType"
                 v-if="workerListType == 'seller'"
                 :workerForm="currentWorker"
-                @updateTable="$emit('updateTable')" ></error-by-sale-btn>
-            <add-worker-to-order-staff
-                v-if="workerListType == 'match'"
+                @updateTable="$emit('updateTable')" ></error-worker-by-sale-btn>
+            <!-- 将服务人员添加至备选 -->
+            <add-worker-to-order-matched-worker-list
+                v-if="workerListType == 'match' || workerListType == 'publicMatch'"
                 :workerForm="currentWorker"
-                @updateTable="$emit('updateTable')"></add-worker-to-order-staff>
-            <recover-error-worker-btn
+                @updateTable="$emit('updateTable')"></add-worker-to-order-matched-worker-list>
+            <!-- 恢复服务人员 -->
+            <!-- <recover-error-worker-btn
                 v-if="workerListType == 'warning'"
                 :workerListType="workerListType" 
                 :currentWorker="currentWorker"
-                @updateTable="$emit('updateTable')"></recover-error-worker-btn>
-            <submit-new-worker-btn
+                @updateTable="$emit('updateTable')"></recover-error-worker-btn> -->
+            <!-- 提交新服务人员 -->
+            <!-- <submit-new-worker-btn
                 v-if="workerListType == 'apply'"
                 :workerListType="workerListType" 
                 :currentWorker="currentWorker"
-                @updateTable="$emit('updateTable')"></submit-new-worker-btn>
+                @updateTable="$emit('updateTable')"></submit-new-worker-btn> -->
         </div>
     </div>
 </template>
 
 <script>
-import {
-    $utils,
-    operateService,
-} from '@common/index.js'
+import {$utils} from '@common/index.js'
 
-import showBtn from '../control/showBtn.vue'
-import changeStatusBtn from '../control/changeStatusBtn.vue'
-import editByOperateBtn from '../control/editByOperateBtn.vue'
-import makeImageBtn from '../control/makeImageBtn.vue'
-import errorBySaleBtn from '../control/errorBySaleBtn.vue'
-import addWorkerToOrderStaff from '../control/addWorkerToOrderStaff.vue'
-import submitNewWorkerBtn from '../control/submitNewWorkerBtn.vue'
-import recoverErrorWorkerBtn from '../control/recoverErrorWorkerBtn.vue'
+import {
+    addWorkerToOrderMatchedWorkerList,
+    changeWorkerStatusBtn,
+    editWorkerByOperateBtn,
+    errorWorkerBySaleBtn,
+    goWorkerShowItemBtn,
+} from '../control/index.js'
+
+// import submitNewWorkerBtn from '../control/submitNewWorkerBtn.vue'
+// import recoverErrorWorkerBtn from '../control/recoverErrorWorkerBtn.vue'
 
 import {
     iconComponent
@@ -113,21 +120,23 @@ import {educationList,zodiac_signList}from '../IworkerList.ts'
 
 export default {
     components: {
-        showBtn,
-        changeStatusBtn,
-        editByOperateBtn,
+        goWorkerShowItemBtn,
+        changeWorkerStatusBtn,
+        editWorkerByOperateBtn,
         iconComponent,
-        makeImageBtn,
-        errorBySaleBtn,
-        addWorkerToOrderStaff,
-        submitNewWorkerBtn,
-        recoverErrorWorkerBtn,
+        errorWorkerBySaleBtn,
+        addWorkerToOrderMatchedWorkerList,
+        // submitNewWorkerBtn,
+        // recoverErrorWorkerBtn,
     },
     filters: {
         /**
          * 更改时间戳格式
          */
-        formDate(timestamp){
+        formatDate(timestamp){
+            if(timestamp == 0){
+                return '-'
+            }
             return $utils.formatDate(new Date(timestamp), 'yyyy-MM-dd')
         }
     },

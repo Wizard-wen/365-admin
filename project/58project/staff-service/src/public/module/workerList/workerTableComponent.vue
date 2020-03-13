@@ -1,14 +1,14 @@
 <template>
     <div class="table-contains">
         <div class="btn-contains">
-            <create-by-operate-btn 
+            <create-worker-by-operate-btn 
                 :workerListType="workerListType"
-                v-if="workerListType == 'total'"></create-by-operate-btn>
-            <create-by-sale-btn 
+                v-if="workerListType == 'total'"></create-worker-by-operate-btn>
+            <create-worker-by-sale-btn 
                 :workerListType="workerListType"
                 @updateTable="$emit('updateTable')"  
                 :workerConfigForm="workerConfigForm" 
-                v-if="workerListType == 'seller'"></create-by-sale-btn>
+                v-if="workerListType == 'seller'"></create-worker-by-sale-btn>
         </div>
         <el-table 
             :data="tableData" 
@@ -28,7 +28,7 @@
 
             <el-table-column label="签约状态"  align="center" width="100">
                 <template slot-scope="{row}">
-                    <el-tag :type="row.sign_status | signStatusFilter">
+                    <el-tag size="small" :type="row.sign_status | signStatusFilter">
                         {{ row.sign_status == 1? '未签约' : '已签约' }}
                     </el-tag>
                 </template>
@@ -38,7 +38,7 @@
 
             <el-table-column  label="性别" prop="sex" align="center"  width="70">
                 <template slot-scope="{row}">
-                    <el-tag :type="row.sex==1?'primary':'danger'">
+                    <el-tag size="small" :type="row.sex==1?'primary':'danger'">
                         {{ row.sex==1? '男': '女' }}
                     </el-tag>
                 </template>
@@ -82,16 +82,17 @@
 </template>
 <script>
     import {operateService, $utils} from '@common/index.js'
-    import createByOperateBtn from './control/createByOperateBtn.vue'
-    import createBySaleBtn from './control/createBySaleBtn.vue'
+    
+    import createWorkerByOperateBtn from './control/createWorkerByOperateBtn.vue'
+    import createWorkerBySaleBtn from './control/createWorkerBySaleBtn.vue'
 
     import tableItemForm from './workerTableComponent/tableItemForm.vue'
     
     export default {
         components: {
             tableItemForm,
-            createByOperateBtn,
-            createBySaleBtn,
+            createWorkerByOperateBtn,
+            createWorkerBySaleBtn,
         },  
         filters: {
             /**

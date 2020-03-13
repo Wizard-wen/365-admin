@@ -31,8 +31,9 @@ interface searchSaleContractForm {
 }
 
 
+//合同状态
 export const contract_typeList = [
-    {name: '待执行',id: 1},
-    {name: '执行中',id: 2},
-    {name: '已终止',id: 3},
+    {id: 1, name: '待执行',color: '#E6A23C'},
+    {id: 2, name: '执行中',color: '#67C23A'},
+    {id: 3, name: '已终止',color: '#F56C6C'},
 ]

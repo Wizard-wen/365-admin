@@ -1,9 +1,9 @@
 <template>
     <div class="table-box" v-loading="is_loading">
-        <order-query-component
+        <sale-order-query-component
             :orderModuleType="'sale'"
             :queryForm="orderConfigForm"
-            @changeQueryedForm="changeQueryedForm"></order-query-component>
+            @changeQueryedForm="changeQueryedForm"></sale-order-query-component>
         <order-table-component
             :orderModuleType="'sale'"
             :tableData="orderTable"
@@ -20,14 +20,12 @@
 
     import {saleService} from '@/service/sale.ts'
 
-    import orderQueryComponent from '@/public/module/orderList/orderQueryComponent.vue'
+    import saleOrderQueryComponent from './saleOrderList/saleOrderQueryComponent.vue'
     import orderTableComponent from '@/public/module/orderList/orderTableComponent.vue'
-    import pagination from '@/pages/operateWorker/workerList/pagination.vue'
 
     export default {
         components: {
-            orderQueryComponent,
-            pagination,
+            saleOrderQueryComponent,
             orderTableComponent,
         },
         data() {
@@ -46,16 +44,6 @@
                 },
                 //查询对象 16个
                 queryForm: {
-                    // contract_code: '',//合同流水号
-                    // contract_number: '',//合同编号
-                    // sign_at: [],//签约时间
-                    // sign_manager_id: [],//经纪人
-                    // status: [],//合同状态
-                    // sign_user_name: '',//雇主姓名
-                    // sign_user_phone: '',//雇主电话
-                    // sign_staff_name: '',//服务人员姓名
-                    // sign_staff_code: '',//服务人员工号
-
                     order_code: '',//订单编号
                     type: [],//订单状态 
                     order_at: [],//客户下单时间
@@ -110,7 +98,7 @@
                         this.queryObject.agent_store_id = [this.presentUser.store_id]
                     }
     
-                    await saleService.getOrderList(this.queryObject).then(data=>{
+                    await saleService.getSaleOrderList(this.queryObject).then(data=>{
                         
                         this.pagination = data.pagination
                         this.orderTable = data.orderTable

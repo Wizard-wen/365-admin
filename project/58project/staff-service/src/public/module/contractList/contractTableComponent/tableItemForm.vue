@@ -69,13 +69,6 @@ export default {
             type: Number | String,
             default: 1,
         },
-        /**
-         * 字段配置
-         */
-        contractConfigForm: {
-            type: Object,
-            default(){return {}}
-        },
         contractModuleType: {
             type: String,
             default: 'operateContractList'

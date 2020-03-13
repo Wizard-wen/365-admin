@@ -41,19 +41,17 @@ export const apiRequestWorker:api_worker =  {
      /**
      * 手机号查重
      */
-    checkStaffPhone(id, phone){
+    checkStaffPhone(checkWorkerPhoneForm){
         return axios.post(`./admin/staff/checkStaffPhone`,{
-            phone,
-            id,
+            ...checkWorkerPhoneForm,
         })
     },
     /**
      *  改变服务人员状态
      */
-    changeStaffType(id, version){
+    changeStaffType(changeWorkerStatusForm){
         return axios.post(`./admin/staff/changeStaffType`, {
-            version: version,
-            id: id
+            ...changeWorkerStatusForm,
         })
     },
     /**
@@ -93,24 +91,10 @@ export const apiRequestWorker:api_worker =  {
      * @param from list 从列表提交 还是从编辑详情提交
      * @param id 若是from=list id为人员id  若是from=edit id是服务人员信息object
      */
-    agreeStaffSingle(module_type, from, id){
-        if(from == 'list'){
-            return axios.post(`./admin/staff/agreeStaffSingle`,{
-                module: module_type,
-                from,
-                id,
-            })
-        } else {
-            let obj = {
-                module: module_type,
-                from,
-                id,
-            }
-            return axios.post(`./admin/staff/agreeStaffSingle`,{
-                ...obj
-            })
-        }
-
+    agreeStaffSingle(changeWorkerTypeForm){
+        return axios.post(`./admin/staff/agreeStaffSingle`,{
+            ...changeWorkerTypeForm
+        })
     },
     /**
      * 销售创建服务人员

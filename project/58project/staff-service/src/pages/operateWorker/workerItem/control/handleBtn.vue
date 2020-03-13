@@ -1,11 +1,31 @@
 <template>
     <el-button size="mini" type="primary" @click="submitStaff" v-if="submitText != ''">{{submitText}}</el-button>
+    
 </template>
 
 <script>
 export default {
     props: {
-
+        
+    },
+    computed: {
+        /**
+         * 控制提交按钮文案
+         */
+        submitText(type){
+            let type = this.$route.query.type 
+            // if(type == 2){
+            //     return '导出回访'
+            // }  
+            
+            if(type == 3){
+                return '恢复'
+            } else if(type == 4){
+                return '保存并提交'
+            } else {
+                return ''
+            }
+        },
     },
     methods: {
         /**
@@ -14,9 +34,10 @@ export default {
         async submitStaff(){
             let type = this.$route.query.type,
                 module_type = '';
-            if(type == 2){
-                module_type = 'return'
-            } else if(type == 3){
+            // if(type == 2){
+            //     module_type = 'return'
+            // } 
+            if(type == 3){
                 module_type = 'warning'
             } else if(type == 4){
                 module_type = 'apply'

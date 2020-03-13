@@ -19,12 +19,12 @@
 
     import clientRequireQueryComponent from './clientRequireList/clientRequireQueryComponent.vue'
     import orderApplyTableComponent from '@/public/module/orderApplyList/orderApplyTableComponent.vue'
-    import pagination from '@/public/module/orderApplyList/pagination.vue'
+    // import pagination from '@/public/module/orderApplyList/pagination.vue'
 
     export default {
         components: {
             clientRequireQueryComponent,
-            pagination,
+            // pagination,
             orderApplyTableComponent,
         },
         data() {

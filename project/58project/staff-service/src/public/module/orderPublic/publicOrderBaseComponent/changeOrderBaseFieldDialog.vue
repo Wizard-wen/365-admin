@@ -21,13 +21,7 @@
 </template>
 
 <script>
-/**
- * type 0 新建  1 编辑
- */
-import {
-    operateService, 
-    saleService
-} from '@common/index.js'
+import {publicModuleService, } from '@/service/publicModule'
 
 export default {
     props:{
@@ -169,15 +163,43 @@ export default {
                             value: this.orderBaseFieldForm[this.orderBaseFieldForm.field],//属性值
                         }
                     }
+                    let response 
                     
                     if(this.publicOrderType == 1){
-                        await this.editApplication(sendOrderBaseField)
+                        // 编辑订单申请字段接口
+                        response = publicModuleService.editStoreApplicationField(sendOrderBaseField)
                     } else if(this.publicOrderType == 2) {
-                        await this.editRequire(sendOrderBaseField)
+                        // 更改客户需求字段接口
+                        response = publicModuleService.editClientRequireField(sendOrderBaseField)
                     } else if(this.publicOrderType == 3){
-                        await this.editOrder(sendOrderBaseField)
+                        // 编辑门店订单字段接口
+                        response = publicModuleService.editOrderConfigBaseField(sendOrderBaseField)
                     } else {
                         return
+                    }
+                    
+                    try{
+                        await response.then(data =>{
+                            if(data.code == '0'){
+                                this.$message({
+                                    type:"success",
+                                    message: data.message
+                                })
+                                this.$emit('closeChangeOrderFieldDialog')
+                            }
+                        }).catch(error =>{
+                            this.$message({
+                                type:'error',
+                                message: error.message
+                            })
+                        }).finally(() =>{
+
+                        })
+                    } catch(error){
+                        this.$message({
+                            type:'error',
+                            message: error.message
+                        })
                     }
 
                 } else {
@@ -185,90 +207,6 @@ export default {
                 }
             })
         },
-        /**
-         * 更改客户需求字段接口
-         */
-        async editRequire(sendOrderBaseField){
-            try{
-                await operateService.editRequire(sendOrderBaseField).then(data =>{
-                    if(data.code == '0'){
-                        this.$message({
-                            type:"success",
-                            message: data.message
-                        })
-                        this.$emit('closeChangeOrderFieldDialog')
-                    }
-                }).catch(error =>{
-                    this.$message({
-                        type:'error',
-                        message: error.message
-                    })
-                }).finally(() =>{
-
-                })
-            } catch(error){
-                this.$message({
-                    type:'error',
-                    message: error.message
-                })
-            }
-        },
-        /**
-         * 编辑订单申请字段接口
-         */
-        async editApplication(sendOrderBaseField){
-            try{
-                await operateService.editApplication(sendOrderBaseField).then(data =>{
-                    if(data.code == '0'){
-                        this.$message({
-                            type:"success",
-                            message: data.message
-                        })
-                        this.$emit('closeChangeOrderFieldDialog')
-                    }
-                }).catch(error =>{
-                    this.$message({
-                        type:'error',
-                        message: error.message
-                    })
-                }).finally(() =>{
-
-                })
-            } catch(error){
-                this.$message({
-                    type:'error',
-                    message: error.message
-                })
-            }
-        },
-        /**
-         * 编辑门店订单字段接口
-         */
-        async editOrder(sendOrderBaseField){
-            try{
-                await saleService.editOrder(sendOrderBaseField).then(data =>{
-                    if(data.code == '0'){
-                        this.$message({
-                            type:"success",
-                            message: data.message
-                        })
-                        this.$emit('closeChangeOrderFieldDialog')
-                    }
-                }).catch(error =>{
-                    this.$message({
-                        type:'error',
-                        message: error.message
-                    })
-                }).finally(() =>{
-
-                })
-            } catch(error){
-                this.$message({
-                    type:'error',
-                    message: error.message
-                })
-            }
-        }
     },
 }
 </script>

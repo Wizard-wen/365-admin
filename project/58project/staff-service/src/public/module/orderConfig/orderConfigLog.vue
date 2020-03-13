@@ -24,14 +24,10 @@ export default {
             type: Number | String,
             default: 1,
         },
-    },
-    computed: {
-        /**
-         * 订单日志
-         */
-        order_logs(){
-            return this.$store.state.saleModule.order_logs
-        },
+        order_logs: {
+            type: Array,
+            default(){return []}
+        }
     },
     methods: {
         /**

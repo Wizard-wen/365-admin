@@ -57,9 +57,9 @@ export const voidContractType = [
 export const operateModule = {
     mutations:{
         //设置服务人员搜索配置字段
-        setWorkerConfigForm(state, workerConfigForm){
-            state.workerConfigForm = workerConfigForm
-        },
+        // setWorkerConfigForm(state, workerConfigForm){
+        //     state.workerConfigForm = workerConfigForm
+        // },
         /**
          * 初始化运营工作台数据
          */
@@ -73,19 +73,19 @@ export const operateModule = {
             state.operateWorkstation.user_count = data.user_count
         },
         //设置订单申请相关搜索配置字段
-        setOrderApplyConfigForm(state, orderApplyFormConfig){
-            state.orderApplyFormConfig.apply_manager_id = orderApplyFormConfig.apply_manager_id
-            state.orderApplyFormConfig.created_manager_id = orderApplyFormConfig.apply_manager_id
-            state.orderApplyFormConfig.apply_store_id = orderApplyFormConfig.apply_store_id
-        },
+        // setOrderApplyConfigForm(state, orderApplyFormConfig){
+        //     state.orderApplyFormConfig.apply_manager_id = orderApplyFormConfig.apply_manager_id
+        //     state.orderApplyFormConfig.created_manager_id = orderApplyFormConfig.apply_manager_id
+        //     state.orderApplyFormConfig.apply_store_id = orderApplyFormConfig.apply_store_id
+        // },
         //设置订单相关搜索接口
-        setOrderConfigForm(state,orderFormConfig){
-            state.orderFormConfig.apply_manager_id = orderFormConfig.apply_manager_id
-            state.orderFormConfig.apply_store_id = orderFormConfig.apply_store_id
-            state.orderFormConfig.agent_manager_id = orderFormConfig.apply_manager_id
-            state.orderFormConfig.agent_store_id = orderFormConfig.apply_store_id
-            state.orderFormConfig.created_manager_id = orderFormConfig.apply_manager_id
-        },
+        // setOrderConfigForm(state,orderFormConfig){
+        //     state.orderFormConfig.apply_manager_id = orderFormConfig.apply_manager_id
+        //     state.orderFormConfig.apply_store_id = orderFormConfig.apply_store_id
+        //     state.orderFormConfig.agent_manager_id = orderFormConfig.apply_manager_id
+        //     state.orderFormConfig.agent_store_id = orderFormConfig.apply_store_id
+        //     state.orderFormConfig.created_manager_id = orderFormConfig.apply_manager_id
+        // },
         //设置空合同搜索相关标签
         setVoidContractConfigForm(state, voidContractConfigForm){
             state.voidContractConfigForm.manager_id = voidContractConfigForm.apply_manager_id
@@ -112,39 +112,39 @@ export const operateModule = {
         //     state.errorWorkerList[payload.queryKey] = payload.queryedList
         // },
         //设置订单申请列表查询字段
-        setOrderApplyList(state,payload){
-            state.orderApplyList[payload.queryKey] = payload.queryedList
-        },
+        // setOrderApplyList(state,payload){
+        //     state.orderApplyList[payload.queryKey] = payload.queryedList
+        // },
         //设置订单列表查询字段
-        setOrderList(state,payload){
-            state.orderList[payload.queryKey] = payload.queryedList
-        },
+        // setOrderList(state,payload){
+        //     state.orderList[payload.queryKey] = payload.queryedList
+        // },
         //设置合同列表查询字段
-        setContractList(state,payload){
-            state.contractList[payload.queryKey] = payload.queryedList
-        },
+        // setContractList(state,payload){
+        //     state.contractList[payload.queryKey] = payload.queryedList
+        // },
         //设置空合同列表查询字段
         setVoidContractList(state,payload){
             state.voidContractList[payload.queryKey] = payload.queryedList
         },
         //设置合同相关搜索接口
-        setContractConfigForm(state,contractConfigForm){
-            state.contractConfigForm.sign_manager_id = contractConfigForm.apply_manager_id
-            state.contractConfigForm.sign_store_id = contractConfigForm.apply_store_id
-        },
+        // setContractConfigForm(state,contractConfigForm){
+        //     state.contractConfigForm.sign_manager_id = contractConfigForm.apply_manager_id
+        //     state.contractConfigForm.sign_store_id = contractConfigForm.apply_store_id
+        // },
         //设置客户端订单申请相关搜索配置字段
-        setClientRequireConfigForm(state, clientRequireConfig){
-            state.clientRequireConfig.order_apply_type = clientRequireConfig.order_apply_type
-            state.clientRequireConfig.created_at = clientRequireConfig.created_at
-        },
+        // setClientRequireConfigForm(state, clientRequireConfig){
+        //     state.clientRequireConfig.order_apply_type = clientRequireConfig.order_apply_type
+        //     state.clientRequireConfig.created_at = clientRequireConfig.created_at
+        // },
         //设置客户端订单申请列表查询字段
-        setClientRequire(state,payload){
-            state.clientRequire[payload.queryKey] = payload.queryedList
-        },
+        // setClientRequire(state,payload){
+        //     state.clientRequire[payload.queryKey] = payload.queryedList
+        // },
         //设置客户端订单申请列表查询字段
-        setClientList(state,payload){
-            state.clientList[payload.queryKey] = payload.queryedList
-        },
+        // setClientList(state,payload){
+        //     state.clientList[payload.queryKey] = payload.queryedList
+        // },
 
     },
     state: {
@@ -153,9 +153,9 @@ export const operateModule = {
 
         // },
         //客户列表相关配置
-        clientConfigForm: {
+        // clientConfigForm: {
             
-        },
+        // },
         //运营工作台
         operateWorkstation: {
             staff_application: [],//新服务人员申请
@@ -167,31 +167,31 @@ export const operateModule = {
             user_count: {},//用户数量
         },
         //订单申请相关列表筛选配置项
-        orderApplyFormConfig: {
-            type: order_apply_type,//订单申请状态
-            created_at,//创建时间
-            apply_manager_id: [],//订单来源人
-            created_manager_id: [],//订单申请创建人
-            apply_store_id: [],//订单来源门店
-        },
+        // orderApplyFormConfig: {
+        //     type: order_apply_type,//订单申请状态
+        //     created_at,//创建时间
+        //     apply_manager_id: [],//订单来源人
+        //     created_manager_id: [],//订单申请创建人
+        //     apply_store_id: [],//订单来源门店
+        // },
         //订单相关列表筛选
-        orderFormConfig: {
-            type: order_status,//订单状态
-            order_at: created_at,//客户下单时间
-            apply_manager_id: [],//来源人
-            apply_store_id: [],//来源门店
-            created_at: created_at,//订单创建时间
-            created_manager_id: [],//订单创建人
-            agent_store_id: [],//订单经纪门店
-            agent_manager_id: [],//订单经纪人
-        },
+        // orderFormConfig: {
+        //     type: order_status,//订单状态
+        //     order_at: created_at,//客户下单时间
+        //     apply_manager_id: [],//来源人
+        //     apply_store_id: [],//来源门店
+        //     created_at: created_at,//订单创建时间
+        //     created_manager_id: [],//订单创建人
+        //     agent_store_id: [],//订单经纪门店
+        //     agent_manager_id: [],//订单经纪人
+        // },
         //合同搜索列表筛选
-        contractConfigForm: {
-            type: contract_type,
-            sign_at: created_at,//签约时间
-            sign_manager_id: [],//签约经纪人
-            sign_store_id: [],//签约经纪门店
-        },
+        // contractConfigForm: {
+        //     type: contract_type,
+        //     sign_at: created_at,//签约时间
+        //     sign_manager_id: [],//签约经纪人
+        //     sign_store_id: [],//签约经纪门店
+        // },
         //空合同搜索列表筛选
         voidContractConfigForm: {
             type: voidContractType,
@@ -269,18 +269,19 @@ export const operateModule = {
         //     updated_type: [],//更新时间
         // },
         //订单申请查询字段
-        orderApplyList: {
-            page: 1, //请求页码
-            pageNumber: 20,//单页信息数量
-            type: [],//订单申请类型
-            apply_manager_id:[],//来源人id
-            apply_store_id: [],//来源门店id
-            apply_code: '',//订单申请编号
-            created_manager_id: [],//申请创建人id
-            user_phone: '',//客户电话
-            user_name: '',//客户姓名
-            created_at: [],//创建时间
-        },
+        // orderApplyList: {
+        //     page: 1, //请求页码
+        //     pageNumber: 20,//单页信息数量
+            
+        //     type: [],//订单申请类型
+        //     apply_manager_id:[],//来源人id
+        //     apply_store_id: [],//来源门店id
+        //     apply_code: '',//订单申请编号
+        //     created_manager_id: [],//申请创建人id
+        //     user_phone: '',//客户电话
+        //     user_name: '',//客户姓名
+        //     created_at: [],//创建时间
+        // },
         /**
          * 订单列表查询参数
          */
@@ -306,26 +307,26 @@ export const operateModule = {
         // },
         /**
          *  合同列表查询字段
-         */
-        contractList: {
-            /*********************表格字段查询******************************/
-            page: 1, //请求页码
-            pageNumber: 10,//单页信息数量
-            contract_code:'',//合同流水号
-            contract_number:'',//合同编号
+        //  */
+        // contractList: {
+        //     /*********************表格字段查询******************************/
+        //     page: 1, //请求页码
+        //     pageNumber: 10,//单页信息数量
+        //     contract_code:'',//合同流水号
+        //     contract_number:'',//合同编号
 
 
-            type: [],//合同状态
-            sign_at: [],//签约时间
-            sign_manager_id: [],//签约经纪人
-            sign_store_id: [],//签约经纪门店
+        //     type: [],//合同状态
+        //     sign_at: [],//签约时间
+        //     sign_manager_id: [],//签约经纪人
+        //     sign_store_id: [],//签约经纪门店
 
-            sign_user_name: '',//雇主
-            sign_user_phone:'',//雇主电话
+        //     sign_user_name: '',//雇主
+        //     sign_user_phone:'',//雇主电话
 
-            sign_staff_name:'',//签约家政服务员
-            sign_staff_code: '',//签约家政服务员员工号
-        }, //全部查询参数
+        //     sign_staff_name:'',//签约家政服务员
+        //     sign_staff_code: '',//签约家政服务员员工号
+        // }, //全部查询参数
         /**
          * 空合同查询字段
          */
@@ -339,20 +340,20 @@ export const operateModule = {
             manager_id:[],//经纪人id
         },
         //客户端订单申请相关列表筛选配置项
-        clientRequireConfig: {
-            type: order_apply_type,//订单申请状态
-            created_at,//创建时间
-        },
+        // clientRequireConfig: {
+        //     type: order_apply_type,//订单申请状态
+        //     created_at,//创建时间
+        // },
         //订单申请查询字段
-        clientRequire: {
-          page: 1, //请求页码
-          pageNumber: 20,//单页信息数量
-          type: [],//订单申请类型
-          require_code: '',//订单申请编号
-          user_phone: '',//客户电话
-          user_name: '',//客户姓名
-          created_at: [],//创建时间
-        },
+        // clientRequire: {
+        //   page: 1, //请求页码
+        //   pageNumber: 20,//单页信息数量
+        //   type: [],//订单申请类型
+        //   require_code: '',//订单申请编号
+        //   user_phone: '',//客户电话
+        //   user_name: '',//客户姓名
+        //   created_at: [],//创建时间
+        // },
         // 运营客户列表
         clientList: {
             page: 1, //请求页码

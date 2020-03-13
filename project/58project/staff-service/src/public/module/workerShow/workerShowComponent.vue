@@ -6,258 +6,86 @@
         <template slot="icon" >
             <icon-component
                 :iconUrl="workerForm.icon?`./resource/${workerForm.icon}`:''"
-                :height="140"
-                :width="100"></icon-component>
+                :height="140" :width="100"></icon-component>
         </template>
         
         <template slot="detail" >
             <div class="detail-left">
                 <div class="detail-left-box">
                     <div class="detail-left-line">创建人：{{workerForm.manager_name}}</div>
-                    <div class="detail-left-line">创建时间：{{workerForm.created_at | formDate}}</div>
-                    <div class="detail-left-line">更新时间：{{workerForm.updated_at | formDate}}</div>
-                    <div class="detail-left-line">上次回访时间：{{workerForm.return_at | formDate}}</div>
+                    <div class="detail-left-line">创建时间：{{workerForm.created_at | formatDate}}</div>
+                    <div class="detail-left-line">更新时间：{{workerForm.updated_at | formatDate}}</div>
+                    <div class="detail-left-line">上次回访时间：{{workerForm.return_at | formatDate}}</div>
                 </div>
             </div>
         </template>
         <template slot="statistic">
-            <div class="detail-right">
-                <div class="right-box">
-                    <div class="title">
-                        签约状态
-                        <el-tooltip class="item" effect="dark" content="是否正在平台执行合同" placement="top-start">
-                            <i class="el-icon-info"></i>
-                        </el-tooltip>
-                    </div>
-                    <div class="value" :style="{color: workerForm.sign_status == 1? '#F56C6C': '#67C23A'}">
-                        {{ workerForm.sign_status == 1? '未签约': '已签约'}}
-                    </div>
-                </div>
-                <div class="right-box" >
-                    <div class="title" >
-                        是否启用
-                        <el-tooltip class="item" effect="dark" content="平台是否对外展示该劳动者" placement="top-start">
-                            <i class="el-icon-info"></i>
-                        </el-tooltip>
-                    </div>
-                    <div class="value" :style="{color: workerForm.status == 1? '#67C23A': '#F56C6C'}">
-                        {{ workerForm.status == 1? '启用': '停用'}}
-                    </div>
-                </div>
-            </div>
+            <!-- 服务人员状态 -->
+            <worker-status :workerForm="workerForm"></worker-status>
         </template>
         <template slot="control">
             <div class="control-contains">
                 <make-image-btn 
                     :workerForm="workerForm" 
                     :workerConfigForm="workerConfigForm" 
-                    :isShowImageButton="$route.query.type == 1 || $route.query.type ==  5"></make-image-btn>
+                    :isShowImageButton="$route.query.type == 1 || $route.query.type == 5 || $route.query.type == 6"></make-image-btn>
                 <el-button size="mini" @click="goback">返回</el-button>
             </div>
         </template>
-
-        
-          
-            <card-box-component 
-                :title="'基本信息'">
-                <div slot="contains" class="contains-form">
-                    <detail-form-component>
-                        <detail-form-item-component
-                            :label="'姓名'"
-                            :size="3"
-                            :value="workerForm.name"></detail-form-item-component>
-                        <detail-form-item-component
-                            :label="'电话'"
-                            :size="3"
-                            :value="workerForm.phone"></detail-form-item-component>
-                        <detail-form-item-component
-                            :type="'template'"
-                            :label="'性别'"
-                            :size="3"
-                            :value="workerForm.sex">
-                            <p slot="template">{{workerForm.sex == 1? '男' : '女'}}</p>
-                        </detail-form-item-component>
-                        <detail-form-item-component
-                            :label="'身份证号'"
-                            :size="3"
-                            :value="workerForm.identify"></detail-form-item-component>
-                        <detail-form-item-component
-                            :label="'年龄'"
-                            :size="3"
-                            :value="workerForm.age"></detail-form-item-component>
-                        <detail-form-item-component
-                            :label="'出生日期'"
-                            :size="3"
-                            :value="workerForm.birthday"></detail-form-item-component>
-                        <detail-form-item-component
-                            :type="'template'"
-                            :label="'民族'"
-                            :size="3"
-                            :value="workerForm.nation">
-                            <table-tag-component 
-                                slot="template"
-                                v-if="workerConfigForm.nation" 
-                                :propList="workerConfigForm.nation" 
-                                :tableOriginData="workerForm.nation"></table-tag-component>
-                        </detail-form-item-component>
-                        <detail-form-item-component
-                            :type="'template'"
-                            :label="'学历'"
-                            :size="3"
-                            :value="workerForm.education">
-                            <p slot="template">{{workerForm.education | educationFormat}}</p>
-                        </detail-form-item-component>
-                        <detail-form-item-component
-                            :type="'template'"
-                            :label="'婚姻状况'"
-                            :size="3"
-                            :value="workerForm.is_married">
-                            <p slot="template">{{workerForm.is_married == 1? '是': '否'}}</p>
-                        </detail-form-item-component>
-                        <detail-form-item-component
-                            :type="'template'"
-                            :label="'生肖'"
-                            :size="3"
-                            :value="workerForm.zodiac_sign">
-                            <p slot="template">{{workerForm.zodiac_sign |zodiac_signFormat}}</p>
-                        </detail-form-item-component>
-                        <detail-form-item-component
-                            :label="'身高'"
-                            :size="3"
-                            :value="`${workerForm.body_height}cm`"></detail-form-item-component>
-                        <detail-form-item-component
-                            :label="'体重'"
-                            :size="3"
-                            :value="`${workerForm.body_weight}kg`"></detail-form-item-component>
-                        <detail-form-item-component
-                            :type="'template'"
-                            :label="'证件照'"
-                            :size="1"
-                            :value="workerForm.id_photo">
-                            <multiple-picture-upload
-                                slot="template"
-                                :isEdit="false"
-                                v-model="workerForm.id_photo"
-                                :title="'证件照'"
-                                :height="150"
-                                :width="237"></multiple-picture-upload>
-                        </detail-form-item-component>
-                        <detail-form-item-component
-                            :label="'现住址'"
-                            :size="1"
-                            :value="workerForm.address"></detail-form-item-component>
-                        <detail-form-item-component
-                            :label="'紧急联系人'"
-                            :size="1"
-                            :value="workerForm.urgent_phone"></detail-form-item-component>
-                    </detail-form-component>
-                </div>
-            </card-box-component>
-            <card-box-component 
-                :title="'基本信息'">
-                <div slot="contains" class="contains-form">
-                    <detail-form-component>
-                        <detail-form-item-component
-                            :type="'template'"
-                            :label="'职业类型'"
-                            :size="1"
-                            :value="workerForm.skill">
-                            <table-tag-component 
-                                slot="template"
-                                v-if="workerConfigForm.skill" 
-                                :propList="workerConfigForm.skill" 
-                                :tableOriginData="workerForm.skill"></table-tag-component>
-                        </detail-form-item-component>
-                        <detail-form-item-component
-                            :type="'template'"
-                            :label="'参加培训'"
-                            :size="1"
-                            :value="workerForm.course">
-                            <table-tag-component 
-                                slot="template"
-                                v-if="workerConfigForm.course" 
-                                :propList="workerConfigForm.course" 
-                                :tableOriginData="workerForm.course"></table-tag-component>
-                        </detail-form-item-component>
-                        <detail-form-item-component
-                            :type="'template'"
-                            :label="'技能证书'"
-                            :size="1"
-                            :value="workerForm.paper">
-                            <table-tag-component 
-                                slot="template"
-                                v-if="workerConfigForm.paper_category" 
-                                :propList="workerConfigForm.paper_category" 
-                                :tableOriginData="workerForm.paper"></table-tag-component>
-                        </detail-form-item-component>
-                        <detail-form-item-component
-                            :label="'参加工作年份'"
-                            :size="3"
-                            :value="`${workerForm.worked_at}年`"></detail-form-item-component>
-                        <detail-form-item-component
-                            :type="'template'"
-                            :label="'照片'"
-                            :size="1"
-                            :value="workerForm.photo">
-                            <multiple-picture-upload
-                                slot="template"
-                                :isEdit="false"
-                                v-model="workerForm.photo"
-                                :title="'照片'"
-                                :maxCount="10"
-                                :height="150"
-                                :width="237"></multiple-picture-upload>
-                        </detail-form-item-component>
-                    </detail-form-component>
-                </div>
-            </card-box-component>
-        
+        <div slot="form">
+            <!-- 基本信息 -->
+            <worker-base-component :workerForm="workerForm" :workerConfigForm="workerConfigForm"></worker-base-component>
+            <!-- 技能信息 -->
+            <worker-skill-component :workerForm="workerForm" :workerConfigForm="workerConfigForm"></worker-skill-component>
+            <!-- 服务人员日志 -->
             <log-component :title="'日志'" :isEdit="false" :logList="workerForm.log"></log-component>
-
+            <!-- 回访信息 -->
             <return-msg-component 
                 :isEdit="this.$route.query.type == 2? true :false" 
                 :return_msg="workerForm.return_log" 
                 @updateOrderConfig="getWorkerForm"></return-msg-component>
+        </div>
             
-        
-            <make-image-btn 
-                :workerForm="workerForm" 
-                :workerConfigForm="workerConfigForm" 
-                :isShowImageButton="$route.query.type == 1 || $route.query.type ==  5"></make-image-btn>
-            <el-button size="mini" @click="goback">返回</el-button>
+        <div class="control">
+            <div>
+                <make-image-btn 
+                    :workerForm="workerForm" 
+                    :workerConfigForm="workerConfigForm" 
+                    :isShowImageButton="$route.query.type == 1 || $route.query.type ==  5"></make-image-btn>
+                <el-button size="mini" @click="goback">返回</el-button>
+            </div>
+        </div>
+            
     </page-edit-component>
 </template>
 
 <script>
 
 import {
-    operateService, 
     $utils
 } from '@common/index.js'
 
 
-import makeImageBtn from '@/pages/operateWorker/workerList/workerTableComponent/control/makeImageBtn.vue'
-import workerPictureComponent from './workerShowComponent/workerPictureComponent.vue'
 
-import {operateWorkerService} from '@/service/operateWorker'
 
-import {zodiac_signList,educationList} from '@/pages/operateWorker/workerList/IworkerList.ts'
+import {publicModuleService} from '@/service/publicModule'
+
 import returnMsgComponent from '@/pages/operateWorker/workerItem/returnMsgComponent.vue'
+import makeImageBtn from './workerShowComponent/makeImageBtn.vue'
+import workerStatus from './workerShowComponent/workerStatus.vue'
+import workerBaseComponent from './workerShowComponent/workerBaseComponent.vue'
+import workerSkillComponent from './workerShowComponent/workerSkillComponent.vue'
 export default {
     components: {
-        workerPictureComponent,//生成服务人员名片组件
         returnMsgComponent,
         makeImageBtn,
+        workerStatus,
+        workerBaseComponent,
+        workerSkillComponent,
     },
     data() {
-
         return {
             is_loading: false,//
-            makeImageDialogVisible:false,//是否打开创建图片弹窗
-            editText: '',//编辑按钮文案
-            submitText: '',//提交按钮文案
-            isShowImageButton: false,//是否显示生成名片按钮
-            timeDefaultShow: '',//当前日期
             //员工信息表单
             workerForm: {
                 /************逻辑字段******************/
@@ -300,42 +128,26 @@ export default {
                 return_log:[],//回访信息
             },
             workerConfigForm: {},
-            datePickerOption: {
-                disabledDate(time) {
-                    return time.getTime() > Date.now();//如果没有后面的-8.64e6就是不可以选择今天的
-                }
-            },
-            isShowBlack: false,//头像阴影
-            //图片上传header
-            uploadHeader:{
-                accessToken: this.$store.state.loginModule.token.access_token
-            }
         }
     },
     filters: {
-        // nationFormat(target){
-        //     return this.workerConfigForm.nation.find(item => item.id == target ).name
-        // },
-        educationFormat(target){
-            return educationList.find(item => item.id == target ).name
-        },
-        zodiac_signFormat(target){
-            return zodiac_signList.find(item => item.id == target ).name
-        },
-        formDate(timestamp){
+        formatDate(timestamp){
+            if(timestamp == 0){
+                return '-'
+            }
             return $utils.formatDate(new Date(timestamp), 'yyyy-MM-dd')
         }
     },
     methods: {
-        //头像上传成功
-        onIconPictureSuccess(res){
-            this.workerForm.icon = res.path
-        },
         /**
          * 返回
          */
         goback(){
             let fromPage = this.$route.query.type
+
+
+
+
             if(fromPage == 1){
                 this.$router.push("/worker/workerList")
             } else if (fromPage == 2){
@@ -352,52 +164,15 @@ export default {
                         order_id: this.$route.query.order_id
                     }
                 })
+            } else if (fromPage == 7){
+                this.$router.push({
+                    path: "/sale/salePublicOrderConfig",
+                    query: {
+                        order_type: 3,
+                        order_id: this.$route.query.order_id
+                    }
+                })
             } 
-            // else if (fromPage == 4){
-            //     this.$router.push("/worker/newWorkerList")
-            // }
-        },
-        /**
-         * 生成图片
-         */
-        makeImage(){
-            this.makeImageDialogVisible = true
-        },
-        /**
-         * 控制编辑按钮文案
-         */
-        setEditButtonText(type){
-            if(type == 0){
-                return '立即创建'
-            } else if(type == 1 || type == 2 || type == 3){
-                return '确认编辑'
-            } else if(type == 4){
-                return '保存'
-            }
-        },
-        /**
-         * 控制提交按钮文案
-         */
-        setSubmitButtonText(type){
-            if(type == 2){
-                return '导出回访'
-            } else if(type == 3){
-                return '恢复'
-            } else if(type == 4){
-                return '保存并提交'
-            } else {
-                return ''
-            }
-        },
-        /**
-         * 控制生成图片按钮是否显示
-         */
-        setIsShowImageButton(type){
-            if(type == 1){
-                return true
-            } else {
-                return false
-            }
         },
         /**
          * 获取表单数据
@@ -406,7 +181,7 @@ export default {
             try{
                 this.is_loading = true
 
-                await operateWorkerService.getWorkerFormConfig('edit').then((data) =>{
+                await publicModuleService.getPublicWorkerConfigForm('edit').then((data) =>{
                     if(data.code == '0'){
                         this.workerConfigForm = data.data
                     }
@@ -418,10 +193,10 @@ export default {
                 })
                 //如果是编辑则请求接口
                 if(this.$route.query.type != 0){
-                    await operateWorkerService.getWorker(this.$route.query.id,this.workerConfigForm).then(data =>{
+                    await publicModuleService.getPublicWorkerShow(this.$route.query.id,this.workerConfigForm).then(data =>{
                         let responseData = data
-                        responseData.skill = operateWorkerService.sendCascanderData(responseData.skill)
-                        responseData.course = operateWorkerService.sendCascanderData(responseData.course)
+                        responseData.skill = publicModuleService.sendCascanderData(responseData.skill)
+                        responseData.course = publicModuleService.sendCascanderData(responseData.course)
                         this.workerForm = data
                     }).catch(error =>{
                         this.$message({
@@ -444,18 +219,7 @@ export default {
         }
     },
     async mounted(){
-        let _this = this;
-        // 设定日期选择器为当前日期
-        this.timeDefaultShow = Date.parse(new Date());
-
-        //按钮显示隐藏，文案
-        this.editText = this.setEditButtonText(this.$route.query.type)
-        this.submitText  = this.setSubmitButtonText(this.$route.query.type)
-        this.isShowImageButton = this.setIsShowImageButton(this.$route.query.type)
-        
-        
         this.getWorkerForm()
-
     }
 }
 </script>
@@ -470,29 +234,7 @@ export default {
     .contains-form{
         display: flex;
         flex-wrap:wrap;
-    }
-    .form-item-3-size{
-        width: 33%;
-    }
-    .form-item-23-size{
-        width: 66%;
-    }
-    .form-item-1-size{
-        width: 100%;
-    }
-    .form-item-2-size{
-        width: 50%;
-    }
-    .form-item-size{
-        max-width: 900px;
-    }
-    & /deep/ .el-form-item__content{
-
-    }  
-
-    & /deep/ .el-form-item__content{
-
-    }      
+    }     
 }
 
 .detail-left{
@@ -526,16 +268,8 @@ export default {
         }
     }
 }
-// 日志
-.log{
-    padding: 24px;
-    width: 300px;
-    margin-left: 24px;
-    background: #fff;
-    & /deep/ .el-step__title{
-        font-size: 12px;
-        color: #333;
-    }
+.control{
+    justify-content: space-between;
+    padding: 20px 20px 100px 20px;
 }
-
 </style>
