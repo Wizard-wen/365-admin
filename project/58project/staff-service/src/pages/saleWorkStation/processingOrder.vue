@@ -68,7 +68,7 @@ export default {
                 path: '/sale/saleOrderConfig',
                 query: {
                     order_id: item.id,
-                    order_type: 2,
+                    module: 'sale',
                 }
             })
         },

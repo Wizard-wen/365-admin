@@ -46,7 +46,7 @@
                 @updateOrderConfig="getWorkerForm"></return-msg-component>
         </div>
             
-        <div class="control">
+        <!-- <div class="control">
             <div>
                 <make-image-btn 
                     :workerForm="workerForm" 
@@ -54,7 +54,7 @@
                     :isShowImageButton="$route.query.type == 1 || $route.query.type ==  5"></make-image-btn>
                 <el-button size="mini" @click="goback">返回</el-button>
             </div>
-        </div>
+        </div> -->
             
     </page-edit-component>
 </template>
@@ -154,6 +154,8 @@ export default {
                 this.$router.push("/worker/returnWorkerList")
             } else if (fromPage == 3){
                 this.$router.push("/worker/errorWorkerList")
+            } else if (fromPage == 4){
+                this.$router.push("/operate/operateOrderConfig")
             } else if (fromPage == 5){
                 this.$router.push("/sale/saleWorkerList")
             } else if (fromPage == 6){
@@ -161,6 +163,7 @@ export default {
                     path: "/sale/saleOrderConfig",
                     query: {
                         order_type: 2,
+                        module: '',
                         order_id: this.$route.query.order_id
                     }
                 })
@@ -169,6 +172,7 @@ export default {
                     path: "/sale/salePublicOrderConfig",
                     query: {
                         order_type: 3,
+                        module: 'public',
                         order_id: this.$route.query.order_id
                     }
                 })

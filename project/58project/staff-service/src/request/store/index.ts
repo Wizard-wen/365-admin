@@ -48,8 +48,10 @@ export const apiRequestStore:api_store = {
     /**
      * 门店工作台
      */
-    saleWorkBench(id){
-        return axios.get(`./admin/store/workBench?id=${id}`)
+    saleWorkBench(getSaleWorkstationForm){
+        return axios.get(`./admin/store/workBench?
+            id=${getSaleWorkstationForm.id}&
+            get_for=${getSaleWorkstationForm.get_for}`)
     }
 }
 

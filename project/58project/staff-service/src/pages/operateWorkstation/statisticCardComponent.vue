@@ -1,24 +1,33 @@
 <template>
     <div class="card" >
-        <div class="title">我维护的客户</div>
-        <div class="number">{{`300`}}</div>
+        <div class="title">{{title}}</div>
+        <div class="number">{{statisticItem.total}}</div>
         <div class="statistic">
             <div class="left">上月&nbsp;&nbsp;
-                <span>{{`250`}}</span>
+                <span>{{statisticItem.last_month}}</span>
             </div>
             <div class="right">环比&nbsp;&nbsp;
-                <span class="">{{`20%`}}</span>
+                <span class="">{{`${statisticItem.rate}%`}}</span>
             </div>
         </div>
-        <div class="message">本月新增客户&nbsp;&nbsp;
-            <span>{{`300`}}</span>
+        <div class="message">本月新增&nbsp;&nbsp;
+            <span>{{statisticItem.this_month}}</span>
         </div>
     </div>
 </template>
 
 <script>
 export default {
-
+    props: {
+        title: {
+            type: String,
+            default: ''
+        },
+        statisticItem: {
+            type: Object,
+            default(){return {}}
+        }
+    }
 }
 </script>
 

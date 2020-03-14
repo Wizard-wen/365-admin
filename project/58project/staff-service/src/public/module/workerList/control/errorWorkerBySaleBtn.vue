@@ -13,7 +13,7 @@
 </template>
 
 <script>
-import errorWorkerDialog from './errorBySaleBtn/errorWorkerDialog.vue'
+import errorWorkerDialog from './errorWorkerBySaleBtn/errorWorkerDialog.vue'
 export default {
     components: {
         errorWorkerDialog

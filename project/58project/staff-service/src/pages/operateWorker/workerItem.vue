@@ -21,30 +21,6 @@
             </div>
         </template>
         <template slot="statistic">
-            <!-- <div class="detail-right">
-                <div class="right-box">
-                    <div class="title">
-                        签约状态
-                        <el-tooltip class="item" effect="dark" content="是否正在平台执行合同" placement="top-start">
-                            <i class="el-icon-info"></i>
-                        </el-tooltip>
-                    </div>
-                    <div class="value" :style="{color: workerForm.sign_status == 1? '#F56C6C': '#67C23A'}">
-                        {{ workerForm.sign_status == 1? '未签约': '已签约'}}
-                    </div>
-                </div>
-                <div class="right-box" >
-                    <div class="title" >
-                        是否启用
-                        <el-tooltip class="item" effect="dark" content="平台是否对外展示该劳动者" placement="top-start">
-                            <i class="el-icon-info"></i>
-                        </el-tooltip>
-                    </div>
-                    <div class="value" :style="{color: workerForm.status == 1? '#67C23A': '#F56C6C'}">
-                        {{ workerForm.status == 1? '启用': '停用'}}
-                    </div>
-                </div>
-            </div> -->
             <worker-status
                 v-if="$route.query.type !=0"
                 :workerForm="workerForm"></worker-status>
@@ -63,8 +39,7 @@
                     {{$route.query.type == 3 ? '恢复':'保存并提交'}}
                 </el-button>
                 
-                <back-worker-list-btn ref="back"></back-worker-list-btn>
-
+                <el-button size="mini" @click="goback">返回</el-button>
             </div>
         </template>
 
@@ -327,20 +302,19 @@ import {operateWorkerService} from '@/service/operateWorker'
 import {zodiac_signList} from '@/public/module/workerList/IworkerList.ts'
 import {educationList} from '@/public/module/workerList/IworkerList.ts'
 
-//上传证书组件
-import paperComponent from './workerItem/paperComponent.vue'
-import returnMsgComponent from './workerItem/returnMsgComponent.vue'
-import backWorkerListBtn from '@/pages/operateWorker/workerItem/control/backWorkerListBtn.vue'
-// import recoverErrorWorkerBtn from '@/public/module/workerList/control/recoverErrorWorkerBtn.vue'
-// import submitNewWorkerBtn from '@/public/module/workerList/control/submitNewWorkerBtn.vue'
+import {
+    paperComponent,
+    returnMsgComponent,
+} from './workerItem/index.js'
+
+
 import workerStatus from '@/public/module/workerShow/workerShowComponent/workerStatus.vue'
+
+
 export default {
     components: {
         paperComponent,//上传证书照片证书组件
         returnMsgComponent,
-        backWorkerListBtn,
-        // recoverErrorWorkerBtn,
-        // submitNewWorkerBtn,
         workerStatus,
     },
     data() {
@@ -698,7 +672,22 @@ export default {
             }
             this.is_loading = false
             
-        }
+        },
+        /**
+         * 返回
+         */
+        goback(){
+            let fromPage = this.$route.query.type
+            if(fromPage == 0 || fromPage == 1){
+                this.$router.push("/worker/workerList")
+            } else if (fromPage == 2){
+                this.$router.push("/worker/returnWorkerList")
+            } else if (fromPage == 3){
+                this.$router.push("/worker/errorWorkerList")
+            } else if (fromPage == 4){
+                this.$router.push("/worker/newWorkerList")
+            }
+        },
     },
     async mounted(){
         let _this = this;

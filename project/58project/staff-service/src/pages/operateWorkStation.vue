@@ -1,16 +1,20 @@
 <template>
     <div class="workstation" v-loading="is_loading">
         <div class="performance">
-            <number-card-component></number-card-component>
-            <number-card-component></number-card-component>
-            <number-card-component></number-card-component>
-            <number-card-component></number-card-component>
+            <statistic-card-component
+                :title="'回访服务人员'" :statisticItem="operateWorkerStation.return_staff_count"></statistic-card-component>
+            <statistic-card-component
+                :title="'审核订单申请'" :statisticItem="operateWorkerStation.pass_order_count"></statistic-card-component>
+            <statistic-card-component
+                :title="'审核新服务人员'" :statisticItem="operateWorkerStation.pass_staff_count"></statistic-card-component>
+            <statistic-card-component
+                :title="'回访客户'" :statisticItem="operateWorkerStation.return_client_count"></statistic-card-component>
         </div>
         <div class="down-board">
             <div class="left-board">
-                <user-order-application></user-order-application>
-                <store-order-application></store-order-application>
-                <staff-application></staff-application>
+                <user-order-application :user_order_application="operateWorkerStation.user_order_application"></user-order-application>
+                <store-order-application :store_order_application="operateWorkerStation.store_order_application"></store-order-application>
+                <staff-application :staff_application="operateWorkerStation.staff_application"></staff-application>
             </div>
             <div class="right-board">
                 <card-box-component :title="'快速操作'" class="operate-card-box">
@@ -49,29 +53,21 @@
     </div>
 </template>
 <script>
-import {operateService} from '@common/index.js'
+import {operateWorkerStationService} from '@/service/operateWorkerstation'
 
 import {
     userOrderApplication,
     storeOrderApplication,
     staffApplication,
-    numberCardComponent,
+    statisticCardComponent,
 } from './operateWorkstation/index.js'
 
-// import {
-//     cardBoxComponent,
-// } from '@/pages/components/index.js'
 export default {
     components: {
         userOrderApplication,
         storeOrderApplication,
         staffApplication,
-        numberCardComponent,
-    },
-    data(){
-        return {
-            is_loading: false,
-        }
+        statisticCardComponent,
     },
     computed: {
         /**
@@ -80,11 +76,19 @@ export default {
         presentUser(){
             return this.$store.state.loginModule.user
         },
-        /**
-         * 工作台数据
-         */
-        saleWorkstation(){
-            return this.$store.state.operateModule.operateWorkstation
+    },
+    data(){
+        return {
+            is_loading: false,
+            operateWorkerStation :{
+                return_staff_count:{},//回访劳动者数量
+                pass_order_count:{},//通过订单数量
+                pass_staff_count:{},//通过劳动者数量
+                return_client_count:{},//回访客户数量
+                user_order_application:[], //客户订单申请
+                staff_application:[], //服务人员申请
+                store_order_application:[],//门店订单申请
+            }
         }
     },
     methods: {
@@ -150,10 +154,15 @@ export default {
         async getData(){
             try{
                 this.is_loading = true
-                await operateService.getOperateWorkBench(this.presentUser.id).then(data =>{
+                let getOperateWorkerStationForm = {
+                    id: this.presentUser.id,
+                    get_for:"personal"
+                }
+                await operateWorkerStationService.getOperateWorkerStation(getOperateWorkerStationForm).then(data =>{
                     if(data.code == '0'){
-                        //设置工作台数据
-                        this.$store.commit('configOperateWorkstation', data.data)
+                        this.operateWorkerStation = {
+                            ...data.data
+                        }
                         this.is_loading = false
                     }
                 }).catch(error =>{

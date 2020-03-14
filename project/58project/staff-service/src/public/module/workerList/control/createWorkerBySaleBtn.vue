@@ -12,7 +12,7 @@
 </template>
 
 <script>
-import  createWorkerDialog from './createBySaleBtn/createWorkerDialog.vue'
+import  createWorkerDialog from './createWorkerBySaleBtn/createWorkerDialog.vue'
 export default {
     components: {
         createWorkerDialog,

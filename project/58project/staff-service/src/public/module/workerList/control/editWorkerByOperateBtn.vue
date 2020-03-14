@@ -36,13 +36,29 @@ export default {
          */
         setEditType(){
             if(this.workerListType == 'total'){
-                return {id: 1,type: 'total'}
+                return {
+                    id: 1,
+                    type: 'total',
+                    from: 'workerList'
+                }
             } else if(this.workerListType == 'return'){
-                return {id: 2,type: 'return'}
+                return {
+                    id: 2,
+                    type: 'return',
+                    from: 'returnWorkerList'
+                }
             } else if(this.workerListType == 'warning'){
-                return {id: 3,type: 'warning'}
+                return {
+                    id: 3,
+                    type: 'warning',
+                    from: 'errorWorkerList'
+                }
             } else if(this.workerListType == 'apply'){
-                return {id: 4,type: 'apply'}
+                return {
+                    id: 4,
+                    type: 'apply',
+                    from: 'newWorkerList'
+                }
             }
         },
         editWorker(){

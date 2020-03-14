@@ -38,7 +38,7 @@ export default {
                 path: this.setOrderType().path,
                 query: {
                     order_id: this.currentOrder.id,
-                    order_type: this.setOrderType().id,//3代表来源于公海订单
+                    // order_type: this.setOrderType().id,//3代表来源于公海订单
                     module: this.orderModuleType,
                     currentPage: this.currentPage,
                 }

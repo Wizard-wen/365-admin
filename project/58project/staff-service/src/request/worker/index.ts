@@ -3,8 +3,8 @@ import {api_worker} from './api_worker'
 import axios from 'axios'
 
 export const apiRequestWorker:api_worker =  {
-    getOperateWorkBench(id) {
-        return axios.get(`./admin/staff/workBench?id=${id}`)
+    getOperateWorkBench(getOperateWorkerStationForm) {
+        return axios.get(`./admin/staff/workBench?id=${getOperateWorkerStationForm.id}&get_for=${getOperateWorkerStationForm.get_for}`)
     },
     /**
      * 获取员工列表

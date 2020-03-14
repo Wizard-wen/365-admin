@@ -85,7 +85,7 @@ export default {
                 path: '/sale/publicOrderConfig',
                 query: {
                     order_id: item.id,
-                    order_type: 3,
+                    module: 'public',
                 }
             })
         }

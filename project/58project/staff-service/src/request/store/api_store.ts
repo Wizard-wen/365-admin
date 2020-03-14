@@ -1,5 +1,7 @@
 
-
+import {
+    getSaleWorkstationForm,
+} from '@/pages/saleWorkStation/saleWorkstation'
 
 
 export interface api_store {
@@ -14,6 +16,6 @@ export interface api_store {
     // 解绑门店员工
     unbind:{(paramObj:object):Promise<any>},
     // 门店工作台
-    saleWorkBench:{(id:string):Promise<any>},
+    saleWorkBench:{(getSaleWorkstationForm:getSaleWorkstationForm):Promise<any>},
     // storeData:{():Promise<any>},
 }

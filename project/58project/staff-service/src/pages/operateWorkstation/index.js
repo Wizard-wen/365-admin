@@ -7,10 +7,10 @@ import storeOrderApplication from './storeOrderApplication.vue'
 import staffApplication from './staffApplication.vue'
 
 //
-import numberCardComponent from './numberCardComponent.vue'
+import statisticCardComponent from './statisticCardComponent.vue'
 export {
     userOrderApplication,
     storeOrderApplication,
     staffApplication,
-    numberCardComponent,
+    statisticCardComponent,
 }

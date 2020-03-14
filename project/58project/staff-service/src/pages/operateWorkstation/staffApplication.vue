@@ -35,7 +35,10 @@
 import {$utils} from '@common/index.js'
 export default {
     props: {
-
+        staff_application: {
+            type: Array,
+            default(){return []}
+        }
     },
     filters: {
         timeFomatter(value){ 
@@ -43,16 +46,6 @@ export default {
                 return '-'
             }
             return $utils.formatDate(new Date(value), 'yyyy-MM-dd')
-        }
-    },
-    computed: {
-        staff_application(){
-            return this.$store.state.operateModule.operateWorkstation.staff_application
-        }
-    },
-    data(){
-        return {
-
         }
     },
     methods: {

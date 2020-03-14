@@ -10,8 +10,13 @@ import {
     checkWorkerPhoneForm
 }from '@/public/module/workerList/IworkerList'
 
+
+import {
+    getOperateWorkerStationForm
+} from '@/pages/operateWorkstation/operateWorkstation'
+
 export interface api_worker{
-    getOperateWorkBench: {(id:string): Promise<any>},
+    getOperateWorkBench: {(getOperateWorkerStationForm:getOperateWorkerStationForm): Promise<any>},
     getStaffList:{(queryObject:searchWorkerForm):Promise<any>},//获取服务人员列表
     getStaff:{(id:string):Promise<any>},//获取服务人员
     editStaff:{(queryObject:workerItem):Promise<any>},//编辑服务人员

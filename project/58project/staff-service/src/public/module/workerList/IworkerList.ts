@@ -85,21 +85,25 @@ export interface workerList extends workerItem{
 }
 //由列表进入服务人员编辑页时的状态
 export const goWorkerItemType = [
-    {type: 'create',fromPage: 'workerList',des: '运营人员创建', id: 0},
-    {type: 'edit',fromPage: 'workerList',des: '运营人员编辑', id: 1},
-    {type: 'return',fromPage: 'returnWorkerList',des: '运营人员回访时编辑', id: 2},
-    {type: 'warning',fromPage: 'errorWorkerList',des: '运营人员处理异常时编辑', id: 3},
-    {type: 'apply',fromPage: 'newWorkerList',des: '运营人员处理新建申请', id: 4},
+    {type: 'create',fromPage: '/worker/workerList',des: '运营人员创建', id: 0},
+    {type: 'edit',fromPage: '/worker/workerList',des: '运营人员编辑', id: 1},
+    {type: 'return',fromPage: '/worker/returnWorkerList',des: '运营人员回访时编辑', id: 2},
+    {type: 'warning',fromPage: '/worker/errorWorkerList',des: '运营人员处理异常时编辑', id: 3},
+    {type: 'apply',fromPage: '/worker/newWorkerList',des: '运营人员处理新建申请', id: 4},
 ]
 
 //由列表进入服务人员详情页时的状态
 export const goWorkerShowItemType = [
-    {fromPage: 'workerList',from_des: '服务人员运营',id: 1,},
-    {fromPage: 'returnWorkerList',from_des: '回访服务人员运营',id: 2,},
-    {fromPage: 'errorWorkerList',from_des: '异常服务人员运营',id: 3,},
-    {fromPage: 'saleWorkerList',from_des: '门店服务人员列表',id: 4,},
-    {fromPage: 'operateOrderConfig',from_des: '运营订单匹配服务人员',id: 5,},
-    {fromPage: 'saleOrderConfig',from_des: '门店订单匹配服务人员',id: 6,},
+    {fromPage: '/worker/workerList',from_des: '服务人员运营',id: 1,},
+    {fromPage: '/worker/returnWorkerList',from_des: '回访服务人员运营',id: 2,},
+    {fromPage: '/worker/errorWorkerList',from_des: '异常服务人员运营',id: 3,},
+
+    {fromPage: '/sale/saleWorkerList',from_des: '门店服务人员列表',id: 4,},
+
+    {fromPage: '/operate/operateOrderConfig',from_des: '运营订单匹配服务人员',id: 5,},
+
+    {fromPage: '/sale/saleOrderConfig',from_des: '门店订单匹配服务人员',id: 6,},
+    {fromPage: '/sale/salePublicOrderConfig',from_des: '门店公海订单匹配服务人员',id: 7,},
 ]
 
 
