@@ -60,7 +60,7 @@ import {
     storeOrderApplication,
     staffApplication,
     statisticCardComponent,
-} from './operateWorkstation/index.js'
+} from './operateWorkStation/index.js'
 
 export default {
     components: {

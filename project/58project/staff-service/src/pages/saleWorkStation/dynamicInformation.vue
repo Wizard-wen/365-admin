@@ -47,13 +47,11 @@ import {
     $utils,
 } from '@common/index.js'
 export default {
-    data(){
-        return {
-
-        }
-    },
     props: {
-
+        dynamic_information: {
+            type: Array,
+            default(){return []}
+        }
     },
     filters: {
         timeFomatter(value){ 
@@ -61,11 +59,6 @@ export default {
                 return '-'
             }
             return $utils.formatDate(new Date(value), 'yyyy-MM-dd')
-        }
-    },
-    computed: {
-        dynamic_information(){
-            return this.$store.state.saleModule.saleWorkstation.dynamic_information
         }
     },
     methods: {

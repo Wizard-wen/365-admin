@@ -1,15 +1,18 @@
 <template>
     <div class="workstation" v-loading="is_loading">
         <div class="performance">
-            <number-card-component></number-card-component>
-            <number-card-component></number-card-component>
-            <number-card-component></number-card-component>
-            <number-card-component></number-card-component>
+            <statistic-card-component v-hide
+                :title="'订单转化率'" :statisticItem="saleWorkStation.order_transform_rate"></statistic-card-component>
+            <statistic-card-component v-hide
+                :title="'订单流水'" :statisticItem="saleWorkStation.sale_amount"></statistic-card-component>
+            <statistic-card-component v-hide
+                :title="'销售额'" :statisticItem="saleWorkStation.sale_service_amount"></statistic-card-component>
+            <statistic-card-component v-hide></statistic-card-component>
         </div>
         <div class="down-board">
             <div class="left-board">
-                <processing-order></processing-order>
-                <dynamic-information></dynamic-information>
+                <processing-order :processing_order="saleWorkStation.processing_order"></processing-order>
+                <dynamic-information  :dynamic_information="saleWorkStation.dynamic_information"></dynamic-information>
             </div>
             <div class="right-board">
                 <card-box-component :title="'快速操作'" class="operate-card-box">
@@ -49,10 +52,12 @@ import {
     applyOrderDialog,
     processingOrder,
     dynamicInformation,
-    numberCardComponent,
 } from './saleWorkStation/index.js'
 
-import {saleService} from '@common/index.js'
+import {
+    statisticCardComponent,
+} from './operateWorkStation/index'
+import {saleWorkstationService} from '@/service/saleWorkStation'
 
 
 export default {
@@ -60,13 +65,20 @@ export default {
         return {
             is_loading: false,
             applyOrderDialogVisible: false,//订单申请弹窗显示隐藏
+            saleWorkStation: {
+                // order_transform_rate: {},//订单转化率
+                // sale_amount: {},//流水
+                // sale_service_amount: {},//销售额
+                dynamic_information: [],//公海订单
+                processing_order: [],//待处理订单
+            },
         }
     },
     components: {
         applyOrderDialog,
         processingOrder,
         dynamicInformation,
-        numberCardComponent,
+        statisticCardComponent,
     },
     computed: {
         /**
@@ -75,12 +87,6 @@ export default {
         presentUser(){
             return this.$store.state.loginModule.user
         },
-        /**
-         * 工作台数据
-         */
-        saleWorkstation(){
-            return this.$store.state.saleModule.saleWorkstation
-        }
     },
     methods: {
         //打开订单申请弹窗
@@ -141,10 +147,18 @@ export default {
     async mounted(){
         try{
             this.is_loading = true
-            await saleService.saleWorkBench(this.presentUser.id).then(data =>{
+
+            let getSaleWorkerStationForm = {
+                id: this.presentUser.id,
+                get_for:this.presentUser.is_store_manager == 2? "store" : "personal"
+            }
+
+            await saleWorkstationService.getSaleWorkBench(getSaleWorkerStationForm).then(data =>{
                 if(data.code == '0'){
                     //设置工作台数据
-                    this.$store.commit('configSaleWorkstation', data.data)
+                    this.saleWorkStation = {
+                        ...data.data,
+                    }
                     this.is_loading = false
                 }
             }).catch(error =>{

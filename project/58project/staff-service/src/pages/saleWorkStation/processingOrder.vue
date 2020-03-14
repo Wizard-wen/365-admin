@@ -39,7 +39,10 @@ import {
 } from '@common/index.js'
 export default {
     props: {
-
+        processing_order: {
+            type: Array,
+            default(){return []}
+        }
     },
     filters: {
         timeFomatter(value){ 
@@ -47,16 +50,6 @@ export default {
                 return '-'
             }
             return $utils.formatDate(new Date(value), 'yyyy-MM-dd')
-        }
-    },
-    computed: {
-        processing_order(){
-            return this.$store.state.saleModule.saleWorkstation.processing_order
-        }
-    },
-    data(){
-        return {
-
         }
     },
     methods: {

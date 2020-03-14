@@ -10,12 +10,9 @@ import processingOrder from './processingOrder.vue'
 //动态信息
 import dynamicInformation from './dynamicInformation.vue'
 
-//
-import numberCardComponent from './numberCardComponent.vue'
 
 export {
     applyOrderDialog,
     processingOrder,
     dynamicInformation,
-    numberCardComponent,
 }

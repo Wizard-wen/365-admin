@@ -13,7 +13,7 @@ import {
 
 import {
     getOperateWorkerStationForm
-} from '@/pages/operateWorkstation/operateWorkstation'
+} from '@/pages/operateWorkStation/operateWorkstation'
 
 export interface api_worker{
     getOperateWorkBench: {(getOperateWorkerStationForm:getOperateWorkerStationForm): Promise<any>},

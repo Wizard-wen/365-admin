@@ -1,7 +1,7 @@
 
 import {
     getSaleWorkstationForm,
-} from '@/pages/saleWorkStation/saleWorkstation'
+} from '@/pages/saleWorkStation/saleWorkStation'
 
 
 export interface api_store {

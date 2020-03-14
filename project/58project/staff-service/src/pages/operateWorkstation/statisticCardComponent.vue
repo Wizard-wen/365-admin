@@ -25,7 +25,12 @@ export default {
         },
         statisticItem: {
             type: Object,
-            default(){return {}}
+            default(){return {
+                total: 0,
+                last_month: 0,
+                rate: 0,
+                this_month: 0,
+            }}
         }
     }
 }
