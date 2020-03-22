@@ -34,7 +34,13 @@
                 <div class="detail-item-box line-list">
                     <div class="detail-item">
                         <p class="detail-title">工种： </p>
-                        <p class="detail-type-text">{{orderBaseDetail.work_type}}</p>
+                        <p class="detail-type-text">
+                            <!-- {{orderBaseDetail.work_type}} -->
+                            <table-tag-component 
+                                :propList="workerConfigForm.skill" 
+                                v-if="workerConfigForm.skill" 
+                                :tableOriginData="orderBaseDetail.work_type"></table-tag-component>
+                        </p>
                         <p  
                             v-if="isChangeImageShow"
                             @click="openChangeOrderBaseFieldDialog('work_type','工种')" class="change">
@@ -90,14 +96,17 @@
         </template>
         <!-- 生成订单名片组件 -->
         <template>
+            <!-- height: 420px;
+    width: 368px; -->
             <make-image-component
-                :height="500"
-                :width="460"
+                :height="420"
+                :width="368"
                 :makeImageDialogVisible="makeImageDialogVisible"
                 v-if="makeImageDialogVisible"
                 @closeMakeImageDialog="makeImageDialogVisible = false">
                 <template slot="pictureContains">
                     <order-picture-component
+                        :workerConfigForm="workerConfigForm"
                         :pictureForm="orderBaseDetail"></order-picture-component>
                 </template>
             </make-image-component>
@@ -119,6 +128,7 @@ import {
     changeOrderBaseFieldDialog ,
     orderPictureComponent,
 }from './publicOrderBaseComponent/index.js'
+import {publicModuleService} from '@/service/publicModule'
 export default {
     components: {
         changeOrderBaseFieldDialog,
@@ -136,6 +146,7 @@ export default {
                 fieldName: '',
                 value: '',
             },
+            workerConfigForm: {}
         }
     },
     props: {
@@ -227,6 +238,11 @@ export default {
         makeOrderImage(){   
             this.makeImageDialogVisible = true
         },
+    },
+    async mounted(){
+        await publicModuleService.getPublicWorkerConfigForm('edit').then(data =>{
+            this.workerConfigForm = data.data
+        })
     }
 }
 </script>

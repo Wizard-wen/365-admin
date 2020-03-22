@@ -1,12 +1,14 @@
 
 
-import {apiRequestOrder, apiRequestCommon} from '@/request/index'
+import {apiRequestOrder, apiRequestCommon, apiRequestFormConfig} from '@/request/index'
 import {
     editClientRequireForm,
     editStoreApplicationForm,
     editOrderConfigBaseForm,
     changeFieldForm,
 } from '@/public/module/orderPublic/IorderPublic'
+
+import {$utils} from '@/utils/index'
 export const publicOrderPublicService = {
     /**
      * 编辑客户需求订单字段
@@ -28,6 +30,19 @@ export const publicOrderPublicService = {
      */
     editOrderConfigBaseField(editOrderConfigBaseForm:editOrderConfigBaseForm){
         return apiRequestOrder.editOrder(editOrderConfigBaseForm)
+    },
+    /**
+     * 获得
+     */
+    async getOrderConfigBaseField(originSkill:number){
+        let configData = {
+            skill: [],
+        }
+        await apiRequestFormConfig.getWorkerFormConfig('edit').then(data => {
+            configData = data.data
+        })
+
+        return Promise.resolve($utils.setTreeArray(originSkill,configData.skill))
     },
     /**
      * 获取门店员工
@@ -58,4 +73,8 @@ export const publicOrderPublicService = {
             return Promise.resolve()
         }
     },
+    assignOrder(operateAssignOrderForm:any){
+        return apiRequestOrder.assignOrder(operateAssignOrderForm)
+    }
 }
+

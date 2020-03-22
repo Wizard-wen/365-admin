@@ -1,190 +1,125 @@
 <template>
-    <div class="store" v-loading="isLoading">
+    <div class="table-box" v-loading="is_loading">
+        <query-component
+            :queryForm="workerConfigForm"
+            @changeQueryedForm="changeQueryedForm"></query-component>
         <store-table-component
-            :staffTable="storeList"
-            :controlScopeLength="100">
-
-            <template slot="searchList">
-                <div class="left-search-module">
-                    <query-component @updateTable="updateTable"></query-component>
-                </div>
-            </template>
-
-            <template slot="searchForm">
-                <query-tag-component 
-                    :queryFormConfig="queryFormConfig"
-                    :queryedList="queryedList"
-                    @updateTable="updateTagTable"></query-tag-component>
-                <el-button type="primary" @click="openCreateStoreDialog">创建门店</el-button>
-            </template>
-
-            <template slot="control" slot-scope="controler">
-                <el-button size="mini" type="text" @click="editstore(controler.scoper.row)">详情</el-button>
-            </template>
-
-            <template slot="pagination">
-                <el-pagination
-                    class="pagination"
-                    @current-change="handleCurrentPage"
-                    @prev-click="prevAndNextClick"
-                    @next-click="prevAndNextClick"
-                    :current-page.sync="pagination.currentPage"
-                    :page-size="pagination.pageNumber"
-                    layout="prev, pager, next, jumper"
-                    :total="pagination.total"></el-pagination>
-            </template>
-        </store-table-component>
-        <create-store-dialog
-			:createStoreDialogVisible="createStoreDialogVisible"
-			v-if="createStoreDialogVisible"
-			@closeAddStoreStaffDialog="closeAddStoreStaffDialog"></create-store-dialog>
+            :tableData="storeTable"
+            :workerConfigList="workerConfigForm"
+            @updateTable="updateTable"></store-table-component>
+        <pagination
+            :pagination="pagination"
+            @changePage="changePage"></pagination>
     </div>
 </template>
+
 <script>
-	import {storeService,$utils} from '@common/index.js'
-    import {createStoreDialog} from './storeList/index.js'
-    import {
-        storeTableComponent,
+import {storeService} from '@/service/store'
+
+import queryComponent from './storeList/queryComponent.vue'
+import storeTableComponent from './storeList/storeTableComponent.vue'
+
+export default {
+    components: {
         queryComponent,
-    } from './storeList/index.js'
-    export default {
-        data() {
-            return {
-				isLoading: false,
-                //门店列表
-                storeList: [],
-                /**
-                 * 分页信息
-                 */
-                pagination: {
-                    total: 0,
-                    currentPage: 1,
-                    pageNumber: 20,
-                },
-				createStoreDialogVisible: false,//创建新门店弹窗
-            }
-		},
-		components: {
-            createStoreDialog,
-            storeTableComponent,
-            queryComponent,
-        },
-        computed: {
-            /**
-             * 查询对象
-             */
-            queryedList(){
-                return this.$store.state.storeModule.storeList
+        storeTableComponent,
+    },
+    data(){
+        return {
+            is_loading: false,
+            //列表
+            storeTable: [],
+            // 列表配置项
+            workerConfigForm: {},
+            // 页码
+            pagination: {
+                currentPage:1,
+                total: 0,
+                pageNumber: 20,
             },
-            /**
-             * 查询配置参数
-             */
-            queryFormConfig(){
-                return this.$store.state.storeModule.storeFormConfig
+            //查询对象
+            queryForm: {
+                is_third: [],
+                status: [],
+                name: '',
+                store_manager_name: '',
+                store_code: '',
+            },
+        }
+    },
+    computed: {
+        /**
+         * 列表查询对象
+         */
+        queryObject(){
+            return {
+                page: this.pagination.currentPage, //请求页码
+                pageNumber: this.pagination.pageNumber,//单页信息数量
+                ...this.queryForm,
             }
-        },
-        methods: {
-             /**
-             * 请求表格数据
-             */
-            async getTableList(){
-
-                try{
-                    this.isLoading = true
-                    await storeService.getStoreList().then(data =>{
-						if(data.code == "0"){
-							this.storeList = data.data.data
-
-							//分页信息
-							this.pagination.currentPage = data.data.current_page //当前页码
-                            this.pagination.total = data.data.total //列表总条数
-                            this.isLoading = false
-						}
-					}).catch(error =>{
-						this.$message({
-							type:'error',
-							message: error.message
-						})
-						this.isLoading = false
-					}).finally(() =>{
-						this.isLoading = false
-					})
-                } catch(error){
+        }
+    },
+    methods: {
+        /**
+         * 请求列表数据
+         */
+        async getTable(){          
+            try{
+                this.is_loading = true
+                let queryStore = {
+                    ...this.queryObject,
+                }
+                await storeService.getStoreList(this.queryObject).then(data=>{
+                    
+                    this.pagination = data.pagination
+                    this.storeTable = data.storeTable
+                    
+                    this.is_loading = false
+                }).catch(error =>{
                     this.$message({
-                        type:'error',
+                        type: 'error',
                         message: error.message
                     })
-                }
-            },
-            // 由查询组件触发的更新表格事件
-            async updateTable(){
-                await this.getTableList()
-            },
-            async updateTagTable(param){
-                //将查询组件数据变化存入vuex
-                await this.$store.commit('setStoreList', {
-                    queryKey: param[0],
-                    queryedList: param[1]
+                    this.is_loading = false
                 })
-                await this.updateTable()
-            },
-            // 上一页和下一页钩子
-            prevAndNextClick(val){
-                //设置page查询参数
-                this.$store.commit('setStoreList', {
-                    queryKey: 'page',
-                    queryedList: val
+            } catch(error){
+                this.$message({
+                    type: 'error',
+                    message: error.message
                 })
-            },
-            /**
-             * 切换页码
-             */
-            async handleCurrentPage(val){
-                //设置page查询参数
-                this.$store.commit('setStoreList', {
-                    queryKey: 'page',
-                    queryedList: val
-                })
-                await this.getTableList()
-            },
-            /**
-             * 打开创建门店弹窗
-             */
-            openCreateStoreDialog(){
-                this.createStoreDialogVisible = true
-			},
-			/**
-			 * 关闭创建门店弹窗
-			 */
-			async closeAddStoreStaffDialog(){
-				this.createStoreDialogVisible = false
-				await this.getTableList()
-			},
-            /**
-             * 编辑门店
-             */
-            editstore(row){
-                this.$router.push({
-                    path: "/store/storeItem",
-                    query: {
-                        type: 1, //编辑为1
-                        id: row.id
-                    }
-                })
-            },
-
+                this.is_loading = false
+            }
         },
-        async mounted(){
-            await this.getTableList()
-        }
-    }
+        /**
+         * 改变页码
+         */
+        async changePage(res){
+            this.pagination.currentPage = res
+            await this.getTable()
+        },
+        async updateTable(res){
+            this.queryForm = {
+                ...res
+            }
+            await this.getTable()
+        },
+        async changeQueryedForm(res){
+            this.queryForm = {
+                ...res
+            }
+            await this.getTable()
+        },
+        
+    },
+    async mounted(){
+        await this.getTable()
+    }   
+}
 </script>
-<style lang="scss" scoped>
 
+<style>
+    .table-box{
+        padding: 24px;
+        background: #f1f2f5;
+    }
 </style>
-
-
-
-
-
-

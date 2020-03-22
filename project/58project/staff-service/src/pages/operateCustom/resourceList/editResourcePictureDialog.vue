@@ -12,18 +12,26 @@
                 <el-input type="primary" v-model="editResourcePictureForm.name"></el-input>
             </el-form-item>
             <el-form-item label="图片类型" prop="type">
-                <select-tag-component
-                    :propTagList="resourceTypeList"
-                    v-model="editResourcePictureForm.type"
-                    :isSingle="true"></select-tag-component>
+                <el-select 
+                    v-model="editResourcePictureForm.type" 
+                    @change="changePictureType"
+                    placeholder="请选择图片类型"
+                    filterable>
+                    <el-option
+                        v-for="item in resourceTypeList"
+                        :key="item.id"
+                        :label="item.name"
+                        :value="item.id"></el-option>
+                </el-select>
             </el-form-item>
             <el-form-item label="图片" prop="url" class="form-item-size">
                 <single-picture-upload
                     :uploadHeader="uploadHeader"
-                    :height="150"
-                    :width="237"
+                    :height="picHeight"
+                    :width="picWidth"
                     :initUrl="editResourcePictureForm.url?`./resource/${editResourcePictureForm.url}`: ''"
                     @onSinglePictureSuccess="onSinglePictureSuccess"></single-picture-upload>
+                <p>{{`${picWidth}（宽） * ${picHeight}（高）`}}</p>
             </el-form-item>
         </el-form>
         <div slot="footer" class="dialog-footer">
@@ -35,7 +43,7 @@
 
 <script>
 
-import {customService} from '@common/index.js'
+import {operateCustomService} from '@/service/operateCustom'
 
 export default {
     props:{
@@ -59,17 +67,18 @@ export default {
         resourcePictureItem:{
             default: function(){return {}},
             type: Object
+        },
+        resourceTypeList: {
+            type: Array,
+            default(){return []}
         }
     },
     data() {
         return {
             is_loading :false,
-            //资源图片类型
-            resourceTypeList: [
-                {id: 1, name: '长图'},
-                {id: 2, name: '全屏'},
-                {id: 3, name: '半屏'},
-            ],
+            picHeight:0,
+            picWidth: 0,
+
             //分派订单字段
             editResourcePictureForm: {
                 id: '',
@@ -119,7 +128,7 @@ export default {
                             url: this.editResourcePictureForm.icon
                         }
 
-                        await customService.editAdResource(sendPictureObject).then(data =>{
+                        await operateCustomService.editAdResource(sendPictureObject).then(data =>{
                             if(data.code == '0'){
                                 this.$message({
                                     type:"success",
@@ -147,11 +156,23 @@ export default {
                 }
             })
 
+        },
+        changePictureType(type){
+            let currentType = this.resourceTypeList.find(item => item.id == type )
+            this.picHeight = currentType.height
+            this.picWidth = currentType.width
         }
     },
     async mounted(){
+        let currentType = this.resourceTypeList.find(item => item.id == 1 )
+            this.picHeight = currentType.height
+            this.picWidth = currentType.width
+        
         if(this.isEdit){
             this.editResourcePictureForm= this.resourcePictureItem
+            let currentType = this.resourceTypeList.find(item => item.id == this.resourcePictureItem.type )
+            this.picHeight = currentType.height
+            this.picWidth = currentType.width
         }
     }
 }

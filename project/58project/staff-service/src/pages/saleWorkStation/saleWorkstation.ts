@@ -14,7 +14,7 @@ export interface dynamic_informationItem{
 
 export interface getSaleWorkstationForm{
     get_for:string;//统计维度： 运营个人、全公司
-    id:number;
+    id?:number;
 }
 export enum get_for{
     personal = 'personal',

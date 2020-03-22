@@ -19,7 +19,7 @@
     
 </template>
 <script>
-    import {operateService, $utils} from '@common/index.js'
+    import {operateService} from '@common/index.js'
 
     export default {
         props: {
@@ -34,6 +34,7 @@
              * 前往合同详情页
              */
             goContractPage(row){
+                // return
                 this.$router.push({
                     path: "/operate/clientItem",
                     query: {

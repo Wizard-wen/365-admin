@@ -124,7 +124,7 @@ export default {
                     let staffFormSend = {
                         ...this.createWorkerForm
                     }
-                    staffFormSend.skill = publicModuleService.sendCascanderData(staffFormSend.skill) 
+                    staffFormSend.skill = this.$utils.sendCascanderData(staffFormSend.skill) 
                     try{    
                         this.is_loading = true
                         await publicModuleService.createWorkerBySeller(staffFormSend).then(data =>{

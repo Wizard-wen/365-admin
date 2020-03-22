@@ -36,7 +36,7 @@
                 :signedUserDetailObject="operateOrderItem.order"></signed-user-detail-component>
 
             <order-config-log
-                @updateOrderConfig="getOrder"></order-config-log>
+                @updateOrderConfig="getOrder" :isEdit="false"></order-config-log>
                      
         </div>
     </div>

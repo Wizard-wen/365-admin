@@ -8,7 +8,7 @@
 				<div class="detail-left-box">
 					<div class="detail-left-line">编号：{{ storeDetail.store_code }}</div>
 					<div class="detail-left-line">创建人：{{ storeDetail.created_manager_name }}</div>
-					<div class="detail-left-line">创建时间：{{ storeDetail.created_at | formDate }}</div>
+					<div class="detail-left-line">创建时间：{{ storeDetail.created_at | timeToDayFomatter }}</div>
 					<div class="detail-left-line">门店类型：{{storeDetail.is_third == 1 ? '直营店': '加盟店'}}</div>
 					<div class="detail-left-line">门店负责人：{{ storeDetail.store_manager_name }}</div>
 					<div class="detail-left-line">门店地址：{{storeDetail.address}}</div>
@@ -21,8 +21,8 @@
 				<div class="right-box">
 					<div class="title">经营状态</div>
 					<div class="value" 
-						:style="{color: storeDetail.type == 1? '#67C23A' : '#F56C6C'}">
-						{{storeDetail.type == 1?'营业':'停业'}}
+						:style="{color: storeDetail.status == 1? '#67C23A' : '#F56C6C'}">
+						{{storeDetail.status == 1?'营业':'停业'}}
 					</div>
 				</div>
 				<div class="right-box">
@@ -50,19 +50,25 @@
 				<statistic-card-component v-hide></statistic-card-component>
 			</div>
 
-			<chart-box></chart-box>
-			<store-staff-list :storeStaffList="salesPersonTable"></store-staff-list>
+			<!-- <chart-box></chart-box> -->
+			<!-- 门店员工列表 -->
+			<store-staff-list 
+				:storeStaffList="salesPersonTable" 
+				:storeDetail="storeDetail"
+				@updateStoreItem="getStore"></store-staff-list>
 		</div>
 	</page-edit-component>
 </template>
 
 <script>
-import { storeService, store, $utils } from "@common/index.js";
+import { storeService } from "@/service/store";
 
 
 import chartBox from './storeStatistic/chartBox.vue'
 import storeStaffList from './storeItem/storeStaffList.vue'
+
 import {statisticCardComponent} from '../operateWorkStation/index'
+
 export default {
 	components: {
 		statisticCardComponent,
@@ -71,12 +77,11 @@ export default {
 	},
 	data() {
 		return {
+			// 门店详情
 			storeDetail: {},
 			is_loading: false,
 			//员工列表
 			salesPersonTable: [],
-			//经营状态
-			typeList: [{ id: 1, name: "正常" }, { id: 2, name: "关闭" }],
 		};
 	},
 	methods: {
@@ -85,28 +90,28 @@ export default {
 		 */
 		async getStore(){
 			try{
-				this.isLoading = true
+				this.is_loading = true
 				await storeService.getStore(this.$route.query.id).then(data => {
 					if (data.code == "0") {
 						this.storeDetail = {...data.data.store};
 						this.salesPersonTable = data.data.store_staff_list.data
-						this.isLoading = false
+						this.is_loading = false
 					}
 				}).catch(error => {
 					this.$message({
 						type: "error",
 						message: error.message
 					});
-					this.isLoading = false
+					this.is_loading = false
 				}).finally(() =>{
-					this.isLoading = false
+					this.is_loading = false
 				})
 			} catch(error){
 				this.$message({
 					type: "error",
 					message: error.message
 				});
-				this.isLoading = false
+				this.is_loading = false
 			}
 
 		},
@@ -126,16 +131,10 @@ export default {
 		goback(){
 			this.$router.push('/store/storeList')
 		},
-
 	},
-	filters: {
-		formDate(timestamp){
-			return $utils.formatDate(new Date(timestamp), 'yyyy-MM-dd')
-		}
-	},
-  mounted() {
-    this.getStore();
-  }
+	async mounted() {
+		await this.getStore();
+	}
 };
 </script>
 

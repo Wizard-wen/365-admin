@@ -25,7 +25,7 @@
                     <div 
                         class="detail-left-line" 
                         v-if="orderApplyModuleType == 'apply'">申请创建人：{{ currentOrderApply.created_manager_name }}</div>
-                    <div class="detail-left-line">申请创建时间：{{ currentOrderApply.created_at | formDate }}</div>
+                    <div class="detail-left-line">申请创建时间：{{ currentOrderApply.created_at | timeToDayFomatter }}</div>
                     <div 
                         class="detail-left-line" 
                         v-if="orderApplyModuleType == 'apply'">来源门店：{{currentOrderApply.apply_store_name }}</div>
@@ -49,7 +49,6 @@
 
 <script>
 import {
-    $utils,
     operateService,
 } from '@common/index.js'
 import {
@@ -101,14 +100,6 @@ export default {
         orderApplyTypeStyle(){
             return order_apply_typeList.find(item => item.id == this.currentOrderApply.type)
         },
-    },
-    filters: {
-        /**
-         * 更改时间戳格式
-         */
-        formDate(timestamp){
-            return $utils.formatDate(new Date(timestamp), 'yyyy-MM-dd')
-        }
     },
 }
 </script>

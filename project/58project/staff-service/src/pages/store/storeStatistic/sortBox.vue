@@ -25,13 +25,15 @@ export default {
         },  
         sortList: {
             type: Array, 
-            default(){return [{store_name: '365总店', store_number: 300},
-                            {store_name: '365总店1', store_number: 300},
-                            {store_name: '365总店2', store_number: 300},
-                            {store_name: '365总店3', store_number: 300},
-                            {store_name: '365总店4', store_number: 300},
-                            {store_name: '365总店5', store_number: 300},
-                    ]}
+            default(){
+                return [
+                        {store_name: '365总店', store_number: 300},
+                        {store_name: '365总店1', store_number: 300},
+                        {store_name: '365总店2', store_number: 300},
+                        {store_name: '365总店3', store_number: 300},
+                        {store_name: '365总店4', store_number: 300},
+                    ]
+            }
         }
     }
 }
@@ -40,7 +42,7 @@ export default {
 <style lang="scss" scoped>
 .sort-box{
     min-width:300px;
-    // height: 400px;
+    height: 235px;
     padding: 0 20px;
     .sort-title{ 
         height: 30px;
@@ -52,11 +54,9 @@ export default {
         font-weight: 500;
     }
     .sort-list{
-        // margin-top: 16px;
-        
         .sort-list-item{
             display: flex;
-            margin-top: 16px;
+            margin-bottom: 16px;
             .rank{
                 line-height: 22px;
                 text-align: center;

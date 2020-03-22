@@ -3,18 +3,18 @@
         :title="userItem.name">
 
         <template slot="icon" >
-            <div class="icon">
-                <img style="height: 120px;width: 120px;" :src="`./resource/${userItem.icon}`" alt="" v-if="userItem.icon">
-                <div class="no-icon-style" v-else>暂无头像</div>
-            </div>
+            <icon-component
+                :iconUrl="userItem.icon?`./resource/${userItem.icon}`:''"
+                :height="140"
+                :width="100"></icon-component>
         </template>
         
         <template slot="detail" >
             <div class="detail-left">
                 <div class="detail-left-box">
                     <div class="detail-left-line">手机号：{{userItem.phone}}</div>
-                    <div class="detail-left-line">创建时间：{{userItem.created_at | formDate}}</div>
-                    <div class="detail-left-line">更新时间：{{userItem.updated_at | formDate}}</div>
+                    <!-- <div class="detail-left-line">创建时间：{{userItem.created_at | timeToDayFomatter}}</div> -->
+                    <!-- <div class="detail-left-line">更新时间：{{userItem.updated_at | timeToDayFomatter}}</div> -->
                 </div>
             </div>
         </template>
@@ -64,7 +64,7 @@ export default {
             }
         },
         goback(){
-
+            this.$router.push('/operate/clientList')
         }
     },
     async mounted(){

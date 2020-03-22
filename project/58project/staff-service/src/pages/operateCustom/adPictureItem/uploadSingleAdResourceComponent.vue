@@ -1,9 +1,6 @@
 <template>
     <div>
-        <el-form 
-            :model="pictureObject" 
-            label-width="140px" 
-            ref="pictureObject">
+        <el-form :model="pictureObject" label-width="140px" ref="pictureObject">
             <el-form-item :label="`${label}展示`">
                 <div 
                     class="icon-box" 
@@ -11,7 +8,8 @@
                     @mouseover="showblack('0')"
                     @mouseout="showblack('1')"
                     @click="openResourceListDialog('1')">
-                    <img class="icon-item" :src="'./resource/'+pictureObject.url" alt=""  >
+                    <img v-if="!isImageError" class="icon-item" :src="'./resource/'+pictureObject.url" alt=""  >
+                    <div v-else class="icon-item">图片有误</div>
                     <div class="icon-item-back" v-if="isShowBlack">
                         <i class="el-icon-edit icon-uploader-edit-icon" style="color: #fff;font-size: 20px;"></i>
                     </div>
@@ -19,12 +17,8 @@
                 
                 <i class="el-icon-plus adPicture-plus" v-else @click="openResourceListDialog('0')"></i>
                 <div class="picture-message">
-                    <select-tag-component
-                        :propTagList="resourceTypeList"
-                        v-model="pictureObject.type"
-                        :isSingle="true"
-                        :isEdit="false"></select-tag-component>
-                    <el-tag v-if="pictureObject.name" style="margin-left: 20px;">{{pictureObject.name}}</el-tag>
+                    <el-tag size="small" v-if="pictureObject.type">{{resourceType}}</el-tag>
+                    <el-tag size="small" v-if="pictureObject.name" style="margin-left: 20px;">{{pictureObject.name}}</el-tag>
                 </div>
             </el-form-item>
             <el-form-item :label="`${label}url`">
@@ -44,6 +38,7 @@
 
 <script>
 import resourceListDialog from './uploadSingleAdResourceComponent/resourceListDialog.vue'
+import {resourceTypeList} from '../resourceList/IresourcePicture'
 export default {
     components: {
         resourceListDialog,
@@ -65,8 +60,14 @@ export default {
             }
         }
     },
+    computed: {
+        resourceType(){
+            return this.resourceTypeList.find(item =>item.id == this.pictureObject.type).name
+        }
+    },
     data(){
         return {
+            isImageError: false,
             //资源图片弹窗
             resourceListDialogVisible: false,
             //是否编辑
@@ -76,11 +77,7 @@ export default {
             //选中的图片对象
             pictureObject: {},
             //资源图片类型
-            resourceTypeList: [
-                {id: 1, name: '长图'},
-                {id: 2, name: '全屏'},
-                {id: 3, name: '半屏'},
-            ],
+            resourceTypeList,
         }
     },
     methods: {
@@ -118,16 +115,24 @@ export default {
             this.$emit('input',this.pictureObject)
         },
     },
-    mounted(){
-
+    created(){
+        var img = new Image();  
+        img.onload = function () {
+            this.isImageError = false
+        };  
+        img.onerror = function () {
+            this.isImageError = true
+        };  
+        img.src = this.pictureObject.url 
     }
 }
 </script>
 
 <style lang="scss" scoped>
 .icon-box{
-    width:500px;
-    height: 300px;
+    width:502px;
+    height: 302px;
+    border: 1px dashed #ccc;
     position: relative;
     .icon-item {
         width:500px;

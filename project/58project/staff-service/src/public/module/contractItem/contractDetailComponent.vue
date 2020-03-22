@@ -48,7 +48,18 @@
                     :label="'服务人数'"
                     :size="3"
                     :value="`${contractBase.service_count}人`"></detail-form-item-component>
-                <detail-form-item-component :size="3"></detail-form-item-component>
+                
+                <detail-form-item-component 
+                    :type="'template'"
+                    :label="'所属行业'"
+                    :size="3"
+                    :value="contractBase.work_type">
+                    <table-tag-component 
+                        slot="template"
+                        :propList="workerConfigForm.skill" 
+                        v-if="workerConfigForm.skill" 
+                        :tableOriginData="contractBase.work_type"></table-tag-component>
+                </detail-form-item-component>
                 <detail-form-item-component :size="3"></detail-form-item-component>
                 <detail-form-item-component
                     :type="'template'"
@@ -56,7 +67,7 @@
                     :size="1"
                     :value="contractBase.service_start">
                     <p slot="template">
-                        {{contractBase.service_start | timeFomatter}} - {{contractBase.service_end | timeFomatter}}
+                        {{contractBase.service_start | timeToDayFomatter}} - {{contractBase.service_end | timeToDayFomatter}}
                     </p>
                 </detail-form-item-component>
                 <detail-form-item-component
@@ -96,7 +107,7 @@
                     :size="1"
                     :value="contractBase.insurance_start">
                     <p slot="template">
-                        {{contractBase.insurance_start | timeFomatter}} - {{contractBase.insurance_end | timeFomatter}}
+                        {{contractBase.insurance_start | timeToDayFomatter}} - {{contractBase.insurance_end | timeToDayFomatter}}
                     </p>
                 </detail-form-item-component>
                 <detail-form-item-component :size="3"></detail-form-item-component>
@@ -127,7 +138,6 @@
 </template>
 
 <script>
-import {$utils} from '@common/index.js'
 import {
     sign_service_typeList,// 服务方式列表
     sign_service_containsList,//服务内容
@@ -135,14 +145,6 @@ import {
 } from '@/pages/sale/saleSignPage/IsaleSignItem.ts'
 
 export default {
-    filters: {
-        timeFomatter(value){
-            if(value == 0){
-                return '-'
-            }
-            return $utils.formatDate(new Date(value), 'yyyy-MM-dd hh:mm:ss')
-        },
-    },
     data(){
         return {
             order_service_type: sign_service_typeList,// 服务方式列表
@@ -163,6 +165,10 @@ export default {
          * 合同基本信息
          */
         contractBase: {
+            type: Object,
+            default: function(){return {}}
+        },
+        workerConfigForm: {
             type: Object,
             default: function(){return {}}
         }

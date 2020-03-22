@@ -9,7 +9,7 @@
 </template>
 
 <script>
-import HogLayout from '../../common/components/Layout/SystemLayout.vue'
+import {Layout} from '@/public/components/index.js'
 
 
 export default {
@@ -18,20 +18,14 @@ export default {
             closeAble: false,
         }
     },
-    methods:{
-
-    },
     computed:{
         menuList(){
-            return store.state.loginModule.user.menuList        
+            return this.$store.state.loginModule.user.menuList        
         }
     },
     components: {
-        HogLayout,
+        HogLayout: Layout,
     },
-    async mounted(){
-        // this.menuList = await menuService.getMenuList()
-    }
 }
 </script>
 

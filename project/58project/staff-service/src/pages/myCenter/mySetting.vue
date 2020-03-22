@@ -4,19 +4,10 @@
             <el-tabs v-model="currentTabPosition" :tab-position="tabPosition" @tab-click="changeTab">
                 <el-tab-pane label="员工基本信息" name="basic">
                     <detail-form-component>
-                        <detail-form-item-component
-                            :label="'账号'"
-                            :size="1"
-                            :value="baseForm.account"></detail-form-item-component>
-                        <detail-form-item-component
-                            :label="'工号'"
-                            :size="1"
-                            :value="baseForm.manager_code">
+                        <detail-form-item-component :label="'账号'" :size="1" :value="baseForm.account"></detail-form-item-component>
+                        <detail-form-item-component :label="'工号'" :size="1" :value="baseForm.manager_code">
                         </detail-form-item-component>
-                        <detail-form-item-component
-                            :label="'真实姓名'"
-                            :size="1"
-                            :value="baseForm.real_name"></detail-form-item-component>
+                        <detail-form-item-component :label="'真实姓名'" :size="1" :value="baseForm.real_name"></detail-form-item-component>
                         <detail-form-item-component
                             :type="'template'"
                             :label="'所属部门'"
@@ -40,7 +31,7 @@
                         </el-form-item>
                         <el-form-item label="头像" class="form-item-size">
                             <single-picture-upload
-                                :uploadHeader="uploadHeader"
+                                :uploadHeader="customizeUploadHeader"
                                 :height="140"
                                 :width="100"
                                 :initUrl="personalInfoForm.icon?`./resource/${personalInfoForm.icon}`:''"
@@ -108,7 +99,8 @@
     </div>
 </template>
 <script>
-import {myCenterService} from '@common/index.js'
+import {myCenterService} from '@/service/myCenter'
+import {departmentList} from './ImyCenter'
    export default {
     data() {
         let _this = this;
@@ -146,10 +138,9 @@ import {myCenterService} from '@common/index.js'
                     return time.getTime() > Date.now();//如果没有后面的-8.64e6就是不可以选择今天的
                 }
             },
-            //图片上传header
-            uploadHeader:{
-                accessToken: this.$store.state.loginModule.token.access_token
-            },
+            //时间选择器默认时间
+            timeDefaultShow:'',
+            departmentList,
             /**
              * 更改密码字段
              */
@@ -207,23 +198,7 @@ import {myCenterService} from '@common/index.js'
                     {required: true, message: '请输入微信号', trigger: 'blur'}
                 ],
             },
-            //时间选择器默认时间
-            timeDefaultShow:'',
         };
-    },
-    computed: {
-        /**
-         * 当前用户信息
-         */
-        presentUser(){
-            return this.$store.state.loginModule.user
-        },
-        /**
-         * 部门信息
-         */
-        departmentList(){
-            return this.$store.state.authModule.departmentList
-        }
     },
     methods: {
         /**
@@ -242,7 +217,6 @@ import {myCenterService} from '@common/index.js'
                             this.personalInfoForm = {
                                 ...this.personalInfoForm,
                                 ...data.data,
-                                // icon_url: '',
                             }
                         }
                     }).catch(error =>{
@@ -276,7 +250,6 @@ import {myCenterService} from '@common/index.js'
                         //定义用户信息传输字段
                         let sendPersonalInfoObject = {
                             ...this.personalInfoForm,
-                            // icon: this.personalInfoForm.icon_url
                         }
 
                         await myCenterService.editPersonal(sendPersonalInfoObject).then(data =>{
@@ -312,16 +285,17 @@ import {myCenterService} from '@common/index.js'
          * 更改密码
          */
         async changePassword(formName){
-            let _this = this;
             await this.$refs[formName].validate(async valid =>{
                 if(valid){
                     try{
                         this.is_loading = true
-                        this.passwordChangeForm = {
+
+                        passwordChangeForm = {
                             ...this.passwordChangeForm,
-                            id: _this.presentUser.id
+                            id: this.presentUser.id
                         }
-                        await myCenterService.changePassword(this.passwordChangeForm).then(data =>{
+
+                        await myCenterService.changePassword(passwordChangeForm).then(data =>{
                             if(data.code == '0'){
                                 this.$message({
                                     type: 'success',

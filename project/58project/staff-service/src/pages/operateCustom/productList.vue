@@ -38,29 +38,20 @@
                 </el-form-item>
 
                 <el-form-item label="是否展示">
-                    <select-tag-component
-                        :propTagList="typeList"
-                        v-model="productForm.status"
-                        :isSingle="true"></select-tag-component>
+                    <el-radio-group v-model="productForm.status">
+                        <el-radio :label="1">展示</el-radio>
+                        <el-radio :label="2">不展示</el-radio>
+                    </el-radio-group>
                 </el-form-item>
                 
                 <el-form-item label="商品详情" prop="files" ref="files" v-if="hasParentNode">
-                    <!-- <el-upload
-                        accept=".jpg,.jpeg,.png,.gif,.bmp,.pdf,.JPG,.JPEG,.PBG,.GIF,.BMP,.PDF"
-                        action="/admin/common/uploadImage"
-                        :on-success="uploadSuccess"
-                        :on-remove="removePic"
-                        :file-list="productForm.files"
-                        list-type="picture-card"
-                        :headers="uploadHeader">
-                        <i class="el-icon-plus"></i>
-                    </el-upload> -->
                     <multiple-picture-upload
                         v-model="productForm.files"
                         :title="'商品详情'"
                         :maxCount="10"
-                        :height="150"
-                        :width="237"></multiple-picture-upload>
+                        :height="300"
+                        :width="200"></multiple-picture-upload>
+                    <p>图片比例为1（宽）:1.5（高），请尽量上传高质量图片</p>
                 </el-form-item>
                 <el-form-item >
                     <el-button type="primary" @click="saveProduct">修改</el-button>
@@ -77,7 +68,7 @@
 <script>
 
 import createProductDialog from './productList/createProductDialog.vue'
-import { operateService } from '@common/index.js';
+import { operateCustomService } from '@/service/operateCustom';
 
 
 export default {
@@ -134,7 +125,7 @@ export default {
                     banner_url: this.productForm.banner_icon,
                 }
 
-                await operateService.editService(sendProductObject).then(data =>{
+                await operateCustomService.editService(sendProductObject).then(data =>{
                     if(data.code == '0'){
                         this.$message({
                             type:'success',
@@ -188,7 +179,7 @@ export default {
         async deleteService(){
             try{
                 this.is_contains_loading = true
-                await operateService.deleteService(this.productForm.id).then(data =>{
+                await operateCustomService.deleteService(this.productForm.id).then(data =>{
                     if(data.code == '0'){
                         this.$message({
                             type:'success',
@@ -231,11 +222,11 @@ export default {
             this.hasParentNode = clickObject.parent_id == 0 ? false : true;
             try{
                 this.is_contains_loading = true
-                await operateService.getService(clickObject.id).then(data =>{
+                await operateCustomService.getService(clickObject.id).then(data =>{
                     this.productForm = data.data
-                    this.productForm.files.forEach((item, index) =>{
-                            item.url = +item.url
-                    })
+                    // this.productForm.files.forEach((item, index) =>{
+                    //         item.url = +item.url
+                    // })
                 }).catch(error =>{
                     this.$message({
                         type:'error',
@@ -303,7 +294,7 @@ export default {
         async getServiceTree(){
             try{
                 this.is_tree_loading = true
-                await operateService.getServiceTree().then(data =>{
+                await operateCustomService.getServiceTree().then(data =>{
 
                     this.productTreeList = data.data
                     
@@ -343,7 +334,7 @@ export default {
         }
         //获取服务商品下拉菜单
         try{
-            await operateService.getServiceSelection().then(data =>{
+            await operateCustomService.getServiceSelection().then(data =>{
                 this.selectionList = data.data
             }).catch(error =>{
                 this.$message({

@@ -11,13 +11,16 @@
 
 <script>
 import createVoidContractDialog from './createVoidContractBtn/createVoidContractDialog.vue'
+
 export default {
     components: {
         createVoidContractDialog,
     },
     data(){
+        
         return {
             createVoidContractDialogVisible: false,
+            
         }
     },
     methods: {
@@ -32,7 +35,7 @@ export default {
          */
         async closeVoidContractCreateDialog(){
             this.createVoidContractDialogVisible = false
-            await this.getTableList()
+            this.$emit('updateTable')
         }
     }
 }

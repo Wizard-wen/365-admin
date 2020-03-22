@@ -16,7 +16,7 @@
     </div>
 </template>
 <script>
-    import {operateService, $utils} from '@common/index.js'
+    import {operateService} from '@common/index.js'
 
     import {operateOrderService} from '@/service/operateOrder'
 

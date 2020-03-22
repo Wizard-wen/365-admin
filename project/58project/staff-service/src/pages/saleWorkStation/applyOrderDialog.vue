@@ -10,7 +10,15 @@
         <el-form :model="applyOrderForm" label-width="120px" :rules="applyOrderRules" ref="applyOrderForm">
 
             <el-form-item label="工种" prop="work_type" ref="work_type" style="margin-bottom:30px;">
-                <el-input v-model="applyOrderForm.work_type"></el-input>
+                <!-- <el-input v-model="applyOrderForm.work_type"></el-input> -->
+                <el-cascader
+                    v-model="applyOrderForm.work_type"
+                    :props="{
+                        label: 'name',
+                        value: 'id',
+                    }"
+                    :options="workerConfigForm.skill"
+                    :show-all-levels="false"></el-cascader>
             </el-form-item>
 
             <el-form-item label="服务地址" prop="service_address" ref="service_address">
@@ -69,7 +77,7 @@
 /**
  * type 0 新建  1 编辑
  */
-import {saleService,operateService} from '@common/index.js'
+import {saleService} from '@/service/sale'
 
 export default {
     props:{
@@ -131,7 +139,8 @@ export default {
                     { required: true, message: '请填写客户姓名', trigger: 'blur' }
                 ],
  
-            }
+            },
+            workerConfigForm: {}
         }
     },
     computed: {
@@ -199,11 +208,13 @@ export default {
             try{
                 this.is_loading = true
                 await Promise.all([
-                    operateService.getStoreSelection(),
-                    operateService.getStoreManagerSelection(1)
+                    saleService.getStoreSelection(),
+                    saleService.getStoreManagerSelection(1),
+                    saleService.getWorkerFormConfig('edit'),
                 ]).then((data) =>{
                     this.storeList = data[0].data
                     this.storeManagerList = data[1].data
+                    this.workerConfigForm = data[2].data
                     this.is_loading = false
                 }).catch((error) =>{
                     this.$message({

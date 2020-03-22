@@ -30,7 +30,7 @@
                 </template>    
             </card-box-component>
 
-            <order-apply-log :order_logs="applyLogTable"></order-apply-log>
+            <order-apply-log :isEdit="false" :order_logs="applyLogTable"></order-apply-log>
 
         </div>
     </div>

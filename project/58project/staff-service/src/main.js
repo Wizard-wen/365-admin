@@ -17,6 +17,8 @@ import './element-variables.scss'
 
 Vue.use(ElementUI);
 import ECharts from 'vue-echarts'
+
+
 import 'echarts/lib/chart/line'
 import 'echarts/lib/chart/pie'
 import 'echarts/lib/chart/bar'
@@ -24,14 +26,16 @@ import 'echarts/lib/chart/bar'
 import 'echarts/lib/component/title'; //引入标题组件
 import 'echarts/lib/component/legend'; //引入图例组件
 import 'echarts/lib/component/tooltip'; //引入图例组件
+import 'echarts/lib/component/toolbox'; //引入图例组件
 
 Vue.component('chart', ECharts)
+
 
 Vue.prototype.$axios = axios;
 
 import {$styleConfig} from '../common/index.js'
 
-import {$utils} from '../common/index.js'
+import {$utils} from './utils/index'
 
 Vue.prototype.$utils = $utils
 Vue.prototype.$styleConfig = $styleConfig
@@ -47,14 +51,16 @@ import App from './App'
 
 import '../common/config'
 
-import {
 
-    store, //引入vuex数据
-    
-    router,
-    authService,//引入路由
-    loginService,
-} from '../common'
+/**
+ * 路由
+ */
+import router from './router/index.js'
+
+import {loginService} from './service/login'
+import { mapState } from 'vuex'
+import {store} from './store/index'
+
 
 Vue.config.productionTip = false
 
@@ -68,8 +74,6 @@ Vue.config.productionTip = false
  */
 
  //设置ajax根路径
-// axios.defaults.baseURL = config.apiPath
-// axios.defaults.timeout = 10000
 axios.interceptors.request.use(config => {
     //token加入请求头
     config.headers = {
@@ -123,6 +127,43 @@ axios.interceptors.response.use(async response => {
 });
 
 
+Vue.mixin({
+    filters: {
+        /**
+         * 过滤时间 年月日
+         * @param {*} value 
+         */
+        timeToDayFomatter(value){
+            if(value == 0){
+                return '-'
+            }
+            return $utils.formatDate(new Date(value), 'yyyy-MM-dd')
+        },
+        /**
+         * 过滤时间  年月日 时分秒
+         * @param {*} value 
+         */
+        timeToSecondFomatter(value){
+            if(value == 0){
+                return '-'
+            }
+            return $utils.formatDate(new Date(value), 'yyyy-MM-dd hh:mm:ss')
+        },
+    },
+    computed: {
+        ...mapState({
+            presentUser: state => state.loginModule.user,
+            accessToken: state => state.loginModule.user.access_token,
+            customizeUploadHeader: state => {
+                return {
+                    accessToken: state.loginModule.user.access_token
+                }
+            }
+		}),
+    }
+})
+
+
 
 new Vue({
     el: '#app',
@@ -130,4 +171,4 @@ new Vue({
     components: { App },
     template: '<App/>',
     store,
-  })
+})

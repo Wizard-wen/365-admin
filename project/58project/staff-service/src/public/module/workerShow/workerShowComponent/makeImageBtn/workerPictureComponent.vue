@@ -61,7 +61,7 @@
                 </div>
                 <div class="item">
                     <div class="label">技能证书</div>:
-                    <div class="value" v-if="paper.lengt">
+                    <div class="value" v-if="paper.length">
                         <span v-for="(item, index) in paper" :key="index">{{`${item.name}&nbsp;&nbsp;`}}</span>
                     </div>
                     <div class="value" v-else>不详</div>
@@ -79,7 +79,6 @@
 import {
     zodiac_signList,
     educationList,
-
 } from '@/public/module/workerList/IworkerList.ts'
 import {publicModuleService} from '@/service/publicModule'
 export default {
@@ -104,12 +103,13 @@ export default {
             if(!this.pictureForm.paper.length){
                 return []
             }
-            if(this.workerConfigForm){
+
+            if(this.workerConfigForm.paper_category){
                 return this.pictureForm.paper.reduce((arr,item,index) =>{
                     return this.workerConfigForm.paper_category.some(it => it.id == item)? 
-                        arr.concat({
+                        [...arr,{
                             ...this.workerConfigForm.paper_category.find(it => it.id == item),
-                        }) : arr
+                        }] : arr
                 },[])
             } else {
                 return []
@@ -127,7 +127,7 @@ export default {
          */
         education(){
             if(this.pictureForm.education){
-                return this.workerConfigForm.education.find(it => it.id == this.pictureForm.education)
+                return educationList.find(it => it.id == this.pictureForm.education).name
             } else {
                 return '不详'
             }
@@ -147,7 +147,6 @@ export default {
          */
         showSkillList(){
             let showList = []
-            // this.pictureForm.skill = publicModuleService.sendCascanderData(this.pictureForm.skill)
             if(this.pictureForm.skill && this.workerConfigForm.skill.length){
                 
                 var arr = this.changeOriginData(this.pictureForm.skill)
@@ -174,11 +173,6 @@ export default {
             } else {
                 return '不详'
             }
-        }
-    },
-    filters: {
-        formDate(timestamp){
-            return $utils.formatDate(new Date(timestamp), 'yyyy-MM-dd')
         }
     },
 

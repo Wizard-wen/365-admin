@@ -18,7 +18,7 @@
                                 </div>
                                 
                             </div>
-                            <div class="time">{{item.created_at | timeFomatter}}</div>
+                            <div class="time">{{item.created_at | timeToDayFomatter}}</div>
                         </div>
                         <div class="order-message">
                             <el-tag class="tag-item" size="mini" v-if="item.work_type">{{item.work_type}}</el-tag>
@@ -43,22 +43,12 @@
 </template>
 
 <script>
-import {
-    $utils,
-} from '@common/index.js'
+
 export default {
     props: {
         dynamic_information: {
             type: Array,
             default(){return []}
-        }
-    },
-    filters: {
-        timeFomatter(value){ 
-            if(value == 0){
-                return '-'
-            }
-            return $utils.formatDate(new Date(value), 'yyyy-MM-dd')
         }
     },
     methods: {

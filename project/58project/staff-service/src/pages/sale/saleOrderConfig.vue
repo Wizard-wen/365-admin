@@ -45,6 +45,7 @@
                 :signedUserDetailObject="saleOrderItem.order"></signed-user-detail-component>
 
             <order-config-log
+                :isEdit="false"
                 @updateOrderConfig="getSaleOrder"
                 :order_logs="saleOrderItem.order_logs"></order-config-log>
         </div>
@@ -102,6 +103,7 @@ export default {
             try{
                 this.is_loading = true
                 await saleService.getSaleOrder(this.$route.query.order_id).then((data) =>{
+
                     this.saleOrderItem = {
                         ...data,
                     }

@@ -15,7 +15,6 @@
     </div>
 </template>
 <script>
-    // import {operateService, $utils} from '@common/index.js'
     // 
     import {saleService} from '@/service/sale.ts'
     // 

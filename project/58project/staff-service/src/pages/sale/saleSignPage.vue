@@ -78,7 +78,7 @@
                                 placeholder="请选择服务内容"
                                 filterable>
                                 <el-option
-                                    v-for="item in orderConfigList.order_service_contains"
+                                    v-for="item in sign_service_containsList"
                                     :key="item.id"
                                     :label="item.name"
                                     :value="item.id"></el-option>
@@ -89,22 +89,14 @@
                                 <el-radio :label="1">自理</el-radio>
                                 <el-radio :label="2">不自理</el-radio>
                             </el-radio-group>
-                            <!-- <select-tag-component
-                                :propTagList="orderConfigList.order_service_level"
-                                v-model="signForm.service_level"
-                                :isSingle="true"></select-tag-component> -->
                         </el-form-item>
                         <el-form-item label="服务方式" prop="service_type" class="form-item-size form-item-3-size" size="small">
-                            <!-- <select-tag-component
-                                :propTagList="orderConfigList.order_service_type"
-                                v-model="signForm.service_type"
-                                :isSingle="true"></select-tag-component> -->
                             <el-select 
                                 v-model="signForm.service_type" 
                                 placeholder="请选择服务方式"
                                 filterable>
                                 <el-option
-                                    v-for="item in orderConfigList.order_service_type"
+                                    v-for="item in sign_service_typeList"
                                     :key="item.id"
                                     :label="item.name"
                                     :value="item.id"></el-option>
@@ -116,7 +108,7 @@
                         
                         <el-form-item label="服务期限" prop="service_duration" class="form-item-size form-item-23-size" size="small">
                             <el-date-picker
-                                v-model="service_duration"
+                                v-model="signForm.service_duration"
                                 value-format="timestamp"
                                 @change="changeServiceDuration"
                                 :picker-options="pickerOptions"
@@ -132,9 +124,10 @@
                         <el-form-item label="工作时间" prop="service_time" class="form-item-size form-item-1-size" size="small">
                             <el-input v-model="signForm.service_time" placeholder="请输入劳动者日常工作时间"></el-input>
                         </el-form-item>
-                        <el-form-item label="服务所在行业" prop="service_skill" class="form-item-size form-item-1-size" size="small">
+                        <el-form-item label="服务所在行业" prop="work_type" class="form-item-size form-item-1-size" size="small">
                             <el-cascader
-                                v-model="signForm.service_skill"
+                                :disabled="true"
+                                v-model="signForm.work_type"
                                 :props="{
                                     label: 'name',
                                     value: 'id',
@@ -164,7 +157,7 @@
                                     <p>劳动者服务费 = 劳务报酬/月 ✖ 10%</p>
                                 </div>    
                             </form-item-label-tooltip-component>
-                            <el-input v-model.number="signForm.staff_charge" placeholder="请输入劳动者服务费"></el-input>
+                            <el-input :disabled="true" v-model.number="signForm.staff_charge" placeholder="请输入劳动者服务费"></el-input>
                         </el-form-item>
                         <el-form-item prop="user_charge" class="form-item-size form-item-3-size" size="small">
                             <form-item-label-tooltip-component
@@ -176,7 +169,7 @@
                                     <p>劳动者服务费 = 劳务报酬/月 ✖ 20%</p>
                                 </div>    
                             </form-item-label-tooltip-component>
-                            <el-input v-model.number="signForm.user_charge" placeholder="请输入客户服务费"></el-input>
+                            <el-input :disabled="true" v-model.number="signForm.user_charge" placeholder="请输入客户服务费"></el-input>
                         </el-form-item>
                         <el-form-item prop="user_pay" class="form-item-size form-item-3-size" size="small">
                             <form-item-label-tooltip-component
@@ -188,7 +181,7 @@
                                     <p>其中，只有首次签约才会产生客户服务费。</p>
                                 </div>    
                             </form-item-label-tooltip-component>
-                            <el-input v-model.number="signForm.user_pay" placeholder="请输入客户缴纳金额"></el-input>
+                            <el-input :disabled="true" v-model.number="signForm.user_pay" placeholder="请输入客户缴纳金额"></el-input>
                         </el-form-item>
                         <el-form-item prop="staff_deposit" class="form-item-size form-item-3-size" size="small">
                             <form-item-label-tooltip-component
@@ -199,7 +192,7 @@
                                     <p>劳动者押金通常为200元</p>
                                 </div>    
                             </form-item-label-tooltip-component>
-                            <el-input v-model.number="signForm.staff_deposit" placeholder="请输入劳动者押金"></el-input>
+                            <el-input :disabled="true" v-model.number="signForm.staff_deposit" placeholder="请输入劳动者押金"></el-input>
                         </el-form-item>
                     </div>
                 </card-box-component>
@@ -210,7 +203,7 @@
                         </el-form-item>
                         <el-form-item label="保险期限" prop="insurance_duration" class="form-item-size form-item-23-size" size="small">
                             <el-date-picker
-                                v-model="insurance_duration"
+                                v-model="signForm.insurance_duration"
                                 value-format="timestamp"
                                 @change="changeInsuranceDuration"
                                 :picker-options="pickerOptions"
@@ -247,6 +240,15 @@
     </div>
 </template>
 <script>
+    import {
+        // sign_service_typeList,
+        sign_service_levelList,
+        sign_service_typeList,
+        sign_service_containsList,
+        // order_service_typeList,
+    } from './saleSignPage/IsaleSignItem'
+
+    
     import {saleService} from '@/service/sale.ts'
 export default {
     data(){
@@ -420,8 +422,9 @@ export default {
                 service_count:'',// 服务对象人数
                 service_level:1,// 护理依赖程度
                 service_type:'',// 服务方式
-                service_skill: [], //服务所在行业
-    
+                work_type: 0, //工种
+
+                service_duration: [],
                 service_start:'',// 服务期限起始
                 service_end: '',//服务期限截止
                 service_time:'',// 工作时间
@@ -429,14 +432,19 @@ export default {
                 staff_wage:'',// 劳务报酬
                 user_charge:'',// 客户服务费
                 user_pay:'',// 客户缴纳
-                staff_deposit:'',// 劳动者押金
+                staff_charge:'',//劳动者服务费
+                staff_deposit:200,// 劳动者押金
                 insurance_benefit:'',// 保险受益人
                 
+                insurance_duration:[],
                 insurance_start:'',// 保险起始日
                 insurance_end:'',//保险终止日
                 accessory:[],// 上传附件
                 remarks:'',//备注
             },
+            sign_service_typeList,
+            sign_service_containsList,
+            sign_service_levelList,
             workerConfigForm: {},
             workerItem: {},
             pickerOptions: {
@@ -444,21 +452,19 @@ export default {
                     return time.getTime() < Date.now() - 8.64e7;
                 },
             },
-            service_duration:[],// 服务期限展示字段
-            insurance_duration:[],// 保险期限
+            // service_duration:[],// 服务期限展示字段
+            // insurance_duration:[],// 保险期限
             //图片上传header
             uploadHeader:{
                 accessToken: this.$store.state.loginModule.token.access_token
             }
         }
     },
-
-    computed:{
-        /**
-         * 订单签约字段
-         */
-        orderConfigList(){
-            return this.$store.state.saleModule
+    watch: {
+        'signForm.staff_wage': function(val, oldVal){
+            this.signForm.user_charge = parseInt(val * 0.2)
+            this.signForm.user_pay = parseInt(val * 1.2)
+            this.signForm.staff_charge = parseInt(val * 0.1)
         }
     },
     methods: {
@@ -503,6 +509,7 @@ export default {
                 let signForm = {
                     ...this.signForm,
                 }
+                signForm.work_type = this.$utils.sendCascanderData(signForm.work_type)[0]
                 await saleService.sign(signForm).then(data =>{
                     if(data.code == "0"){
                         this.$message({
@@ -569,6 +576,11 @@ export default {
                 saleService.getWorkerFormConfig('edit')
             ]).then(data => {
                 this.contract_numberList = data[0].data
+
+                this.workerConfigForm = data[2].data
+
+                let skillTree = this.workerConfigForm.skill
+                let work_type = this.$route.query.work_type
                 this.workerItem = data[1].data
                 // 初始化签约服务人员数据
                 this.signForm.sign_staff_name = this.workerItem.name// 签约家政服务员
@@ -576,10 +588,11 @@ export default {
                 this.signForm.sign_staff_phone = this.workerItem.phone// 签约家政服务员电话
                 this.signForm.sign_staff_identify = this.workerItem.identify// 签约家政服务员身份证号
                 this.signForm.sign_staff_cur_address = this.workerItem.address// 签约家政服务员现住址
-                this.signForm.sign_staff_urgent = this.workerItem.urgent// 签约家政服务员紧急联系方式
+                this.signForm.sign_staff_urgent = this.workerItem.urgent_phone// 签约家政服务员紧急联系方式
+                this.signForm.work_type = this.$utils.setTreeArray(work_type,skillTree)
                 this.signForm.insurance_benefit = this.workerItem.name
 
-                this.workerConfigForm = data[2].data
+                
                 this.is_loading = false
                 
                 if(this.contract_numberList.length == 0){

@@ -33,10 +33,14 @@
 
             <el-table-column  label="工种" prop="work_type" align="center" >
                 <template slot-scope="scope">
-                    <el-popover trigger="click" placement="top">
+                    <table-tag-component 
+                        v-if="orderConfigForm.skill" 
+                        :propList="orderConfigForm.skill" 
+                        :tableOriginData="scope.row.work_type"></table-tag-component>
+                    <!-- <el-popover trigger="click" placement="top">
                         <p>{{ scope.row.work_type }}</p>
                         <p slot="reference" class="overCellText">{{ scope.row.work_type }}</p>
-                    </el-popover>
+                    </el-popover> -->
                 </template>
             </el-table-column>
 
@@ -80,7 +84,6 @@
     
 </template>
 <script>
-    import {$utils} from '@common/index.js'
 
     import {
         saleApplyOrderBtn,
@@ -129,7 +132,7 @@
                 if(row.order_at == 0){
                     return '-'
                 }
-                return $utils.formatDate(new Date(row.order_at), 'yyyy-MM-dd')
+                return this.$utils.formatDate(new Date(row.order_at), 'yyyy-MM-dd')
             },
         }
     }

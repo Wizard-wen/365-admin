@@ -8,8 +8,11 @@
         :close-on-press-escape="false"
         :close-on-click-modal="false">
         <el-form ref="voidContractForm" class="assign-form" :model="voidContractForm" :rules="voidContractRules" label-width="120px">
-            <el-form-item label="合同编号" prop="contract_number">
-                <el-input v-model="voidContractForm.contract_number"></el-input>
+            <el-form-item prop="contract_number">
+                <el-tooltip slot="label" class="item" effect="dark" content="合同编号不可重复！" placement="top-start">
+                    <span>合同编号<i class="el-icon-info"></i></span>
+                </el-tooltip>
+                <el-input v-model="voidContractForm.contract_number" placeholder="请输入合同编号"></el-input>
             </el-form-item>
         </el-form>
         <div slot="footer" class="dialog-footer">
@@ -21,7 +24,7 @@
 </template>
 <script>
 
-import {operateService, saleService, $utils} from '@common/index.js'
+import {operateContractService} from '@/service/operateContract'
 export default {
     props: {
         //是否打弹出框
@@ -31,13 +34,49 @@ export default {
         },
     },
     data(){
+        let _this = this
+        const contractValidate = async (rule, value, callback) =>{
+            // if (value == '') {
+            //     _this.contractCheck = false
+            //     _this.contractCheckObject = {}
+            //     callback(new Error('请输入手机号'));
+            // } else {
+                try{
+                    await operateContractService.checkContractNumber(_this.voidContractForm).then((data) =>{
+                        if(data.code == '0'){
+                            callback()
+
+                            _this.contractCheck = false
+                            _this.contractCheckObject = {}
+
+                        } else {
+                            callback(new Error(data.message))
+                        }
+                    }).catch(error =>{
+                        callback(new Error('请联系管理员'))
+                    }).finally(() =>{
+
+                    })
+                } catch(error){
+                    _this.contractCheck = true
+                    _this.contractCheckObject = error.data
+                    callback(error.message)
+                }
+            // }
+        }
         return {
             voidContractForm: {
                 contract_number: '',//空合同编号
             },
+            //空合同重复检测
+            contractCheck: false,
+            contractCheckObject: {
+
+            },
             voidContractRules: {
                 contract_number: [
-                    { required: true, message: '请选填写合同编号', trigger: 'blur'}
+                    { required: true, message: '请选填写合同编号', trigger: 'blur'},
+                    {validator:contractValidate,trigger:'blur'},
                 ]
             },
             loading: false
@@ -60,7 +99,7 @@ export default {
                 if (valid) {
                     try{
                         this.loading = true
-                        await operateService.createVoidContract(this.voidContractForm).then((data) =>{
+                        await operateContractService.createVoidContract(this.voidContractForm).then((data) =>{
                             if(data.code == "0"){
                                 this.$message({
                                     type:'success',

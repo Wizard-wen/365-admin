@@ -39,14 +39,16 @@ export default {
             let showList = []
             
             if(this.tableOriginData && this.propList.length){
-                
                 var arr = this.changeOriginData(this.tableOriginData)
                 arr.forEach((item, index) =>{
                     if(this.propList.length){
+
                         let a = this.findTargetId(item,this.propList)
-                        if(a.hasOwnProperty('id')){
+                        
+                        if( a!=null && a.hasOwnProperty('id')){
                             showList.push(a)
                         }
+
                     }
                 })
                 showList = showList.reduce((arr,item,index) => {
@@ -62,17 +64,23 @@ export default {
             } else {
                 return []
             }
-            
         },
     },
     methods: {
+        /**
+         * 包装初始化数据
+         */
         changeOriginData(val){
+            // 如果是数组，直接返回
             if(Array.isArray(val)){return val}
-            
-            if(typeof val == 'number' || typeof val == 'string'){
-                return [Number(val)]
+            // 若是数字或者字符串类型，包装成数组，若是
+            if(typeof val == 'number'  || typeof val == 'string'){
+                return val == 0? [] : [Number(val)]
             } 
         },
+        /**
+         * 查找字段
+         */
         findTargetId(targetId,arr){
             let targetObject = null;
 
@@ -87,6 +95,7 @@ export default {
                 }
             }
             findTagId(arr)
+            
             if(targetObject!=null){
                 return targetObject
             }

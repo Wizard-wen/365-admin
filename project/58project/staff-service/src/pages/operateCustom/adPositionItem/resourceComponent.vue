@@ -30,7 +30,7 @@
     </div>
 </template>
 <script>
-
+import {operateCustomService} from '@/service/operateCustom'
 export default {
     props: {
         /**
@@ -110,12 +110,13 @@ export default {
          * @param param 图片信息
          */
         async deleteAdPictureItem(param){
+            console.log(param)
             await this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
                 confirmButtonText: '确定',
                 cancelButtonText: '取消',
                 type: 'warning'
             }).then(async () => {
-                await this.deleteAdPositionResource(param.id)
+                await this.deleteAdPositionResource(param.ad_position_resource_id)
             }).catch(() => {
                 this.$message({
                     type: 'info',
@@ -129,7 +130,7 @@ export default {
         async deleteAdPositionResource(id){
             try{
                 this.is_loading = true
-                await customService.deleteAdPositionResource(id).then(data =>{
+                await operateCustomService.deleteAdPositionResource(id).then(data =>{
                     if(data.code == '0'){
                         this.$message({
                             type:'success',

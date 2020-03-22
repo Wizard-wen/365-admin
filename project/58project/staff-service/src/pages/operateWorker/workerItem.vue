@@ -14,9 +14,9 @@
             <div class="detail-left">
                 <div class="detail-left-box">
                     <div class="detail-left-line">创建人：{{workerForm.manager_name}}</div>
-                    <div class="detail-left-line">创建时间：{{workerForm.created_at | formDate}}</div>
-                    <div class="detail-left-line">更新时间：{{workerForm.updated_at | formDate}}</div>
-                    <div class="detail-left-line">上次回访时间：{{workerForm.return_at | formDate}}</div>
+                    <div class="detail-left-line">创建时间：{{workerForm.created_at | timeToDayFomatter}}</div>
+                    <div class="detail-left-line">更新时间：{{workerForm.updated_at | timeToDayFomatter}}</div>
+                    <div class="detail-left-line">上次回访时间：{{workerForm.return_at | timeToDayFomatter}}</div>
                 </div>
             </div>
         </template>
@@ -78,7 +78,7 @@
                         <el-tooltip slot="label" class="item" effect="dark" content="出生日期根据身份证号确定" placement="top-start">
                             <span>出生日期<i class="el-icon-info"></i></span>
                         </el-tooltip>
-                        {{ workerForm.birthday | formDate }}
+                        {{ workerForm.birthday | timeToDayFomatter }}
                     </el-form-item>
 
                     <el-form-item label="民族" prop="nation" class="form-item-size form-item-3-size" size="small">
@@ -164,6 +164,9 @@
                     <el-form-item label="紧急联系人" prop="urgent_phone" class="form-item-size form-item-1-size" size="small">
                         <el-input v-model="workerForm.urgent_phone" :maxlength="50" placeholder="请输入紧急联系人"></el-input>
                     </el-form-item>
+                    <!-- <el-form-item label="户籍地址" prop="address_in_law" class="form-item-size form-item-1-size" size="small">
+                        <el-input v-model="workerForm.address_in_law" :maxlength="50" placeholder="请输入户籍地址"></el-input>
+                    </el-form-item> -->
                 </div>
                 
             </card-box-component>
@@ -237,6 +240,12 @@
                             :height="150"
                             :width="237"></multiple-picture-upload>
                     </el-form-item>
+                    <!-- <el-form-item label="" prop="cus_working_exprience" class="form-item-size form-item-1-size" size="small">
+                        <el-tooltip class="item" effect="dark" content="这个是给客户展示的工作经验" placement="top-start">
+                            <span>工作经验<i class="el-icon-info"></i></span>
+                        </el-tooltip>
+                        <el-input v-model="workerForm.cus_working_exprience" :maxlength="50" placeholder="请输入工作经验"></el-input>
+                    </el-form-item> -->
                     
                 </div>   
             </card-box-component>
@@ -291,14 +300,12 @@
 
 import {
     operateService, 
-    $utils
 } from '@common/index.js'
 
 
 
 
 import {operateWorkerService} from '@/service/operateWorker'
-
 import {zodiac_signList} from '@/public/module/workerList/IworkerList.ts'
 import {educationList} from '@/public/module/workerList/IworkerList.ts'
 
@@ -401,6 +408,8 @@ export default {
                 nation:null,//民族
                 id_photo: [],//证件照
                 address:'',//地址
+                // address_in_law:'',//户籍地址
+                // cus_working_exprience:'',//工作经验（客户展示）
                 education:0,//学历
                 urgent_phone:'',//紧急联系人电话
                 photo: [],//照片
@@ -443,15 +452,6 @@ export default {
                     return time.getTime() > Date.now();//如果没有后面的-8.64e6就是不可以选择今天的
                 }
             },
-        }
-    },
-    filters: {
-        formDate(timestamp){
-            if(timestamp){
-                return $utils.formatDate(new Date(timestamp), 'yyyy-MM-dd')
-            } else {
-                return '-'
-            }
         }
     },
     computed: {
@@ -514,8 +514,8 @@ export default {
                     workerFormSend.id = this.$store.state.loginModule.user.username
                 }
 
-                workerFormSend.skill = operateWorkerService.sendCascanderData(workerFormSend.skill) 
-                workerFormSend.course = operateWorkerService.sendCascanderData(workerFormSend.course) 
+                workerFormSend.skill = this.$utils.sendCascanderData(workerFormSend.skill) 
+                workerFormSend.course = this.$utils.sendCascanderData(workerFormSend.course) 
                 
                 let response
                 let changeWorkerTypeForm = {}
@@ -547,8 +547,9 @@ export default {
                             })
                             this.is_loading = false
                             // 返回上一级列表
-                            let path = operateWorkerService.gobackToWorkerList(this.$route.query.type)
-                            this.$router.push(path)
+                            // let path = operateWorkerService.gobackToWorkerList(this.$route.query.type)
+                            // this.$router.push(path)
+                            this.goback()
                         }
                     }).catch(error =>{
                         this.$message({
@@ -582,8 +583,8 @@ export default {
                         workerFormSend.id = this.$store.state.loginModule.user.username
                     }
 
-                    workerFormSend.skill = operateWorkerService.sendCascanderData(workerFormSend.skill) 
-                    workerFormSend.course = operateWorkerService.sendCascanderData(workerFormSend.course) 
+                    workerFormSend.skill = this.$utils.sendCascanderData(workerFormSend.skill) 
+                    workerFormSend.course = this.$utils.sendCascanderData(workerFormSend.course) 
 
                     try{
                         this.is_loading = true
@@ -594,7 +595,11 @@ export default {
                                     message: data.message
                                 })
                                 this.is_loading = false
-                                this.$refs.back.goback()
+
+                                // 返回上一级列表
+                                // let path = operateWorkerService.gobackToWorkerList(this.$route.query.type)
+                                // this.$router.push(path)
+                                this.goback()
                             }
                         }).catch(error =>{
                             this.$message({
@@ -690,7 +695,6 @@ export default {
         },
     },
     async mounted(){
-        let _this = this;
         // 设定日期选择器为当前日期
         this.timeDefaultShow = Date.parse(new Date());
 

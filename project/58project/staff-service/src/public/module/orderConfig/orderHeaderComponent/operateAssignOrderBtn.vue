@@ -18,9 +18,7 @@
 import {
     publicAssignOrderComponent,
 } from '@/public/module/orderPublic/index.js'
-import {
-    saleService,
-} from '@common/index.js'
+import {publicModuleService} from '@/service/publicModule'
 export default {
     components: {
         publicAssignOrderComponent,
@@ -65,7 +63,7 @@ export default {
         async assignOrder(assignOrderObject){
             try{
                 this.is_loading = true
-                await saleService.assignOrder(assignOrderObject).then(data =>{
+                await publicModuleService.assignOrder(assignOrderObject).then(data =>{
                     if(data.code == '0'){
                         this.$message({
                             type:"success",

@@ -10,7 +10,7 @@
                     placeholder="请选择订单申请状态"
                     filterable clearable>
                     <el-option 
-                        v-for="(item, index) in order_typeList" 
+                        v-for="(item, index) in order_apply_typeList" 
                         :key="index" :label="item.name" :value="item.id"></el-option>
                 </el-select>
             </el-form-item >
@@ -35,10 +35,10 @@
                 </el-select>
             </el-form-item >
             <el-form-item label="客户电话" prop="user_phone">
-                <el-input class="input" style="width: 173px" v-model="localQueryedForm.order_user_phone" placeholder="请输入下单客户电话" :maxlength="20"></el-input>
+                <el-input class="input" style="width: 173px" v-model="localQueryedForm.user_phone" placeholder="请输入下单客户电话" :maxlength="20"></el-input>
             </el-form-item>
             <el-form-item label="客户姓名" prop="user_name">
-                <el-input class="input" style="width: 173px" v-model="localQueryedForm.order_user_name" placeholder="请输入下单客户" :maxlength="20"></el-input>
+                <el-input class="input" style="width: 173px" v-model="localQueryedForm.user_name" placeholder="请输入下单客户" :maxlength="20"></el-input>
             </el-form-item>
             <el-form-item label="来源人" prop="apply_manager_id">
                 <el-select 
@@ -73,14 +73,16 @@
 <script>
 
 import {
-    created_atList,
-    order_typeList
+    created_atList
 } from '@/public/module/orderList/IorderList.ts'
+import {
+    order_apply_typeList
+} from '@/public/module/orderApplyList/IorderApplyList'
 export default {
     data(){
         return {
             created_atList,
-            order_typeList,
+            order_apply_typeList,
             localQueryedForm: {
                 type: [],//订单申请类型
                 apply_manager_id:[],//来源人id

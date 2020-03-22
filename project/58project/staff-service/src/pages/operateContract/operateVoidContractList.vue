@@ -12,7 +12,7 @@
     </div>
 </template>
 <script>
-    import {operateService, $utils} from '@common/index.js'
+    import {operateService} from '@common/index.js'
 
     import {operateContractService} from '@/service/operateContract'
 
@@ -121,9 +121,9 @@
              * 更新表格
              */
             async updateTable(res){
-                this.queryForm = {
-                    ...res
-                }
+                // this.queryForm = {
+                //     ...res
+                // }
                 await this.getTable()
             },
             /**

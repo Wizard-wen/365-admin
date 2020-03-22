@@ -13,13 +13,12 @@
                         v-for="item in storeStaffList"
                         :key="item.manager_id"
                         :label="item.real_name"
-                        :value="item.manager_id"
-                        ></el-option>
+                        :value="item.manager_id"></el-option>
                 </el-select>
             </el-form-item>
         </el-form>
         <div slot="footer" class="dialog-footer">
-            <el-button @click="cancelAddStoreStaff">取 消</el-button>
+            <el-button @click="closeAddStoreStaffDialog">取 消</el-button>
             <el-button type="primary" @click="onSubmit">确定</el-button>
         </div>
     </el-dialog>
@@ -27,10 +26,7 @@
 
 <script>
 
-/**
- * type 0 新建  1 编辑
- */
-import {operateService, storeService} from '@common/index.js'
+import { storeService} from '@/service/store'
 
 export default {
     props:{
@@ -53,6 +49,7 @@ export default {
     },
     data() {
         return {
+            is_loading: false,
             //改变的字段内容
             addStoreStaffForm: {
                 store_id: this.storeObject.id,//门店id
@@ -63,34 +60,71 @@ export default {
         }
     },
     methods: {
-        cancelAddStoreStaff(){
+
+        closeAddStoreStaffDialog(){
             this.addStoreStaffForm.store_manager_id = ''
             this.addStoreStaffForm.store_id = ''
             this.$emit('closeAddStoreStaffDialog')
         },
+
         async onSubmit(formName){
             //校验并提交
-            await storeService.addStoreManager(this.addStoreStaffForm).then(data =>{
-                if(data.code == '0'){
-                    this.$message({
-                        type:"success",
-                        message: data.message
-                    })
-                    this.$emit('closeAddStoreStaffDialog')
+            try{
+                this.is_loading = true
+                let addStoreStaffForm = {
+                    ...this.addStoreStaffForm
                 }
+                await storeService.addStoreManager(addStoreStaffForm).then(data =>{
+                    if(data.code == '0'){
+                        this.$message({
+                            type:"success",
+                            message: data.message
+                        })
+                    }
+
+                    this.is_loading = false
+                    this.closeAddStoreStaffDialog()
+                }).catch(error =>{
+                    this.$message({
+                        type:'error',
+                        message: error.message
+                    })
+                    this.is_loading = false
+                }).finally(() =>{
+                    this.is_loading = false
+                })
+            } catch(error) {
+                this.$message({
+                    type:'error',
+                    message: error.message
+                })
+                this.is_loading = false
+            }
+        }
+    },
+    async mounted(){
+        try{
+            this.is_loading = true
+            await storeService.getNotInStoreManagerSelection().then(data =>{
+                this.storeStaffList = data.data
+                this.is_loading = false
             }).catch(error =>{
                 this.$message({
                     type:'error',
                     message: error.message
                 })
+                this.is_loading = false
+            }).finally(() =>{
+                this.is_loading = false
             })
-
+        } catch(error) {
+            this.$message({
+                type:'error',
+                message: error.message
+            })
+            this.is_loading = false
         }
-    },
-    async mounted(){
-        await storeService.getNotInStoreManagerSelection().then(data =>{
-            this.storeStaffList = data.data
-        })
+        
     }
 }
 </script>

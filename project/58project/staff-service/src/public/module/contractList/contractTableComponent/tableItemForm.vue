@@ -37,7 +37,6 @@
 
 <script>
 import {
-    $utils,
     operateService,
 } from '@common/index.js'
 
@@ -45,14 +44,6 @@ import showContractBtn from '@/public/module/contractList/contractTableComponent
 export default {
     components: {
         showContractBtn,
-    },
-    filters: {
-        /**
-         * 更改时间戳格式
-         */
-        formatDate(timestamp){
-            return $utils.formatDate(new Date(timestamp), 'yyyy-MM-dd')
-        }
     },
     props: {
         /**

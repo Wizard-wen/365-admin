@@ -6,7 +6,7 @@
                 @click="openAddStroeStaffDialog">添加新店员</el-button>
         </template>
         <el-table 
-            slot="contains"  class="person-table" 
+            slot="contains"  class="person-table" v-loading="is_loading"
             :data="storeStaffList" max-height="500"
             :header-cell-style="{height: '48px',background: '#fafafa'}">
             <el-table-column label="编号" prop="manager_code" align="center"></el-table-column>
@@ -41,6 +41,9 @@
 
 <script>
 import addStoreWorkerDialog from './addStoreWorkerDialog.vue'
+import {positionTypeList} from '../Istore'
+
+import {storeService} from '@/service/store'
 export default {
     components: {
         addStoreWorkerDialog,
@@ -49,14 +52,17 @@ export default {
         storeStaffList: {
             type: Array,
             default(){return []}
-        }
+		},
+		storeDetail: {
+			type: Object,
+			default(){return {}}
+		}
     },
     data(){
         return {
+			is_loading: false,
             //门店员工职位
-            positionTypeList: [{id: 1, name: '店员'}, {id: 2, name: '店长'}],
-            //门店详情
-			storeDetail: {},
+            positionTypeList,
 			//添加新店员弹窗显示隐藏
 			addStoreStaffDialogVisible: false,
         }
@@ -73,7 +79,7 @@ export default {
 		 */
 		async closeAddStoreStaffDialog(){
 			this.addStoreStaffDialogVisible = false;
-			await this.getStore()
+			this.$emit('updateStoreItem')
         },
         /**
 		 * 查看员工详情
@@ -91,53 +97,54 @@ export default {
 		 * 解绑员工
 		 */
 		async deleteStoreStaff(paramObj){
-			let _this= this;
-
-			let response = await this.$confirm(`确定要解绑该员工吗?`, '提示', {
+			await this.$confirm(`确定要解绑该员工吗?`, '提示', {
 				confirmButtonText: '确定',
 				cancelButtonText: '取消',
 				type: 'warning'
+			}).then(async () =>{
+				await this.deleteStoreRequest(paramObj)
+				this.$emit('updateStoreItem')
 			}).catch(() => {
 				this.$message({
 					type: 'info',
 					message: `已取消解绑`
 				});
 			});
-
-			if(response == "confirm"){
-				try{
-					let manager = {
-						store_manager_id: paramObj.id
-					}
-					this.isLoading = true
-					await storeService.unbind(manager).then(data =>{
-						if(data.code == "0"){
-							this.$message({
-								type:'success',
-								message: data.message
-							})
-							this.isLoading = false
-						}
-					}).catch(error =>{
+		},
+		/**
+		 * 解绑门店员工
+		 */
+		async deleteStoreRequest(paramObj){
+			try{
+				let manager = {
+					store_manager_id: paramObj.id
+				}
+				this.is_loading = true
+				await storeService.unbind(manager).then(data =>{
+					if(data.code == "0"){
 						this.$message({
-							type:'error',
-							message: error.message
+							type:'success',
+							message: data.message
 						})
-						this.isLoading = false
-					}).finally(() =>{
-						this.isLoading = false
-					})
-				} catch(error){
+						this.is_loading = false
+					}
+				}).catch(error =>{
 					this.$message({
 						type:'error',
 						message: error.message
 					})
-					this.isLoading = false
-				}
-				await _this.getStore()
-
+					this.is_loading = false
+				}).finally(() =>{
+					this.is_loading = false
+				})
+			} catch(error){
+				this.$message({
+					type:'error',
+					message: error.message
+				})
+				this.is_loading = false
 			}
-		},
+		}
     }
 }
 </script>

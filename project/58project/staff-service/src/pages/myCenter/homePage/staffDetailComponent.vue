@@ -12,34 +12,18 @@
                 :width="60"
                 :displayType="'circle'"></icon-component>
         </detail-form-item-component>
-        <detail-form-item-component
-            :label="'真实姓名'"
-            :size="1"
-            :value="staffForm.real_name"></detail-form-item-component>
-        <detail-form-item-component
-            :label="'用户名'"
-            :size="1"
-            :value="staffForm.manager_name"></detail-form-item-component>
-        <detail-form-item-component
-            :label="'工号'"
-            :size="1"
-            :value="staffForm.manager_code"></detail-form-item-component>
-        <detail-form-item-component
-            :label="'手机号'"
-            :size="1"
-            :value="staffForm.phone"></detail-form-item-component>
-        <detail-form-item-component
-            :label="'微信号'"
-            :size="1"
-            :value="staffForm.wechat"></detail-form-item-component>
-            <detail-form-item-component
-            :label="'邮箱'"
-            :size="1"
-            :value="staffForm.email"></detail-form-item-component>
+        <detail-form-item-component :label="'真实姓名'" :size="1" :value="staffForm.real_name"></detail-form-item-component>
+        <detail-form-item-component :label="'用户名'" :size="1" :value="staffForm.manager_name"></detail-form-item-component>
+        <detail-form-item-component :label="'工号'" :size="1" :value="staffForm.manager_code"></detail-form-item-component>
+        <detail-form-item-component :label="'手机号'" :size="1" :value="staffForm.phone"></detail-form-item-component>
+        <detail-form-item-component :label="'微信号'" :size="1" :value="staffForm.wechat"></detail-form-item-component>
+        <detail-form-item-component :label="'邮箱'" :size="1" :value="staffForm.email"></detail-form-item-component>
     </detail-form-component>
 </template>
 
 <script>
+import { mapState } from 'vuex'
+
 export default {
     props: {
         /**
@@ -51,18 +35,9 @@ export default {
         }
     },
     computed: {
-        /**
-         * 当前用户信息
-         */
-        presentUser(){
-            return this.$store.state.loginModule.user
-        },
-        /**
-         * 部门信息
-         */
-        departmentList(){
-            return this.$store.state.authModule.departmentList
-        }
+        ...mapState({
+            presentUser: state =>state.loginModule.user,
+        })
     },
 }
 </script>

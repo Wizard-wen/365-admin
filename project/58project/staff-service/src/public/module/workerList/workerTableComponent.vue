@@ -81,13 +81,13 @@
     
 </template>
 <script>
-    import {operateService, $utils} from '@common/index.js'
+    import {operateService} from '@common/index.js'
     
     import createWorkerByOperateBtn from './control/createWorkerByOperateBtn.vue'
     import createWorkerBySaleBtn from './control/createWorkerBySaleBtn.vue'
 
     import tableItemForm from './workerTableComponent/tableItemForm.vue'
-    
+    import {educationList} from './IworkerList'
     export default {
         components: {
             tableItemForm,
@@ -133,32 +133,32 @@
                 if(row.created_at == 0){
                     return '0000-00-00'
                 }
-                return $utils.formatDate(new Date(row.created_at), 'yyyy-MM-dd')
+                return this.$utils.formatDate(new Date(row.created_at), 'yyyy-MM-dd')
             },
             //登记时间字段转换
             register_atFormatter(row, column){
                 if(row.register_at == 0){
                     return '0000-00-00'
                 }
-                return $utils.formatDate(new Date(row.register_at), 'yyyy-MM-dd')
+                return this.$utils.formatDate(new Date(row.register_at), 'yyyy-MM-dd')
             },
             //更新时间字段转换
             updated_atFormatter(row, column){
                 if(row.updated_at == 0){
                     return '0000-00-00'
                 }
-                return $utils.formatDate(new Date(row.updated_at), 'yyyy-MM-dd')
+                return this.$utils.formatDate(new Date(row.updated_at), 'yyyy-MM-dd')
             },
             //出生日期字段转换
             birthdayFormatter(row, column){
                 if(row.birthday == 0){
                     return ''
                 }
-                return $utils.formatDate(new Date(row.birthday), 'yyyy-MM-dd')
+                return this.$utils.formatDate(new Date(row.birthday), 'yyyy-MM-dd')
             },
             //教育背景字段转换
             educationFomatter(row, column){
-                let a =  this.$store.state.operateModule.educationList.filter(item => item.id == row.education)
+                let a =  educationList.filter(item => item.id == row.education)
                 return a.length? a[0].name : ''
             },
         },

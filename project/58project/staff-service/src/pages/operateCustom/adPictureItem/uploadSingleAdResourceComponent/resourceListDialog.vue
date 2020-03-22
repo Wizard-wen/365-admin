@@ -1,6 +1,7 @@
 <template>
 
     <el-dialog
+        v-loading="is_loading"
         width="1000px"
         :visible.sync="resourceListDialogVisible"
         :show-close="false"
@@ -9,36 +10,17 @@
         <div class="header" slot="title">
             <p>选择广告图片</p>
             <el-tag 
-                class=""
-                :closable="true" 
-                @close="closeTag"   
+                class="" :closable="true"  @close="closeTag"   
                 v-if="currentSelectedObj.id">{{currentSelectedObj.name}}-{{currentSelectedObj.typeName}}</el-tag>
         </div>
-        
         <el-row>
-            <el-col :span="6" v-for="(item, index) in adResourceList" :key="index" style="margin-bottom:20px;">
+            <el-col :span="8" v-for="(item, index) in adResourceList" :key="index" style="margin-bottom:20px;">
                 <div style="padding: 0 10px;">
-                    <el-card :body-style="{ padding: '0px' }">
-                        <img :src="`./resource/${item.url}`" class="image">
-                        <div style="padding: 14px;">
-                            <span>{{item.name}}</span>
-                            <div class="bottom">
-                                <div class="bottom-left">
-                                    <el-tag size="small">{{item.typeName}}</el-tag>
-                                </div>
-                                <div class="bottom-right">
-                                    <el-switch
-                                        @change="changeSelectedTag(item)"
-                                        v-model="item.isSelected"
-                                        active-color="#13ce66"
-                                        inactive-color="#ff4949"></el-switch>
-                                </div>
-                            </div>
-                        </div>
-                    </el-card>
+                    <picture-card :pictureItem="item" @changeSelectedTag="changeSelectedTag"></picture-card>
                 </div>
             </el-col>
         </el-row>
+
         <el-pagination
             class="pagination"
             @current-change="handleCurrentPage"
@@ -48,17 +30,22 @@
             :page-size="pagination.pageNumber"
             layout="prev, pager, next, jumper"
             :total="pagination.total"></el-pagination>
-        <el-form-item slot="footer">
+        <div slot="footer">
             <el-button type="primary" @click="setAdPicture">确定</el-button>
             <el-button @click="closeDialog">取消</el-button>
-        </el-form-item>
+        </div>
     </el-dialog>
 </template>
 <script>
 
-import { customService} from '@common/index.js'
+import { operateCustomService} from '@/service/operateCustom'
+import pictureCard from '../../resourceList/pictureCard.vue'
 
+import {resourceTypeList} from '../../resourceList/IresourcePicture'
 export default {
+    components: {
+        pictureCard,
+    },
     props: {
         /**
          * 控制组件的显示隐藏
@@ -80,6 +67,10 @@ export default {
         selectedAdPicture: {
             default: function(){return {}},
             type: Object
+        },
+        resourceType: {
+            type: Number,
+            default: 0,
         }
     },
     data() {
@@ -87,18 +78,19 @@ export default {
             is_loading: false,
             //广告资源
             adResourceList: [],
+            resourceTypeList,
             /**
              * 分页信息
              */
             pagination: {
                 total: 0,
                 currentPage: 1,
-                pageNumber: 8,
+                pageNumber: 6,
             },
             getResourceForm: {
                 page: 1, 
-                pageNumber: 8,
-                type: 0,
+                pageNumber: 6,
+                type: this.resourceType,
             },
             //当前选中的id
             currentSelectedObj: {},
@@ -159,7 +151,7 @@ export default {
             try{
                 this.is_loading = true
 
-                await customService.getAdResourceList(this.getResourceForm).then(data =>{
+                await operateCustomService.getAdResourceList(this.getResourceForm).then(data =>{
                     this.adResourceList = data.data.data
                     this.adResourceList = this.adResourceList.map((item, index) =>{
                         return {

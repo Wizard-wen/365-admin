@@ -19,7 +19,7 @@
                 :type="'template'"
                 :label="'下单时间'" 
                 :size="3" :value="currentOrder.order_at">
-                <p slot="template">{{currentOrder.order_at | formatDate}}</p>
+                <p slot="template">{{currentOrder.order_at | timeToDayFomatter}}</p>
             </detail-form-item-component>
             <detail-form-item-component :size="3"></detail-form-item-component>
             <detail-form-item-component :size="3"></detail-form-item-component>
@@ -34,7 +34,7 @@
                 :label="'订单创建时间'" 
                 :size="3" 
                 :value="currentOrder.created_at">
-                <p slot="template">{{currentOrder.created_at | formatDate}}</p>
+                <p slot="template">{{currentOrder.created_at | timeToDayFomatter}}</p>
             </detail-form-item-component>
             <detail-form-item-component  :size="3"></detail-form-item-component>
 
@@ -91,7 +91,7 @@
                 :type="'template'" 
                 :label="'签约服务开始时间'" 
                 :size="3" :value="currentOrder.sign_service_start">
-                <p slot="template">{{ currentOrder.sign_service_start | formatDate}}</p>
+                <p slot="template">{{ currentOrder.sign_service_start | timeToDayFomatter}}</p>
             </detail-form-item-component>
             <detail-form-item-component
                 :labelWidth="140"
@@ -99,7 +99,7 @@
                 :type="'template'" 
                 :label="'签约服务截止时间'" 
                 :size="3" :value="currentOrder.sign_service_end">
-                <p slot="template">{{ currentOrder.sign_service_end | formatDate}}</p>
+                <p slot="template">{{ currentOrder.sign_service_end | timeToDayFomatter}}</p>
             </detail-form-item-component>
             <detail-form-item-component 
                 v-if="isSign"
@@ -146,7 +146,6 @@
 
 <script>
 import {
-    $utils,
     operateService,
 } from '@common/index.js'
 
@@ -165,14 +164,6 @@ export default {
         operateAssignOrderBtn,
         dealOrderBtn,
         saleAssignOrderBtn,
-    },
-    filters: {
-        /**
-         * 更改时间戳格式
-         */
-        formatDate(timestamp){
-            return $utils.formatDate(new Date(timestamp), 'yyyy-MM-dd')
-        }
     },
     computed: {
         /**

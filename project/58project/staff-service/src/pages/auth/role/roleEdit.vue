@@ -1,12 +1,6 @@
 <template>
-    <div class="role-edit">
-        <el-form
-          class="roleForm"
-          ref="form"
-          :model="roleForm"
-          label-width="120px"
-          :rules="roleRules"
-        >
+    <div class="role-edit" v-loading="is_loading">
+        <el-form class="roleForm" ref="form" :model="roleForm" label-width="120px" :rules="roleRules">
             <el-form-item label="名称" prop="name">
                 <el-input v-model="roleForm.name" :maxlength="20"></el-input>
             </el-form-item>
@@ -18,35 +12,22 @@
     </div>
 </template>
 <script>
-import {authService} from '@common/index.js'
+import {authService} from '@/service/auth'
 export default {
     data(){
-        const validateName = (rule, value, callback) => {
-            if (value === '') {
-                callback(new Error('请输入角色名'));
-            } else {
-                callback();
-            }
-        };
         return {
+            is_loading: false,
             //账户信息
             roleForm: {
+                id: this.$route.query.id ? this.$route.query.id : '',
                 name: '', //名称
             },
             //角色校验规则
             roleRules: {
                 name: [
-                    { validator: validateName, trigger: 'blur' }
+                    {required: true, message: '请填写角色名称',trigger: 'blur',},
                 ],
             }
-        }
-    },
-    computed: {
-        /**
-         * 角色is
-         */
-        roleId(){
-            return this.$route.query.id ? this.$route.query.id : ''
         }
     },
     methods:{
@@ -54,23 +35,38 @@ export default {
          * 提交角色信息修改
          */
         async onSubmit(formName){
-            await this.$refs[formName].validate((valid) => {
+            await this.$refs[formName].validate(async (valid) => {
                 if (valid) {
-                    authService.editRole(this.roleForm.name, this.roleId)
-                    .then(data =>{
-                        if(data.code == "0"){
-                            this.$message({
-                                type: "success",
-                                message: data.message
-                            })
-                            this.$router.push('/auth/roleList')
+                    try{
+                        this.is_loading = true
+                        let roleForm = {
+                            ...this.roleForm
                         }
-                    }).catch(error =>{
+                        await authService.editRole(roleForm).then(data =>{
+                            if(data.code == "0"){
+                                this.$message({
+                                    type: "success",
+                                    message: data.message
+                                })
+                            }
+                            this.is_loading = false
+                            this.$router.push('/auth/roleList')
+                        }).catch(error =>{
+                            this.$message({
+                                type: "error",
+                                message: error.message
+                            })
+                            this.is_loading = false
+                        }).finally(() =>{
+                            this.is_loading = false
+                        })
+                    } catch(error){
                         this.$message({
                             type: "error",
                             message: error.message
                         })
-                    })
+                        this.is_loading = false
+                    }
                 } else {
                     return false;
                 }
@@ -78,23 +74,32 @@ export default {
         }
     },
     async mounted(){
-        let _this = this
-        store.commit('setLoading',true)
         try {
+            this.is_loading = true
             //编辑角色信息
             if(this.$route.query.type == 1){
-                await authService.getRole(this.roleId)
-                    .then(data =>{
-                        this.roleForm.name = data.data.name
-                    }).catch(err =>{
-
+                await authService.getRole(this.$route.query.id).then(data =>{
+                    this.roleForm.name = data.data.name
+                    this.is_loading = false
+                }).catch(error =>{
+                    this.$message({
+                        type: "error",
+                        message: error.message
                     })
+                    this.is_loading = false
+                }).finally(() =>{
+                    this.is_loading = false
+                })
+            } else {
+                this.is_loading = false
             }
-
         } catch (error) {
-
+            this.$message({
+                type: "error",
+                message: error.message
+            })
+            this.is_loading = false
         }
-        store.commit('setLoading',false)
     }
 }
 </script>

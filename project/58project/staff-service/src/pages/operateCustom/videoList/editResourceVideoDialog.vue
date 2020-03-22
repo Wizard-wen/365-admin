@@ -29,7 +29,7 @@
 
 <script>
 
-import {customService} from '@common/index.js'
+import {operateCustomService} from '@/service/operateCustom'
 export default {
     props:{
         /**
@@ -81,7 +81,7 @@ export default {
                     //校验并提交
                     try{
                         this.is_loading = true
-                        await customService.editVideo(this.editResourceVideoForm).then(data =>{
+                        await operateCustomService.editVideo(this.editResourceVideoForm).then(data =>{
                             if(data.code == '0'){
                                 this.$message({
                                     type:"success",

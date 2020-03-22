@@ -13,11 +13,13 @@ export const orderApplyListService = {
     async getOrderApplyList(searchOrderApplyForm:searchOrderApplyForm):Promise<any>{
         return Promise.all([
             apiRequestOrder.getApplicationList(searchOrderApplyForm),
-            apiRequestFormConfig.getApplyFormConfig()
+            apiRequestFormConfig.getApplyFormConfig(),
+            apiRequestFormConfig.getWorkerFormConfig('edit'),
         ]).then(data =>{
             return {
                 orderApplyConfigForm: {
                     ...data[1].data,
+                    ...data[2].data,
                 },
                 pagination: {
                     currentPage: data[0].data.current_page, //当前页码

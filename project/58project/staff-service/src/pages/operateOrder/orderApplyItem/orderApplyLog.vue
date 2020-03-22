@@ -1,5 +1,6 @@
 <template>
     <log-component
+        :isEdit="isEdit"
         :logList="order_logs"
         :logDialogVisible="logDialogVisible"
         @openLogDialog="openLogDialog"
@@ -23,6 +24,10 @@ export default {
             type: Array,
             default: function(){return []}
         },
+        isEdit: {
+            type: Boolean,
+            default: false,
+        }
     },
     methods: {
         /**

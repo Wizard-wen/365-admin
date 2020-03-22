@@ -2,17 +2,26 @@
 import Vue from 'vue'
 
 
+import Layout from './Layout/SystemLayout.vue'
+
+import sliderSpread from './menu/menuSpread/sliderSpread.vue'
+import sliderVertical from './menu/menuVertical/sliderVertical.vue'
+
+
+
+Vue.component('sliderSpread',sliderSpread)
+Vue.component('sliderVertical',sliderVertical)
 
 //照片详情组件
 import pictureDetailDialog from './pictureDetailDialog.vue'
 //生成图片组件
 import makeImageComponent from './makeImageComponent.vue'
 // 上传单张图片
-import singlePictureUpload from './singlePictureUpload/index.vue'
+import singlePictureUpload from './singlePictureUpload.vue'
 // 上传多张图片
-import multiplePictureUpload from './multiplePictureUpload/index.vue'
+import multiplePictureUpload from './multiplePictureUpload.vue'
 //头像组件
-import iconComponent from './iconComponent/index.vue'
+import iconComponent from './iconComponent.vue'
 //日志组件
 import logComponent from './logComponent.vue'
 
@@ -20,7 +29,7 @@ import logComponent from './logComponent.vue'
  * 和tag标签相关的组件
  */
 //tag标签信息配置
-import configTagComponent from './configTagComponent/index.vue'
+import configTagComponent from './configTagComponent.vue'
 
 //表单项，直接点击，单选或多选tag标签
 import selectTagComponent from './selectTagComponent.vue'
@@ -80,6 +89,9 @@ export {
     formItemLabelTooltipComponent,
     singlePictureUpload,
     pagination,
+
+    Layout,
+    sliderSpread,
 }
 
 

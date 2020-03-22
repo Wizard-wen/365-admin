@@ -41,10 +41,14 @@
 
             <el-table-column  label="工种" prop="work_type" align="center" width="120">
                 <template slot-scope="scope">
-                    <el-popover trigger="click" placement="top">
+                    <!-- <el-popover trigger="click" placement="top">
                         <p>{{ scope.row.work_type }}</p>
                         <p slot="reference" class="overCellText">{{ scope.row.work_type }}</p>
-                    </el-popover>
+                    </el-popover> -->
+                    <table-tag-component 
+                        v-if="orderApplyConfigForm.skill" 
+                        :propList="orderApplyConfigForm.skill" 
+                        :tableOriginData="scope.row.work_type"></table-tag-component>
                 </template>
             </el-table-column>
 
@@ -88,7 +92,7 @@
     
 </template>
 <script>
-    import {operateService, $utils} from '@common/index.js'
+    import {operateService} from '@common/index.js'
 
     import tableItemForm from './orderApplyTableComponent/tableItemForm.vue'
     
@@ -130,7 +134,7 @@
                 if(row.created_at == 0){
                     return '-'
                 }
-                return $utils.formatDate(new Date(row.created_at), 'yyyy-MM-dd')
+                return this.$utils.formatDate(new Date(row.created_at), 'yyyy-MM-dd')
             },
         }
     }

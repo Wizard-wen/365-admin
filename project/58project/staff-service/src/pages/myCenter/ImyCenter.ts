@@ -10,11 +10,17 @@ export const departmentList = [
     {id:6,name:'开发部'}
 ]
 
+// 获取个人信息get_for
+export enum personalGet_for {
+    personal= 'personal',
+    basic ='basic',
+}
+
 /**
  * 账号基本信息---只读，不可编辑
  */
 export interface base_accountItem {
-    get_for?:string;
+    id:number;
     account:string;//账号
     staff_code:string;//工号
     real_name:string;//真实姓名
@@ -25,9 +31,9 @@ export interface base_accountItem {
 /**
  * 个人信息---用户可以变更（独立接口）
  */
-export interface personal_info {
+export interface personal_infoForm {
+    id:number;
     get_for?:string;
-
 
     icon:string;//头像
     name: string//用户名
@@ -43,7 +49,8 @@ export interface personal_info {
 /**
  * 修改密码---独立接口
  */
-export interface passwordChange {
+export interface passwordChangeForm {
+    id:number;
     originPassword:string;//原始密码
     newPassword:string;//新密码
     reNewPassword:string;//确认新密码

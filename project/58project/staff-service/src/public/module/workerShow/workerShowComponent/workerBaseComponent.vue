@@ -10,7 +10,7 @@
                 </detail-form-item-component>
                 <detail-form-item-component :label="'身份证号'" :size="3" :value="workerForm.identify"></detail-form-item-component>
                 <detail-form-item-component :label="'年龄'" :size="3" :value="workerForm.age"></detail-form-item-component>
-                <detail-form-item-component :label="'出生日期'" :size="3" :value="workerForm.birthday | formatDate"></detail-form-item-component>
+                <detail-form-item-component :label="'出生日期'" :size="3" :value="workerForm.birthday | timeToDayFomatter"></detail-form-item-component>
                 <detail-form-item-component :type="'template'" :label="'民族'" :size="3" :value="workerForm.nation">
                     <table-tag-component 
                         slot="template"
@@ -40,13 +40,13 @@
                 </detail-form-item-component>
                 <detail-form-item-component :label="'现住址'" :size="1" :value="workerForm.address"></detail-form-item-component>
                 <detail-form-item-component :label="'紧急联系人'" :size="1" :value="workerForm.urgent_phone"></detail-form-item-component>
+                <!-- <detail-form-item-component :label="'户籍地址'" :size="1" :value="workerForm.address_in_law"></detail-form-item-component> -->
             </detail-form-component>
         </div>
     </card-box-component>
 </template>
 
 <script>
-import {$utils} from '@common/index.js'
 
 import {
     zodiac_signList,
@@ -70,12 +70,6 @@ export default {
         zodiac_signFormat(target){
             return zodiac_signList.find(item => item.id == target ).name
         },
-        formatDate(timestamp){
-            if(timestamp == 0){
-                return '-'
-            }
-            return $utils.formatDate(new Date(timestamp), 'yyyy-MM-dd')
-        }
     },
 }
 </script>

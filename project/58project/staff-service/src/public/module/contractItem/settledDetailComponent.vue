@@ -8,7 +8,7 @@
                     :label="'结算时间'"
                     :size="1"
                     :value="contractBase.stop_at">
-                    <p slot="template">{{contractBase.stop_at | timeFomatter}}</p>
+                    <p slot="template">{{contractBase.stop_at | timeToDayFomatter}}</p>
                 </detail-form-item-component>
                 <detail-form-item-component
                     :type="'template'"
@@ -16,8 +16,8 @@
                     :size="1"
                     :value="contractBase.service_start">
                     <p slot="template">
-                        {{contractBase.account.service_start | timeFomatter}} —— 
-                        {{contractBase.account.service_end | timeFomatter}}
+                        {{contractBase.account.service_start | timeToDayFomatter}} —— 
+                        {{contractBase.account.service_end | timeToDayFomatter}}
                     </p>
                 </detail-form-item-component>
                 <detail-form-item-component
@@ -60,16 +60,7 @@
 </template>
 
 <script>
-import {$utils} from '@common/index.js'
 export default {
-    filters: {
-        timeFomatter(value){
-            if(value == 0){
-                return '-'
-            }
-            return $utils.formatDate(new Date(value), 'yyyy-MM-dd')
-        },
-    },
     props: {
         /**
          * 合同基本信息

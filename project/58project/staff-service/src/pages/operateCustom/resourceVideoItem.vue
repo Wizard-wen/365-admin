@@ -31,7 +31,7 @@
 
 <script>
 
-import {customService} from '@common/index.js'
+import {operateCustomService} from '@/service/operateCustom'
 import uploadSingleAdResourceComponent from './adPictureItem/uploadSingleAdResourceComponent.vue'
 export default {
     components: {
@@ -80,7 +80,7 @@ export default {
         async getVideo(){
             try{
                 this.is_loading = true
-                await customService.getVideo(this.$route.query.id).then(data =>{
+                await operateCustomService.getVideo(this.$route.query.id).then(data =>{
                     this.editResourceVideoForm = data.data
                     this.is_loading = false
                 }).catch(error =>{
@@ -109,7 +109,7 @@ export default {
                     //校验并提交
                     try{
                         this.is_loading = true
-                        await customService.editVideo(this.editResourceVideoForm).then(data =>{
+                        await operateCustomService.editVideo(this.editResourceVideoForm).then(data =>{
                             if(data.code == '0'){
                                 this.$message({
                                     type:"success",

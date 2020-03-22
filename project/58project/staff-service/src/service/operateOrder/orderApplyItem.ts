@@ -1,6 +1,7 @@
 
 import {
     apiRequestOrder,
+    apiRequestCommon,
 } from '@/request/index'
 
 export const orderApplyItemService = {
@@ -11,4 +12,24 @@ export const orderApplyItemService = {
     async getApplication(id:number){
         return apiRequestOrder.getApplication(id)
     },
+    /**
+     * 
+     * @param orderOriginForm 
+     */
+    editAppLySource(orderOriginForm:any){
+        return apiRequestOrder.editAppLySource(orderOriginForm)
+    },
+    /**
+     * 
+     */
+    getStoreSelection(){
+        return apiRequestCommon.getStoreSelection()
+    },
+    /**
+     * 
+     * @param store_id 
+     */
+    getStoreManagerSelection(store_id:any){
+        return apiRequestCommon.getStoreManagerSelection(store_id)
+    }
 }

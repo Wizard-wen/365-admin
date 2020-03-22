@@ -27,7 +27,6 @@
 </template>
 <script>
 
-import { $utils} from '@common/index.js'
 import {publicModuleService} from '@/service/publicModule'
 
 

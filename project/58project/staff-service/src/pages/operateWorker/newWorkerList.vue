@@ -8,7 +8,7 @@
         <worker-table-component
             :workerListType="'apply'"
             :tableData="workerTable"
-            :workerConfigList="workerConfigForm"
+            :workerConfigForm="workerConfigForm"
             @updateTable="updateTable"></worker-table-component>
         <pagination
             :pagination="pagination"

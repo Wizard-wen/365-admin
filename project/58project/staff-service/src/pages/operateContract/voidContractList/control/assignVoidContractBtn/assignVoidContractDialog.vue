@@ -25,7 +25,7 @@
 </template>
 <script>
 
-import {operateService, saleService, $utils} from '@common/index.js'
+import {operateContractService} from '@/service/operateContract'
 export default {
     props: {
         //是否打弹出框
@@ -78,7 +78,7 @@ export default {
                 if (valid) {
                     try{
                         this.loading = true
-                        await operateService.assignVoidContract(this.assignVoidContractForm).then((data) =>{
+                        await operateContractService.assignVoidContract(this.assignVoidContractForm).then((data) =>{
                             if(data.code == "0"){
                                 this.$message({
                                     type:'success',
@@ -114,7 +114,7 @@ export default {
     async mounted(){
         try{
             this.loading = true
-            await operateService.getDepartmentManagerSelection(4).then((data) =>{
+            await operateContractService.getDepartmentManagerSelection(4).then((data) =>{
                 if(data.code == "0"){
                     this.selectionList = [
                         {real_name: '请选择', manager_id: 0},
@@ -143,28 +143,6 @@ export default {
 </script>
 <style lang="scss" scoped>
 
-        .base-form-box{
-            .base-line{
-                float: left;
-                display: flex;
-                line-height: 40px;
-                height:40px;
-                .base-word{
-                    display: flex;
-                    .base-key{
-                        width: 120px;
-                        padding-right: 10px;
-                        text-align: right;
-                    }
-                    .base-value{
-                        flex: 1;
-                    }
-                }
-            }
-        }
-        .assign-form{
-            width:100%;
-        }
 
 </style>
 

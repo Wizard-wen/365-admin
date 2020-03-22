@@ -6,9 +6,13 @@ import {
 import {
     getSaleWorkstationForm,
 } from '@/pages/saleWorkStation/saleWorkStation'
-
+import {$utils} from '@/utils/index'
 export const saleWorkstationService = {
     getSaleWorkBench(getSaleWorkstationForm:getSaleWorkstationForm){
-        return apiRequestStore.saleWorkBench(getSaleWorkstationForm)
+        let queryUrl = $utils.changeObjectToPathString(getSaleWorkstationForm)
+        return apiRequestStore.saleWorkBench(queryUrl)
+    },
+    getHalfYearData(){
+        return apiRequestStore.getHalfYearData() 
     }
 }

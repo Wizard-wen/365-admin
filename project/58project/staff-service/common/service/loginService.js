@@ -2,7 +2,7 @@
  * 登陆模块
  */
 
-import store from '../store'
+// import store from '../../src/store'
 
 import loginRequest from './request/loginRequest'
 

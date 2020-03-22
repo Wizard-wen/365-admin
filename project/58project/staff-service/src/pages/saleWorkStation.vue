@@ -1,11 +1,11 @@
 <template>
     <div class="workstation" v-loading="is_loading">
         <div class="performance">
-            <statistic-card-component v-hide
+            <statistic-card-component
                 :title="'订单转化率'" :statisticItem="saleWorkStation.order_transform_rate"></statistic-card-component>
-            <statistic-card-component v-hide
+            <statistic-card-component
                 :title="'订单流水'" :statisticItem="saleWorkStation.sale_amount"></statistic-card-component>
-            <statistic-card-component v-hide
+            <statistic-card-component
                 :title="'销售额'" :statisticItem="saleWorkStation.sale_service_amount"></statistic-card-component>
             <statistic-card-component v-hide></statistic-card-component>
         </div>
@@ -49,11 +49,12 @@
 </template>
 <script>
 import {
-    applyOrderDialog,
+    // applyOrderDialog,
     processingOrder,
     dynamicInformation,
 } from './saleWorkStation/index.js'
 
+import applyOrderDialog from '@/public/module/orderList/control/saleApplyOrderBtn/applyOrderDialog.vue'
 import {
     statisticCardComponent,
 } from './operateWorkStation/index'
@@ -149,10 +150,21 @@ export default {
             this.is_loading = true
 
             let getSaleWorkerStationForm = {
-                id: this.presentUser.id,
+                store_id: this.presentUser.is_store_manager == 2 ?this.presentUser.store_id :this.presentUser.id,
+                id: this.presentUser.is_store_manager == 2 ?this.presentUser.store_id :this.presentUser.id,
                 get_for:this.presentUser.is_store_manager == 2? "store" : "personal"
             }
 
+
+            // let getSaleWorkerStationForm = {}
+            // if(this.presentUser.is_store_manager == 2){
+            //     getSaleWorkerStationForm.store_
+            // } else {
+
+            // }
+            await saleWorkstationService.getHalfYearData().then(data =>{
+                console.log(data)
+            })
             await saleWorkstationService.getSaleWorkBench(getSaleWorkerStationForm).then(data =>{
                 if(data.code == '0'){
                     //设置工作台数据

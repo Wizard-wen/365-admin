@@ -37,7 +37,7 @@ export default {
         /**
          * 切换页码
          */
-        async handleCurrentPage(val){
+        handleCurrentPage(val){
             this.$emit('changePage', val)
         },
     }

@@ -13,7 +13,6 @@
 </template>
 <script>
 
-import {saleService, $utils} from '@common/index.js'
 export default {
     props: {
         //是否打弹出框
@@ -49,29 +48,6 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-
-        .base-form-box{
-            .base-line{
-                float: left;
-                display: flex;
-                line-height: 40px;
-                height:40px;
-                .base-word{
-                    display: flex;
-                    .base-key{
-                        width: 120px;
-                        padding-right: 10px;
-                        text-align: right;
-                    }
-                    .base-value{
-                        flex: 1;
-                    }
-                }
-            }
-        }
-        .assign-form{
-            width:100%;
-        }
 
 </style>
 

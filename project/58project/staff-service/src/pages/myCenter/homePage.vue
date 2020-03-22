@@ -83,10 +83,15 @@
 
 <script>
 import {noticeArticleList} from './noticeArticle/index.js'
+
 import {staffDetailComponent} from './homePage/index.js'
-import {operateService} from '@common/index.js'
+
+import {myCenterService} from '@/service/myCenter'
+
 import noHeaderImage from './homePage/images/header.png'
-// import { departmentList } from './interface.ts';
+
+import {departmentList} from './ImyCenter'
+
 export default {
 	components: {
 		staffDetailComponent,
@@ -96,18 +101,17 @@ export default {
 			is_loading: false,
 			noticeArticleList,//文章列表数组
 			noHeaderImage,//没有头像展位图
-			departmentManagerList: [],
+			departmentManagerList: [],//部门员工列表
+			departmentList,//所有部门列表
 		};
 	},
 	computed: {
-		presentUser() {
-			return this.$store.state.loginModule.user;
-		},
+		// 部门名称
 		department_name() {
-			return this.$store.state.authModule.departmentList.filter(
+			return this.departmentList.filter(
 				item => item.id == this.presentUser.department_id
 			)[0].name;
-		}
+		},
 	},
 	methods:{
 		/**
@@ -121,10 +125,16 @@ export default {
 				}
 			})
 		},
+		/**
+		 * 获取小组成员
+		 */
 		async getTeamList(){
+			// 若员工属于某个门店
 			if(this.presentUser.department_id == 4){
+				// 获取当前门店全部成员
 				await this.getCurrentStoreSelection()
 			} else {
+				// 获取非门店部门所有人员
 				await this.getDepartmentManagerSelection()
 			}
 		},
@@ -134,7 +144,7 @@ export default {
 		async getCurrentStoreSelection(){
 			try{
 				this.is_loading = true
-				await operateService.getStoreManagerSelection(this.presentUser.store_id).then((data) =>{
+				await myCenterService.getStoreManagerSelection(this.presentUser.store_id).then((data) =>{
 					this.departmentManagerList = data.data
 					this.is_loading = false
 				}).catch(error =>{
@@ -160,7 +170,7 @@ export default {
 		async getDepartmentManagerSelection(){
 			try{
                 this.is_loading = true
-                await operateService.getDepartmentManagerSelection(this.presentUser.department_id).then((data) =>{
+                await myCenterService.getDepartmentManagerSelection(this.presentUser.department_id).then((data) =>{
                     this.departmentManagerList = data.data
                     this.is_loading = false
                 }).catch(error =>{
@@ -215,13 +225,13 @@ export default {
 				align-items: center;
 				justify-content: center;
 				.home-icon {
-					height: 100px;
+					height: 140px;
 					width: 100px;
-					border-radius: 50%;
+					// border-radius: 4px;
 					& img {
-						height: 100px;
+						height: 140px;
 						width: 100px;
-						border-radius: 50%;
+						border-radius: 4px;
 					}
 				}
 				.home-name {

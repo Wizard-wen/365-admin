@@ -13,11 +13,13 @@ export const clientRequireListService = {
     async getClientRequireList(searchClientRequireForm:searchClientRequireForm):Promise<any>{
         return Promise.all([
             apiRequestOrder.getClientRequireList(searchClientRequireForm),
-            apiRequestFormConfig.getApplyFormConfig()
+            apiRequestFormConfig.getApplyFormConfig(),
+            apiRequestFormConfig.getWorkerFormConfig('edit'),
         ]).then(data =>{
             return {
                 orderApplyConfigForm: {
                     ...data[1].data,
+                    ...data[2].data,
                 },
                 pagination: {
                     currentPage: data[0].data.current_page, //当前页码

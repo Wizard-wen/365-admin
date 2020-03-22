@@ -4,7 +4,7 @@ import {refreshToken} from './changeToken/index'
 import {apiRequestCommon} from './common/index'
 import {apiRequestFormConfig} from './formConfig/index'
 import {apiRequestLog} from './log/index'
-import {login} from './login/index'
+import {apiLogin} from './login/index'
 import {apiRequestOrder} from './order/index'
 import {apiRequestPermission} from './permission/index'
 import {apiRequestPersonal} from './personal/index'
@@ -23,7 +23,7 @@ export {
     apiRequestCommon,
     apiRequestFormConfig,
     apiRequestLog,
-    login,
+    apiLogin,
     apiRequestOrder,
     apiRequestPermission,
     apiRequestPersonal,

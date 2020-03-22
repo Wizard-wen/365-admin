@@ -32,7 +32,7 @@ export const apiRequestVideo:api_video = {
      */
     deleteVideo(id){
         return axios.post(`./admin/video/deleteVideo`,{
-            id,
+            id: id,
         })
     },
 }

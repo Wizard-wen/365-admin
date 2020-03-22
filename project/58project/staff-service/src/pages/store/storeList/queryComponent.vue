@@ -1,75 +1,108 @@
 <template>
-    <div class="queryBox">
-        <query-search-input
-            @updateSearchInput="updateSearchInput"
-            :queryKey="'name'"
-            :queryName="'门店名'"
-            :selectedText="queryStoreList.name"></query-search-input>
-        <query-search-input
-            @updateSearchInput="updateSearchInput"
-            :queryKey="'store_manager_name'"
-            :queryName="'店长'"
-            :selectedText="queryStoreList.store_manager_name"></query-search-input>
-        <query-search-input
-            @updateSearchInput="updateSearchInput"
-            :queryKey="'store_code'"
-            :queryName="'门店编号'"
-            :selectedText="queryStoreList.store_code"></query-search-input>
-        <query-search-list
-            @updateSearchList="updateSearchList"
-            :queryKey="'is_third'"
-            :queryName="'门店类型'"
-            :queryList="storeFormConfig.is_third"
-            :selectedList="queryStoreList.is_third"
-            :isSingleQuery="true"></query-search-list>
-        <query-search-list
-            @updateSearchList="updateSearchList"
-            :queryKey="'type'"
-            :queryName="'经营状态'"
-            :queryList="storeFormConfig.type"
-            :selectedList="queryStoreList.type"
-            :isSingleQuery="true"></query-search-list>
+    <div class="search-box">
+        <el-form :inline="true" size="mini" ref="localQueryedForm" label-width="90px" :model="localQueryedForm" class="account-form">
+            <el-form-item label="门店名" prop="name">
+                <el-input class="input" style="width: 173px" v-model="localQueryedForm.name" placeholder="请输入服务人员姓名" :maxlength="20"></el-input>
+            </el-form-item>
+
+            <el-form-item label="店长" prop="store_manager_name">
+                <el-input class="input" style="width: 173px" v-model="localQueryedForm.store_manager_name" placeholder="请输入店长姓名" :maxlength="20"></el-input>
+            </el-form-item>
+
+            <el-form-item label="门店编号" prop="store_code">
+                <el-input class="input" style="width: 173px" v-model="localQueryedForm.store_code" placeholder="请输入门店编号" :maxlength="20"></el-input>
+            </el-form-item>
+
+            <el-form-item label="门店类型" prop="is_third">
+                <el-select v-model="localQueryedForm.is_third" placeholder="请选择接单状态" clearable>
+                    <!-- <el-option :label="'全部'" :value="0"></el-option> -->
+                    <el-option 
+                        v-for="(item, index) in is_thirdList" 
+                        :key="index" 
+                        :label="item.name" 
+                        :value="item.id"></el-option>
+                </el-select>
+            </el-form-item>
+
+            <el-form-item label="经营状态" prop="status">
+                <el-select v-model="localQueryedForm.status" placeholder="请选择经营状态" clearable>
+                    <!-- <el-option :label="'全部'" :value="0"></el-option> -->
+                    <el-option 
+                        v-for="(item, index) in runTypeList" 
+                        :key="index" 
+                        :label="item.name" 
+                        :value="item.id"></el-option>
+                </el-select>
+            </el-form-item>
+
+            <el-form-item >
+                <div style="width: 263px;display: flex;justify-content: flex-end">
+                    <el-button type="primary" @click="searchForm">查询</el-button>
+                    <el-button @click="resetForm('localQueryedForm')">重置</el-button>
+                </div>
+            </el-form-item>
+        </el-form>
     </div>
 </template>
+
 <script>
+
+import {is_thirdList,runTypeList} from '../Istore'
 export default {
     data(){
         return {
-            setWorkerConfigForm: [],//本地接收的搜索config字段
+            is_thirdList,
+            runTypeList,
+            localQueryedForm: {
+                is_third: [],
+                status: [],
+                name: '',
+                store_manager_name: '',
+                store_code: '',
+            }
         }
     },
-    computed:{
+    props: {
         /**
-         * 合同筛选字段
+         * 待选择的数据
          */
-        storeFormConfig(){
-            return this.$store.state.storeModule.storeFormConfig
+        queryForm: {
+            type: Object,
+            default: function(){
+                return {}
+            }
         },
-        queryStoreList(){
-            return this.$store.state.storeModule.storeList
-        }
     },
     methods: {
-        // 
-        updateSearchInput(queryObject){
-            this.$store.commit('setStoreList', {
-                queryKey: queryObject[0], 
-                queryedList: queryObject[1]
-            })
-            this.$emit('updateTable')
+        /**
+         * 搜索
+         */
+        searchForm(){
+            let sendForm = {
+                ...this.localQueryedForm
+            }
+            sendForm.is_third = sendForm.is_third? [sendForm.is_third]: []
+            sendForm.status = sendForm.status? [sendForm.status]: []
+            this.$emit('changeQueryedForm', sendForm)
         },
-        updateSearchList(queryObject){
-            this.$store.commit('setStoreList', {
-                queryKey: queryObject[0], 
-                queryedList: queryObject[1]
-            })
-            this.$emit('updateTable')
+        /**
+         * 重置
+         */
+        resetForm(formName) {
+            this.$refs[formName].resetFields();
+            this.searchForm()
         }
-    },
+    }
 }
 </script>
+
 <style lang="scss" scoped>
-
+    .search-box{
+        background: #fff;
+        padding: 18px 30px 18px 30px;
+        margin-bottom: 18px;
+        .account-form{
+            background: #fff;
+        }
+    }
 </style>
-
-

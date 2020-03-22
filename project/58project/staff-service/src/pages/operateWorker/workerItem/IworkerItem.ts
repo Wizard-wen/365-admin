@@ -22,7 +22,7 @@ export interface workerItem{
 
     /****************************客户可见 **********************/
 
-    cus_working_experience:string;//工作经历、个人技能
+    cus_working_experience?:string;//工作经历、个人技能
 
     /****************************基本信息16个***************** */
     name:string;//姓名
@@ -40,6 +40,7 @@ export interface workerItem{
     body_weight:string;//体重
     nation?:number;//民族
     address:string;//现地址
+    address_in_law?:string;//户籍地址
     education?:number;//学历
     //格式一般为:  姓名/与劳动者的关系 + 电话
     urgent_phone?:string;//紧急联系人

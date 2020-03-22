@@ -112,7 +112,8 @@
             </el-form-item >
 
 
-            <el-form-item label="订单经纪人" prop="agent_manager_id" v-if="presentUser.is_store_manager != 1">
+            <el-form-item label="订单经纪人" prop="agent_manager_id" 
+                v-if="presentUser.is_store_manager != 1 || (presentUser.department_id != 4 && presentUser.department_id !=5)">
                 <el-select 
                     v-model="localQueryedForm.agent_manager_id" 
                     placeholder="请选择订单经纪人"
@@ -125,7 +126,7 @@
                         :value="item.id"></el-option>
                 </el-select>
             </el-form-item >
-            <!-- <el-form-item label="订单经纪门店">
+            <el-form-item label="订单经纪门店">
                 <el-select 
                     v-model="localQueryedForm.agent_store_id" 
                     placeholder="请选择订单经纪门店"
@@ -137,7 +138,7 @@
                         :label="item.name" 
                         :value="item.id"></el-option>
                 </el-select>
-            </el-form-item> -->
+            </el-form-item>
             <el-form-item >
                 <div style="width: 263px;display: flex;justify-content: flex-end">
                     <el-button type="primary" @click="searchForm">查询</el-button>

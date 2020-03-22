@@ -39,7 +39,7 @@
     
 </template>
 <script>
-    import {operateService, $utils} from '@common/index.js'
+    import {operateService} from '@common/index.js'
 
     import {contract_typeList} from '@/public/module/contractList/IcontractList.ts'
     import tableItemForm from './contractTableComponent/tableItemForm.vue'
@@ -77,21 +77,21 @@
                 if(row.sign_at == 0){
                     return '-'
                 }
-                return $utils.formatDate(new Date(row.sign_at), 'yyyy-MM-dd')
+                return this.$utils.formatDate(new Date(row.sign_at), 'yyyy-MM-dd')
             },
             // 服务开始时间
             service_startFormatter(row, column){
                 if(row.service_start == 0){
                     return '-'
                 }
-                return $utils.formatDate(new Date(row.service_start), 'yyyy-MM-dd')
+                return this.$utils.formatDate(new Date(row.service_start), 'yyyy-MM-dd')
             },
             // 服务截止时间
             service_endFormatter(row, column){
                 if(row.service_end == 0){
                     return '-'
                 }
-                return $utils.formatDate(new Date(row.service_end), 'yyyy-MM-dd')
+                return this.$utils.formatDate(new Date(row.service_end), 'yyyy-MM-dd')
             },
             
         }

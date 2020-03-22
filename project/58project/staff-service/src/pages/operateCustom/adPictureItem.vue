@@ -1,15 +1,15 @@
 <template>
-    <el-form :model="adPictureForm" class="form-style" label-width="120px" :rules="adPictureRules" ref="adPictureForm">
+    <el-form :model="adPictureForm" class="form-style" label-width="140px" :rules="adPictureRules" ref="adPictureForm">
 
         <upload-single-ad-resource-component 
             v-model="adPictureForm.resource_object" 
             :label="'跳转页详情图片'"></upload-single-ad-resource-component>
 
         <el-form-item label="跳转类别" prop="jump_type">
-            <select-tag-component
-                :propTagList="jump_typeList"
-                v-model="adPictureForm.jump_type"
-                :isSingle="true"></select-tag-component>
+            <el-radio-group v-model="adPictureForm.jump_type">
+                <el-radio :label="1">活动页</el-radio>
+                <el-radio :label="2">详情页</el-radio>
+            </el-radio-group>
         </el-form-item>
 
         <el-form-item label="服务详情" prop="client_category_id" v-if="adPictureForm.jump_type == 2">
@@ -35,10 +35,7 @@
 
 <script>
 
-/**
- * type 0 新建  1 编辑
- */
-import {operateService, customService} from '@common/index.js'
+import {operateCustomService} from '@/service/operateCustom'
 
 //上传单张广告资源图片组件
 import uploadSingleAdResourceComponent from './adPictureItem/uploadSingleAdResourceComponent.vue'
@@ -85,7 +82,7 @@ export default {
         async getResourceItem(){
             try{
                 this.is_loading = true
-                await customService.getAdPositionResource(this.$route.query.ad_position_resource_id).then(data =>{
+                await operateCustomService.getAdPositionResource(this.$route.query.ad_position_resource_id).then(data =>{
                     if(data.code == '0'){
                         this.adPictureForm = data.data
                         this.adPictureForm.resource_object = data.data.resource_object
@@ -119,7 +116,7 @@ export default {
                 if (valid) {
                     try{
                         this.is_loading = true
-                        await customService.editAdPositionResource(this.adPictureForm).then(data =>{
+                        await operateCustomService.editAdPositionResource(this.adPictureForm).then(data =>{
                             if(data.code == '0'){
                                 this.$message({
                                     type:'success',
@@ -178,7 +175,7 @@ export default {
     async mounted(){
         //获取服务商品下拉菜单
         try{
-            await operateService.getServiceTree().then(data =>{
+            await operateCustomService.getServiceTree().then(data =>{
                 this.serviceGoodList = data.data
 
                 this.serviceGoodList = this.serviceGoodList.reduce((arr, item, index) =>{

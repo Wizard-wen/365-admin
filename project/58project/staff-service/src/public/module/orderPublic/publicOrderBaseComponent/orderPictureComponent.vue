@@ -9,8 +9,17 @@
             <div class="contains">{{pictureForm.agent_manager_name}}</div>
         </div>
         <div class="form-item">
+            <div class="label">联系电话：</div>
+            <div class="contains">{{pictureForm.agent_manager_phone}}</div>
+        </div>
+        <div class="form-item">
             <div class="label">工种：</div>
-            <div class="contains">{{pictureForm.work_type}}</div>
+            <div class="contains">
+                <table-tag-component 
+                    :propList="workerConfigForm.skill" 
+                    v-if="workerConfigForm.skill" 
+                    :tableOriginData="pictureForm.work_type"></table-tag-component>
+            </div>
         </div>
         <div class="form-item">
             <div class="label">工资待遇：</div>
@@ -24,14 +33,11 @@
             <div class="label">地址：</div>
             <div class="contains">{{pictureForm.service_address}}</div>
         </div>
-        <div class="form-double-item">
+        <div class="form-item">
             <div class="label">订单详情：</div>
             <div class="contains">{{pictureForm.order_details}}</div>
         </div>
-        <div class="form-item">
-            <div class="label">联系电话：</div>
-            <div class="contains">{{pictureForm.agent_manager_phone}}</div>
-        </div>
+        
     </div>
 </template>
 
@@ -41,6 +47,10 @@ export default {
         pictureForm: {
             default: function(){return {}},
             type: Object
+        },
+        workerConfigForm: {
+            type: Object,
+            default(){return {}}
         }
     },
 }
@@ -49,34 +59,46 @@ export default {
 <style lang="scss" scoped>
 .picture-contains{
     position: relative;
-    height: 500px;
-    width: 460px;
+    height: 420px;
+    width: 358px;
     background: url(./orderPictureComponent/images/orderImage.png) no-repeat;
-    background-size: 460px 500px; 
-    padding: 80px 10px 0 30px;
+    background-size: 368px 400px; 
+    padding: 50px 10px 0 20px;
     .form-item{
-        height: 45px;
-        line-height: 45px;
-        width: 100%;
-        display: flex;
-        font-family: '楷体';
-        font-size: 18px;
-        .label{
-            font-family: 'KaiTi';
-            width: 110px;
+        &:after{
+            clear:both;
+            display: block;
+            content:'';
         }
-    }
-    .form-double-item{
-        height: 90px;
-        line-height: 45px;
+        // height: 40px;
+        line-height: 30px;
+        margin-bottom:10px;
         width: 100%;
         // display: flex;
         font-family: '楷体';
-        font-size: 18px;
+        font-size: 14px;
         .label{
             float: left;
             font-family: 'KaiTi';
-            width: 110px;
+            width: 90px;
+            text-align:right;
+        }.contains{
+            float:left;
+            width: calc(100% - 90px);
+        }
+    }
+    .form-double-item{
+        // height: 90px;
+        line-height: 35px;
+        margin-bottom:5px;
+        width: 100%;
+        // display: flex;
+        font-family: '楷体';
+        font-size: 14px;
+        .label{
+            float: left;
+            font-family: 'KaiTi';
+            width: 90px;
         }
         .contains{
             // float: left;

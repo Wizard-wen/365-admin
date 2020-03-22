@@ -8,7 +8,8 @@
         <div class="order-down">
             <!-- 订单基本信息 -->
             <contract-detail-component
-                :contractBase="contractBase"></contract-detail-component>
+                :contractBase="contractBase"
+                :workerConfigForm="workerConfigForm"></contract-detail-component>
             <!-- 签约服务人员信息 -->
             <signed-service-detail-component
                 :signedServiceDetailObject="contractBase"></signed-service-detail-component>
@@ -49,6 +50,7 @@ export default {
         return {
             is_loading: false,//
             contractBase: {},//合同信息
+            workerConfigForm:{},
         }
     },
     computed:{
@@ -90,6 +92,9 @@ export default {
     },
     async mounted(){
         await this.getSaleContract()
+        await saleService.getWorkerFormConfig('edit').then(data =>{
+            this.workerConfigForm = data.data
+        })
     }    
 }
 </script>

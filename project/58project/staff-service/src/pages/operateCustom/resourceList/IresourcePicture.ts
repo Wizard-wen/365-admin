@@ -15,9 +15,10 @@ export interface resourcePicture {
 }
 
 export const  resourceTypeList = [
-    {id: 1, name: '长图'},
-    {id: 2, name: '全屏'},
-    {id: 3, name: '半屏'},
+    {id: 1, name: '长图',width: 250,height:500,},
+    {id: 2, name: '全屏',width: 710,height:300,},
+    {id: 3, name: '半屏',width: 350,height:220,},
+    {id: 4, name: '广告',width: 710,height:200,},
 ]
 
 export interface searchResourceForm {

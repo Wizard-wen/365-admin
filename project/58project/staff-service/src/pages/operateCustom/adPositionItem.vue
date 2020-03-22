@@ -2,7 +2,6 @@
     <el-form  
         v-loading="is_loading"
         :model="adPositionForm" 
-        :rules="adPositionRules" 
         ref="adPositionForm" 
         label-width="100px" 
         class="adPositionForm">
@@ -15,11 +14,12 @@
         </el-form-item>
 
         <el-form-item label="展现形式" prop="display">
-            <select-tag-component
+            <!-- <select-tag-component
                 :propTagList="displayList"
                 v-model="adPositionForm.display"
                 :isSingle="true"
-                :isEdit="false"></select-tag-component>
+                :isEdit="false"></select-tag-component> -->
+            <el-tag size="small">{{displayTag}}</el-tag>
         </el-form-item>
         
         <el-form-item label="图片列表" prop="resource">
@@ -36,9 +36,9 @@
 
 <script>
 
-import {customService} from '@common/index.js'
+import {operateCustomService} from '@/service/operateCustom'
 import resourceComponent from './adPositionItem/resourceComponent.vue'
-
+import {displayList} from './adPositionList/ICustomAdList'
 
 export default {
     components: {
@@ -54,10 +54,12 @@ export default {
                 name: '',//广告位名称
                 resource: [],//资源数组
             },
-            adPositionRules: {
-
-            },
-            displayList: [{id:1, name: '轮播图'}, {id: 2, name: '图片'}]
+            displayList,
+        }
+    },
+    computed: {
+        displayTag(){
+            return this.displayList.find(item => item.id == this.adPositionForm.display).name
         }
     },
     methods: {
@@ -68,7 +70,7 @@ export default {
             try{
                 let adId = this.$route.query.position_id
                 this.is_loading = true
-                await customService.getAdPosition(1, adId).then(data =>{
+                await operateCustomService.getAdPosition(1, adId).then(data =>{
                     if(data.code == '0'){
                         this.adPositionForm = data.data
                         this.is_loading = false
@@ -98,7 +100,7 @@ export default {
                 if (valid) {
                     try{
                         this.is_loading = true
-                        await customService.editAdPosition(this.adPositionForm).then(data =>{
+                        await operateCustomService.editAdPosition(this.adPositionForm).then(data =>{
                             if(data.code == '0'){
                                 this.$message({
                                     type:'success',

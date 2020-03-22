@@ -1,228 +1,116 @@
 <template>
-<div>
-    <worker-ad-table-component
-        v-loading="is_loading"
-        :tableData="workerAdPositionList">
-
-        <template slot="searchForm">
-            <div class="search-left">
-                <el-input placeholder="请输入key值" v-model="queryForm.key" :maxlength="20"></el-input>
-                <el-input placeholder="请输入广告位名" v-model="queryForm.name" :maxlength="20"></el-input>
-                <el-button type="primary" @click="queryAdPosition">查询</el-button>
-                <el-button type="primary" @click="reset">重置</el-button>
-            </div>
-            <div class="search-right">
-                <el-button type="primary" @click="openCreateAdPositionDialog">创建</el-button>
-            </div>
-        </template>
-
-        <template slot="control" slot-scope="controler">
-            <el-button size="mini" type="text" @click="goAdDetailPage(controler.scoper.row)">查看</el-button>
-            <el-button size="mini" type="text" @click="deleteAdPositionConfirm(controler.scoper.row)" style="color:#f56c6c">删除</el-button>
-        </template>
-
-        <template slot="pagination">
-            <el-pagination
-                class="pagination"
-                @current-change="handleCurrentPage"
-                @prev-click="prevAndNextClick"
-                @next-click="prevAndNextClick"
-                :current-page.sync="pagination.currentPage"
-                :page-size="pagination.pageNumber"
-                layout="prev, pager, next, jumper"
-                :total="pagination.total"></el-pagination>
-        </template>
-    </worker-ad-table-component>
-    <create-ad-position-dialog
-        v-if="createAdPositionDialogVisible"
-        :createAdPositionDialogVisible="createAdPositionDialogVisible"
-        @closeCreateAdPositionDialog="closeCreateAdPositionDialog"></create-ad-position-dialog>
-</div>
-     
+    <div class="table-box" v-loading="is_loading">
+        <query-component
+            :queryForm="workerConfigForm"
+            @changeQueryedForm="changeQueryedForm"></query-component>
+        <ad-position-table-component
+            :tableData="workerTable"
+            :workerConfigList="workerConfigForm"
+            @updateTable="updateTable"></ad-position-table-component>
+        <pagination
+            :pagination="pagination"
+            @changePage="changePage"></pagination>
+    </div>
 </template>
 
 <script>
-import {customService} from '@common/index.js'
-import {
-    workerAdTableComponent,
-} from './workerAdList/index.js'
-import createAdPositionDialog from './customAdList/createAdPositionDialog.vue'
+import {operateCustomService} from '@/service/operateCustom.ts'
+
+import queryComponent from './adPositionList/queryComponent.vue'
+import adPositionTableComponent from './adPositionList/adPositionTableComponent.vue'
+
 
 export default {
     components: {
-        workerAdTableComponent,
-        createAdPositionDialog
+        queryComponent,
+        adPositionTableComponent,
     },
     data(){
         return {
             is_loading: false,
-            //客户端广告位列表
-            workerAdPositionList: [],
-            queryForm: {
-                client: 2,
-                key: '',
-                name: '',
-                page: 1,
-                pageNumber: 15,
-            },
-            /**
-             * 分页信息
-             */
+            //列表
+            workerTable: [],
+            // 列表配置项
+            workerConfigForm: {},
+            // 页码
             pagination: {
+                currentPage:1,
                 total: 0,
-                currentPage: 1,
                 pageNumber: 20,
             },
-            //控制创建广告位弹出框显示隐藏
-            createAdPositionDialogVisible: false,
+            //查询对象
+            queryForm: {
+                
+                key: '',
+                name: '',
+                client: 2,
+                display: '',
+            },
         }
     },
     computed: {
-        presentUser(){
-            return this.$store.state.loginModule.user
+        /**
+         * 列表查询对象
+         */
+        queryObject(){
+            return {
+                page: this.pagination.currentPage, //请求页码
+                pageNumber: this.pagination.pageNumber,//单页信息数量
+                ...this.queryForm,
+            }
         }
     },
     methods: {
         /**
-         * 打开创建广告位弹窗
+         * 请求列表数据
          */
-        openCreateAdPositionDialog(){
-            this.createAdPositionDialogVisible = true
-        },
-        /**
-         * 关闭创建广告位弹窗
-         */
-        async closeCreateAdPositionDialog(){
-            this.createAdPositionDialogVisible = false
-            await this.getTableList()
-        },
-        /**
-         * 点击查询广告位按钮
-         */
-        async queryAdPosition(){
-            await this.getTableList()
-        },
-        reset(){
-            this.queryForm.key = ''
-            this.queryForm.name = ''
-        },
-        /**
-         * 请求表格数据
-         */
-        async getTableList(){
-            try{
-
-                this.is_loading = true
-
-                await customService.getAdPositionList(this.queryForm).then((data) =>{
-
-                    this.workerAdPositionList = data.data.data
-                    //分页信息
-                    this.pagination.currentPage = data.data.current_page //当前页码
-                    this.pagination.total = data.data.total //列表总条数
-
-                    this.is_loading = false
-                }).catch(error =>{
-                    this.$message({
-                        type:'error',
-                        message: error.message
-                    })
-                    this.is_loading = false
-                }).finally(() =>{
-                    this.is_loading = false
-                })
-
-            } catch(error){
-                this.$message({
-                    type:'error',
-                    message: error.message
-                })
-                this.is_loading = false
-            }
-        },
-        //下一页
-        async prevAndNextClick(val){
-            this,queryForm.page = val
-            await this.getTableList()
-        },
-        /**
-         * 切换页码
-         */
-        async handleCurrentPage(val){
-            this,queryForm.page = val
-            await this.getTableList()
-        },
-        /**
-         * 进入广告位详情页
-         */
-        goAdDetailPage(row){
-            this.$router.push({
-                path: '/operate/adPositionItem',
-                query: {
-                    from: 2,
-                    position_id: row.id
-                }
-            })
-        },
-        /**
-         * 删除广告位
-         */
-        async deleteAdPositionConfirm(row){
-            await this.$confirm('确定要删除该广告位吗, 是否继续?', '提示', {
-                confirmButtonText: '确定',
-                cancelButtonText: '取消',
-                type: 'warning',
-            }).then(async () => {
-                await this.deleteAdPosition(row.id)
-            }).catch(() => {
-                this.$message({
-                    type: 'info',
-                    message: '已取消删除',
-                });          
-            });
-        },
-        /**
-         * 删除广告位接口
-         */
-        async deleteAdPosition(id){
+        async getTable(){          
             try{
                 this.is_loading = true
-                await customService.deleteAdPosition(id).then( async data =>{
-                    if(data.code == '0'){
-                        this.$message({
-                            type: 'success',
-                            message: data.message
-                        });
-                        this.getTableList()
-                        this.is_loading = false
-                    }
+                await operateCustomService.getAdPositionList(this.queryObject).then(data=>{
+                    
+                    this.pagination = data.pagination
+                    this.workerTable = data.workerTable
+                    
+                    this.is_loading = false
                 }).catch(error =>{
                     this.$message({
                         type: 'error',
                         message: error.message
-                    });
-                    this.is_loading = false
-                }).finally(() =>{
+                    })
                     this.is_loading = false
                 })
             } catch(error){
                 this.$message({
                     type: 'error',
                     message: error.message
-                });
+                })
                 this.is_loading = false
             }
+        },
+        /**
+         * 改变页码
+         */
+        async changePage(){
+
+        },
+        async updateTable(){
+            await this.getTable()
+        },
+        async changeQueryedForm(res){
+            this.queryForm = res
+            await this.getTable()
         }
     },
     async mounted(){
-        await this.getTableList()
-    }
+        await this.getTable()
+    }   
 }
 </script>
 
-<style lang="scss" scoped>
-.search-left{
-    display: flex;
-    width: 800px;
-}
+<style>
+    .table-box{
+        padding: 24px;
+        background: #f1f2f5;
+    }
 </style>

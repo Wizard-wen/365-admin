@@ -6,8 +6,8 @@ export const apiRequestUser:api_user = {
     /**
      * 获取用户列表
      */
-    getUserList(){
-        return axios.get(`./admin/user/getUserList`)
+    getUserList(searchUrl){
+        return axios.get(`./admin/user/getUserList${searchUrl}`)
     },
     /**
      * 获取用户信息

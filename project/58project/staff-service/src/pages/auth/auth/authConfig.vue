@@ -1,5 +1,5 @@
 <template>
-    <div class="auth-config">
+    <div class="auth-config" v-loading="is_loading">
         <el-form class="auth-form" ref="form" :model="authForm" label-width="120px" :rules="authRules">
 
             <el-form-item label="权限路由" prop="router">
@@ -25,11 +25,10 @@
             </el-form-item>
 
             <el-form-item label="是否展示">
-                <!-- <el-switch v-model="authForm.is_display"></el-switch> -->
-                <select-tag-component
-                    :propTagList="is_displayList"
-                    v-model="authForm.is_display"
-                    :isSingle="true"></select-tag-component>
+                <el-radio-group v-model="authForm.is_display">
+                    <el-radio :label="1">展示</el-radio>
+                    <el-radio :label="2">不展示</el-radio>
+                </el-radio-group>
             </el-form-item>
 
             <el-form-item>
@@ -41,13 +40,11 @@
 </template>
 <script>
 
-/**
- * type 0 新建  1 编辑
- */
-import {authService} from '@common/index.js'
+import {authService} from '@/service/auth'
 export default {
     data() {
         return {
+            is_loading: false,
             //权限表单
             authForm: {
                 id: 0,//id
@@ -71,11 +68,6 @@ export default {
             },
             //权限父级id下拉列表
             selectionList: [],
-            //是否展示
-            is_displayList: [
-                {name: '展示', id: 1},
-                {name: '不展示', id: 2},
-            ]
         }
     },
     methods: {
@@ -84,68 +76,79 @@ export default {
          * 区分新建和编辑
          */
         async onSubmit(formName) {
-
-            await this.$refs[formName].validate((valid) => {
+            await this.$refs[formName].validate(async (valid) => {
                 if (valid) {
-                    authService.editPermission(this.authForm).then(data =>{
-                        if(data.code == '0'){
-                            this.$message({
-                                type:"success",
-                                message: data.message
-                            })
+                    try{
+                        this.is_loading = true
+                        await authService.editPermission(this.authForm).then(data =>{
+                            if(data.code == '0'){
+                                this.$message({
+                                    type:"success",
+                                    message: data.message
+                                })
+                            }
+                            this.is_loading = false
                             this.$router.push('/auth/authList')
-                        }
-                    }).catch(error =>{
+                        }).catch(error =>{
+                            this.$message({
+                                type:'error',
+                                message: error.message
+                            })
+                            this.is_loading = false
+                        }).finally(() =>{
+                            this.is_loading = false
+                        })
+                    } catch(error){
                         this.$message({
                             type:'error',
                             message: error.message
                         })
-                    })
+                        this.is_loading = false
+                    }
                 } else {
                     return false;
                 }
             });
         },
         goback(){
-            console.log(this.$route.query.fromPage)
             this.$router.push({
                 path: "/auth/authList",
                 query: {
-                    page: this.$route.query.fromPage
+                    // page: this.$route.query.fromPage
                 }
             })
         }
     },
     async mounted(){
-        store.commit('setLoading',true)
         try{
-            await authService.getPermission(this.$route.query.id)
-                .then(data =>{
-                    if(data.data.method == "add"){
+            this.is_loading = true
+            await authService.getPermission(this.$route.query.id).then(data =>{
+                if(data.data.method == "add"){
 
-                    } else {
-                        //权限表单字段
-                        this.authForm = data.data.permission
-                    }
+                } else {
+                    //权限表单字段
+                    this.authForm = data.data.permission
+                }
 
-                    //下拉菜单列表
-                    this.selectionList = data.data.selection
-
-                }).catch(error =>{
-                    this.$message({
-                        type:'error',
-                        mexternal
-                    })
+                //下拉菜单列表
+                this.selectionList = data.data.selection
+                this.is_loading = false
+            }).catch(error =>{
+                this.$message({
+                    type:'error',
+                    message: error.message
                 })
-
-        }catch(e){
+                this.is_loading = false
+            }).finally(() =>{
+                this.is_loading = false
+            })
+        }catch(error){
             this.$message({
                 type:'error',
-                message: e.message
+                message: error.message
             })
+            this.is_loading = false
         }
-
-        store.commit('setLoading',false)
     }
 }
 </script>

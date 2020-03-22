@@ -64,7 +64,7 @@
                 </div>
             </el-form-item>
         </el-form>
-        <el-form :model="localQueryedForm1">
+        <!-- <el-form :model="localQueryedForm1">
             <el-form-item label="空合同状态" prop="" v-if="localQueryedForm.assign_at == 1">
                 <el-select 
                     v-model="localQueryedForm1.type1" 
@@ -79,7 +79,7 @@
                         :value="item.id"></el-option>
                 </el-select>
             </el-form-item >
-        </el-form>
+        </el-form> -->
     </div>
 </template>
 
@@ -102,9 +102,9 @@ export default {
                 type: [],
                 manager_id: [],
             },
-            localQueryedForm1: {
-                type1: [],
-            }
+            // localQueryedForm1: {
+            //     type1: [],
+            // }
         }
     },
     props: {

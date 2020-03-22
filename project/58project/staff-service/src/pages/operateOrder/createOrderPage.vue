@@ -5,7 +5,15 @@
                 <el-form  :model="createOrderForm" class="createOrderForm" label-width="120px" :rules="createOrderRules" ref="createOrderForm">
 
                     <el-form-item label="工种" prop="work_type" ref="work_type" style="margin-bottom:30px;">
-                        <el-input v-model="createOrderForm.work_type" placeholder="请输入工种"></el-input>
+                        <!-- <el-input v-model="createOrderForm.work_type" placeholder="请输入工种"></el-input> -->
+                        <el-cascader
+                            v-model="createOrderForm.work_type"
+                            :props="{
+                                label: 'name',
+                                value: 'id',
+                            }"
+                            :options="workerConfigForm.skill"
+                            :show-all-levels="false"></el-cascader>
                     </el-form-item>
 
                     <el-form-item label="服务地址" prop="service_address" ref="service_address">
@@ -109,7 +117,7 @@ export default {
             applyStoreManagerList: [],//
             
             createOrderForm: {
-                work_type: '', //工种
+                work_type: [], //工种
                 service_address: '',//地址
                 service_duration: '',//工作时间
                 wage: '',//工资
@@ -138,8 +146,7 @@ export default {
                     { max: 10, message: '只能输入少于10个字符', trigger: 'blur' }
                 ],
                 work_type: [
-                    {required: true, message: '请填写工种',trigger: 'blur',},
-                    { max: 10, message: '只能输入少于10个字符', trigger: 'blur' }
+                    {required: true, message: '请选择工种',trigger: 'change',},
                 ],
                 service_duration: [
                     {required: true, message: '请填写工作时间',trigger: 'blur',},
@@ -151,7 +158,8 @@ export default {
                 service_address: [
                     {required: true, message: '请填写服务地址',trigger: 'blur',}
                 ],
-            }
+            },
+            workerConfigForm:{},
         }
     },
     methods: {
@@ -206,7 +214,11 @@ export default {
                 if (valid) {
                     try{
                         this.is_loading = true
-                        await operateOrderService.operateCreateOrder(this.createOrderForm).then(data =>{
+                        let createOrderForm = {
+                            ...this.createOrderForm
+                        }
+                        createOrderForm.work_type =  this.$utils.sendCascanderData(createOrderForm.work_type)[0]
+                        await operateOrderService.operateCreateOrder(createOrderForm).then(data =>{
                             if(data.code == '0'){
                                 this.$message({
                                     type:"success",
@@ -245,11 +257,13 @@ export default {
                 this.is_loading = true
                 await Promise.all([
                     operateOrderService.getStoreSelection(),
-                    operateOrderService.getStoreManagerSelection(1)
+                    operateOrderService.getStoreManagerSelection(1),
+                    operateOrderService.getWorkerFormConfig()
                 ]).then((data) =>{
                     this.storeList = data[0].data
                     this.agentStoreManagerList = data[1].data
                     this.applyStoreManagerList = data[1].data
+                    this.workerConfigForm = data[2].data
                     this.is_loading = false
                 }).catch((error) =>{
                     this.$message({

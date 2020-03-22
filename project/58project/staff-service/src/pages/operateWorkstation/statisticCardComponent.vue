@@ -1,7 +1,20 @@
 <template>
     <div class="card" >
         <div class="title">{{title}}</div>
-        <div class="number">{{statisticItem.total}}</div>
+        <!-- <div class="number">{{statisticItem.total}}</div> -->
+        <count-to
+            ref="example"
+            :start-val="0"
+            :end-val="Number(statisticItem.total)"
+            :duration="1000"
+            :decimals="0"
+            :separator="','"
+            :prefix="''"
+            :suffix="''"
+            :autoplay="false"
+            class="number"/>
+
+
         <div class="statistic">
             <div class="left">上月&nbsp;&nbsp;
                 <span>{{statisticItem.last_month}}</span>
@@ -17,7 +30,11 @@
 </template>
 
 <script>
+import countTo from 'vue-count-to'
 export default {
+    components: {
+        countTo,
+    },
     props: {
         title: {
             type: String,
@@ -32,11 +49,27 @@ export default {
                 this_month: 0,
             }}
         }
+    },
+    mounted(){
+        this.$refs.example.start()
     }
 }
 </script>
 
 <style lang="scss" scoped>
+
+
+.example {
+  font-size: 50px;
+  color: #F6416C;
+  display: block;
+  margin: 10px 0;
+  text-align: center;
+  font-size: 40px;
+  font-weight: 500;
+}
+
+
 .card{
     height: 180px;
     width: calc(25% - 20px);
@@ -54,7 +87,7 @@ export default {
         height: 35px;
         line-height: 35px;
         font-size: 30px;
-        color:rgba(0,0,0,.85);
+        color: rgba(97,160,168,0.85);
     }
     .statistic{
         display: flex;

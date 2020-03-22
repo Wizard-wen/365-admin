@@ -13,53 +13,56 @@
             :editResourceVideoVisible="editResourceVideoVisible"
             @closeEditResourcePictureDialog="closeEditResourcePictureDialog"></edit-resource-video-dialog>
         <div class="resource-down">
-            <el-row>
-                <el-col :span="6" v-for="(item, index) in videoResourceList" :key="index" style="margin-bottom:20px;">
-                    <div style="padding: 0 10px;">
-                        <el-card :body-style="{ padding: '0px' }">
-                            <div class="resource-box">
-                                <div class="picture-box">
-                                    <img v-if="item.picture_url" :src="`./resource/${item.picture_url}`" class="general-image">
-                                    <div v-else>暂无</div>
+            <div class="resource-contains">
+                <el-row>
+                    <el-col :span="6" v-for="(item, index) in videoResourceList" :key="index" style="margin-bottom:20px;">
+                        <div style="padding: 0 10px;">
+                            <el-card :body-style="{ padding: '0px' }">
+                                <div class="resource-box">
+                                    <div class="picture-box">
+                                        <img v-if="item.picture_url" :src="`./resource/${item.picture_url}`" class="general-image">
+                                        <div v-else>暂无</div>
+                                    </div>
+                                    
+                                    <div class="resource-message">
+                                        <div class="header">
+                                            <p class="title" :title="item.name">{{item.name}}</p>
+                                            <div class="created_at">上传于&nbsp;{{item.created_at | timeToDayFomatter}}</div>
+                                        </div>
+                                        <div></div>
+                                        <div class="bottom">
+                                            <div class="bottom-left">
+                                                {{`主讲人：${item.teacher}`}}
+                                            </div>
+                                            <div class="bottom-right">
+                                                <el-button type="text" class="button" @click="goVideoResourceItemPage(item)">编辑</el-button>
+                                                <el-button type="text" class="button" @click="deleteResource(item)">删除</el-button>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                                 
-                                <div class="resource-message">
-                                    <div class="header">
-                                        <p class="title" :title="item.name">{{item.name}}</p>
-                                        <div class="created_at">上传于&nbsp;{{item.created_at | timeFomatter}}</div>
-                                    </div>
-                                    <div></div>
-                                    <div class="bottom">
-                                        <div class="bottom-left">
-                                            <el-tag size="small">{{item.teacher}}</el-tag>
-                                        </div>
-                                        <div class="bottom-right">
-                                            <el-button type="text" class="button" @click="goVideoResourceItemPage(item)">编辑</el-button>
-                                            <el-button type="text" class="button" @click="deleteResource(item)">删除</el-button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            
-                        </el-card>
-                    </div>
-                </el-col>
-            </el-row>
-            <el-pagination
-                class="pagination"
-                @current-change="handleCurrentPage"
-                @prev-click="prevAndNextClick"
-                @next-click="prevAndNextClick"
-                :current-page.sync="pagination.currentPage"
-                :page-size="pagination.pageNumber"
-                layout="prev, pager, next, jumper"
-                :total="pagination.total"></el-pagination>
+                            </el-card>
+                        </div>
+                    </el-col>
+                </el-row>
+                <el-pagination
+                    class="pagination"
+                    @current-change="handleCurrentPage"
+                    @prev-click="prevAndNextClick"
+                    @next-click="prevAndNextClick"
+                    :current-page.sync="pagination.currentPage"
+                    :page-size="pagination.pageNumber"
+                    layout="prev, pager, next, jumper"
+                    :total="pagination.total"></el-pagination>
+            </div>
+            
         </div>
     </div>
 </template>
 
 <script>
-import {customService, $utils} from '@common/index.js'
+import {operateCustomService} from '@/service/operateCustom'
 import editResourceVideoDialog from './videoList/editResourceVideoDialog.vue'
 
 export default {
@@ -91,14 +94,6 @@ export default {
             // resourceVideoItem:{},
         }
     },
-    filters: {
-        timeFomatter(value){
-            if(value == 0){
-                return '-'
-            }
-            return $utils.formatDate(new Date(value), 'yyyy-MM-dd')
-        },
-     },
     methods: {
         async prevAndNextClick(val){
             this.getResourceForm.page = val
@@ -122,6 +117,7 @@ export default {
                 type: 'warning',
             }).then(async () => {
                 await this.deleteVideoResource(item.id)
+                await this.getResourcePictureList()
             }).catch(() => {
                 this.$message({
                     type: 'info',
@@ -135,13 +131,13 @@ export default {
         async deleteVideoResource(id){
             try{
                 this.is_loading = true
-                await customService.deleteVideo(id).then( async data =>{
+                await operateCustomService.deleteVideo(id).then( async data =>{
                     if(data.code == '0'){
                         this.$message({
                             type: 'success',
                             message: data.message
                         });
-                        this.getResourcePictureList()
+                        
                         this.is_loading = false
                     }
                 }).catch(error =>{
@@ -194,7 +190,7 @@ export default {
             try{
                 this.is_loading = true
 
-                await customService.getVideoList(this.getResourceForm).then(data =>{
+                await operateCustomService.getVideoList(this.getResourceForm).then(data =>{
                     this.videoResourceList = data.data.data
                     //分页信息
                     this.pagination.currentPage = data.data.current_page //当前页码
@@ -264,6 +260,10 @@ export default {
     }
     .resource-down{
         margin: 24px;
+        .resource-contains{
+            padding: 20px;
+            background: #fff;
+        }
     }
 }
 
@@ -304,7 +304,7 @@ export default {
                 display: flex;
                 justify-content: space-between;
                 .bottom-left{
-                    width: 90px;
+                    width: 130px;
                 }
                 .bottom-right{
                     width: 65px;

@@ -45,11 +45,19 @@ export const apiRequestStore:api_store = {
             ...paramObj,
         })
     },
+
+    
     /**
      * 门店工作台
      */
-    saleWorkBench(getSaleWorkstationForm){
-        return axios.get(`./admin/store/workBench?id=${getSaleWorkstationForm.id}&get_for=${getSaleWorkstationForm.get_for}`)
+    saleWorkBench(queryUrl){
+        return axios.get(`./admin/store/workBench${queryUrl}`)
+    },
+    /**
+     * 获取半年内统计数据
+     */
+    getHalfYearData(){
+        return axios.get(`/admin/store/getHalfYearData`)
     }
 }
 

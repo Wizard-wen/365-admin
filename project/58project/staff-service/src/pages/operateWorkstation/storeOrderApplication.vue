@@ -16,7 +16,7 @@
                     <div class="text">{{item.work_type}} / {{item.wage}} / {{item.service_duration}}</div>
                 </div>
                 <div class="control">
-                    <div class="time">{{item.created_at | timeFomatter}}</div>
+                    <div class="time">{{item.created_at | timeToDayFomatter}}</div>
                     <div class="btn" @click="goOrderApplyItemPage(item)">
                         <i class="el-icon-d-arrow-right"></i>
                     </div>
@@ -32,22 +32,11 @@
 </template>
 
 <script>
-import {
-    $utils,
-} from '@common/index.js'
 export default {
     props: {
         store_order_application:{
             type: Array,
             default(){return []}
-        }
-    },
-    filters: {
-        timeFomatter(value){ 
-            if(value == 0){
-                return '-'
-            }
-            return $utils.formatDate(new Date(value), 'yyyy-MM-dd')
         }
     },
     methods: {

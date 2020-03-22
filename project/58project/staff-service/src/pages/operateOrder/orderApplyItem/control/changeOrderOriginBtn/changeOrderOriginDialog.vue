@@ -37,10 +37,7 @@
 
 <script>
 
-/**
- * type 0 新建  1 编辑
- */
-import {operateService} from '@common/index.js'
+import {operateOrderService} from '@/service/operateOrder'
 
 export default {
     props:{
@@ -94,7 +91,7 @@ export default {
          * @param id 新更换的id
          */
         async changeStoreManager(id){
-            await operateService.getStoreManagerSelection(id).then(data =>{
+            await operateOrderService.getStoreManagerSelection(id).then(data =>{
                 this.apply_manager_list = data.data
                 this.orderOriginForm.apply_manager_id = 0
             }).catch(error =>{
@@ -108,7 +105,7 @@ export default {
             //校验并提交
             try{
                 this.is_loading = true
-                await operateService.editAppLySource(this.orderOriginForm).then(data =>{
+                await operateOrderService.editAppLySource(this.orderOriginForm).then(data =>{
                     if(data.code == '0'){
                         this.$message({
                             type:"success",
@@ -142,8 +139,8 @@ export default {
         try{
             this.is_loading = true
             await Promise.all([
-                operateService.getStoreSelection(),
-                operateService.getStoreManagerSelection(this.orderOriginForm.apply_store_id)
+                operateOrderService.getStoreSelection(),
+                operateOrderService.getStoreManagerSelection(this.orderOriginForm.apply_store_id)
             ]).then((data) =>{
                 this.storeList = data[0].data
                 this.apply_manager_list = data[1].data

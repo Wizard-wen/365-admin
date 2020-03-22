@@ -3,14 +3,25 @@
     <el-dialog
         :title="`更改${changeOrderBaseField.fieldName}`"
         :visible.sync="changeOrderBaseFieldDialogVisible"
+        v-loading="is_loading"
         :show-close="false"
         :close-on-press-escape="false"
         :close-on-click-modal="false">
         <el-form :model="orderBaseFieldForm" :rules="orderApplyFieldRules" label-width="120px" ref="orderBaseFieldForm">
             <el-form-item :label="changeOrderBaseField.fieldName" :prop="changeOrderBaseField.field">
                 <el-input 
+                    v-if="changeOrderBaseField.field!='work_type'"
                     v-model="orderBaseFieldForm[changeOrderBaseField.field]"
                     :type="changeOrderBaseField.field == 'order_details'? 'textarea':'text'"></el-input>
+                <el-cascader
+                    v-else
+                    v-model="orderBaseFieldForm[changeOrderBaseField.field]"
+                    :props="{
+                        label: 'name',
+                        value: 'id',
+                    }"
+                    :options="workerConfigForm.skill"
+                    :show-all-levels="false"></el-cascader>
             </el-form-item>
         </el-form>
         <div slot="footer" class="dialog-footer">
@@ -81,6 +92,7 @@ export default {
             }
         }
         return {
+            is_loading: false,
             //改变的字段内容
             orderBaseFieldForm: {
                 id: this.orderItemObject.order_id,//订单申请id
@@ -119,8 +131,8 @@ export default {
                     { max: 10, message: '只能输入少于10个字符', trigger: 'blur' }
                 ],
                 work_type: [
-                    {required: true, message: '请填写工种',trigger: 'blur',},
-                    { max: 10, message: '只能输入少于10个字符', trigger: 'blur' }
+                    {required: true, message: '请填写工种',trigger: 'change',},
+                    // { max: 10, message: '只能输入少于10个字符', trigger: 'blur' }
                 ],
                 service_duration: [
                     {required: true, message: '请填写工作时间',trigger: 'blur',},
@@ -132,7 +144,8 @@ export default {
                 service_address: [
                     {required: true, message: '请填写服务地址',trigger: 'blur',}
                 ],
-            }
+            },
+            workerConfigForm: {},
         }
     },
     methods: {
@@ -163,6 +176,10 @@ export default {
                             value: this.orderBaseFieldForm[this.orderBaseFieldForm.field],//属性值
                         }
                     }
+                    if(sendOrderBaseField.field == 'work_type'){
+                        sendOrderBaseField.value = this.$utils.sendCascanderData(sendOrderBaseField.value)[0]
+                    }
+
                     let response 
                     
                     if(this.publicOrderType == 1){
@@ -208,6 +225,45 @@ export default {
             })
         },
     },
+    async mounted(){
+        /**
+         * 若当前更改的字段是work_type，包装这个字段
+         */
+        if(this.changeOrderBaseField.field == 'work_type'){
+            try{
+                this.is_loading = true
+
+
+                await Promise.all([
+                    publicModuleService.getOrderConfigBaseField(this.changeOrderBaseField.value),
+                    publicModuleService.getPublicWorkerConfigForm('edit'),
+                ]).then(data =>{
+                    this.orderBaseFieldForm.work_type = data[0]
+                    this.workerConfigForm = data[1].data
+                    this.is_loading = false
+                }).catch(error =>{
+                    this.$message({
+                        type: 'error',
+                        message: error.message
+                    })
+                    this.is_loading = false
+                })
+                // // 包装成级联选择器可以接受的字段
+                // this.orderBaseFieldForm.work_type =  await publicModuleService.getOrderConfigBaseField(this.changeOrderBaseField.value)
+                // // 获取work_type级联选择器的配置字段
+                // await publicModuleService.getPublicWorkerConfigForm('edit').then(data =>{
+                //     this.workerConfigForm = data.data
+                // })
+            } catch(error){
+                this.$message({
+                    type: 'error',
+                    message: error.message
+                })
+                this.is_loading = false
+            }
+            
+        }   
+    }
 }
 </script>
 

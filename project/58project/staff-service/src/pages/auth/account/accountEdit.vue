@@ -1,16 +1,19 @@
 <template>
     <page-edit-component
+        v-loading="is_loading"
         :title="accountForm.real_name">
         <template slot="control">
             <el-button size="mini" @click="goback">返回</el-button>
-            <el-button size="mini" type="primary" @click="onSubmit('form')">修改</el-button>
+            <el-button size="mini" type="primary" @click="onSubmit('form')">
+                {{this.$route.query.type == 0? '创建' : '修改'}}
+            </el-button>
         </template>
 
         <template slot="icon">
-            <div class="icon">
-                <img style="height: 120px;width: 120px;" :src="`./resource/${accountForm.icon}`" alt="" v-if="accountForm.icon">
-                <div class="no-icon-style" v-else>暂无头像</div>
-            </div>
+            <icon-component
+                :iconUrl="accountForm.icon?`./resource/${accountForm.icon}`:''"
+                :height="140"
+                :width="100"></icon-component>
         </template>
         <template slot="detail">
             <div class="detail-left">
@@ -21,95 +24,99 @@
             </div>
         </template>
         <template slot="form" >
-            <el-form            
-                ref="form"
-                style="width: 760px;"
-                :rules="accountRules"
-                :model="accountForm"
-                label-width="120px">
+            <el-form class="account" ref="form" :rules="accountRules" :model="accountForm" label-width="120px">
+                <card-box-component 
+                :title="'基本信息'">
+                    <div slot="contains" class="contains-form">
+                        <el-form-item v-if="!accountForm.id" label="账号" prop="account">
+                            <el-input autocomplete="off" v-model="accountForm.account" ></el-input>
+                        </el-form-item>
 
-                <el-form-item v-if="!accountForm.id" label="账号" prop="account">
-                    <el-input autocomplete="off" v-model="accountForm.account" ></el-input>
-                </el-form-item>
+                        <el-form-item label="真实姓名" prop="real_name">
+                            <el-input autocomplete="off" v-model="accountForm.real_name" ></el-input>
+                        </el-form-item>
 
-                <!-- <el-form-item v-if="!accountForm.id" label="工号" prop="manager_code">
-                    <el-input autocomplete="off" v-model="accountForm.manager_code" ></el-input>
-                </el-form-item> -->
+                        <div v-if="this.$route.query.type == 0">
+                            <el-form-item label="密码" prop="password">
+                                <el-input :maxlength="50" autocomplete="new-password"  v-model="accountForm.password" type="password"></el-input>
+                            </el-form-item>
 
-                <el-form-item label="真实姓名" prop="real_name">
-                    <el-input autocomplete="off" v-model="accountForm.real_name" ></el-input>
-                </el-form-item>
+                            <el-form-item label="确认密码" prop="repassword">
+                                <el-input :maxlength="50" v-model="accountForm.repassword" @focus.native="this.type='password'" type="password"></el-input>
+                            </el-form-item>
+                        </div>
 
+                        <el-form-item label="用户名" prop="name">
+                            <el-input autocomplete="off" v-model="accountForm.name" :maxlength="20"></el-input>
+                        </el-form-item>
 
-                <!-- <el-form-item v-if="this.$route.query.type == 1" label="明文密码" prop="clear_password">
-                    <el-input :maxlength="50" autocomplete="new-password" :disabled="true" v-model="accountForm.clear_password" type="text"></el-input>
-                    <el-button type="text" @click="isSetPassword=!isSetPassword">{{isSetPassword? '收起' : '密码重置'}}</el-button>
-                </el-form-item> -->
+                        <el-form-item label="手机号" prop="phone">
+                            <el-input autocomplete="off" v-model="accountForm.phone" :maxlength="11"></el-input>
+                        </el-form-item>
 
-                <div v-if="this.$route.query.type == 0">
-                    <el-form-item label="密码" prop="password">
-                        <el-input :maxlength="50" autocomplete="new-password"  v-model="accountForm.password" type="password"></el-input>
-                    </el-form-item>
+                        <el-form-item label="邮箱" prop="email">
+                            <el-input autocomplete="off" v-model="accountForm.email"></el-input>
+                        </el-form-item>
 
-                    <el-form-item label="确认密码" prop="repassword">
-                        <el-input :maxlength="50" v-model="accountForm.repassword" @focus.native="this.type='password'" type="password"></el-input>
-                    </el-form-item>
-                </div>
+                        <el-form-item label="微信号" prop="wechat">
+                            <el-input autocomplete="off" v-model="accountForm.wechat"></el-input>
+                        </el-form-item>
 
-                <el-form-item label="用户名" prop="name">
-                    <el-input autocomplete="off" v-model="accountForm.name" :maxlength="20"></el-input>
-                </el-form-item>
+                        <el-form-item label="角色配置" prop="roleIds">
+                            <el-select 
+                                v-model="accountForm.roleIds" 
+                                placeholder="请选择技能证书"
+                                filterable multiple>
+                                <el-option
+                                    v-for="item in roleList"
+                                    :key="item.id" :label="item.name" :value="item.id"></el-option>
+                            </el-select>
+                        </el-form-item>
 
-                <el-form-item label="手机号" prop="phone">
-                    <el-input autocomplete="off" v-model="accountForm.phone" :maxlength="11"></el-input>
-                </el-form-item>
+                        <el-form-item label="部门配置" prop="department_id">
+                            <el-select 
+                                v-model="accountForm.department_id" 
+                                placeholder="请选择技能证书"
+                                filterable>
+                                <el-option
+                                    v-for="item in departmentList"
+                                    :key="item.id" :label="item.name" :value="item.id"></el-option>
+                            </el-select>
+                        </el-form-item>
+                        
+                        <el-form-item label="个人简介" prop="personal_intro">
+                            <el-input autocomplete="off" type="textarea" v-model="accountForm.personal_intro"></el-input>
+                        </el-form-item>
 
-                <el-form-item label="邮箱" prop="email">
-                    <el-input autocomplete="off" v-model="accountForm.email"></el-input>
-                </el-form-item>
+                        <el-form-item label="生日" prop="birthday">
+                            <el-date-picker
+                                v-model="accountForm.birthday"
+                                :default-value="new Date()"
+                                :picker-options="pickerOptions"
+                                type="date"
+                                placeholder="选择日期"
+                                format="yyyy 年 MM 月 dd 日"
+                                value-format="timestamp"></el-date-picker>
+                        </el-form-item>
+                        
+                        <el-form-item label="头像" class="form-item-size">
+                            <single-picture-upload
+                                :uploadHeader="customizeUploadHeader"
+                                :height="140"
+                                :width="100"
+                                :initUrl="accountForm.icon?`./resource/${accountForm.icon}`:''"
+                                @onSinglePictureSuccess="onIconPictureSuccess"></single-picture-upload>
+                        </el-form-item>
 
-                <el-form-item label="微信号" prop="wechat">
-                    <el-input autocomplete="off" v-model="accountForm.wechat"></el-input>
-                </el-form-item>
-
-                <el-form-item label="角色配置" prop="roleIds">
-                    <select-tag-component :propTagList="roleList" v-model="accountForm.roleIds" :isSingle="false"></select-tag-component>
-                </el-form-item>
-
-                <el-form-item label="部门配置" prop="department_id">
-                    <select-tag-component :propTagList="departmentList" v-model="accountForm.department_id" :isSingle="true"></select-tag-component>
-                </el-form-item>
-                
-                <el-form-item label="个人简介" prop="personal_intro">
-                    <el-input autocomplete="off" type="textarea" v-model="accountForm.personal_intro"></el-input>
-                </el-form-item>
-
-                <el-form-item label="生日" prop="birthday">
-                    <el-date-picker
-                        v-model="accountForm.birthday"
-                        type="date"
-                        placeholder="选择日期"
-                        format="yyyy 年 MM 月 dd 日"
-                        value-format="timestamp"></el-date-picker>
-                </el-form-item>
-                
-                <el-form-item label="头像" class="form-item-size">
-                    <upload-single-picture-component
-                        :pictureUrl="accountForm.icon"
-                        @singlePictureUploadSucess="uploadIconSuccess"></upload-single-picture-component>
-                </el-form-item>
-
-                <el-form-item label="紧急联系人" prop="urgent">
-                    <el-input autocomplete="off" v-model="accountForm.urgent"></el-input>
-                </el-form-item>
-                
-                <el-form-item label="现住址" prop="current_address">
-                    <el-input autocomplete="off" v-model="accountForm.current_address"></el-input>
-                </el-form-item>
-
-
-
-
+                        <el-form-item label="紧急联系人" prop="urgent">
+                            <el-input autocomplete="off" v-model="accountForm.urgent"></el-input>
+                        </el-form-item>
+                        
+                        <el-form-item label="现住址" prop="current_address">
+                            <el-input autocomplete="off" v-model="accountForm.current_address"></el-input>
+                        </el-form-item>
+                    </div>
+                </card-box-component>
 
                 <el-form-item>
                     <el-button type="primary" size="medium" @click="onSubmit('form')">修改</el-button>
@@ -122,9 +129,9 @@
 </template>
 <script>
 
-import {authService} from '@common/index.js'
+import {authService} from '@/service/auth'
 
-
+import {departmentList} from '@/pages/myCenter/ImyCenter'
 export default {
     data(){
         const validatePassword = (rule, value, callback) => {
@@ -160,6 +167,13 @@ export default {
         }
         return {
             is_loading: false,
+            // 日期选择器设置为只能选择今天之前的日子
+            pickerOptions: {
+                disabledDate(time) {
+                    var times = Date.now() - 24 * 60 * 60 * 1000;
+                    return time.getTime() > times;
+                }
+            },
             //账户信息
             accountForm: {
                 id: this.$route.query.id ? this.$route.query.id : '',
@@ -172,7 +186,7 @@ export default {
 
                 name: '', //用户名
                 phone: '',//手机号
-                birthday: this.getNowTime(),//生日
+                birthday: '',//生日
                 icon: '',//头像
                 email: '',//邮箱
                 wechat: '',//微信
@@ -206,21 +220,9 @@ export default {
                     {required: true, message: '请输入微信号', trigger: 'blur'},
                 ]
             },
-            // pickerOptions: {
-            //     disabledDate(time) {
-            //         return time.getTime() < Date.now() - 8.64e7;
-            //     },
-            // },
+            departmentList,
             roleList: [],//角色id
             isSetPassword: false,//是否展示设置密码
-        }
-    },
-    computed: {
-        /**
-         * 部门信息
-         */
-        departmentList(){
-            return this.$store.state.authModule.departmentList
         }
     },
     methods:{
@@ -231,15 +233,15 @@ export default {
             
             await this.$refs[formName].validate(async (valid) => {
                 if (valid) {
-                    store.commit('setLoading',true)
                     try {
+                        this.is_loading = true
                         await authService.editManager(this.accountForm).then(data =>{
                             if(data.code == '0'){
                                 this.$message({
                                     type: "success",
                                     message: data.message
                                 })
-                                // store.commit('setLoading',false)
+                                this.is_loading = false
                                 this.$router.push("/auth/accountList")
                             }
                         }).catch(error =>{
@@ -247,16 +249,16 @@ export default {
                                 type: "error",
                                 message: error.message
                             })
-                            store.commit('setLoading',false)
+                            this.is_loading = false
                         }).finally(() =>{
-                            store.commit('setLoading',false)
+                            this.is_loading = false
                         })
                     } catch (error) {
                         this.$message({
                             type: "error",
                             message: error.message
                         })
-                        store.commit('setLoading',false)
+                        this.is_loading = false
                     }
                 } else {
                     return false;
@@ -278,6 +280,7 @@ export default {
                         }
                         //全部角色列表
                         this.roleList =  data.data.roleList
+                        this.is_loading = false
                     }
                 }).catch(error =>{
                     if(error.code == "1"){
@@ -306,9 +309,8 @@ export default {
             this.$router.push('/auth/accountList')
         },
         //头像上传成功
-        uploadIconSuccess(param) {
-            this.accountForm.icon = param;
-            this.accountForm.icon_url = param;
+        onIconPictureSuccess(res) {
+            this.accountForm.icon = res.path;
         },
         //处理默认选中当前日期
 	    getNowTime() {
@@ -331,56 +333,43 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-    .account-edit{
-        padding: 30px;
-    }
-    .no-icon-style{
-        height: 120px;
-        width: 120px;
-        line-height: 120px;
-        text-align: center;
-        color: #fff;
-        background: rgba(0,0,0,0.3)
-    }
-    .detail-left{
-        flex:1;
-        .detail-left-box{
-            display: flex;
-            flex-wrap: wrap;
-            .detail-left-line{
-                width: 50%;
-                color: rgba(0,0,0,.65);
-                line-height: 20px;
-                padding-bottom: 8px;
-            }
-        }
-    }
-    .detail-right{
-        min-width: 400px;
+
+.detail-left{
+    flex:1;
+    .detail-left-box{
         display: flex;
-        .right-box{
-            height: 80px;
+        flex-wrap: wrap;
+        .detail-left-line{
             width: 50%;
-            .title{
-                color: rgba(0,0,0,.45);
-                font-size: 14px;
-                line-height: 1.5;
-            }
-            .value{
-                font-size: 20px;
-                color: rgba(0,0,0,.85);
-                line-height: 1.5;
-            }
+            color: rgba(0,0,0,.65);
+            line-height: 20px;
+            padding-bottom: 8px;
         }
     }
-.icon-uploader{
-    height: 178px;
-    width: 178px;
-    & /deep/ .el-upload {
-        height: 178px;
-        width: 178px;
-        line-height: 178px;
+}
+.detail-right{
+    min-width: 400px;
+    display: flex;
+    .right-box{
+        height: 80px;
+        width: 50%;
+        .title{
+            color: rgba(0,0,0,.45);
+            font-size: 14px;
+            line-height: 1.5;
+        }
+        .value{
+            font-size: 20px;
+            color: rgba(0,0,0,.85);
+            line-height: 1.5;
+        }
     }
+}
+.contains-form{
+    max-width: 900px; 
+}
+.account{
+    width: 100%;
 }
 </style>
 

@@ -6,7 +6,8 @@
             v-if="determinateOrderDialogVisible"
             :determinateOrderDialogVisible="determinateOrderDialogVisible"
             @closeDeterminateOrderDialog="closeDeterminateOrderDialog"
-            :order_id="currentOrder.id"></terminate-order-dialog>
+            :order_id="currentOrder.id"
+            :currentOrder="currentOrder"></terminate-order-dialog>
     </div>
 </template>
 

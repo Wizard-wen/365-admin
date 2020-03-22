@@ -48,7 +48,8 @@
 </template>
 
 <script>
-import {loginService} from '@common/index.js'
+
+import {loginService} from '@/service/login'
 export default {
     data() {
         return {
@@ -72,30 +73,44 @@ export default {
          * 提交登录
          */
         submitForm(formName) {
-            let _this = this;
             this.$refs[formName].validate(async (valid) => {
                 if (valid) {
-                    this.is_loading = true
+                    
                     try{
+                        this.is_loading = true
                         await loginService.getToken(this.form.username, this.form.password).then((data) =>{
+                                
+                                // 登录信息存入 vuex sessionStorage
+                                this.$store.commit('login',{
+                                    access_token: data.access_token,
+                                    refresh_token: data.refresh_token
+                                })
+
+                                //用户信息存入 vuex sessionStorage
+                                this.$store.commit('setUser', {
+                                    ...data,
+                                })
                                 this.$message({
                                     type: 'success',
-                                    message: data.message
+                                    message: '登陆成功'
                                 });
-                                _this.$router.push('/');
+                                this.is_loading  = false
+                                this.$router.push('/');
                             }).catch(error =>{
                                 this.$message({
                                     type: 'error',
                                     message: error.message
                                 });
+                                this.is_loading  = false
                             }).finally(() =>{
                                 this.is_loading  = false
                             })
-                    }catch(e){
+                    }catch(error){
                         this.$message({
                             type: 'error',
-                            message: e.message
+                            message: error.message
                         })
+                        this.is_loading  = false
                     }
                 } else {
                     return false;

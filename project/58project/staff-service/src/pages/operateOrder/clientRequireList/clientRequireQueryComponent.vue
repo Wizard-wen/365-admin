@@ -27,10 +27,10 @@
                 </el-select>
             </el-form-item >
             <el-form-item label="客户电话" prop="user_phone">
-                <el-input class="input" style="width: 173px" v-model="localQueryedForm.order_user_phone" placeholder="请输入下单客户电话" :maxlength="20"></el-input>
+                <el-input class="input" style="width: 173px" v-model="localQueryedForm.user_phone" placeholder="请输入下单客户电话" :maxlength="20"></el-input>
             </el-form-item>
             <el-form-item label="客户姓名" prop="user_name">
-                <el-input class="input" style="width: 173px" v-model="localQueryedForm.order_user_name" placeholder="请输入下单客户" :maxlength="20"></el-input>
+                <el-input class="input" style="width: 173px" v-model="localQueryedForm.user_name" placeholder="请输入下单客户" :maxlength="20"></el-input>
             </el-form-item>
             <el-form-item >
                 <div style="width: 263px;display: flex;justify-content: flex-end">

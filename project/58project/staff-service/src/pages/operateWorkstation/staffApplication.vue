@@ -16,7 +16,7 @@
                     <div class="text">创建人：{{item.manager_name}}</div>
                 </div>
                 <div class="control">
-                    <div class="time">{{item.created_at | timeFomatter}}</div>
+                    <div class="time">{{item.created_at | timeToDayFomatter}}</div>
                     <div class="btn" @click="goworkerItemPage(item)">
                         <i class="el-icon-d-arrow-right"></i>
                     </div>
@@ -32,20 +32,11 @@
 </template>
 
 <script>
-import {$utils} from '@common/index.js'
 export default {
     props: {
         staff_application: {
             type: Array,
             default(){return []}
-        }
-    },
-    filters: {
-        timeFomatter(value){ 
-            if(value == 0){
-                return '-'
-            }
-            return $utils.formatDate(new Date(value), 'yyyy-MM-dd')
         }
     },
     methods: {

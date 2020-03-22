@@ -37,6 +37,10 @@
                         :tableOriginData="workerForm.paper"></table-tag-component>
                 </detail-form-item-component>
                 <detail-form-item-component :label="'参加工作年份'" :size="3" :value="workerForm.worked_at?`${workerForm.worked_at}年`:''"></detail-form-item-component>
+                <!-- <detail-form-item-component :label="'工作经验（客户展示）'" :size="1" :value="workerForm.cus_working_exprience"></detail-form-item-component> -->
+                
+                
+                
                 <detail-form-item-component
                     :type="'template'"
                     :label="'照片'"

@@ -40,7 +40,7 @@
 /**
  * type 0 新建  1 编辑
  */
-import {operateService} from '@common/index.js'
+import {operateWorkerService} from '@/service/operateWorker'
 
 export default {
     props:{
@@ -186,7 +186,7 @@ export default {
         try{
             this.is_loading = true
             //获取证书字段列表
-            await operateService.getPaperSelection('enable').then(data =>{
+            await operateWorkerService.getPaperSelection('enable').then(data =>{
                  this.paperCategoryList = data.data
                  this.is_loading = false
             }).catch(error =>{

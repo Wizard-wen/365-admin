@@ -2,7 +2,7 @@
  * 运营模块
  */
 import operateRequest from './request/operateRequest.js'
-import {store} from '../../common'
+// import {store} from '../../common'
 
 
 /**
@@ -171,7 +171,7 @@ export const operate_staffRequest = {
      * 多个回访人员到回访列表
      */
     addReturnStaff(){
-        let obj = store.state.operateModule.queryedList
+        // let obj = store.state.operateModule.queryedList
         return operateRequest.addReturnStaff(obj)
     },
     /**
@@ -179,11 +179,11 @@ export const operate_staffRequest = {
      */
     getReturnStaff(){
         //设置回访count查询参数
-        store.commit('setWorkerList', {
-            queryKey: 'count',
-            queryedList: 0
-        })
-        let obj = store.state.operateModule.queryedList
+        // store.commit('setWorkerList', {
+        //     queryKey: 'count',
+        //     queryedList: 0
+        // })
+        // let obj = store.state.operateModule.queryedList
         return operateRequest.getReturnStaff(obj)
     },
     /**

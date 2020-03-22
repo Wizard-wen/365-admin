@@ -7,6 +7,7 @@
         :close-on-press-escape="false"
         :close-on-click-modal="false">
         <el-form :model="determinateOrderForm" label-width="120px" :rules="determinateOrderRules" ref="determinateOrderForm">
+            
             <el-form-item label="终止事由" prop="message">
                 <span slot="label">
                     终止事由
@@ -16,30 +17,30 @@
                 </span>
                 <el-input v-model="determinateOrderForm.message" type="textarea" placeholder="请输入终止事由"></el-input>
             </el-form-item>
-            <el-form-item label="客户余额" prop="has_user_cost">
-                <select-tag-component
-                    v-if="boolList"
-                    :propTagList="boolList"
-                    v-model="determinateOrderForm.has_user_cost"
-                    :isSingle="true"></select-tag-component>
+            <el-form-item label="当前客户余额"> 
+                {{orderItem.sign_user_account?orderItem.sign_user_account:'未签约' }}
             </el-form-item>
             <el-form-item label="返还客户金额" prop="return_user_cost">
-                <el-input v-model="determinateOrderForm.return_user_cost" placeholder="请输入返还客户金额"></el-input>
+                <el-input v-model="determinateOrderForm.return_user_cost" :disabled="!orderItem.sign_user_account" placeholder="请输入返还客户金额"></el-input>
+            </el-form-item>
+            <el-form-item label="客户余额" prop="has_user_cost">
+                <el-radio-group v-model="determinateOrderForm.has_user_cost" :disabled="!orderItem.sign_user_account">
+                    <el-radio :label="1">已平账</el-radio>
+                    <el-radio :label="2">未平账</el-radio>
+                </el-radio-group>
             </el-form-item>
             <el-form-item label="劳动者押金" prop="has_worker_cost">
-                <select-tag-component
-                    v-if="boolList"
-                    :propTagList="boolList"
-                    v-model="determinateOrderForm.has_worker_cost"
-                    :isSingle="true"></select-tag-component>
+                <el-radio-group v-model="determinateOrderForm.has_worker_cost" :disabled="!orderItem.sign_user_account">
+                    <el-radio :label="1">已返还</el-radio>
+                    <el-radio :label="2">未返还</el-radio>
+                </el-radio-group>
             </el-form-item>
 
             <el-form-item label="劳动者工资" prop="has_worker_wage">
-                <select-tag-component
-                    v-if="boolList"
-                    :propTagList="boolList"
-                    v-model="determinateOrderForm.has_worker_wage"
-                    :isSingle="true"></select-tag-component>
+                <el-radio-group v-model="determinateOrderForm.has_worker_wage" :disabled="!orderItem.sign_user_account">
+                    <el-radio :label="1">已发放</el-radio>
+                    <el-radio :label="2">未发放</el-radio>
+                </el-radio-group>
             </el-form-item>
 
             <el-form-item label="备注" prop="remarks">
@@ -80,8 +81,28 @@ export default {
             default: 0,
             type: String | Number,
         },
+        currentOrder: {
+            type: Object,
+            default(){return {}}
+        }
+    },
+    computed: {
+        orderItem(){
+            return {
+                ...this.currentOrder,
+            }
+        }
     },
     data() {
+        let _this = this
+        const validateReturnUserCost = (rule, value, callback) => {
+            console.log(1)
+            if(value > _this.currentOrder.sign_user_account){
+                callback(new Error('返还金额不能大于当前客户余额'))
+            } else {
+                callback()
+            }
+        }
         return {
             is_loading: false,
             boolList: [{id: 1, name:'已平账'}, {id: 2, name: '未平账'}],
@@ -102,6 +123,9 @@ export default {
                 message: [
                     {required: true, message: '请输入订单终止事由', trigger: 'blur'},
                 ],
+                return_user_cost:[
+                    {validator: validateReturnUserCost,trigger:'blur'}
+                ]
             }
         }
     },

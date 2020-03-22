@@ -1,6 +1,7 @@
 <template>
     <!-- 订单申请 -->
     <el-dialog
+        v-loading="is_loading"
         title="创建新门店"
         :visible.sync="createStoreDialogVisible"
         :show-close="false"
@@ -14,14 +15,17 @@
                 <el-input v-model="createStoreForm.address" placeholder="请填写门店地址"></el-input>
             </el-form-item>
             <el-form-item label="门店类型" prop="is_third">
-				<select-tag-component :propTagList="typeList" v-model="createStoreForm.is_third" :isSingle="true"></select-tag-component>
+                <el-radio-group v-model="createStoreForm.is_third">
+                    <el-radio :label="1">直营店</el-radio>
+                    <el-radio :label="2">加盟店</el-radio>
+                </el-radio-group>
 			</el-form-item>
             <el-form-item label="店铺备注信息" prop="remarks">
                 <el-input v-model="createStoreForm.remarks" placeholder="请填写店铺备注信息"></el-input>
             </el-form-item>
         </el-form>
         <div slot="footer" class="dialog-footer">
-            <el-button @click="cancelCreateStore">取 消</el-button>
+            <el-button @click="closeAddStoreDialog">取 消</el-button>
             <el-button type="primary" @click="onSubmit('createStoreForm')">确定</el-button>
         </div>
     </el-dialog>
@@ -29,10 +33,7 @@
 
 <script>
 
-/**
- * type 0 新建  1 编辑
- */
-import {storeService} from '@common/index.js'
+import {storeService} from '@/service/store'
 export default {
     props:{
         /**
@@ -45,7 +46,7 @@ export default {
     },
     data() {
         return {
-            isLoading: false,
+            is_loading: false,
             //改变的字段内容
             createStoreForm: {
                 name: "",//门店名
@@ -63,35 +64,38 @@ export default {
         }
     },
     methods: {
-        cancelCreateStore(){
+        closeAddStoreDialog(){
             this.createStoreForm.name = ''
             this.createStoreForm.address = ''
             this.createStoreForm.remarks = ''
 
-            this.$emit('closeAddStoreStaffDialog')
+            this.$emit('closeAddStoreDialog')
         },
         async onSubmit(formName){
             await this.$refs[formName].validate(async (valid) => {
                 if (valid) {
                     try{
-                        this.isLoading = true
-                        await storeService.editStore(this.createStoreForm).then(data => {
+                        this.is_loading = true
+                        let createStoreForm = {
+                            ...this.createStoreForm,
+                        }
+                        await storeService.editStore(createStoreForm).then(data => {
                             if (data.code == "0") {
                                 this.$message({
                                     type: "success",
                                     message: data.message
                                 });
-                                this.isLoading = false
-                                this.$emit('closeAddStoreStaffDialog')
                             }
+                            this.is_loading = false
+                            this.closeAddStoreDialog()
                         }).catch(error => {
                             this.$message({
                                 type: "error",
                                 message: error.message
                             });
-                            this.isLoading = false
+                            this.is_loading = false
                         }).finally( () =>{
-                            this.isLoading = false
+                            this.is_loading = false
                         })
                     } catch(error) {
                         this.$message({
@@ -103,14 +107,8 @@ export default {
                     return false;
                 }
             });
-
-
-
         }
     },
-    async mounted(){
-
-    }
 }
 </script>
 

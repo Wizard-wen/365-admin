@@ -1,7 +1,8 @@
 
 import {
     apiRequestOrder,
-    apiRequestCommon
+    apiRequestCommon,
+    apiRequestFormConfig
 } from '@/request/index'
 import {createOperateOrderForm} from '@/pages/operateOrder/createOrderPage/IcreateOrderPage.ts'
 export const operateCreateOrderService = {
@@ -23,4 +24,7 @@ export const operateCreateOrderService = {
     async getStoreSelection():Promise<any>{
         return apiRequestCommon.getStoreSelection()
     },
+    async getWorkerFormConfig(){
+        return apiRequestFormConfig.getWorkerFormConfig('edit')
+    }
 }

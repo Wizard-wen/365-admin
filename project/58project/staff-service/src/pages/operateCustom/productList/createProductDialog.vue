@@ -19,7 +19,11 @@
             </el-form-item>
 
             <el-form-item label="是否展示" prop="status">
-                <el-switch v-model="productTreeForm.status"></el-switch>
+                <el-radio-group v-model="productTreeForm.status">
+                    <el-radio :label="1">展示</el-radio>
+                    <el-radio :label="2">不展示</el-radio>
+                </el-radio-group>
+                <!-- <el-switch v-model="productTreeForm.status"></el-switch> -->
             </el-form-item>
 
             <el-form-item>
@@ -32,7 +36,7 @@
 <script>
 
 
-import {authService, operateService} from '@common/index.js'
+import { operateCustomService} from '@/service/operateCustom'
 
 export default {
     props: {
@@ -50,7 +54,7 @@ export default {
             //商品树表单
             productTreeForm: {
                 name: '',//商品名
-                status: true,// 1 允许 2 禁止
+                status: 1,// 1 允许 2 禁止
                 parent_id: 0,//权限父级id
                 version: 0,//新建version
             },
@@ -77,14 +81,9 @@ export default {
         async onSubmit(formName) {
             await this.$refs[formName].validate(async (valid) => {
                 if (valid) {
-                    if(this.productTreeForm.status){
-                        this.productTreeForm.status = '1'
-                    } else {
-                        this.productTreeForm.status = '2'
-                    }
                     try{
                         this.is_loading = true
-                        await operateService.editService(this.productTreeForm).then(data =>{
+                        await operateCustomService.editService(this.productTreeForm).then(data =>{
                             if(data.code == '0'){
                                 this.$message({
                                     type:"success",
@@ -122,7 +121,7 @@ export default {
         }
     },
     async mounted(){
-        await operateService.getServiceSelection().then(data =>{
+        await operateCustomService.getServiceSelection().then(data =>{
             console.log(data)
             this.selectionList = data.data
         }).catch(error =>{

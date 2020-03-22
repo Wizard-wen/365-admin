@@ -18,7 +18,7 @@
         <div class="detail-left">
             <div class="detail-left-box">
                 <div class="detail-left-line">合同流水号：{{contractBase.contract_code}}</div>
-                <div class="detail-left-line">签约时间：{{contractBase.sign_at | timeFomatter}}</div>
+                <div class="detail-left-line">签约时间：{{contractBase.sign_at | timeToDayFomatter}}</div>
                 <div class="detail-left-line">签约经纪人：{{ contractBase.sign_manager_name }}</div>
                 <div class="detail-left-line">签约经纪门店：{{ contractBase.sign_store_name }}</div>
             </div>
@@ -47,9 +47,6 @@ import {
     contract_typeList
 } from '@/public/module/contractList/IcontractList.ts'
 import {is_wageList} from '@/public/module/contractItem/IcontractItem.ts'
-import {
-    $utils,
-} from '@common/index.js'
 export default {
     components: {
         settleWageBtn,
@@ -76,14 +73,6 @@ export default {
             type: Number,
             default: 1,
         }
-    },
-    filters: {
-        timeFomatter(value){
-            if(value == 0){
-                return '-'
-            }
-            return $utils.formatDate(new Date(value), 'yyyy-MM-dd hh:mm:ss')
-        },
     },
     computed:{
         //合同状态

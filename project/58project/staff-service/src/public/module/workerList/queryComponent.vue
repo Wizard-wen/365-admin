@@ -174,9 +174,9 @@ export default {
             let sendForm = {
                 ...this.localQueryedForm,
             }
-            sendForm.service_category = operateWorkerService.sendCascanderData(sendForm.service_category) 
-            sendForm.manager = operateWorkerService.sendCascanderData(sendForm.manager) 
-            sendForm.course = operateWorkerService.sendCascanderData(sendForm.course) 
+            sendForm.service_category = this.$utils.sendCascanderData(sendForm.service_category) 
+            sendForm.manager = this.$utils.sendCascanderData(sendForm.manager) 
+            sendForm.course = this.$utils.sendCascanderData(sendForm.course) 
 
             // sendForm.course = sendForm.course? [sendForm.course]: []
             sendForm.nation = sendForm.nation? [sendForm.nation]: []

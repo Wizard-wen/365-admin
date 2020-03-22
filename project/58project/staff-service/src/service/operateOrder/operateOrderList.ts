@@ -11,11 +11,13 @@ export const operateOrderListService = {
     async getOperateOrderList(searchOrderApplyForm:searchOperateOrderForm):Promise<any>{
         return Promise.all([
             apiRequestFormConfig.getOrderFormConfig(),
-            apiRequestOrder.getOrderList(searchOrderApplyForm)
+            apiRequestOrder.getOrderList(searchOrderApplyForm),
+            apiRequestFormConfig.getWorkerFormConfig('edit'),
         ]).then(data =>{
             return {
                 orderConfigForm: {
                     ...data[0].data,
+                    ...data[2].data,
                 },
                 pagination: {
                     currentPage: data[1].data.current_page, //当前页码

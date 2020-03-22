@@ -3,10 +3,10 @@
         <query-component
             :queryForm="workerConfigForm"
             @changeQueryedForm="changeQueryedForm"></query-component>
-        <custom-ad-table-component
+        <ad-position-table-component
             :tableData="workerTable"
             :workerConfigList="workerConfigForm"
-            @updateTable="updateTable"></custom-ad-table-component>
+            @updateTable="updateTable"></ad-position-table-component>
         <pagination
             :pagination="pagination"
             @changePage="changePage"></pagination>
@@ -14,19 +14,17 @@
 </template>
 
 <script>
-import {operateService} from '@common/index.js'
-import {adService} from '@/service/operateCustom.ts'
 
-import queryComponent from './customAdList/queryComponent.vue'
-import customAdTableComponent from './customAdList/customAdTableComponent.vue'
-import pagination from './customAdList/pagination.vue'
+import {operateCustomService} from '@/service/operateCustom'
+
+import queryComponent from './adPositionList/queryComponent.vue'
+import adPositionTableComponent from './adPositionList/adPositionTableComponent.vue'
 
 
 export default {
     components: {
         queryComponent,
-        pagination,
-        customAdTableComponent,
+        adPositionTableComponent,
     },
     data(){
         return {
@@ -43,8 +41,11 @@ export default {
             },
             //查询对象
             queryForm: {
+
                 key: '',
                 name: '',
+                client: 1,
+                display: '',
             },
         }
     },
@@ -67,7 +68,7 @@ export default {
         async getTable(){          
             try{
                 this.is_loading = true
-                await adService.getTableList(this.queryObject).then(data=>{
+                await operateCustomService.getAdPositionList(this.queryObject).then(data=>{
                     
                     this.pagination = data.pagination
                     this.workerTable = data.workerTable

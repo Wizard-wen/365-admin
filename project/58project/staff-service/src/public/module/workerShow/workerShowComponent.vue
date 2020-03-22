@@ -13,9 +13,9 @@
             <div class="detail-left">
                 <div class="detail-left-box">
                     <div class="detail-left-line">创建人：{{workerForm.manager_name}}</div>
-                    <div class="detail-left-line">创建时间：{{workerForm.created_at | formatDate}}</div>
-                    <div class="detail-left-line">更新时间：{{workerForm.updated_at | formatDate}}</div>
-                    <div class="detail-left-line">上次回访时间：{{workerForm.return_at | formatDate}}</div>
+                    <div class="detail-left-line">创建时间：{{workerForm.created_at | timeToDayFomatter}}</div>
+                    <div class="detail-left-line">更新时间：{{workerForm.updated_at | timeToDayFomatter}}</div>
+                    <div class="detail-left-line">上次回访时间：{{workerForm.return_at | timeToDayFomatter}}</div>
                 </div>
             </div>
         </template>
@@ -41,29 +41,15 @@
             <log-component :title="'日志'" :isEdit="false" :logList="workerForm.log"></log-component>
             <!-- 回访信息 -->
             <return-msg-component 
-                :isEdit="this.$route.query.type == 2? true :false" 
+                :isEdit="false" 
                 :return_msg="workerForm.return_log" 
                 @updateOrderConfig="getWorkerForm"></return-msg-component>
         </div>
-            
-        <!-- <div class="control">
-            <div>
-                <make-image-btn 
-                    :workerForm="workerForm" 
-                    :workerConfigForm="workerConfigForm" 
-                    :isShowImageButton="$route.query.type == 1 || $route.query.type ==  5"></make-image-btn>
-                <el-button size="mini" @click="goback">返回</el-button>
-            </div>
-        </div> -->
             
     </page-edit-component>
 </template>
 
 <script>
-
-import {
-    $utils
-} from '@common/index.js'
 
 
 
@@ -130,14 +116,6 @@ export default {
             workerConfigForm: {},
         }
     },
-    filters: {
-        formatDate(timestamp){
-            if(timestamp == 0){
-                return '-'
-            }
-            return $utils.formatDate(new Date(timestamp), 'yyyy-MM-dd')
-        }
-    },
     methods: {
         /**
          * 返回
@@ -145,18 +123,14 @@ export default {
         goback(){
             let fromPage = this.$route.query.type
 
-
-
-
             if(fromPage == 1){
                 this.$router.push("/worker/workerList")
             } else if (fromPage == 2){
                 this.$router.push("/worker/returnWorkerList")
             } else if (fromPage == 3){
                 this.$router.push("/worker/errorWorkerList")
-            } else if (fromPage == 4){
-                this.$router.push("/operate/operateOrderConfig")
-            } else if (fromPage == 5){
+            } 
+            else if (fromPage == 5){
                 this.$router.push("/sale/saleWorkerList")
             } else if (fromPage == 6){
                 this.$router.push({
@@ -173,6 +147,14 @@ export default {
                     query: {
                         order_type: 3,
                         module: 'public',
+                        order_id: this.$route.query.order_id
+                    }
+                })
+            } else if (fromPage == 8){
+                this.$router.push({
+                    path: "/operate/operateOrderConfig",
+                    query: {
+                        ...this.$route.query,
                         order_id: this.$route.query.order_id
                     }
                 })
@@ -199,8 +181,8 @@ export default {
                 if(this.$route.query.type != 0){
                     await publicModuleService.getPublicWorkerShow(this.$route.query.id,this.workerConfigForm).then(data =>{
                         let responseData = data
-                        responseData.skill = publicModuleService.sendCascanderData(responseData.skill)
-                        responseData.course = publicModuleService.sendCascanderData(responseData.course)
+                        responseData.skill = this.$utils.sendCascanderData(responseData.skill)
+                        responseData.course = this.$utils.sendCascanderData(responseData.course)
                         this.workerForm = data
                     }).catch(error =>{
                         this.$message({

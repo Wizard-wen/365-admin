@@ -44,8 +44,11 @@ export default {
                 return {type: 6, from: 'match', path: '/sale/saleWorkerShow',}
             } else if(this.workerListType == 'publicMatch'){
                 return {type: 7, from: 'publicMatch', path: '/sale/saleWorkerShow',}
+            } else if(this.workerListType == 'operatePublicMatch'){
+                return {type: 8, from: 'operatePublicMatch', path: '/worker/workerItemShow',}
             }
         },
+
         /**
          * 查看服务人员详情
          */
@@ -53,10 +56,11 @@ export default {
             this.$router.push({
                 path: this.setShowType().path,
                 query: {
+                    ...this.$route.query,
                     id: this.currentWorker.id,
                     from:  this.setShowType().from,
                     type: this.setShowType().type,
-                    order_id: (this.setShowType().type == 6 || this.setShowType().type == 7)? this.$route.query.order_id: 0
+                    order_id: (this.setShowType().type == 6 || this.setShowType().type == 7 || this.setShowType().type == 8)? this.$route.query.order_id: 0
                 }
             })
         },

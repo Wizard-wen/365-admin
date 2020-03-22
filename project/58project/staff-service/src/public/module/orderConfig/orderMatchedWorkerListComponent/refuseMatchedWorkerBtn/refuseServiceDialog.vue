@@ -6,10 +6,14 @@
         :show-close="false"
         :close-on-press-escape="false"
         :close-on-click-modal="false">
-        <p style="padding: 0 40px 20px 40px;font-size: 18px;">
-            您将拒绝服务人员<strong>{{serviceObj.staff_name}}(工号{{serviceObj.staff_code}})</strong>接单，请填写拒绝事由。
-        </p>
+        
         <el-form :model="refuseServiceForm" :rules="refuseServiceRules" label-width="120px" ref="refuseServiceForm">
+            <el-form-item label="警告">
+                <p style="text-align:left">您将拒绝服务人员
+                    <strong style="color:#E6A23C;">{{serviceObj.staff_name}}(工号{{serviceObj.staff_code}})</strong>
+                    接单，请填写拒绝事由。
+                </p>
+            </el-form-item>
             <el-form-item label="拒绝事由" prop="message">
                 <el-input v-model="refuseServiceForm.message" type="textarea"></el-input>
             </el-form-item>

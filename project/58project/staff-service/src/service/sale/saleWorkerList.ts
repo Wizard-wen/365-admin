@@ -30,4 +30,9 @@ export const saleWorkerListService = {
             }
         })
     },
+    getWorkerFormConfig(type:string){
+        return apiRequestFormConfig.getWorkerFormConfig(type)
+    }
+
+
 }

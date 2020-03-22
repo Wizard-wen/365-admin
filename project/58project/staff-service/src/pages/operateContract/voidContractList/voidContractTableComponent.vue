@@ -1,7 +1,7 @@
 <template>
     <div class="table-contains">
         <div class="btn-contains">
-            <create-void-contract-btn></create-void-contract-btn>
+            <create-void-contract-btn @updateTable="$emit('updateTable')"></create-void-contract-btn>
         </div>
         <el-table 
             :data="tableData" 
@@ -36,7 +36,6 @@
     
 </template>
 <script>
-    import {$utils} from '@common/index.js'
     import {voidContractTypeList} from './IvoidContractList.ts'
     import assignVoidContractBtn from './control/assignVoidContractBtn.vue'
     import createVoidContractBtn from './control/createVoidContractBtn.vue'
@@ -65,7 +64,7 @@
                 if(row.created_at == 0){
                     return '-'
                 }
-                return $utils.formatDate(new Date(row.created_at), 'yyyy-MM-dd')
+                return this.$utils.formatDate(new Date(row.created_at), 'yyyy-MM-dd')
             },
             /**
              * 空合同分派时间
@@ -74,7 +73,7 @@
                 if(row.assign_at == 0){
                     return '-'
                 }
-                return $utils.formatDate(new Date(row.assign_at), 'yyyy-MM-dd')
+                return this.$utils.formatDate(new Date(row.assign_at), 'yyyy-MM-dd')
             }
         }
     }

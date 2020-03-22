@@ -32,15 +32,15 @@
                 <div class="detail-left-line">订单经纪人：{{ currentOrder.agent_manager_name }}</div>
                 <div class="detail-left-line">订单经纪门店：{{ currentOrder.agent_store_name }}</div>
                 <div class="detail-left-line">订单创建人（运营）：{{ currentOrder.created_manager_name }}</div>
-                <div class="detail-left-line">订单创建时间：{{currentOrder.created_at | timeFomatter}}</div>
+                <div class="detail-left-line">订单创建时间：{{currentOrder.created_at | timeToSecondFomatter}}</div>
                 <div class="detail-left-line">来源门店：{{currentOrder.apply_store_name}}</div>
                 <div class="detail-left-line">来源人：{{currentOrder.apply_manager_id == 0 ? '门店' : currentOrder.apply_manager_name}}</div>
                 <div
                     v-if="currentOrder.type != 1 && publicOrderType !=4" 
-                    class="detail-left-line">签约时间：{{currentOrder.sign_at | timeFomatter}}</div>
+                    class="detail-left-line">签约时间：{{currentOrder.sign_at | timeToSecondFomatter}}</div>
                 <div
                     v-if="currentOrder.type != 1 && publicOrderType !=4" 
-                    class="detail-left-line">服务周期：{{currentOrder.sign_service_start | timeFomatter}} - {{currentOrder.sign_service_end | timeFomatter}}</div>
+                    class="detail-left-line">服务周期：{{currentOrder.sign_service_start | timeToDayFomatter}} - {{currentOrder.sign_service_end | timeToDayFomatter}}</div>
             </div>
         </div>
         <div class="detail-right">
@@ -63,13 +63,6 @@
 </template>
 
 <script>
-
-// import operateAssignOrderBtn from '@/public/module/orderConfig/orderHeaderComponent/operateAssignOrderBtn.vue'
-// import saleAssignOrderBtn from '@/public/module/orderConfig/orderHeaderComponent/saleAssignOrderBtn.vue'
-// import resignBtn from '@/public/module/orderConfig/orderHeaderComponent/resignBtn.vue'
-// import terminateOrderBtn from '@/public/module/orderConfig/orderHeaderComponent/terminateOrderBtn.vue'
-
-// import backOrderListBtn from '@/public/module/orderConfigbackOrderListBtn.vue'
 import {
     backOrderListBtn,
     terminateOrderBtn,
@@ -80,10 +73,7 @@ import {
 
 import {order_typeList} from '@/public/module/orderList/IorderList.ts'
 
-import { 
-    $utils, 
-    saleService,
-} from '@common/index.js'
+import {saleService} from '@/service/sale'
 
 export default {
     components: {
@@ -159,14 +149,6 @@ export default {
          */
         isShowOperateAssignOrderBtn(){
             return this.orderModuleType == 'operate'
-        }
-    },
-    filters: {
-        timeFomatter(value){
-            if(value == 0){
-                return '-'
-            }
-            return $utils.formatDate(new Date(value), 'yyyy-MM-dd')
         }
     },
 }

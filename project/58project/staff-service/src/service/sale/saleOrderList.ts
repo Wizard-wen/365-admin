@@ -13,11 +13,12 @@ export const saleOrderListService = {
         return Promise.all([
             apiRequestFormConfig.getOrderFormConfig(),
             apiRequestOrder.getOrderList(orderQueryForm),
-            
+            apiRequestFormConfig.getWorkerFormConfig('edit'),
         ]).then(data =>{
             return {
                 orderConfigForm: {
                     ...data[0].data,
+                    ...data[2].data,
                 },
                 pagination: {
                     currentPage: data[1].data.current_page, //当前页码

@@ -37,6 +37,14 @@ export const operateContractService = {
         return apiRequestOrder.getContract(id)
     },
     /**
+     * 检查空合同
+     */
+    checkContractNumber(){
+        return Promise.resolve({
+            code: 0,
+        })
+    },
+    /**
      * 
      * @param searchVoidContractForm 
      */
@@ -58,5 +66,32 @@ export const operateContractService = {
                 storeManagerList: data[1].data,
             }
         })
+    },
+    /**
+     * 创建空合同
+     * @param voidContractForm
+     */
+    async createVoidContract(voidContractForm:any){
+        return apiRequestOrder.createVoidContract(voidContractForm)
+    },
+    /**
+     * 分派空合同
+     * @param assignVoidContractForm 
+     */
+    async assignVoidContract(assignVoidContractForm:any){
+        return apiRequestOrder.assignVoidContract(assignVoidContractForm)
+    },
+    /**
+     * 按部门查找员工
+     * @param department_id 
+     */
+    async getDepartmentManagerSelection(department_id:number){
+        return apiRequestCommon.getDepartmentManagerSelection(department_id)
+    },
+    /**
+     * 获取配置信息
+     */
+    getWorkerFormConfig(){
+        return apiRequestFormConfig.getWorkerFormConfig('edit')
     }
 }

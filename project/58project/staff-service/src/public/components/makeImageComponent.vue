@@ -1,5 +1,5 @@
 <template>
-    <div v-if="makeImageDialogVisible" class="imageBoxMark" v-loading="isLoading">
+    <div v-if="makeImageDialogVisible" class="imageBoxMark" v-loading="is_loading">
         <div class="imageBox" 
             :style="{
                 height: `${height+60}px`,
@@ -62,7 +62,7 @@ export default {
             //是否已经生成图片
             isImageCompleted:false,
             //图片正在生成中
-            isLoading: false, 
+            is_loading: false, 
         }
     },
     methods: {
@@ -73,7 +73,7 @@ export default {
     },
     async mounted(){
         try{
-            this.isLoading = true
+            this.is_loading = true
             await html2canvas(this.$refs.imageCutBox).then(async canvas =>{
                 
                 //生成base64图片
@@ -99,16 +99,16 @@ export default {
                     
                     this.canvasCompletedImage = './resource/'+data.data.path
                     
-                    this.isLoading = false
+                    this.is_loading = false
                     
                 }).catch((error)=>{
                     this.$message({
                         message: error.message,
                         type: 'error'
                     })
-                    this.isLoading = false
+                    this.is_loading = false
                 }).finally(() => {
-                    this.isLoading = false
+                    this.is_loading = false
                 })
 
             }).catch(error =>{
@@ -116,14 +116,14 @@ export default {
                     message: error.message,
                     type: 'error'
                 })
-                this.isLoading = false
+                this.is_loading = false
             });
         } catch(error){
             this.$message({
                 message: error.message,
                 type: 'error'
             })
-            this.isLoading = false
+            this.is_loading = false
         }
         
     }

@@ -26,7 +26,8 @@ export default {
             default(){return []}
         },
         isEdit: {
-
+            type: Boolean,
+            default: false,
         }
     },
     methods: {

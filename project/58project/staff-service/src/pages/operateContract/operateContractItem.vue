@@ -6,7 +6,8 @@
         <div class="order-down">
 
             <contract-detail-component
-                :contractBase="contractBase"></contract-detail-component>
+                :contractBase="contractBase"
+                :workerConfigForm="workerConfigForm"></contract-detail-component>
             
             <signed-service-detail-component
                 :signedServiceDetailObject="contractBase"></signed-service-detail-component>
@@ -26,7 +27,8 @@
     </div>
 </template>
 <script>
-    import {operateService, $utils, saleService} from '@common/index.js'
+    import {operateContractService} from '@/service/operateContract'
+    // import {operateContractService} from '@/service/operateContract'
 
     import {
         settledDetailComponent,
@@ -49,78 +51,17 @@ export default {
         return {
             is_loading: false,//
             contractBase: {},//合同信息
+            workerConfigForm: {},
         }
     },
-    filters: {
-        timeFomatter(value){
-            if(value == 0){
-                return '-'
-            }
-            return $utils.formatDate(new Date(value), 'yyyy-MM-dd')
-        },
-        contractTypeFormatter(value){
-            if(value == 1){
-                return '待执行'
-            } else if (value == 2){
-                return '执行中'
-            } else {
-                return '已终止'
-            }
-        },
-        isWagedFormatter(value){
-            if(value == 1){
-                return '否'
-            } else {
-                return '是'
-            }
-        }
-    },
-    computed:{
-        /**
-         * 当前用户信息
-         */
-        presentUser(){
-            return this.$store.state.loginModule.user
-        },
-        //订单服务内容
-        order_service_contains(){
-            return this.$store.state.saleModule.order_service_contains
-        },
-        //订单护理依赖程度
-        order_service_level(){
-            return this.$store.state.saleModule.order_service_level
-        },
-        //订单服务方式
-        order_service_type(){
-            return this.$store.state.saleModule.order_service_type
-        },
-        //合同状态
-        contractType(value){
-            if(this.contractBase.type == 1){
-                return {
-                    name: '待执行',
-                    color: '#E6A23C'
-                }
-            } else if (this.contractBase.type == 2){
-                return {
-                    name: '执行中',
-                    color: '#67C23A'
-                }
-            } else {
-                return {
-                    name: '已终止',
-                    color: '#F56C6C'
-                }
-            }
-        },
-        //是否结算
+    computed: {
         is_settle(){
-            if(!this.contractBase.account){
-                return 3
+            if(this.contractBase.account){
+                return this.contractBase.account.is_settle
             } else {
-                return this.contractBase.account.type
+                return null
             }
-        },
+        }
     },
     methods: {
         /**
@@ -129,12 +70,12 @@ export default {
         async getContract(){
             try{
                 this.is_loading = true
-                await saleService.getContract(this.$route.query.id).then((data) =>{
+                await operateContractService.getOperateContract(this.$route.query.id).then((data) =>{
                     this.contractBase = data.data
-                }).catch(e =>{
+                }).catch(error =>{
                     this.$message({
                         type:'error',
-                        message: e.message
+                        message: error.message
                     })
                     this.is_loading = false
                 }).finally(() =>{
@@ -166,6 +107,9 @@ export default {
     },
     async mounted(){
         await this.getContract()
+        await operateContractService.getWorkerFormConfig().then(data =>{
+            this.workerConfigForm = data.data
+        })
     }    
 }
 </script>

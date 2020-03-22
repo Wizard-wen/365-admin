@@ -69,14 +69,14 @@ export default {
         staffApplication,
         statisticCardComponent,
     },
-    computed: {
-        /**
-         * 当前用户信息
-         */
-        presentUser(){
-            return this.$store.state.loginModule.user
-        },
-    },
+    // computed: {
+    //     /**
+    //      * 当前用户信息
+    //      */
+    //     presentUser(){
+    //         return this.$store.state.loginModule.user
+    //     },
+    // },
     data(){
         return {
             is_loading: false,

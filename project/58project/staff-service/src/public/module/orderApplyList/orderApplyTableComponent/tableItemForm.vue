@@ -31,7 +31,7 @@
                 :label="'订单创建时间'" 
                 :size="3" 
                 :value="currentOrderApply.created_at">
-                <p slot="template">{{currentOrderApply.created_at | formatDate}}</p>
+                <p slot="template">{{currentOrderApply.created_at | timeToDayFomatter}}</p>
             </detail-form-item-component>
             <detail-form-item-component
                 v-if="currentOrderApply.created_manager_name" :size="3"></detail-form-item-component>
@@ -54,7 +54,7 @@
                 v-if="orderApplyModuleType!='require'" 
                 :label="'下单时间'" 
                 :size="3" :value="currentOrderApply.created_at">
-                <p slot="template">{{currentOrderApply.created_at | formatDate}}</p>
+                <p slot="template">{{currentOrderApply.created_at | timeToDayFomatter}}</p>
             </detail-form-item-component>
             <detail-form-item-component
                 v-else :size="3"></detail-form-item-component>
@@ -82,7 +82,6 @@
 
 <script>
 import {
-    $utils,
     operateService,
 } from '@common/index.js'
 
@@ -96,14 +95,6 @@ export default {
         editOrderApplyBtn,
         passOrderApplyBtn,
         refuseOrderApplyBtn,
-    },
-    filters: {
-        /**
-         * 更改时间戳格式
-         */
-        formatDate(timestamp){
-            return $utils.formatDate(new Date(timestamp), 'yyyy-MM-dd')
-        }
     },
     computed: {
         /**

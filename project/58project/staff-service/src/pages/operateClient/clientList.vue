@@ -7,21 +7,21 @@
             @updateTable="updateTable"></client-table-component>
         <pagination
             :pagination="pagination"
+
             @changePage="changePage"></pagination>
     </div>
 </template>
 <script>
-    import {clientService} from '@/service/operateClient.ts'
+    import {clientService} from '@/service/operateClient'
 
     import queryComponent from './clientList/queryComponent.vue'
     import clientTableComponent from './clientList/clientTableComponent.vue'
-    import pagination from './clientList/pagination.vue'
+    // import pagination from './clientList/pagination.vue'
 
     export default {
         components: {
             clientTableComponent,
             queryComponent,
-            pagination,
         },
         data(){
             return {
@@ -35,12 +35,22 @@
                     pageNumber: 20,
                 },
                 //查询对象
-                queryedForm: {
-                    page: 1,
-                    pageNumber: 20,
+                queryForm: {
                     name: '',
                     phone: '',
                 },
+            }
+        },
+        computed: {
+            /**
+             * 列表查询对象
+             */
+            queryObject(){
+                return {
+                    page: this.pagination.currentPage, //请求页码
+                    pageNumber: this.pagination.pageNumber,//单页信息数量
+                    ...this.queryForm,
+                }
             }
         },
         methods: {
@@ -52,9 +62,7 @@
 
                     this.is_loading = true
 
-
-                    
-                    await clientService.getUserList().then((data) =>{
+                    await clientService.getUserList(this.queryObject).then((data) =>{
 
                         this.clientTable = data.data.data
                         //分页信息
@@ -80,7 +88,10 @@
                 }
             },
             // 由查询组件触发的更新表格事件
-            async updateTable(){
+            async updateTable(res){
+                this.queryForm = {
+                    ...res
+                }
                 await this.getTableList()
             },
             //改变页面
@@ -90,7 +101,9 @@
             },
             //查询组件更新
             async changeQueryedForm(res){
-                this.queryedForm = res
+                this.queryForm = {
+                    ...res
+                }
                 this.getTableList()
             }
         },

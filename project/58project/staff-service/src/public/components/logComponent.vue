@@ -32,7 +32,6 @@
 <script>
 //日志弹窗
 import logDialog from './logComponent/logDialog.vue'
-import {$utils} from '@common/index.js'
 export default {
     components: {
         logDialog,
@@ -76,7 +75,7 @@ export default {
             if(row.created_at == 0){
                 return '0000-00-00'
             }
-            return $utils.formatDate(new Date(row.created_at), 'yyyy-MM-dd hh:mm:ss')
+            return this.$utils.formatDate(new Date(row.created_at), 'yyyy-MM-dd hh:mm:ss')
         },
         /**
          * 打开日志弹窗

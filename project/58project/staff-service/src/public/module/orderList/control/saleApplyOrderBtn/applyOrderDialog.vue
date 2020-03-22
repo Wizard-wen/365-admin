@@ -10,7 +10,14 @@
         <el-form :model="applyOrderForm" label-width="120px" :rules="applyOrderRules" ref="applyOrderForm">
 
             <el-form-item label="工种" prop="work_type" ref="work_type" style="margin-bottom:30px;">
-                <el-input v-model="applyOrderForm.work_type"></el-input>
+                <el-cascader
+                    v-model="applyOrderForm.work_type"
+                    :props="{
+                        label: 'name',
+                        value: 'id',
+                    }"
+                    :options="workerConfigForm.skill"
+                    :show-all-levels="false"></el-cascader>
             </el-form-item>
 
             <el-form-item label="服务地址" prop="service_address" ref="service_address">
@@ -52,7 +59,7 @@
                     <el-option
                         v-for="item in storeManagerList"
                         :key="item.manager_id"
-                        :label="item.manager_name"
+                        :label="item.real_name"
                         :value="item.manager_id"></el-option>
                 </el-select>
             </el-form-item>
@@ -84,7 +91,7 @@ export default {
             storeList: [],//门店列表
             storeManagerList: [],//门店员工列表
             applyOrderForm: {
-                work_type: '', //工种
+                work_type: 0, //工种
                 service_address: '',//地址
                 service_duration: '',//工作时间
                 wage: '',//工资
@@ -98,7 +105,7 @@ export default {
             },
             applyOrderRules: {
                 work_type: [
-                    { required: true, message: '请填写工种', trigger: 'blur' }
+                    { required: true, message: '请填写工种', trigger: 'change' }
                 ],
                 service_address: [
                     { required: true, message: '请填写服务地址', trigger: 'blur' }
@@ -121,7 +128,8 @@ export default {
                     { required: true, message: '请填写客户姓名', trigger: 'blur' }
                 ],
  
-            }
+            },
+            workerConfigForm: {}
         }
     },
     computed: {
@@ -145,7 +153,7 @@ export default {
         async changeStoreList(value){
             try{
                 this.is_loading = true
-                await operateService.getStoreManagerSelection(value).then(data =>{
+                await publicModuleService.getStoreManagerSelection(value).then(data =>{
                     if(data.code == '0'){
                         this.storeManagerList = data.data
                     }
@@ -172,7 +180,12 @@ export default {
                 if (valid) {
                     try{
                         this.is_loading = true
-                        await publicModuleService.saleApplyOrder(this.applyOrderForm).then(data =>{
+                        let applyOrderForm = {
+                            ...this.applyOrderForm
+                        }
+                        applyOrderForm.work_type = this.$utils.sendCascanderData(applyOrderForm.work_type)[0]
+
+                        await publicModuleService.saleApplyOrder(applyOrderForm).then(data =>{
                             if(data.code == '0'){
                                 this.$message({
                                     type:"success",
@@ -207,11 +220,13 @@ export default {
             try{
                 this.is_loading = true
                 await Promise.all([
-                    operateService.getStoreSelection(),
-                    operateService.getStoreManagerSelection(1)
+                    publicModuleService.getStoreSelection(),
+                    publicModuleService.getStoreManagerSelection(1),
+                    publicModuleService.getPublicWorkerConfigForm('edit'),
                 ]).then((data) =>{
                     this.storeList = data[0].data
                     this.storeManagerList = data[1].data
+                    this.workerConfigForm = data[2].data
                     this.is_loading = false
                 }).catch((error) =>{
                     this.$message({

@@ -1,179 +1,130 @@
 <template>
-    <div class="table-box">
-        <!-- 模糊搜索插槽 -->
-        <slot name="searchList"></slot>
-
-        <div class="right-contains">
-            <div class="searched-form">
-                <slot name="searchForm"></slot>
-            </div>  
-            <el-table 
-                :data="staffTable" 
-                class="table-list" 
-                :stripe="true" 
-                border 
-                :fit="true"
-                height="calc(100vh-90px)"
-                row-key="1233444"
-                :header-cell-style="{height: '30px',padding: '0px',fontSize:'12px'}"
-                :cell-style="{height: '30px',padding: 0,fontSize:'12px',}">
-
-                <el-table-column fixed="left" label="门店编号" prop="store_code" align="center" width="120"></el-table-column>
-
-                <el-table-column label="门店名" prop="name" align="center" width="150"></el-table-column>
-
-                <el-table-column label="店长" prop="store_manager_name" align="center" width="150"></el-table-column>
-
-                <el-table-column label="门店类型" prop="is_third" align="center" width="120">
-                    <template slot-scope="scope">
-                        <table-tag-component 
-                            v-if="storeFormConfig.is_third" 
-                            :propList="storeFormConfig.is_third" 
-                            :tableOriginData="scope.row.is_third"></table-tag-component>
-                    </template>
-                </el-table-column>
-
-                <el-table-column label="员工数量" prop="agent_count" align="center" width="150"></el-table-column>
-
-                <el-table-column label="经营状态" prop="type" align="center" width="120">
-                    <template slot-scope="scope">
-                        <table-tag-component 
-                            v-if="storeFormConfig.type" 
-                            :propList="storeFormConfig.type" 
-                            :tableOriginData="scope.row.type"></table-tag-component>
-                    </template>
-                </el-table-column>
-
-                <el-table-column label="地区" prop="address" align="center" width="300" ></el-table-column>
-                
-                <el-table-column label="成立时间" prop="created_at" align="center" :formatter="created_atFormatter" width="150"></el-table-column>
-
-                <el-table-column label="创建人" prop="created_manager_name" align="center" width="150"></el-table-column>
-                <el-table-column label="操作" align="center" fixed="right" :width="controlScopeLength">
-                    <template slot-scope="scope">
-                        <slot name="control" v-bind:scoper="scope"></slot>
-                    </template>
-                </el-table-column>
-            </el-table>
-            <!-- 分页 -->
-            <div class="pagination-box">
-                <slot name="pagination"></slot>
-            </div>
+    <div class="table-contains">
+        <div class="btn-contains">
+            <el-button type="primary" @click="openCreateStoreDialog">创建门店</el-button>
         </div>
+        <el-table 
+            :data="tableData" 
+            class="table-list" 
+            border
+            :header-cell-style="{height: '54px',background: '#fafafa'}">
+            <el-table-column fixed="left" label="门店编号" prop="store_code" align="center" ></el-table-column>
+
+            <el-table-column label="门店名" prop="name" align="center" ></el-table-column>
+
+            <el-table-column label="店长" prop="store_manager_name" align="center" ></el-table-column>
+
+            <el-table-column label="门店类型" prop="is_third" align="center" >
+                <template slot-scope="scope">
+                    <el-tag size="small" :type="scope.row.is_third==1?'success':'danger'">
+                        {{scope.row.is_third==1?'直营店':'加盟店'}}
+                    </el-tag>
+                </template>
+            </el-table-column>
+
+            <el-table-column label="员工数量" prop="agent_count" align="center" ></el-table-column>
+
+            <el-table-column label="经营状态" prop="status" align="center" >
+                <template slot-scope="scope">
+                    <el-tag size="small" :type="scope.row.status==1?'success':'danger'">
+                        {{scope.row.status==1?'营业':'停业'}}
+                    </el-tag>
+                </template>
+            </el-table-column>
+
+            <el-table-column label="地区" prop="address" align="center"  width="280"></el-table-column>
+            
+            <el-table-column label="成立时间" prop="created_at" align="center" :formatter="created_atFormatter" width="120"></el-table-column>
+
+            <el-table-column label="创建人" prop="created_manager_name" align="center"></el-table-column>
+            <el-table-column label="操作" align="center">
+                <template slot-scope="scope">
+                    <el-button size="mini" type="primary" @click="editstore(scope.row)">详情</el-button>
+                </template>
+            </el-table-column>
+        </el-table>
+        <create-store-dialog
+			:createStoreDialogVisible="createStoreDialogVisible"
+			v-if="createStoreDialogVisible"
+			@closeAddStoreDialog="closeAddStoreDialog"></create-store-dialog>
     </div>
+    
 </template>
 <script>
-    import {operateService, $utils} from '@common/index.js'
-
-    
+    import {operateService} from '@common/index.js'
+    import {is_thirdList,runTypeList} from '../Istore'
+    import createStoreDialog from './createStoreDialog.vue'
     export default {
-        props: {
-            //员工信息列表
-            staffTable: {
-                type: Array,
-                default:function(){return []}
-            },
-            maxLength: {
-                type:Object,
-                default:function(){
-                    return {
-                        authentication: 80, //认证状态
-                        working_status: 80,//接单状态
-                        skill_ids: 80,// 职业类型
-                        service_type: 80,//服务类型
-                        service_crowd: 80,//可服务人群
-                        working_age: 80,// 工龄
-                        nation: 80,// 民族
-                        region_ids: 80,//服务地区
-                        course: 80,//参加培训
-                        paper_ids: 80, //技能证书
-                        source: 80,//信息来源
-                    }
-                }
-            },
-            /**
-             * 表格操作栏插槽宽度
-             */
-            controlScopeLength: {
-                default: 0,
-                type: Number
-            }
+        components: {
+            createStoreDialog,
         },
         data(){
             return {
-
+                is_thirdList,
+                runTypeList,
+                createStoreDialogVisible: false,//创建新门店弹窗
             }
         },
-        computed:{
-            //门店配置字段对象
-            storeFormConfig(){
-                return this.$store.state.storeModule.storeFormConfig
-            }
+        props: {
+            //列表数据
+            tableData: {
+                type: Array,
+                default:function(){return []}
+            },
         },
         methods: {
             /**
-             * 状态转换
+             * 创建时间字段转换
              */
-            typeFormatter(row, column){
-                if(row.type == 'enable'){
-                    return 1
-                } else {
-                    return 2
+            created_atFormatter(row){
+                if(row.created_at == 0){
+                    return '0000-00-00'
                 }
+                return this.$utils.formatDate(new Date(row.created_at), 'yyyy-MM-dd')
             },
             /**
-             * 门店成立时间字段转换
+             * 打开创建门店弹窗
              */
-            created_atFormatter(row, column){
-                if(row.created_at == 0){
-                    return '-'
-                }
-                return $utils.formatDate(new Date(row.created_at), 'yyyy-MM-dd')
+            openCreateStoreDialog(){
+                this.createStoreDialogVisible = true
+			},
+			/**
+			 * 关闭创建门店弹窗
+			 */
+			async closeAddStoreDialog(){
+				this.createStoreDialogVisible = false
+				this.$emit('updateTable')
             },
-
+            /**
+             * 编辑门店
+             */
+            editstore(row){
+                this.$router.push({
+                    path: "/store/storeItem",
+                    query: {
+                        type: 1, //编辑为1
+                        id: row.id
+                    }
+                })
+            },
         },
     }
 </script>
 <style lang="scss" scoped>
-    .tag-style{
-        height:24px;
-        line-height: 24px;
+.table-contains{
+    background: #fff;
+    .btn-contains{
+        padding: 10px 50px;
+        display: flex;
+        justify-content: flex-end;
     }
-//表格
-.table-box{
-    height: calc(100vh - 50px);
-    width:100%;
-    display: flex;
-    //左侧搜索模块
-    .left-search-module{
-        width: 200px;
-        height: 100%;
-        overflow-y: auto;
-        background: #fff;
-        margin-right: 5px;
-        margin-left: 5px;
-    }
-    .right-contains{
-        overflow: auto;
-        flex:1;
-        width: calc(100% - 180px);
-        height: calc(100vh - 50px);
-        .searched-form{
-            width: 100%;
-            display: flex;
-            justify-content: space-between;
-            .search-tag-list{
-                flex: 1;
-            }
-        }
-        .table-list{
-            height: calc(100% - 72px);
-            width: 100%;
-            margin: 0 auto;
-        }
-        .pagination-box{
-            height:32px;
-        }
-    }
+    .table-list{
+        min-height: 800px;
+    }  
 }
+            
+        
+        
+
+
 </style>
