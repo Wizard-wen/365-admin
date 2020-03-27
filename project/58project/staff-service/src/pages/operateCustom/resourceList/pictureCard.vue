@@ -24,7 +24,12 @@ export default {
     props: {
         pictureItem: {
             type: Object,
-            default(){return {}}
+            default(){return {
+                url: '',
+                typeName: '',
+                name: '',
+                isSelected: false,
+            }}
         }
     },
     data(){

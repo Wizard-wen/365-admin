@@ -60,7 +60,7 @@ export default {
 .picture-contains{
     position: relative;
     height: 420px;
-    width: 358px;
+    width: 368px;
     background: url(./orderPictureComponent/images/orderImage.png) no-repeat;
     background-size: 368px 400px; 
     padding: 50px 10px 0 20px;

@@ -264,7 +264,12 @@ export const apiRequestOrder:api_order = {
             ...obj
         })
     },
-
+    //空合同排重
+    checkVoidContract(getCheckVoidContractForm:any){
+        return axios.post(`./admin/order/checkVoidContract`,{
+            ...getCheckVoidContractForm,
+        })
+    }
 }
 
 

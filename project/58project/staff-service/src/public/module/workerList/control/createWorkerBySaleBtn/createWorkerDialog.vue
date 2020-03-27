@@ -39,6 +39,7 @@
 </template>
 <script>
 import {publicModuleService} from '@/service/publicModule'
+import {operateWorkerService} from '@/service/operateWorker'
 export default {
     props: {
         //是否打弹出框
@@ -70,7 +71,7 @@ export default {
                         id: 0,
                         phone: value
                     }
-                    await publicModuleService.checkNewWorkerPhone(checkWorkerPhoneForm).then((data) =>{
+                    await operateWorkerService.checkNewWorkerPhone(checkWorkerPhoneForm).then((data) =>{
                         if(data.code == '0'){
                             callback()
                             _this.phoneCheck = false

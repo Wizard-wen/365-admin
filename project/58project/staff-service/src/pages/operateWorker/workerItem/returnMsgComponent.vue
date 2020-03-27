@@ -1,16 +1,21 @@
 <template>
-    <log-component
+    <return-msg-list
         :title="'回访'"
         :logList="return_msg"
         :isEdit="isEdit"
         :logDialogVisible="logDialogVisible"
         @openLogDialog="openLogDialog"
         @closeLogDialog="closeLogDialog"
-        @submitLogDialog="submitLogDialog"></log-component>
+        @submitLogDialog="submitLogDialog"></return-msg-list>
 </template>
 
 <script>
+import {operateWorkerService} from '@/service/operateWorker'
+import returnMsgList from './returnMsgComponent/returnMsgList.vue'
 export default {
+    components: {
+        returnMsgList,
+    },
     data(){
         return {
             //控制添加
@@ -28,6 +33,10 @@ export default {
         isEdit: {
             type: Boolean,
             default: false,
+        },
+        workerItem: {
+            type: Object,
+            default(){return {}}
         }
     },
     methods: {
@@ -48,32 +57,36 @@ export default {
          */
         async submitLogDialog(param){
 
-            // try{
-            //     await saleService.editOrder(this.orderApplyField).then(data =>{
-            //         if(data.code == '0'){
-            //             this.$message({
-            //                 type:"success",
-            //                 message: data.message
-            //             })
-            //             this.$emit('closeChangeDialog')
-            //         }
-            //     }).catch(error =>{
-            //         this.$message({
-            //             type:'error',
-            //             message: error.message
-            //         })
-            //     })
-            // } catch(error){
-            //     this.$message({
-            //         type:'error',
-            //         message: error.message
-            //     })
-            // }
+            try{
+                let sendForm = {
+                    ...param,
+                    staff_id: this.workerItem.id,
+                }
+                await operateWorkerService.addWorkerReturnMessage(sendForm).then(data =>{
+                    if(data.code == '0'){
+                        this.$message({
+                            type:"success",
+                            message: data.message
+                        })
+                        this.$emit('closeChangeDialog')
+                    }
+                }).catch(error =>{
+                    this.$message({
+                        type:'error',
+                        message: error.message
+                    })
+                })
+            } catch(error){
+                this.$message({
+                    type:'error',
+                    message: error.message
+                })
+            }
             
             //关闭弹窗
             this.logDialogVisible = false
             //更新订单配置数据
-            this.$emit('updateOrderConfig')
+            this.$emit('updateOperateWorker')
         }
     }
 }

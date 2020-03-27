@@ -28,38 +28,50 @@
                 <card-box-component 
                 :title="'基本信息'">
                     <div slot="contains" class="contains-form">
-                        <el-form-item v-if="!accountForm.id" label="账号" prop="account">
-                            <el-input autocomplete="off" v-model="accountForm.account" ></el-input>
+                        <el-form-item v-if="!accountForm.id" prop="account">
+                            <el-tooltip slot="label" class="item" effect="dark" content="账号通常为姓名全拼" placement="top-start">
+                                <span>账号<i class="el-icon-info"></i></span>
+                            </el-tooltip>
+                            <el-input autocomplete="off" v-model="accountForm.account" placeholder="请输入账号，格式通常为姓名全拼"></el-input>
                         </el-form-item>
 
-                        <el-form-item label="真实姓名" prop="real_name">
-                            <el-input autocomplete="off" v-model="accountForm.real_name" ></el-input>
+                        <el-form-item prop="real_name">
+                            <el-tooltip slot="label" class="item" effect="dark" content="请务必输入真实姓名" placement="top-start">
+                                <span>真实姓名<i class="el-icon-info"></i></span>
+                            </el-tooltip>
+                            <el-input autocomplete="off" v-model="accountForm.real_name" placeholder="请输入真实姓名"></el-input>
                         </el-form-item>
 
                         <div v-if="this.$route.query.type == 0">
                             <el-form-item label="密码" prop="password">
-                                <el-input :maxlength="50" autocomplete="new-password"  v-model="accountForm.password" type="password"></el-input>
+                                <el-input :maxlength="50" autocomplete="new-password" placeholder="请输入密码" v-model="accountForm.password" type="password"></el-input>
                             </el-form-item>
 
                             <el-form-item label="确认密码" prop="repassword">
-                                <el-input :maxlength="50" v-model="accountForm.repassword" @focus.native="this.type='password'" type="password"></el-input>
+                                <el-input 
+                                    :maxlength="50" type="password" placeholder="请重新输入密码"
+                                    v-model="accountForm.repassword"  
+                                    @focus.native="this.type='password'" ></el-input>
                             </el-form-item>
                         </div>
 
-                        <el-form-item label="用户名" prop="name">
-                            <el-input autocomplete="off" v-model="accountForm.name" :maxlength="20"></el-input>
+                        <el-form-item prop="name">
+                            <el-tooltip slot="label" class="item" effect="dark" content="用户名应为部门+真实姓名" placement="top-start">
+                                <span>用户名<i class="el-icon-info"></i></span>
+                            </el-tooltip>
+                            <el-input autocomplete="off" v-model="accountForm.name" placeholder="请输入用户名，格式为部门+真实姓名" :maxlength="20"></el-input>
                         </el-form-item>
 
                         <el-form-item label="手机号" prop="phone">
-                            <el-input autocomplete="off" v-model="accountForm.phone" :maxlength="11"></el-input>
+                            <el-input autocomplete="off" v-model="accountForm.phone" placeholder="请输入手机号" :maxlength="11"></el-input>
                         </el-form-item>
 
                         <el-form-item label="邮箱" prop="email">
-                            <el-input autocomplete="off" v-model="accountForm.email"></el-input>
+                            <el-input autocomplete="off" v-model="accountForm.email" placeholder="请输入邮箱"></el-input>
                         </el-form-item>
 
                         <el-form-item label="微信号" prop="wechat">
-                            <el-input autocomplete="off" v-model="accountForm.wechat"></el-input>
+                            <el-input autocomplete="off" v-model="accountForm.wechat" placeholder="请输入微信号"></el-input>
                         </el-form-item>
 
                         <el-form-item label="角色配置" prop="roleIds">
@@ -72,7 +84,7 @@
                                     :key="item.id" :label="item.name" :value="item.id"></el-option>
                             </el-select>
                         </el-form-item>
-
+                        
                         <el-form-item label="部门配置" prop="department_id">
                             <el-select 
                                 v-model="accountForm.department_id" 
@@ -83,9 +95,32 @@
                                     :key="item.id" :label="item.name" :value="item.id"></el-option>
                             </el-select>
                         </el-form-item>
+                        <el-form-item>
+                            <el-alert
+                            title="决不能同时兼具运营和销售两种身份"
+                            type="error"
+                            :closable="false"></el-alert>
+                        </el-form-item>
+                        
+                        <el-form-item>
+                             <el-table :data="roleDesList" border style="width: 100%">
+                                 <el-table-column prop="name" label="身份" ></el-table-column>
+                                <el-table-column prop="department" label="所属部门" >
+                                    <template slot-scope="scope">
+                                        <el-tag size="small" v-for="(item ,index) in scope.row.department" :key="index">{{item}}</el-tag>
+                                    </template>
+                                </el-table-column>
+                                <el-table-column prop="roles" label="角色提示">
+                                    <template slot-scope="scope">
+                                        <el-tag size="small" v-for="(item ,index) in scope.row.roles" :key="index">{{item}}</el-tag>
+                                    </template>
+                                </el-table-column>
+                                <el-table-column prop="des" label="描述"></el-table-column>
+                            </el-table>
+                        </el-form-item>
                         
                         <el-form-item label="个人简介" prop="personal_intro">
-                            <el-input autocomplete="off" type="textarea" v-model="accountForm.personal_intro"></el-input>
+                            <el-input autocomplete="off" type="textarea" placeholder="请输入个人简介" v-model="accountForm.personal_intro"></el-input>
                         </el-form-item>
 
                         <el-form-item label="生日" prop="birthday">
@@ -94,8 +129,8 @@
                                 :default-value="new Date()"
                                 :picker-options="pickerOptions"
                                 type="date"
-                                placeholder="选择日期"
-                                format="yyyy 年 MM 月 dd 日"
+                                placeholder="请选择生日"
+                                format="timestamp"
                                 value-format="timestamp"></el-date-picker>
                         </el-form-item>
                         
@@ -109,11 +144,11 @@
                         </el-form-item>
 
                         <el-form-item label="紧急联系人" prop="urgent">
-                            <el-input autocomplete="off" v-model="accountForm.urgent"></el-input>
+                            <el-input autocomplete="off" placeholder="请输入紧急联系人" v-model="accountForm.urgent"></el-input>
                         </el-form-item>
                         
                         <el-form-item label="现住址" prop="current_address">
-                            <el-input autocomplete="off" v-model="accountForm.current_address"></el-input>
+                            <el-input autocomplete="off" placeholder="请输入现住址" v-model="accountForm.current_address"></el-input>
                         </el-form-item>
                     </div>
                 </card-box-component>
@@ -174,6 +209,21 @@ export default {
                     return time.getTime() > times;
                 }
             },
+            roleDesList:[
+                {
+                    name: '销售人员',
+                    department: ['门店','加盟店'],
+                    roles:['直营店经理','直营店销售专员','加盟店销售专员','加盟店经理'],
+                    des: '销售人员是指在各个门店工作的安置老师，角色只能是这四种其中之一。'
+                },
+                {
+                    name: '运营人员',
+                    department: ['运营中心'],
+                    roles:['运营经理','运营专员'],
+                    des: '运营人员'
+                },
+
+            ],
             //账户信息
             accountForm: {
                 id: this.$route.query.id ? this.$route.query.id : '',

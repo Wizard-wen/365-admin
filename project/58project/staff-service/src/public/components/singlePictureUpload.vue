@@ -14,8 +14,8 @@
                 v-if="initUrl!=''"
                 class="icon-box"
                 :style="{height: `${height}px`,width: `${width}px`}"
-                @mouseover="showblack('0')"
-                @mouseout="showblack('1')">
+                @mouseenter.stop="showblack('0')"
+                @mouseleave="showblack('1')">
                 <img 
                     class="icon-item" 
                     :style="{height: `${height}px`,width: `${width}px`}"

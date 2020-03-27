@@ -54,29 +54,10 @@ export const apiRequestWorker:api_worker =  {
             ...changeWorkerStatusForm,
         })
     },
-    /**
-     * 单个服务人员添加回访
-     */
-    addReturnStaffSingle(id){
-        return axios.post(`./admin/staff/addReturnStaffSingle`,{id: id})
-    },
-    /**
-     * 多个回访人员到回访列表
-     */
-    addReturnStaff(obj){
-        return axios.post(`./admin/staff/addReturnStaff`,{...obj})
-    },
-    /**
-     * 获取可回访人员数量
-     */
-    getReturnStaff(obj){
-        return axios.post(`./admin/staff/getReturnStaff`,{...obj})
-    },
-    /**
-     * 恢复全部回访人员
-     */
-    removeReturnStaff(){
-        return axios.post(`./admin/staff/removeReturnStaff`,{})
+    addReturnLog(addWorkerReturnMessageForm){
+        return axios.post(`./admin/staff/addReturnLog`,{
+            ...addWorkerReturnMessageForm,
+        })
     },
     /**
      * 删除申请添加服务人员

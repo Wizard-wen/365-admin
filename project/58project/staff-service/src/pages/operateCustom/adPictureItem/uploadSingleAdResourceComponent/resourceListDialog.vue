@@ -168,8 +168,10 @@ export default {
                             typeText = '长图'
                         } else if(item.type == 2){
                             typeText = '全屏'
-                        } else {
+                        } else if(item.type == 3){
                             typeText = '半屏'
+                        } else {
+                            typeText = '广告'
                         }
                         return {
                             ...item,

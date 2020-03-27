@@ -34,7 +34,7 @@ import notFound from '@/pages/notFound.vue'
 import mainPage from '@/pages/Main.vue'
 
 //vuex数据
-import {store} from '../store/index.js'
+import {store} from '@/store/index'
 import { Message } from 'element-ui';
 
 window.router = new Router({

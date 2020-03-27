@@ -51,7 +51,7 @@ import App from './App'
 
 import '../common/config'
 
-
+// import './index.d.ts'
 /**
  * 路由
  */
@@ -59,8 +59,12 @@ import router from './router/index.js'
 
 import {loginService} from './service/login'
 import { mapState } from 'vuex'
-import {store} from './store/index'
 
+
+import {store} from './store/index.js'
+
+
+window.store = store
 
 Vue.config.productionTip = false
 
@@ -96,7 +100,17 @@ axios.interceptors.response.use(async response => {
     else if(response.data.code == "10001"){
         
         //刷新token 
-        await loginService.refreshToken(store.state.loginModule.token.refresh_token)
+        await loginService.refreshToken(store.state.loginModule.token.refresh_token).then(data =>{
+            let manager = data.data
+            // 登录信息存入 vuex sessionStorage
+            store.commit('login',{
+                access_token: manager.access_token,
+                refresh_token: manager.refresh_token
+            })
+
+        }).catch(error =>{
+            throw error
+        })
 
         //重发请求
         return axios(response.config)
@@ -134,7 +148,7 @@ Vue.mixin({
          * @param {*} value 
          */
         timeToDayFomatter(value){
-            if(value == 0){
+            if(value == 0 || value == ''){
                 return '-'
             }
             return $utils.formatDate(new Date(value), 'yyyy-MM-dd')

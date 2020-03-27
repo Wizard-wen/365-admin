@@ -37,14 +37,6 @@ export const operateContractService = {
         return apiRequestOrder.getContract(id)
     },
     /**
-     * 检查空合同
-     */
-    checkContractNumber(){
-        return Promise.resolve({
-            code: 0,
-        })
-    },
-    /**
      * 
      * @param searchVoidContractForm 
      */
@@ -93,5 +85,9 @@ export const operateContractService = {
      */
     getWorkerFormConfig(){
         return apiRequestFormConfig.getWorkerFormConfig('edit')
+    },
+    //空合同排重
+    checkVoidContract(getCheckVoidContractForm:any){
+        return apiRequestOrder.checkVoidContract(getCheckVoidContractForm)
     }
 }

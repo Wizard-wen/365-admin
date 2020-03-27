@@ -65,4 +65,7 @@ export interface api_order {
     writeOrderLog: {(obj:object): Promise<any>},
     // 
     // writeApplyLog: {(): Promise<any>},
+
+    // 空合同排重
+    checkVoidContract:{(getCheckVoidContractForm:any):Promise<any>}
 }

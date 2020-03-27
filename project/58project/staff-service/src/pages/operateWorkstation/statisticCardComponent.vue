@@ -5,7 +5,7 @@
         <count-to
             ref="example"
             :start-val="0"
-            :end-val="Number(statisticItem.total)"
+            :end-val="total"
             :duration="1000"
             :decimals="0"
             :separator="','"
@@ -48,6 +48,11 @@ export default {
                 rate: 0,
                 this_month: 0,
             }}
+        }
+    },
+    computed: {
+        total(){
+            return Number(this.statisticItem.total)
         }
     },
     mounted(){

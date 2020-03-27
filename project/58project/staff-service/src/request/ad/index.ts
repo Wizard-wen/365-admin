@@ -63,7 +63,7 @@ export const apiRequestAd:api_ad = {
      */
     deleteAdPositionResource(id){
         return axios.post(`./admin/ad/deleteAdPositionResource`,{
-            id: id,
+            ad_position_resource_id: id,
         })
     },
 

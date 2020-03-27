@@ -6,7 +6,7 @@
 
 import {apiLogin} from '@/request/index'
 
-
+// import {store} from '../main.js'
 
 export const loginService = {
     //登录，获取、设置token 
@@ -86,19 +86,9 @@ export const loginService = {
      * 刷新token 
      * @param refresh_token 刷新token
      */
-    async refreshToken(refresh_token:any){
-        await apiLogin.refreshToken(refresh_token)
-            .then(data =>{
-                let manager = data.data
-                // 登录信息存入 vuex sessionStorage
-                // store.commit('login',{
-                //     access_token: manager.access_token,
-                //     refresh_token: manager.refresh_token
-                // })
-
-            }).catch(error =>{
-
-            })
+    refreshToken(refresh_token:any){
+        return apiLogin.refreshToken(refresh_token)
+            
     },
 }
 

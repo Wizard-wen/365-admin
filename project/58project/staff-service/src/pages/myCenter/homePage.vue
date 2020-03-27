@@ -91,7 +91,7 @@ import {myCenterService} from '@/service/myCenter'
 import noHeaderImage from './homePage/images/header.png'
 
 import {departmentList} from './ImyCenter'
-
+import axios from 'axios'
 export default {
 	components: {
 		staffDetailComponent,
@@ -193,7 +193,7 @@ export default {
 	},
 	async mounted(){
 		await this.getTeamList()
-	}
+	}	
 };
 </script>
 

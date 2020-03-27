@@ -9,7 +9,7 @@
         <worker-table-component
             :workerListType="'return'"
             :tableData="workerTable"
-            :workerConfigList="workerConfigForm"
+            :workerConfigForm="workerConfigForm"
             @updateTable="updateTable"></worker-table-component>
         <pagination
             :pagination="pagination"
@@ -92,14 +92,26 @@ export default {
         /**
          * 改变页码
          */
-        async changePage(){
-
-        },
-        async updateTable(){
+        async changePage(res){
+            this.pagination.currentPage = res
             await this.getTable()
         },
+        /**
+         * 更新表格
+         */
+        async updateTable(res){
+            this.queryForm = {
+                ...res
+            }
+            await this.getTable()
+        },
+        /**
+         * 变更查询条件
+         */
         async changeQueryedForm(res){
-            this.queryForm = res
+            this.queryForm = {
+                ...res
+            }
             await this.getTable()
         }
     },

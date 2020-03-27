@@ -42,7 +42,7 @@ export default {
             //     callback(new Error('请输入手机号'));
             // } else {
                 try{
-                    await operateContractService.checkContractNumber(_this.voidContractForm).then((data) =>{
+                    await operateContractService.checkVoidContract(_this.voidContractForm).then(data =>{
                         if(data.code == '0'){
                             callback()
 

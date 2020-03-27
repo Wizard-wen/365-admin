@@ -157,7 +157,7 @@
                                     <p>劳动者服务费 = 劳务报酬/月 ✖ 10%</p>
                                 </div>    
                             </form-item-label-tooltip-component>
-                            <el-input :disabled="true" v-model.number="signForm.staff_charge" placeholder="请输入劳动者服务费"></el-input>
+                            <el-input :disabled="!isCostomize" v-model.number="signForm.staff_charge" placeholder="请输入劳动者服务费"></el-input>
                         </el-form-item>
                         <el-form-item prop="user_charge" class="form-item-size form-item-3-size" size="small">
                             <form-item-label-tooltip-component
@@ -169,7 +169,7 @@
                                     <p>劳动者服务费 = 劳务报酬/月 ✖ 20%</p>
                                 </div>    
                             </form-item-label-tooltip-component>
-                            <el-input :disabled="true" v-model.number="signForm.user_charge" placeholder="请输入客户服务费"></el-input>
+                            <el-input :disabled="!isCostomize" v-model.number="signForm.user_charge" placeholder="请输入客户服务费"></el-input>
                         </el-form-item>
                         <el-form-item prop="user_pay" class="form-item-size form-item-3-size" size="small">
                             <form-item-label-tooltip-component
@@ -181,7 +181,7 @@
                                     <p>其中，只有首次签约才会产生客户服务费。</p>
                                 </div>    
                             </form-item-label-tooltip-component>
-                            <el-input :disabled="true" v-model.number="signForm.user_pay" placeholder="请输入客户缴纳金额"></el-input>
+                            <el-input :disabled="!isCostomize" v-model.number="signForm.user_pay" placeholder="请输入客户缴纳金额"></el-input>
                         </el-form-item>
                         <el-form-item prop="staff_deposit" class="form-item-size form-item-3-size" size="small">
                             <form-item-label-tooltip-component
@@ -192,7 +192,10 @@
                                     <p>劳动者押金通常为200元</p>
                                 </div>    
                             </form-item-label-tooltip-component>
-                            <el-input :disabled="true" v-model.number="signForm.staff_deposit" placeholder="请输入劳动者押金"></el-input>
+                            <el-input :disabled="!isCostomize" v-model.number="signForm.staff_deposit" placeholder="请输入劳动者押金"></el-input>
+                        </el-form-item>
+                        <el-form-item>
+                            <el-button type="primary" size="mini" @click="customizeCharge">自定义金额</el-button>
                         </el-form-item>
                     </div>
                 </card-box-component>
@@ -224,8 +227,8 @@
                             <multiple-picture-upload
                                 v-model="signForm.accessory"
                                 :title="'合同附件'"
-                                :height="210"
-                                :width="197"></multiple-picture-upload>
+                                :height="212"
+                                :width="150"></multiple-picture-upload>
                         </el-form-item>
                     </div>
                 </card-box-component>
@@ -286,6 +289,7 @@ export default {
             }],
             //订单状态
             publicOrderType: this.$route.query.type,
+            isCostomize:false,//是否自定义订单金额
             signRules: {
                 //合同编号
                 contract_number: [
@@ -462,6 +466,9 @@ export default {
     },
     watch: {
         'signForm.staff_wage': function(val, oldVal){
+            if(this.isCostomize){
+                return
+            }
             this.signForm.user_charge = parseInt(val * 0.2)
             this.signForm.user_pay = parseInt(val * 1.2)
             this.signForm.staff_charge = parseInt(val * 0.1)
@@ -470,6 +477,9 @@ export default {
     methods: {
         goback(){
             this.$router.go(-1)
+        },
+        customizeCharge(){
+            this.isCostomize = true
         },
         /**
          * 提交签约表单

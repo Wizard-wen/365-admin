@@ -171,3 +171,12 @@ export const workerItemType = [
     }
 ]
 
+
+export interface addWorkerReturnMessageForm {
+    manager_id:number;//管理员id
+    manager_name:string;//管理员姓名
+    staff_id:number;//服务人员id
+    message:string;//回访信息
+
+}
+

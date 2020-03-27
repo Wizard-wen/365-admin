@@ -5,7 +5,9 @@ import {
     apiRequestCommon,
 } from '@/request/index'
 
-import {workerItem} from '@/pages/operateWorker/workerItem/IworkerItem'
+import {
+    workerItem,
+    addWorkerReturnMessageForm} from '@/pages/operateWorker/workerItem/IworkerItem'
 
 import {workerConfigForm} from '@/pages/operateWorker/workerConfigForm/IworkerConfigForm'
 import {$utils} from '@/utils/index'
@@ -92,6 +94,7 @@ export const operateWorkerService = {
      * @param checkWorkerPhoneForm 
      */
     checkNewWorkerPhone(checkWorkerPhoneForm:checkWorkerPhoneForm){
+        
         return apiRequestWorker.checkStaffPhone(checkWorkerPhoneForm)
     },
 
@@ -114,6 +117,12 @@ export const operateWorkerService = {
      */
     getPaperSelection(type:any){
         return apiRequestCommon.getPaperSelection(type)
+    },
+    /**
+     * 增加回访人员信息
+     */
+    addWorkerReturnMessage(addWorkerReturnMessageForm:addWorkerReturnMessageForm){
+        return apiRequestWorker.addReturnLog(addWorkerReturnMessageForm)
     }
 }
 

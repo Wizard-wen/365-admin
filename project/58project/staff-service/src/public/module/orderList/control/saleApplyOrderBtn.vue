@@ -33,7 +33,7 @@ export default {
         openOrderApplyDialog(){
             if(this.presentUser.store_id == 0){
                 this.$message({
-                    message: '您不能创建订单申请',
+                    message: '您还不是门店员工，暂时不能创建订单申请',
                     type: 'error'
                 })
                 return;

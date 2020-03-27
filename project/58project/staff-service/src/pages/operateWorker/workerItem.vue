@@ -158,15 +158,24 @@
                             :width="237"></multiple-picture-upload>
                     </el-form-item>
                     <el-form-item label="现住址" prop="address" class="form-item-size form-item-1-size" size="small">
+                        <el-tooltip slot="label" class="item" effect="dark" content="请尽量保持精确" placement="top-start">
+                            <span>现住址<i class="el-icon-info"></i></span>
+                        </el-tooltip>
                         <el-input v-model="workerForm.address" :maxlength="50" placeholder="请输入现住址"></el-input>
                     </el-form-item>
 
                     <el-form-item label="紧急联系人" prop="urgent_phone" class="form-item-size form-item-1-size" size="small">
-                        <el-input v-model="workerForm.urgent_phone" :maxlength="50" placeholder="请输入紧急联系人"></el-input>
+                        <el-tooltip slot="label" class="item" effect="dark" content="签约字段，请尽量保持信息准确完整。与劳动者关系+电话，如，爱人+135****2032" placement="top-start">
+                            <span>紧急联系人<i class="el-icon-info"></i></span>
+                        </el-tooltip>
+                        <el-input v-model="workerForm.urgent_phone" :maxlength="50" placeholder="请输入紧急联系人，签约字段"></el-input>
                     </el-form-item>
-                    <!-- <el-form-item label="户籍地址" prop="address_in_law" class="form-item-size form-item-1-size" size="small">
-                        <el-input v-model="workerForm.address_in_law" :maxlength="50" placeholder="请输入户籍地址"></el-input>
-                    </el-form-item> -->
+                    <el-form-item prop="address_in_law" class="form-item-size form-item-1-size" size="small">
+                        <el-tooltip slot="label" class="item" effect="dark" content="签约字段，请尽量保持信息准确完整。**省**市**区" placement="top-start">
+                            <span>户籍地址<i class="el-icon-info"></i></span>
+                        </el-tooltip>
+                        <el-input v-model="workerForm.address_in_law" :maxlength="50" placeholder="请输入户籍地址，签约字段"></el-input>
+                    </el-form-item>
                 </div>
                 
             </card-box-component>
@@ -205,7 +214,10 @@
                             :options="workerConfigForm.course"
                             :show-all-levels="false"></el-cascader>
                     </el-form-item>
-                    <el-form-item slot="contains" label="技能证书标签" prop="paper" class="form-item-size form-item-2-size" size="small">
+                    <el-form-item slot="contains"  prop="paper" class="form-item-size form-item-2-size" size="small">
+                        <el-tooltip slot="label" class="item" effect="dark" content="注意和技能证书图片保持一致。" placement="top-start">
+                            <span>技能证书标签<i class="el-icon-info"></i></span>
+                        </el-tooltip>
                         <el-select 
                             v-model="workerForm.paper" 
                             placeholder="请选择技能证书"
@@ -220,8 +232,8 @@
                     </el-form-item>
 
                     <el-form-item prop="certificate" class="form-item-size form-item-1-size">
-                        <el-tooltip slot="label" class="item" effect="dark" content="证书尺寸为150*237" placement="top-start">
-                            <span>技能证书<i class="el-icon-info"></i></span>
+                        <el-tooltip slot="label" class="item" effect="dark" content="证书尺寸为150*237。注意和技能证书标签保持一致。" placement="top-start">
+                            <span>技能证书素材<i class="el-icon-info"></i></span>
                         </el-tooltip>
                         <paper-component 
                             v-model="workerForm.certificate" 
@@ -230,8 +242,8 @@
                     </el-form-item>
 
                     <el-form-item class="form-item-size form-item-1-size">
-                        <el-tooltip slot="label" class="item" effect="dark" content="有关服务人员的其他的图片，比例为150*237" placement="top-start">
-                            <span>照片<i class="el-icon-info"></i></span>
+                        <el-tooltip slot="label" class="item" effect="dark" content="有关服务人员的其他的图片，比例为150*237。这些图片会展示给客户，请尽量保证图片质量" placement="top-start">
+                            <span>展示照片<i class="el-icon-info"></i></span>
                         </el-tooltip>
                         <multiple-picture-upload
                             v-model="workerForm.photo"
@@ -240,12 +252,12 @@
                             :height="150"
                             :width="237"></multiple-picture-upload>
                     </el-form-item>
-                    <!-- <el-form-item label="" prop="cus_working_exprience" class="form-item-size form-item-1-size" size="small">
-                        <el-tooltip class="item" effect="dark" content="这个是给客户展示的工作经验" placement="top-start">
-                            <span>工作经验<i class="el-icon-info"></i></span>
+                    <el-form-item prop="cus_working_exprience" class="form-item-size form-item-1-size" size="small">
+                        <el-tooltip slot="label" class="item" effect="dark" content="这是给客户展示的工作经验，请注意措辞。" placement="top-start">
+                            <span>展示工作经验<i class="el-icon-info"></i></span>
                         </el-tooltip>
                         <el-input v-model="workerForm.cus_working_exprience" :maxlength="50" placeholder="请输入工作经验"></el-input>
-                    </el-form-item> -->
+                    </el-form-item>
                     
                 </div>   
             </card-box-component>
@@ -259,17 +271,6 @@
                     <el-input type="textarea" v-model="workerForm.remarks" :maxlength="200" placeholder="请输入备注信息"></el-input>
                 </el-form-item>
             </card-box-component>
-
-            <!-- <card-box-component 
-                v-if="$route.query.type == 3"
-                :title="'异常信息'">
-                <el-form-item slot="contains" prop="warning_log" class="form-item-size" size="small">
-                    <el-tooltip slot="label" class="item" effect="dark" content="由门店提出的需要改进的信息" placement="top-start">
-                        <span>异常服务人员备注<i class="el-icon-info"></i></span>
-                    </el-tooltip>
-                    <el-input type="textarea" v-model="workerForm.warning_log"  disabled :maxlength="200" placeholder="请输入备注信息"></el-input>
-                </el-form-item>
-            </card-box-component> -->
 
             <card-box-component 
                 v-if="$route.query.type == 4"
@@ -286,8 +287,9 @@
 
             <return-msg-component 
                 :isEdit="$route.query.type == 2? true :false" 
+                :workerItem="workerForm"
                 :return_msg="workerForm.return_log" 
-                @updateOrderConfig="getWorkerForm"></return-msg-component>
+                @updateOperateWorker="getWorkerForm"></return-msg-component>
             
             <el-form-item>
 
@@ -336,7 +338,11 @@ export default {
                     callback(new Error('请输入手机号'));
                 } else {
                     try{
-                        await operateWorkerService.checkNewWorkerPhone(_this.workerForm.id, value).then((data) =>{
+                        let checkNewWorkerPhoneForm = {
+                            id: _this.workerForm.id,
+                            phone: value,
+                        }
+                        await operateWorkerService.checkNewWorkerPhone(checkNewWorkerPhoneForm).then((data) =>{
                             if(data.code == '0'){
                                 callback()
                                 _this.phoneCheck = false
@@ -383,21 +389,21 @@ export default {
             //员工信息表单
             workerForm: {
                 /************逻辑字段******************/
-                id:null,//员工id
-                staff_code:null,//员工号
-                version:null,//操作版本号
-                status: null,//员工停用启用
-                sex:'',//性别
-                is_married:'',//婚姻状况
+                id:0,//员工id
+                staff_code:'',//员工号
+                version:0,//操作版本号
+                status: 1,//员工停用启用
+                sex:1,//性别
+                is_married:1,//婚姻状况
                 /************业务字段******************/
                 manager_id:0,//创建人id
                 manager_name:'',//创建人姓名
-                created_at:null,//创建时间
-                updated_at:null,//更新时间
-                return_at:null,//上次回访时间
+                created_at:'',//创建时间
+                updated_at:'',//更新时间
+                return_at:'',//上次回访时间
                 name:'',//姓名
-                age:null,//年龄
-                birthday:null,//出生日期
+                age:'',//年龄
+                birthday:'',//出生日期
                 identify:'',//身份证号码
                 phone:'',//电话
                 skill:[],//职业类型
@@ -408,9 +414,9 @@ export default {
                 nation:null,//民族
                 id_photo: [],//证件照
                 address:'',//地址
-                // address_in_law:'',//户籍地址
-                // cus_working_exprience:'',//工作经验（客户展示）
-                education:0,//学历
+                address_in_law:'',//户籍地址
+                cus_working_exprience:'',//工作经验（客户展示）
+                education:null,//学历
                 urgent_phone:'',//紧急联系人电话
                 photo: [],//照片
                 icon:'',//头像
@@ -659,7 +665,7 @@ export default {
                 if(this.$route.query.type != 0){
                     await operateWorkerService.getWorker(this.$route.query.id,this.workerConfigForm).then(data =>{
                         
-                        this.workerForm = data
+                        this.workerForm = {...data}
                     }).catch(error =>{
                         this.$message({
                             type:'error',

@@ -33,8 +33,15 @@ module.exports = {
 			//       '^/': ''   //需要rewrite的,
 			//   }
 			// },
+			// '/': {
+			// 	target: 'http://60.205.200.55:1001/', // 接口的域名
+			// 	changeOrigin: true, // 如果接口跨域，需要进行这个参数配置
+			// 	pathRewrite: {
+			// 		'^/': '/'   //需要rewrite的,
+			// 	}
+			// },
 			'/': {
-				target: 'http://60.205.200.55:1001/', // 接口的域名
+				target: 'http://localhost:8888/', // 接口的域名
 				changeOrigin: true, // 如果接口跨域，需要进行这个参数配置
 				pathRewrite: {
 					'^/': '/'   //需要rewrite的,

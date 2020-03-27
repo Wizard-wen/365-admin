@@ -1,6 +1,7 @@
 
 import {
     workerItem,
+    addWorkerReturnMessageForm,
 }from '@/pages/operateWorker/workerItem/IworkerItem'
 
 import {
@@ -23,10 +24,9 @@ export interface api_worker{
     checkStaffName:{(id:string,name:string):Promise<any>},//检测服务人员姓名是否重复
     checkStaffPhone:{(checkWorkerPhoneForm:checkWorkerPhoneForm):Promise<any>},//检测服务人员手机号是否重复
     changeStaffType:{(changeWorkerStatusForm:changeWorkerStatusForm):Promise<any>},
-    addReturnStaffSingle:{(id:string):Promise<any>},
-    addReturnStaff:{(obj:object):Promise<any>},
-    getReturnStaff:{(obj:object):Promise<any>},//获取可回访人员数量
-    removeReturnStaff:{():Promise<any>},//恢复全部回访人员
+
+    addReturnLog:{(addWorkerReturnMessageForm:addWorkerReturnMessageForm):Promise<any>},
+
     deleteApplyStaff:{(id:string):Promise<any>},//删除申请添加服务人员
     agreeStaffSingle:{(changeWorkerTypeForm:changeWorkerTypeForm):Promise<any>},//提交新申请服务人员 / 恢复异常服务人员 / 导出回访人员
     createWorkerBySeller:{(obj:object):Promise<any>},//销售创建服务人员

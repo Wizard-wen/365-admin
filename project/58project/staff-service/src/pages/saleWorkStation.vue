@@ -162,9 +162,9 @@ export default {
             // } else {
 
             // }
-            await saleWorkstationService.getHalfYearData().then(data =>{
-                console.log(data)
-            })
+            // await saleWorkstationService.getHalfYearData().then(data =>{
+            //     console.log(data)
+            // })
             await saleWorkstationService.getSaleWorkBench(getSaleWorkerStationForm).then(data =>{
                 if(data.code == '0'){
                     //设置工作台数据
