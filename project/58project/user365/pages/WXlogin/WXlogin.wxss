@@ -1,6 +1,0 @@
-.button {
-   width: 500rpx;
-   height: 100rpx;
-   line-height: 100rpx;
-   margin-top: 50rpx;
-}

@@ -1,4 +1,0 @@
-<view class='container'>
-<button bindtap="tip" class='button'>微信登录</button>
-<button bindtap="login" class='button'>手机号注册登录</button>
-</view>
