@@ -151,7 +151,7 @@ export default {
 </script>
 <style lang="scss" scoped>
     .auth{
-        padding-top: 30px;
+        // padding-top: 30px;
         margin: 0 auto;
         display: flex;
         .auth-table-box{

@@ -43,7 +43,7 @@
                         :value="item.id"></el-option>
                 </el-select>
             </el-form-item >
-            <el-form-item label="经纪人" prop="manager_id">
+            <el-form-item label="所属经纪人" prop="manager_id">
                 <el-select 
                     v-model="localQueryedForm.manager_id" 
                     placeholder="请选择经纪人"

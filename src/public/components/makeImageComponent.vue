@@ -97,7 +97,7 @@ export default {
                 //上传至服务器
                 await axios.post("/admin/common/uploadImage",canvasFormData).then(data =>{
                     
-                    this.canvasCompletedImage = './resource/'+data.data.path
+                    this.canvasCompletedImage = ''+data.data.path
                     
                     this.is_loading = false
                     

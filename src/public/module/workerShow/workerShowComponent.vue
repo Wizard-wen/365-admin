@@ -5,7 +5,7 @@
 
         <template slot="icon" >
             <icon-component
-                :iconUrl="workerForm.icon?`./resource/${workerForm.icon}`:''"
+                :iconUrl="workerForm.icon?workerForm.icon:''"
                 :height="140" :width="100"></icon-component>
         </template>
         

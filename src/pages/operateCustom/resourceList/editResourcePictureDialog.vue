@@ -29,7 +29,7 @@
                     :uploadHeader="uploadHeader"
                     :height="picHeight"
                     :width="picWidth"
-                    :initUrl="editResourcePictureForm.url?`./resource/${editResourcePictureForm.url}`: ''"
+                    :initUrl="editResourcePictureForm.url?`${editResourcePictureForm.url}`: ''"
                     @onSinglePictureSuccess="onSinglePictureSuccess"></single-picture-upload>
                 <p>{{`${picWidth}（宽） * ${picHeight}（高）`}}</p>
             </el-form-item>

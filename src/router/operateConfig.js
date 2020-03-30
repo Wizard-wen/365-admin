@@ -42,6 +42,7 @@ import resourceList from '@/pages/operateCustom/resourceList.vue'
 import videoList from '@/pages/operateCustom/videoList.vue'
 import workerAdList from '@/pages/operateCustom/workerAdList.vue'
 import customAdList from '@/pages/operateCustom/customAdList.vue'
+import showAdList from '@/pages/operateCustom/showAdList.vue'
 import adPositionItem from '@/pages/operateCustom/adPositionItem.vue'
 import adPictureItem from '@/pages/operateCustom/adPictureItem.vue'
 import resourceVideoItem from '@/pages/operateCustom/resourceVideoItem.vue'
@@ -138,6 +139,11 @@ export const operateConfigModule = [
         path: '/operate/customAdList',
         name: 'customAdList',
         component: customAdList,
+    },
+    {
+        path: '/operate/showAdList',
+        name: 'showAdList',
+        component: showAdList,
     },
     {
         path: '/operate/adPositionItem',

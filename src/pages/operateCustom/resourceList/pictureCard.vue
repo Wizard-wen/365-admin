@@ -1,7 +1,7 @@
 <template>
     <el-card :body-style="{padding: 0}">
         <div class="image-box">
-            <img class="image" :src="`./resource/${pictureItem.url}`" >
+            <img class="image" :src="`${pictureItem.url}`" >
         </div>
         <div class="picture-des">
             <span>{{pictureItem.name}}</span>

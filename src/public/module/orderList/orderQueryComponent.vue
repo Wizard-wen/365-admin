@@ -112,8 +112,7 @@
             </el-form-item >
 
 
-            <el-form-item label="订单经纪人" prop="agent_manager_id" 
-                v-if="presentUser.is_store_manager != 1 || (presentUser.department_id != 4 && presentUser.department_id !=5)">
+            <el-form-item label="订单经纪人" prop="agent_manager_id">
                 <el-select 
                     v-model="localQueryedForm.agent_manager_id" 
                     placeholder="请选择订单经纪人"
@@ -126,7 +125,7 @@
                         :value="item.id"></el-option>
                 </el-select>
             </el-form-item >
-            <el-form-item label="订单经纪门店">
+            <el-form-item label="订单经纪门店" prop="agent_store_id">
                 <el-select 
                     v-model="localQueryedForm.agent_store_id" 
                     placeholder="请选择订单经纪门店"
@@ -155,6 +154,7 @@ import {
     created_atList,
     order_typeList
 } from '@/public/module/orderList/IorderList.ts'
+import {$utils} from '@/utils/index'
 export default {
     data(){
         return {
@@ -170,13 +170,16 @@ export default {
                 type: [],//订单状态
                 order_user_phone:'',//下单客户电话
                 order_user_name: '',//下单客户姓名
+                
                 apply_store_id: [],//来源门店
                 apply_manager_id: [],//来源人
+                
                 sign_user_name: '',//签约客户名
                 sign_user_phone: '',//签约客户电话
                 sign_staff_name: '',//签约服务人员姓名
                 sign_staff_code: '',//签约服务人员编号
                 sign_staff_phone: '',//签约服务人员电话
+                
                 created_at: [],//订单创建时间
                 created_manager_id: [],//订单创建人
             }
@@ -210,7 +213,10 @@ export default {
                 ...this.localQueryedForm,
             }
             sendForm.order_at = sendForm.order_at? [sendForm.order_at]: []
+
             sendForm.agent_manager_id = sendForm.agent_manager_id? [sendForm.agent_manager_id]: []
+            // sendForm.agent_manager_id  = $utils.sendCascanderData(sendForm.agent_manager_id)
+            
             sendForm.agent_store_id = sendForm.agent_store_id? [sendForm.agent_store_id]: []
             sendForm.type = sendForm.type? [sendForm.type]: []
             sendForm.apply_store_id = sendForm.apply_store_id? [sendForm.apply_store_id]: []

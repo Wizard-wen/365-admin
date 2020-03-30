@@ -10,7 +10,7 @@
             <div class="ad-imgs">
                 <img
                     class="ad-item-img"
-                    :src="'./resource/'+item.resource_object.url"
+                    :src="''+item.resource_object.url"
                     @click="showDetialPic(item.resource_object.url)">
             </div>
             <div class="image-messsage">
@@ -160,7 +160,7 @@ export default {
          * @param pathParam 展示图片的url
          */
         showDetialPic(pathParam){
-            this.detailImageUrl = './resource/'+pathParam
+            this.detailImageUrl = pathParam
             this.pictureDetailDialogVisible = true
         },
     },

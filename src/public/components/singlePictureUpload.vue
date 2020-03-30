@@ -11,7 +11,7 @@
             :on-change="openCropperDialog" 
             :headers="uploadHeader">
             <div
-                v-if="initUrl!=''"
+                v-if="showPicture!=''"
                 class="icon-box"
                 :style="{height: `${height}px`,width: `${width}px`}"
                 @mouseenter.stop="showblack('0')"
@@ -19,7 +19,7 @@
                 <img 
                     class="icon-item" 
                     :style="{height: `${height}px`,width: `${width}px`}"
-                    :src="initUrl == '' ? '' : initUrl" >
+                    :src="showPicture == '' ? '' : showPicture" >
                 <div 
                     v-if="isShowBlack"
                     class="icon-item-back" 
@@ -105,6 +105,14 @@ export default {
             const num = this.width/this.height
             return [Number(num.toFixed(1)), 1]
         },
+        showPicture(){
+
+            if(this.initUrl == ''){
+                return ''
+            }
+            return this.initUrl.includes('https://oss.sy365.cn/service/')?
+                this.initUrl : `https://oss.sy365.cn/service/${this.initUrl}`
+        }
     },
     data(){
         return {
@@ -142,6 +150,7 @@ export default {
         closeCropperDialog(res){
             this.cropperDialogVisible = false
             if(res){
+                console.log(res)
                 this.$emit('onSinglePictureSuccess', res);
             }
             

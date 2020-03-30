@@ -5,7 +5,7 @@
 
         <template slot="icon" >
             <icon-component
-                :iconUrl="workerForm.icon?`./resource/${workerForm.icon}`:''"
+                :iconUrl="workerForm.icon?`${workerForm.icon}`:''"
                 :height="140"
                 :width="100"></icon-component>
         </template>
@@ -142,7 +142,7 @@
                             :uploadHeader="uploadHeader"
                             :height="140"
                             :width="100"
-                            :initUrl="workerForm.icon?`./resource/${workerForm.icon}`:''"
+                            :initUrl="workerForm.icon?`${workerForm.icon}`:''"
                             @onSinglePictureSuccess="onIconPictureSuccess"></single-picture-upload>
                     </el-form-item>
                     

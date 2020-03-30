@@ -69,7 +69,7 @@
             </div>
         </div>
         <div class="icon">
-            <img v-if="pictureForm.icon" style="height:140px;width:100px;" :src="'./resource/'+pictureForm.icon" alt="">
+            <img v-if="pictureForm.icon" style="height:140px;width:100px;" :src="pictureForm.icon" alt="">
             <div v-else class="no-img">暂无头像</div>
         </div>
     </div>

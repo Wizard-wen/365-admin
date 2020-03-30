@@ -26,7 +26,7 @@
                     <el-col :span="6" v-for="(item, index) in adResourceList" :key="index" style="margin-bottom:20px;">
                         <div style="padding: 0 10px;">
                             <el-card :body-style="{ padding: '0px' }">
-                                <img :src="item.url?`./resource/${item.url}`:''" class="image">
+                                <img :src="item.url?`${item.url}`:''" class="image">
                                 <div style="padding: 14px;">
                                     <span>{{item.name}}</span>
                                     <div class="bottom">

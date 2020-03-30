@@ -11,7 +11,7 @@
 
         <template slot="icon">
             <icon-component
-                :iconUrl="accountForm.icon?`./resource/${accountForm.icon}`:''"
+                :iconUrl="accountForm.icon?`/${accountForm.icon}`:''"
                 :height="140"
                 :width="100"></icon-component>
         </template>
@@ -139,7 +139,7 @@
                                 :uploadHeader="customizeUploadHeader"
                                 :height="140"
                                 :width="100"
-                                :initUrl="accountForm.icon?`./resource/${accountForm.icon}`:''"
+                                :initUrl="accountForm.icon?`${accountForm.icon}`:''"
                                 @onSinglePictureSuccess="onIconPictureSuccess"></single-picture-upload>
                         </el-form-item>
 

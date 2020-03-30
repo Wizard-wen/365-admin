@@ -33,6 +33,7 @@
         </div>
         <div :style="{height: `${height}px`, width: `${width? width:'100%'}`}" v-if="isShowEdit">
             <singlePictureUpload
+                :initUrl="''"
                 :uploadHeader="uploadHeader"
                 @onSinglePictureSuccess="onSinglePictureSuccess"
                 :height="height"
@@ -120,7 +121,7 @@ export default {
          */
         showCompleteUrl: {
             type: String,
-            default: './resource/',
+            default: '',
         }
     },
     watch: {
@@ -131,7 +132,9 @@ export default {
                     this.photo_fileList =  newVal.map((item, index) =>{
                         return {
                             ...item,
-                            url: item[this.pictureUrlArrtibute],
+                            url: item[this.pictureUrlArrtibute].includes('https://oss.sy365.cn/service/')? 
+                            item[this.pictureUrlArrtibute] : 
+                            'https://oss.sy365.cn/service/'+item[this.pictureUrlArrtibute],
                             isBack: false,
                         }
                     })
@@ -158,9 +161,10 @@ export default {
             this.photo_fileList.push(res);
             //包装图片数组，url 展示图片url  isBack 是否显示遮罩
             this.photo_fileList =  this.photo_fileList.map((item, index) =>{
+                console.log('单图片上传',item)
                 return {
                     ...item,
-                    url: item.path,
+                    url: item.url,
                     isBack: false,
                 }
             })

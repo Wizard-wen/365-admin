@@ -36,43 +36,41 @@ export default {
     data(){
         let _this = this
         const contractValidate = async (rule, value, callback) =>{
-            // if (value == '') {
-            //     _this.contractCheck = false
-            //     _this.contractCheckObject = {}
-            //     callback(new Error('请输入手机号'));
-            // } else {
-                try{
-                    await operateContractService.checkVoidContract(_this.voidContractForm).then(data =>{
-                        if(data.code == '0'){
+            try{
+                await operateContractService.checkVoidContract(_this.voidContractForm).then(data =>{
+                    if(data.code == '0'){
+                        if(data.data.isRepeat == 1){
+                            // _this.contractCheck = true
+                            // _this.contractCheckObject = data.data
+                            callback(new Error('该合同号已重复'))
+                        }else {
+                            // _this.contractCheck = false
+                            //     _this.contractCheckObject = {}
                             callback()
-
-                            _this.contractCheck = false
-                            _this.contractCheckObject = {}
-
-                        } else {
-                            callback(new Error(data.message))
                         }
-                    }).catch(error =>{
-                        callback(new Error('请联系管理员'))
-                    }).finally(() =>{
+                    } else {
+                        callback(new Error(data.message))
+                    }
+                }).catch(error =>{
+                    callback(new Error('请联系管理员'))
+                }).finally(() =>{
 
-                    })
-                } catch(error){
-                    _this.contractCheck = true
-                    _this.contractCheckObject = error.data
-                    callback(error.message)
-                }
-            // }
+                })
+            } catch(error){
+                // _this.contractCheck = true
+                // _this.contractCheckObject = error.data
+                callback(error.message)
+            }
         }
         return {
             voidContractForm: {
                 contract_number: '',//空合同编号
             },
             //空合同重复检测
-            contractCheck: false,
-            contractCheckObject: {
+            // contractCheck: false,
+            // contractCheckObject: {
 
-            },
+            // },
             voidContractRules: {
                 contract_number: [
                     { required: true, message: '请选填写合同编号', trigger: 'blur'},

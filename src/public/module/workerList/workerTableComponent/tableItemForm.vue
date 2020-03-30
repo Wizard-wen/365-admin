@@ -8,7 +8,7 @@
                 :value="currentWorker.icon">
                 <icon-component
                     slot="template"
-                    :iconUrl="currentWorker.icon?`./resource/${currentWorker.icon}`:''"
+                    :iconUrl="currentWorker.icon?`${currentWorker.icon}`:''"
                     :height="140"
                     :width="100"></icon-component>
             </detail-form-item-component>

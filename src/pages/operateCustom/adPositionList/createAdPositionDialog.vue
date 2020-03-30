@@ -26,6 +26,7 @@
                 <el-radio-group v-model="createAdPositionForm.client">
                     <el-radio :label="1">客户端</el-radio>
                     <el-radio :label="2">服务端</el-radio>
+                    <el-radio :label="3">官网</el-radio>
                 </el-radio-group>
             </el-form-item>
 

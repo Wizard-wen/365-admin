@@ -34,7 +34,7 @@
                                 :uploadHeader="customizeUploadHeader"
                                 :height="140"
                                 :width="100"
-                                :initUrl="personalInfoForm.icon?`./resource/${personalInfoForm.icon}`:''"
+                                :initUrl="personalInfoForm.icon?`${personalInfoForm.icon}`:''"
                                 @onSinglePictureSuccess="uploadIconSuccess"></single-picture-upload>
                         </el-form-item>
 

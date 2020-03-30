@@ -5,7 +5,7 @@
 				
 				<div class="home-icon-box">
 					<div class="home-icon">
-						<img :src="presentUser.icon? `./resource/${presentUser.icon}` : noHeaderImage" alt="">
+						<img :src="presentUser.icon? `${presentUser.icon}` : noHeaderImage" alt="">
 					</div>
 					<div class="home-name">{{presentUser.real_name}}</div>
 					<div class="home-intro">海纳百川，有容乃大！</div>
@@ -203,6 +203,7 @@ export default {
 	width: 100%;
 	background: #f0f2f5;
 	overflow: auto;
+	min-height: calc(100vh - 50px);
 	.home-contains{
 		// height: 100%;
 		padding: 20px;

@@ -74,12 +74,12 @@ pictureUrl: '',
     methods: {
         getPicturePath(path){
             alert(path)
-            this.pictureUrl = './resource/'+path
+            this.pictureUrl = path
         },
         onSinglePictureSuccess(res){
             if(res){
                 console.log(res)
-                this.pictureUrl = './resource/'+res.path
+                this.pictureUrl = res.path
             }
             
         }

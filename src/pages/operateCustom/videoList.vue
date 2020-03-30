@@ -20,7 +20,7 @@
                             <el-card :body-style="{ padding: '0px' }">
                                 <div class="resource-box">
                                     <div class="picture-box">
-                                        <img v-if="item.picture_url" :src="`./resource/${item.picture_url}`" class="general-image">
+                                        <img v-if="item.picture_url" :src="`${item.picture_url}`" class="general-image">
                                         <div v-else>暂无</div>
                                     </div>
                                     

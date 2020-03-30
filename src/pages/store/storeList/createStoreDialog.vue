@@ -8,20 +8,30 @@
         :close-on-press-escape="false"
         :close-on-click-modal="false">
         <el-form :model="createStoreForm" label-width="120px" :rules="storeRules" ref="createStoreForm">
-            <el-form-item label="店铺名" prop="name">
+            <el-form-item prop="name">
+                <el-tooltip slot="label" class="item" effect="dark" content="店铺命名规则，地域+门店名，例如，大东旗舰店。" placement="top-start">
+                    <span>店铺名<i class="el-icon-info"></i></span>
+                </el-tooltip>
                 <el-input v-model="createStoreForm.name" placeholder="请填写店铺名"></el-input>
             </el-form-item>
-            <el-form-item label="门店地址" prop="address">
+            <el-form-item prop="address">
+                <el-tooltip slot="label" class="item" effect="dark" content="请详细填写门店地址，细化至门牌号。" placement="top-start">
+                    <span>门店地址<i class="el-icon-info"></i></span>
+                </el-tooltip>
                 <el-input v-model="createStoreForm.address" placeholder="请填写门店地址"></el-input>
             </el-form-item>
-            <el-form-item label="门店类型" prop="is_third">
+            <el-form-item prop="is_third">
+                <el-tooltip slot="label" class="item" effect="dark" content="请妥善选择，一旦确定，不能轻易更改。" placement="top-start">
+                    <span>门店类型<i class="el-icon-info"></i></span>
+                </el-tooltip>
                 <el-radio-group v-model="createStoreForm.is_third">
                     <el-radio :label="1">直营店</el-radio>
                     <el-radio :label="2">加盟店</el-radio>
+                    <!-- <el-radio :label="3">商家店铺</el-radio> -->
                 </el-radio-group>
 			</el-form-item>
             <el-form-item label="店铺备注信息" prop="remarks">
-                <el-input v-model="createStoreForm.remarks" placeholder="请填写店铺备注信息"></el-input>
+                <el-input v-model="createStoreForm.remarks" type="textarea" placeholder="请填写店铺备注信息"></el-input>
             </el-form-item>
         </el-form>
         <div slot="footer" class="dialog-footer">

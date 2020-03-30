@@ -12,7 +12,7 @@
                     class="paper-item-img" 
                     v-for="(it, inds) in item.images" 
                     :key="inds" 
-                    :src="'./resource/'+it.url"
+                    :src="it.url"
                     @click="showDetialPic(it.url)">
             </div>
             <div class="image-messsage">
@@ -34,7 +34,7 @@
             @changePaper="changePaper"
             @closePaper="cancelPaperFn"></paper-dialog>
         <picture-detail-dialog
-            :imageUrl="'./resource/'+imageUrl"
+            :imageUrl="imageUrl"
             :title="'证书详情'"
             v-if="pictureDetailDialogVisible"
             :pictureDetailDialogVisible="pictureDetailDialogVisible"

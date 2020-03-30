@@ -4,7 +4,7 @@
 
         <template slot="icon" >
             <icon-component
-                :iconUrl="userItem.icon?`./resource/${userItem.icon}`:''"
+                :iconUrl="userItem.icon?`${userItem.icon}`:''"
                 :height="140"
                 :width="100"></icon-component>
         </template>

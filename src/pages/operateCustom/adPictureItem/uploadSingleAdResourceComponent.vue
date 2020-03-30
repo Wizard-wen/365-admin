@@ -8,7 +8,7 @@
                     @mouseover="showblack('0')"
                     @mouseout="showblack('1')"
                     @click="openResourceListDialog('1')">
-                    <img v-if="!isImageError" class="icon-item" :src="'./resource/'+pictureObject.url" alt=""  >
+                    <img v-if="!isImageError" class="icon-item" :src="pictureObject.url" alt=""  >
                     <div v-else class="icon-item">图片有误</div>
                     <div class="icon-item-back" v-if="isShowBlack">
                         <i class="el-icon-edit icon-uploader-edit-icon" style="color: #fff;font-size: 20px;"></i>

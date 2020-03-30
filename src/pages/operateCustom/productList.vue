@@ -22,7 +22,7 @@
                         :uploadHeader="uploadHeader"
                         :height="125"
                         :width="343"
-                        :initUrl="productForm.banner_url?`./resource/${productForm.banner_url}`: ''"
+                        :initUrl="productForm.banner_url?`${productForm.banner_url}`: ''"
                         @onSinglePictureSuccess="uploadIconSuccess"></single-picture-upload>
                     <p style="line-height: 20px;color: rgba(0,0,0,.65);">343 * 125</p>
                 </el-form-item>
@@ -42,6 +42,17 @@
                         <el-radio :label="1">展示</el-radio>
                         <el-radio :label="2">不展示</el-radio>
                     </el-radio-group>
+                </el-form-item>
+
+                <el-form-item label="商品类型">
+                    <el-radio-group v-model="productForm.product_type">
+                        <el-radio :label="1">签约型</el-radio>
+                        <el-radio :label="2">商品型</el-radio>
+                    </el-radio-group>
+                </el-form-item>
+
+                <el-form-item label="商品规格">
+                    
                 </el-form-item>
                 
                 <el-form-item label="商品详情" prop="files" ref="files" v-if="hasParentNode">
@@ -93,6 +104,7 @@ export default {
                 parent_id: '',//商品父级id
                 status: 1,//是否展示
                 files: [],//商品详情
+                product_type: 1,
             },
             //当前点击节点是否是分类节点
             hasParentNode: false,
@@ -256,31 +268,6 @@ export default {
             store.currentNodeKey = key;
             // this.$refs.tree.$emit("node-click", node.data, node, this.$refs.tree);
         },
-        /**
-         * 上传成功后，接收图片数据，送入图片回显数组
-         */
-        // uploadSuccess(response, file, fileList) {
-        //     let picItem = {
-        //         path: response.data.path,
-        //         url: './resource/'+response.data.path,
-        //         name: response.data.name
-        //     }
-        //     this.productForm.files.push(picItem)
-        //     //消除表单验证
-        //     if(this.productForm.files.length){
-        //         this.$refs.files.clearValidate()
-        //     }
-        // },
-        // /**
-        //  * 移出图片
-        //  */
-        // removePic(file, fileList){
-        //     this.productForm.files.forEach((item, index) =>{
-        //         if(item.name == file.name){
-        //             this.productForm.files.splice(index,1)
-        //         }
-        //     })
-        // },
         /**
          * 关闭创建商品弹窗
          */
