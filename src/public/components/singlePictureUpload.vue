@@ -14,8 +14,8 @@
                 v-if="showPicture!=''"
                 class="icon-box"
                 :style="{height: `${height}px`,width: `${width}px`}"
-                @mouseenter.stop="showblack('0')"
-                @mouseleave="showblack('1')">
+                @mouseover.stop="showblack('0')"
+                @mouseout.stop="showblack('1')">
                 <img 
                     class="icon-item" 
                     :style="{height: `${height}px`,width: `${width}px`}"
@@ -152,6 +152,13 @@ export default {
          * 关闭截图弹窗
          */
         closeCropperDialog(res){
+            /**
+             * 回调函数参数
+             * des 新上传时，传相对路径；若是回显后未改变，直接上传回显回来的绝对路径  
+             * @param name 图片名字
+             * @param path 相对路径
+             * @param url 绝对路径
+             */
             this.cropperDialogVisible = false
             if(res){
                 console.log(res)

@@ -5,9 +5,11 @@
             :style="{height: `${height}px`,width: `${width}px`}"
             v-for="(item,index) in photo_fileList" 
             :key="index"  
-            @mouseover="showPhotoblack(item, index, '0')" 
-            @mouseout="showPhotoblack(item, index, '1')">
-            <img :src="showCompleteUrl+item.url" class="image-item" :style="{height: `${height}px`,width:`${width}px`}">
+            @mouseover.stop="showPhotoblack(item, index, '0')" 
+            @mouseout.stop="showPhotoblack(item, index, '1')">
+            <img 
+                :src="item.url.includes('https://oss.sy365.cn/service/')? item.url : 'https://oss.sy365.cn/service/'+item.url" 
+                class="image-item" :style="{height: `${height}px`,width:`${width}px`}">
             <div 
                 class="image-item-back" 
                 :style="{height: `${height}px`, width: `${width}px`}"
@@ -132,9 +134,10 @@ export default {
                     this.photo_fileList =  newVal.map((item, index) =>{
                         return {
                             ...item,
-                            url: item[this.pictureUrlArrtibute].includes('https://oss.sy365.cn/service/')? 
-                            item[this.pictureUrlArrtibute] : 
-                            'https://oss.sy365.cn/service/'+item[this.pictureUrlArrtibute],
+                            // url: item[this.pictureUrlArrtibute],
+                            // url: item[this.pictureUrlArrtibute].includes('https://oss.sy365.cn/service/')? 
+                            // item[this.pictureUrlArrtibute] : 
+                            // 'https://oss.sy365.cn/service/'+item[this.pictureUrlArrtibute],
                             isBack: false,
                         }
                     })
@@ -142,6 +145,11 @@ export default {
             },
             immediate: true,
             deep: true,
+        }
+    },
+    filters: {
+        addPictureDomain(value){
+            return value.includes('https://oss.sy365.cn/service/')? value : 'https://oss.sy365.cn/service/'+value
         }
     },
     computed: {
@@ -157,17 +165,22 @@ export default {
          * 照片上传成功钩子函数
          */
         onSinglePictureSuccess(res, file) {
+            console.log(res)
+            let newPic = {
+                ...res,
+                url: res.path,
+            }
             //将回传的图片url存入数组中
-            this.photo_fileList.push(res);
+            this.photo_fileList.push(newPic);
             //包装图片数组，url 展示图片url  isBack 是否显示遮罩
-            this.photo_fileList =  this.photo_fileList.map((item, index) =>{
-                console.log('单图片上传',item)
-                return {
-                    ...item,
-                    url: item.url,
-                    isBack: false,
-                }
-            })
+            // this.photo_fileList =  this.photo_fileList.map((item, index) =>{
+            //     console.log('单图片上传',item)
+            //     return {
+            //         ...item,
+            //         url: item.path,
+            //         isBack: false,
+            //     }
+            // })
             let newArr = this.photo_fileList
             this.$set(this.photo_fileList, newArr)
             //触发上层v-model
