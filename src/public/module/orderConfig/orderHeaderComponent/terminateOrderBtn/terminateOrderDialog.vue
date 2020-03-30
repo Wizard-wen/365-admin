@@ -18,25 +18,49 @@
                 <el-input v-model="determinateOrderForm.message" type="textarea" placeholder="请输入终止事由"></el-input>
             </el-form-item>
             <el-form-item label="当前客户余额"> 
+                <span slot="label">
+                    当前客户余额
+                    <el-tooltip class="item" effect="dark" content="当前客户在公司的余额。" placement="top-start">
+                        <i class="el-icon-info"></i>
+                    </el-tooltip>
+                </span>
                 {{orderItem.sign_user_account?orderItem.sign_user_account:'未签约' }}
             </el-form-item>
             <el-form-item label="返还客户金额" prop="return_user_cost">
                 <el-input v-model="determinateOrderForm.return_user_cost" :disabled="!orderItem.sign_user_account" placeholder="请输入返还客户金额"></el-input>
             </el-form-item>
-            <el-form-item label="客户余额" prop="has_user_cost">
+            <el-form-item prop="has_user_cost">
+                <span slot="label">
+                    客户余额
+                    <el-tooltip class="item" effect="dark" content="请确保信息准确！" placement="top-start">
+                        <i class="el-icon-info"></i>
+                    </el-tooltip>
+                </span>
                 <el-radio-group v-model="determinateOrderForm.has_user_cost" :disabled="!orderItem.sign_user_account">
                     <el-radio :label="1">已平账</el-radio>
                     <el-radio :label="2">未平账</el-radio>
                 </el-radio-group>
             </el-form-item>
-            <el-form-item label="劳动者押金" prop="has_worker_cost">
+            <el-form-item prop="has_worker_cost">
+                <span slot="label">
+                    劳动者押金
+                    <el-tooltip class="item" effect="dark" content="请确保信息准确！" placement="top-start">
+                        <i class="el-icon-info"></i>
+                    </el-tooltip>
+                </span>
                 <el-radio-group v-model="determinateOrderForm.has_worker_cost" :disabled="!orderItem.sign_user_account">
                     <el-radio :label="1">已返还</el-radio>
                     <el-radio :label="2">未返还</el-radio>
                 </el-radio-group>
             </el-form-item>
 
-            <el-form-item label="劳动者工资" prop="has_worker_wage">
+            <el-form-item prop="has_worker_wage">
+                <span slot="label">
+                    劳动者工资
+                    <el-tooltip class="item" effect="dark" content="请确保信息准确！" placement="top-start">
+                        <i class="el-icon-info"></i>
+                    </el-tooltip>
+                </span>
                 <el-radio-group v-model="determinateOrderForm.has_worker_wage" :disabled="!orderItem.sign_user_account">
                     <el-radio :label="1">已发放</el-radio>
                     <el-radio :label="2">未发放</el-radio>

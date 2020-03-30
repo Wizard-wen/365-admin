@@ -66,7 +66,7 @@
                 </el-form-item>
                 <el-form-item >
                     <el-button type="primary" @click="saveProduct">修改</el-button>
-                    <el-button type="danger" @click="deleteProduct">删除</el-button>
+                    <el-button type="danger" disabled @click="deleteProduct">删除</el-button>
                 </el-form-item>
             </el-form>
         </div>

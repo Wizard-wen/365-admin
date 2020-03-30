@@ -105,11 +105,15 @@ export default {
             const num = this.width/this.height
             return [Number(num.toFixed(1)), 1]
         },
+        /**
+         * 展示的图片
+         */
         showPicture(){
 
             if(this.initUrl == ''){
                 return ''
             }
+
             return this.initUrl.includes('https://oss.sy365.cn/service/')?
                 this.initUrl : `https://oss.sy365.cn/service/${this.initUrl}`
         }

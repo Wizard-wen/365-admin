@@ -24,13 +24,12 @@
                                     <div class="user-icon-box">
                                         <img 
                                             class="user-icon"  
-                                            :src="presentUser.icon? `./resource/${presentUser.icon}`: minePic" alt="">
+                                            :src="presentUser.icon? `${presentUser.icon}`: minePic" alt="">
                                     </div>
                                     
                                     <img class="user-icon-contains"  slot="reference"
-                                        :src="presentUser.icon? `./resource/${presentUser.icon}`: minePic" alt="">
+                                        :src="presentUser.icon? `${presentUser.icon}`: minePic" alt="">
                                 </el-popover>
-                                <!-- <img class="user-icon" :src="presentUser.icon? `./resource/${presentUser.icon}`: minePic" alt=""> -->
                             </div>
                             <div class="dropdown-box"> 
                                   <el-dropdown @command="handleCommand" class="dropdown">
