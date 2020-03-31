@@ -24,6 +24,7 @@
         
         <el-form-item label="图片列表" prop="resource">
             <resource-component 
+                @updateResourceList="getAdPosition"
                 :adType="adPositionForm.display"
                 v-model="adPositionForm.resource"></resource-component>
         </el-form-item>

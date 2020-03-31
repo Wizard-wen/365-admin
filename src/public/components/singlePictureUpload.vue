@@ -16,16 +16,15 @@
                 :style="{height: `${height}px`,width: `${width}px`}">
                 <!-- @mouseover.stop="showblack('0')"
                 @mouseout.stop="showblack('1')"> -->
-                <!-- <img 
+                <img 
                     class="icon-item" 
                     :style="{height: `${height}px`,width: `${width}px`}"
                     :src="showPicture == '' ? '' : showPicture" >
                 <div 
-                    v-if="isShowBlack"
                     class="icon-item-back" 
                     :style="{height: `${height}px`,width: `${width}px`,lineHeight:`${height}px`}">
                     <i class="el-icon-edit icon-uploader-icon" style="color: #fff;font-size: 20px;"></i>
-                </div> -->
+                </div>
 
             </div>
             <div v-else :style="{height: `${height}px`, width: `${width}px`}">
@@ -199,7 +198,7 @@ export default {
             position: absolute;
             top: 0;
             z-index: 4;
-            background: rgba(0,0,0,.5)
+            background: rgba(0,0,0,.2)
         }
     }
 </style>

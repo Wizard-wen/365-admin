@@ -6,13 +6,13 @@
         :show-close="false"
         :close-on-press-escape="false"
         :close-on-click-modal="false">
-        <el-form class="productTree-form" ref="productTreeForm" :model="productTreeForm" label-width="120px" :rules="productTreeRules">
+        <el-form class="productTree-form" ref="productTreeForm" :model="productTreeForm" label-width="140px" :rules="productTreeRules">
 
-            <el-form-item label="商品名字" prop="name">
+            <el-form-item label="商品/分类名字" prop="name">
                 <el-input v-model="productTreeForm.name" :maxlength="6" placeholder="请输入商品名称，至多输入六个字"></el-input>
             </el-form-item>
 
-            <el-form-item label="商品父级id" prop="parent_id">
+            <el-form-item label="商品/分类父级id" prop="parent_id">
                 <el-select v-model="productTreeForm.parent_id" placeholder="商品父级id">
                     <el-option v-for="item in selectionList" :key="item.id" :label="item.names" :value="item.id"></el-option>
                 </el-select>
@@ -23,7 +23,6 @@
                     <el-radio :label="1">展示</el-radio>
                     <el-radio :label="2">不展示</el-radio>
                 </el-radio-group>
-                <!-- <el-switch v-model="productTreeForm.status"></el-switch> -->
             </el-form-item>
 
             <el-form-item>

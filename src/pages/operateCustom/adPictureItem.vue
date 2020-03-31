@@ -3,7 +3,7 @@
 
         <upload-single-ad-resource-component 
             v-model="adPictureForm.resource_object" 
-            :label="'跳转页详情图片'"></upload-single-ad-resource-component>
+            :label="'广告位展示图片'"></upload-single-ad-resource-component>
 
         <el-form-item label="跳转类别" prop="jump_type">
             <el-radio-group v-model="adPictureForm.jump_type">
@@ -15,9 +15,8 @@
         <el-form-item label="服务详情" prop="client_category_id" v-if="adPictureForm.jump_type == 2">
             <el-cascader
                 :props="propAttribute"
-                v-model="clientCategoryIds"
+                v-model="adPictureForm.client_category_id"
                 :options="serviceGoodList"
-                @change="clientCategoryChange"
                 :show-all-levels="false"></el-cascader>
         </el-form-item>
 
@@ -40,10 +39,24 @@ import {operateCustomService} from '@/service/operateCustom'
 //上传单张广告资源图片组件
 import uploadSingleAdResourceComponent from './adPictureItem/uploadSingleAdResourceComponent.vue'
 
-
+import {$utils} from '@/utils/index'
 export default {
     components: {
         uploadSingleAdResourceComponent,
+    },
+    watch: {
+        'adPictureForm.jump_type': function(val){
+            if(val == 1){
+                this.adPictureForm.client_category_id = []
+            } else {
+                this.adPictureForm.activity_object = {
+                    id: 0,
+                    name: "",
+                    type: 1,
+                    url: "",
+                }
+            }
+        }
     },
     data() {
         return {
@@ -52,17 +65,30 @@ export default {
             jump_typeList: [{id: 1, name: '活动页'}, {id: 2, name: '详情页'}],
             //表单校验
             adPictureRules: {
-
+                // id: 0,
+                // name: "",
+                // type: 1,
+                // url: "",
             },
             //广告位图片表单
             adPictureForm: {
                 ad_position_resource_id: this.$route.query.type == 2? this.$route.query.ad_position_resource_id : 0,//关联广告位id
                 position_id: this.$route.query.position_id,//所属广告位id
                 resource_id: this.$route.query.type == 2? this.$route.query.resource_id : 0,//资源id
-                resource_object: {},//广告图片对象
+                resource_object: {
+                    id: 0,
+                    name: "",
+                    type: 1,
+                    url: "",
+                },//广告图片对象
                 jump_type: 1,//跳转页面类别
                 client_category_id: 0,//详情页id
-                activity_object: {},//活动图片对象
+                activity_object: {
+                    id: 0,
+                    name: "",
+                    type: 1,
+                    url: "",
+                },//活动图片对象
             },
             //服务商品列表
             serviceGoodList: [],
@@ -79,13 +105,19 @@ export default {
         /**
          * 请求广告位资源
          */
-        async getResourceItem(){
+        async getResourceItem(serviceTree){
             try{
                 this.is_loading = true
                 await operateCustomService.getAdPositionResource(this.$route.query.ad_position_resource_id).then(data =>{
                     if(data.code == '0'){
-                        this.adPictureForm = data.data
-                        this.adPictureForm.resource_object = data.data.resource_object
+                        let adPictureItem = {
+                            ...data.data
+                        }
+                        // adPictureItem.activity_object = 
+                        adPictureItem.client_category_id = $utils.setTreeArray(adPictureItem.client_category_id,serviceTree)
+
+                        this.adPictureForm = adPictureItem
+                        // this.adPictureForm.resource_object = data.data.resource_object
                         this.is_loading = false
                     }
                 }).catch(error =>{
@@ -116,7 +148,13 @@ export default {
                 if (valid) {
                     try{
                         this.is_loading = true
-                        await operateCustomService.editAdPositionResource(this.adPictureForm).then(data =>{
+                        let adPictureItem = {
+                            ...this.adPictureForm,
+                        }
+
+                        adPictureItem.client_category_id = $utils.sendCascanderData(adPictureItem.client_category_id)[0]
+
+                        await operateCustomService.editAdPositionResource(adPictureItem).then(data =>{
                             if(data.code == '0'){
                                 this.$message({
                                     type:'success',
@@ -165,12 +203,12 @@ export default {
                 }
             })
         },
-        /**
-         * 改变跳转页类别
-         */
-        clientCategoryChange(item){
-            this.adPictureForm.client_category_id = item[1]
-        },
+        // /**
+        //  * 改变跳转页类别
+        //  */
+        // clientCategoryChange(item){
+        //     this.adPictureForm.client_category_id = item[1]
+        // },
     },
     async mounted(){
         //获取服务商品下拉菜单
@@ -191,7 +229,7 @@ export default {
                 })
             })
             if(this.$route.query.type == 2){
-                await this.getResourceItem()
+                await this.getResourceItem(this.serviceGoodList)
             }
         } catch(error){
             this.$message({

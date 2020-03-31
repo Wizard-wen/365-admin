@@ -137,6 +137,7 @@ export default {
                             message: data.message
                         })
                         this.is_loading = false
+                        this.$emit('updateResourceList')
                     }
                 }).catch(error =>{
                     this.$message({

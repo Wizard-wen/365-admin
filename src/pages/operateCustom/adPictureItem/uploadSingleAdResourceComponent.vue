@@ -5,12 +5,12 @@
                 <div 
                     class="icon-box" 
                     v-if="pictureObject.url" 
-                    @mouseover="showblack('0')"
-                    @mouseout="showblack('1')"
                     @click="openResourceListDialog('1')">
+                    <!-- @mouseover="showblack('0')"
+                    @mouseout="showblack('1')" -->
                     <img v-if="!isImageError" class="icon-item" :src="pictureObject.url" alt=""  >
                     <div v-else class="icon-item">图片有误</div>
-                    <div class="icon-item-back" v-if="isShowBlack">
+                    <div class="icon-item-back">
                         <i class="el-icon-edit icon-uploader-edit-icon" style="color: #fff;font-size: 20px;"></i>
                     </div>
                 </div>
@@ -145,7 +145,7 @@ export default {
         height: 300px;
         top: 0;
         z-index: 4;
-        background: rgba(0,0,0,.5);
+        background: rgba(0,0,0,.2);
         text-align: center;
         line-height: 300px;
         cursor: pointer;

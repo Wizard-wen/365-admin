@@ -1,7 +1,7 @@
 <template>
     <div class="product" v-loading="is_tree_loading">
         <div class="product-tree-box">
-            <div class="title">服务服务索引</div>
+            <div class="title">服务商品索引</div>
             <el-tree
                 ref="tree"
                 :default-expanded-keys="defaultExpandKeys"
@@ -349,6 +349,7 @@ export default {
                 display: flex;
                 justify-content: flex-end;
                 margin: 15px 0;
+                padding: 0 30px;
             }
             .productForm{
                 width: 80%;

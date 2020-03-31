@@ -261,7 +261,7 @@ export default {
             top: 0;
             z-index: 4;
             cursor: pointer;
-            background: rgba(0,0,0,.5);
+            background: rgba(0,0,0,.2);
             display: flex;
             //编辑
             .image-edit-deal-icon{
