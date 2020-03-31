@@ -61,6 +61,10 @@
                             <el-radio :label="1">男</el-radio>
                             <el-radio :label="2">女</el-radio>
                         </el-radio-group>
+                        <!-- <el-tooltip slot="label" class="item" effect="dark" content="性别根据身份证号确定" placement="top-start">
+                            <span>性别<i class="el-icon-info"></i></span>
+                        </el-tooltip>
+                        {{workerForm.sex|sexFilter}} -->
                     </el-form-item>
 
                     <el-form-item label="身份证号码" prop="identify" class="form-item-size form-item-3-size" size="small">
@@ -126,11 +130,17 @@
                         </el-select>
                     </el-form-item>
 
-                    <el-form-item label="身高" prop="body_height" class="form-item-size form-item-3-size" size="small">
+                    <el-form-item prop="body_height" class="form-item-size form-item-3-size" size="small">
+                        <el-tooltip slot="label" class="item" effect="dark" content="单位为厘米（cm）" placement="top-start">
+                            <span>身高<i class="el-icon-info"></i></span>
+                        </el-tooltip>
                         <el-input v-model="workerForm.body_height" :maxlength="18" placeholder="请输入身高，cm"></el-input>
                     </el-form-item>
 
-                    <el-form-item label="体重" prop="body_weight" class="form-item-size form-item-3-size" size="small">
+                    <el-form-item prop="body_weight" class="form-item-size form-item-3-size" size="small">
+                        <el-tooltip slot="label" class="item" effect="dark" content="单位为公斤（kg）" placement="top-start">
+                            <span>体重<i class="el-icon-info"></i></span>
+                        </el-tooltip>
                         <el-input v-model="workerForm.body_weight" :maxlength="18" placeholder="请输入体重，kg"></el-input>
                     </el-form-item>
 
@@ -699,6 +709,18 @@ export default {
                 this.$router.push("/worker/newWorkerList")
             }
         },
+    },
+    filters: {
+        sexFilter(val){
+            if(val == ''){
+                return '-'
+            }
+            if(val == 1){
+                return '男'
+            } else {
+                return '女'
+            }
+        }
     },
     async mounted(){
         // 设定日期选择器为当前日期

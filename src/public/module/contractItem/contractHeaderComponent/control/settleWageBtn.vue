@@ -33,7 +33,13 @@ export default {
          * 打开结算工资弹窗
          */
         openSettleWageDialog(){
-            this.settleWageDialogVisible = true
+            // this.settleWageDialogVisible = true
+            this.$router.push({
+                path: '/sale/saleSettleWage',
+                query: {
+                    contract_id: this.$route.query.id
+                }
+            })
         },
         /**
          * 关闭结算工资弹窗

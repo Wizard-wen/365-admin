@@ -114,8 +114,8 @@ export default {
                 return ''
             }
 
-            return this.initUrl.includes('https://oss.sy365.cn/service/')?
-                this.initUrl : `https://oss.sy365.cn/service/${this.initUrl}`
+            return this.initUrl.includes('https://oss.sy365.cn/')?
+                this.initUrl : this.newUploadPictureUrl
         }
     },
     data(){
@@ -125,6 +125,7 @@ export default {
             disabled:false,
             currentFileObject: null, // 当前被选择的图片文件
             cropperDialogVisible: false,//
+            newUploadPictureUrl: '',//缓存新上传图片url
         }
     },
     methods: {
@@ -161,7 +162,10 @@ export default {
              */
             this.cropperDialogVisible = false
             if(res){
+                
+                this.newUploadPictureUrl = res.url;
                 console.log(res)
+                console.log(this.newUploadPictureUrl)
                 this.$emit('onSinglePictureSuccess', res);
             }
             

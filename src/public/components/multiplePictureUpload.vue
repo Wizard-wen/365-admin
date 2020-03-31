@@ -8,7 +8,7 @@
             @mouseover.stop="showPhotoblack(item, index, '0')" 
             @mouseout.stop="showPhotoblack(item, index, '1')">
             <img 
-                :src="item.url.includes('https://oss.sy365.cn/service/')? item.url : 'https://oss.sy365.cn/service/'+item.url" 
+                :src="item.showUrl" 
                 class="image-item" :style="{height: `${height}px`,width:`${width}px`}">
             <div 
                 class="image-item-back" 
@@ -130,14 +130,17 @@ export default {
         value: {
             handler(newVal, oldVal){
                 if(newVal!= oldVal){
+                    console.log('触发更新')
                     //包装图片数组，url 展示图片url  isBack 是否显示遮罩
                     this.photo_fileList =  newVal.map((item, index) =>{
+                        let hasShowUrl = item.hasOwnProperty('showUrl')
                         return {
                             ...item,
                             // url: item[this.pictureUrlArrtibute],
                             // url: item[this.pictureUrlArrtibute].includes('https://oss.sy365.cn/service/')? 
                             // item[this.pictureUrlArrtibute] : 
                             // 'https://oss.sy365.cn/service/'+item[this.pictureUrlArrtibute],
+                            showUrl: hasShowUrl? item.showUrl: item.url,
                             isBack: false,
                         }
                     })
@@ -163,15 +166,25 @@ export default {
     methods: {
         /**
          * 照片上传成功钩子函数
+         * 回调函数参数
+         * des 新上传时，传相对路径；若是回显后未改变，直接上传回显回来的绝对路径  
+         * @param name 图片名字
+         * @param path 相对路径
+         * @param url 绝对路径
          */
         onSinglePictureSuccess(res, file) {
-            console.log(res)
+            console.log('上传成功',res)
+            let showUrl = res.url
             let newPic = {
                 ...res,
-                url: res.path,
+                showUrl: showUrl,//展示的url
+                url: res.path,//后台根据这个值判断要不要更新图片资源
             }
+
             //将回传的图片url存入数组中
             this.photo_fileList.push(newPic);
+
+
             //包装图片数组，url 展示图片url  isBack 是否显示遮罩
             // this.photo_fileList =  this.photo_fileList.map((item, index) =>{
             //     console.log('单图片上传',item)
@@ -181,8 +194,11 @@ export default {
             //         isBack: false,
             //     }
             // })
+
             let newArr = this.photo_fileList
+            
             this.$set(this.photo_fileList, newArr)
+            
             //触发上层v-model
             this.$emit('input',this.photo_fileList)
         },

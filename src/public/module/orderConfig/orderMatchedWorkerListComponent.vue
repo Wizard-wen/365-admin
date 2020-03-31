@@ -115,11 +115,14 @@ export default {
             try{
                 await publicModuleService.getWorker(paramObj.staff_id).then(data =>{
                     let workerItem = data.data
-                    if( workerItem.name && 
-                        workerItem.phone && 
-                        workerItem.identify && 
-                        workerItem.address && 
-                        workerItem.urgent_phone){
+                    if( workerItem.name &&  //姓名
+                        workerItem.phone &&  //电话
+                        workerItem.identify &&  //身份证号
+                        workerItem.address_in_law &&  //户籍地址
+                        workerItem.address && //现住址
+                        workerItem.urgent_phone //紧急联系人
+                    ){
+
                     } else {
                         this.$message({
                             type: 'warning',
@@ -138,7 +141,9 @@ export default {
                         })
                         return
                     }
-                    this.$alert(`<p>签约前请确定<Strong style="color:#E6A23C;">客户姓名、电话、工种</Strong>正确，</p>
+
+                    this.$alert(`
+                        <p>签约前请确定<Strong style="color:#E6A23C;">客户姓名、电话、工种</Strong>正确，</p>
                         <p>并仔细核实<Strong style="color:#E6A23C;">待服务人员信息</Strong>。</p>
                         <p>如有不符，请联系运营中心更改后再签约！</p>
                         <p><Strong style="color:#E6A23C;">按下按钮代表<span style="text-decoration:underline">您已经仔细核实相关信息，并对此负责。</span></Strong></p>`, '提示', {
@@ -146,7 +151,7 @@ export default {
                         cancelButtonText: '取消',
                         dangerouslyUseHTMLString: true,
                         type: 'warning'
-                    }).then(async () =>{
+                    }).then( () =>{
                         this.$router.push({
                             path: `/sale/saleSignPage`,
                             query: {
@@ -154,9 +159,10 @@ export default {
                                 type: this.orderBase.type,//订单状态\
                                 work_type: this.orderBase.work_type,//
                                 worker_id: type == 1 ? this.orderBase.sign_staff_id : paramObj.staff_id,
-                                sign_user_name: this.orderBase.type == 3 ? this.orderBase.sign_user_name : '',
+
+                                sign_user_name: this.orderBase.type == 3 ? this.orderBase.sign_user_name : this.orderBase.order_user_name,
                                 sign_user_id: this.orderBase.type == 3 ? this.orderBase.sign_user_id : '',
-                                sign_user_phone: this.orderBase.type == 3 ? this.orderBase.sign_user_phone : '',
+                                sign_user_phone: this.orderBase.type == 3 ? this.orderBase.sign_user_phone : this.orderBase.order_user_phone,
                                 sign_user_identify: this.orderBase.type == 3 ? this.orderBase.sign_user_identify : '',
                             }
                         })

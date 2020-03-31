@@ -12,8 +12,8 @@
                     class="paper-item-img" 
                     v-for="(it, inds) in item.images" 
                     :key="inds" 
-                    :src="it.url"
-                    @click="showDetialPic(it.url)">
+                    :src="it.showUrl"
+                    @click="showDetialPic(it.showUrl)">
             </div>
             <div class="image-messsage">
                 <p>{{item.paper_category_name}}</p>
@@ -75,9 +75,26 @@ export default {
         //v-model字段
         value: {
             handler(newVal, oldVal){
-                // console.log(11)
+                console.log('paper组件触发更新')
                 if(newVal!= oldVal){
-                    this.paperList = newVal
+
+                    this.paperList =  newVal.map((item, index) =>{
+
+                        let imagesItem = item.images
+
+                        imagesItem = imagesItem.map(it =>{
+                            let hasShowUrl = it.hasOwnProperty('showUrl')
+                            return {
+                                ...it,
+                                showUrl: hasShowUrl?it.showUrl:it.url
+                            }
+                        })
+
+                        return {
+                            ...item,
+                            images: imagesItem,
+                        }
+                    })
                 }
             },
             immediate: true,
@@ -151,6 +168,8 @@ export default {
                     if(item.paper_category_id == deleteParam.paper_category_id){
                         //删除证书
                         this.paperList.splice(index, 1)
+                        //v-model
+                        this.$emit('input',this.paperList)
                     }
                 })
                 this.$message({

@@ -28,7 +28,7 @@
                 <card-box-component :title="'雇主信息'">
                     <div slot="contains" class="contains-form">
                         <el-form-item prop="sign_user_name" label="姓名" class="form-item-3-size" size="small">
-                            <el-input v-model="signForm.sign_user_name" :disabled="publicOrderType == 3 || publicOrderType == 2" placeholder="请输入雇主姓名"></el-input>
+                            <el-input v-model="signForm.sign_user_name" :disabled="true" placeholder="请输入雇主姓名"></el-input>
                         </el-form-item>
                         <el-form-item prop="sign_user_phone" class="form-item-3-size" size="small">
                             <form-item-label-tooltip-component
@@ -41,7 +41,7 @@
                                     <p>另外，如果签约客户不是我们的注册用户，首次签约后，客户将自动成为我们的注册用户，并可以在小程序查看自己的订单详情。</p>
                                 </div>    
                             </form-item-label-tooltip-component>
-                            <el-input v-model.number="signForm.sign_user_phone" placeholder="请输入雇主联系电话"></el-input>
+                            <el-input v-model.number="signForm.sign_user_phone" :disabled="true" placeholder="请输入雇主联系电话"></el-input>
                         </el-form-item>
                         <el-form-item label="身份证号" prop="sign_user_identify" class="form-item-3-size" size="small">
                             <el-input v-model="signForm.sign_user_identify" :disabled="publicOrderType == 3 || publicOrderType == 2" placeholder="请输入雇主身份证号"></el-input>
@@ -60,7 +60,7 @@
                             <el-input v-model="signForm.sign_staff_identify" :disabled="true" placeholder=""></el-input>
                         </el-form-item>
                         <el-form-item label="户籍地址" prop="sign_staff_law_address" class="form-item-size form-item-1-size" size="small">
-                            <el-input v-model="signForm.sign_staff_law_address" placeholder=""></el-input>
+                            <el-input v-model="signForm.sign_staff_law_address" :disabled="true" placeholder=""></el-input>
                         </el-form-item>
                         <el-form-item label="现住址" prop="sign_staff_cur_address" class="form-item-size form-item-1-size" size="small">
                             <el-input v-model="signForm.sign_staff_cur_address" :disabled="true" placeholder=""></el-input>
@@ -195,7 +195,7 @@
                             <el-input :disabled="!isCostomize" v-model.number="signForm.staff_deposit" placeholder="请输入劳动者押金"></el-input>
                         </el-form-item>
                         <el-form-item>
-                            <el-button type="primary" size="mini" @click="customizeCharge">自定义金额</el-button>
+                            <el-button type="primary" size="mini" :disabled="isCostomize" @click="customizeCharge">自定义金额</el-button>
                         </el-form-item>
                     </div>
                 </card-box-component>
@@ -465,6 +465,7 @@ export default {
         }
     },
     watch: {
+        // 是否自定义工资
         'signForm.staff_wage': function(val, oldVal){
             if(this.isCostomize){
                 return
@@ -599,6 +600,7 @@ export default {
                 this.signForm.sign_staff_identify = this.workerItem.identify// 签约家政服务员身份证号
                 this.signForm.sign_staff_cur_address = this.workerItem.address// 签约家政服务员现住址
                 this.signForm.sign_staff_urgent = this.workerItem.urgent_phone// 签约家政服务员紧急联系方式
+                this.signForm.sign_staff_law_address = this.workerItem.address_in_law//签约家政服务员户籍地址
                 this.signForm.work_type = this.$utils.setTreeArray(work_type,skillTree)
                 this.signForm.insurance_benefit = this.workerItem.name
 

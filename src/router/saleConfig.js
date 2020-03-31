@@ -8,6 +8,10 @@ import saleWorkStation from '@/pages/saleWorkStation.vue'//门店工作台
 import saleOrderList from '@/pages/sale/saleOrderList.vue'//订单列表
 import saleOrderConfig from '@/pages/sale/saleOrderConfig.vue'//订单配置页
 import saleSignPage from '@/pages/sale/saleSignPage.vue'//签约页面
+
+import saleSettleWage from '@/pages/sale/saleSettleWage.vue'//签约页面
+
+
 import salePublicOrderList from '@/pages/sale/salePublicOrderList.vue'//公海订单列表
 import salePublicOrderConfig from '@/pages/sale/salePublicOrderConfig.vue'//公海订单详情
 import saleContractList from '@/pages/sale/saleContractList.vue'//我的合同列表
@@ -42,6 +46,11 @@ export const saleConfigModule = [
         name: 'salePublicOrderList',
         component: salePublicOrderList,
     },//公海订单列表
+    {
+        path: '/sale/saleSettleWage',
+        name: 'saleSettleWage',
+        component: saleSettleWage,
+    },//结算工资页
     {
         path: '/sale/salePublicOrderConfig',
         name: 'salePublicOrderConfig',
