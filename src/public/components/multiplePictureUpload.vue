@@ -4,16 +4,16 @@
             class="image-box"
             :style="{height: `${height}px`,width: `${width}px`}"
             v-for="(item,index) in photo_fileList" 
-            :key="index"  
-            @mouseover.stop="showPhotoblack(item, index, '0')" 
-            @mouseout.stop="showPhotoblack(item, index, '1')">
+            :key="index"  >
+            <!-- @mouseover.stop="showPhotoblack(item, index, '0')" 
+            @mouseout.stop="showPhotoblack(item, index, '1')"> -->
             <img 
                 :src="item.showUrl" 
                 class="image-item" :style="{height: `${height}px`,width:`${width}px`}">
             <div 
                 class="image-item-back" 
-                :style="{height: `${height}px`, width: `${width}px`}"
-                v-if="item.isBack && isEdit">
+                :style="{height: `${height}px`, width: `${width}px`}">
+                <!-- v-if="item.isBack && isEdit"> -->
                 <i 
                     class="el-icon-delete image-edit-deal-icon" 
                     :style="{lineHeight: `${height}px`}" 
@@ -23,7 +23,7 @@
                     :style="{lineHeight: `${height}px`}" 
                     @click="openPictureDetailDialog(item)"></i>
             </div>
-            <div 
+            <!-- <div 
                 class="image-item-back" 
                 :style="{height: `${height}px`, width: `${width}px`}"
                 v-if="item.isBack && !isEdit">
@@ -31,7 +31,7 @@
                     class="el-icon-zoom-in image-deal-icon" 
                     :style="{lineHeight: `${height}px`}" 
                     @click="openPictureDetailDialog(item)"></i>
-            </div>
+            </div> -->
         </div>
         <div :style="{height: `${height}px`, width: `${width? width:'100%'}`}" v-if="isShowEdit">
             <singlePictureUpload

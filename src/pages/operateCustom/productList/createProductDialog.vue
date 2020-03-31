@@ -1,7 +1,7 @@
 <template>
 
     <el-dialog
-        title="创建新商品"
+        title="创建新商品/分类"
         :visible.sync="createProductDialogVisible"
         :show-close="false"
         :close-on-press-escape="false"

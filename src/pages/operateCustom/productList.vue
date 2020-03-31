@@ -1,7 +1,7 @@
 <template>
     <div class="product" v-loading="is_tree_loading">
         <div class="product-tree-box">
-            <div class="title">服务索引</div>
+            <div class="title">服务服务索引</div>
             <el-tree
                 ref="tree"
                 :default-expanded-keys="defaultExpandKeys"

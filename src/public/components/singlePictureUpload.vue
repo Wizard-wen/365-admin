@@ -13,10 +13,10 @@
             <div
                 v-if="showPicture!=''"
                 class="icon-box"
-                :style="{height: `${height}px`,width: `${width}px`}"
-                @mouseover.stop="showblack('0')"
-                @mouseout.stop="showblack('1')">
-                <img 
+                :style="{height: `${height}px`,width: `${width}px`}">
+                <!-- @mouseover.stop="showblack('0')"
+                @mouseout.stop="showblack('1')"> -->
+                <!-- <img 
                     class="icon-item" 
                     :style="{height: `${height}px`,width: `${width}px`}"
                     :src="showPicture == '' ? '' : showPicture" >
@@ -25,7 +25,7 @@
                     class="icon-item-back" 
                     :style="{height: `${height}px`,width: `${width}px`,lineHeight:`${height}px`}">
                     <i class="el-icon-edit icon-uploader-icon" style="color: #fff;font-size: 20px;"></i>
-                </div>
+                </div> -->
 
             </div>
             <div v-else :style="{height: `${height}px`, width: `${width}px`}">
