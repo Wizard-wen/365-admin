@@ -8,13 +8,23 @@
         
         <div class="paper-imgs-box" v-for="(item, index) in paperList" :key="index">
             <div class="paper-imgs">
-                <img 
+                <!-- <img 
                     class="paper-item-img" 
                     v-for="(it, inds) in item.images" 
                     :key="inds" 
                     :src="it.showUrl"
-                    @click="showDetialPic(it.showUrl)">
+                    @click="showDetialPic(it.showUrl)"> -->
+                <el-image 
+                    class="paper-item-img" 
+                    v-for="(it, inds) in item.images" 
+                    :key="inds" 
+                    :fit="'contain'"
+                    :src="it.showUrl"
+                    :preview-src-list="[it.showUrl]">
+                </el-image>
             </div>
+
+
             <div class="image-messsage">
                 <p>{{item.paper_category_name}}</p>
                 <div v-if="!isShow">
@@ -245,6 +255,7 @@ export default {
         .paper-imgs{
             display: flex;
             flex-wrap: wrap;
+            border-bottom: 1px dashed #ccc;
             .paper-item-img{
                 display: block;
                 height:150px;

@@ -38,7 +38,7 @@
 
 <script>
 import resourceListDialog from './uploadSingleAdResourceComponent/resourceListDialog.vue'
-import {resourceTypeList} from '../resourceList/IresourcePicture'
+import {resourceTypeList} from '../pictureResourceList/IresourcePicture'
 export default {
     components: {
         resourceListDialog,

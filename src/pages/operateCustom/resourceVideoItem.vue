@@ -32,7 +32,7 @@
 <script>
 
 import {operateCustomService} from '@/service/operateCustom'
-import uploadSingleAdResourceComponent from './adPictureItem/uploadSingleAdResourceComponent.vue'
+import uploadSingleAdResourceComponent from './adPositionPictureItem/uploadSingleAdResourceComponent.vue'
 export default {
     components: {
         uploadSingleAdResourceComponent,

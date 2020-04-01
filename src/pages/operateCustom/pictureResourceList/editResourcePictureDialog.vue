@@ -2,20 +2,20 @@
     <!-- 订单申请 -->
     <el-dialog
         v-loading="is_loading"
-        :title="isEdit?'编辑图片': '创建图片'"
+        :title="isEdit?'编辑图片素材': '创建图片素材'"
         :visible.sync="editResourcePictureVisible"
         :show-close="false"
         :close-on-press-escape="false"
         :close-on-click-modal="false">
         <el-form :model="editResourcePictureForm" label-width="120px" ref="editResourcePictureForm" :rules="editResourcePictureRules">
-            <el-form-item label="资源图片名" prop="name">
+            <el-form-item label="图片素材名" prop="name">
                 <el-input type="primary" v-model="editResourcePictureForm.name"></el-input>
             </el-form-item>
-            <el-form-item label="图片类型" prop="type">
+            <el-form-item label="图片素材类型" prop="type">
                 <el-select 
                     v-model="editResourcePictureForm.type" 
                     @change="changePictureType"
-                    placeholder="请选择图片类型"
+                    placeholder="请选择图片素材类型"
                     filterable>
                     <el-option
                         v-for="item in resourceTypeList"
@@ -24,7 +24,7 @@
                         :value="item.id"></el-option>
                 </el-select>
             </el-form-item>
-            <el-form-item label="图片" prop="url" class="form-item-size">
+            <el-form-item label="图片素材" prop="url" class="form-item-size">
                 <single-picture-upload
                     :uploadHeader="uploadHeader"
                     :height="picHeight"

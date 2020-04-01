@@ -134,19 +134,19 @@ export default {
         },
         //广告资源库
         goResourceList(){
-            this.$router.push('/operate/resourceList')
+            this.$router.push('/operate/pictureResourceList')
         },
         //视频素材库
         goVideoList(){
-            this.$router.push('/operate/videoList')
+            this.$router.push('/operate/videoResourceList')
         },
         //服务端广告位
         goWorkerAdList(){
-            this.$router.push('/operate/workerAdList')
+            this.$router.push('/operate/workerAdPositionList')
         },
         //客户端广告位
         goCustomAdList(){
-            this.$router.push('/operate/customAdList')
+            this.$router.push('/operate/customAdPositionList')
         },
         /**
          * 获取运营工作台数据

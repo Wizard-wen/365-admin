@@ -41,7 +41,14 @@ export default {
                  * is_wage 1 未发放工资 2 已发放工资
                  */
                 if(this.currentContract.is_wage == 1){
-                    this.determinateContractDialogVisible = true
+                    // this.determinateContractDialogVisible = true
+
+                    this.$router.push({
+                        path: '/sale/saleTerminateContract',
+                        query: {
+                            contract_id: this.$route.query.id
+                        }
+                    })
                 } else {
                     await this.determinateContract()
                 }

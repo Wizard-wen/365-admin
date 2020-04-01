@@ -87,8 +87,7 @@ export const loginService = {
      * @param refresh_token 刷新token
      */
     refreshToken(refresh_token:any){
-        return apiLogin.refreshToken(refresh_token)
-            
+        return apiLogin.refreshToken(refresh_token)      
     },
 }
 

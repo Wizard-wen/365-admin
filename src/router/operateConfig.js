@@ -38,13 +38,17 @@ import operateContractItem from '@/pages/operateContract/operateContractItem.vue
  */
 import productList from '@/pages/operateCustom/productList.vue'
 import eduVideoList from '@/pages/operateCustom/eduVideoList.vue'
-import resourceList from '@/pages/operateCustom/resourceList.vue'
-import videoList from '@/pages/operateCustom/videoList.vue'
-import workerAdList from '@/pages/operateCustom/workerAdList.vue'
-import customAdList from '@/pages/operateCustom/customAdList.vue'
-import showAdList from '@/pages/operateCustom/showAdList.vue'
+
+import pictureResourceList from '@/pages/operateCustom/pictureResourceList.vue'
+
+import videoResourceList from '@/pages/operateCustom/videoResourceList.vue'
+
+import workerAdPositionList from '@/pages/operateCustom/workerAdPositionList.vue'
+import customAdPositionList from '@/pages/operateCustom/customAdPositionList.vue'
+import showAdPositionList from '@/pages/operateCustom/showAdPositionList.vue'
+
 import adPositionItem from '@/pages/operateCustom/adPositionItem.vue'
-import adPictureItem from '@/pages/operateCustom/adPictureItem.vue'
+import adPositionPictureItem from '@/pages/operateCustom/adPositionPictureItem.vue'
 import resourceVideoItem from '@/pages/operateCustom/resourceVideoItem.vue'
 /**
  * 运营---服务人员管理
@@ -120,30 +124,30 @@ export const operateConfigModule = [
         component: eduVideoList,
     },
     {
-        path: '/operate/resourceList',
-        name: 'resourceList',
-        component: resourceList,
+        path: '/operate/pictureResourceList',
+        name: 'pictureResourceList',
+        component: pictureResourceList,
     },
 
     {
-        path: '/operate/videoList',
-        name: 'videoList',
-        component: videoList,
+        path: '/operate/videoResourceList',
+        name: 'videoResourceList',
+        component: videoResourceList,
     },
     {
-        path: '/operate/workerAdList',
-        name: 'workerAdList',
-        component: workerAdList,
+        path: '/operate/workerAdPositionList',
+        name: 'workerAdPositionList',
+        component: workerAdPositionList,
     },
     {
-        path: '/operate/customAdList',
-        name: 'customAdList',
-        component: customAdList,
+        path: '/operate/customAdPositionList',
+        name: 'customAdPositionList',
+        component: customAdPositionList,
     },
     {
-        path: '/operate/showAdList',
-        name: 'showAdList',
-        component: showAdList,
+        path: '/operate/showAdPositionList',
+        name: 'showAdPositionList',
+        component: showAdPositionList,
     },
     {
         path: '/operate/adPositionItem',
@@ -151,9 +155,9 @@ export const operateConfigModule = [
         component: adPositionItem,
     },
     {
-        path: '/operate/adPictureItem',
-        name: 'adPictureItem',
-        component: adPictureItem,
+        path: '/operate/adPositionPictureItem',
+        name: 'adPositionPictureItem',
+        component: adPositionPictureItem,
     },
     {
         path: '/operate/resourceVideoItem',

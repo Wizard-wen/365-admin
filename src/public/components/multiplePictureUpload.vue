@@ -7,13 +7,19 @@
             :key="index"  >
             <!-- @mouseover.stop="showPhotoblack(item, index, '0')" 
             @mouseout.stop="showPhotoblack(item, index, '1')"> -->
-            <img 
+            <!-- <img 
                 :src="item.showUrl" 
-                class="image-item" :style="{height: `${height}px`,width:`${width}px`}">
+                class="image-item" :style="{height: `${height}px`,width:`${width}px`}"> -->
+            <el-image 
+                class="image-item"
+                :style="{height: `${height}px`,width:`${width}px`}"
+                :src="item.showUrl" 
+                :preview-src-list="isEdit?[]: [item.showUrl]">
+            </el-image>
             <div 
                 class="image-item-back" 
-                :style="{height: `${height}px`, width: `${width}px`}">
-                <!-- v-if="item.isBack && isEdit"> -->
+                :style="{height: `${height}px`, width: `${width}px`}"
+                v-if="isEdit">
                 <i 
                     class="el-icon-delete image-edit-deal-icon" 
                     :style="{lineHeight: `${height}px`}" 
@@ -235,7 +241,7 @@ export default {
          * 打开图片详情弹窗
          */
         openPictureDetailDialog(item){
-            this.pictureDetailUrl = this.showCompleteUrl + item.url
+            this.pictureDetailUrl =item.showUrl
             this.pictureDetailDialogVisible = true;
         }
     }

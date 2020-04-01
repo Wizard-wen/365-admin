@@ -37,7 +37,7 @@
 import {operateCustomService} from '@/service/operateCustom'
 
 //上传单张广告资源图片组件
-import uploadSingleAdResourceComponent from './adPictureItem/uploadSingleAdResourceComponent.vue'
+import uploadSingleAdResourceComponent from './adPositionPictureItem/uploadSingleAdResourceComponent.vue'
 
 import {$utils} from '@/utils/index'
 export default {
@@ -113,11 +113,11 @@ export default {
                         let adPictureItem = {
                             ...data.data
                         }
-                        // adPictureItem.activity_object = 
+
                         adPictureItem.client_category_id = $utils.setTreeArray(adPictureItem.client_category_id,serviceTree)
 
                         this.adPictureForm = adPictureItem
-                        // this.adPictureForm.resource_object = data.data.resource_object
+
                         this.is_loading = false
                     }
                 }).catch(error =>{

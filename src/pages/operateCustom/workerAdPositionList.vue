@@ -4,6 +4,7 @@
             :queryForm="workerConfigForm"
             @changeQueryedForm="changeQueryedForm"></query-component>
         <ad-position-table-component
+            :adListType="2"
             :tableData="workerTable"
             :workerConfigList="workerConfigForm"
             @updateTable="updateTable"></ad-position-table-component>
@@ -14,8 +15,7 @@
 </template>
 
 <script>
-
-import {operateCustomService} from '@/service/operateCustom'
+import {operateCustomService} from '@/service/operateCustom.ts'
 
 import queryComponent from './adPositionList/queryComponent.vue'
 import adPositionTableComponent from './adPositionList/adPositionTableComponent.vue'
@@ -41,10 +41,10 @@ export default {
             },
             //查询对象
             queryForm: {
-
+                
                 key: '',
                 name: '',
-                client: 1,
+                client: 2,
                 display: '',
             },
         }

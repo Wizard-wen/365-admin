@@ -39,9 +39,8 @@
 <script>
 
 import { operateCustomService} from '@/service/operateCustom'
-import pictureCard from '../../resourceList/pictureCard.vue'
-
-import {resourceTypeList} from '../../resourceList/IresourcePicture'
+import pictureCard from '../../pictureResourceList/pictureCard.vue'
+import {resourceTypeList} from '../../pictureResourceList/IresourcePicture'
 export default {
     components: {
         pictureCard,

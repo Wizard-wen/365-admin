@@ -8,10 +8,20 @@
 
         <div class="ad-imgs-box" v-for="(item, index) in adPositionList" :key="index">
             <div class="ad-imgs">
-                <img
+                <!-- <img
                     class="ad-item-img"
                     :src="''+item.resource_object.url"
-                    @click="showDetialPic(item.resource_object.url)">
+                    @click="showDetialPic(item.resource_object.url)"> -->
+                <el-image
+                    style="width: 500px; height: 280px"
+                    class="ad-image-size"
+                    :src="item.resource_object.url"
+                    :preview-src-list="[item.resource_object.url]"
+                    :fit="'contain'">
+                    <div slot="error" class="ad-image-slot">
+                        <i class="el-icon-picture-outline"></i>
+                    </div>
+                </el-image>
             </div>
             <div class="image-messsage">
                 <p>{{item.name}}</p>
@@ -95,7 +105,7 @@ export default {
          */
         goAdPictureItemPage(state, paperItem){
             this.$router.push({
-                path: '/operate/adPictureItem',
+                path: '/operate/adPositionPictureItem',
                 query: {
                     from: this.$route.query.from,//来源于 客户端广告位还是服务端广告位
                     type: state == 'edit' ? 2 : 1,//是否是编辑
@@ -186,10 +196,17 @@ export default {
                 padding: 15px;
                 display: flex;
                 flex-wrap: wrap;
-                .ad-item-img{
-                    display: block;
+                .ad-image-size{
                     width: 500px;
-                    cursor: pointer;
+                    height: 280px;
+                    /deep/ .ad-image-slot{
+                        width: 500px;
+                        height: 280px;
+                        font-size: 30px;
+                        text-align: center;
+                        line-height: 280px;
+                        background: #f5f7fa;
+                    }
                 }
             }
             .image-messsage{

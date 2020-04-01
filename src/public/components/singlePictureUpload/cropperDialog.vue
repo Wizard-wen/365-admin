@@ -138,18 +138,21 @@ export default {
 			option: {
 				img: '', // 裁剪图片的地址  (默认：空)
 				outputSize: 1, // 裁剪生成图片的质量  (默认:1)
-				full: false, // 是否输出原图比例的截图 选true生成的图片会非常大  (默认:false)
+				full: true, // 是否输出原图比例的截图 选true生成的图片会非常大  (默认:false)
 				outputType: 'png', // 裁剪生成图片的格式  (默认:jpg)
 				canMove: true, // 上传图片是否可以移动  (默认:true)
-				original: false, // 上传图片按照原始比例渲染  (默认:false)
-				canMoveBox: true, // 截图框能否拖动  (默认:true)
+				original: true, // 上传图片按照原始比例渲染  (默认:false)
+                
+                canMoveBox: true, // 截图框能否拖动  (默认:true)
 				autoCrop: true, // 是否默认生成截图框  (默认:false)
 				autoCropWidth: this.width, // 默认生成截图框宽度  (默认:80%)
 				autoCropHeight: this.height, // 默认生成截图框高度  (默认:80%)
-				fixedBox: false, // 固定截图框大小 不允许改变  (默认:false)
+                
+                fixedBox: false, // 固定截图框大小 不允许改变  (默认:false)
 				fixed: true, // 是否开启截图框宽高固定比例  (默认:true)
 				fixedNumber: this.fixedNumber, // 截图框比例  (默认:[1:1])
-				enlarge: 1
+                
+                enlarge: 1
 			},
 			isDisabled: false,
             downImg: '#',
@@ -222,7 +225,7 @@ export default {
             img.onload = async () => {
                 
                 //压缩图片
-                let _data = utils.compress(img, this.fixedNumber[0]);
+                let _data = utils.compress(img, this.fixedNumber[1]);
                 // data to blob
                 let blob = utils.dataURItoBlob(_data);
                 let formData = new FormData(); 

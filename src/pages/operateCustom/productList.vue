@@ -16,7 +16,7 @@
             <div class="control">
                 <el-button type="primary" @click="openCreateProductDialog">创建商品</el-button>
             </div>
-            <el-form class="productForm" ref="productForm" :model="productForm" label-width="120px">
+            <el-form class="productForm" ref="productForm" :model="productForm" label-width="120px" style="max-width: 750px;">
                 <el-form-item v-if="productForm.parent_id == 0" label="分类banner图" prop="banner_url" class="form-item-size">
                     <single-picture-upload
                         :uploadHeader="uploadHeader"
@@ -60,9 +60,9 @@
                         v-model="productForm.files"
                         :title="'商品详情'"
                         :maxCount="10"
-                        :height="300"
+                        :height="200"
                         :width="200"></multiple-picture-upload>
-                    <p>图片比例为1（宽）:1.5（高），请尽量上传高质量图片</p>
+                    <p>图片比例为1（宽）:2（高），请尽量上传高质量图片</p>
                 </el-form-item>
                 <el-form-item >
                     <el-button type="primary" @click="saveProduct">修改</el-button>

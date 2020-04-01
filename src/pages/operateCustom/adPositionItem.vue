@@ -5,20 +5,11 @@
         ref="adPositionForm" 
         label-width="100px" 
         class="adPositionForm">
-        <el-form-item label="广告位名称" prop="name">
-            <el-input type="text" v-model="adPositionForm.name" disabled></el-input>
-        </el-form-item>
+        <el-form-item label="广告位名称" prop="name">{{adPositionForm.name}}</el-form-item>
         
-        <el-form-item label="广告位编号" prop="key">
-            <el-input type="text" v-model="adPositionForm.key" disabled></el-input>
-        </el-form-item>
+        <el-form-item label="广告位编号" prop="key">{{adPositionForm.key}}</el-form-item>
 
         <el-form-item label="展现形式" prop="display">
-            <!-- <select-tag-component
-                :propTagList="displayList"
-                v-model="adPositionForm.display"
-                :isSingle="true"
-                :isEdit="false"></select-tag-component> -->
             <el-tag size="small">{{displayTag}}</el-tag>
         </el-form-item>
         
@@ -136,8 +127,16 @@ export default {
          * 返回
          */
         goback(){
+            let goUrl = ''
+            if(this.$route.query.from == 1){
+                goUrl = '/operate/customAdPositionList'
+            } else if(this.$route.query.from == 2){
+                goUrl = '/operate/workerAdPositionList'
+            } else {
+                goUrl = '/operate/showAdPositionList'
+            }
             this.$router.push({
-                path: this.$route.query.from == 1?`/operate/customAdList` : `/operate/workerAdList`,
+                path: goUrl,
             })
         }
     },

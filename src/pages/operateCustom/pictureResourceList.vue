@@ -2,7 +2,7 @@
     <div class="resource" v-loading="is_loading">  
         <div class="resource-header">
             <div class="resource-name">
-                <h4>广告图片资源库</h4>
+                <h4>图片素材库</h4>
             </div>
             <div class="btn-group">
                 <el-button size="mini" type="primary" @click="openEditResourcePictureDialog(2)">添加图片</el-button>
@@ -26,8 +26,20 @@
                     <el-col :span="6" v-for="(item, index) in adResourceList" :key="index" style="margin-bottom:20px;">
                         <div style="padding: 0 10px;">
                             <el-card :body-style="{ padding: '0px' }">
-                                <img :src="item.url?`${item.url}`:''" class="image">
-                                <div style="padding: 14px;">
+                                <div class="resource-image-box">
+                                    <el-image
+                                        class="resource-image"
+                                        :src="item.url"
+                                        :preview-src-list="[item.url]"
+                                        :fit="'contain'">
+                                        <div slot="error" class="resource-image-slot">
+                                            <i class="el-icon-picture-outline"></i>
+                                        </div>
+                                    </el-image>
+                                </div>
+                               
+
+                                <div class="image-des">
                                     <span>{{item.name}}</span>
                                     <div class="bottom">
                                         <div class="bottom-left">
@@ -59,9 +71,9 @@
 
 <script>
 import {operateCustomService} from '@/service/operateCustom'
-import editResourcePictureDialog from './resourceList/editResourcePictureDialog.vue'
+import editResourcePictureDialog from './pictureResourceList/editResourcePictureDialog.vue'
 
-import {resourceTypeList} from './resourceList/IresourcePicture'
+import {resourceTypeList} from './pictureResourceList/IresourcePicture'
 export default {
     components: {
         editResourcePictureDialog,
@@ -264,12 +276,28 @@ export default {
         }
     }
 }
-
-    .image {
+.resource-image-box{
+    width: 100%;
+    height: 211px;
+    border-bottom: 1px dashed #ccc;
+    .resource-image {
         height: 210px;
-        width: 100%;
+        width: 300px;
+        margin: 0 auto;
         display: block;
+        /deep/ .resource-image-slot{
+            width: 300px;
+            height: 210px;
+            font-size: 30px;
+            text-align: center;
+            line-height: 210px;
+            // background: #f5f7fa;
+        }
     }
+}
+.image-des{
+    padding: 14px;
+    height: 75px;
     .bottom {
         width: 100%;
         margin-top: 7px;
@@ -287,6 +315,9 @@ export default {
             }
         }
     }
+}
+    
+    
 
 
 

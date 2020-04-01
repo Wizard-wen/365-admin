@@ -26,14 +26,23 @@ export default {
         var originWidth = img.width;
         var originHeight = img.height;
         // 最大尺寸限制
-        var maxHeight = 400;
+        // var maxHeight = 1000;
+
+        var maxWidth = 750;
         // 目标尺寸
         var targetWidth = originWidth, targetHeight = originHeight;
         // 图片尺寸超过400x400的限制
-        if ( originHeight > maxHeight) {
-            targetHeight = maxHeight;
-            targetWidth = maxHeight * scale;
+        // if ( originHeight > maxHeight) {
+        //     targetHeight = maxHeight;
+        //     targetWidth = maxHeight * scale;
+        // }
+        console.log('scale',scale)
+        if ( originWidth > maxWidth) {
+            targetWidth = maxWidth;
+            targetHeight = maxWidth * scale;
         }
+
+
         canvas.width = targetWidth;
         canvas.height = targetHeight;
         // 铺底色

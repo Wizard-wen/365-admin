@@ -69,6 +69,10 @@
                 type: Object,
                 default: function(){return {}}
             },
+            adListType: {
+                type: Number,
+                default: 1,
+            }
         },
         methods: {
             /**
@@ -78,7 +82,7 @@
                 this.$router.push({
                     path: '/operate/adPositionItem',
                     query: {
-                        from: 1,
+                        from: this.adListType,
                         position_id: row.id
                     }
                 })

@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div style="width: 100%;">
         <el-upload
             accept=".jpg,.jpeg,.png,.gif,.bmp,.pdf,.JPG,.JPEG,.PBG,.GIF,.BMP,.PDF"
             class="icon-uploader"

@@ -4,6 +4,7 @@
             :queryForm="workerConfigForm"
             @changeQueryedForm="changeQueryedForm"></query-component>
         <ad-position-table-component
+            :adListType="3"
             :tableData="workerTable"
             :workerConfigList="workerConfigForm"
             @updateTable="updateTable"></ad-position-table-component>
@@ -43,7 +44,7 @@ export default {
                 
                 key: '',
                 name: '',
-                client: 2,
+                client: 3,
                 display: '',
             },
         }

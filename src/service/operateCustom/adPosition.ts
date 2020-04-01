@@ -15,7 +15,7 @@ import {
 import {
     resourcePicture,
     searchResourceForm
-} from '@/pages/operateCustom/resourceList/IresourcePicture'
+} from '@/pages/operateCustom/pictureResourceList/IresourcePicture'
 
 
 

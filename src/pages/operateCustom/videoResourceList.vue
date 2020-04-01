@@ -2,7 +2,7 @@
     <div class="resource" v-loading="is_loading">  
         <div class="resource-header">
             <div class="resource-name">
-                <h4>视频资源库</h4>
+                <h4>视频素材库</h4>
             </div>
             <div class="btn-group">
                 <el-button size="mini" type="primary" @click="openEditResourceVideoDialog(2)">添加视频</el-button>
@@ -19,9 +19,20 @@
                         <div style="padding: 0 10px;">
                             <el-card :body-style="{ padding: '0px' }">
                                 <div class="resource-box">
-                                    <div class="picture-box">
+                                    <!-- <div class="picture-box">
                                         <img v-if="item.picture_url" :src="`${item.picture_url}`" class="general-image">
                                         <div v-else>暂无</div>
+                                    </div> -->
+                                    <div class="resource-image-box">
+                                        <el-image
+                                            class="resource-image"
+                                            :src="item.picture_url"
+                                            :preview-src-list="[item.picture_url]"
+                                            :fit="'contain'">
+                                            <div slot="error" class="resource-image-slot">
+                                                <i class="el-icon-picture-outline"></i>
+                                            </div>
+                                        </el-image>
                                     </div>
                                     
                                     <div class="resource-message">
@@ -63,7 +74,7 @@
 
 <script>
 import {operateCustomService} from '@/service/operateCustom'
-import editResourceVideoDialog from './videoList/editResourceVideoDialog.vue'
+import editResourceVideoDialog from './videoResourceList/editResourceVideoDialog.vue'
 
 export default {
     components: {
@@ -268,18 +279,37 @@ export default {
 }
 
     .resource-box{
-        .picture-box{
-            height: 210px;
+        // .picture-box{
+        //     height: 210px;
+        //     width: 100%;
+        //     .general-image{
+        //         height: 210px;
+        //         width: 100%;
+        //         display: block;
+        //     }
+        // }
+        .resource-image-box{
             width: 100%;
-            .general-image{
+            height: 211px;
+            border-bottom: 1px dashed #ccc;
+            .resource-image {
                 height: 210px;
-                width: 100%;
+                width: 300px;
+                margin: 0 auto;
                 display: block;
+                /deep/ .resource-image-slot{
+                    width: 300px;
+                    height: 210px;
+                    font-size: 30px;
+                    text-align: center;
+                    line-height: 210px;
+                    // background: #f5f7fa;
+                }
             }
         }
-        
         .resource-message{
             padding: 14px 7px 7px 7px;
+            height: 75px;
             .header{
                 height: 20px;
                 width: 100%;

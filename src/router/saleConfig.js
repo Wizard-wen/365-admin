@@ -9,7 +9,8 @@ import saleOrderList from '@/pages/sale/saleOrderList.vue'//订单列表
 import saleOrderConfig from '@/pages/sale/saleOrderConfig.vue'//订单配置页
 import saleSignPage from '@/pages/sale/saleSignPage.vue'//签约页面
 
-import saleSettleWage from '@/pages/sale/saleSettleWage.vue'//签约页面
+import saleSettleWage from '@/pages/sale/saleSettleWage.vue'//结算工资页面
+import saleTerminateContract from '@/pages/sale/saleTerminateContract.vue'//提前终止合同页面
 
 
 import salePublicOrderList from '@/pages/sale/salePublicOrderList.vue'//公海订单列表
@@ -51,6 +52,11 @@ export const saleConfigModule = [
         name: 'saleSettleWage',
         component: saleSettleWage,
     },//结算工资页
+    {
+        path: '/sale/saleTerminateContract',
+        name: 'saleTerminateContract',
+        component: saleTerminateContract,
+    },//提前终止合同页
     {
         path: '/sale/salePublicOrderConfig',
         name: 'salePublicOrderConfig',

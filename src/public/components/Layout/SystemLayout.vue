@@ -15,6 +15,9 @@
                     </div>
                     <div class="user">
                         <div class="user-contains">
+                            <!-- <el-badge :value="12" class="item">
+                                <el-button size="small">评论</el-button>
+                            </el-badge> -->
                             <div class="icon-box">
                                 <el-popover
                                     placement="bottom-end"
@@ -26,7 +29,7 @@
                                             class="user-icon"  
                                             :src="presentUser.icon? `${presentUser.icon}`: minePic" alt="">
                                     </div>
-                                    
+                                    <!-- <el-avatar shape="square" :size="100" :fit="'contain'" :src="presentUser.icon"></el-avatar> -->
                                     <img class="user-icon-contains"  slot="reference"
                                         :src="presentUser.icon? `${presentUser.icon}`: minePic" alt="">
                                 </el-popover>
@@ -162,8 +165,11 @@ export default {
          */
         handleCommand(type){
             if(type == '1'){
+                
                 this.$store.commit('logout')
+
                 this.$router.push('/login')
+            
             } else if(type =='3'){
                 this.$router.push('/myCenter/homePage')
             } else if(type =='2'){

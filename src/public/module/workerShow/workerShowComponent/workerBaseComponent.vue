@@ -40,7 +40,7 @@
                 </detail-form-item-component>
                 <detail-form-item-component :label="'现住址'" :size="1" :value="workerForm.address"></detail-form-item-component>
                 <detail-form-item-component :label="'紧急联系人'" :size="1" :value="workerForm.urgent_phone"></detail-form-item-component>
-                <!-- <detail-form-item-component :label="'户籍地址'" :size="1" :value="workerForm.address_in_law"></detail-form-item-component> -->
+                <detail-form-item-component :label="'户籍地址'" :size="1" :value="workerForm.address_in_law"></detail-form-item-component>
             </detail-form-component>
         </div>
     </card-box-component>

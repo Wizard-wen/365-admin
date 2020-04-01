@@ -118,14 +118,14 @@ axios.interceptors.response.use(async response => {
     //access_token错误 10002
     else if(response.data.code == "10002"){
         //清除用户信息
-        await loginService.logout()
+        await store.commit('logout')
         //跳登录页
         router.push('/login');
         throw response.data
     }
     //refresh_token错误 10003
     else if(response.data.code == "10003"){
-        await loginService.logout()
+        await store.commit('logout')
         router.push('/login');
         throw response.data
     }

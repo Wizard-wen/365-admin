@@ -195,7 +195,8 @@
                             <el-input :disabled="!isCostomize" v-model.number="signForm.staff_deposit" placeholder="请输入劳动者押金"></el-input>
                         </el-form-item>
                         <el-form-item>
-                            <el-button type="primary" size="mini" :disabled="isCostomize" @click="customizeCharge">自定义金额</el-button>
+                            <!-- <el-button type="primary" size="mini" :disabled="isCostomize" @click="customizeCharge">自定义金额</el-button> -->
+                            <el-button type="primary" size="mini" :disabled="true" @click="customizeCharge">自定义金额</el-button>
                         </el-form-item>
                     </div>
                 </card-box-component>

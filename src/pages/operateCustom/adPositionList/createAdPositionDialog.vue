@@ -5,7 +5,7 @@
         :show-close="false"
         :close-on-press-escape="false"
         :close-on-click-modal="false">
-        <el-form  ref="createAdPositionForm" :model="createAdPositionForm" label-width="120px" :rules="createAdPositionRules">
+        <el-form  ref="createAdPositionForm" :model="createAdPositionForm" style="max-width: 750px;" label-width="120px" :rules="createAdPositionRules">
 
             <el-form-item label="广告位名称" prop="name">
                 <el-input type="text" v-model="createAdPositionForm.name" ></el-input>
@@ -24,9 +24,9 @@
 
             <el-form-item label="所属项目" prop="client">
                 <el-radio-group v-model="createAdPositionForm.client">
-                    <el-radio :label="1">客户端</el-radio>
-                    <el-radio :label="2">服务端</el-radio>
-                    <el-radio :label="3">官网</el-radio>
+                    <el-radio :label="1">客户端（移动端）</el-radio>
+                    <el-radio :label="2">服务端（移动端）</el-radio>
+                    <el-radio :label="3">pc端</el-radio>
                 </el-radio-group>
             </el-form-item>
 

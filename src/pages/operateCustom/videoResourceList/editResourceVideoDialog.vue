@@ -2,22 +2,34 @@
     <!-- 订单申请 -->
     <el-dialog
         v-loading="is_loading"
-        :title="'创建视频'"
+        :title="'创建视频素材'"
         :visible.sync="editResourceVideoVisible"
         :show-close="false"
         :close-on-press-escape="false"
         :close-on-click-modal="false">
-        <el-form :model="editResourceVideoForm" label-width="120px" ref="editResourceVideoForm" :rules="editResourceVideoRules">
+        <el-form :model="editResourceVideoForm" label-width="120px" style="max-width: 750px;" ref="editResourceVideoForm" :rules="editResourceVideoRules">
             <el-form-item label="视频名称" prop="name">
-                <el-input type="primary" v-model="editResourceVideoForm.name"></el-input>
+                <el-tooltip slot="label" class="item" effect="dark" content="视频名称将展示在客户端，请尽量保持精简。推荐格式为：分类+主题，如，母婴护理课-婴幼儿疾病护理" placement="top-start">
+                    <span>视频名称<i class="el-icon-info"></i></span>
+                </el-tooltip>
+                <el-input type="primary" v-model="editResourceVideoForm.name" placeholder="请填写视频名称，推荐格式为：分类+主题，如，母婴护理课-婴幼儿疾病护理"></el-input>
             </el-form-item>
 
             <el-form-item label="主讲人" prop="teacher">
-                <el-input type="primary" v-model="editResourceVideoForm.teacher"></el-input>
+                <el-tooltip slot="label" class="item" effect="dark" content="主讲人将展示在客户端，推荐填写 真实姓名 或 x老师" placement="top-start">
+                    <span>主讲人<i class="el-icon-info"></i></span>
+                </el-tooltip>
+                <el-input type="primary" v-model="editResourceVideoForm.teacher" placeholder="请填写主讲人，推荐填写真实姓名或x老师"></el-input>
             </el-form-item>
 
-            <el-form-item label="视频url" prop="video_url">
-                <el-input type="textarea" v-model="editResourceVideoForm.video_url"></el-input>
+            <el-form-item prop="video_url" style="margin-bottom: 0;">
+                <el-tooltip slot="label" class="item" effect="dark" content="请将视频素材上传至腾讯视频，然后复制视频url" placement="top-start">
+                    <span>视频url<i class="el-icon-info"></i></span>
+                </el-tooltip>
+                <el-input type="textarea" v-model="editResourceVideoForm.video_url" placeholder="请将腾讯视频页面url复制下来即可。"></el-input>
+            </el-form-item>
+            <el-form-item style="margin-bottom: 0;">
+                <p style="color:#67C23A;">视频链接格式类似，https://v.qq.com/x/page/e30157yc9nn.html</p>
             </el-form-item>
         </el-form>
         <div slot="footer" class="dialog-footer">

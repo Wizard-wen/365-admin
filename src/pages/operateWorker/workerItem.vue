@@ -4,10 +4,20 @@
         :title="workerForm.name">
 
         <template slot="icon" >
-            <icon-component
+            <!-- <icon-component
                 :iconUrl="workerForm.icon?`${workerForm.icon}`:''"
                 :height="140"
-                :width="100"></icon-component>
+                :width="100"></icon-component> -->
+            <el-image 
+                class="icon-box"
+                :src="workerForm.icon" 
+                :fit="'contain'"
+                :preview-src-list="[workerForm.icon]">
+                <div slot="error" class="image-slot">
+                    <i class="el-icon-picture-outline"></i>
+                </div>
+            </el-image>
+            
         </template>
         
         <template slot="detail" >
@@ -50,21 +60,27 @@
             <card-box-component 
                 :title="'基本信息'">
                 <div slot="contains" class="contains-form">
-                    <el-form-item  label="姓名" prop="name" ref="name" class="form-item-3-size" size="small">
+                    <el-form-item  prop="name" ref="name" class="form-item-3-size" size="small">
+                        <el-tooltip slot="label" class="item" effect="dark" content="应当填写服务人员的真实姓名，一旦确定，不能更改。" placement="top-start">
+                            <span>姓名<i class="el-icon-info"></i></span>
+                        </el-tooltip>
                         <el-input v-model="workerForm.name" :maxlength="20" placeholder="请输入服务人员姓名"></el-input>
                     </el-form-item>
-                    <el-form-item label="电话" prop="phone" class="form-item-3-size" size="small">
+                    <el-form-item prop="phone" class="form-item-3-size" size="small">
+                        <el-tooltip slot="label" class="item" effect="dark" content="手机号是服务人员的id，同一个手机号不能重复添加。手机号一旦确定，不能更改。" placement="top-start">
+                            <span>电话<i class="el-icon-info"></i></span>
+                        </el-tooltip>
                         <el-input v-model="workerForm.phone" :maxlength="11" placeholder="请输入手机号"></el-input>
                     </el-form-item>
                     <el-form-item label="性别" prop="sex" class="form-item-3-size">
-                        <el-radio-group v-model="workerForm.sex">
+                        <!-- <el-radio-group v-model="workerForm.sex">
                             <el-radio :label="1">男</el-radio>
                             <el-radio :label="2">女</el-radio>
-                        </el-radio-group>
-                        <!-- <el-tooltip slot="label" class="item" effect="dark" content="性别根据身份证号确定" placement="top-start">
+                        </el-radio-group> -->
+                        <el-tooltip slot="label" class="item" effect="dark" content="性别根据身份证号确定" placement="top-start">
                             <span>性别<i class="el-icon-info"></i></span>
                         </el-tooltip>
-                        {{workerForm.sex|sexFilter}} -->
+                        {{workerForm.sex | sexFilter}}
                     </el-form-item>
 
                     <el-form-item label="身份证号码" prop="identify" class="form-item-size form-item-3-size" size="small">
@@ -242,7 +258,7 @@
                     </el-form-item>
 
                     <el-form-item prop="certificate" class="form-item-size form-item-1-size">
-                        <el-tooltip slot="label" class="item" effect="dark" content="证书尺寸为150*237。注意和技能证书标签保持一致。" placement="top-start">
+                        <el-tooltip slot="label" class="item" effect="dark" content="证书尺寸为150*237。注意和技能证书标签保持一致。图片会展示给客户，请尽量保证图片质量。" placement="top-start">
                             <span>技能证书素材<i class="el-icon-info"></i></span>
                         </el-tooltip>
                         <paper-component 
@@ -266,7 +282,7 @@
                         <el-tooltip slot="label" class="item" effect="dark" content="这是给客户展示的工作经验，请注意措辞。" placement="top-start">
                             <span>展示工作经验<i class="el-icon-info"></i></span>
                         </el-tooltip>
-                        <el-input v-model="workerForm.cus_working_exprience" :maxlength="50" placeholder="请输入工作经验"></el-input>
+                        <el-input v-model="workerForm.cus_working_exprience" :maxlength="50" placeholder="请输入工作经验，展示给客户的信息，请尽量保持精简。"></el-input>
                     </el-form-item>
                     
                 </div>   
@@ -810,6 +826,17 @@ export default {
     & /deep/ .el-step__title{
         font-size: 12px;
         color: #333;
+    }
+}
+.icon-box{
+    height: 140px;
+    width: 100px;
+    /deep/ .image-slot{
+        height: 140px;
+        width: 100px;
+        line-height: 140px;
+        text-align: center;
+        background: #f5f7fa;
     }
 }
 
