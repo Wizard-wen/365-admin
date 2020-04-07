@@ -19,7 +19,7 @@
                 :type="'template'"
                 :label="'下单时间'" 
                 :size="3" :value="currentOrder.order_at">
-                <p slot="template">{{currentOrder.order_at | timeToDayFomatter}}</p>
+                <p slot="template">{{currentOrder.order_at | timeToSecondFomatter}}</p>
             </detail-form-item-component>
             <detail-form-item-component :size="3"></detail-form-item-component>
             <detail-form-item-component :size="3"></detail-form-item-component>
@@ -34,7 +34,7 @@
                 :label="'订单创建时间'" 
                 :size="3" 
                 :value="currentOrder.created_at">
-                <p slot="template">{{currentOrder.created_at | timeToDayFomatter}}</p>
+                <p slot="template">{{currentOrder.created_at | timeToSecondFomatter}}</p>
             </detail-form-item-component>
             <detail-form-item-component  :size="3"></detail-form-item-component>
 

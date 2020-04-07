@@ -39,7 +39,7 @@ export default {
             //申请创建劳动者信息
             errorWorkerForm : {
                 warning_log: '',//日志信息
-                id: this.workerForm.id,//服务人员id
+                id: this.workerForm.staff_id,//服务人员id
             },
             //申请创建劳动者表单验证
             errorWorkerRules: {

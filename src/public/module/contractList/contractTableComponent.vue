@@ -30,9 +30,9 @@
 
             <el-table-column  label="签约时间" prop="sign_at" align="center"  :formatter="sign_atFormatter"></el-table-column>
             
-            <el-table-column  label="服务开始时间" prop="service_start" align="center"  :formatter="service_startFormatter"></el-table-column>
+            <el-table-column  label="服务开始日期" prop="service_start" align="center"  :formatter="service_startFormatter"></el-table-column>
 
-            <el-table-column  label="服务终止时间" prop="service_end" align="center" :formatter="service_endFormatter"></el-table-column>
+            <el-table-column  label="服务终止日期" prop="service_end" align="center" :formatter="service_endFormatter"></el-table-column>
 
         </el-table>
     </div>
@@ -77,7 +77,7 @@
                 if(row.sign_at == 0){
                     return '-'
                 }
-                return this.$utils.formatDate(new Date(row.sign_at), 'yyyy-MM-dd')
+                return this.$utils.formatDate(new Date(row.sign_at), 'yyyy-MM-dd hh:mm:ss')
             },
             // 服务开始时间
             service_startFormatter(row, column){

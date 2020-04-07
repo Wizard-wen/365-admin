@@ -62,7 +62,7 @@ export default {
     height: 420px;
     width: 368px;
     background: url(./orderPictureComponent/images/orderImage.png) no-repeat;
-    background-size: 368px 400px; 
+    background-size: 368px 420px; 
     padding: 50px 10px 0 20px;
     .form-item{
         &:after{

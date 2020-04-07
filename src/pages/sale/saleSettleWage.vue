@@ -1,6 +1,6 @@
 <template>
     <div class="settle-box">
-        <el-form :model="settleWageForm" label-width="120px" :rules="settleWageRules" ref="settleWageForm" class="settle-form">
+        <el-form :model="settleWageForm" label-width="120px" :rules="settleWageRules" ref="settleWageForm1" class="settle-form">
             <el-divider content-position="left">服务人员工资</el-divider>
             <el-form-item label="服务期限" prop="service_duration">
                 <el-date-picker
@@ -18,8 +18,8 @@
             <el-form-item label="日工资" prop="daily_wage">
                 <el-input v-model.number="settleWageForm.daily_wage" placeholder="请输入日工资"></el-input>
             </el-form-item>
-            <el-form-item label="首月应发工资" prop="total_wage" style="margin-bottom: 0;">
-                <el-input v-model.number="settleWageForm.total_wage" :disabled="true" placeholder=""></el-input>
+            <el-form-item label="首月应发工资" style="margin-bottom: 0;">
+                {{settleWageForm.total_wage != null? `${settleWageForm.total_wage}元` : ''}}
             </el-form-item>
             <el-form-item style="margin-bottom: 0;">
                 <p style="color: #67C23A;">首月应发工资 = 工作天数 × 日工资</p>
@@ -33,8 +33,8 @@
             <el-form-item label="扣除事由" prop="cost_reason">
                 <el-input v-model="settleWageForm.cost_reason" type="textarea" placeholder="请输入扣除事由"></el-input>
             </el-form-item>
-            <el-form-item label="实发工资" prop="real_wage" style="margin-bottom: 0;">
-                <el-input v-model.number="settleWageForm.real_wage" :disabled="true" placeholder=""></el-input>
+            <el-form-item label="实发工资"  style="margin-bottom: 0;">
+                {{settleWageForm.real_wage != null? `${settleWageForm.real_wage}元` : ''}}
             </el-form-item>
             <el-form-item style="margin-bottom: 0;">
                 <p style="color: #67C23A;">实发工资 = 工作天数 × 日工资 - 服务费用 - 其他费用扣除</p>
@@ -42,96 +42,121 @@
             
             <el-divider content-position="left">客户余额</el-divider>
             
-            <el-form-item label="客户余额" prop="user_account">
-                <el-input v-model.number="orderItem.sign_user_account" :disabled="true" placeholder=""></el-input>
+            <el-form-item label="扣除前余额">
+                {{orderItem.sign_user_account != null? `${orderItem.sign_user_account}元` : ''}}
             </el-form-item>
-            <el-form-item label="当月客户支出" prop="user_cost" style="margin-bottom: 0;">
-                <el-input v-model.number="settleWageForm.user_cost" :disabled="true" placeholder=""></el-input>
+            <el-form-item label="当月客户支出" style="margin-bottom: 0;">
+                {{settleWageForm.user_cost != null? `${settleWageForm.user_cost}元` : ''}}
             </el-form-item>
             <el-form-item style="margin-bottom: 0;">
                 <p style="color: #67C23A;">当月客户支出 = 工作天数 × 日工资 - 其他费用扣除</p>
             </el-form-item>
-            <el-form-item label="返还客户金额" prop="return_wage">
+            <el-form-item label="返还客户金额">
                 <el-input v-model.number="settleWageForm.return_wage" placeholder="请输入返还客户金额"></el-input>
             </el-form-item>
-            <el-form-item label="扣除后客户余额" prop="finally_user_account">
-                <el-input v-model.number="settleWageForm.finally_user_account" :disabled="true" placeholder=""></el-input>
+            <el-form-item label="扣除后客户余额">
+                {{settleWageForm.finally_user_account != null? `${settleWageForm.finally_user_account}元`: ''}}
             </el-form-item>
             <el-form-item>
                 <el-button @click="goback">取 消</el-button>
-                <el-button type="primary" @click="onSubmit('settleWageForm')">确定</el-button>
+                <el-button type="primary" @click="settleWage('settleWageForm1')">确定</el-button>
             </el-form-item>
         </el-form>
-        <div class="bell-list">
-            <div class="bell-box">
-                <div class="title">工资账单明细</div>
-                <el-divider content-position="right">服务人员工资</el-divider>
-                <div 
-                    class="level-1"
-                    v-if="settleWageForm.service_days && settleWageForm.daily_wage">
-                    <span class="label">首月应发工资：</span>
-                    {{settleWageForm.service_days}} 天 × {{settleWageForm.daily_wage}} 元 = {{settleWageForm.total_wage}}元
-                </div>
-                <div
-                    class="level-1" 
-                    v-if="settleWageForm.service_days">
-                    <span class="label">工作天数：</span>
-                    {{settleWageForm.service_days}} 天</div>
-                <div 
-                    class="level-1"
-                    v-if="settleWageForm.daily_wage">
-                    <span class="label">日工资：</span>
-                    {{settleWageForm.daily_wage}} 元</div>
-                <div 
-                    class="level-1"
-                    v-if="settleWageForm.service_cost">
-                    <span class="label">服务费扣除：</span>
-                    {{settleWageForm.service_cost}} 元</div>
-                <div 
-                    class="level-1"
-                    v-if="settleWageForm.other_cost">
-                    <span class="label">其他扣除扣除：</span>
-                    {{settleWageForm.other_cost}} 元</div>
+        <div class="right-bill">
+            <div class="bell-list">
+                <div class="bell-box">
+                    <div class="title">工资账单明细</div>
+                    <div 
+                        class="level-1"
+                        v-if="settleWageForm.service_start">
+                        <span class="label">服务周期：</span>
+                        {{settleWageForm.service_start | timeToDayFomatter}} - {{settleWageForm.service_end | timeToDayFomatter}}
+                    </div>
+                    <el-divider content-position="right">服务人员工资</el-divider>
+                    <div 
+                        class="level-1"
+                        v-if="settleWageForm.service_days != null && settleWageForm.daily_wage != null">
+                        <span class="label">首月应发工资：</span>
+                        {{settleWageForm.service_days}} 天 × {{settleWageForm.daily_wage}} 元 = {{settleWageForm.total_wage}}元
+                    </div>
+                    <div
+                        class="level-1" 
+                        v-if="settleWageForm.service_days != null">
+                        <span class="label">工作天数：</span>
+                        {{settleWageForm.service_days}} 天
+                    </div>
+                    <div 
+                        class="level-1"
+                        v-if="settleWageForm.daily_wage != null">
+                        <span class="label">日工资：</span>
+                        {{settleWageForm.daily_wage}} 元
+                    </div>
+                    <div 
+                        class="level-1"
+                        v-if="settleWageForm.service_cost != null">
+                        <span class="label">服务费扣除：</span>
+                        {{settleWageForm.service_cost}} 元
+                    </div>
+                    <div 
+                        class="level-1"
+                        v-if="settleWageForm.other_cost != null">
+                        <span class="label">其他扣除：</span>
+                        {{settleWageForm.other_cost}} 元
+                    </div>
 
-                
-                <div 
-                    class="level-1"
-                    v-if="settleWageForm.service_days && settleWageForm.daily_wage && settleWageForm.service_cost">
-                    <span class="label" style="color: #F56C6C">实发工资：</span>
+                    
+                    <div 
+                        class="level-1"
+                        v-if="settleWageForm.service_days != null && settleWageForm.daily_wage != null && settleWageForm.service_cost != null">
+                        <span class="label" style="color: #F56C6C">实发工资：</span>
+                    </div>
+                    <div
+                        class="level-2"
+                        v-if="settleWageForm.service_days != null && settleWageForm.daily_wage != null && settleWageForm.service_cost != null">
+                        {{settleWageForm.service_days}} 天 × {{settleWageForm.daily_wage}} 元
+                        <span v-if="settleWageForm.service_cost"> - {{settleWageForm.service_cost}} 元</span>
+                        <span v-if="settleWageForm.other_cost"> - {{settleWageForm.other_cost}} 元</span>
+                        = {{settleWageForm.real_wage}} 元
+                    </div>
+                    <el-divider content-position="right">客户余额</el-divider>
+                    <div 
+                        class="level-1"
+                        v-if="settleWageForm.service_days != null && settleWageForm.daily_wage != null">
+                        <span class="label">扣除前余额：</span>
+                        {{orderItem.sign_user_account}} 元
+                    </div>
+                    <div
+                        class="level-1" 
+                        v-if="settleWageForm.service_days != null && settleWageForm.daily_wage != null">
+                        <span class="label" style="color: #F56C6C">客户当月支出：</span>
+                        {{settleWageForm.service_days}} 天 × {{settleWageForm.daily_wage}} 元
+                        <span v-if="settleWageForm.other_cost"> - {{settleWageForm.other_cost}} 天</span>
+                        = {{settleWageForm.user_cost}} 元
+                    </div>
+                    <div 
+                        class="level-1"
+                        v-if="settleWageForm.service_days != null && settleWageForm.daily_wage != null">
+                        <span class="label">返还客户金额：</span>
+                        {{settleWageForm.return_wage}} 元
+                    </div>
+                    <div 
+                        class="level-1"
+                        v-if="settleWageForm.service_days != null && settleWageForm.daily_wage != null">
+                        <span class="label">扣除后余额：</span>
+                        {{settleWageForm.finally_user_account}} 元
+                    </div>
+                    <el-divider style="margin: 0"></el-divider>
                 </div>
-                <div
-                    v-if="settleWageForm.service_days && settleWageForm.daily_wage && settleWageForm.service_cost">
-                    {{settleWageForm.service_days}} 天 × {{settleWageForm.daily_wage}} 元
-                    <span v-if="settleWageForm.service_cost"> - {{settleWageForm.service_cost}} 元</span>
-                    <span v-if="settleWageForm.other_cost"> - {{settleWageForm.other_cost}} 元</span>
-                    = {{settleWageForm.real_wage}} 元
-                </div>
-                <el-divider content-position="right">客户余额</el-divider>
-                <div 
-                    class="level-1"
-                    v-if="settleWageForm.service_days && settleWageForm.daily_wage">
-                    <span class="label">客户余额：</span>
-                    {{orderItem.sign_user_account}} 元
-                </div>
-                <div
-                    class="level-1" 
-                    v-if="settleWageForm.service_days && settleWageForm.daily_wage">
-                    <span class="label" style="color: #F56C6C">客户当月支出：</span>
-                    {{settleWageForm.service_days}} 天 × {{settleWageForm.daily_wage}} 元
-                    <span v-if="settleWageForm.other_cost"> - {{settleWageForm.other_cost}} 天</span>
-                    = {{settleWageForm.user_cost}} 元
-                </div>
-                <div 
-                    class="level-1"
-                    v-if="settleWageForm.service_days && settleWageForm.daily_wage">
-                    <span class="label">返还客户金额：</span>
-                    {{settleWageForm.return_wage}} 元
-                </div>
-                <div 
-                    class="level-1"
-                    v-if="settleWageForm.service_days && settleWageForm.daily_wage">
-                    <span class="label">扣除后余额：</span>
-                    {{settleWageForm.finally_user_account}} 元
+                <div class="bottom">
+                    <div class="sun-code">
+                        <div class="des-box">
+                            <p style="color:#ccc;">账单数据来源于365生活服务平台</p>
+                            <p style="color:#ccc;">私密数据，注意保密，外泄必究。</p>
+                        </div>
+                        <div class="sun-code-pic">
+                            <el-image class="pic" :src="sunCodePic"></el-image>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -143,38 +168,13 @@
 import {publicModuleService} from '@/service/publicModule'
 
 import {saleService} from '@/service/sale'
+import sunCodePic from './saleSettleWage/sun-code.jpg'
 
 export default {
-    props:{
-        /**
-         * 控制组件的显示隐藏
-         */
-        settleWageDialogVisible:{
-            default:false,
-            type: Boolean,
-        },
-        /**
-         * 合同信息
-         */
-        contractObj: {
-            default: function(){
-                return {}
-            },
-            type: Object,
-        },
-    },
     data() {
         let _this = this;
         const validator = {
-            user_name(rule, value, callback){
-                if (!value) {
-                    callback(new Error('客户名不能为空'));
-                } else if (!/^[a-zA-Z\u4e00-\u9fa5]+$/.test(value)){
-                    callback(new Error('只能是中、英文及其组合'));
-                } else {
-                    callback()
-                }
-            },
+
             validateReturn_wage(rule, value, callback){
                 if(value < 0){
                     callback(new Error('返还客户余额不能为负！'))
@@ -185,20 +185,12 @@ export default {
                     callback(new Error('不能超过现有余额扣除当月支出的金额！'))
                 }
             },
-            // validateService_cost(rule, value, callback){
-            //     if(value < 0){
-            //         callback(new Error('返还客户余额不能为负！'))
-            //     }
-            //     let currentUserAccount = parseInt(_this.orderItem.sign_user_account
-            //     - _this.settleWageForm.user_cost)
-            //     if(Number(value) > currentUserAccount){
-            //         callback(new Error('不能超过现有余额扣除当月支出的金额！'))
-            //     }
-            // },
         }
         return {
-            contractItem: {},
-            orderItem: {},
+            contractItem: {},//合同信息
+            orderItem: {},//订单信息
+            sunCodePic,//太阳码
+            //结算信息
             settleWageForm: {
                 contract_id: this.$route.query.contract_id,//合同id
                 service_duration: [],//服务期限组件字段
@@ -207,22 +199,27 @@ export default {
                 service_end:'',//服务终止日
                 
                 service_days:null,//工作天数
-                daily_wage:'',//日工资
-                total_wage:'',//首月工资合计
+                daily_wage:null,//日工资
+                total_wage:null,//首月工资合计
                 
-                service_cost:'',//服务费扣除
-                other_cost:'',//其他扣除
+                service_cost:null,//服务费扣除
+                other_cost:null,//其他扣除
                 cost_reason:'',//扣除事由
                 
-                real_wage:'',//服务人员实发工资
+                real_wage:null,//服务人员实发工资
+
+                user_cost: null,//客户支出金额-----
                 
-                user_account:'',//客户余额-----
-                user_cost: '',//客户支出金额-----
+                return_wage:null,//返还客户金额
                 
-                return_wage:'',//返还客户金额
-                
-                finally_user_account:'',//扣除后客户余额-----
+                finally_user_account:null,//扣除后客户余额-----
             },
+            //展示结算信息
+            showSettleWage: {
+                user_cost: null,
+                finally_user_account: null,
+            },
+            //结算信息表单验证
             settleWageRules: {
                 //服务期限
                 service_duration: [
@@ -238,11 +235,6 @@ export default {
                     {required: true, message: '请输入日工资金额', trigger: 'blur'},
                     { type: 'number',message:'日工资金额只能是数字',trigger: 'blur'},
                 ],
-                //工资合计
-                total_wage: [
-                    {required: true, message: '请输入工资合计金额', trigger: 'blur'},
-                    { type: 'number',message:'工资合计金额只能是数字',trigger: 'blur'},
-                ],
                 //服务费扣除
                 service_cost: [
                     {required: true, message: '请输入服务费扣除金额', trigger: 'blur'},
@@ -257,15 +249,10 @@ export default {
                 cost_reason: [
                     {required: true, message: '请输入其他扣除事由', trigger: 'blur'}
                 ],
-                //服务人员实发工资
-                real_wage: [
-                    {required: true, message: '请输入服务人员实发工资金额', trigger: 'blur'},
-                    { type: 'number',message:'实发工资金额只能是数字',trigger: 'blur'},
-                ],
                 //返还客户金额
                 return_wage: [
                     {required: true, message: '请输入返还客户金额', trigger: 'blur'},
-                    { type: 'number',message:'返还客户金额只能是数字',trigger: 'blur'},
+                    {type: 'number',message:'返还客户金额只能是数字',trigger: 'blur'},
                     {validator: validator.validateReturn_wage,trigger: 'blur'},
                 ],
             }
@@ -332,7 +319,7 @@ export default {
             this.settleWageForm.finally_user_account = //扣除后余额
                 parseInt(this.orderItem.sign_user_account - //客户原始余额
                 this.settleWageForm.user_cost - //客户当月支出
-                this.settleWageForm.return_wage) //返还客户金额
+                val) //返还客户金额
         }
 
     },
@@ -347,23 +334,45 @@ export default {
          * 服务期限时间转换
          */
         changeServiceDuration(value){
-            this.settleWageForm.service_start = value[0]
-            this.settleWageForm.service_end = value[1]
+            if(value){
+                this.settleWageForm.service_start = value[0]
+                this.settleWageForm.service_end = value[1]
+                return 
+            }
+            this.settleWageForm.service_start = ''
+            this.settleWageForm.service_end = ''
+        },
+        /**
+         * 结算工资
+         */
+        async settleWage(formName){
+            await this.$confirm("此操作不可逆，请务必保证结算信息准确完整！", "提示", {
+                confirmButtonText: "确定",
+                cancelButtonText: "取消",
+                type: "warning"
+            }).then(async () =>{
+                await this.settleWageRequest(formName)
+            }).catch(() => {
+                this.$message({
+                    type: "info",
+                    message: "已放弃签约"
+                });
+            });
         },
         /**
          * 提交结算信息
          */
-        async onSubmit(formName){
+        async settleWageRequest(formName){
             //校验并提交
-            await this.$refs[formName].validate((valid) => {
+            await this.$refs[formName].validate( valid => {
                 if (valid) {
-                    publicModuleService.settleWage(this.settleWageForm).then(data =>{
+                     publicModuleService.settleWage(this.settleWageForm).then(data =>{
                         if(data.code == '0'){
                             this.$message({
                                 type:"success",
                                 message: data.message
                             })
-                            // this.$emit('closeSettleWageDialog')
+                            this.goback()
                         }
                     }).catch(error =>{
                         this.$message({
@@ -429,7 +438,6 @@ export default {
         }
     },
     async mounted(){
-        
         await this.getContract()
     }
 }
@@ -443,12 +451,20 @@ export default {
         .settle-form {
             width: 750px;;
         }
+        .right-bill {
+            padding: 30px 10px;
+            .control {
+                display: flex;
+                justify-content: flex-end;
+                padding: 10px 20px;
+            }
+        }
         .bell-list{
             width: 450px;
-            padding: 30px;
+            padding: 30px 20px 0px 20px;
+            border: 1px dashed #ccc;
+            border-radius: 4px;
             .bell-box{
-                border: 1px dashed #ccc;
-                border-radius: 4px;
                 padding: 10px;
                 .title{
                     height: 50px;
@@ -464,7 +480,32 @@ export default {
                         text-align: right;
                     }
                     line-height: 30px;
-
+                }
+                .level-2{
+                    text-indent: 50px;
+                }
+            }
+            .bottom{
+                height: 170px;
+                .sun-code{
+                    height: 140px;
+                    width: 100%;
+                    display: flex;
+                    .des-box{
+                        flex:1;
+                        height: 40px;
+                        padding: 50px 0;
+                        text-align: center;;
+                    }
+                    .sun-code-pic{
+                        height: 160px;
+                        width: 160px;
+                        padding: 20px;
+                        .pic{
+                            height: 120px;
+                            width: 120px;
+                        }
+                    }
                 }
             }
         }

@@ -30,7 +30,7 @@
                     :tableOriginData="currentWorker.education"></table-tag-component>
             </detail-form-item-component>
             <detail-form-item-component :type="'template'" :label="'创建时间'" :size="2" :value="currentWorker.created_at">
-                <p slot="template">{{currentWorker.created_at | timeToDayFomatter}}</p>
+                <p slot="template">{{currentWorker.created_at | timeToSecondFomatter}}</p>
             </detail-form-item-component>
             <detail-form-item-component :type="'template'" :label="'出生日期'" :size="2" :value="currentWorker.birthday">
                 <p slot="template">{{currentWorker.birthday | timeToDayFomatter}}</p>
@@ -48,7 +48,7 @@
             </detail-form-item-component>
             <detail-form-item-component :label="'体重'" :size="2" :value="currentWorker.body_weight?`${currentWorker.body_weight}kg`:''"></detail-form-item-component>
             <detail-form-item-component :type="'template'" :label="'更新时间'" :size="2" :value="currentWorker.updated_at">
-                <p slot="template">{{currentWorker.updated_at | timeToDayFomatter}}</p>
+                <p slot="template">{{currentWorker.updated_at | timeToSecondFomatter}}</p>
             </detail-form-item-component>
             <detail-form-item-component :label="'创建人'" :size="2" :value="currentWorker.manager_name"></detail-form-item-component>
         </detail-form-component>

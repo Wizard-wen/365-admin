@@ -29,6 +29,7 @@
                         type="success" size="mini"
                         v-if="scope.row.type != 3 && publicOrderType == 3" 
                         @click="goSignOrder(2,scope.row)">签约</el-button>
+                    <error-worker-by-order-config-btn :workerForm="scope.row"></error-worker-by-order-config-btn>
                     <!-- 拒绝服务人员 -->
                     <refuse-matched-worker-btn
                         v-if=" scope.row.type != 3 && publicOrderType == 3"
@@ -36,7 +37,7 @@
                         :currentWorker="scope.row"
                         :currentOrder="orderBase"></refuse-matched-worker-btn>
                     <!-- 查看服务人员详情 -->
-                    <go-worker-show-item-btn :workerListType="goWorkerShowType" :currentWorker="scope.row"></go-worker-show-item-btn>
+                    <el-button type="primary" size="mini" @click="goWorkerDetail(scope.row)">查看</el-button>
                     <!-- 只有添加人才能删除 -->
                     <delete-matched-worker-btn
                         v-if="presentUser.id == scope.row.created_manager_id"
@@ -58,17 +59,19 @@ import {orderMatchedWorkerList} from '@/public/module/orderConfig/IorderItem.ts'
 import refuseMatchedWorkerBtn from './orderMatchedWorkerListComponent/refuseMatchedWorkerBtn.vue'
 import deleteMatchedWorkerBtn from './orderMatchedWorkerListComponent/deleteMatchedWorkerBtn.vue'
 import goWorkerShowItemBtn from '@/public/module/workerList/control/goWorkerShowItemBtn.vue'
-
+import errorWorkerByOrderConfigBtn from './orderMatchedWorkerListComponent/errorWorkerByOrderConfigBtn.vue'
 export default {
     components: {
         refuseMatchedWorkerBtn,
         deleteMatchedWorkerBtn,
         goWorkerShowItemBtn,
+        errorWorkerByOrderConfigBtn,
     },
     data(){
         return {
             //已匹配劳动者签约状态
             orderMatchedWorkerList,
+            currentWorkerForm: {},
         }
     },
     props: {
@@ -124,9 +127,31 @@ export default {
                     ){
 
                     } else {
-                        this.$message({
-                            type: 'warning',
-                            message: `该备选服务人员基本信息不全，请联系运营完善信息！`
+                        this.$alert(`
+                            <p>该备选服务人员基本信息不全，请联系运营完善信息！</p>
+                            <p>
+                                签约字段包括
+                                <Strong style="color:#E6A23C;">姓名</Strong>、
+                                <Strong style="color:#E6A23C;">电话</Strong>、
+                                <Strong style="color:#E6A23C;">身份证号</Strong>、
+                                <Strong style="color:#E6A23C;">户籍地址</Strong>、
+                                <Strong style="color:#E6A23C;">现住址</Strong>、
+                                <Strong style="color:#E6A23C;">紧急联系人</Strong>
+                            </p>`, '签约提示', {
+                            confirmButtonText: '确定',
+                            cancelButtonText: '取消',
+                            dangerouslyUseHTMLString: true,
+                            type: 'warning'
+                        }).then(() =>{
+                            // this.$message({
+                            //     type: 'warning',
+                            //     message: ``
+                            // })
+                        }).catch(() =>{
+                            // this.$message({
+                            //     type: 'warning',
+                            //     message: ``
+                            // })
                         })
                         return
                     }
@@ -145,8 +170,17 @@ export default {
                     this.$alert(`
                         <p>签约前请确定<Strong style="color:#E6A23C;">客户姓名、电话、工种</Strong>正确，</p>
                         <p>并仔细核实<Strong style="color:#E6A23C;">待服务人员信息</Strong>。</p>
+                        <p>
+                            签约字段包括
+                            <Strong style="color:#E6A23C;">姓名</Strong>、
+                            <Strong style="color:#E6A23C;">电话</Strong>、
+                            <Strong style="color:#E6A23C;">身份证号</Strong>、
+                            <Strong style="color:#E6A23C;">户籍地址</Strong>、
+                            <Strong style="color:#E6A23C;">现住址</Strong>、
+                            <Strong style="color:#E6A23C;">紧急联系人</Strong>
+                        </p>
                         <p>如有不符，请联系运营中心更改后再签约！</p>
-                        <p><Strong style="color:#E6A23C;">按下按钮代表<span style="text-decoration:underline">您已经仔细核实相关信息，并对此负责。</span></Strong></p>`, '提示', {
+                        <p><Strong style="color:#E6A23C;">按下按钮代表<span style="text-decoration:underline">您已经仔细核实相关信息，并对此负责。</span></Strong></p>`, '签约提示', {
                         confirmButtonText: '确定',
                         cancelButtonText: '取消',
                         dangerouslyUseHTMLString: true,
@@ -156,8 +190,11 @@ export default {
                             path: `/sale/saleSignPage`,
                             query: {
                                 order_id: this.orderBase.id,
-                                type: this.orderBase.type,//订单状态\
-                                work_type: this.orderBase.work_type,//
+                                type: this.orderBase.type,//订单状态
+                                work_type: this.orderBase.work_type,//工种
+                                // service_duration: this.orderBase.service_duration,//服务周期
+                                // service_address: this.orderBase.service_address,//服务地址
+
                                 worker_id: type == 1 ? this.orderBase.sign_staff_id : paramObj.staff_id,
 
                                 sign_user_name: this.orderBase.type == 3 ? this.orderBase.sign_user_name : this.orderBase.order_user_name,
@@ -186,6 +223,18 @@ export default {
                 })
             }
         },
+        goWorkerDetail(row){
+            this.$router.push({
+                path: '/sale/saleWorkerShow',
+                query: {
+                    ...this.$route.query,
+                    id: row.staff_id,
+                    from:  'match',
+                    type: 6,
+                    order_id: this.$route.query.order_id,
+                }
+            })
+        }
     }
 }
 </script>

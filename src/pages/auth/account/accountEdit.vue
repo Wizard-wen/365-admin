@@ -130,7 +130,7 @@
                                 :picker-options="pickerOptions"
                                 type="date"
                                 placeholder="请选择生日"
-                                format="timestamp"
+                                format="yyyy 年 MM 月 dd 日"
                                 value-format="timestamp"></el-date-picker>
                         </el-form-item>
                         

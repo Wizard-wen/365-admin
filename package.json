@@ -18,6 +18,7 @@
     "highlightjs": "^9.10.0",
     "hljs": "^6.2.3",
     "html2canvas": "^1.0.0-rc.1",
+    "jspdf": "^1.5.3",
     "prismjs": "^1.13.0",
     "qs": "^6.5.1",
     "sass-resources-loader": "^2.0.0",

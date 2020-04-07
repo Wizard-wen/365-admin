@@ -44,11 +44,13 @@
 
                         <el-form-item label="生日" prop="birthday">
                             <el-date-picker  
-                                :default-value="timeDefaultShow"
                                 v-model="personalInfoForm.birthday" 
-                                value-format="timestamp" 
+                                :default-value="new Date()"
+                                :picker-options="pickerOptions"
                                 type="date" 
-                                placeholder="请选择出生日期"></el-date-picker>
+                                placeholder="请选择生日"
+                                format="yyyy 年 MM 月 dd 日" 
+                                value-format="timestamp"></el-date-picker>
                         </el-form-item>
 
                         <el-form-item label="邮箱" prop="email">
@@ -133,9 +135,11 @@ import {departmentList} from './ImyCenter'
             tabPosition: 'left',
             //tab当前所在页
             currentTabPosition: 'basic',
-            datePickerOption: {
+            // 日期选择器设置为只能选择今天之前的日子
+            pickerOptions: {
                 disabledDate(time) {
-                    return time.getTime() > Date.now();//如果没有后面的-8.64e6就是不可以选择今天的
+                    var times = Date.now() - 24 * 60 * 60 * 1000;
+                    return time.getTime() > times;
                 }
             },
             //时间选择器默认时间
@@ -178,7 +182,7 @@ import {departmentList} from './ImyCenter'
                 get_for: 'personal',
                 name: '',//用户名
                 phone: '',//手机号
-                birthday: null,//生日
+                birthday: '',//生日
                 email: '',//邮箱
                 wechat: '',//微信
                 personal_intro: '',//个人简介
@@ -290,7 +294,7 @@ import {departmentList} from './ImyCenter'
                     try{
                         this.is_loading = true
 
-                        passwordChangeForm = {
+                        let passwordChangeForm = {
                             ...this.passwordChangeForm,
                             id: this.presentUser.id
                         }

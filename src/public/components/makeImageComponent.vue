@@ -95,9 +95,9 @@ export default {
                 canvasFormData.append("file", blob)
 
                 //上传至服务器
-                await axios.post("/admin/common/uploadImage",canvasFormData).then(data =>{
+                await axios.post("./admin/common/uploadImage",canvasFormData).then(data =>{
                     
-                    this.canvasCompletedImage = ''+data.data.path
+                    this.canvasCompletedImage = ''+data.data.url
                     
                     this.is_loading = false
                     

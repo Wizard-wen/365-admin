@@ -20,9 +20,12 @@ export default {
                 query: {
                     order_id: this.currentOrder.id,
                     type: this.currentOrder.type,//订单状态
-                    sign_staff_id: this.currentOrder.sign_staff_id ,
-                    sign_staff_name: this.currentOrder.sign_staff_name,
+                    work_type: this.currentOrder.work_type,//
+
+                    worker_id: this.currentOrder.sign_staff_id ,
+
                     sign_user_name: this.currentOrder.sign_user_name,
+                    sign_user_phone: this.currentOrder.sign_user_phone,
                     sign_user_id: this.currentOrder.sign_user_id,
                     sign_user_identify: this.currentOrder.sign_user_identify,
                 }

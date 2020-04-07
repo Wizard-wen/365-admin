@@ -8,8 +8,8 @@
         :close-on-click-modal="false">
         
         <el-form :model="refuseServiceForm" :rules="refuseServiceRules" label-width="120px" ref="refuseServiceForm">
-            <el-form-item label="警告">
-                <p style="text-align:left">您将拒绝服务人员
+            <el-form-item style="margin-bottom: 0px;">
+                <p style="text-align:left"><strong style="color:#E6A23C;">警告!</Strong>您将拒绝服务人员
                     <strong style="color:#E6A23C;">{{serviceObj.staff_name}}(工号{{serviceObj.staff_code}})</strong>
                     接单，请填写拒绝事由。
                 </p>

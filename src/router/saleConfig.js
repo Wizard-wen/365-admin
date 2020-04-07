@@ -11,7 +11,8 @@ import saleSignPage from '@/pages/sale/saleSignPage.vue'//签约页面
 
 import saleSettleWage from '@/pages/sale/saleSettleWage.vue'//结算工资页面
 import saleTerminateContract from '@/pages/sale/saleTerminateContract.vue'//提前终止合同页面
-
+import saleTestJsPdf from '@/pages/sale/saleTestJsPdf.vue'
+import jspdfdemo2 from '@/pages/sale/jspdfdemo2.vue'
 
 import salePublicOrderList from '@/pages/sale/salePublicOrderList.vue'//公海订单列表
 import salePublicOrderConfig from '@/pages/sale/salePublicOrderConfig.vue'//公海订单详情
@@ -57,6 +58,16 @@ export const saleConfigModule = [
         name: 'saleTerminateContract',
         component: saleTerminateContract,
     },//提前终止合同页
+    {
+        path: '/sale/saleTestJsPdf',
+        name: 'saleTestJsPdf',
+        component: saleTestJsPdf,
+    },//测试合同签约页
+    {
+        path: '/sale/jspdfdemo2',
+        name: 'jspdfdemo2',
+        component: jspdfdemo2,
+    },//测试合同签约页2
     {
         path: '/sale/salePublicOrderConfig',
         name: 'salePublicOrderConfig',

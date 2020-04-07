@@ -6,6 +6,7 @@ export interface api_common {
     getPaperSelection:{(type:string):Promise<any>},
     // 获取权限树
     getPermissionTree:{():Promise<any>},
+    
     // 获取所有员工列表
     getManagerSelection:{():Promise<any>},
     // 获取某个部门的全部员工

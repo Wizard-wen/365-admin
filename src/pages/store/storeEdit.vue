@@ -48,7 +48,17 @@
                         :value="item.manager_id"></el-option>
                 </el-select>
 			</el-form-item>
-
+			<el-form-item>
+				<el-tooltip slot="label" class="item" effect="dark" content="上传门店的营业执照，比例为150*237。" placement="top-start">
+					<span>营业执照<i class="el-icon-info"></i></span>
+				</el-tooltip>
+				<multiple-picture-upload
+					v-model="storeForm.licenseFile"
+					:title="'营业执照'"
+					:maxCount="2"
+					:height="150"
+					:width="237"></multiple-picture-upload>
+			</el-form-item>
 			<el-form-item label="备注" prop="remarks">
 				<el-input v-model="storeForm.remarks" type="textarea" :maxlength="20"></el-input>
 			</el-form-item>
@@ -82,6 +92,7 @@ export default {
 				status: 1,
 				created_at: 0,
 				agent_count: 0,
+				licenseFile: [],
 			},
 			storeStaffList: [],//门店内所有员工列表
 			//店铺规则
@@ -171,7 +182,7 @@ export default {
 .store-edit {
   padding: 30px;
   .form-style {
-    width: 600px;
+    width: 750px;
   }
 }
 </style>

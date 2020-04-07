@@ -24,7 +24,7 @@
                         <i class="el-icon-info"></i>
                     </el-tooltip>
                 </span>
-                {{orderItem.sign_user_account?orderItem.sign_user_account:'未签约' }}
+                {{orderItem.sign_user_account? orderItem.sign_user_account:'暂无余额' }}
             </el-form-item>
             <el-form-item label="返还客户金额" prop="return_user_cost">
                 <el-input v-model="determinateOrderForm.return_user_cost" :disabled="!orderItem.sign_user_account" placeholder="请输入返还客户金额"></el-input>

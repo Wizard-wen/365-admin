@@ -118,13 +118,13 @@
                                 end-placeholder="服务结束日期"></el-date-picker>
                         </el-form-item>
                         <el-form-item label="服务地址" prop="service_address" class="form-item-size form-item-1-size" size="small">
-                            <el-input v-model="signForm.service_address" placeholder="请输入服务地址"></el-input>
+                            <el-input v-model="signForm.service_address"  placeholder="请输入服务地址"></el-input>
                         </el-form-item>
                        
                         <el-form-item label="工作时间" prop="service_time" class="form-item-size form-item-1-size" size="small">
-                            <el-input v-model="signForm.service_time" placeholder="请输入劳动者日常工作时间"></el-input>
+                            <el-input v-model="signForm.service_time"  placeholder="请输入劳动者日常工作时间"></el-input>
                         </el-form-item>
-                        <el-form-item label="服务所在行业" prop="work_type" class="form-item-size form-item-1-size" size="small">
+                        <el-form-item label="工种" prop="work_type" class="form-item-size form-item-1-size" size="small">
                             <el-cascader
                                 :disabled="true"
                                 v-model="signForm.work_type"
@@ -147,7 +147,7 @@
                                 :explain="'劳务报酬是指的双方约定的，服务人员服务一个月应得的报酬。'"></form-item-label-tooltip-component>
                             <el-input v-model.number="signForm.staff_wage" placeholder="请输入劳动者劳务报酬"></el-input>
                         </el-form-item>
-                        <el-form-item prop="staff_charge" class="form-item-size form-item-3-size" size="small">
+                        <el-form-item prop="staff_charge" ref="staff_charge" class="form-item-size form-item-3-size" size="small">
                             <form-item-label-tooltip-component
                                 slot="label"
                                 :label="'劳动者服务费'"
@@ -159,7 +159,7 @@
                             </form-item-label-tooltip-component>
                             <el-input :disabled="!isCostomize" v-model.number="signForm.staff_charge" placeholder="请输入劳动者服务费"></el-input>
                         </el-form-item>
-                        <el-form-item prop="user_charge" class="form-item-size form-item-3-size" size="small">
+                        <el-form-item prop="user_charge" ref="user_charge" class="form-item-size form-item-3-size" size="small">
                             <form-item-label-tooltip-component
                                 slot="label"
                                 :label="'客户服务费'"
@@ -171,7 +171,7 @@
                             </form-item-label-tooltip-component>
                             <el-input :disabled="!isCostomize" v-model.number="signForm.user_charge" placeholder="请输入客户服务费"></el-input>
                         </el-form-item>
-                        <el-form-item prop="user_pay" class="form-item-size form-item-3-size" size="small">
+                        <el-form-item prop="user_pay" ref="user_pay" class="form-item-size form-item-3-size" size="small">
                             <form-item-label-tooltip-component
                                 slot="label"
                                 :label="'客户缴纳金额'"
@@ -183,7 +183,7 @@
                             </form-item-label-tooltip-component>
                             <el-input :disabled="!isCostomize" v-model.number="signForm.user_pay" placeholder="请输入客户缴纳金额"></el-input>
                         </el-form-item>
-                        <el-form-item prop="staff_deposit" class="form-item-size form-item-3-size" size="small">
+                        <el-form-item prop="staff_deposit" ref="staff_deposit" class="form-item-size form-item-3-size" size="small">
                             <form-item-label-tooltip-component
                                 slot="label"
                                 :label="'劳动者押金'"
@@ -196,7 +196,7 @@
                         </el-form-item>
                         <el-form-item>
                             <!-- <el-button type="primary" size="mini" :disabled="isCostomize" @click="customizeCharge">自定义金额</el-button> -->
-                            <el-button type="primary" size="mini" :disabled="true" @click="customizeCharge">自定义金额</el-button>
+                            <!-- <el-button type="primary" size="mini" :disabled="true" @click="customizeCharge">自定义金额</el-button> -->
                         </el-form-item>
                     </div>
                 </card-box-component>
@@ -427,12 +427,13 @@ export default {
                 service_count:'',// 服务对象人数
                 service_level:1,// 护理依赖程度
                 service_type:'',// 服务方式
-                work_type: 0, //工种
-
+    
                 service_duration: [],
                 service_start:'',// 服务期限起始
                 service_end: '',//服务期限截止
                 service_time:'',// 工作时间
+                work_type: 0, //工种
+                service_address: '',
 
                 staff_wage:'',// 劳务报酬
                 user_charge:'',// 客户服务费
@@ -474,6 +475,14 @@ export default {
             this.signForm.user_charge = parseInt(val * 0.2)
             this.signForm.user_pay = parseInt(val * 1.2)
             this.signForm.staff_charge = parseInt(val * 0.1)
+            this.$refs.user_charge.clearValidate()
+            this.$refs.user_pay.clearValidate()
+            this.$refs.staff_charge.clearValidate()
+        },
+        'signForm.accessory': function(val, oldVal){
+            if(val.length){
+                this.$refs.accessory.clearValidate()
+            }
         }
     },
     methods: {
@@ -593,6 +602,7 @@ export default {
 
                 let skillTree = this.workerConfigForm.skill
                 let work_type = this.$route.query.work_type
+
                 this.workerItem = data[1].data
                 // 初始化签约服务人员数据
                 this.signForm.sign_staff_name = this.workerItem.name// 签约家政服务员
@@ -603,6 +613,10 @@ export default {
                 this.signForm.sign_staff_urgent = this.workerItem.urgent_phone// 签约家政服务员紧急联系方式
                 this.signForm.sign_staff_law_address = this.workerItem.address_in_law//签约家政服务员户籍地址
                 this.signForm.work_type = this.$utils.setTreeArray(work_type,skillTree)
+
+                // this.signForm.service_address = this.$route.query.service_address
+                // this.signForm.service_time = this.$route.query.service_duration
+
                 this.signForm.insurance_benefit = this.workerItem.name
 
                 
