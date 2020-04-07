@@ -12,6 +12,10 @@
             <el-table-column label="姓名" prop="staff_name" align="center"></el-table-column>
 
             <el-table-column label="电话" prop="staff_phone" align="center"></el-table-column>
+            <el-table-column label="身份证号" prop="identify" align="center"></el-table-column>
+            <el-table-column label="现住址" prop="address" align="center"></el-table-column>
+            <el-table-column label="户籍地址" prop="address_in_law" align="center"></el-table-column>
+            <el-table-column label="紧急联系人" prop="urgent_phone" align="center"></el-table-column>
 
             <el-table-column label="匹配状态" prop="type" align="center">
                 <template slot-scope="scope">

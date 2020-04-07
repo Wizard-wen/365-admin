@@ -8,7 +8,8 @@
 				<div class="detail-left-box">
 					<div class="detail-left-line">编号：{{ storeDetail.store_code }}</div>
 					<div class="detail-left-line">创建人：{{ storeDetail.created_manager_name }}</div>
-					<div class="detail-left-line">创建时间：{{ storeDetail.created_at | timeToDayFomatter }}</div>
+					<div class="detail-left-line">创建时间：{{ storeDetail.created_at | timeToSecondFomatter }}</div>
+					<div class="detail-left-line">更新时间：{{ storeDetail.updated_at | timeToSecondFomatter }}</div>
 					<div class="detail-left-line">门店类型：{{storeDetail.is_third == 1 ? '直营店': '加盟店'}}</div>
 					<div class="detail-left-line">门店负责人：{{ storeDetail.store_manager_name }}</div>
 					<div class="detail-left-line">门店地址：{{storeDetail.address}}</div>

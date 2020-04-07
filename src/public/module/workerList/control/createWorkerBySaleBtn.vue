@@ -35,7 +35,8 @@ export default {
          * des 先创建服务人员，然后才能添加服务人员技能。
          */
         openCreateWorkerBySaleDialog(){
-            this.createWorkerDialogVisible = true;
+            this.$router.push('/sale/saleApplyWorker')
+            // this.createWorkerDialogVisible = true;
         },
         closeCreateWorkerDialog(){
             this.createWorkerDialogVisible=false       

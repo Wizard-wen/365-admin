@@ -13,7 +13,7 @@ import saleSettleWage from '@/pages/sale/saleSettleWage.vue'//结算工资页面
 import saleTerminateContract from '@/pages/sale/saleTerminateContract.vue'//提前终止合同页面
 import saleTestJsPdf from '@/pages/sale/saleTestJsPdf.vue'
 import jspdfdemo2 from '@/pages/sale/jspdfdemo2.vue'
-
+import saleApplyWorker from '@/pages/sale/saleApplyWorker.vue' //门店申请创建劳动者
 import salePublicOrderList from '@/pages/sale/salePublicOrderList.vue'//公海订单列表
 import salePublicOrderConfig from '@/pages/sale/salePublicOrderConfig.vue'//公海订单详情
 import saleContractList from '@/pages/sale/saleContractList.vue'//我的合同列表
@@ -88,6 +88,11 @@ export const saleConfigModule = [
         name: 'saleWorkerList',
         component: saleWorkerList,
     },//门店全部服务人员信息
+    {
+        path: '/sale/saleApplyWorker',
+        name: 'saleApplyWorker',
+        component: saleApplyWorker,
+    },//门店创建服务人员
     {
         path: '/sale/saleWorkerShow',
         name: 'saleWorkerShow',

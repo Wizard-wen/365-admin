@@ -1,6 +1,7 @@
 import {
     apiRequestWorker,
     apiRequestOrder,
+    apiRequestFormConfig,
 } from '@/request/index'
 import {
     changeWorkerTypeForm,
@@ -56,5 +57,12 @@ export const publicWorkerListService = {
      */
     checkNewWorkerPhone(checkWorkerPhoneForm:checkWorkerPhoneForm){
         return apiRequestWorker.checkStaffPhone(checkWorkerPhoneForm)
-    }
+    },
+    /**
+     * 
+     * @param type 查询类型  edit 使用 config 编辑
+     */
+    async getWorkerConfigForm(type:string):Promise<any>{
+        return apiRequestFormConfig.getWorkerFormConfig(type)
+    },
 }
