@@ -60,7 +60,7 @@
                         v-model="productForm.files"
                         :title="'商品详情'"
                         :maxCount="10"
-                        :height="200"
+                        :height="400"
                         :width="200"></multiple-picture-upload>
                     <p>图片比例为1（宽）:2（高），请尽量上传高质量图片</p>
                 </el-form-item>
