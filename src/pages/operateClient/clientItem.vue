@@ -13,8 +13,6 @@
             <div class="detail-left">
                 <div class="detail-left-box">
                     <div class="detail-left-line">手机号：{{userItem.phone}}</div>
-                    <!-- <div class="detail-left-line">创建时间：{{userItem.created_at | timeToDayFomatter}}</div> -->
-                    <!-- <div class="detail-left-line">更新时间：{{userItem.updated_at | timeToDayFomatter}}</div> -->
                 </div>
             </div>
         </template>
@@ -23,16 +21,32 @@
                 <el-button size="mini" @click="goback">返回</el-button>
             </div>
         </template>
+        <template slot="form">
+            <card-box-component 
+                :title="'客户订单'">
+                <order-table-component
+                    :orderModuleType="'client'"
+                    :tableData="orderTable"
+                    :orderConfigForm="orderConfigForm"></order-table-component>
+            </card-box-component>
+            
+        </template>
     </page-edit-component>
 </template>
 
 <script>
 import {clientService} from '@/service/operateClient.ts'
+import orderTableComponent from './clientItem/orderTableComponent.vue'
 export default {
+    components: {
+        orderTableComponent,
+    },
     data(){
         return {
             is_loading: false,
             userItem: {},
+            orderConfigForm: {},
+            orderTable: [],
 
         }
     },
@@ -43,7 +57,9 @@ export default {
 
                 await clientService.getUser(this.$route.query.id).then((data) =>{
 
-                    this.userItem = data.data
+                    this.userItem = data[0].data
+                    this.orderTable = data[0].data.orders
+                    this.orderConfigForm = data[1].data
                     this.is_loading = false
                 }).catch(error =>{
                     this.$message({

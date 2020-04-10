@@ -88,7 +88,7 @@
                             <div class="title">工资账单明细</div>
                             <div class="level-1">
                                 <span class="label">结算时间：</span>
-                                {{contractBase.account.created_at | timeToDayFomatter}}
+                                {{contractBase.account.created_at | timeToSecondFomatter}}
                             </div>
                             <div class="level-1">
                                 <span class="label">服务周期：</span>

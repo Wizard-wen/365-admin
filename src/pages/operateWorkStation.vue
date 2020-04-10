@@ -128,6 +128,9 @@ export default {
         goOperateVoidContractList(){
             this.$router.push('/operate/operateVoidContractList')
         },
+
+
+
         //服务商品列表
         goProductList(){
             this.$router.push('/operate/productList')
@@ -148,6 +151,11 @@ export default {
         goCustomAdList(){
             this.$router.push('/operate/customAdPositionList')
         },
+        // 官网广告位
+        goOfficialAdList(){
+            this.$router.push(`/operate/showAdPositionList`)
+        },
+        
         /**
          * 获取运营工作台数据
          */

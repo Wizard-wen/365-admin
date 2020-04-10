@@ -15,6 +15,10 @@ export default {
          * 返回
          */
         goback(){
+            if(this.$route.query.module == 'client'){
+                this.$router.go(-1)
+
+            }
             if(this.publicOrderType == 3){
                 this.$router.push({
                     path: '/sale/saleOrderList',
@@ -36,7 +40,9 @@ export default {
                         currentPage: this.$route.query.currentPage
                     }
                 })  
-            } 
+            }  else {
+                this.$router.go(-1)
+            }
         },
     }
 }

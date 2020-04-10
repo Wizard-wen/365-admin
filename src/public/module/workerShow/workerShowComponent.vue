@@ -13,9 +13,9 @@
             <div class="detail-left">
                 <div class="detail-left-box">
                     <div class="detail-left-line">创建人：{{workerForm.manager_name}}</div>
-                    <div class="detail-left-line">创建时间：{{workerForm.created_at | timeToDayFomatter}}</div>
-                    <div class="detail-left-line">更新时间：{{workerForm.updated_at | timeToDayFomatter}}</div>
-                    <div class="detail-left-line">上次回访时间：{{workerForm.return_at | timeToDayFomatter}}</div>
+                    <div class="detail-left-line">创建时间：{{workerForm.created_at | timeToSecondFomatter}}</div>
+                    <div class="detail-left-line">更新时间：{{workerForm.updated_at | timeToSecondFomatter}}</div>
+                    <div class="detail-left-line">上次回访时间：{{workerForm.return_at | timeToSecondFomatter}}</div>
                 </div>
             </div>
         </template>

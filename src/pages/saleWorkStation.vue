@@ -4,9 +4,9 @@
             <statistic-card-component
                 :title="'订单转化率'" :statisticItem="saleWorkStation.order_transform_rate"></statistic-card-component>
             <statistic-card-component
-                :title="'订单流水'" :statisticItem="saleWorkStation.sale_amount"></statistic-card-component>
+                :title="'订单累计流水'" :statisticItem="saleWorkStation.sale_amount"></statistic-card-component>
             <statistic-card-component
-                :title="'销售额'" :statisticItem="saleWorkStation.sale_service_amount"></statistic-card-component>
+                :title="'累计服务费'" :statisticItem="saleWorkStation.sale_service_amount"></statistic-card-component>
             <statistic-card-component v-hide></statistic-card-component>
         </div>
         <div class="down-board">
@@ -21,10 +21,10 @@
                             <div class="control" @click="openOrderApplyDialog">申请订单</div>
                             <div class="control" @click="goSaleWorkerList">服务人员信息库</div>
                             <div class="control" @click="goSaleOrderList">我的订单</div>
-                            <div class="control" >我的客户</div>
+                            <div class="control" @click="goSaleApplyWorker">申请创建服务人员</div>
                             <div class="control" @click="goContractList">我的合同</div>
                             <div class="control" @click="goPublicOrderList">公海订单</div>
-                            <div class="control" @click="goSaleOwnWorkerList">我创建的服务人员</div>
+                            <!-- <div class="control" @click="goSaleOwnWorkerList">我创建的服务人员</div> -->
                         </div>
                     </template>
                 </card-box-component>
@@ -142,6 +142,14 @@ export default {
                     order_id: item.id
                 }
             })
+        },
+        /**
+         * 进入申请创建服务人员页
+         */
+        goSaleApplyWorker(){
+            this.$router.push({
+                path: `/sale/saleApplyWorker`,
+            })
         }
 
     },
@@ -150,7 +158,7 @@ export default {
             this.is_loading = true
 
             let getSaleWorkerStationForm = {
-                store_id: this.presentUser.is_store_manager == 2 ?this.presentUser.store_id :this.presentUser.id,
+                store_id: this.presentUser.store_id,
                 id: this.presentUser.is_store_manager == 2 ?this.presentUser.store_id :this.presentUser.id,
                 get_for:this.presentUser.is_store_manager == 2? "store" : "personal"
             }

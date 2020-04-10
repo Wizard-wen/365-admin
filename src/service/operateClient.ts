@@ -1,4 +1,7 @@
-import {apiRequestUser} from '../request/user/index'
+import {
+    apiRequestUser,
+    apiRequestFormConfig,
+} from '../request/index'
 
 import {$utils} from '@/utils/index'
 /**
@@ -13,6 +16,10 @@ export const clientService = {
      * 获取用户信息
      */
     getUser(id:number):Promise<any>{
-        return apiRequestUser.getUser(id)
-    }
+        return Promise.all([
+            apiRequestUser.getUser(id),
+            apiRequestFormConfig.getWorkerFormConfig('edit'),
+        ])
+    },
+
 }

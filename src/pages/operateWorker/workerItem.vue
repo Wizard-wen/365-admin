@@ -24,9 +24,9 @@
             <div class="detail-left">
                 <div class="detail-left-box">
                     <div class="detail-left-line">创建人：{{workerForm.manager_name}}</div>
-                    <div class="detail-left-line">创建时间：{{workerForm.created_at | timeToDayFomatter}}</div>
-                    <div class="detail-left-line">更新时间：{{workerForm.updated_at | timeToDayFomatter}}</div>
-                    <div class="detail-left-line">上次回访时间：{{workerForm.return_at | timeToDayFomatter}}</div>
+                    <div class="detail-left-line">创建时间：{{workerForm.created_at | timeToSecondFomatter}}</div>
+                    <div class="detail-left-line">更新时间：{{workerForm.updated_at | timeToSecondFomatter}}</div>
+                    <div class="detail-left-line">上次回访时间：{{workerForm.return_at | timeToSecondFomatter}}</div>
                 </div>
             </div>
         </template>
@@ -73,14 +73,15 @@
                         <el-input v-model="workerForm.phone" :maxlength="11" placeholder="请输入手机号"></el-input>
                     </el-form-item>
                     <el-form-item label="性别" prop="sex" class="form-item-3-size">
-                        <!-- <el-radio-group v-model="workerForm.sex">
-                            <el-radio :label="1">男</el-radio>
-                            <el-radio :label="2">女</el-radio>
-                        </el-radio-group> -->
+                        
                         <el-tooltip slot="label" class="item" effect="dark" content="性别根据身份证号确定" placement="top-start">
                             <span>性别<i class="el-icon-info"></i></span>
                         </el-tooltip>
-                        {{workerForm.sex | sexFilter}}
+                        <p v-if="workerForm.identify">{{workerForm.sex | sexFilter}}</p>
+                        <el-radio-group v-else v-model="workerForm.sex">
+                            <el-radio :label="1">男</el-radio>
+                            <el-radio :label="2">女</el-radio>
+                        </el-radio-group>
                     </el-form-item>
 
                     <el-form-item label="身份证号码" prop="identify" class="form-item-size form-item-3-size" size="small">
@@ -91,14 +92,24 @@
                         <el-tooltip slot="label" class="item" effect="dark" content="年龄根据身份证号确定" placement="top-start">
                             <span>年龄<i class="el-icon-info"></i></span>
                         </el-tooltip>
-                        {{workerForm.age? workerForm.age: '-'}}
+                        <p v-if="workerForm.identify">{{ workerForm.age}}</p>
+                        <el-input v-else v-model="workerForm.age" :maxlength="18" placeholder="请输入年龄"></el-input>
                     </el-form-item>
 
                     <el-form-item prop="birthday" class="form-item-size form-item-3-size" size="small">
                         <el-tooltip slot="label" class="item" effect="dark" content="出生日期根据身份证号确定" placement="top-start">
                             <span>出生日期<i class="el-icon-info"></i></span>
                         </el-tooltip>
-                        {{ workerForm.birthday | timeToDayFomatter }}
+                        <p v-if="workerForm.identify">{{ workerForm.birthday | timeToDayFomatter }}</p>
+                        <el-date-picker  
+                            v-else
+                            v-model="workerForm.birthday" 
+                            :default-value="new Date()"
+                            :picker-options="pickerOptions"
+                            type="date" 
+                            placeholder="请选择生日"
+                            format="yyyy 年 MM 月 dd 日" 
+                            value-format="timestamp"></el-date-picker>
                     </el-form-item>
 
                     <el-form-item label="民族" prop="nation" class="form-item-size form-item-3-size" size="small">
@@ -407,6 +418,13 @@ export default {
             phoneCheck: false,
             phoneCheckObject: {
 
+            },
+            // 日期选择器设置为只能选择今天之前的日子
+            pickerOptions: {
+                disabledDate(time) {
+                    var times = Date.now() - 24 * 60 * 60 * 1000;
+                    return time.getTime() > times;
+                }
             },
             //图片上传header
             uploadHeader:{

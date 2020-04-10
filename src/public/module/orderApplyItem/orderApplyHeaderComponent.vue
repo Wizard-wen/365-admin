@@ -25,7 +25,7 @@
                     <div 
                         class="detail-left-line" 
                         v-if="orderApplyModuleType == 'apply'">申请创建人：{{ currentOrderApply.created_manager_name }}</div>
-                    <div class="detail-left-line">申请创建时间：{{ currentOrderApply.created_at | timeToDayFomatter }}</div>
+                    <div class="detail-left-line">申请创建时间：{{ currentOrderApply.created_at | timeToSecondFomatter }}</div>
                     <div 
                         class="detail-left-line" 
                         v-if="orderApplyModuleType == 'apply'">来源门店：{{currentOrderApply.apply_store_name }}</div>

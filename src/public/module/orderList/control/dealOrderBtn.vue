@@ -1,5 +1,5 @@
 <template>
-    <el-button size="mini" type="primary" @click="dealOrder">处理订单</el-button>
+    <el-button size="mini" type="primary" @click="dealOrder">{{orderModuleType == 'client'? '查看订单': '处理订单'}}</el-button>
 </template>
 
 <script>
@@ -28,6 +28,8 @@ export default {
                 return {id: 3, path: '/sale/salePublicOrderConfig',}
             } else if(this.orderModuleType == 'operate'){
                 return {id: 1, path: '/operate/operateOrderConfig',}
+            } else if(this.orderModuleType == 'client'){
+                return {id: 4, path: '/operate/operateOrderConfig',}
             }
         },
         /**

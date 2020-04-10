@@ -1,8 +1,5 @@
 <template>
     <div class="table-contains">
-        <div class="btn-contains">
-
-        </div>
         <el-table 
             :data="tableData" 
             class="table-list" 
@@ -12,42 +9,29 @@
                 <template slot-scope="props">
                     <table-item-form 
                         @updateTable="$emit('updateTable')" 
-                        :currentOrderApply="props.row"
+                        :currentOrder="props.row"
                         :currentPage="currentPage"
-                        :orderApplyConfigForm="orderApplyConfigForm"
-                        :orderApplyModuleType="orderApplyModuleType"></table-item-form>
+                        :orderConfigForm="orderConfigForm"
+                        :orderModuleType="orderModuleType"></table-item-form>
                 </template>
             </el-table-column>
 
-            <el-table-column  
-                v-if="orderApplyModuleType=='apply'" 
-                label="订单申请编号" prop="apply_code" align="center" width="150"></el-table-column>
+            <el-table-column  label="订单编号" prop="order_code" align="center" width="150"></el-table-column>
 
-            <el-table-column  
-                v-if="orderApplyModuleType=='require'" 
-                label="需求申请编号" prop="require_code" align="center" ></el-table-column>
-            <el-table-column  
-                label="申请时间" prop="created_at" align="center" width="100"
-                :formatter="created_atFormatter"></el-table-column>
-
-            <el-table-column  label="申请状态" prop="type" align="center" width="100">
+            <el-table-column  v-if="orderModuleType=='operate' || orderModuleType=='sale'" label="订单状态" prop="type" align="center" width="100">
                 <template slot-scope="scope">
                     <table-tag-component 
-                    v-if="order_apply_typeList" 
-                    :propList="order_apply_typeList" 
+                    v-if="order_typeList" 
+                    :propList="order_typeList" 
                     :tableOriginData="scope.row.type"></table-tag-component>
                 </template>
             </el-table-column>
 
-            <el-table-column  label="工种" prop="work_type" align="center" width="120">
+            <el-table-column  label="工种" prop="work_type" align="center" >
                 <template slot-scope="scope">
-                    <!-- <el-popover trigger="click" placement="top">
-                        <p>{{ scope.row.work_type }}</p>
-                        <p slot="reference" class="overCellText">{{ scope.row.work_type }}</p>
-                    </el-popover> -->
                     <table-tag-component 
-                        v-if="orderApplyConfigForm.skill" 
-                        :propList="orderApplyConfigForm.skill" 
+                        v-if="orderConfigForm.skill" 
+                        :propList="orderConfigForm.skill" 
                         :tableOriginData="scope.row.work_type"></table-tag-component>
                 </template>
             </el-table-column>
@@ -61,7 +45,7 @@
                 </template>
             </el-table-column>
 
-            <el-table-column  label="服务地址" prop="service_address" align="center" width="300">
+            <el-table-column  label="服务地址" prop="service_address" align="center" >
                 <template slot-scope="scope">
                     <el-popover trigger="click" placement="top">
                         <p>{{ scope.row.service_address }}</p>
@@ -79,7 +63,7 @@
                 </template>
             </el-table-column>
 
-            <el-table-column  label="工资" prop="wage" align="center" width="120">
+            <el-table-column  label="工资" prop="wage" align="center" >
                 <template slot-scope="scope">
                     <el-popover trigger="click" placement="top">
                         <p>{{ scope.row.wage }}</p>
@@ -92,18 +76,15 @@
     
 </template>
 <script>
-    import {operateService} from '@common/index.js'
 
-    import tableItemForm from './orderApplyTableComponent/tableItemForm.vue'
+
+    import tableItemForm from './orderTableComponent/tableItemForm.vue'
     
-    import {order_apply_typeList} from '@/public/module/orderApplyList/IorderApplyList.ts'
-    
-    
+    import {order_typeList} from '@/public/module/orderList/IorderList.ts'
     
     export default {
         components: {
             tableItemForm,
-            
         },  
         props: {
             //列表数据
@@ -111,7 +92,7 @@
                 type: Array,
                 default:function(){return []}
             },
-            orderApplyConfigForm: {
+            orderConfigForm: {
                 type: Object,
                 default: function(){return {}}
             },
@@ -119,22 +100,25 @@
                 type: String | Number,
                 default: 1,
             },
-            orderApplyModuleType: {
+            orderModuleType: {
                 type: String,
-                default: 'apply',
+                default: 'operate',
             }
         },
         data(){
             return {
-                order_apply_typeList,
+                order_typeList,
             }
         },
         methods: {
-            created_atFormatter(row, column){
-                if(row.created_at == 0){
+            /**
+             * 客户下单时间字段转换
+             */
+            orderAtFormatter(row, column){
+                if(row.order_at == 0){
                     return '-'
                 }
-                return this.$utils.formatDate(new Date(row.created_at), 'yyyy-MM-dd hh:mm:ss')
+                return this.$utils.formatDate(new Date(row.order_at), 'yyyy-MM-dd')
             },
         }
     }

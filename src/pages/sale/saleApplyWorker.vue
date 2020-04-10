@@ -2,38 +2,15 @@
     <page-edit-component
         v-loading="is_loading"
         :title="workerForm.name">
-
-        <template slot="icon" >
-            <!-- <icon-component
-                :iconUrl="workerForm.icon?`${workerForm.icon}`:''"
-                :height="140"
-                :width="100"></icon-component> -->
-            <!-- <el-image 
-                class="icon-box"
-                :src="workerForm.icon" 
-                :fit="'contain'"
-                :preview-src-list="[workerForm.icon]">
-                <div slot="error" class="image-slot">
-                    <i class="el-icon-picture-outline"></i>
-                </div>
-            </el-image> -->
-            
-        </template>
         
         <template slot="detail" >
             <div class="detail-left">
                 <div class="detail-left-box">
-                    <!-- <div class="detail-left-line">创建人：{{workerForm.manager_name}}</div>
-                    <div class="detail-left-line">创建时间：{{workerForm.created_at | timeToDayFomatter}}</div> -->
-                    <!-- <div class="detail-left-line">更新时间：{{workerForm.updated_at | timeToDayFomatter}}</div>
-                    <div class="detail-left-line">上次回访时间：{{workerForm.return_at | timeToDayFomatter}}</div> -->
                 </div>
             </div>
         </template>
         <template slot="statistic">
-            <!-- <worker-status
-                v-if="$route.query.type !=0"
-                :workerForm="workerForm"></worker-status> -->
+            
         </template>
         <template slot="control">
             <div class="control-contains">
@@ -64,14 +41,13 @@
                         <el-input v-model="workerForm.phone" :maxlength="11" placeholder="请输入手机号"></el-input>
                     </el-form-item>
                     <el-form-item label="性别" prop="sex" class="form-item-3-size">
-                        <!-- <el-radio-group v-model="workerForm.sex">
-                            <el-radio :label="1">男</el-radio>
-                            <el-radio :label="2">女</el-radio>
-                        </el-radio-group> -->
                         <el-tooltip slot="label" class="item" effect="dark" content="性别根据身份证号确定" placement="top-start">
                             <span>性别<i class="el-icon-info"></i></span>
                         </el-tooltip>
-                        {{workerForm.sex | sexFilter}}
+                        <el-radio-group v-model="workerForm.sex">
+                            <el-radio :label="1">男</el-radio>
+                            <el-radio :label="2">女</el-radio>
+                        </el-radio-group>
                     </el-form-item>
 
                     <el-form-item label="身份证号码" prop="identify" class="form-item-size form-item-3-size" size="small">
@@ -82,14 +58,21 @@
                         <el-tooltip slot="label" class="item" effect="dark" content="年龄根据身份证号确定" placement="top-start">
                             <span>年龄<i class="el-icon-info"></i></span>
                         </el-tooltip>
-                        {{workerForm.age? workerForm.age: '-'}}
+                        <el-input v-model="workerForm.age" :maxlength="18" placeholder="请输入年龄"></el-input>
                     </el-form-item>
 
                     <el-form-item prop="birthday" class="form-item-size form-item-3-size" size="small">
                         <el-tooltip slot="label" class="item" effect="dark" content="出生日期根据身份证号确定" placement="top-start">
                             <span>出生日期<i class="el-icon-info"></i></span>
                         </el-tooltip>
-                        {{ workerForm.birthday | timeToDayFomatter }}
+                        <el-date-picker 
+                            v-model="workerForm.birthday" 
+                            :default-value="new Date()"
+                            :picker-options="pickerOptions"
+                            type="date" 
+                            placeholder="请选择生日"
+                            format="yyyy 年 MM 月 dd 日" 
+                            value-format="timestamp"></el-date-picker>
                     </el-form-item>
 
                     <el-form-item label="民族" prop="nation" class="form-item-size form-item-3-size" size="small">
@@ -403,6 +386,13 @@ export default {
             //图片上传header
             uploadHeader:{
                 accessToken: this.$store.state.loginModule.token.access_token
+            },
+            // 日期选择器设置为只能选择今天之前的日子
+            pickerOptions: {
+                disabledDate(time) {
+                    var times = Date.now() - 24 * 60 * 60 * 1000;
+                    return time.getTime() > times;
+                }
             },
             //员工信息表单
             workerForm: {

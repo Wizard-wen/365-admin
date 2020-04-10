@@ -9,21 +9,22 @@
                 :publicOrderType="2"
                 :orderBaseDetail="clientRequireItem"
                 @updatePublicOrderBase="getClientRequire"></public-order-base-component>
+            <order-apply-log :isEdit="false" :order_logs="requireLogTable"></order-apply-log>
         </div>
     </div>
 </template>
 
-        }
 <script>
 import {operateOrderService} from '@/service/operateOrder.ts'
 
 import orderApplyHeaderComponent from '@/public/module/orderApplyItem/orderApplyHeaderComponent.vue'
 import {publicOrderBaseComponent} from '@/public/module/orderPublic/index.js'
-
+import orderApplyLog from './orderApplyItem/orderApplyLog.vue'
 export default {
     components: {
         publicOrderBaseComponent,
         orderApplyHeaderComponent,
+        orderApplyLog,
     },
     data() {
         return {
@@ -46,6 +47,7 @@ export default {
                 user_phone: '',
                 user_name: '',
             },
+            requireLogTable:[],
         };
     },
     methods: {
@@ -57,7 +59,8 @@ export default {
                 this.is_loading = true
                 await operateOrderService.getClientRequire(this.$route.query.id).then(data => {
                     if (data.code == "0") {
-                        this.clientRequireItem = data.data;
+                        this.clientRequireItem = data.data.require;
+                        this.requireLogTable = data.data.requireLog;
                         this.is_loading = true
                     }
                 }).catch(error => {

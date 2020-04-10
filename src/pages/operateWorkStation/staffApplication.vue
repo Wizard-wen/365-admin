@@ -16,7 +16,7 @@
                     <div class="text">创建人：{{item.manager_name}}</div>
                 </div>
                 <div class="control">
-                    <div class="time">{{item.created_at | timeToDayFomatter}}</div>
+                    <div class="time">{{item.created_at | timeToSecondFomatter}}</div>
                     <div class="btn" @click="goworkerItemPage(item)">
                         <i class="el-icon-d-arrow-right"></i>
                     </div>

@@ -6,7 +6,7 @@
 			</el-form-item>
 
 			<el-form-item label="创建时间" prop="created_at">
-				{{storeForm.created_at | timeToDayFomatter}}
+				{{storeForm.created_at | timeToSecondFomatter}}
 			</el-form-item>
 
 			<el-form-item label="创建人" prop="created_manager_name">

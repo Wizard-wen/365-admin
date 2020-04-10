@@ -96,7 +96,7 @@ export default {
          */
         publicOrderType: {    
             type: Number | String,
-            default: 1,
+            default: 0,
         },
         /**
          * 所属模块

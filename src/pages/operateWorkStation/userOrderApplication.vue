@@ -16,7 +16,7 @@
                     <div class="text">{{item.work_type}} / {{item.wage}} / {{item.service_duration}}</div>
                 </div>
                 <div class="control">
-                    <div class="time">{{item.created_at | timeToDayFomatter}}</div>
+                    <div class="time">{{item.created_at | timeToSecondFomatter}}</div>
                     <div class="btn" @click="goClientRequireItemPage(item)">
                         <i class="el-icon-d-arrow-right"></i>
                     </div>

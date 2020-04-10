@@ -18,7 +18,7 @@
         <div class="detail-left">
             <div class="detail-left-box">
                 <div class="detail-left-line">合同流水号：{{contractBase.contract_code}}</div>
-                <div class="detail-left-line">签约时间：{{contractBase.sign_at | timeToDayFomatter}}</div>
+                <div class="detail-left-line">签约时间：{{contractBase.sign_at | timeToSecondFomatter}}</div>
                 <div class="detail-left-line">签约经纪人：{{ contractBase.sign_manager_name }}</div>
                 <div class="detail-left-line">签约经纪门店：{{ contractBase.sign_store_name }}</div>
             </div>

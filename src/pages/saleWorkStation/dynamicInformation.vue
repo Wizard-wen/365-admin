@@ -18,7 +18,7 @@
                                 </div>
                                 
                             </div>
-                            <div class="time">{{item.created_at | timeToDayFomatter}}</div>
+                            <div class="time">{{item.created_at | timeToSecondFomatter}}</div>
                         </div>
                         <div class="order-message">
                             <el-tag class="tag-item" size="mini" v-if="item.work_type">{{item.work_type}}</el-tag>
