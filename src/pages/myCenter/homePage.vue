@@ -5,7 +5,15 @@
 				
 				<div class="home-icon-box">
 					<div class="home-icon">
-						<img :src="presentUser.icon? `${presentUser.icon}` : noHeaderImage" alt="">
+						<!-- <img :src="presentUser.icon? `${presentUser.icon}` : noHeaderImage" alt=""> -->
+						<el-image 
+							style="width: 100px; height: 140px"
+							:src="presentUser.icon"
+							:fit="'fit'">
+							<div slot="error" class="image-slot">
+								<i class="el-icon-picture-outline"></i>
+							</div>
+						</el-image>
 					</div>
 					<div class="home-name">{{presentUser.real_name}}</div>
 					<div class="home-intro">海纳百川，有容乃大！</div>
@@ -228,11 +236,20 @@ export default {
 				.home-icon {
 					height: 140px;
 					width: 100px;
-					// border-radius: 4px;
-					& img {
+					// // border-radius: 4px;
+					// & img {
+					// 	height: 140px;
+					// 	width: 100px;
+					// 	border-radius: 4px;
+					// }
+					& /deep/ .image-slot{
 						height: 140px;
 						width: 100px;
+						text-align: center;
+						line-height: 140px;
+						border: 1px dashed #ccc;
 						border-radius: 4px;
+						font-size: 16px;
 					}
 				}
 				.home-name {

@@ -161,10 +161,15 @@ export default {
          */
         async getData(){
             try{
+                let get_for = 'personal'
+                if(this.presentUser.department_id == 1 ||
+                this.presentUser.department_id == 6){
+                    get_for = 'total'
+                }
                 this.is_loading = true
                 let getOperateWorkerStationForm = {
                     id: this.presentUser.id,
-                    get_for:this.presentUser.department_id == 1? 'total':"personal"
+                    get_for:get_for
                 }
                 await operateWorkerStationService.getOperateWorkerStation(getOperateWorkerStationForm).then(data =>{
                     if(data.code == '0'){

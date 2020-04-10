@@ -6,7 +6,7 @@
             <statistic-card-component
                 :title="'订单累计流水'" :statisticItem="saleWorkStation.sale_amount"></statistic-card-component>
             <statistic-card-component
-                :title="'累计服务费'" :statisticItem="saleWorkStation.sale_service_amount"></statistic-card-component>
+                :title="'服务费（销售额）'" :statisticItem="saleWorkStation.sale_service_amount"></statistic-card-component>
             <statistic-card-component v-hide></statistic-card-component>
         </div>
         <div class="down-board">

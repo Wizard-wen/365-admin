@@ -42,13 +42,14 @@
 
 		<div slot="form" style="width: 100%">
 			<div class="performance">
-				<statistic-card-component v-hide
-					:title="'订单转化率'" ></statistic-card-component>
-				<statistic-card-component v-hide
-					:title="'订单流水'" ></statistic-card-component>
-				<statistic-card-component v-hide
-					:title="'销售额'" ></statistic-card-component>
+				<statistic-card-component
+                :title="'订单转化率'" :statisticItem="saleWorkStation.order_transform_rate"></statistic-card-component>
+				<statistic-card-component
+					:title="'订单累计流水'" :statisticItem="saleWorkStation.sale_amount"></statistic-card-component>
+				<statistic-card-component
+					:title="'服务费（销售额）'" :statisticItem="saleWorkStation.sale_service_amount"></statistic-card-component>
 				<statistic-card-component v-hide></statistic-card-component>
+				<!-- <statistic-card-component v-hide></statistic-card-component> -->
 			</div>
 
 			<!-- <chart-box></chart-box> -->
@@ -64,7 +65,7 @@
 <script>
 import { storeService } from "@/service/store";
 
-
+import {saleWorkstationService} from '@/service/saleWorkStation'
 import chartBox from './storeStatistic/chartBox.vue'
 import storeStaffList from './storeItem/storeStaffList.vue'
 
@@ -83,6 +84,7 @@ export default {
 			is_loading: false,
 			//员工列表
 			salesPersonTable: [],
+			saleWorkStation: {},
 		};
 	},
 	methods: {
@@ -116,6 +118,41 @@ export default {
 			}
 
 		},
+		async getStoreStatistic(){
+			try{
+				this.is_loading = true
+
+				let getSaleWorkerStationForm = {
+					store_id: this.$route.query.id,
+					id: this.$route.query.id,
+					get_for:"store" 
+				}
+
+				await saleWorkstationService.getSaleWorkBench(getSaleWorkerStationForm).then(data =>{
+					if(data.code == '0'){
+						//设置工作台数据
+						this.saleWorkStation = {
+							...data.data,
+						}
+						this.is_loading = false
+					}
+				}).catch(error =>{
+					this.$message({
+						message: error.message,
+						type: 'error'
+					})
+					this.is_loading = false
+				}).finally(() =>{
+					this.is_loading = false
+				})
+			} catch(error){
+				this.$message({
+					message: error.message,
+					type: 'error'
+				})
+				this.is_loading = false
+			}
+		},
 		/**
 		 * 编辑门店信息
 		 */
@@ -135,6 +172,7 @@ export default {
 	},
 	async mounted() {
 		await this.getStore();
+		await this.getStoreStatistic()
 	}
 };
 </script>
