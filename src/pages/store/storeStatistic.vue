@@ -12,9 +12,9 @@
  
             <div style="display:flex;justify-content:space-around">
                 <bar-box :title="'行业分析'"></bar-box>
-                <bar-box style="margin-left: 10px;" :title="'培训课程分析'"></bar-box>
+                <bar-box style="margin-left: 10px;" :title="'培训课程分析'" v-hide></bar-box>
             </div>
-            <sort-store-by-skill-box></sort-store-by-skill-box>
+            <sort-store-by-skill-box v-hide></sort-store-by-skill-box>
         </div>
         
     </div>

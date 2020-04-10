@@ -74,6 +74,7 @@ export default {
     async mounted(){
         try{
             this.is_loading = true
+            console.log(1)
             await html2canvas(this.$refs.imageCutBox).then(async canvas =>{
                 
                 //生成base64图片
@@ -92,12 +93,16 @@ export default {
                 //formData对象
                 let canvasFormData = new FormData()
                 
-                canvasFormData.append("file", blob)
+                canvasFormData.append("file", blob,'名片')
 
                 //上传至服务器
-                await axios.post("./admin/common/uploadImage",canvasFormData).then(data =>{
-                    
-                    this.canvasCompletedImage = ''+data.data.url
+                await axios.post("./admin/common/uploadImage",canvasFormData,{ 
+                    headers: {
+                        'Content-Type': 'multipart/form-data'
+                    }
+                }).then(data =>{
+                    console.log('图片',data)
+                    this.canvasCompletedImage = data.data.url
                     
                     this.is_loading = false
                     

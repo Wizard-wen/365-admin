@@ -44,16 +44,16 @@
                     </el-radio-group>
                 </el-form-item>
 
-                <el-form-item label="商品类型">
+                <!-- <el-form-item label="商品类型">
                     <el-radio-group v-model="productForm.product_type">
                         <el-radio :label="1">签约型</el-radio>
                         <el-radio :label="2">商品型</el-radio>
                     </el-radio-group>
-                </el-form-item>
+                </el-form-item> -->
 
-                <el-form-item label="商品规格">
+                <!-- <el-form-item label="商品规格">
                     
-                </el-form-item>
+                </el-form-item> -->
                 
                 <el-form-item label="商品详情" prop="files" ref="files" v-if="hasParentNode">
                     <multiple-picture-upload

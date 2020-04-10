@@ -156,7 +156,7 @@ export default {
                 this.is_loading = true
                 let getOperateWorkerStationForm = {
                     id: this.presentUser.id,
-                    get_for:"personal"
+                    get_for:this.presentUser.department_id == 1? 'total':"personal"
                 }
                 await operateWorkerStationService.getOperateWorkerStation(getOperateWorkerStationForm).then(data =>{
                     if(data.code == '0'){
