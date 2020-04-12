@@ -9,7 +9,7 @@
                 v-for="(item, index) in sortList" 
                 :key="index">
                 <div :class="['rank',index < 3?'rank-high': '']">{{index+1}}</div>
-                <div class="sort-item-name">{{item.store_name}}</div>
+                <div class="sort-item-name">{{item.manager_name}}</div>
                 <div class="sort-item-number">{{item[currentKey]}}</div>
             </div>
         </div>

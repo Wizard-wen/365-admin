@@ -8,6 +8,7 @@
             <statistic-card-component
                 :title="'审核新服务人员'" :statisticItem="operateWorkerStation.pass_staff_count"></statistic-card-component>
             <statistic-card-component
+                v-hide
                 :title="'回访客户'" :statisticItem="operateWorkerStation.return_client_count"></statistic-card-component>
         </div>
         <div class="down-board">
@@ -37,24 +38,14 @@
                         </div>
                     </template>
                 </card-box-component>
-
-                <card-box-component :title="'业绩排行'" v-hide>
-                    <template slot="control">
-                        <div class="rank-control">
-                            <div class="type">销售额</div>
-                            <div class="type">劳动者</div>
-                            <div class="type">签单量</div>
-                            <div class="type">客户量</div>
-                        </div>
-                    </template>
-                </card-box-component>
+                <operate-rank-box :title="'运营业绩排行'" :dataList="operateWorkerStation.rank"></operate-rank-box>
             </div>
         </div>
     </div>
 </template>
 <script>
 import {operateWorkerStationService} from '@/service/operateWorkerstation'
-
+import operateRankBox from './operateWorkStation/operateRankBox.vue'
 import {
     userOrderApplication,
     storeOrderApplication,
@@ -68,6 +59,7 @@ export default {
         storeOrderApplication,
         staffApplication,
         statisticCardComponent,
+        operateRankBox,
     },
     // computed: {
     //     /**
@@ -88,6 +80,11 @@ export default {
                 user_order_application:[], //客户订单申请
                 staff_application:[], //服务人员申请
                 store_order_application:[],//门店订单申请
+                rank: {
+                    return_staff_count:{},//回访劳动者数量
+                    pass_order_count:{},//通过订单数量
+                    pass_staff_count:{},//通过劳动者数量
+                }
             }
         }
     },
@@ -162,8 +159,9 @@ export default {
         async getData(){
             try{
                 let get_for = 'personal'
-                if(this.presentUser.department_id == 1 ||
-                this.presentUser.department_id == 6){
+                if(
+                    this.presentUser.department_id == 1 ||
+                    this.presentUser.department_id == 6){
                     get_for = 'total'
                 }
                 this.is_loading = true

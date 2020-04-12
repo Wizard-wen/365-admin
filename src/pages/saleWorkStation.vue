@@ -2,11 +2,11 @@
     <div class="workstation" v-loading="is_loading">
         <div class="performance">
             <statistic-card-component
-                :title="'订单转化率'" :statisticItem="saleWorkStation.order_transform_rate"></statistic-card-component>
+                :title="'订单转化率'" :statisticItem="order_transform_rate"></statistic-card-component>
             <statistic-card-component
-                :title="'订单累计流水'" :statisticItem="saleWorkStation.sale_amount"></statistic-card-component>
+                :title="'订单累计流水'" :statisticItem="sale_amount"></statistic-card-component>
             <statistic-card-component
-                :title="'服务费（销售额）'" :statisticItem="saleWorkStation.sale_service_amount"></statistic-card-component>
+                :title="'服务费（销售额）'" :statisticItem="sale_service_amount"></statistic-card-component>
             <statistic-card-component v-hide></statistic-card-component>
         </div>
         <div class="down-board">
@@ -28,16 +28,7 @@
                         </div>
                     </template>
                 </card-box-component>
-                <card-box-component :title="'业绩排行'" v-hide>
-                    <template slot="control">
-                        <div class="rank-control">
-                            <div class="type">销售额</div>
-                            <div class="type">劳动者</div>
-                            <div class="type">签单量</div>
-                            <div class="type">客户量</div>
-                        </div>
-                    </template>
-                </card-box-component>
+                <sale-rank-box :title="'门店业绩排行'" :dataList="saleWorkStation.rank"></sale-rank-box>
             </div>
         </div>
         <!-- 订单申请弹出框 -->
@@ -49,11 +40,10 @@
 </template>
 <script>
 import {
-    // applyOrderDialog,
     processingOrder,
     dynamicInformation,
 } from './saleWorkStation/index.js'
-
+import saleRankBox from './saleWorkStation/saleRankBox.vue'
 import applyOrderDialog from '@/public/module/orderList/control/saleApplyOrderBtn/applyOrderDialog.vue'
 import {
     statisticCardComponent,
@@ -67,9 +57,14 @@ export default {
             is_loading: false,
             applyOrderDialogVisible: false,//订单申请弹窗显示隐藏
             saleWorkStation: {
-                // order_transform_rate: {},//订单转化率
-                // sale_amount: {},//流水
-                // sale_service_amount: {},//销售额
+                order_transform_rate: {},//订单转化率
+                sale_amount: {},//流水
+                sale_service_amount: {},//销售额
+                rank: {
+                    order_transform_rate: {},//订单转化率
+                    sale_amount: {},//流水
+                    sale_service_amount: {},//销售额
+                },
                 dynamic_information: [],//公海订单
                 processing_order: [],//待处理订单
             },
@@ -80,6 +75,7 @@ export default {
         processingOrder,
         dynamicInformation,
         statisticCardComponent,
+        saleRankBox,
     },
     computed: {
         /**
@@ -87,6 +83,30 @@ export default {
          */
         presentUser(){
             return this.$store.state.loginModule.user
+        },
+        order_transform_rate(){
+            return {
+                total: this.saleWorkStation.order_transform_rate.total *100 + '%',
+                last_month: this.saleWorkStation.order_transform_rate.last_month * 100 + '%',
+                rate: this.saleWorkStation.order_transform_rate.rate * 100,
+                this_month: this.saleWorkStation.order_transform_rate.this_month * 100 +'%',
+            }
+        },
+        sale_service_amount(){
+            return {
+                total: this.saleWorkStation.sale_service_amount.total + '元',
+                last_month: this.saleWorkStation.sale_service_amount.last_month + '元',
+                rate: this.saleWorkStation.sale_service_amount.rate,
+                this_month: this.saleWorkStation.sale_service_amount.this_month +'元',
+            }
+        },
+        sale_amount(){
+            return {
+                total: this.saleWorkStation.sale_amount.total + '元',
+                last_month: this.saleWorkStation.sale_amount.last_month + '元',
+                rate: this.saleWorkStation.sale_amount.rate,
+                this_month: this.saleWorkStation.sale_amount.this_month +'元',
+            }
         },
     },
     methods: {
@@ -163,16 +183,6 @@ export default {
                 get_for:this.presentUser.is_store_manager == 2? "store" : "personal"
             }
 
-
-            // let getSaleWorkerStationForm = {}
-            // if(this.presentUser.is_store_manager == 2){
-            //     getSaleWorkerStationForm.store_
-            // } else {
-
-            // }
-            // await saleWorkstationService.getHalfYearData().then(data =>{
-            //     console.log(data)
-            // })
             await saleWorkstationService.getSaleWorkBench(getSaleWorkerStationForm).then(data =>{
                 if(data.code == '0'){
                     //设置工作台数据

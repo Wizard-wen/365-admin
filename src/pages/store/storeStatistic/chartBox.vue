@@ -10,7 +10,6 @@
         </div>
         <div class="chart-contains" slot="contains">
             <chart ref="chart1" class="charts-box" :options="chartData" :auto-resize="true"></chart>
-            <sort-box :title="'流水'"></sort-box>
         </div>
     </card-box-component>
 </template>

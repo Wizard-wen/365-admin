@@ -1,8 +1,8 @@
 <template>
     <div class="card" >
         <div class="title">{{title}}</div>
-        <!-- <div class="number">{{statisticItem.total}}</div> -->
-        <count-to
+        <div class="number">{{statisticItem.total}}</div>
+        <!-- <count-to
             ref="example"
             :start-val="0"
             :end-val="total"
@@ -12,7 +12,7 @@
             :prefix="''"
             :suffix="''"
             :autoplay="false"
-            class="number"/>
+            class="number"/> -->
 
 
         <div class="statistic">
@@ -23,7 +23,7 @@
                 <span class="">{{`${statisticItem.rate}%`}}</span>
             </div>
         </div>
-        <div class="message">本月新增&nbsp;&nbsp;
+        <div class="message">本月&nbsp;&nbsp;
             <span>{{statisticItem.this_month}}</span>
         </div>
     </div>
@@ -56,7 +56,7 @@ export default {
         }
     },
     mounted(){
-        this.$refs.example.start()
+        // this.$refs.example.start()
     }
 }
 </script>
@@ -78,7 +78,7 @@ export default {
 .card{
     height: 180px;
     width: calc(25% - 20px);
-    margin: 0 10px;
+    // margin: 0 10px;
     background: #fff;
     padding: 20px 24px 8px;
     .title{
