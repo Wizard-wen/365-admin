@@ -40,31 +40,37 @@
 			</div>
         </template>
 
-		<div slot="form" style="width: 100%">
-			<div class="performance">
-				<statistic-card-component
-                :title="'订单转化率'" :statisticItem="saleWorkStation.order_transform_rate"></statistic-card-component>
-				<statistic-card-component
-					:title="'订单累计流水'" :statisticItem="saleWorkStation.sale_amount"></statistic-card-component>
-				<statistic-card-component
-					:title="'服务费（销售额）'" :statisticItem="saleWorkStation.sale_service_amount"></statistic-card-component>
-				<statistic-card-component v-hide></statistic-card-component>
-				<!-- <statistic-card-component v-hide></statistic-card-component> -->
-			</div>
+		<template slot="form" >
+			<div style="width: 100%;">
+				<div class="performance">
+					<statistic-card-component
+					:title="'订单转化率'" :statisticItem="order_transform_rate"></statistic-card-component>
+					<statistic-card-component
+						:title="'订单累计流水'" :statisticItem="sale_amount"></statistic-card-component>
+					<statistic-card-component
+						:title="'服务费（销售额）'" :statisticItem="sale_service_amount"></statistic-card-component>
+					<statistic-card-component v-hide></statistic-card-component>
+				</div>
 
-			<!-- <chart-box></chart-box> -->
-			<!-- 门店员工列表 -->
-			<store-staff-list 
-				:storeStaffList="salesPersonTable" 
-				:storeDetail="storeDetail"
-				@updateStoreItem="getStore"></store-staff-list>
-		</div>
+				<!-- 门店员工列表 -->
+
+				<store-staff-list 
+					:storeStaffList="salesPersonTable" 
+					:storeDetail="storeDetail"
+					@updateStoreItem="getStore"></store-staff-list>
+
+				<sale-rank-box :title="'门店业绩排行'" :dataList="saleWorkStation.rank"></sale-rank-box>
+
+			</div>
+			
+			
+		</template>
 	</page-edit-component>
 </template>
 
 <script>
 import { storeService } from "@/service/store";
-
+import saleRankBox from '@/pages/saleWorkStation/saleRankBox.vue'
 import {saleWorkstationService} from '@/service/saleWorkStation'
 import chartBox from './storeStatistic/chartBox.vue'
 import storeStaffList from './storeItem/storeStaffList.vue'
@@ -76,6 +82,7 @@ export default {
 		statisticCardComponent,
 		chartBox,
 		storeStaffList,
+		saleRankBox,
 	},
 	data() {
 		return {
@@ -84,8 +91,45 @@ export default {
 			is_loading: false,
 			//员工列表
 			salesPersonTable: [],
-			saleWorkStation: {},
+			saleWorkStation: {
+                order_transform_rate: {},//订单转化率
+                sale_amount: {},//流水
+                sale_service_amount: {},//销售额
+                rank: {
+                    order_transform_rate: {},//订单转化率
+                    sale_amount: {},//流水
+                    sale_service_amount: {},//销售额
+                },
+                dynamic_information: [],//公海订单
+                processing_order: [],//待处理订单
+            },
 		};
+	},
+	computed: {
+		order_transform_rate(){
+            return {
+                total: this.saleWorkStation.order_transform_rate.total *100 + '%',
+                last_month: this.saleWorkStation.order_transform_rate.last_month * 100 + '%',
+                rate: this.saleWorkStation.order_transform_rate.rate * 100,
+                this_month: this.saleWorkStation.order_transform_rate.this_month * 100 +'%',
+            }
+        },
+        sale_service_amount(){
+            return {
+                total: this.saleWorkStation.sale_service_amount.total + '元',
+                last_month: this.saleWorkStation.sale_service_amount.last_month + '元',
+                rate: this.saleWorkStation.sale_service_amount.rate,
+                this_month: this.saleWorkStation.sale_service_amount.this_month +'元',
+            }
+        },
+        sale_amount(){
+            return {
+                total: this.saleWorkStation.sale_amount.total + '元',
+                last_month: this.saleWorkStation.sale_amount.last_month + '元',
+                rate: this.saleWorkStation.sale_amount.rate,
+                this_month: this.saleWorkStation.sale_amount.this_month +'元',
+            }
+        },
 	},
 	methods: {
 		/**
@@ -217,4 +261,5 @@ export default {
 		}
 	}
 }
+
 </style>

@@ -7,15 +7,15 @@
                 <statistic-card-component :statisticItem="order_transform_rate" :title="'转化率'"></statistic-card-component>
                 <statistic-card-component v-hide></statistic-card-component>
             </div>
-            <div class="chart-box">
-                <div class="chart-left">
+            <!-- <div class="chart-box">
+                <div class="chart-left"> -->
                     <chart-box :halfYearData="statisticData.half_year"></chart-box>
                     <chart-box2 :halfYearData="statisticData.half_year"></chart-box2>
-                </div>
-                <div class="chart-right">
+                <!-- </div>
+                <div class="chart-right"> -->
                     <rank-box :title="'门店业绩排行'" :dataList="statisticData.rank"></rank-box>
-                </div>
-            </div>
+                <!-- </div>
+            </div> -->
             
  
             <div style="display:flex;justify-content:space-around">
@@ -168,7 +168,7 @@ export default {
             display: flex;
             justify-content: space-around;
             .chart-right{
-                width: 400px;
+                width: 350px;
                 margin-left: 20px;
             }
             .chart-left{
