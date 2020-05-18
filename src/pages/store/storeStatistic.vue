@@ -13,7 +13,7 @@
                     <chart-box2 :halfYearData="statisticData.half_year"></chart-box2>
                 <!-- </div>
                 <div class="chart-right"> -->
-                    <rank-box :title="'门店业绩排行'" :dataList="statisticData.rank"></rank-box>
+                    <rank-box :title="'门店业绩排行'" style="height: 500px;" :dataList="statisticData.rank"></rank-box>
                 <!-- </div>
             </div> -->
             

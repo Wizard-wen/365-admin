@@ -34,7 +34,7 @@
     
 </template>
 <script>
-    import {operateService} from '@common/index.js'
+    import {operateCustomService} from '@/service/operateCustom'
 
     import createAdPositionDialog from './createAdPositionDialog.vue'
     export default {
@@ -123,13 +123,13 @@
             async deleteAdPosition(id){
                 try{
                     this.is_loading = true
-                    await customService.deleteAdPosition(id).then( async data =>{
+                    await operateCustomService.deleteAdPosition(id).then( async data =>{
                         if(data.code == '0'){
                             this.$message({
                                 type: 'success',
                                 message: data.message
                             });
-                            this.getTableList()
+                            this.$emit('updateTable')
                             this.is_loading = false
                         }
                     }).catch(error =>{

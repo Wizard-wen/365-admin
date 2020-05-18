@@ -74,7 +74,6 @@ import saleRankBox from '@/pages/saleWorkStation/saleRankBox.vue'
 import {saleWorkstationService} from '@/service/saleWorkStation'
 import chartBox from './storeStatistic/chartBox.vue'
 import storeStaffList from './storeItem/storeStaffList.vue'
-
 import {statisticCardComponent} from '../operateWorkStation/index'
 
 export default {
@@ -160,7 +159,6 @@ export default {
 				});
 				this.is_loading = false
 			}
-
 		},
 		async getStoreStatistic(){
 			try{
